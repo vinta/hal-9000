@@ -1,0 +1,6 @@
+---
+- hosts: my-machine
+  roles:
+    - basic
+    - dev
+    - lifestyle

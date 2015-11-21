@@ -1,0 +1,101 @@
+#!/usr/bin/env python
+
+import argparse
+import os
+import subprocess
+import sys
+
+
+class COLOR:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+class HAL9000Formatter(argparse.HelpFormatter):
+
+    def __init__(self, prog):
+        super(HAL9000Formatter, self).__init__(prog, max_help_position=30)
+
+
+class HAL9000(object):
+
+    def __init__(self):
+        parser = argparse.ArgumentParser(
+            prog='hal',
+            description='I am completely operational, and all my circuits are functioning perfectly',
+            version='9000',
+            formatter_class=HAL9000Formatter
+        )
+
+        subparsers = parser.add_subparsers(
+            title='sub commands'
+        )
+
+        update_parser = subparsers.add_parser('update', help='pull the repo')
+        update_parser.set_defaults(func=self.update)
+
+        create_parser = subparsers.add_parser('create', help='create a Docker Machine VM')
+        create_parser.set_defaults(func=self.create)
+
+        prepare_parser = subparsers.add_parser('prepare', help='setup nginx-proxy and dnsmasq')
+        prepare_parser.set_defaults(func=self.prepare)
+
+        pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, Hal')
+        pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
+
+        self.parser = parser
+
+    def __run(self, command, shell=True, verbose=True):
+        if verbose:
+            print('run: {}{}{}'.format(COLOR.OKBLUE, command, COLOR.ENDC))
+
+        return_code = subprocess.call(command, shell=shell)
+
+        return not return_code
+
+    def update(self, args):
+        os.chdir('/usr/local/HAL-9000')
+        self.__run('git fetch')
+        self.__run('git pull')
+
+        os.chdir('/usr/local/HAL-9000/playbooks')
+        self.__run('ansible-playbook site.yml -v')
+
+    def create(self, args):
+        if self.__run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev'):
+            # scp /var/lib/boot2docker/bootsync.sh will cause Permission denied
+            self.__run('docker-machine scp /usr/local/HAL-9000/docker/bootsync.sh test1:/var/lib/boot2docker/bootsync.sh')
+            self.__run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
+            self.__run('docker-machine restart dev')
+
+    def prepare(self, args):
+        self.__run('docker-compose -f /usr/local/HAL-9000/docker/dash.yml -p dash up -d')
+
+    # TODO
+    # maybe you should just type `docker-compose up` yourself
+    def up(self, args):
+        pass
+
+    def open_the_pod_bay_doors(self, args):
+        print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(COLOR.FAIL, COLOR.ENDC))
+
+        self.__run('afplay /usr/local/HAL-9000/assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3', verbose=False)
+
+    def read_lips(self):
+        if len(sys.argv) == 1:
+            self.parser.print_help()
+            sys.exit(0)
+
+        args = self.parser.parse_args()
+        args.func(args)
+
+
+if __name__ == '__main__':
+    hal_9000 = HAL9000()
+    hal_9000.read_lips()

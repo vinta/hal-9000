@@ -1,0 +1,12 @@
+# https://github.com/vinta/HAL-9000
+export PATH=$PATH:/usr/local/HAL-9000/bin
+
+alias hal-9000='hal'
+
+alias HAL='hal'
+alias HAL-9000='hal'
+
+# https://docs.docker.com/machine/
+if [[ $(docker-machine ip dev 2>/dev/null) == "192.168."* ]]; then
+  eval "$(docker-machine env dev)";
+fi

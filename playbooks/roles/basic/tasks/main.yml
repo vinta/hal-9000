@@ -1,0 +1,15 @@
+- name: Check sudo Password
+  command: whoami
+  become: yes
+  become_method: sudo
+
+# https://github.com/caskroom/homebrew-cask
+- name: Install Homebrew-Cask
+  homebrew:
+    name: caskroom/cask/brew-cask
+    state: present
+
+# https://github.com/caskroom/homebrew-fonts
+- name: Tap Caskroom-Fonts
+  homebrew_tap:
+    tap: caskroom/fonts

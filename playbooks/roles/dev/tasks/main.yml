@@ -1,0 +1,76 @@
+# https://www.virtualbox.org/
+- name: Install Virtualbox
+  homebrew_cask:
+    name: virtualbox
+    state: present
+  environment:
+    HOMEBREW_CASK_OPTS: "--appdir={{ BREW_CASK_APPDIR }}"
+
+- name: Install VirtVirtualBox Extension Pack
+  homebrew_cask:
+    name: virtualbox-extension-pack
+    state: present
+
+# https://www.docker.com/
+- name: Install Docker and Extras
+  homebrew:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - docker
+    - docker-machine
+    - docker-compose
+
+- name: Create resolver directory
+  file:
+    path: /etc/resolver
+    state: directory
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+# CAUTION: `src` must be absolute path when `state` is `link`
+- name: Link .dev resolver file
+  file:
+    src: "{{ REPO_ROOT }}/playbooks/roles/dev/files/resolver_dev.conf"
+    dest: /etc/resolver/dev
+    state: link
+    force: yes
+  become: yes
+  become_method: sudo
+
+# assign the result of this task to a variable named `exports`
+# the variable can be used in another task
+- name: Add NFS share to /etc/exports
+  lineinfile:
+    dest: /etc/exports
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - /Users 192.168.99.100 -alldirs -mapall=0:80
+  become: yes
+  become_method: sudo
+  register: exports
+
+- name: Restart nfsd
+  command: sudo nfsd restart
+  become: yes
+  become_method: sudo
+  when: exports.changed
+
+- name: Add Docker Machine Environment to .zshrc
+  lineinfile:
+    dest: ~/.zshrc
+    line: "source {{ REPO_ROOT }}/playbooks/roles/dev/files/hal_profile"
+    create: yes
+  when: ansible_env.SHELL == "/bin/zsh"
+
+- name: Add Docker Machine Environment to .bash_profile
+  lineinfile:
+    dest: ~/.bash_profile
+    line: "source {{ REPO_ROOT }}/playbooks/roles/dev/files/hal_profile"
+    create: yes
+  when: ansible_env.SHELL == "/bin/bash"
+
+- name: Create Docker Machine
+  command: "{{ REPO_ROOT }}/bin/hal create"
