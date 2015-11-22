@@ -33,6 +33,6 @@ fi
 
 echo 'Run ansible-playbook (will require your sudo password)...'
 cd $REPO_ROOT/playbooks
-ansible-playbook site.yml -v
+ansible-playbook site.yml
 
 source $REPO_ROOT/playbooks/roles/dev/files/hal_profile
