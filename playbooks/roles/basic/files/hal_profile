@@ -1,0 +1,10 @@
+# https://github.com/vinta/HAL-9000
+export PATH=$PATH:/usr/local/HAL-9000/bin
+
+alias hal9000='hal'
+alias hal-9000='hal'
+alias hal_9000='hal'
+alias HAL='hal'
+alias HAL9000='hal'
+alias HAL-9000='hal'
+alias HAL_9000='hal'

@@ -2,6 +2,7 @@
 127.0.0.1 ansible_connection=local
 
 [my-machine:vars]
-REPO_URL=https://github.com/vinta/HAL-9000
-REPO_ROOT=/usr/local/HAL-9000
 BREW_CASK_APPDIR=/Applications
+HOME_PATH=/Users/vinta
+REPO_ROOT=/usr/local/HAL-9000
+REPO_URL=https://github.com/vinta/HAL-9000

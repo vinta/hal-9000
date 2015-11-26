@@ -32,7 +32,7 @@
 # CAUTION: `src` must be absolute path when `state` is `link`
 - name: Link .dev resolver file
   file:
-    src: "{{ REPO_ROOT }}/playbooks/roles/dev/files/resolver_dev.conf"
+    src: "{{ REPO_ROOT }}/playbooks/roles/docker/files/resolver_dev.conf"
     dest: /etc/resolver/dev
     state: link
     force: yes
@@ -50,27 +50,22 @@
     - /Users 192.168.99.100 -alldirs -mapall=0:80
   become: yes
   become_method: sudo
-  register: exports
+  register: nfs_exports
 
 - name: Restart nfsd
   command: sudo nfsd restart
   become: yes
   become_method: sudo
-  when: exports.changed
+  when: nfs_exports.changed
 
-- name: Add Docker Machine Environment to .zshrc
+- name: Enable Docker Machine environment in .zshrc
   lineinfile:
     dest: ~/.zshrc
-    line: "source {{ REPO_ROOT }}/playbooks/roles/dev/files/hal_profile"
+    line: "{{ item }}"
     create: yes
+  with_items:
+    - source {{ REPO_ROOT }}/playbooks/roles/docker/files/docker_machine_profile
   when: ansible_env.SHELL == "/bin/zsh"
 
-- name: Add Docker Machine Environment to .bash_profile
-  lineinfile:
-    dest: ~/.bash_profile
-    line: "source {{ REPO_ROOT }}/playbooks/roles/dev/files/hal_profile"
-    create: yes
-  when: ansible_env.SHELL == "/bin/bash"
-
-- name: Create Docker Machine
+- name: Create a Docker Machine VM
   command: "{{ REPO_ROOT }}/bin/hal create"
