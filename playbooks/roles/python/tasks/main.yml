@@ -1,0 +1,49 @@
+# https://github.com/yyuu/pyenv
+- name: Install pyenv and extras
+  homebrew:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - pyenv
+    - pyenv-virtualenv
+    - pyenv-virtualenvwrapper
+    - homebrew/boneyard/pyenv-pip-rehash
+
+- name: stat Python 2 version directory
+  stat:
+    path: "~/.pyenv/versions/{{ PYTHON_2_VERSION }}"
+  register: py2_version_dir
+
+- name: Install Python 2 via pyenv
+  shell: "pyenv install {{ PYTHON_2_VERSION }}"
+  when: not py2_version_dir.stat.exists
+
+- name: stat Python 3 version directory
+  stat: path=~/.pyenv/versions/{{ PYTHON_3_VERSION }}
+  register: py3_version_dir
+
+- name: Install Python 3 via pyenv
+  shell: "pyenv install {{ PYTHON_3_VERSION }}"
+  when: not py3_version_dir.stat.exists
+
+- name: Install must-have packages for Python 2
+  pip:
+    executable: "{{ HOME_PATH }}/.pyenv/versions/{{ PYTHON_2_VERSION }}/bin/pip"
+    requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
+
+# TODO
+# works only in Ansible 2.0+
+# - name: Install must-have packages for Python 3
+#   pip:
+#     virtualenv_python: "/Users/vinta/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/python3"
+#     executable: "/Users/vinta/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
+#     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
+
+- name: Enable pyenv environment in .zshrc
+  lineinfile:
+    dest: ~/.zshrc
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - source {{ REPO_ROOT }}/playbooks/roles/python/files/pyenv_profile
+  when: ansible_env.SHELL == "/bin/zsh"
