@@ -15,12 +15,18 @@ $ bash <(curl -fsSL https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/
 ## Usage
 
 ``` bash
+# pull the repo and run ansible-playbook
 $ hal update
+
+# create a Docker Machine VM
 $ hal create
+
+# setup nginx-proxy and dnsmasq
 $ hal prepare
 
 $ cd /path/to/your_project/ # that contains a docker-compose.yml file
 $ docker-compose up
 
+# open the pod bay doors, please, Hal
 $ hal open-the-pod-bay-doors
 ```
