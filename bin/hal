@@ -71,12 +71,17 @@ class HAL9000(object):
     def create(self, args):
         if self.__run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev'):
             # scp /var/lib/boot2docker/bootsync.sh will cause Permission denied
-            self.__run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/dev/files/bootsync.sh test1:/var/lib/boot2docker/bootsync.sh')
+            self.__run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootsync.sh test1:/var/lib/boot2docker/bootsync.sh')
             self.__run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
             self.__run('docker-machine restart dev')
 
+    # TODO
+    # start the Docker Machine VM
+    def start(self, args):
+        pass
+
     def prepare(self, args):
-        self.__run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/dev/files/dash.yml -p dash up -d')
+        self.__run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
     # TODO
     # maybe you should just type `docker-compose up` yourself
