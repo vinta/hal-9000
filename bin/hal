@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from contextlib import contextmanager
 import argparse
 import os
 import subprocess
@@ -38,27 +39,58 @@ class HAL9000(object):
             title='sub commands'
         )
 
-        update_parser = subparsers.add_parser('update', help='pull the repo')
+        update_parser = subparsers.add_parser('update', help='pull the repo and run ansible-playbook')
         update_parser.set_defaults(func=self.update)
 
-        create_parser = subparsers.add_parser('create', help='create a Docker Machine VM')
+        create_parser = subparsers.add_parser('create', help='create Docker Machine VM')
         create_parser.set_defaults(func=self.create)
+
+        start_parser = subparsers.add_parser('start', help='start Docker Machine VM')
+        start_parser.set_defaults(func=self.start)
 
         prepare_parser = subparsers.add_parser('prepare', help='setup nginx-proxy and dnsmasq')
         prepare_parser.set_defaults(func=self.prepare)
+
+        up_parser = subparsers.add_parser('up', help='simply a wrapper for `docker-compose up`')
+        up_parser.set_defaults(func=self.up)
 
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, Hal')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
 
         self.parser = parser
 
-    def __run(self, command, shell=True, verbose=True):
+        self.command_queue = []
+
+    def __compose(self, command, verbose=True):
+        if isinstance(command, (list, tuple)):
+            command = ' '.join(map(str, command))
+
         if verbose:
             print('run: {}{}{}'.format(COLOR.OKBLUE, command, COLOR.ENDC))
 
-        return_code = subprocess.call(command, shell=shell)
+        self.command_queue.append(command)
+
+        return command
+
+    def __run(self, command, shell=True, verbose=True):
+        command = self.__compose(command, verbose)
+
+        commands = '; '.join(self.command_queue)
+        return_code = subprocess.call(commands, shell=shell)
+
+        self.command_queue = []
 
         return not return_code
+
+    @contextmanager
+    def __prefix(self, command, verbose=True):
+        # __enter__
+        command = self.__compose(command, verbose)
+
+        yield
+
+        # __exit__
+        pass
 
     def update(self, args):
         os.chdir('/usr/local/HAL-9000')
@@ -66,7 +98,7 @@ class HAL9000(object):
         self.__run('git pull')
 
         os.chdir('/usr/local/HAL-9000/playbooks')
-        self.__run('ansible-playbook site.yml -v')
+        self.__run('ansible-playbook site.yml')
 
     def create(self, args):
         if self.__run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev'):
@@ -75,18 +107,24 @@ class HAL9000(object):
             self.__run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
             self.__run('docker-machine restart dev')
 
-    # TODO
-    # start the Docker Machine VM
     def start(self, args):
-        pass
+        self.__run('docker-machine start dev')
 
     def prepare(self, args):
-        self.__run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
+        self.start()
 
-    # TODO
-    # maybe you should just type `docker-compose up` yourself
+        with self.__prefix('eval "$(docker-machine env dev)"'):
+            self.__run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
+
     def up(self, args):
-        pass
+        self.prepare()
+
+        os.chdir(os.getcwd())
+        with self.__prefix('eval "$(docker-machine env dev)"'):
+            self.__run('docker-compose up')
+
+    def stop(self, args):
+        self.__run('docker-machine stop dev')
 
     def open_the_pod_bay_doors(self, args):
         print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(COLOR.FAIL, COLOR.ENDC))
