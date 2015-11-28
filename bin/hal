@@ -106,7 +106,7 @@ class HAL9000(object):
         # __exit__
         self.command_queue.pop()
 
-    def update(self, args):
+    def update(self, namespace, extra_args=None):
         os.chdir('/usr/local/HAL-9000')
         self.__run('git fetch')
         self.__run('git pull')
@@ -114,7 +114,7 @@ class HAL9000(object):
         os.chdir('/usr/local/HAL-9000/playbooks')
         self.__run('ansible-playbook site.yml')
 
-    def create(self, args):
+    def create(self, namespace, extra_args=None):
         returncode = self.__run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
         if returncode == 0:
             # scp /var/lib/boot2docker/bootsync.sh will cause Permission denied
@@ -122,7 +122,7 @@ class HAL9000(object):
             self.__run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
             self.__run('docker-machine restart dev')
 
-    def prepare(self, args):
+    def prepare(self, namespace, extra_args=None):
         self.__run('docker-machine start dev')
 
         returncode, output = self.__run_with_output('eval "$(docker-machine env dev)"', verbose=False, print_output=False)
@@ -132,14 +132,15 @@ class HAL9000(object):
         with self.__prefix('eval "$(docker-machine env dev)"'):
             self.__run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
-    def up(self, args):
-        self.prepare(args=None)
+    def up(self, namespace, extra_args=None):
+        self.prepare(namespace, extra_args)
 
         os.chdir(os.getcwd())
         with self.__prefix('eval "$(docker-machine env dev)"'):
-            self.__run('docker-compose up')
+            command = ['docker-compose', 'up'] + extra_args
+            self.__run(command)
 
-    def open_the_pod_bay_doors(self, args):
+    def open_the_pod_bay_doors(self, namespace, extra_args=None):
         print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(COLOR.FAIL, COLOR.ENDC))
 
         self.__run('afplay /usr/local/HAL-9000/assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3', verbose=False)
@@ -149,8 +150,9 @@ class HAL9000(object):
             self.parser.print_help()
             sys.exit(0)
 
-        args = self.parser.parse_args()
-        args.func(args)
+        # https://docs.python.org/2/library/argparse.html#partial-parsing
+        namespace, extra_args = self.parser.parse_known_args()
+        namespace.func(namespace, extra_args)
 
 
 if __name__ == '__main__':
