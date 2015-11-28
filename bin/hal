@@ -45,9 +45,6 @@ class HAL9000(object):
         create_parser = subparsers.add_parser('create', help='create Docker Machine VM')
         create_parser.set_defaults(func=self.create)
 
-        start_parser = subparsers.add_parser('start', help='start Docker Machine VM')
-        start_parser.set_defaults(func=self.start)
-
         prepare_parser = subparsers.add_parser('prepare', help='setup nginx-proxy and dnsmasq')
         prepare_parser.set_defaults(func=self.prepare)
 
@@ -65,32 +62,49 @@ class HAL9000(object):
         if isinstance(command, (list, tuple)):
             command = ' '.join(map(str, command))
 
-        if verbose:
-            print('run: {}{}{}'.format(COLOR.OKBLUE, command, COLOR.ENDC))
-
         self.command_queue.append(command)
+        commands = '; '.join(self.command_queue)
 
-        return command
+        if verbose:
+            print('run: {}{}{}'.format(COLOR.OKBLUE, commands, COLOR.ENDC))
+
+        return commands
 
     def __run(self, command, shell=True, verbose=True):
-        command = self.__compose(command, verbose)
+        commands = self.__compose(command, verbose)
 
-        commands = '; '.join(self.command_queue)
-        return_code = subprocess.call(commands, shell=shell)
+        returncode = subprocess.call(commands, shell=shell)
 
-        self.command_queue = []
+        self.command_queue.pop()
 
-        return not return_code
+        return returncode
+
+    def __run_with_output(self, command, shell=True, verbose=True, print_output=True):
+        commands = self.__compose(command, verbose)
+
+        try:
+            output = subprocess.check_output(commands, stderr=subprocess.STDOUT, shell=shell)
+            returncode = 0
+        except subprocess.CalledProcessError as exc:
+            output = exc.output
+            returncode = exc.returncode
+        finally:
+            if print_output and output:
+                print(output)
+
+        self.command_queue.pop()
+
+        return returncode, output
 
     @contextmanager
-    def __prefix(self, command, verbose=True):
+    def __prefix(self, command):
         # __enter__
-        command = self.__compose(command, verbose)
+        self.__compose(command, verbose=False)
 
         yield
 
         # __exit__
-        pass
+        self.command_queue.pop()
 
     def update(self, args):
         os.chdir('/usr/local/HAL-9000')
@@ -101,30 +115,29 @@ class HAL9000(object):
         self.__run('ansible-playbook site.yml')
 
     def create(self, args):
-        if self.__run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev'):
+        returncode = self.__run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
+        if returncode == 0:
             # scp /var/lib/boot2docker/bootsync.sh will cause Permission denied
             self.__run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootsync.sh test1:/var/lib/boot2docker/bootsync.sh')
             self.__run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
             self.__run('docker-machine restart dev')
 
-    def start(self, args):
+    def prepare(self, args):
         self.__run('docker-machine start dev')
 
-    def prepare(self, args):
-        self.start()
+        returncode, output = self.__run_with_output('eval "$(docker-machine env dev)"', verbose=False, print_output=False)
+        if 'Error running connection boilerplate' in output:
+            self.__run('sleep 4')
 
         with self.__prefix('eval "$(docker-machine env dev)"'):
             self.__run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
     def up(self, args):
-        self.prepare()
+        self.prepare(args=None)
 
         os.chdir(os.getcwd())
         with self.__prefix('eval "$(docker-machine env dev)"'):
             self.__run('docker-compose up')
-
-    def stop(self, args):
-        self.__run('docker-machine stop dev')
 
     def open_the_pod_bay_doors(self, args):
         print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(COLOR.FAIL, COLOR.ENDC))
