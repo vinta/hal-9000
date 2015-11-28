@@ -27,6 +27,9 @@ class HAL9000Formatter(argparse.HelpFormatter):
 
 class HAL9000(object):
 
+    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    DOTFILES_ROOT = os.path.join(PROJECT_ROOT, 'dotfiles/')
+
     def __init__(self):
         parser = argparse.ArgumentParser(
             prog='hal',
@@ -34,10 +37,13 @@ class HAL9000(object):
             version='9000',
             formatter_class=HAL9000Formatter
         )
+        self.parser = parser
 
         subparsers = parser.add_subparsers(
             title='sub commands'
         )
+
+        self.command_queue = []
 
         update_parser = subparsers.add_parser('update', help='pull the repo and run ansible-playbook')
         update_parser.set_defaults(func=self.update)
@@ -51,12 +57,12 @@ class HAL9000(object):
         up_parser = subparsers.add_parser('up', help='simply a wrapper for `docker-compose up`')
         up_parser.set_defaults(func=self.up)
 
+        link_parser = subparsers.add_parser('link', help='')
+        link_parser.set_defaults(func=self.link)
+        link_parser.add_argument('filename', type=str)
+
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, Hal')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
-
-        self.parser = parser
-
-        self.command_queue = []
 
     def __compose(self, command, verbose=True):
         if isinstance(command, (list, tuple)):
@@ -139,6 +145,23 @@ class HAL9000(object):
         with self.__prefix('eval "$(docker-machine env dev)"'):
             command = ['docker-compose', 'up'] + extra_args
             self.__run(command)
+
+    def link(self, namespace, extra_args=None):
+        file_path = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
+        file_name = os.path.basename(file_path)
+
+        sorry = 0
+
+        mv_returncode = self.__run('mv {} {}'.format(file_path, self.DOTFILES_ROOT))
+        sorry += mv_returncode
+        if mv_returncode == 0:
+            link_source = os.path.join(self.DOTFILES_ROOT, file_name)
+            link_destnation = file_path
+            ln_returncode = self.__run('ln -sf {} {}'.format(link_source, link_destnation))
+            sorry += ln_returncode
+
+        if sorry:
+            self.open_the_pod_bay_doors(namespace, extra_args)
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(COLOR.FAIL, COLOR.ENDC))
