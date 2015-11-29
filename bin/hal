@@ -29,7 +29,7 @@ class Color(object):
 class DotfilesConfig(object):
 
     DEFAULT_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.json')
-    EXAMPLE_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.example.json')
+    TEMPLATE_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.template.json')
 
     def __init__(self, path=None):
         self.path = path or self.DEFAULT_CONFIG
@@ -39,11 +39,11 @@ class DotfilesConfig(object):
     def data(self):
         if not self.__data:
             with open(self.path) as f:
-                self.__data = json.load(f)
-
-            if not self.__data:
-                with open(self.EXAMPLE_CONFIG) as f:
+                try:
                     self.__data = json.load(f)
+                except ValueError:
+                    with open(self.TEMPLATE_CONFIG) as f:
+                        self.__data = json.load(f)
 
         return self.__data
 
@@ -106,6 +106,10 @@ class HAL9000(object):
         link_parser.set_defaults(func=self.link)
         link_parser.add_argument('filename', type=str)
 
+        unlink_parser = subparsers.add_parser('unlink', help='')
+        unlink_parser.set_defaults(func=self.unlink)
+        unlink_parser.add_argument('filename', type=str)
+
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, Hal')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
 
@@ -117,7 +121,7 @@ class HAL9000(object):
         commands = '; '.join(self.command_queue)
 
         if verbose:
-            print('run: {}{}{}'.format(Color.OKBLUE, commands, Color.ENDC))
+            print('hal: {}{}{}'.format(Color.OKBLUE, commands, Color.ENDC))
 
         return commands
 
@@ -184,7 +188,7 @@ class HAL9000(object):
             self.__run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
     def up(self, namespace, extra_args=None):
-        self.prepare(namespace, extra_args)
+        self.prepare(namespace)
 
         os.chdir(os.getcwd())
         with self.__prefix('eval "$(docker-machine env dev)"'):
@@ -192,27 +196,41 @@ class HAL9000(object):
             self.__run(command)
 
     def link(self, namespace, extra_args=None):
-        file_path = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
-        file_name = os.path.basename(file_path)
+        filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
+        filename = os.path.basename(filepath)
 
-        if self.__run('mv {} {}'.format(file_path, Setting.DOTFILES_ROOT)) == 0:
-            ln_src = os.path.join(Setting.DOTFILES_ROOT, file_name)
-            ln_dest = file_path
+        if self.__run('mv {} {}'.format(filepath, Setting.DOTFILES_ROOT)) == 0:
+            ln_src = os.path.join(Setting.DOTFILES_ROOT, filename)
+            ln_dest = filepath
             self.__run('ln -sf {} {}'.format(ln_src, ln_dest))
 
-            ln_dict = self.config.find_by_key('src', file_name, 'links')
+            ln_dict = self.config.find_by_key('src', filename, 'links')
             if ln_dict:
-                ln_dict['dest'] = file_path
+                ln_dict['dest'] = filepath
             else:
                 self.config.data['links'].append(
-                    {'dest': file_path, 'src': file_name},
+                    {'dest': filepath, 'src': filename},
                 )
 
             self.config.save()
             self.config.show()
 
     def unlink(self, namespace, extra_args=None):
-        pass
+        filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
+
+        if os.path.islink(filepath):
+            real_filepath = os.path.realpath(filepath)
+            self.__run('unlink {}'.format(filepath))
+            self.__run('mv {} {}'.format(real_filepath, os.path.dirname(filepath)))
+
+            ln_dict = self.config.find_by_key('dest', filepath, 'links')
+            if ln_dict:
+                self.config.data['links'].remove(ln_dict)
+
+            self.config.save()
+            self.config.show()
+        else:
+            print('{} is not a link file'.format(filepath))
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(Color.FAIL, Color.ENDC))
