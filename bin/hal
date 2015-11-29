@@ -2,12 +2,19 @@
 
 from contextlib import contextmanager
 import argparse
+import json
 import os
 import subprocess
 import sys
 
 
-class COLOR(object):
+class Setting(object):
+
+    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    DOTFILES_ROOT = os.path.join(PROJECT_ROOT, 'dotfiles/')
+
+
+class Color(object):
 
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -19,6 +26,45 @@ class COLOR(object):
     UNDERLINE = '\033[4m'
 
 
+class DotfilesConfig(object):
+
+    DEFAULT_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.json')
+    EXAMPLE_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.example.json')
+
+    def __init__(self, path=None):
+        self.path = path or self.DEFAULT_CONFIG
+        self.__data = None
+
+    @property
+    def data(self):
+        if not self.__data:
+            with open(self.path) as f:
+                self.__data = json.load(f)
+
+            if not self.__data:
+                with open(self.EXAMPLE_CONFIG) as f:
+                    self.__data = json.load(f)
+
+        return self.__data
+
+    def find_by_key(self, key, value, field_name):
+        some_list = self.data[field_name]
+
+        try:
+            some_dict = next(some_dict for some_dict in some_list if some_dict[key] == value)
+        except StopIteration:
+            some_dict = None
+
+        return some_dict
+
+    def show(self):
+        print(json.dumps(self.data, sort_keys=True, indent=4, separators=(',', ': ')))
+
+    def save(self):
+        with open(self.path, 'w') as f:
+            json.dump(self.data, f, sort_keys=True, indent=4, separators=(',', ': '))
+
+
 class HAL9000Formatter(argparse.HelpFormatter):
 
     def __init__(self, prog):
@@ -26,9 +72,6 @@ class HAL9000Formatter(argparse.HelpFormatter):
 
 
 class HAL9000(object):
-
-    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    DOTFILES_ROOT = os.path.join(PROJECT_ROOT, 'dotfiles/')
 
     def __init__(self):
         parser = argparse.ArgumentParser(
@@ -57,6 +100,8 @@ class HAL9000(object):
         up_parser = subparsers.add_parser('up', help='simply a wrapper for `docker-compose up`')
         up_parser.set_defaults(func=self.up)
 
+        self.config = DotfilesConfig()
+
         link_parser = subparsers.add_parser('link', help='')
         link_parser.set_defaults(func=self.link)
         link_parser.add_argument('filename', type=str)
@@ -72,7 +117,7 @@ class HAL9000(object):
         commands = '; '.join(self.command_queue)
 
         if verbose:
-            print('run: {}{}{}'.format(COLOR.OKBLUE, commands, COLOR.ENDC))
+            print('run: {}{}{}'.format(Color.OKBLUE, commands, Color.ENDC))
 
         return commands
 
@@ -150,21 +195,27 @@ class HAL9000(object):
         file_path = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
         file_name = os.path.basename(file_path)
 
-        sorry = 0
+        if self.__run('mv {} {}'.format(file_path, Setting.DOTFILES_ROOT)) == 0:
+            ln_src = os.path.join(Setting.DOTFILES_ROOT, file_name)
+            ln_dest = file_path
+            self.__run('ln -sf {} {}'.format(ln_src, ln_dest))
 
-        mv_returncode = self.__run('mv {} {}'.format(file_path, self.DOTFILES_ROOT))
-        sorry += mv_returncode
-        if mv_returncode == 0:
-            link_source = os.path.join(self.DOTFILES_ROOT, file_name)
-            link_destnation = file_path
-            ln_returncode = self.__run('ln -sf {} {}'.format(link_source, link_destnation))
-            sorry += ln_returncode
+            ln_dict = self.config.find_by_key('src', file_name, 'links')
+            if ln_dict:
+                ln_dict['dest'] = file_path
+            else:
+                self.config.data['links'].append(
+                    {'dest': file_path, 'src': file_name},
+                )
 
-        if sorry:
-            self.open_the_pod_bay_doors(namespace, extra_args)
+            self.config.save()
+            self.config.show()
+
+    def unlink(self, namespace, extra_args=None):
+        pass
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
-        print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(COLOR.FAIL, COLOR.ENDC))
+        print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(Color.FAIL, Color.ENDC))
 
         self.__run('afplay /usr/local/HAL-9000/assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3', verbose=False)
 
