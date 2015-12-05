@@ -33,19 +33,19 @@ class DotfilesConfig(object):
 
     def __init__(self, path=None):
         self.path = path or self.DEFAULT_CONFIG
-        self.__data = None
+        self._data = None
 
     @property
     def data(self):
-        if not self.__data:
+        if not self._data:
             with open(self.path) as f:
                 try:
-                    self.__data = json.load(f)
+                    self._data = json.load(f)
                 except ValueError:
                     with open(self.TEMPLATE_CONFIG) as f:
-                        self.__data = json.load(f)
+                        self._data = json.load(f)
 
-        return self.__data
+        return self._data
 
     def find_by_key(self, key, value, field_name):
         some_list = self.data[field_name]
@@ -113,7 +113,7 @@ class HAL9000(object):
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, Hal')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
 
-    def __compose(self, command, verbose=True):
+    def _compose(self, command, verbose=True):
         if isinstance(command, (list, tuple)):
             command = ' '.join(map(str, command))
 
@@ -125,8 +125,8 @@ class HAL9000(object):
 
         return commands
 
-    def __run(self, command, shell=True, verbose=True):
-        commands = self.__compose(command, verbose)
+    def _run(self, command, shell=True, verbose=True):
+        commands = self._compose(command, verbose)
 
         returncode = subprocess.call(commands, shell=shell)
 
@@ -134,8 +134,8 @@ class HAL9000(object):
 
         return returncode
 
-    def __run_with_output(self, command, shell=True, verbose=True, print_output=True):
-        commands = self.__compose(command, verbose)
+    def _run_with_output(self, command, shell=True, verbose=True, print_output=True):
+        commands = self._compose(command, verbose)
 
         try:
             output = subprocess.check_output(commands, stderr=subprocess.STDOUT, shell=shell)
@@ -152,9 +152,9 @@ class HAL9000(object):
         return returncode, output
 
     @contextmanager
-    def __prefix(self, command):
+    def _prefix(self, command):
         # __enter__
-        self.__compose(command, verbose=False)
+        self._compose(command, verbose=False)
 
         yield
 
@@ -163,46 +163,46 @@ class HAL9000(object):
 
     def update(self, namespace, extra_args=None):
         os.chdir('/usr/local/HAL-9000')
-        self.__run('git fetch')
-        self.__run('git pull')
+        self._run('git fetch')
+        self._run('git pull')
 
         os.chdir('/usr/local/HAL-9000/playbooks')
-        self.__run('ansible-playbook site.yml')
+        self._run('ansible-playbook site.yml')
 
     def create(self, namespace, extra_args=None):
-        returncode = self.__run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
+        returncode = self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
         if returncode == 0:
             # scp /var/lib/boot2docker/bootsync.sh will cause Permission denied
-            self.__run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootsync.sh test1:/var/lib/boot2docker/bootsync.sh')
-            self.__run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
-            self.__run('docker-machine restart dev')
+            self._run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootsync.sh test1:/var/lib/boot2docker/bootsync.sh')
+            self._run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
+            self._run('docker-machine restart dev')
 
     def prepare(self, namespace, extra_args=None):
-        self.__run('docker-machine start dev')
+        self._run('docker-machine start dev')
 
-        returncode, output = self.__run_with_output('eval "$(docker-machine env dev)"', verbose=False, print_output=False)
+        returncode, output = self._run_with_output('eval "$(docker-machine env dev)"', verbose=False, print_output=False)
         if 'Error running connection boilerplate' in output:
-            self.__run('sleep 4')
+            self._run('sleep 4')
 
-        with self.__prefix('eval "$(docker-machine env dev)"'):
-            self.__run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
+        with self._prefix('eval "$(docker-machine env dev)"'):
+            self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
     def up(self, namespace, extra_args=None):
         self.prepare(namespace)
 
         os.chdir(os.getcwd())
-        with self.__prefix('eval "$(docker-machine env dev)"'):
+        with self._prefix('eval "$(docker-machine env dev)"'):
             command = ['docker-compose', 'up'] + extra_args
-            self.__run(command)
+            self._run(command)
 
     def link(self, namespace, extra_args=None):
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
         filename = os.path.basename(filepath)
 
-        if self.__run('mv {} {}'.format(filepath, Setting.DOTFILES_ROOT)) == 0:
+        if self._run('mv {} {}'.format(filepath, Setting.DOTFILES_ROOT)) == 0:
             ln_src = os.path.join(Setting.DOTFILES_ROOT, filename)
             ln_dest = filepath
-            self.__run('ln -sf {} {}'.format(ln_src, ln_dest))
+            self._run('ln -sf {} {}'.format(ln_src, ln_dest))
 
             ln_dict = self.config.find_by_key('src', filename, 'links')
             if ln_dict:
@@ -220,8 +220,8 @@ class HAL9000(object):
 
         if os.path.islink(filepath):
             real_filepath = os.path.realpath(filepath)
-            self.__run('unlink {}'.format(filepath))
-            self.__run('mv {} {}'.format(real_filepath, os.path.dirname(filepath)))
+            self._run('unlink {}'.format(filepath))
+            self._run('mv {} {}'.format(real_filepath, os.path.dirname(filepath)))
 
             ln_dict = self.config.find_by_key('dest', filepath, 'links')
             if ln_dict:
@@ -235,7 +235,7 @@ class HAL9000(object):
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(Color.FAIL, Color.ENDC))
 
-        self.__run('afplay /usr/local/HAL-9000/assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3', verbose=False)
+        self._run('afplay /usr/local/HAL-9000/assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3', verbose=False)
 
     def read_lips(self):
         if len(sys.argv) == 1:
