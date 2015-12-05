@@ -91,7 +91,7 @@ class HAL9000(object):
         update_parser = subparsers.add_parser('update', help='pull the repo and run ansible-playbook')
         update_parser.set_defaults(func=self.update)
 
-        create_parser = subparsers.add_parser('create', help='create Docker Machine VM')
+        create_parser = subparsers.add_parser('create', help='create the Docker Machine VM')
         create_parser.set_defaults(func=self.create)
 
         prepare_parser = subparsers.add_parser('prepare', help='setup nginx-proxy and dnsmasq')
@@ -102,11 +102,11 @@ class HAL9000(object):
 
         self.dotfiles = Dotfiles()
 
-        link_parser = subparsers.add_parser('link', help='add a dotfile to the repository')
+        link_parser = subparsers.add_parser('link', help='add the file to the dotfiles repository')
         link_parser.set_defaults(func=self.link)
         link_parser.add_argument('filename', type=str)
 
-        unlink_parser = subparsers.add_parser('unlink', help='remove a dotfile from the repository')
+        unlink_parser = subparsers.add_parser('unlink', help='add the file to the dotfiles repository')
         unlink_parser.set_defaults(func=self.unlink)
         unlink_parser.add_argument('filename', type=str)
 

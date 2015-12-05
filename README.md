@@ -18,7 +18,7 @@ $ bash <(curl -fsSL https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/
 # pull the repo and run ansible-playbook
 $ hal update
 
-# create a Docker Machine VM
+# create the Docker Machine VM
 $ hal create
 
 # setup nginx-proxy and dnsmasq
@@ -26,6 +26,17 @@ $ hal prepare
 
 $ cd /path/to/your_project/ # that contains a docker-compose.yml file
 $ docker-compose up
+# or
+$ hal up
+
+# add the file to the dotfiles repository
+$ hal link ~/.zshrc
+
+# add the file to the dotfiles repository
+$ hal unlink ~/.zshrc
+
+# force sync dotfiles
+$ hal sync
 
 # open the pod bay doors, please, Hal
 $ hal open-the-pod-bay-doors
