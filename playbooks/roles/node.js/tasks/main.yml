@@ -1,0 +1,32 @@
+# https://github.com/creationix/nvm
+- name: stat .nvm directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.nvm/"
+  register: nvm_dir
+
+- name: Install nvm
+  shell: "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash"
+  args:
+    executable: /bin/bash
+  when: not nvm_dir.stat.exists
+
+- name: stat Node.js version directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}"
+  register: node_version_dir
+
+- name: Install Node.js
+  shell: >
+    . ~/.nvm/nvm.sh && \
+    nvm install {{ NODE_VERSION }} && \
+    nvm alias default {{ NODE_VERSION }}
+  when: not node_version_dir.stat.exists
+
+- name: Enable nvm environment in .zshrc
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - source {{ REPO_ROOT }}/playbooks/roles/node.js/files/nvm_profile
+  when: ansible_env.SHELL == "/bin/zsh"

@@ -1,0 +1,3 @@
+# https://github.com/creationix/nvm
+export NVM_DIR="/Users/vinta/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
