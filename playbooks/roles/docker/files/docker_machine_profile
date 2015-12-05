@@ -2,3 +2,15 @@
 if [[ $(docker-machine ip dev 2>/dev/null) == "192.168."* ]]; then
   eval "$(docker-machine env dev)";
 fi
+
+# delete all containers
+alias dockerrmall='docker rm -f $(docker ps -a -q)'
+
+# delete all stopped containers
+alias dockerrmstop='docker rm -f $(docker ps -a -q)'
+
+# delete all images
+alias dockerrmiall='docker rmi $(docker images -q)'
+
+# delete all untagged images
+alias dockerrminotag='docker rmi $(docker images -q -f dangling=true)'
