@@ -3,6 +3,7 @@
 
 [my-machine:vars]
 BREW_CASK_APPDIR=/Applications
+GO_VERSION=1.5.2
 PYTHON_2_VERSION=2.7.10
 PYTHON_3_VERSION=3.5.0
 REPO_ROOT=/usr/local/HAL-9000

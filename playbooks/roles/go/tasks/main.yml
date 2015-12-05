@@ -1,0 +1,41 @@
+- name: stat gvm bin file
+  stat:
+    path: "{{ ansible_env.HOME }}/.gvm/bin/gvm"
+  register: gvm_bin_file
+
+- name: Install gvm
+  shell: bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+  when: not gvm_bin_file.stat.exists
+
+- name: stat Go 1.4 version directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.gvm/gos/go1.4"
+  register: go14_version_dir
+
+- name: Install Go 1.4
+  shell: >
+    source "$HOME/.gvm/scripts/gvm" && \
+    gvm install go1.4
+  when: not go14_version_dir.stat.exists
+
+- name: stat Go newer version directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ GO_VERSION }}"
+  register: go_newer_version_dir
+
+- name: Install Go newer version
+  shell: >
+    source {{ ansible_env.HOME }}/.gvm/scripts/gvm && \
+    gvm use go1.4 && \
+    gvm install go{{ GO_VERSION }} && \
+    gvm use go{{ GO_VERSION }} --default
+  when: not go_newer_version_dir.stat.exists
+
+- name: Enable gvm environment in .zshrc
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile
+  when: ansible_env.SHELL == "/bin/zsh"

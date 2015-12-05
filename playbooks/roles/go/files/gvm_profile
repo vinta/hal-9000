@@ -1,0 +1,6 @@
+# https://github.com/moovweb/gvm
+if [ -f "$HOME/.gvm/scripts/gvm" ]; then
+    source "$HOME/.gvm/scripts/gvm";
+    export GOPATH="$HOME/Projects/oh-my-go"
+    export PATH="$HOME/Projects/oh-my-go/bin:$PATH"
+fi

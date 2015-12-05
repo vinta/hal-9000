@@ -3,4 +3,5 @@
   roles:
     - basic
     - docker
+    - go
     - python
