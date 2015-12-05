@@ -8,7 +8,7 @@ Dominating your dev environment like cats rule the Internet.
 
 Building a Dockerized development environment with Ansible on Mac OS X. Inspired by IFTTT's [Dash](https://github.com/IFTTT/dash).
 
-HAL will configure those things for you:
+HAL will configure these tools for you, Dave:
 
 - Homebrew
 - Ansible
@@ -16,10 +16,15 @@ HAL will configure those things for you:
 - Docker
 - Docker Machine
 - Docker Compose
-- Go 1.5
-- Python 2.7
-- Python 3.5
+- Go
+- Node.js
+- Python
 - and your dotfiles
+
+You may need to...
+
+1. Install [Xcode](https://itunes.apple.com/us/app/xcode/id497799835) from Mac App Store
+2. Install Command Line Tools via `xcode-select --install`
 
 ## Bootstrap
 
