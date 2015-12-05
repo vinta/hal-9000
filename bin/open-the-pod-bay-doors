@@ -22,7 +22,7 @@ fi
 REPO_REMOTE=git@github.com:vinta/HAL-9000.git
 REPO_ROOT=/usr/local/HAL-9000
 if [ ! -d $REPO_ROOT/.git/ ] ; then
-    echo 'Check out the repo...'
+    echo 'Checkout the repo...'
     git clone $REPO_REMOTE $REPO_ROOT
 else
     echo 'Pull the repo...'

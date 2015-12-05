@@ -26,7 +26,7 @@ class Color(object):
     UNDERLINE = '\033[4m'
 
 
-class DotfilesConfig(object):
+class Dotfiles(object):
 
     DEFAULT_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.json')
     TEMPLATE_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.template.json')
@@ -100,7 +100,7 @@ class HAL9000(object):
         up_parser = subparsers.add_parser('up', help='simply a wrapper for `docker-compose up`')
         up_parser.set_defaults(func=self.up)
 
-        self.config = DotfilesConfig()
+        self.dotfiles = Dotfiles()
 
         link_parser = subparsers.add_parser('link', help='')
         link_parser.set_defaults(func=self.link)
@@ -109,6 +109,9 @@ class HAL9000(object):
         unlink_parser = subparsers.add_parser('unlink', help='')
         unlink_parser.set_defaults(func=self.unlink)
         unlink_parser.add_argument('filename', type=str)
+
+        sync_parser = subparsers.add_parser('sync', help='')
+        sync_parser.set_defaults(func=self.sync)
 
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, Hal')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
@@ -121,7 +124,7 @@ class HAL9000(object):
         commands = '; '.join(self.command_queue)
 
         if verbose:
-            print('hal: {}{}{}'.format(Color.OKBLUE, commands, Color.ENDC))
+            print('HAL: {}{}{}'.format(Color.OKBLUE, commands, Color.ENDC))
 
         return commands
 
@@ -204,16 +207,16 @@ class HAL9000(object):
             ln_dest = filepath
             self._run('ln -sf {} {}'.format(ln_src, ln_dest))
 
-            ln_dict = self.config.find_by_key('src', filename, 'links')
+            ln_dict = self.dotfiles.find_by_key('src', filename, 'links')
             if ln_dict:
                 ln_dict['dest'] = filepath
             else:
-                self.config.data['links'].append(
+                self.dotfiles.data['links'].append(
                     {'dest': filepath, 'src': filename},
                 )
 
-            self.config.save()
-            self.config.show()
+            self.dotfiles.save()
+            self.dotfiles.show()
 
     def unlink(self, namespace, extra_args=None):
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
@@ -223,14 +226,18 @@ class HAL9000(object):
             self._run('unlink {}'.format(filepath))
             self._run('mv {} {}'.format(real_filepath, os.path.dirname(filepath)))
 
-            ln_dict = self.config.find_by_key('dest', filepath, 'links')
+            ln_dict = self.dotfiles.find_by_key('dest', filepath, 'links')
             if ln_dict:
-                self.config.data['links'].remove(ln_dict)
+                self.dotfiles.data['links'].remove(ln_dict)
 
-            self.config.save()
-            self.config.show()
+            self.dotfiles.save()
+            self.dotfiles.show()
         else:
             print('{} is not a link file'.format(filepath))
+
+    def sync(self, namespace, extra_args=None):
+        for link in self.dotfiles.data['links']:
+            self._run('ln -sf {} {}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(Color.FAIL, Color.ENDC))
