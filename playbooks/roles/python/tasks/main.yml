@@ -2,7 +2,7 @@
 - name: Install pyenv and extras
   homebrew:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - pyenv
     - pyenv-virtualenv

@@ -15,7 +15,7 @@
 - name: Install Docker and extras
   homebrew:
     name: "{{ item }}"
-    state: latest
+    state: present
   with_items:
     - docker
     - docker-machine

@@ -1,13 +1,14 @@
-- name: stat gvm bin file
+# https://github.com/moovweb/gvm
+- name: stat .gvm directory
   stat:
-    path: "{{ ansible_env.HOME }}/.gvm/bin/gvm"
-  register: gvm_bin_file
+    path: "{{ ansible_env.HOME }}/.gvm/"
+  register: gvm_dir
 
 - name: Install gvm
   shell: "bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)"
   args:
     executable: /bin/bash
-  when: not gvm_bin_file.stat.exists
+  when: not gvm_dir.stat.exists
 
 - name: stat Go 1.4 version directory
   stat:

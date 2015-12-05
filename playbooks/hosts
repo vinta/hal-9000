@@ -2,9 +2,5 @@
 127.0.0.1 ansible_connection=local
 
 [my-machine:vars]
-BREW_CASK_APPDIR=/Applications
-GO_VERSION=1.5.2
-PYTHON_2_VERSION=2.7.10
-PYTHON_3_VERSION=3.5.0
 REPO_ROOT=/usr/local/HAL-9000
 REPO_URL=https://github.com/vinta/HAL-9000
