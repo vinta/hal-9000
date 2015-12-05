@@ -58,6 +58,6 @@ $ hal unlink ~/.zshrc
 # force sync dotfiles
 $ hal sync
 
-# open the pod bay doors, please, Hal
+# open the pod bay doors, please, HAL
 $ hal open-the-pod-bay-doors
 ```
