@@ -14,9 +14,14 @@
   homebrew_tap:
     tap: caskroom/fonts
 
-- name: Update Homebrew
-  homebrew:
-    update_homebrew: yes
+# - name: Update Homebrew
+#   homebrew:
+#     update_homebrew: yes
+
+- name: Checkout dircolors-solarized
+  git:
+    repo: https://github.com/seebi/dircolors-solarized.git
+    dest: ~/.dircolors-solarized
 
 - name: Enable hal environment in .zshrc
   lineinfile:

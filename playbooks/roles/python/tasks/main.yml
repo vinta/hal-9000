@@ -11,7 +11,7 @@
 
 - name: stat Python 2 version directory
   stat:
-    path: "~/.pyenv/versions/{{ PYTHON_2_VERSION }}"
+    path: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}"
   register: py2_version_dir
 
 - name: Install Python 2 via pyenv
@@ -19,7 +19,8 @@
   when: not py2_version_dir.stat.exists
 
 - name: stat Python 3 version directory
-  stat: path=~/.pyenv/versions/{{ PYTHON_3_VERSION }}
+  stat:
+    path: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}"
   register: py3_version_dir
 
 - name: Install Python 3 via pyenv
@@ -28,7 +29,7 @@
 
 - name: Install must-have packages for Python 2
   pip:
-    executable: "{{ HOME_PATH }}/.pyenv/versions/{{ PYTHON_2_VERSION }}/bin/pip"
+    executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}/bin/pip"
     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
 
 # TODO
@@ -41,7 +42,7 @@
 
 - name: Enable pyenv environment in .zshrc
   lineinfile:
-    dest: ~/.zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
     create: yes
   with_items:

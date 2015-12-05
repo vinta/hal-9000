@@ -3,7 +3,6 @@
 
 [my-machine:vars]
 BREW_CASK_APPDIR=/Applications
-HOME_PATH=/Users/vinta
 PYTHON_2_VERSION=2.7.10
 PYTHON_3_VERSION=3.5.0
 REPO_ROOT=/usr/local/HAL-9000
