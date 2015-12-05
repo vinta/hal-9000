@@ -102,15 +102,15 @@ class HAL9000(object):
 
         self.dotfiles = Dotfiles()
 
-        link_parser = subparsers.add_parser('link', help='')
+        link_parser = subparsers.add_parser('link', help='add a dotfile to the repository')
         link_parser.set_defaults(func=self.link)
         link_parser.add_argument('filename', type=str)
 
-        unlink_parser = subparsers.add_parser('unlink', help='')
+        unlink_parser = subparsers.add_parser('unlink', help='remove a dotfile from the repository')
         unlink_parser.set_defaults(func=self.unlink)
         unlink_parser.add_argument('filename', type=str)
 
-        sync_parser = subparsers.add_parser('sync', help='')
+        sync_parser = subparsers.add_parser('sync', help='force sync dotfiles')
         sync_parser.set_defaults(func=self.sync)
 
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, Hal')
