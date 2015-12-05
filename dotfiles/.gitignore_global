@@ -1,0 +1,6 @@
+*~
+.DS_Store
+.idea/libraries/
+.vagrant/
+.tern-port
+.tern-project

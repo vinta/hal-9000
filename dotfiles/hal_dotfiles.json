@@ -1,0 +1,24 @@
+{
+    "links": [
+        {
+            "dest": "/Users/vinta/.zshrc",
+            "src": ".zshrc"
+        },
+        {
+            "dest": "/Users/vinta/.gitconfig",
+            "src": ".gitconfig"
+        },
+        {
+            "dest": "/Users/vinta/.gitignore_global",
+            "src": ".gitignore_global"
+        },
+        {
+            "dest": "/Users/vinta/.iterm2_shell_integration.zsh",
+            "src": ".iterm2_shell_integration.zsh"
+        },
+        {
+            "dest": "/Users/vinta/.iterm2_tab_color.zsh",
+            "src": ".iterm2_tab_color.zsh"
+        }
+    ]
+}
