@@ -106,7 +106,7 @@ class HAL9000(object):
         link_parser.set_defaults(func=self.link)
         link_parser.add_argument('filename', type=str)
 
-        unlink_parser = subparsers.add_parser('unlink', help='add the file to the dotfiles repository')
+        unlink_parser = subparsers.add_parser('unlink', help='remove the file from the dotfiles repository')
         unlink_parser.set_defaults(func=self.unlink)
         unlink_parser.add_argument('filename', type=str)
 

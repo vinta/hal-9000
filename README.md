@@ -52,7 +52,7 @@ $ hal up # == hal prepare + docker-compose up
 # add the file to the dotfiles repository
 $ hal link ~/.zshrc
 
-# add the file to the dotfiles repository
+# remove the file from the dotfiles repository
 $ hal unlink ~/.zshrc
 
 # force sync dotfiles
