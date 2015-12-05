@@ -4,7 +4,22 @@
 
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](http://vinta.ws)
 
-Build Dockerized development environments with Ansible on Mac OS X. Inspired by IFTTT's [Dash](https://github.com/IFTTT/dash).
+Dominating your dev environment like cats rule the Internet.
+
+Building a Dockerized development environment with Ansible on Mac OS X. Inspired by IFTTT's [Dash](https://github.com/IFTTT/dash).
+
+HAL will configure those things for you:
+
+- Homebrew
+- Ansible
+- VirtualBox
+- Docker
+- Docker Machine
+- Docker Compose
+- Go 1.5
+- Python 2.7
+- Python 3.5
+- and your dotfiles
 
 ## Bootstrap
 
