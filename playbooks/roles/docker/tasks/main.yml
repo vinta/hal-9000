@@ -60,7 +60,7 @@
 
 - name: Enable Docker Machine environment in .zshrc
   lineinfile:
-    dest: ~/.zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
     create: yes
   with_items:
