@@ -3,6 +3,16 @@
   become: yes
   become_method: sudo
 
+# https://github.com/robbyrussell/oh-my-zsh
+- name: stat .oh-my-zsh directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh/"
+  register: oh_my_zsh_dir
+
+- name: Install oh-my-zsh
+  shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  when: not oh_my_zsh_dir.stat.exists
+
 # https://github.com/caskroom/homebrew-cask
 - name: Install Homebrew-Cask
   homebrew:
