@@ -1,38 +1,63 @@
 #!/usr/bin/env bash
 
-echo 'Hello, HAL. Do you read me, HAL?'
-echo 'Affirmative, Dave. I read you.'
-echo ''
+# Use colors, but only if connected to a terminal, and that terminal supports them
+if which tput >/dev/null 2>&1; then
+    ncolors=$(tput colors)
+fi
+if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
+    BLUE="$(tput setaf 4)"
+    GREEN="$(tput setaf 2)"
+    RED="$(tput setaf 1)"
+    YELLOW="$(tput setaf 3)"
+    BOLD="$(tput bold)"
+    NORMAL="$(tput sgr0)"
+else
+    BLUE=""
+    GREEN=""
+    RED=""
+    YELLOW=""
+    BOLD=""
+    NORMAL=""
+fi
+
+printf "${BOLD}Hello, HAL. Do you read me, HAL?${NORMAL}\n"
+printf "${BOLD}Affirmative, Dave. I read you.${NORMAL}\n"
 
 which -s brew
 if [[ $? != 0 ]] ; then
-    echo 'Install Homebrew...'
+    printf "\n"
+    printf "${BLUE}Install Homebrew...${NORMAL}\n"
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 else
-    echo 'Update Homebrew...'
+    printf "\n"
+    printf "${BLUE}Update Homebrew...${NORMAL}\n"
     brew update
 fi
 
 which -s ansible-playbook
 if [[ $? != 0 ]] ; then
-    echo 'Install Ansible...'
+    printf "\n"
+    printf "${BLUE}Install Ansible...${NORMAL}\n"
     brew install ansible
 fi
 
 REPO_REMOTE=git@github.com:vinta/HAL-9000.git
 REPO_ROOT=/usr/local/HAL-9000
 if [ ! -d $REPO_ROOT/.git/ ] ; then
-    echo 'Checkout the repo...'
+    printf "\n"
+    printf "${BLUE}Checkout the repo...${NORMAL}\n"
     git clone $REPO_REMOTE $REPO_ROOT
 else
-    echo 'Pull the repo...'
+    printf "\n"
+    printf "${BLUE}Pull the repo...${NORMAL}\n"
     cd $REPO_ROOT
     git fetch
     git pull
 fi
 
-echo 'Run ansible-playbook (will require your sudo password)...'
+printf "\n"
+printf "${BLUE}Run ansible-playbook (will require your sudo password)...${NORMAL}\n"
 cd $REPO_ROOT/playbooks
 ansible-playbook site.yml
 
-source $REPO_ROOT/playbooks/roles/dev/files/hal_profile
+source $REPO_ROOT/playbooks/roles/basic/files/hal_profile
