@@ -17,7 +17,7 @@
 
 - name: Install Go 1.4
   shell: >
-    source "$HOME/.gvm/scripts/gvm" && \
+    source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
     gvm install go1.4
   when: not go14_version_dir.stat.exists
 
@@ -28,11 +28,29 @@
 
 - name: Install Go newer version
   shell: >
-    source {{ ansible_env.HOME }}/.gvm/scripts/gvm && \
+    source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
     gvm use go1.4 && \
     gvm install go{{ GO_VERSION }} && \
     gvm use go{{ GO_VERSION }} --default
   when: not go_newer_version_dir.stat.exists
+
+- name: Create oh-my-go directory
+  file:
+    path: "{{ ansible_env.HOME }}/Projects/oh-my-go"
+    state: directory
+
+- name: Install must-have packages for Go
+  shell: >
+    source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
+    go get -u {{ item }}
+  with_items:
+    - github.com/golang/lint/golint
+    - github.com/mattn/goveralls
+    - github.com/nsf/gocode
+    - github.com/rogpeppe/godef
+    - golang.org/x/tools/cmd/godoc
+    - golang.org/x/tools/cmd/goimports
+    - golang.org/x/tools/cmd/vet
 
 - name: Enable gvm environment in .zshrc
   lineinfile:
