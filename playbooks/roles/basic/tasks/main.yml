@@ -62,9 +62,10 @@
     - quicklook-csv
     - qlimagesize
 
+# https://github.com/seebi/dircolors-solarized
 - name: Checkout dircolors-solarized
   git:
-    repo: https://github.com/seebi/dircolors-solarized.git
+    repo: git@github.com:seebi/dircolors-solarized.git
     dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
     update: no
 
