@@ -66,6 +66,7 @@
   git:
     repo: https://github.com/seebi/dircolors-solarized.git
     dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
+    update: no
 
 - name: Enable hal environment in .zshrc
   lineinfile:
