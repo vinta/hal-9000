@@ -22,6 +22,15 @@
     nvm alias default {{ NODE_VERSION }}
   when: not node_version_dir.stat.exists
 
+- name: Install must-have packages for Node.js
+  npm:
+    name: "{{ item }}"
+    state: present
+    global: yes
+    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}/bin/npm"
+  with_items:
+    - eslint
+
 - name: Enable nvm environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
