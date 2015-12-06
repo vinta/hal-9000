@@ -42,7 +42,7 @@
 - name: Install must-have packages for Go
   shell: >
     source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
-    go get -u {{ item }}
+    go get {{ item }}
   with_items:
     - github.com/golang/lint/golint
     - github.com/mattn/goveralls
