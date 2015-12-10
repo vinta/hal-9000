@@ -1,8 +1,8 @@
 ---
 - hosts: my-machine
   roles:
-    - basic
-    - docker
-    - go
-    - node.js
-    - python
+    - {role: basic, tags: ['basic']}
+    - {role: docker, tags: ['docker']}
+    - {role: go, tags: ['go']}
+    - {role: node.js, tags: ['node.js']}
+    - {role: python, tags: ['python']}

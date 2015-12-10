@@ -164,6 +164,7 @@ class HAL9000(object):
         # __exit__
         self.command_queue.pop()
 
+    # TODO: pass `--tags "basic,go"` to ansible-playbook command
     def update(self, namespace, extra_args=None):
         os.chdir('/usr/local/HAL-9000')
         self._run('git fetch')
