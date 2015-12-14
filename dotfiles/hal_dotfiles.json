@@ -19,6 +19,10 @@
         {
             "dest": "/Users/vinta/.iterm2_tab_color.zsh",
             "src": ".iterm2_tab_color.zsh"
+        },
+        {
+            "dest": "/Users/vinta/.mackup.cfg",
+            "src": ".mackup.cfg"
         }
     ]
 }
