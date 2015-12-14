@@ -1,3 +1,4 @@
+awscli
 bpython
 coverage
 dotfiles
@@ -14,6 +15,7 @@ pylint-django
 saltpylint
 sphinx
 sphinx-rtd-theme
+ssh2
 thefuck
 uniout
 virtualenv
