@@ -171,7 +171,9 @@ class HAL9000(object):
         self._run('git pull')
 
         os.chdir('/usr/local/HAL-9000/playbooks')
-        self._run('ansible-playbook site.yml')
+        returncode = self._run('ansible-playbook site.yml')
+        if returncode == 0:
+            print("HAL: {}Now open a new shell to active your dev environment{}".format(Color.HEADER, Color.ENDC))
 
     def create(self, namespace, extra_args=None):
         returncode = self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
