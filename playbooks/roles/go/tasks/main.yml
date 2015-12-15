@@ -21,18 +21,18 @@
     gvm install go1.4
   when: not go14_version_dir.stat.exists
 
-- name: stat Go newer version directory
-  stat:
-    path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ GO_VERSION }}"
-  register: go_newer_version_dir
+# - name: stat Go newer version directory
+#   stat:
+#     path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ GO_VERSION }}"
+#   register: go_newer_version_dir
 
-- name: Install Go newer version
-  shell: >
-    source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
-    gvm use go1.4 && \
-    gvm install go{{ GO_VERSION }} && \
-    gvm use go{{ GO_VERSION }} --default
-  when: not go_newer_version_dir.stat.exists
+# - name: Install Go newer version
+#   shell: >
+#     source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
+#     gvm use go1.4 && \
+#     gvm install go{{ GO_VERSION }} && \
+#     gvm use go{{ GO_VERSION }} --default
+#   when: not go_newer_version_dir.stat.exists
 
 - name: Create oh-my-go directory
   file:
