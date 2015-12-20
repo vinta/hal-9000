@@ -23,6 +23,10 @@
         {
             "dest": "/Users/vinta/.mackup.cfg",
             "src": ".mackup.cfg"
+        },
+        {
+            "dest": "/Users/vinta/.npmrc",
+            "src": ".npmrc"
         }
     ]
 }
