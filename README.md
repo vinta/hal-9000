@@ -66,8 +66,8 @@ $ hal open-the-pod-bay-doors
 
 ``` bash
 # it's optional to setup port forwarding
-$ VBoxManage modifyvm "dev" --natpf1 "Rule 8000,tcp,127.0.0.1,8000,,8000" && \
-  VBoxManage modifyvm "dev" --natpf1 "Rule 8001,tcp,127.0.0.1,8001,,8001" && \
-  VBoxManage modifyvm "dev" --natpf1 "Rule 8002,tcp,127.0.0.1,8002,,8002" && \
-  VBoxManage modifyvm "dev" --natpf1 "Rule 8003,tcp,127.0.0.1,8003,,8003"
+$ VBoxManage modifyvm "dev" --natpf1 "Rule 8000,tcp,,8000,,8000" && \
+  VBoxManage modifyvm "dev" --natpf1 "Rule 8001,tcp,,8001,,8001" && \
+  VBoxManage modifyvm "dev" --natpf1 "Rule 8002,tcp,,8002,,8002" && \
+  VBoxManage modifyvm "dev" --natpf1 "Rule 8003,tcp,,8003,,8003"
 ```
