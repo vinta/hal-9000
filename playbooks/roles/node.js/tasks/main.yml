@@ -30,6 +30,7 @@
     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}/bin/npm"
   with_items:
     - eslint
+    - tldr
 
 - name: Enable nvm environment in .zshrc
   lineinfile:
