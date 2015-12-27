@@ -92,12 +92,12 @@ alias o='a -e open'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias ls='gls --color=auto'
-alias dir='gdir --color=auto'
+alias ll='ls -lAU'
+alias la='ls -AU'
 alias grep='grep --color=auto'
 alias stat='gstat'
 
-alias ll='ls -lAU'
-alias la='ls -AU'
+alias clear-pyc="find $PWD -name '*.pyc' -delete"
 
 alias fuck='$(thefuck $(fc -ln -1))'
 alias FUCK='fuck'
