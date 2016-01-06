@@ -48,6 +48,7 @@
     - s3cmd
     - ssh-copy-id
     - tree
+    - wget
     - zsh-completions
 
 # https://github.com/sindresorhus/quick-look-plugins
