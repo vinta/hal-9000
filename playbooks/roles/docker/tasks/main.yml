@@ -53,7 +53,7 @@
   register: nfs_exports
 
 - name: Restart nfsd
-  command: sudo nfsd restart
+  command: nfsd restart
   become: yes
   become_method: sudo
   when: nfs_exports.changed
