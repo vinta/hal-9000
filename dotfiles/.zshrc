@@ -48,7 +48,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(autojump brew docker fasd git golang npm osx pip)
+plugins=(autojump brew docker fasd git golang npm pip)
 
 # User configuration
 
@@ -97,7 +97,7 @@ alias la='ls -AU'
 alias grep='grep --color=auto'
 alias stat='gstat'
 
-alias clear-pyc="find $PWD -name '*.pyc' -delete"
+alias pycclean="find $PWD -name '*.pyc' -delete"
 
 alias fuck='$(thefuck $(fc -ln -1))'
 alias FUCK='fuck'
