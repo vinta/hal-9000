@@ -179,7 +179,7 @@ class HAL9000(object):
         returncode = self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
         if returncode == 0:
             # scp /var/lib/boot2docker/bootsync.sh will cause Permission denied
-            self._run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootsync.sh test1:/var/lib/boot2docker/bootsync.sh')
+            self._run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootsync.sh dev:/var/lib/boot2docker/bootsync.sh')
             self._run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
             self._run('docker-machine restart dev')
 
