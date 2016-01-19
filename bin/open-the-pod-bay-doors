@@ -58,6 +58,6 @@ fi
 printf "\n"
 printf "${BLUE}Run ansible-playbook (will require your sudo password)...${NORMAL}\n"
 cd $REPO_ROOT/playbooks
-ansible-playbook site.yml
+ansible-playbook site.yml -v
 
 source $REPO_ROOT/playbooks/roles/basic/files/hal_profile
