@@ -1,8 +1,10 @@
 awscli
 bpython
 coverage
-dotfiles
 flake8
+flake8-debugger
+flake8-print
+flake8-string-format
 howdoi
 httpie
 ipdb
@@ -15,7 +17,6 @@ pylint-django
 saltpylint
 sphinx
 sphinx-rtd-theme
-ssh2
 thefuck
 uniout
 virtualenv
