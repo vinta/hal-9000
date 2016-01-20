@@ -176,7 +176,7 @@ class HAL9000(object):
             print("HAL: {}Now open a new shell to active your dev environment{}".format(Color.HEADER, Color.ENDC))
 
     def create(self, namespace, extra_args=None):
-        returncode = self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
+        returncode = self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --virtualbox-disk-size 30000 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
         if returncode == 0:
             # scp to dev:/var/lib/boot2docker/bootsync.sh will cause Permission denied
             self._run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootsync.sh dev:/tmp/bootsync.sh')
