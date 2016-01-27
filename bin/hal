@@ -124,7 +124,7 @@ class HAL9000(object):
         commands = '; '.join(self.command_queue)
 
         if verbose:
-            print('HAL: {}{}{}'.format(Color.OKBLUE, commands, Color.ENDC))
+            print('HAL: {0}{1}{2}'.format(Color.OKBLUE, commands, Color.ENDC))
 
         return commands
 
@@ -173,7 +173,7 @@ class HAL9000(object):
         os.chdir('/usr/local/HAL-9000/playbooks')
         returncode = self._run('ansible-playbook site.yml -v')
         if returncode == 0:
-            print("HAL: {}Now open a new shell to active your dev environment{}".format(Color.HEADER, Color.ENDC))
+            print('HAL: {0}Now open a new shell to active your dev environment{1}'.format(Color.HEADER, Color.ENDC))
 
     def create(self, namespace, extra_args=None):
         returncode = self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --virtualbox-disk-size 30000 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
@@ -205,10 +205,10 @@ class HAL9000(object):
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
         filename = os.path.basename(filepath)
 
-        if self._run('mv {} {}'.format(filepath, Setting.DOTFILES_ROOT)) == 0:
+        if self._run('mv {0} {1}'.format(filepath, Setting.DOTFILES_ROOT)) == 0:
             ln_src = os.path.join(Setting.DOTFILES_ROOT, filename)
             ln_dest = filepath
-            self._run('ln -sf {} {}'.format(ln_src, ln_dest))
+            self._run('ln -sf {0} {1}'.format(ln_src, ln_dest))
 
             ln_dict = self.dotfiles.find_by_key('src', filename, 'links')
             if ln_dict:
@@ -226,8 +226,8 @@ class HAL9000(object):
 
         if os.path.islink(filepath):
             real_filepath = os.path.realpath(filepath)
-            self._run('unlink {}'.format(filepath))
-            self._run('mv {} {}'.format(real_filepath, os.path.dirname(filepath)))
+            self._run('unlink {0}'.format(filepath))
+            self._run('mv {0} {1}'.format(real_filepath, os.path.dirname(filepath)))
 
             ln_dict = self.dotfiles.find_by_key('dest', filepath, 'links')
             if ln_dict:
@@ -236,14 +236,14 @@ class HAL9000(object):
             self.dotfiles.save()
             self.dotfiles.show()
         else:
-            print('{} is not a link file'.format(filepath))
+            print('{0} is not a link file'.format(filepath))
 
     def sync(self, namespace, extra_args=None):
         for link in self.dotfiles.data['links']:
-            self._run('ln -sf {} {}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
+            self._run('ln -sf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
-        print("{}I'm sorry Dave, I'm afraid I can't do that.{}".format(Color.FAIL, Color.ENDC))
+        print("{0}I'm sorry Dave, I'm afraid I can't do that.{1}".format(Color.FAIL, Color.ENDC))
 
         self._run('afplay /usr/local/HAL-9000/assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3', verbose=False)
 
