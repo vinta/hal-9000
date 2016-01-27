@@ -39,25 +39,6 @@
   become: yes
   become_method: sudo
 
-# assign the result of this task to a variable named `exports`
-# the variable can be used in another task
-- name: Add NFS share to /etc/exports
-  lineinfile:
-    dest: /etc/exports
-    line: "{{ item }}"
-    create: yes
-  with_items:
-    - /Users 192.168.99.100 -alldirs -mapall=0:80
-  become: yes
-  become_method: sudo
-  register: nfs_exports
-
-- name: Restart nfsd
-  command: nfsd restart
-  become: yes
-  become_method: sudo
-  when: nfs_exports.changed
-
 - name: Enable Docker Machine environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
