@@ -176,28 +176,23 @@ class HAL9000(object):
             print('HAL: {0}Now open a new shell to active your dev environment{1}'.format(Color.HEADER, Color.ENDC))
 
     def create(self, namespace, extra_args=None):
-        returncode = self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --virtualbox-disk-size 30000 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 dev')
-        if returncode == 0:
-            # scp to dev:/var/lib/boot2docker/bootsync.sh will cause Permission denied
-            self._run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootsync.sh dev:/tmp/bootsync.sh')
-            self._run('docker-machine ssh dev "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"')
-            self._run('docker-machine restart dev')
+        self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --virtualbox-disk-size 30000 eva01')
 
     def prepare(self, namespace, extra_args=None):
-        self._run('docker-machine start dev')
+        self._run('docker-machine start eva01')
 
-        returncode, output = self._run_with_output('eval "$(docker-machine env dev)"', verbose=False, print_output=False)
+        returncode, output = self._run_with_output('eval "$(docker-machine env eva01)"', verbose=False, print_output=False)
         if 'Error running connection boilerplate' in output:
             self._run('sleep 4')
 
-        with self._prefix('eval "$(docker-machine env dev)"'):
+        with self._prefix('eval "$(docker-machine env eva01)"'):
             self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
     def up(self, namespace, extra_args=None):
         self.prepare(namespace)
 
         os.chdir(os.getcwd())
-        with self._prefix('eval "$(docker-machine env dev)"'):
+        with self._prefix('eval "$(docker-machine env eva01)"'):
             command = ['docker-compose', 'up'] + extra_args
             self._run(command)
 
