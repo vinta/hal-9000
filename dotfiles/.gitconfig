@@ -23,6 +23,7 @@
 
 [core]
     excludesfile = ~/.gitignore_global
+	preloadindex = true
 
 [help]
     autocorrect = 1
