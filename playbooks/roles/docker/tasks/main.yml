@@ -50,3 +50,23 @@
 
 - name: Create the Docker Machine VM
   command: "{{ REPO_ROOT }}/bin/hal create"
+
+# https://github.com/nlf/dlite
+- name: Install dlite
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - dlite
+
+- name: stat dlite directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.dlite"
+  register: dlite_dir
+
+- name: Setup dlite
+  shell: "{{ item }}"
+  with_items:
+    - sudo dlite install
+    - dlite start
+  when: not dlite_dir.stat.exists
