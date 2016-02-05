@@ -67,6 +67,6 @@
 - name: Setup dlite
   shell: "{{ item }}"
   with_items:
-    - sudo dlite install
+    - sudo dlite install --disk=20 --memory=4
     - dlite start
   when: not dlite_dir.stat.exists
