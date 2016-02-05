@@ -176,23 +176,23 @@ class HAL9000(object):
             print('HAL: {0}Now open a new shell to active your dev environment{1}'.format(Color.HEADER, Color.ENDC))
 
     def create(self, namespace, extra_args=None):
-        self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --virtualbox-disk-size 30000 eva01')
+        self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --virtualbox-disk-size 30000 default')
 
     def prepare(self, namespace, extra_args=None):
-        self._run('docker-machine start eva01')
+        self._run('docker-machine start default')
 
-        returncode, output = self._run_with_output('eval "$(docker-machine env eva01)"', verbose=False, print_output=False)
+        returncode, output = self._run_with_output('eval "$(docker-machine env default)"', verbose=False, print_output=False)
         if 'Error running connection boilerplate' in output:
             self._run('sleep 4')
 
-        with self._prefix('eval "$(docker-machine env eva01)"'):
+        with self._prefix('eval "$(docker-machine env default)"'):
             self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
     def up(self, namespace, extra_args=None):
         self.prepare(namespace)
 
         os.chdir(os.getcwd())
-        with self._prefix('eval "$(docker-machine env eva01)"'):
+        with self._prefix('eval "$(docker-machine env default)"'):
             command = ['docker-compose', 'up'] + extra_args
             self._run(command)
 

@@ -1,6 +1,6 @@
 # https://docs.docker.com/machine/
-if [[ $(docker-machine ip eva01 2>/dev/null) == "192.168."* ]]; then
-  eval "$(docker-machine env eva01)";
+if [[ $(docker-machine ip default 2>/dev/null) == "192.168."* ]]; then
+  eval "$(docker-machine env default)";
 fi
 
 # delete all containers
