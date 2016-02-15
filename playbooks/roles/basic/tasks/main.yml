@@ -18,9 +18,9 @@
   homebrew_tap:
     tap: caskroom/fonts
 
-# - name: Update Homebrew
-#   homebrew:
-#     update_homebrew: yes
+- name: Update Homebrew
+  homebrew:
+    update_homebrew: yes
 
 - name: Install system packages
   homebrew:
