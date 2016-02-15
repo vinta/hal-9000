@@ -64,9 +64,9 @@
     path: "{{ ansible_env.HOME }}/.dlite"
   register: dlite_dir
 
-- name: Setup dlite
-  shell: "{{ item }}"
-  with_items:
-    - sudo dlite install --disk=20 --memory=4
-    - dlite start
-  when: not dlite_dir.stat.exists
+# - name: Setup dlite
+#   shell: "{{ item }}"
+#   with_items:
+#     - sudo dlite install --disk=20 --memory=4
+#     - dlite start
+#   when: not dlite_dir.stat.exists
