@@ -2,7 +2,7 @@
 
 set -e
 
-# Use colors, but only if connected to a terminal, and that terminal supports them
+# use colors, but only if connected to a terminal, and that terminal supports them
 if which tput >/dev/null 2>&1; then
     ncolors=$(tput colors)
 fi
@@ -22,6 +22,41 @@ else
     NORMAL=""
 fi
 
+# borrow from https://github.com/IFTTT/dash/blob/master/bin/bootstrap
+# returns 1 if upgrade is needed
+# $1 - SYSTEM VERSION
+# $2 - NEEDED VERSION
+update_needed () {
+    if [[ $1 == $2 ]]
+    then
+        return 0
+    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    # fill empty fields in ver1 with zeros
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+    do
+        ver1[i]=0
+    done
+    for ((i=0; i<${#ver1[@]}; i++))
+    do
+        if [[ -z ${ver2[i]} ]]
+        then
+            # fill empty fields in ver2 with zeros
+            ver2[i]=0
+        fi
+        if ((10#${ver1[i]} > 10#${ver2[i]}))
+        then
+            return 1
+        fi
+        if ((10#${ver1[i]} < 10#${ver2[i]}))
+        then
+            return 0
+        fi
+    done
+    return 0
+}
+
 printf "${BOLD}Hello, HAL. Do you read me, HAL?${NORMAL}\n"
 printf "${BOLD}Affirmative, Dave. I read you.${NORMAL}\n"
 
@@ -36,22 +71,35 @@ else
     brew update
 fi
 
+ANSIBLE_NEEDED="2.0"
 which -s ansible-playbook
 if [[ $? != 0 ]] ; then
     printf "\n"
     printf "${BLUE}Install Ansible...${NORMAL}\n"
     brew install ansible
+else
+    ANSIBLE_VERSION=$(ansible --version | grep ansible | cut -d " " -f 2)
+    if update_needed $ANSIBLE_VERSION $ANSIBLE_NEEDED ; then
+        printf "\n"
+        printf "${RED}Ansible version is too old: $ANSIBLE_VERSION. We need > $ANSIBLE_NEEDED.${NORMAL}\n"
+        printf "${BLUE}Update Ansible...${NORMAL}\n"
+        brew upgrade ansible
+        brew link --overwrite ansible
+    else
+        printf "\n"
+        printf "${BLUE}Ansible version is $ANSIBLE_VERSION. Update not needed.${NORMAL}\n"
+    fi
 fi
 
 REPO_REMOTE=git@github.com:vinta/HAL-9000.git
 REPO_ROOT=/usr/local/HAL-9000
 if [ ! -d $REPO_ROOT/.git/ ] ; then
     printf "\n"
-    printf "${BLUE}Checkout the repo...${NORMAL}\n"
+    printf "${BLUE}Checkout the GitHub repo...${NORMAL}\n"
     git clone $REPO_REMOTE $REPO_ROOT
 else
     printf "\n"
-    printf "${BLUE}Pull the repo...${NORMAL}\n"
+    printf "${BLUE}Pull the GitHub repo...${NORMAL}\n"
     cd $REPO_ROOT
     git fetch
     git pull
