@@ -33,6 +33,13 @@ You may need to...
 $ bash <(curl -fsSL https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors)
 ```
 
+If you want to install specific components (based on roles in [site.yml](https://github.com/vinta/HAL-9000/blob/master/playbooks/site.yml)):
+
+``` bash
+$ curl -O https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors
+$ open-the-pod-bay-doors --tags docker,go
+```
+
 ## Usage
 
 ``` bash

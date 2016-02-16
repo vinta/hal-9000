@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # Use colors, but only if connected to a terminal, and that terminal supports them
 if which tput >/dev/null 2>&1; then
     ncolors=$(tput colors)
@@ -58,6 +60,6 @@ fi
 printf "\n"
 printf "${BLUE}Run ansible-playbook (will require your sudo password)...${NORMAL}\n"
 cd $REPO_ROOT/playbooks
-ansible-playbook site.yml -v
+ansible-playbook site.yml -v "$@"
 
 source $REPO_ROOT/playbooks/roles/basic/files/hal_profile
