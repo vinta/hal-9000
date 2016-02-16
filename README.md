@@ -75,8 +75,7 @@ $ hal open-the-pod-bay-doors
 ``` bash
 # it's optional to setup port forwarding to access Docker containers via 127.0.0.1
 # otherwise you can only access them through Docker Machine VM's IP
-$ VBoxManage modifyvm "default" --natpf1 "Rule 8000,tcp,,8000,,8000" && \
-  VBoxManage modifyvm "default" --natpf1 "Rule 8001,tcp,,8001,,8001" && \
-  VBoxManage modifyvm "default" --natpf1 "Rule 8002,tcp,,8002,,8002" && \
-  VBoxManage modifyvm "default" --natpf1 "Rule 8003,tcp,,8003,,8003"
+$ VBoxManage controlvm "default" natpf1 "Rule 3000,tcp,,3000,,3000" && \
+  VBoxManage controlvm "default" natpf1 "Rule 8000,tcp,,8000,,8000" && \
+  VBoxManage controlvm "default" natpf1 "Rule 9000,tcp,,9000,,9000"
 ```
