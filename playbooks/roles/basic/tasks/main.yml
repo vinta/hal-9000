@@ -1,4 +1,4 @@
-- name: Check sudo Password
+- name: Check sudo password
   command: whoami
   become: yes
   become_method: sudo
@@ -13,8 +13,13 @@
   shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   when: not oh_my_zsh_dir.stat.exists
 
+# https://github.com/caskroom/homebrew-versions
+- name: Tap Caskroom versions
+  homebrew_tap:
+    tap: caskroom/versions
+
 # https://github.com/caskroom/homebrew-fonts
-- name: Tap Caskroom Fonts
+- name: Tap Caskroom fonts
   homebrew_tap:
     tap: caskroom/fonts
 
@@ -57,6 +62,19 @@
     - quicklook-json
     - quicklook-csv
     - qlimagesize
+
+- name: Install applications
+  homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - atom-beta
+    - iterm2-beta
+    - sequel-pro
+    - sourcetree
+    - sublime-text-dev
+  environment:
+    HOMEBREW_CASK_OPTS: "--appdir={{ BREW_CASK_APPDIR }}"
 
 # https://github.com/seebi/dircolors-solarized
 - name: Checkout dircolors-solarized
