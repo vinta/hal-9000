@@ -36,8 +36,9 @@ $ bash <(curl -fsSL https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/
 If you want to install specific components (see [site.yml](https://github.com/vinta/HAL-9000/blob/master/playbooks/site.yml)):
 
 ``` bash
-$ curl -O https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors
-$ open-the-pod-bay-doors --tags docker,go
+$ curl -O https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors && \
+  chmod +x open-the-pod-bay-doors  && \
+  ./open-the-pod-bay-doors --tags docker,node.js
 ```
 
 ## Usage
