@@ -66,9 +66,6 @@ test -e ${HOME}/.iterm2_tab_color.zsh && source ${HOME}/.iterm2_tab_color.zsh
 
 eval "$(fasd --init auto)"
 
-alias v='f -e sublime'
-alias o='a -e open'
-
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
@@ -91,16 +88,15 @@ alias o='a -e open'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias ls='gls --color=auto'
-alias ll='ls -lAU'
-alias la='ls -AU'
-alias grep='grep --color=auto'
-alias stat='gstat'
-
-alias pycclean="find $PWD -name '*.pyc' -delete"
-
 alias fuck='$(thefuck $(fc -ln -1))'
-alias FUCK='fuck'
+alias grep='grep --color=auto'
+alias la='ls -AU'
+alias ll='ls -lAU'
+alias ls='gls --color=auto'
+alias o='a -e open'
+alias pycclean="find $PWD -name '*.pyc' -delete"
+alias stat='gstat'
+alias v='f -e sublime'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/docker/files/docker_machine_profile
