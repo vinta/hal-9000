@@ -193,12 +193,12 @@ class HAL9000(object):
             # self._run('docker-machine-nfs default --mount-opts="nolock,vers=3,udp,noatime,actimeo=1"')
 
     def prepare(self, namespace, extra_args=None):
-        returncode = self._run('docker-machine start default')
-        if returncode != 0:
+        _, output = self._run_with_output('docker-machine start default')
+        if 'Host does not exist' in output:
             self._hal_says('You may need to run `hal create` first', color=Color.WARNING)
             sys.exit(0)
 
-        returncode, output = self._run_with_output('eval "$(docker-machine env default)"', verbose=False, print_output=False)
+        _, output = self._run_with_output('eval "$(docker-machine env default)"', verbose=False, print_output=False)
         if 'Error running connection boilerplate' in output:
             self._run('sleep 4')
 
