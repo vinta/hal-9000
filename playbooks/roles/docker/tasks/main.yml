@@ -46,7 +46,7 @@
     dest: /etc/exports
     create: yes
     marker: "# HAL 9000"
-    content: "/Users 192.168.99.100 -alldirs -mapall=0:80"
+    content: "/Users 192.168.99.100 -alldirs -mapall=501:20"
   become: yes
   become_method: sudo
   register: nfs_exports
@@ -56,6 +56,12 @@
   become: yes
   become_method: sudo
   when: nfs_exports.changed
+
+- name: Download docker-machine-nfs
+  get_url:
+    url: https://raw.githubusercontent.com/adlogix/docker-machine-nfs/master/docker-machine-nfs.sh
+    dest: /usr/local/bin/docker-machine-nfs
+    mode: 0755
 
 - name: Enable Docker Machine environment in .zshrc
   lineinfile:
