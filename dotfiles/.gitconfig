@@ -23,8 +23,8 @@
 
 [core]
     excludesfile = ~/.gitignore_global
-	preloadindex = true
-	ignorecase = false
+    preloadindex = true
+    ignorecase = false
 
 [help]
     autocorrect = 1
