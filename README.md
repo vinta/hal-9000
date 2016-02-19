@@ -8,7 +8,7 @@ Dominating your dev environment like cats rule the Internet.
 
 Building a Dockerized development environment with Ansible on Mac OS X. Inspired by IFTTT's [Dash](https://github.com/IFTTT/dash).
 
-HAL will configure these tools for you, Dave:
+HAL will configure these tools for you:
 
 - Homebrew
 - Ansible
@@ -21,6 +21,11 @@ HAL will configure these tools for you, Dave:
 - Node.js
 - Python
 - and your dotfiles
+
+It will create:
+
+- A Docker Machine VM named 'default'
+- A DNS resolver configuration pointing `.dev` domains to your VM
 
 You may need to...
 
@@ -76,7 +81,5 @@ $ hal open-the-pod-bay-doors
 ``` bash
 # it's optional to setup port forwarding to access Docker containers via 127.0.0.1
 # otherwise you can only access them through Docker Machine VM's IP
-$ VBoxManage controlvm "default" natpf1 "Rule 3000,tcp,,3000,,3000" && \
-  VBoxManage controlvm "default" natpf1 "Rule 8000,tcp,,8000,,8000" && \
-  VBoxManage controlvm "default" natpf1 "Rule 9000,tcp,,9000,,9000"
+$ VBoxManage controlvm "default" natpf1 "Rule 8000,tcp,,8000,,8000"
 ```
