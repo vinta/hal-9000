@@ -10,17 +10,17 @@
     executable: /bin/bash
   when: not nvm_dir.stat.exists
 
-- name: stat nvm version directory
+- name: stat Node.js version directory
   stat:
     path: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}"
-  register: nvm_version_dir
+  register: node_version_dir
 
 - name: Install Node.js
   shell: >
     . ~/.nvm/nvm.sh && \
     nvm install {{ NODE_VERSION }} && \
     nvm alias default {{ NODE_VERSION }}
-  when: not nvm_version_dir.stat.exists
+  when: not node_version_dir.stat.exists
 
 # - name: Install must-have packages for Node.js
 #   npm:
