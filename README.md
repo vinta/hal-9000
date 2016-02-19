@@ -24,7 +24,7 @@ HAL will configure these tools for you:
 
 It will create:
 
-- A Docker Machine VM named 'default'
+- A Docker Machine VM named `default`
 - A DNS resolver configuration pointing `.dev` domains to your VM
 
 You may need to...
