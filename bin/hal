@@ -174,7 +174,7 @@ class HAL9000(object):
         self._run('git pull')
 
         os.chdir('/usr/local/HAL-9000/playbooks')
-        returncode = self._run('ansible-playbook site.yml -v')
+        returncode = self._run('ansible-playbook site.yml')
         if returncode == 0:
             self._hal_says('Now open a new shell to active your dev environment', color=Color.HEADER)
 
