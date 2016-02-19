@@ -4,5 +4,5 @@
     - {role: basic, tags: ['basic']}
     - {role: docker, tags: ['docker']}
     - {role: go, tags: ['go']}
-    - {role: node.js, tags: ['node.js']}
+    - {role: node, tags: ['node']}
     - {role: python, tags: ['python']}

@@ -101,5 +101,5 @@ alias v='f -e sublime'
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/docker/files/docker_machine_profile
 source /usr/local/HAL-9000/playbooks/roles/go/files/gvm_profile
-source /usr/local/HAL-9000/playbooks/roles/node.js/files/nvm_profile
+source /usr/local/HAL-9000/playbooks/roles/node/files/nvm_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile

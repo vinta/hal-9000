@@ -38,7 +38,7 @@ If you want to install specific components (see [site.yml](https://github.com/vi
 ``` bash
 $ curl -O https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors && \
   chmod +x open-the-pod-bay-doors && \
-  ./open-the-pod-bay-doors --tags docker,node.js
+  ./open-the-pod-bay-doors --tags docker,node
 ```
 
 ## Usage
