@@ -76,12 +76,19 @@
   environment:
     HOMEBREW_CASK_OPTS: "--appdir={{ BREW_CASK_APPDIR }}"
 
+# https://github.com/tarruda/zsh-autosuggestions
+- name: Checkout zsh-autosuggestions
+  git:
+    repo: git://github.com/tarruda/zsh-autosuggestions
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    update: yes
+
 # https://github.com/seebi/dircolors-solarized
 - name: Checkout dircolors-solarized
   git:
     repo: git@github.com:seebi/dircolors-solarized.git
     dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
-    update: no
+    update: yes
 
 - name: Enable hal environment in .zshrc
   lineinfile:
@@ -89,13 +96,16 @@
     line: "{{ item }}"
     create: yes
   with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile
+    - "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile"
   when: ansible_env.SHELL == "/bin/zsh"
 
 - name: Run hal sync
   command: "{{ REPO_ROOT }}/bin/hal sync"
 
-- name: Create Projects directory
+- name: Create directories
   file:
-    path: "{{ ansible_env.HOME }}/Projects"
+    path: "{{ item }}"
     state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/Downloads"
+    - "{{ ansible_env.HOME }}/Projects"

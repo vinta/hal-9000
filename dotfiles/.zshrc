@@ -48,7 +48,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(autojump brew docker fasd git golang npm pip)
+plugins=(autojump brew docker fasd git golang npm pip zsh-autosuggestions)
 
 # User configuration
 
@@ -58,6 +58,8 @@ source $ZSH/oh-my-zsh.sh
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
+
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
 
 test -e ${HOME}/.dircolors-solarized && eval $(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)
 
