@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 from contextlib import contextmanager
 import argparse
 import json
@@ -151,7 +152,7 @@ class HAL9000(object):
             returncode = exc.returncode
         finally:
             if print_output and output:
-                print(output)
+                print(output, end='')
 
         self.command_queue.pop()
 
