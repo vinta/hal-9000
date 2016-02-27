@@ -56,12 +56,9 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - qlcolorcode
-    - qlstephen
-    - qlmarkdown
-    - quicklook-json
-    - quicklook-csv
     - qlimagesize
+    - quicklook-csv
+    - quicklook-json
 
 - name: Install applications
   homebrew_cask:
