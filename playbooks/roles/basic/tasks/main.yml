@@ -65,7 +65,7 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - atom-beta
+    - atom
     - iterm2-beta
     - sequel-pro
     - sourcetree
