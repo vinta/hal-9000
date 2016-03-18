@@ -60,19 +60,6 @@
     - quicklook-csv
     - quicklook-json
 
-- name: Install applications
-  homebrew_cask:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - atom
-    - iterm2-beta
-    - sequel-pro
-    - sourcetree
-    - sublime-text-dev
-  environment:
-    HOMEBREW_CASK_OPTS: "--appdir={{ BREW_CASK_APPDIR }}"
-
 # https://github.com/tarruda/zsh-autosuggestions
 - name: Checkout zsh-autosuggestions
   git:
