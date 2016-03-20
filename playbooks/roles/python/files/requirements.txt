@@ -1,4 +1,6 @@
 awscli
+boto
+boto3
 bpython
 coverage
 flake8
@@ -14,9 +16,7 @@ pep8-naming
 pylint
 pylint-celery
 pylint-django
-saltpylint
-sphinx
-sphinx-rtd-theme
+requests
 thefuck
 uniout
 virtualenv
