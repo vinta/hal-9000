@@ -90,7 +90,6 @@ eval "$(fasd --init auto)"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias fuck='$(thefuck $(fc -ln -1))'
 alias grep='grep --color=auto'
 alias la='ls -AU'
 alias ll='ls -lAU'
@@ -99,6 +98,11 @@ alias o='a -e open'
 alias pycclean="find $PWD -name '*.pyc' -delete"
 alias stat='gstat'
 alias v='f -e sublime'
+
+if $(grc &>/dev/null) && ! $(brew &>/dev/null)
+then
+  source `brew --prefix grc`/etc/grc.bashrc
+fi
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/docker/files/docker_machine_profile
