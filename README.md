@@ -56,7 +56,7 @@ $ hal create
 # setup nginx-proxy and dnsmasq
 $ hal prepare
 
-$ cd /path/to/your_project/ # that contains a docker-compose.yml file
+$ cd /path/to/your/project/ # that contains a docker-compose.yml file
 $ docker-compose up
 # or
 $ hal up # == hal prepare + docker-compose up
