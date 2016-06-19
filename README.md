@@ -35,15 +35,13 @@ You may need to...
 ## Bootstrap
 
 ``` bash
-$ bash <(curl -fsSL https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors)
+$ curl https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors | bash
 ```
 
 If you want to install specific components (see [site.yml](https://github.com/vinta/HAL-9000/blob/master/playbooks/site.yml)):
 
 ``` bash
-$ curl -O https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors && \
-  chmod +x open-the-pod-bay-doors && \
-  ./open-the-pod-bay-doors --tags docker,node
+$ curl https://raw.githubusercontent.com/vinta/HAL-9000/master/bin/open-the-pod-bay-doors | bash -s -- --tags docker
 ```
 
 ## Usage
