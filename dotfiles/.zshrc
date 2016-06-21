@@ -101,7 +101,7 @@ alias v='f -e sublime'
 
 if $(grc &>/dev/null) && ! $(brew &>/dev/null)
 then
-  source `brew --prefix grc`/etc/grc.bashrc
+  source `brew --prefix`/etc/grc.bashrc
 fi
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
