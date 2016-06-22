@@ -37,7 +37,6 @@
     - enchant
     - fasd
     - git
-    - grc
     - homebrew/dupes/rsync
     - jq
     - mackup

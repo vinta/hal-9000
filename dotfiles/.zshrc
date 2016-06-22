@@ -64,7 +64,6 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
 test -e ${HOME}/.dircolors-solarized && eval $(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
-test -e ${HOME}/.iterm2_tab_color.zsh && source ${HOME}/.iterm2_tab_color.zsh
 
 eval "$(fasd --init auto)"
 
@@ -98,11 +97,6 @@ alias o='a -e open'
 alias pycclean="find $PWD -name '*.pyc' -delete"
 alias stat='gstat'
 alias v='f -e sublime'
-
-if $(grc &>/dev/null) && ! $(brew &>/dev/null)
-then
-  source `brew --prefix`/etc/grc.bashrc
-fi
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/docker/files/docker_machine_profile
