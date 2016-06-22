@@ -2,7 +2,7 @@ version: "2"
 
 services:
   proxy:
-    image: jwilder/nginx-proxy
+    image: jwilder/nginx-proxy:0.4.0
     ports:
       - "80:80"
     volumes:
@@ -10,7 +10,7 @@ services:
     restart: always
 
   dns:
-    image: andyshinn/dnsmasq
+    image: andyshinn/dnsmasq:2.75
     ports:
       - "192.168.99.100:53:53/tcp"
       - "192.168.99.100:53:53/udp"
