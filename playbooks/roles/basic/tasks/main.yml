@@ -83,9 +83,6 @@
     - "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile"
   when: ansible_env.SHELL == "/bin/zsh"
 
-- name: Run hal sync
-  command: "{{ REPO_ROOT }}/bin/hal sync"
-
 - name: Create directories
   file:
     path: "{{ item }}"
