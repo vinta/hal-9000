@@ -1,35 +1,9 @@
-# https://github.com/creationix/nvm
-- name: stat .nvm directory
-  stat:
-    path: "{{ ansible_env.HOME }}/.nvm/"
-  register: nvm_dir
-
-- name: Install nvm
-  shell: "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash"
+# https://github.com/tj/n
+- name: Install n
+  shell: "curl -L https://git.io/n-install | N_PREFIX=~/.n bash -s -- -y"
   args:
+    creates: "{{ ansible_env.HOME }}/.n/"
     executable: /bin/bash
-  when: not nvm_dir.stat.exists
-
-- name: stat Node.js version directory
-  stat:
-    path: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}"
-  register: node_version_dir
-
-- name: Install Node.js
-  shell: >
-    . ~/.nvm/nvm.sh && \
-    nvm install {{ NODE_VERSION }} && \
-    nvm alias default {{ NODE_VERSION }}
-  when: not node_version_dir.stat.exists
-
-# - name: Install must-have packages for Node.js
-#   npm:
-#     name: "{{ item }}"
-#     state: present
-#     global: yes
-#     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}/bin/npm"
-#   with_items:
-#     - npm
 
 - name: Enable nvm environment in .zshrc
   lineinfile:
@@ -37,5 +11,5 @@
     line: "{{ item }}"
     create: yes
   with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/node/files/nvm_profile
+    - source {{ REPO_ROOT }}/playbooks/roles/node/files/n_profile
   when: ansible_env.SHELL == "/bin/zsh"
