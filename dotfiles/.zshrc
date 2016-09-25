@@ -48,7 +48,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(autojump brew docker fasd git golang npm pip zsh-autosuggestions)
+plugins=(autojump docker fasd zsh-autosuggestions)
 
 # User configuration
 
@@ -90,16 +90,14 @@ eval "$(fasd --init auto)"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias grep='grep --color=auto'
+alias stat='gstat'
+alias ls='gls --color=auto'
 alias la='ls -AU'
 alias ll='ls -lAU'
-alias ls='gls --color=auto'
 alias o='a -e open'
-alias pycclean="find $PWD -name '*.pyc' -delete"
-alias stat='gstat'
 alias v='f -e sublime'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
-source /usr/local/HAL-9000/playbooks/roles/docker/files/docker_machine_profile
 source /usr/local/HAL-9000/playbooks/roles/go/files/gvm_profile
-source /usr/local/HAL-9000/playbooks/roles/node/files/nvm_profile
+source /usr/local/HAL-9000/playbooks/roles/node/files/n_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
