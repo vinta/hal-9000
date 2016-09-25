@@ -1,38 +1,25 @@
 # https://github.com/moovweb/gvm
-- name: stat .gvm directory
-  stat:
-    path: "{{ ansible_env.HOME }}/.gvm/"
-  register: gvm_dir
-
 - name: Install gvm
   shell: "bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)"
   args:
     executable: /bin/bash
-  when: not gvm_dir.stat.exists
-
-- name: stat Go 1.4 version directory
-  stat:
-    path: "{{ ansible_env.HOME }}/.gvm/gos/go1.4"
-  register: go14_version_dir
+    creates: "{{ ansible_env.HOME }}/.gvm/"
 
 - name: Install Go 1.4
   shell: >
     source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
     gvm install go1.4 && \
     gvm use go1.4 --default
-  when: not go14_version_dir.stat.exists
-
-- name: stat Go newer version directory
-  stat:
-    path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ GO_VERSION }}"
-  register: go_newer_version_dir
+  args:
+    creates: "{{ ansible_env.HOME }}/.gvm/gos/go1.4"
 
 - name: Install Go newer version
   shell: >
     source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
     gvm install go{{ GO_VERSION }} && \
     gvm use go{{ GO_VERSION }} --default
-  when: not go_newer_version_dir.stat.exists
+  args:
+    creates: "{{ ansible_env.HOME }}/.gvm/gos/go{{ GO_VERSION }}"
 
 - name: Create oh-my-go directory
   file:
