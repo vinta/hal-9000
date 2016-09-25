@@ -4,24 +4,10 @@
   become_method: sudo
 
 # https://github.com/robbyrussell/oh-my-zsh
-- name: stat .oh-my-zsh directory
-  stat:
-    path: "{{ ansible_env.HOME }}/.oh-my-zsh/"
-  register: oh_my_zsh_dir
-
 - name: Install oh-my-zsh
   shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  when: not oh_my_zsh_dir.stat.exists
-
-# https://github.com/caskroom/homebrew-versions
-- name: Tap Caskroom versions
-  homebrew_tap:
-    tap: caskroom/versions
-
-# https://github.com/caskroom/homebrew-fonts
-- name: Tap Caskroom fonts
-  homebrew_tap:
-    tap: caskroom/fonts
+  args:
+    creates: "{{ ansible_env.HOME }}/.oh-my-zsh/"
 
 - name: Update Homebrew
   homebrew:
@@ -37,7 +23,6 @@
     - enchant
     - fasd
     - git
-    - homebrew/dupes/rsync
     - jq
     - mackup
     - mercurial
@@ -74,6 +59,14 @@
     dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
     update: yes
 
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/Downloads"
+    - "{{ ansible_env.HOME }}/Projects"
+
 - name: Enable hal environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
@@ -82,11 +75,3 @@
   with_items:
     - "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile"
   when: ansible_env.SHELL == "/bin/zsh"
-
-- name: Create directories
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "{{ ansible_env.HOME }}/Downloads"
-    - "{{ ansible_env.HOME }}/Projects"
