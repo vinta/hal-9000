@@ -74,3 +74,5 @@
 
 - name: Create the Docker Machine VM
   command: "{{ REPO_ROOT }}/bin/hal create"
+  args:
+    creates: "{{ ansible_env.HOME }}/.docker/machine/machines/default"
