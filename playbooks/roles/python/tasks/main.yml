@@ -9,12 +9,12 @@
     # - pyenv-virtualenvwrapper
 
 - name: Install Python 2 via pyenv
-  shell: "pyenv install {{ PYTHON_2_VERSION }}"
+  command: "pyenv install {{ PYTHON_2_VERSION }}"
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}"
 
 - name: Install Python 3 via pyenv
-  shell: "pyenv install {{ PYTHON_3_VERSION }}"
+  command: "pyenv install {{ PYTHON_3_VERSION }}"
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}"
 

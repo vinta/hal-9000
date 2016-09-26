@@ -1,6 +1,6 @@
 # https://github.com/moovweb/gvm
 - name: Install gvm
-  shell: "bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)"
+  command: "bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)"
   args:
     executable: /bin/bash
     creates: "{{ ansible_env.HOME }}/.gvm/"
