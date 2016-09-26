@@ -23,10 +23,12 @@
     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}/bin/pip"
     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
 
-- name: Install must-have packages for Python 3
-  pip:
-    executable: "/Users/vinta/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
-    requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
+# TODO
+# works only in Ansible 2.1+
+# - name: Install must-have packages for Python 3
+#   pip:
+#     executable: "/Users/vinta/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
+#     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
 
 - name: Enable pyenv environment in .zshrc
   lineinfile:
