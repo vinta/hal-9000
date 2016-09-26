@@ -1,6 +1,6 @@
 # https://github.com/tj/n
 - name: Install n
-  shell: "curl -L https://git.io/n-install | N_PREFIX=~/.n bash -s -- -y"
+  command: "curl -L https://git.io/n-install | N_PREFIX=~/.n bash -s -- -y"
   args:
     creates: "{{ ansible_env.HOME }}/.n/"
     executable: /bin/bash
