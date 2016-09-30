@@ -57,6 +57,7 @@
   become_method: sudo
   when: nfs_exports.changed
 
+# https://github.com/adlogix/docker-machine-nfs
 - name: Download docker-machine-nfs
   get_url:
     url: https://raw.githubusercontent.com/adlogix/docker-machine-nfs/master/docker-machine-nfs.sh
