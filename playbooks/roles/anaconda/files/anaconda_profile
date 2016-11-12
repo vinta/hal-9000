@@ -1,0 +1,2 @@
+# https://docs.continuum.io/anaconda/
+export PATH=$HOME/anaconda/bin:$PATH
