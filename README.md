@@ -14,9 +14,8 @@ HAL will configure these tools for you:
 - Ansible
 - VirtualBox
 - Docker
-- Docker Machine
+- Docker Machine (with [NFS support](https://github.com/adlogix/docker-machine-nfs))
 - Docker Compose
-- DLite
 - Go
 - Node.js
 - Python
