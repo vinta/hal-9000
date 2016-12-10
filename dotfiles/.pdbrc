@@ -1,0 +1,25 @@
+# Print contents of an object's class (including bases).
+alias pc for k,v in sorted({k:v for cls in reversed(%1.__class__.__mro__) for k,v in cls.__dict__.items() if cls is not object}.items()): print("%s%-30s= %-80.80s" % ("%1.", k, repr(v)))
+
+# Print a dictionary, sorted. %1 is the dict, %2 is the prefix for the names.
+alias p_ for k in sorted(%1.keys()): print "%s%-30s= %-80.80s" % ("%2", k, repr(%1[k]))
+alias pd for k in sorted(%1.keys()): print "%s%-30s= %-80.80s" % ("%1", '[%s]' % (repr(k)), repr(%1[k]))
+
+# Print the member variables of a thing.
+alias pi p_ %1.__dict__ %1.
+
+# Print the member variables of self.
+alias ps pi self
+
+# Print the locals.
+alias pl pd locals()
+
+alias dir dir(%1)
+alias dirp pp dir(%1)
+
+# .pdbrc only allows for debugger commands; you cannot insert Python scripts.
+# To overcome this restriction, this .pdbrc executes ~/.pdbrc.py, which can contain arbitrary Python commands.
+# If ~/.pdbrc.py is missing, you get an error message (which doesn't hurt).
+#
+# import os
+# execfile(os.path.expanduser('~/.pdbrc.py'))
