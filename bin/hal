@@ -78,10 +78,11 @@ class HAL9000(object):
         parser = argparse.ArgumentParser(
             prog='hal',
             description='I am completely operational, and all my circuits are functioning perfectly',
-            version='9000',
             formatter_class=HAL9000Formatter
         )
         self.parser = parser
+
+        self.parser.add_argument('-v', '--version', action='version', version='9000')
 
         subparsers = parser.add_subparsers(
             title='sub commands'
