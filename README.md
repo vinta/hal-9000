@@ -33,19 +33,19 @@ You may need to...
 
 ## Bootstrap
 
-``` bash
+```bash
 $ curl -L http://bit.ly/open-the-pod-bay-doors | bash
 ```
 
 If you want to install specific components (see [site.yml](https://github.com/vinta/HAL-9000/blob/master/playbooks/site.yml)):
 
-``` bash
+```bash
 $ curl -L http://bit.ly/open-the-pod-bay-doors | bash -s -- --tags docker
 ```
 
 ## Usage
 
-``` bash
+```bash
 # pull the repo and run ansible-playbook
 $ hal update
 
@@ -75,7 +75,7 @@ $ hal open-the-pod-bay-doors
 
 ## Extras
 
-``` bash
+```bash
 # it's optional to setup port forwarding to access Docker containers via 127.0.0.1
 # otherwise you can only access them through Docker Machine VM's IP
 $ VBoxManage controlvm "default" natpf1 "Rule 8000,tcp,,8000,,8000"
