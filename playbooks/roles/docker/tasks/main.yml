@@ -20,6 +20,7 @@
     - docker
     - docker-machine
     - docker-compose
+    - docker-clean
 
 - name: Create resolver directory
   file:
