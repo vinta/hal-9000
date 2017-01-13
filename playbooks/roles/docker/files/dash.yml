@@ -12,13 +12,13 @@ services:
     restart: always
 
   dns:
-    image: andyshinn/dnsmasq:2.75
+    image: andyshinn/dnsmasq:2.76
     ports:
-      - "192.168.99.100:53:53/tcp"
-      - "192.168.99.100:53:53/udp"
+      - "53535:53/tcp"
+      - "53535:53/udp"
     cap_add:
       - NET_ADMIN
-    command: --address=/dev/192.168.99.100
+    command: --address=/dev/127.0.0.1
     restart: always
 
 networks:
