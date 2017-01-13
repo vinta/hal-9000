@@ -1,33 +1,33 @@
 [user]
-    name = Vinta
-    email = vinta.chen@gmail.com
+	name = Vinta
+	email = vinta.chen@gmail.com
 
 [push]
-    default = simple
+	default = simple
 
 [color]
-    ui = 1
-    diff = auto
-    status = auto
-    branch = auto
-    log = auto
+	ui = 1
+	diff = auto
+	status = auto
+	branch = auto
+	log = auto
 
 [alias]
-    branches = branch -a
-    ci = commit
-    co = checkout
-    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
-    remotes = remote -v
-    st = status -sb
-    tags = tag -l
+	branches = branch -a
+	ci = commit
+	co = checkout
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+	remotes = remote -v
+	st = status -sb
+	tags = tag -l
 
 [core]
-    excludesfile = ~/.gitignore_global
-    preloadindex = true
-    ignorecase = false
+	excludesfile = ~/.gitignore_global
+	preloadindex = true
+	ignorecase = false
 
 [help]
-    autocorrect = 1
+	autocorrect = 1
 
 [credential]
-    helper = osxkeychain
+	helper = osxkeychain
