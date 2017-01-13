@@ -93,9 +93,6 @@ class HAL9000(object):
         update_parser = subparsers.add_parser('update', help='pull the repo and run ansible-playbook')
         update_parser.set_defaults(func=self.update)
 
-        create_parser = subparsers.add_parser('create', help='create the Docker Machine VM')
-        create_parser.set_defaults(func=self.create)
-
         prepare_parser = subparsers.add_parser('prepare', help='setup nginx-proxy and dnsmasq')
         prepare_parser.set_defaults(func=self.prepare)
 
@@ -169,51 +166,29 @@ class HAL9000(object):
         # __exit__
         self.command_queue.pop()
 
-    # TODO: pass `--tags "basic,go"` to ansible-playbook command
     def update(self, namespace, extra_args=None):
         os.chdir('/usr/local/HAL-9000')
         self._run('git fetch')
         self._run('git pull')
 
         os.chdir('/usr/local/HAL-9000/playbooks')
-        returncode = self._run('ansible-playbook site.yml')
+        command = 'ansible-playbook site.yml'
+        if extra_args:
+            command = ' '.join([command, ] + extra_args)
+        returncode = self._run(command)
         if returncode == 0:
             self._hal_says('Now open a new shell to active your dev environment', color=Color.HEADER)
 
-    def create(self, namespace, extra_args=None):
-        returncode = self._run('docker-machine create --driver virtualbox --virtualbox-cpu-count 2 --virtualbox-memory 4096 --virtualbox-disk-size 30000 --engine-opt dns=192.168.99.100 --engine-opt dns=8.8.8.8 --engine-opt dns=8.8.4.4 default')
-        if returncode == 0:
-            # scp to default:/var/lib/boot2docker/bootlocal.sh directly will cause Permission denied
-            self._run('docker-machine scp /usr/local/HAL-9000/playbooks/roles/docker/files/bootlocal.sh default:/tmp/bootlocal.sh')
-            self._run('docker-machine ssh default "sudo mv /tmp/bootlocal.sh /var/lib/boot2docker/bootlocal.sh"')
-            self._run('docker-machine ssh default "sudo chown root:root /var/lib/boot2docker/bootlocal.sh"')
-            self._run('docker-machine ssh default "sudo chmod +x /var/lib/boot2docker/bootlocal.sh"')
-            self._run('docker-machine ssh default "sync"')
-            self._run('sleep 2')
-            self._run('docker-machine restart default')
-            # or
-            # self._run('docker-machine-nfs default --mount-opts="nolock,vers=3,udp,noatime,actimeo=1"')
-
     def prepare(self, namespace, extra_args=None):
-        _, output = self._run_with_output('docker-machine start default')
-        if 'Host does not exist' in output:
-            self._hal_says('You may need to run `hal create` first', color=Color.WARNING)
-            sys.exit(0)
-
-        _, output = self._run_with_output('eval "$(docker-machine env default)"', verbose=False, print_output=False)
-        if 'Error running connection boilerplate' in output:
-            self._run('sleep 4')
-
-        with self._prefix('eval "$(docker-machine env default)"'):
-            self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
+        self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
     def up(self, namespace, extra_args=None):
         self.prepare(namespace)
 
-        os.chdir(os.getcwd())
-        with self._prefix('eval "$(docker-machine env default)"'):
-            command = ['docker-compose', 'up'] + extra_args
-            self._run(command)
+        command = 'docker-compose up'
+        if extra_args:
+            command = ' '.join([command, ] + extra_args)
+        self._run(command)
 
     def link(self, namespace, extra_args=None):
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
