@@ -15,6 +15,11 @@
     chdir: /usr/local/d4m-nfs/
     creates: /tmp/d4m-nfs-mounts.txt
 
+- name: Make d4m-nfs.sh run at startup
+  template:
+    src: "{{ REPO_ROOT }}/playbooks/roles/docker/files/local.d4m-nfs.plist"
+    dest: "{{ ansible_env.HOME }}/Library/LaunchAgents/local.d4m-nfs.plist"
+
 # https://docs.docker.com/compose/
 - name: Install Docker Compose and extras
   homebrew:
