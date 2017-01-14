@@ -4,6 +4,8 @@
     name: "{{ item }}"
     state: present
   with_items:
+    - readline
+    - openssl
     - pyenv
     # - pyenv-virtualenv
     # - pyenv-virtualenvwrapper
