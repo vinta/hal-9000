@@ -69,7 +69,7 @@ else
     brew update
 fi
 
-ANSIBLE_NEEDED="2.0"
+ANSIBLE_NEEDED="2.2"
 which -s ansible-playbook
 if [[ $? != 0 ]] ; then
     printf "\n"
