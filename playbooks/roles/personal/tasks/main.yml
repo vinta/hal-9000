@@ -1,0 +1,75 @@
+- name: Install system packages
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - autojump
+    - coreutils
+    - enchant
+    - fasd
+    - git
+    - jq
+    - mackup
+    - p7zip
+    - s3cmd
+    - ssh-copy-id
+    - tree
+    - wget
+    - zsh-completions
+
+# https://github.com/sindresorhus/quick-look-plugins
+- name: Install system plugins
+  homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - qlimagesize
+    - quicklook-csv
+    - quicklook-json
+
+# https://github.com/robbyrussell/oh-my-zsh
+- name: Install oh-my-zsh
+  command: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  args:
+    creates: "{{ ansible_env.HOME }}/.oh-my-zsh/"
+
+# https://github.com/tarruda/zsh-autosuggestions
+- name: Checkout zsh-autosuggestions
+  git:
+    repo: git://github.com/tarruda/zsh-autosuggestions
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    update: yes
+
+# https://github.com/seebi/dircolors-solarized
+- name: Checkout dircolors-solarized
+  git:
+    repo: git@github.com:seebi/dircolors-solarized.git
+    dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
+    update: yes
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/Downloads"
+    - "{{ ansible_env.HOME }}/Projects"
+
+- name: Setup git config - user.name
+  git_config:
+    name: user.name
+    scope: global
+    value: Vinta
+
+- name: Setup git config - user.email
+  git_config:
+    name: user.email
+    scope: global
+    value: vinta.chen@gmail.com
+
+# https://help.github.com/articles/caching-your-github-password-in-git/
+- name: Setup git config - credential.helper
+  git_config:
+    name: credential.helper
+    scope: global
+    value: osxkeychain

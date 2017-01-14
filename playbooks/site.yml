@@ -6,3 +6,4 @@
     - {role: go, tags: ['go']}
     - {role: node, tags: ['node']}
     - {role: python, tags: ['python']}
+    - {role: personal, tags: ['personal'], when: ansible_user == 'vinta'}
