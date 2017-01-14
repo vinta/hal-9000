@@ -180,7 +180,6 @@ class HAL9000(object):
             self._hal_says('Now open a new shell to active your dev environment', color=Color.HEADER)
 
     def prepare(self, namespace, extra_args=None):
-        self._run('/usr/local/d4m-nfs/d4m-nfs.sh -q')
         self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
 
     def up(self, namespace, extra_args=None):

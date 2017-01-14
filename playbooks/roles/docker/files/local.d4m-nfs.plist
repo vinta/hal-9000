@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>local.d4m-nfs</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+    <key>ProgramArguments</key>
+    <array>
+        <string>sudo</string>
+        <string>-u</string>
+        <string>{{ ansible_user }}</string>
+        <string>/usr/local/d4m-nfs/d4m-nfs.sh</string>
+        <string>-q</string>
+    </array>
+    <key>StandardOutPath</key>
+    <string>/tmp/local.d4m-nfs.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/local.d4m-nfs.log</string>
+    <key>ExitTimeOut</key>
+    <integer>60</integer>
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>
