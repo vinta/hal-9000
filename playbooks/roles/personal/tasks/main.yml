@@ -8,6 +8,7 @@
     - enchant
     - fasd
     - git
+    - git-extras
     - jq
     - mackup
     - p7zip
