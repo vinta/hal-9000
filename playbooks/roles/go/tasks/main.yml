@@ -26,7 +26,7 @@
     path: "{{ ansible_env.HOME }}/Projects/oh-my-go"
     state: directory
 
-- name: Install must-have packages for Go
+- name: Install Go tools
   shell: >
     source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
     {{ ansible_env.HOME }}/.gvm/gos/go{{ GO_VERSION }}/bin/go get {{ item }}
