@@ -5,7 +5,6 @@
   with_items:
     - autojump
     - coreutils
-    - enchant
     - fasd
     - git
     - git-extras
@@ -14,6 +13,7 @@
     - p7zip
     - s3cmd
     - ssh-copy-id
+    - tmux
     - tree
     - wget
     - zsh-completions
@@ -37,16 +37,31 @@
 # https://github.com/tarruda/zsh-autosuggestions
 - name: Checkout zsh-autosuggestions
   git:
-    repo: git://github.com/tarruda/zsh-autosuggestions
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
     dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     update: yes
 
 # https://github.com/seebi/dircolors-solarized
 - name: Checkout dircolors-solarized
   git:
-    repo: git@github.com:seebi/dircolors-solarized.git
+    repo: https://github.com/seebi/dircolors-solarized.git
     dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
     update: yes
+
+# https://github.com/tmux-plugins/tpm
+- name: Checkout tmux Plugin Manager
+  git:
+    repo: https://github.com/tmux-plugins/tpm.git
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+    update: yes
+
+- name: Install Ruby tools
+  gem:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - retryit
+    - tmuxinator
 
 - name: Create directories
   file:
