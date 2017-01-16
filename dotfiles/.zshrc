@@ -73,6 +73,7 @@ eval "$(fasd --init auto)"
 # else
 #   export EDITOR='mvim'
 # fi
+export EDITOR='sublime'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
