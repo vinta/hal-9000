@@ -10,6 +10,5 @@ ipython
 pangu
 pep8-naming
 requests
-virtualenv
-virtualenvwrapper
-wheel
+# virtualenv
+# virtualenvwrapper
