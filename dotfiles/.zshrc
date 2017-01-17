@@ -64,9 +64,9 @@ export DISABLE_AUTO_TITLE="true"
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="40"
 
-test -e ${HOME}/.dircolors-solarized && eval $(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)
+eval $(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)
 
-test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+source ${HOME}/.iterm2_shell_integration.zsh
 
 eval "$(fasd --init auto)"
 
