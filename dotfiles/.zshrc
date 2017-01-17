@@ -62,6 +62,7 @@ export LC_CTYPE=en_US.UTF-8
 export DISABLE_AUTO_TITLE="true"
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="40"
 
 test -e ${HOME}/.dircolors-solarized && eval $(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)
 
