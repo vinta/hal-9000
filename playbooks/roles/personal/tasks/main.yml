@@ -62,6 +62,8 @@
   with_items:
     - retryit
     - tmuxinator
+  become: yes
+  become_method: sudo
 
 - name: Create directories
   file:
