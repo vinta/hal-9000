@@ -9,16 +9,15 @@
     src: "{{ REPO_ROOT }}/playbooks/roles/docker/files/d4m-nfs-mounts.txt"
     dest: /usr/local/d4m-nfs/etc/d4m-nfs-mounts.txt
 
-- name: Run d4m-nfs.sh
-  command: ./d4m-nfs.sh
-  args:
-    chdir: /usr/local/d4m-nfs/
-    creates: /tmp/d4m-nfs-mounts.txt
-
 - name: Make d4m-nfs.sh run at startup
   template:
     src: "{{ REPO_ROOT }}/playbooks/roles/docker/files/local.d4m-nfs.plist"
     dest: "{{ ansible_env.HOME }}/Library/LaunchAgents/local.d4m-nfs.plist"
+
+- name: Start local.d4m-nfs
+  shell: >
+    launchctl load {{ ansible_env.HOME }}/Library/LaunchAgents/local.d4m-nfs.plist && \
+    launchctl start local.d4m-nfs
 
 # https://docs.docker.com/compose/
 - name: Install Docker Compose and extras
