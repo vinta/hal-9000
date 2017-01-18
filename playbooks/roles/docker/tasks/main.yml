@@ -19,13 +19,11 @@
     launchctl load {{ ansible_env.HOME }}/Library/LaunchAgents/local.d4m-nfs.plist && \
     launchctl start local.d4m-nfs
 
-# https://docs.docker.com/compose/
-- name: Install Docker Compose and extras
+- name: Install Docker tools
   homebrew:
     name: "{{ item }}"
     state: latest
   with_items:
-    - docker-compose
     - docker-clean
 
 # http://engineering.ifttt.com/oss/2015/10/06/developing-with-docker/
