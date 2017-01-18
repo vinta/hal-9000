@@ -91,3 +91,6 @@
     name: credential.helper
     scope: global
     value: osxkeychain
+
+- name: Run hal sync
+  command: "{{ REPO_ROOT }}/bin/hal sync"
