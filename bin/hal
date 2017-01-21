@@ -180,7 +180,7 @@ class HAL9000(object):
             self._hal_says('Now open a new shell to active your dev environment', color=Color.HEADER)
 
     def prepare(self, namespace, extra_args=None):
-        self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/dash.yml -p dash up -d')
+        self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/hal.yml -p hal up -d')
 
     def up(self, namespace, extra_args=None):
         self.prepare(namespace)

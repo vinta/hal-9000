@@ -10,7 +10,6 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     restart: always
-
   dns:
     image: andyshinn/dnsmasq:2.76
     ports:
@@ -20,7 +19,3 @@ services:
       - NET_ADMIN
     command: --address=/dev/127.0.0.1
     restart: always
-
-networks:
-  default:
-    driver: bridge
