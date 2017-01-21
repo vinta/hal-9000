@@ -9,6 +9,7 @@ services:
       - "80:80"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+    network_mode: "bridge"
     restart: always
   dns:
     image: andyshinn/dnsmasq:2.76
@@ -18,4 +19,5 @@ services:
     cap_add:
       - NET_ADMIN
     command: --address=/dev/127.0.0.1
+    network_mode: "bridge"
     restart: always
