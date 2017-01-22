@@ -2,9 +2,7 @@ version: "2"
 
 services:
   proxy:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
       - "80:80"
     volumes:
