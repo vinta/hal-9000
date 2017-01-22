@@ -185,9 +185,9 @@ class HAL9000(object):
     def up(self, namespace, extra_args=None):
         self.prepare(namespace)
 
-        command = 'docker-compose up'
+        command = ['docker-compose', 'up']
         if extra_args:
-            command = ' '.join([command, ] + extra_args)
+            command[1:1] = extra_args
         self._run(command)
 
     def link(self, namespace, extra_args=None):
