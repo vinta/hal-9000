@@ -9,4 +9,5 @@ git reset --hard
 cat $filename
 echo "false" > $filename
 git add $filename && git commit -s -m "Disable flushing"
-echo "You should now restart Docker for Mac"
+echo ""
+echo "You should now restart Docker for Mac and d4m-nfs"
