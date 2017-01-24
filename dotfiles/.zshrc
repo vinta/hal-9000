@@ -95,11 +95,15 @@ alias stat='gstat'
 alias ls='gls --color=auto'
 alias la='ls -AU'
 alias ll='ls -lAU'
+
 alias o='a -e open'
 alias v='f -e sublime'
+
+alias docker-stopall='docker stop $(docker ps -a -q)'
+alias docker-rmall='docker rm $(docker ps -a -q)'
+alias docker-rmiall='docker rmi $(docker images -q)'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/go/files/gvm_profile
 source /usr/local/HAL-9000/playbooks/roles/node/files/n_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
-# source /usr/local/HAL-9000/playbooks/roles/anaconda/files/anaconda_profile
