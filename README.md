@@ -6,7 +6,7 @@
 
 Dominating your dev environment like cats rule the Internet.
 
-Building a Dockerized development environment with Ansible on Mac OS X. Inspired by IFTTT's [Dash](https://github.com/IFTTT/dash).
+Building a Dockerized development environment with Ansible on macOS. Inspired by IFTTT's [Dash](https://github.com/IFTTT/dash).
 
 HAL will configure these tools for you:
 
