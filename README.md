@@ -17,7 +17,7 @@ HAL will configure these tools for you:
 - Go
 - Node.js
 - Python
-- and your dotfiles
+- dotfiles
 
 ## Prerequisite
 
