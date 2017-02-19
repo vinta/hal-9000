@@ -3,7 +3,6 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - autojump
     - coreutils
     - fasd
     - git
@@ -37,21 +36,28 @@
 # https://github.com/tarruda/zsh-autosuggestions
 - name: Checkout zsh-autosuggestions
   git:
-    repo: https://github.com/zsh-users/zsh-autosuggestions.git
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    repo: https://github.com/tarruda/zsh-autosuggestions
+    dest: "{{ ansible_env.HOME }}/.zsh/zsh-autosuggestions"
+    update: yes
+
+# https://github.com/zsh-users/zsh-syntax-highlighting
+- name: Checkout zsh-syntax-highlighting
+  git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting
+    dest: "{{ ansible_env.HOME }}/.zsh/zsh-syntax-highlighting"
     update: yes
 
 # https://github.com/seebi/dircolors-solarized
 - name: Checkout dircolors-solarized
   git:
-    repo: https://github.com/seebi/dircolors-solarized.git
+    repo: https://github.com/seebi/dircolors-solarized
     dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
     update: yes
 
 # https://github.com/tmux-plugins/tpm
 - name: Checkout tmux Plugin Manager
   git:
-    repo: https://github.com/tmux-plugins/tpm.git
+    repo: https://github.com/tmux-plugins/tpm
     dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
     update: yes
 
