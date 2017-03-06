@@ -111,3 +111,6 @@ source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/go/files/gvm_profile
 source /usr/local/HAL-9000/playbooks/roles/node/files/n_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
+
+source ~/Projects/dps/playbook/ssh_alias
+source ~/Projects/streetvoice-deployment/ssh_alias
