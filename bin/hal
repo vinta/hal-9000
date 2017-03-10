@@ -167,11 +167,11 @@ class HAL9000(object):
         self.command_queue.pop()
 
     def update(self, namespace, extra_args=None):
-        os.chdir('/usr/local/HAL-9000')
+        os.chdir(Setting.PROJECT_ROOT)
         self._run('git fetch')
         self._run('git pull')
 
-        os.chdir('/usr/local/HAL-9000/playbooks')
+        os.chdir(os.path.join(Setting.PROJECT_ROOT, 'playbooks'))
         command = 'ansible-playbook site.yml'
         if extra_args:
             command = ' '.join([command, ] + extra_args)
@@ -180,7 +180,8 @@ class HAL9000(object):
             self._hal_says('Now open a new shell to active your dev environment', color=Color.HEADER)
 
     def prepare(self, namespace, extra_args=None):
-        self._run('docker-compose -f /usr/local/HAL-9000/playbooks/roles/docker/files/hal.yml -p hal up -d --force-recreate')
+        filepath = os.path.join(Setting.PROJECT_ROOT, 'playbooks/roles/docker/files/hal.yml')
+        self._run('docker-compose -f {0} -p hal up -d --force-recreate'.format(filepath))
 
     def up(self, namespace, extra_args=None):
         self.prepare(namespace)
@@ -233,7 +234,9 @@ class HAL9000(object):
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that", color=Color.FAIL)
-        self._run('afplay /usr/local/HAL-9000/assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3', verbose=False)
+
+        filepath = os.path.join(Setting.PROJECT_ROOT, 'assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3')
+        self._run('afplay {0}'.format(filepath), verbose=False)
 
     def read_lips(self):
         if len(sys.argv) == 1:
