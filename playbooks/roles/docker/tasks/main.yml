@@ -3,11 +3,15 @@
   git:
     repo: https://github.com/IFSight/d4m-nfs.git
     dest: /usr/local/d4m-nfs
+  become: yes
+  become_method: sudo
 
 - name: Link d4m-nfs-mounts.txt
   template:
     src: "{{ REPO_ROOT }}/playbooks/roles/docker/files/d4m-nfs-mounts.txt"
     dest: /usr/local/d4m-nfs/etc/d4m-nfs-mounts.txt
+  become: yes
+  become_method: sudo
 
 - name: Make d4m-nfs.sh run at startup
   template:

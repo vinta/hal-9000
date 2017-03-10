@@ -17,19 +17,19 @@
     - wget
     - zsh-completions
 
-# https://github.com/sindresorhus/quick-look-plugins
-- name: Install system plugins
-  homebrew_cask:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - qlimagesize
-    - quicklook-csv
-    - quicklook-json
+# # https://github.com/sindresorhus/quick-look-plugins
+# - name: Install system plugins
+#   homebrew_cask:
+#     name: "{{ item }}"
+#     state: present
+#   with_items:
+#     - qlimagesize
+#     - quicklook-csv
+#     - quicklook-json
 
 # https://github.com/robbyrussell/oh-my-zsh
 - name: Install oh-my-zsh
-  command: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   args:
     creates: "{{ ansible_env.HOME }}/.oh-my-zsh/"
 

@@ -1,9 +1,19 @@
-# https://github.com/tj/n
-- name: Install n
-  command: "curl -L https://git.io/n-install | N_PREFIX=~/.n bash -s -- -y"
-  args:
-    creates: "{{ ansible_env.HOME }}/.n/"
-    executable: /bin/bash
+# https://github.com/creationix/nvm
+- name: Install nvm
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - nvm
+
+- name: Enable nvm environment in .bash_profile
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.bash_profile"
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - source {{ REPO_ROOT }}/playbooks/roles/node/files/nvm_profile
+  when: ansible_env.SHELL == "/bin/bash"
 
 - name: Enable nvm environment in .zshrc
   lineinfile:
@@ -11,5 +21,5 @@
     line: "{{ item }}"
     create: yes
   with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/node/files/n_profile
+    - source {{ REPO_ROOT }}/playbooks/roles/node/files/nvm_profile
   when: ansible_env.SHELL == "/bin/zsh"
