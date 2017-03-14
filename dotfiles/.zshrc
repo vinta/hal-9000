@@ -114,3 +114,12 @@ source ~/Projects/HAL-9000/playbooks/roles/python/files/pyenv_profile
 
 source ~/Projects/dps/playbook/ssh_alias
 source ~/Projects/streetvoice-deployment/ssh_alias
+
+if which java > /dev/null; then
+    export JAVA_HOME=$(/usr/libexec/java_home -v 1.8);
+fi
+
+if which pyspark > /dev/null; then
+  export SPARK_HOME="/usr/local/Cellar/apache-spark/2.1.0/libexec"
+  export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/build:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH
+fi
