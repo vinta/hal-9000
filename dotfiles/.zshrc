@@ -108,8 +108,8 @@ alias docker-rmall='docker rm $(docker ps -a -q)'
 alias docker-rmiall='docker rmi $(docker images -q)'
 
 source ~/Projects/HAL-9000/playbooks/roles/basic/files/hal_profile
-source ~/Projects/HAL-9000/playbooks/roles/go/files/gvm_profile
-source ~/Projects/HAL-9000/playbooks/roles/node/files/nvm_profile
+# source ~/Projects/HAL-9000/playbooks/roles/go/files/gvm_profile
+# source ~/Projects/HAL-9000/playbooks/roles/node/files/nvm_profile
 source ~/Projects/HAL-9000/playbooks/roles/python/files/pyenv_profile
 
 source ~/Projects/dps/playbook/ssh_alias
@@ -122,4 +122,12 @@ fi
 if which pyspark > /dev/null; then
   export SPARK_HOME="/usr/local/Cellar/apache-spark/2.1.0/libexec"
   export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH
+  export PYSPARK_DRIVER_PYTHON="jupyter"
+  export PYSPARK_DRIVER_PYTHON_OPTS="notebook --ip 0.0.0.0"
 fi
+
+# The next line updates PATH for the Google Cloud SDK.
+# if [ -f '/usr/local/google-cloud-sdk/path.zsh.inc' ]; then source '/usr/local/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+# if [ -f '/usr/local/google-cloud-sdk/completion.zsh.inc' ]; then source '/usr/local/google-cloud-sdk/completion.zsh.inc'; fi
