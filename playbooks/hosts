@@ -2,5 +2,5 @@
 127.0.0.1 ansible_connection=local
 
 [discovery-one:vars]
-REPO_ROOT=~/Projects/HAL-9000
+REPO_ROOT=/usr/local/HAL-9000
 REPO_URL=https://github.com/vinta/HAL-9000
