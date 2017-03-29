@@ -90,11 +90,12 @@ else
 fi
 
 REPO_REMOTE=https://github.com/vinta/HAL-9000.git
-REPO_ROOT=~/Projects/HAL-9000
+REPO_ROOT=/usr/local/HAL-9000
 if [ ! -d $REPO_ROOT/.git/ ] ; then
     printf "\n"
     printf "${BLUE}Checkout the GitHub repo...${NORMAL}\n"
-    git clone $REPO_REMOTE $REPO_ROOT
+    sudo git clone $REPO_REMOTE $REPO_ROOT
+    sudo chown -R "$USER":admin $REPO_ROOT
 else
     printf "\n"
     printf "${BLUE}Pull the GitHub repo...${NORMAL}\n"
