@@ -6,6 +6,19 @@
   with_items:
     - nvm
 
+- name: stat Node.js version directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}"
+  register: node_version_dir
+
+- name: Install Node.js
+  shell: >
+    . /usr/local/opt/nvm/nvm.sh && \
+    nvm install {{ NODE_VERSION }} && \
+    nvm use {{ NODE_VERSION }} && \
+    nvm alias default {{ NODE_VERSION }}
+  when: not node_version_dir.stat.exists
+
 - name: Enable nvm environment in .bash_profile
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.bash_profile"

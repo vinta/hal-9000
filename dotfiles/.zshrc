@@ -109,7 +109,7 @@ alias docker-rmiall='docker rmi $(docker images -q)'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 # source /usr/local/HAL-9000/playbooks/roles/go/files/gvm_profile
-# source /usr/local/HAL-9000/playbooks/roles/node/files/nvm_profile
+source /usr/local/HAL-9000/playbooks/roles/node/files/nvm_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 
 source ~/Projects/dps/playbook/ssh_alias
