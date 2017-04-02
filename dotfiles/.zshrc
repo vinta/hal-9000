@@ -120,7 +120,7 @@ if which java > /dev/null; then
 fi
 
 if which pyspark > /dev/null; then
-  export SPARK_HOME="/usr/local/Cellar/apache-spark/2.1.0/libexec"
+  export SPARK_HOME="/usr/local/share/spark/spark-2.1.0"
   export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH
   export PYSPARK_DRIVER_PYTHON="jupyter"
   export PYSPARK_DRIVER_PYTHON_OPTS="notebook --ip 0.0.0.0"
