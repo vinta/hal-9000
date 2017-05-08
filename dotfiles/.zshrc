@@ -106,9 +106,9 @@ alias v='f -e sublime'
 alias docker-stopall='docker stop $(docker ps -a -q)'
 alias docker-rmall='docker rm $(docker ps -a -q)'
 alias docker-rmiall='docker rmi $(docker images -q)'
+alias docker-rmiallf='docker rmi $(docker images -q) --force'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
-# source /usr/local/HAL-9000/playbooks/roles/go/files/gvm_profile
 source /usr/local/HAL-9000/playbooks/roles/node/files/nvm_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 
@@ -119,15 +119,10 @@ if which java > /dev/null; then
   export JAVA_HOME=$(/usr/libexec/java_home -v 1.8);
 fi
 
+export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
+
 if which pyspark > /dev/null; then
   export SPARK_HOME="/usr/local/share/spark/spark-2.1.0"
   export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH
-  export PYSPARK_DRIVER_PYTHON="jupyter"
-  export PYSPARK_DRIVER_PYTHON_OPTS="notebook --ip 0.0.0.0"
+  export PYSPARK_DRIVER_PYTHON=ipython
 fi
-
-# The next line updates PATH for the Google Cloud SDK.
-# if [ -f '/usr/local/google-cloud-sdk/path.zsh.inc' ]; then source '/usr/local/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-# if [ -f '/usr/local/google-cloud-sdk/completion.zsh.inc' ]; then source '/usr/local/google-cloud-sdk/completion.zsh.inc'; fi
