@@ -67,17 +67,17 @@ source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 source ~/.iterm2_shell_integration.zsh
 
-eval $(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)
+eval "$(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)"
 
 eval "$(fasd --init auto)"
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
+#   export EDITOR="vim"
 # else
-#   export EDITOR='mvim'
+#   export EDITOR="mvim"
 # fi
-export EDITOR='sublime'
+export EDITOR="sublime"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -94,19 +94,19 @@ export EDITOR='sublime'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias grep='grep --color=auto'
-alias stat='gstat'
-alias ls='gls --color=auto'
-alias la='ls -AU'
-alias ll='ls -lAU'
+alias grep="grep --color=auto"
+alias stat="gstat"
+alias ls="gls --color=auto"
+alias la="ls -AU"
+alias ll="ls -lAU"
 
-alias o='a -e open'
-alias v='f -e sublime'
+alias o="a -e open"
+alias v="f -e sublime"
 
-alias docker-stopall='docker stop $(docker ps -a -q)'
-alias docker-rmall='docker rm $(docker ps -a -q)'
-alias docker-rmiall='docker rmi $(docker images -q)'
-alias docker-rmiallf='docker rmi $(docker images -q) --force'
+alias docker-stopall="docker stop $(docker ps -a -q)"
+alias docker-rmall="docker rm $(docker ps -a -q)"
+alias docker-rmiall="docker rmi $(docker images -q)"
+alias docker-rmiallf="docker rmi $(docker images -q) --force"
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/node/files/nvm_profile
@@ -121,8 +121,7 @@ fi
 
 export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
 
-if which pyspark > /dev/null; then
-  export SPARK_HOME="/usr/local/share/spark/spark-2.1.0"
-  export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH
-  export PYSPARK_DRIVER_PYTHON=ipython
-fi
+export PATH="/usr/local/share/spark/spark-2.1.0/bin:$PATH"
+export SPARK_HOME="/usr/local/share/spark/spark-2.1.0"
+export PYTHONPATH="$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH"
+export PYSPARK_DRIVER_PYTHON="ipython"
