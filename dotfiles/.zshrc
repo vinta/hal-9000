@@ -116,7 +116,8 @@ source ~/Projects/dps/playbook/ssh_alias
 source ~/Projects/streetvoice-deployment/ssh_alias
 
 if which java > /dev/null; then
-  export JAVA_HOME=$(/usr/libexec/java_home -v 1.8);
+  export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+  export PATH="$JAVA_HOME/bin:$PATH"
 fi
 
 export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
