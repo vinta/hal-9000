@@ -104,8 +104,8 @@ alias o="a -e open"
 alias v="f -e sublime"
 
 alias docker-stopall='docker stop $(docker ps -a -q) 2> /dev/null'
-alias docker-rmall='docker rm $(docker ps -a -q)'
-alias docker-rmiall='docker rmi $(docker images -q)'
+alias docker-rmall='docker rm $(docker ps -a -q) 2> /dev/null'
+alias docker-rmiall='docker rmi $(docker images -q) 2> /dev/null'
 alias docker-rmiallf='docker rmi $(docker images -q) --force'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
