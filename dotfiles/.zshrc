@@ -125,6 +125,5 @@ export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
 export SPARK_HOME="/usr/local/share/apache-spark/spark-2.2.0"
 export PATH="$SPARK_HOME/bin:$PATH"
 export PYTHONPATH="$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH"
-export RUN_ON_SMALL_MACHINE=true
 
 export PATH="/Users/vinta/vendors/google-cloud-sdk/bin:$PATH"
