@@ -120,7 +120,11 @@ if [[ -o interactive ]]; then
     }
 
     # If hostname -f is slow on your system, set iterm2_hostname prior to sourcing this script.
-    [[ -z "$iterm2_hostname" ]] && iterm2_hostname=`hostname -f`
+    [[ -z "$iterm2_hostname" ]] && iterm2_hostname=`hostname -f 2>/dev/null`
+    # some flavors of BSD (i.e. NetBSD and OpenBSD) don't have the -f option
+    if [ $? -ne 0 ]; then
+      iterm2_hostname=`hostname`
+    fi
 
     [[ -z $precmd_functions ]] && precmd_functions=()
     precmd_functions=($precmd_functions iterm2_precmd)
@@ -129,7 +133,7 @@ if [[ -o interactive ]]; then
     preexec_functions=($preexec_functions iterm2_preexec)
 
     iterm2_print_state_data
-    printf "\033]1337;ShellIntegrationVersion=5;shell=zsh\007"
+    printf "\033]1337;ShellIntegrationVersion=6;shell=zsh\007"
   fi
 fi
 alias imgcat=~/.iterm2/imgcat;alias imgls=~/.iterm2/imgls;alias it2attention=~/.iterm2/it2attention;alias it2check=~/.iterm2/it2check;alias it2copy=~/.iterm2/it2copy;alias it2dl=~/.iterm2/it2dl;alias it2getvar=~/.iterm2/it2getvar;alias it2setcolor=~/.iterm2/it2setcolor;alias it2setkeylabel=~/.iterm2/it2setkeylabel;alias it2ul=~/.iterm2/it2ul;alias it2universion=~/.iterm2/it2universion
