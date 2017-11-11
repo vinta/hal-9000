@@ -67,7 +67,7 @@ source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 source ~/.iterm2_shell_integration.zsh
 
-eval "$(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)"
+# eval "$(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)"
 
 eval "$(fasd --init auto)"
 
@@ -109,11 +109,10 @@ alias docker-rmiall='docker rmi $(docker images -q) 2> /dev/null'
 alias docker-rmiallf='docker rmi $(docker images -q) --force'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
-# source /usr/local/HAL-9000/playbooks/roles/node/files/nvm_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 
-source ~/Projects/dps/playbook/ssh_alias
-source ~/Projects/streetvoice-deployment/ssh_alias
+# source ~/Projects/dps/playbook/ssh_alias
+# source ~/Projects/streetvoice-deployment/ssh_alias
 
 if which java > /dev/null; then
   export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
