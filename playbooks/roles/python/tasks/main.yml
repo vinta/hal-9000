@@ -7,8 +7,6 @@
     - readline
     - openssl
     - pyenv
-    # - pyenv-virtualenv
-    # - pyenv-virtualenvwrapper
 
 - name: Install Python 2 via pyenv
   command: "pyenv install {{ PYTHON_2_VERSION }}"
