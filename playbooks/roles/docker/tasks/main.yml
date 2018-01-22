@@ -39,10 +39,10 @@
   become: yes
   become_method: sudo
 
-- name: Link .dev resolver file
+- name: Link .locahost resolver file
   file:
-    src: "{{ REPO_ROOT }}/playbooks/roles/docker/files/resolver_dev.conf"
-    dest: /etc/resolver/dev
+    src: "{{ REPO_ROOT }}/playbooks/roles/docker/files/resolver_locahost.conf"
+    dest: /etc/resolver/locahost
     state: link
     force: yes
   become: yes
