@@ -4,7 +4,6 @@ flake8
 flake8-debugger
 flake8-print
 flake8-string-format
-gitsome
 httpie
 ipdb
 ipython
