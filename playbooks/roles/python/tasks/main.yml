@@ -18,10 +18,10 @@
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}"
 
-- name: Install Python 2 tools
-  pip:
-    executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}/bin/pip"
-    requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
+# - name: Install Python 2 tools
+#   pip:
+#     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}/bin/pip"
+#     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
 
 - name: Install Python 3 tools
   pip:
