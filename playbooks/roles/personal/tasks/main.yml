@@ -10,6 +10,7 @@
     - jq
     - mackup
     - p7zip
+    - ruby
     - s3cmd
     - ssh-copy-id
     - tmux
@@ -65,11 +66,10 @@
   gem:
     name: "{{ item }}"
     state: present
+    user_install: no
   with_items:
     - retryit
     - tmuxinator
-  become: yes
-  become_method: sudo
 
 - name: Create directories
   file:
