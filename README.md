@@ -12,7 +12,7 @@ HAL will configure these tools for you:
 
 - Homebrew
 - Ansible
-- Docker for Mac with [NFS support](https://github.com/IFSight/d4m-nfs) (see [docker/for-mac#77](https://github.com/docker/for-mac/issues/77))
+- Docker for Mac (might has a performance issue, see [docker/for-mac#77](https://github.com/docker/for-mac/issues/77))
 - Docker Compose
 - Go
 - Node.js
@@ -26,7 +26,6 @@ First, you need to manually...
 1. Install [Xcode](https://itunes.apple.com/us/app/xcode/id497799835)
 2. Install Command Line Tools via `$ xcode-select --install`
 3. Install [Docker for Mac](https://docs.docker.com/docker-for-mac/)
-4. Unmount the `/Users` directory from [Docker for Mac Preferences](https://github.com/IFSight/d4m-nfs#d4m-nfs)
 
 ## Bootstrap
 
