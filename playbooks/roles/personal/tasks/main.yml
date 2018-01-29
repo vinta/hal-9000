@@ -10,7 +10,6 @@
     - jq
     - mackup
     - p7zip
-    - ruby
     - s3cmd
     - ssh-copy-id
     - tmux
@@ -61,15 +60,6 @@
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
     update: yes
-
-- name: Install Ruby tools
-  gem:
-    name: "{{ item }}"
-    state: present
-    user_install: no
-  with_items:
-    - retryit
-    - tmuxinator
 
 - name: Create directories
   file:
