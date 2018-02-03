@@ -12,3 +12,4 @@ pep8-naming
 prospector
 pylama
 requests
+tmuxp
