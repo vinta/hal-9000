@@ -1,0 +1,19 @@
+session_name: swag
+windows:
+- window_name: swag
+  layout: main-horizontal
+  focus: 'true'
+  options:
+    automatic-rename: 'off'
+    main-pane-height: 35
+  start_directory: ~/Projects/swag-server
+  shell_command_before:
+    - clear
+  panes:
+  - shell_command:
+    - docker-compose up
+  - shell_command:
+    focus: 'true'
+  - shell_command:
+    - cd ../swag-bot
+    - make run
