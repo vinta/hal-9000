@@ -110,10 +110,6 @@ alias docker-rmall='docker rm $(docker ps -a -q) 2> /dev/null'
 alias docker-rmiall='docker rmi $(docker images -q) 2> /dev/null'
 alias docker-rmiallf='docker rmi $(docker images -q) --force'
 
-if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
-fi
-
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 
@@ -128,4 +124,11 @@ export SPARK_HOME="/usr/local/share/apache-spark/spark-2.2.0"
 export PATH="$SPARK_HOME/bin:$PATH"
 export PYTHONPATH="$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH"
 
-export PATH="$HOME/vendors/google-cloud-sdk/bin:$PATH"
+if [ -f "$HOME/vendors/google-cloud-sdk/path.zsh.inc" ]; then
+  source "$HOME/vendors/google-cloud-sdk/path.zsh.inc"
+  source "$HOME/vendors/google-cloud-sdk/completion.zsh.inc"
+fi
+
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
