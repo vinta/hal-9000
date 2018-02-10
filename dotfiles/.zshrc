@@ -110,6 +110,10 @@ alias docker-rmall='docker rm $(docker ps -a -q) 2> /dev/null'
 alias docker-rmiall='docker rmi $(docker images -q) 2> /dev/null'
 alias docker-rmiallf='docker rmi $(docker images -q) --force'
 
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi
+
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 
