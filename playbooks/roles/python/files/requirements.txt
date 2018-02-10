@@ -16,5 +16,10 @@ pangu
 pep8-naming
 prospector
 pylama
+pylint
+pylint-celery
+pylint-common
+pylint-django
+pylint-flask
 requests
 tmuxp
