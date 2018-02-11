@@ -11,9 +11,9 @@ windows:
     - clear
   panes:
   - shell_command:
-    - docker-compose up
+    - make up
   - shell_command:
     focus: 'true'
   - shell_command:
     - cd ../swag-bot
-    - make run
+    - clear
