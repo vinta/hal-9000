@@ -3,6 +3,9 @@ start_directory: ~/Projects/swag-server
 shell_command_before:
   - clear
 windows:
+  - window_name: db
+    panes:
+    - make up
   - window_name: web
     layout: main-horizontal
     focus: true
@@ -16,6 +19,3 @@ windows:
       - make run_worker
     - shell_command:
       focus: true
-  - window_name: db
-    panes:
-    - make up
