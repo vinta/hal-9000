@@ -4,6 +4,7 @@
     state: present
   with_items:
     - coreutils
+    - ctags
     - fasd
     - git
     - git-extras
