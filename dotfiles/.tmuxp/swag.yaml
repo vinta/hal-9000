@@ -7,15 +7,17 @@ windows:
     panes:
     - make up
   - window_name: web
-    layout: main-horizontal
+    layout: tiled
     focus: true
     options:
       automatic-rename: 'off'
-      main-pane-height: 32
     panes:
     - shell_command:
       - make run_web
     - shell_command:
       - make run_worker
+    - shell_command:
+      - cd ../swag-bot
+      - make run
     - shell_command:
       focus: true
