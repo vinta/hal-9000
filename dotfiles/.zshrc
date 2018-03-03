@@ -112,24 +112,6 @@ alias docker-rmiallf='docker rmi $(docker images -q) --force'
 alias docker-rmvall='docker volume rm `docker volume ls -q -f dangling=true`'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
+source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/gcloud_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
-
-if which java > /dev/null; then
-  export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
-  export PATH="$JAVA_HOME/bin:$PATH"
-fi
-
-export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
-
-export SPARK_HOME="/usr/local/share/apache-spark/spark-2.2.0"
-export PATH="$SPARK_HOME/bin:$PATH"
-export PYTHONPATH="$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:$PYTHONPATH"
-
-if [ -f "$HOME/vendors/google-cloud-sdk/path.zsh.inc" ]; then
-  source "$HOME/vendors/google-cloud-sdk/path.zsh.inc"
-  source "$HOME/vendors/google-cloud-sdk/completion.zsh.inc"
-fi
-
-if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
-fi
+source /usr/local/HAL-9000/playbooks/roles/spark/files/spark_profile
