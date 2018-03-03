@@ -1,0 +1,10 @@
+if which java > /dev/null; then
+  export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+  export PATH="$JAVA_HOME/bin:$PATH"
+fi
+
+export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
+
+export SPARK_HOME="/usr/local/share/apache-spark/spark-2.3.0"
+export PATH="$SPARK_HOME/bin:$PATH"
+export PYTHONPATH="$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.6-src.zip:$PYTHONPATH"
