@@ -1,0 +1,41 @@
+- name: Homebrew tap caskroom/versions
+  homebrew_tap:
+    name: caskroom/versions
+
+# - name: Install Java 8
+#   homebrew_cask:
+#     name: "{{ item }}"
+#     state: present
+#   with_items:
+#     - java8
+
+- name: Install Scala 2.11
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - scala@2.11
+
+# https://spark.apache.org/downloads.html
+- name: Unarchive Spark
+  unarchive:
+    src: http://ftp.tc.edu.tw/pub/Apache/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+    remote_src: yes
+    dest: /usr/local/share/apache-spark
+    creates: /usr/local/share/apache-spark/spark-2.3.0
+
+- name: Rename Spark directory
+  command: mv spark-2.3.0-bin-hadoop2.7 spark-2.3.0
+  args:
+    chdir: /usr/local/share/apache-spark
+    creates: spark-2.3.0
+    removes: spark-2.3.0-bin-hadoop2.7
+
+- name: Enable Spark environment in .zshrc
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - source {{ REPO_ROOT }}/playbooks/roles/spark/files/spark_profile
+  when: ansible_env.SHELL == "/bin/zsh"
