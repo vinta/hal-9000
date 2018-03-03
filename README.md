@@ -6,26 +6,14 @@
 
 Dominating your dev environment like cats rule the Internet.
 
-Building a Dockerized development environment with Ansible on macOS. Inspired by IFTTT's [Dash](https://github.com/IFTTT/dash).
-
-HAL will configure these tools for you:
-
-- Homebrew
-- Ansible
-- Docker for Mac (might has a performance issue, see [docker/for-mac#77](https://github.com/docker/for-mac/issues/77))
-- Docker Compose
-- Go
-- Node.js
-- Python
-- dotfiles
+Building a Dockerized development environment with Ansible on macOS.
 
 ## Prerequisite
 
 First, you need to manually...
 
-1. Install [Xcode](https://itunes.apple.com/us/app/xcode/id497799835)
-2. Install Command Line Tools via `$ xcode-select --install`
-3. Install [Docker for Mac](https://docs.docker.com/docker-for-mac/)
+1. Install Command Line Tools via `$ xcode-select --install`
+2. Install [Docker for Mac](https://docs.docker.com/docker-for-mac/)
 
 ## Bootstrap
 
