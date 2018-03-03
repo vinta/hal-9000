@@ -8,4 +8,4 @@
     - {role: node, tags: ['node']}
     - {role: python, tags: ['python']}
     - {role: spark, tags: ['spark']}
-    - {role: personal, tags: ['personal']}
+    - {role: personal, tags: ['personal'], when: ansible_user == 'vinta'}
