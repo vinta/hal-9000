@@ -12,6 +12,9 @@
   with_items:
     - minikube
 
+- name: Install gcloud components
+  command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil kubectl"
+
 - name: Enable Google Cloud SDK environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
