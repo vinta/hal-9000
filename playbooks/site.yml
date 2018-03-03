@@ -3,7 +3,9 @@
   roles:
     - {role: basic, tags: ['basic']}
     - {role: docker, tags: ['docker']}
-    # - {role: go, tags: ['go']}
-    # - {role: node, tags: ['node']}
+    - {role: go, tags: ['go']}
+    - {role: kubernetes, tags: ['kubernetes']}
+    - {role: node, tags: ['node']}
+    - {role: personal, tags: ['personal']}
     - {role: python, tags: ['python']}
-    - {role: personal, tags: ['personal'], when: ansible_user == 'vinta'}
+    - {role: spark, tags: ['spark']}
