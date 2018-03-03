@@ -4,21 +4,3 @@
     state: latest
   with_items:
     - docker-clean
-
-# # http://engineering.ifttt.com/oss/2015/10/06/developing-with-docker/
-# - name: Create resolver directory
-#   file:
-#     path: /etc/resolver
-#     state: directory
-#     mode: 0755
-#   become: yes
-#   become_method: sudo
-
-# - name: Link .locahost resolver file
-#   file:
-#     src: "{{ REPO_ROOT }}/playbooks/roles/docker/files/resolver_locahost.conf"
-#     dest: /etc/resolver/locahost
-#     state: link
-#     force: yes
-#   become: yes
-#   become_method: sudo
