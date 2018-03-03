@@ -6,6 +6,6 @@
     - {role: go, tags: ['go']}
     - {role: kubernetes, tags: ['kubernetes']}
     - {role: node, tags: ['node']}
-    - {role: personal, tags: ['personal']}
     - {role: python, tags: ['python']}
     - {role: spark, tags: ['spark']}
+    - {role: personal, tags: ['personal']}
