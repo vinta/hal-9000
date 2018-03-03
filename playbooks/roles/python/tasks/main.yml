@@ -24,7 +24,7 @@
     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
 
 - name: Specify the default Python version
-  command: "pyenv global {{ PYTHON_3_VERSION }}"
+  command: "pyenv global {{ PYTHON_3_VERSION }} {{ PYTHON_2_VERSION }}"
 
 - name: Enable pyenv environment in .zshrc
   lineinfile:
