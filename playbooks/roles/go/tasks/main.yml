@@ -1,45 +1,6 @@
-# https://github.com/moovweb/gvm
-- name: Install gvm
-  shell: "bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)"
-  args:
-    executable: /bin/bash
-    creates: "{{ ansible_env.HOME }}/.gvm/"
-
-- name: Install Go 1.4
-  shell: >
-    source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
-    gvm install go1.4 --binary && \
-    gvm use go1.4 --default
-  args:
-    creates: "{{ ansible_env.HOME }}/.gvm/gos/go1.4"
-
-- name: Install Go newer version
-  shell: >
-    source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile && \
-    gvm install go{{ GO_VERSION }} && \
-    gvm use go{{ GO_VERSION }} --default
-  args:
-    creates: "{{ ansible_env.HOME }}/.gvm/gos/go{{ GO_VERSION }}"
-
-- name: Create oh-my-go directory
-  file:
-    path: "{{ ansible_env.HOME }}/Projects/oh-my-go"
-    state: directory
-
-- name: Enable gvm environment in .bash_profile
-  lineinfile:
-    dest: "{{ ansible_env.HOME }}/.bash_profile"
-    line: "{{ item }}"
-    create: yes
+- name: Install Go v{{ GO_VERSION }}
+  homebrew:
+    name: "{{ item }}"
+    state: present
   with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile
-  when: ansible_env.SHELL == "/bin/bash"
-
-- name: Enable gvm environment in .zshrc
-  lineinfile:
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    line: "{{ item }}"
-    create: yes
-  with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/go/files/gvm_profile
-  when: ansible_env.SHELL == "/bin/zsh"
+    - "go@{{ GO_VERSION }}"
