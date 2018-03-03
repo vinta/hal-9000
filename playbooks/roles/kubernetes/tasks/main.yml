@@ -1,0 +1,22 @@
+- name: Unarchive Google Cloud SDK
+  unarchive:
+    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-191.0.0-linux-x86_64.tar.gz
+    remote_src: yes
+    dest: "{{ ansible_env.HOME }}/vendors"
+    creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
+
+- name: Install minikube
+  homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - minikube
+
+- name: Enable Google Cloud SDK environment in .zshrc
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - source {{ REPO_ROOT }}/playbooks/roles/kubernetes/files/gcloud_profile
+  when: ansible_env.SHELL == "/bin/zsh"
