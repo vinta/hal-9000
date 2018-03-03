@@ -60,6 +60,12 @@
     - "{{ ansible_env.HOME }}/Downloads"
     - "{{ ansible_env.HOME }}/Projects"
 
+- name: Link HAL-9000
+  file:
+    src: "{{ REPO_ROOT }}"
+    dest: "{{ ansible_env.HOME }}/Projects/HAL-9000"
+    state: link
+
 - name: Setup git config - user.name
   git_config:
     name: user.name
