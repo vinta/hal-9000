@@ -172,7 +172,7 @@ class HAL9000(object):
         self._run('git pull')
 
         os.chdir(os.path.join(Setting.PROJECT_ROOT, 'playbooks'))
-        command = 'ansible-playbook site.yml'
+        command = 'ansible-playbook site.yml -v'
         if extra_args:
             command = ' '.join([command, ] + extra_args)
         returncode = self._run(command)
