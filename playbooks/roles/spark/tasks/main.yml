@@ -2,12 +2,12 @@
   homebrew_tap:
     name: caskroom/versions
 
-# - name: Install Java 8
-#   homebrew_cask:
-#     name: "{{ item }}"
-#     state: present
-#   with_items:
-#     - java8
+- name: Install Java 8
+  homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - java8
 
 - name: Install Scala 2.11
   homebrew:
@@ -30,6 +30,14 @@
     chdir: /usr/local/share/apache-spark
     creates: spark-2.3.0
     removes: spark-2.3.0-bin-hadoop2.7
+
+# https://zeppelin.apache.org/
+- name: Install Zeppelin
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apache-zeppelin
 
 - name: Enable Spark environment in .zshrc
   lineinfile:
