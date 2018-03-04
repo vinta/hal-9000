@@ -3,4 +3,5 @@
     name: "{{ item }}"
     state: latest
   with_items:
+    - ctop
     - docker-clean
