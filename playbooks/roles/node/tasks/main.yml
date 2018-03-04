@@ -1,6 +1,6 @@
-- name: Install Node.js v{{ NODE_VERSION }}
+- name: Install Node.js
   homebrew:
     name: "{{ item }}"
     state: present
   with_items:
-    - "node@{{ NODE_VERSION }}"
+    - node
