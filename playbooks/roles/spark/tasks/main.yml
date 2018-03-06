@@ -16,6 +16,19 @@
   with_items:
     - scala@2.11
 
+- name: Install GNU tar
+  homebrew:
+    name: gnu-tar
+    state: present
+    install_options: with-default-names
+
+- name: Create /usr/local/share/apache-spark
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /usr/local/share/apache-spark
+
 # https://spark.apache.org/downloads.html
 - name: Unarchive Spark
   unarchive:
