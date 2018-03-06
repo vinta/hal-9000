@@ -1,6 +1,6 @@
-- name: Install Go v{{ GO_VERSION }}
+- name: Install Go
   homebrew:
     name: "{{ item }}"
     state: present
   with_items:
-    - "go@{{ GO_VERSION }}"
+    - "go"
