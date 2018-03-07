@@ -17,7 +17,7 @@ windows:
     - shell_command:
       - make run_worker
     - shell_command:
+      focus: true
+    - shell_command:
       - cd ../swag-bot
       - make run
-    - shell_command:
-      focus: true
