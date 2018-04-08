@@ -3,4 +3,5 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - "go"
+    - go
+    - dep
