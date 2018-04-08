@@ -112,6 +112,7 @@ alias docker-rmiallf='docker rmi $(docker images -q) --force'
 alias docker-rmvall='docker volume rm `docker volume ls -q -f dangling=true`'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
+source /usr/local/HAL-9000/playbooks/roles/go/files/go_profile
 source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/gcloud_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 source /usr/local/HAL-9000/playbooks/roles/spark/files/spark_profile
