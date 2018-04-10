@@ -5,6 +5,9 @@
     dest: "{{ ansible_env.HOME }}/vendors"
     creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
 
+- name: Install gcloud components
+  command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil kubectl"
+
 - name: Install minikube
   homebrew_cask:
     name: "{{ item }}"
@@ -12,8 +15,16 @@
   with_items:
     - minikube
 
-- name: Install gcloud components
-  command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil kubectl"
+- name: Homebrew tap johanhaleby/kubetail
+  homebrew_tap:
+    name: johanhaleby/kubetail
+
+- name: Install kubetail
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - kubetail
 
 - name: Enable Google Cloud SDK environment in .zshrc
   lineinfile:
