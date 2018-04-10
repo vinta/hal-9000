@@ -3,18 +3,18 @@ start_directory: ~/Projects/swag-server
 shell_command_before:
   - clear
 windows:
-  - window_name: web
+  - window_name: logs
     layout: tiled
     focus: true
     options:
       automatic-rename: 'off'
     panes:
     - shell_command:
-      - kubectl logs statefulset/mongo-rs0 -f
+      - kubetail mongo-rs0
     - shell_command:
-      - kubectl logs statefulset/mongo-rs0-mongos -f
+      - kubetail swag-api
     - shell_command:
-      - kubectl logs deploy/swag-api -f
+      - kubetail swag-bot
     - focus: true
       shell_command:
-      - kubectl top node
+      - kubetail swag-worker
