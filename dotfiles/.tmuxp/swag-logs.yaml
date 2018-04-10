@@ -1,11 +1,8 @@
-session_name: swag
+session_name: swag-logs
 start_directory: ~/Projects/swag-server
 shell_command_before:
   - clear
 windows:
-  - window_name: db
-    panes:
-    - make up
   - window_name: web
     layout: tiled
     focus: true
@@ -13,11 +10,11 @@ windows:
       automatic-rename: 'off'
     panes:
     - shell_command:
-      - make run_web
+      - kubectl logs statefulset/mongo-rs0 -f
     - shell_command:
-      - make run_worker
+      - kubectl logs statefulset/mongo-rs0-mongos -f
+    - shell_command:
+      - kubectl logs deploy/swag-api -f
     - focus: true
       shell_command:
-    - shell_command:
-      - cd ../swag-bot
-      - make run
+      - kubectl top node
