@@ -19,5 +19,6 @@ windows:
     - focus: true
       shell_command:
     - shell_command:
+      - sleep 3
       - cd ../swag-bot
       - make run
