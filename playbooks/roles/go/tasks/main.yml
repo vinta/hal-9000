@@ -6,6 +6,13 @@
     - go
     - dep
 
+- name: Create $GOPATH directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/Projects/oh-my-go"
+
 - name: Enable Go environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
