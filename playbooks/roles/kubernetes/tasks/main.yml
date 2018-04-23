@@ -1,30 +1,26 @@
+# https://cloud.google.com/sdk/docs/quickstart-macos
 - name: Unarchive Google Cloud SDK
   unarchive:
-    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-191.0.0-linux-x86_64.tar.gz
+    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-198.0.0-darwin-x86_64.tar.gz
     remote_src: yes
     dest: "{{ ansible_env.HOME }}/vendors"
     creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
 
 - name: Install gcloud components
-  command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil kubectl"
-
-- name: Install minikube
-  homebrew_cask:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - minikube
+  command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil"
 
 - name: Homebrew tap johanhaleby/kubetail
   homebrew_tap:
     name: johanhaleby/kubetail
 
-- name: Install kubetail
-  homebrew:
+- name: Install k8s tools
+  homebrew_cask:
     name: "{{ item }}"
     state: present
   with_items:
+    - kubernetes-cli
     - kubetail
+    - minikube
 
 - name: Enable Google Cloud SDK environment in .zshrc
   lineinfile:
