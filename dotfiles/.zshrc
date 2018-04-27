@@ -77,7 +77,7 @@ eval "$(fasd --init auto)"
 # else
 #   export EDITOR="mvim"
 # fi
-export EDITOR="st"
+export EDITOR="vim"
 
 export DISABLE_AUTO_TITLE="true"
 
