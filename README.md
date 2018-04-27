@@ -2,7 +2,7 @@
 
 # HAL 9000
 
-[![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](http://vinta.ws)
+[![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
 
 Dominating your dev environment like cats rule the Internet.
 
@@ -10,32 +10,29 @@ Building a Dockerized development environment with Ansible on macOS.
 
 ## Prerequisite
 
-First, you need to manually...
+First, you need to manually:
 
 1. Install Command Line Tools via `$ xcode-select --install`
-2. Install [Docker for Mac](https://docs.docker.com/docker-for-mac/)
+2. Install [Docker for Mac](https://docs.docker.com/docker-for-mac/install/)
 
 ## Bootstrap
 
-```bash
-$ curl -L http://bit.ly/open-the-pod-bay-doors | bash
+```console
+$ curl -L https://bit.ly/open-the-pod-bay-doors | bash
 ```
 
 If you want to install only specific components (see [site.yml](https://github.com/vinta/HAL-9000/blob/master/playbooks/site.yml)):
 
-```bash
-$ curl -L http://bit.ly/open-the-pod-bay-doors | bash -s -- --tags docker
+```console
+$ curl -L https://bit.ly/open-the-pod-bay-doors | bash -s -- --tags docker,kubernetes
 ```
 
 ## Usage
 
-```bash
+```console
 # pull the repo and run ansible-playbook
 $ hal update
-$ hal update --tags docker,go
-
-$ cd /path/to/your/project/ # that contains a docker-compose.yml file
-$ hal up
+$ hal update --tags docker,kubernetes
 
 # add the file to the dotfiles repository
 $ hal link ~/.zshrc
