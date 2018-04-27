@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -13,6 +16,7 @@ class Setting(object):
 
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     DOTFILES_ROOT = os.path.join(PROJECT_ROOT, 'dotfiles/')
+    WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.expanduser('~'), 'Projects'))
 
 
 class Color(object):
@@ -88,16 +92,10 @@ class HAL9000(object):
             title='sub commands'
         )
 
-        self.command_queue = []
+        command_queue = []
 
         update_parser = subparsers.add_parser('update', help='pull the repo and run ansible-playbook')
         update_parser.set_defaults(func=self.update)
-
-        prepare_parser = subparsers.add_parser('prepare', help='setup nginx-proxy and dnsmasq')
-        prepare_parser.set_defaults(func=self.prepare)
-
-        up_parser = subparsers.add_parser('up', help='simply a wrapper for `docker-compose up`')
-        up_parser.set_defaults(func=self.up)
 
         self.dotfiles = Dotfiles()
 
@@ -112,38 +110,30 @@ class HAL9000(object):
         sync_parser = subparsers.add_parser('sync', help='force sync dotfiles')
         sync_parser.set_defaults(func=self.sync)
 
+        clone_parser = subparsers.add_parser('clone', help='git clone my repositories')
+        clone_parser.set_defaults(func=self.clone)
+        clone_parser.add_argument('repo_scope', type=str)
+
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, HAL')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
 
     def _hal_says(self, text, color=Color.ENDC):
         print('HAL: {0}{1}{2}'.format(color, text, Color.ENDC))
 
-    def _compose(self, command, verbose=True):
-        if isinstance(command, (list, tuple)):
-            command = ' '.join(map(str, command))
-
-        self.command_queue.append(command)
-        commands = '; '.join(self.command_queue)
-
-        if verbose:
-            self._hal_says(commands, color=Color.OKBLUE)
-
-        return commands
-
     def _run(self, command, shell=True, verbose=True):
-        commands = self._compose(command, verbose)
+        if verbose:
+            self._hal_says(command, color=Color.OKBLUE)
 
-        returncode = subprocess.call(commands, shell=shell)
-
-        self.command_queue.pop()
+        returncode = subprocess.call(command, shell=shell)
 
         return returncode
 
     def _run_with_output(self, command, shell=True, verbose=True, print_output=True):
-        commands = self._compose(command, verbose)
+        if verbose:
+            self._hal_says(command, color=Color.OKBLUE)
 
         try:
-            output = subprocess.check_output(commands, stderr=subprocess.STDOUT, shell=shell)
+            output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=shell)
             returncode = 0
         except subprocess.CalledProcessError as exc:
             output = exc.output
@@ -152,19 +142,7 @@ class HAL9000(object):
             if print_output and output:
                 print(output, end='')
 
-        self.command_queue.pop()
-
         return returncode, output
-
-    @contextmanager
-    def _prefix(self, command):
-        # __enter__
-        self._compose(command, verbose=False)
-
-        yield
-
-        # __exit__
-        self.command_queue.pop()
 
     def update(self, namespace, extra_args=None):
         os.chdir(Setting.PROJECT_ROOT)
@@ -178,18 +156,6 @@ class HAL9000(object):
         returncode = self._run(command)
         if returncode == 0:
             self._hal_says('Now open a new shell to active your dev environment', color=Color.HEADER)
-
-    def prepare(self, namespace, extra_args=None):
-        filepath = os.path.join(Setting.PROJECT_ROOT, 'playbooks/roles/docker/files/hal.yml')
-        self._run('docker-compose -f {0} -p hal up -d --force-recreate'.format(filepath))
-
-    def up(self, namespace, extra_args=None):
-        self.prepare(namespace)
-
-        command = ['docker-compose', 'up']
-        if extra_args:
-            command[1:1] = extra_args
-        self._run(command)
 
     def link(self, namespace, extra_args=None):
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
@@ -227,10 +193,60 @@ class HAL9000(object):
             self.dotfiles.show()
         else:
             self._hal_says('{0} is not a link file'.format(filepath), color=Color.FAIL)
+            sys.exit(1)
 
     def sync(self, namespace, extra_args=None):
         for link in self.dotfiles.data['links']:
             self._run('ln -sf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
+
+    def clone(self, namespace, extra_args=None):
+        scopes = {
+            'work': [
+                {'git_url': 'https://github.com/swaglive/swag-bot.git'},
+                {'git_url': 'https://github.com/swaglive/swag-server.git'},
+                {'git_url': 'https://github.com/swaglive/swag-stats.git'},
+                {'git_url': 'https://github.com/swaglive/swag.live.git'},
+            ],
+            'personal': [
+                {'git_url': 'https://github.com/CodeTengu/HyakkiYagyo.git'},
+                {'git_url': 'https://github.com/CodeTengu/JokeKappa.git'},
+                {'git_url': 'https://github.com/CodeTengu/LambdaBaku.git'},
+                {'git_url': 'https://github.com/vinta/albedo.git'},
+                {'git_url': 'https://github.com/vinta/awesome-python.git'},
+                {'git_url': 'https://github.com/vinta/pangu.git', 'location': os.path.join(Setting.WORKSPACE_ROOT, 'oh-my-go/src/github.com/vinta/pangu')},
+                {'git_url': 'https://github.com/vinta/pangu.java.git'},
+                {'git_url': 'https://github.com/vinta/pangu.js.git'},
+                {'git_url': 'https://github.com/vinta/pangu.py.git'},
+                {'git_url': 'https://github.com/vinta/pangu.space.git', 'location': os.path.join(Setting.WORKSPACE_ROOT, 'oh-my-go/src/github.com/vinta/pangu.space')},
+            ]
+        }
+
+        try:
+            repo_list = scopes[namespace.repo_scope]
+        except KeyError:
+            if namespace.repo_scope == 'all':
+                repo_list = []
+                for scope in scopes.keys():
+                    for repo_data in scopes[scope]:
+                        repo_list.append(repo_data)
+            else:
+                self._hal_says('available scopes: {0}'.format(', '.join(['all', ] + list(scopes.keys()))), color=Color.FAIL)
+                sys.exit(1)
+
+        github_re = r'https://github.com/([\w\.\-_]+)/([\w\.\-_]+).git'
+
+        def git_clone(repo_data):
+            repo_git_url = repo_data['git_url']
+            repo_name = re.match(github_re, repo_data['git_url']).group(2)
+            repo_location = repo_data.get('location', os.path.join(Setting.WORKSPACE_ROOT, repo_name))
+            _, output = self._run_with_output('git clone {0} {1}'.format(repo_git_url, repo_location), print_output=False)
+            if b'already exists and is not an empty directory' in output:
+                self._run('cd {0} && git pull'.format(repo_location))
+            return True
+
+        with ThreadPoolExecutor(max_workers=None) as executor:
+            for _ in executor.map(git_clone, repo_list):
+                pass
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that", color=Color.FAIL)
