@@ -43,6 +43,11 @@ $ hal unlink ~/.zshrc
 # force sync dotfiles
 $ hal sync
 
+# git clone my repositories
+$ hal clone all
+$ hal clone work
+$ hal clone personal
+
 # open the pod bay doors, please, HAL
 $ hal open-the-pod-bay-doors
 ```
