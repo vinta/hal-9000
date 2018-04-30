@@ -13,6 +13,7 @@ ipython
 pangu
 pep8-naming
 pipenv
+proselint
 prospector
 pylama
 pylint
