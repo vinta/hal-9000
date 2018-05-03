@@ -19,6 +19,7 @@
     state: present
   with_items:
     - kubernetes-cli
+    - kubectx
     - kubetail
     - minikube
 
