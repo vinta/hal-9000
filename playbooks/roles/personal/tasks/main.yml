@@ -9,7 +9,6 @@
     - git
     - git-extras
     - jq
-    - mackup
     - p7zip
     - s3cmd
     - ssh-copy-id

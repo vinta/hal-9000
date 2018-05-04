@@ -10,6 +10,7 @@ flake8-string-format
 httpie
 ipdb
 ipython
+mackup
 pangu
 pep8-naming
 pipenv
