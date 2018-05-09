@@ -4,3 +4,10 @@
     state: present
   with_items:
     - node
+
+- name: Install Node.js tools
+  homebrew:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - yarn
