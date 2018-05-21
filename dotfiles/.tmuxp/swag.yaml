@@ -18,6 +18,7 @@ windows:
       - make run_worker
     - focus: true
       shell_command:
+      - pipenv shell
     - shell_command:
       - sleep 3
       - cd ../swag-bot
