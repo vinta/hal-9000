@@ -1,3 +1,5 @@
+export ZSH_DISABLE_COMPFIX=true
+
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/vinta/.oh-my-zsh
 
