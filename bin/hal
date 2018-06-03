@@ -13,14 +13,12 @@ import sys
 
 
 class Setting(object):
-
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     DOTFILES_ROOT = os.path.join(PROJECT_ROOT, 'dotfiles/')
     WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.expanduser('~'), 'Projects'))
 
 
 class Color(object):
-
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
@@ -32,7 +30,6 @@ class Color(object):
 
 
 class Dotfiles(object):
-
     DEFAULT_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.json')
     TEMPLATE_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.template.json')
 
@@ -91,8 +88,6 @@ class HAL9000(object):
         subparsers = parser.add_subparsers(
             title='sub commands'
         )
-
-        command_queue = []
 
         update_parser = subparsers.add_parser('update', help='pull the repo and run ansible-playbook')
         update_parser.set_defaults(func=self.update)
@@ -202,10 +197,15 @@ class HAL9000(object):
     def clone(self, namespace, extra_args=None):
         scopes = {
             'work': [
+                {'git_url': 'https://github.com/swaglive/pushd.git.git'},
                 {'git_url': 'https://github.com/swaglive/swag-bot.git'},
+                {'git_url': 'https://github.com/swaglive/swag-frontend.git'},
                 {'git_url': 'https://github.com/swaglive/swag-server.git'},
                 {'git_url': 'https://github.com/swaglive/swag-stats.git'},
+                {'git_url': 'https://github.com/swaglive/swag-webapp.git'},
                 {'git_url': 'https://github.com/swaglive/swag.live.git'},
+                {'git_url': 'https://github.com/swaglive/wallet-bot.git'},
+                {'git_url': 'https://github.com/swaglive/wallet.git'},
             ],
             'personal': [
                 {'git_url': 'https://github.com/CodeTengu/HyakkiYagyo.git'},
