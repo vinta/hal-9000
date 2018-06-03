@@ -6,6 +6,7 @@
     - coreutils
     - ctags
     - fasd
+    - fzf
     - git
     - git-extras
     - jq
