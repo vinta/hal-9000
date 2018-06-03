@@ -213,6 +213,7 @@ class HAL9000(object):
                 {'git_url': 'https://github.com/CodeTengu/LambdaBaku.git'},
                 {'git_url': 'https://github.com/vinta/albedo.git'},
                 {'git_url': 'https://github.com/vinta/awesome-python.git'},
+                {'git_url': 'https://github.com/vinta/dockerfiles.git'},
                 {'git_url': 'https://github.com/vinta/pangu.git', 'location': os.path.join(Setting.WORKSPACE_ROOT, 'oh-my-go/src/github.com/vinta/pangu')},
                 {'git_url': 'https://github.com/vinta/pangu.java.git'},
                 {'git_url': 'https://github.com/vinta/pangu.js.git'},
