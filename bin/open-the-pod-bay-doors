@@ -21,41 +21,6 @@ else
     NORMAL=""
 fi
 
-# borrow from https://github.com/IFTTT/dash/blob/master/bin/bootstrap
-# returns 1 if upgrade is needed
-# $1 - SYSTEM VERSION
-# $2 - NEEDED VERSION
-update_needed () {
-    if [[ $1 == $2 ]]
-    then
-        return 0
-    fi
-    local IFS=.
-    local i ver1=($1) ver2=($2)
-    # fill empty fields in ver1 with zeros
-    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
-    do
-        ver1[i]=0
-    done
-    for ((i=0; i<${#ver1[@]}; i++))
-    do
-        if [[ -z ${ver2[i]} ]]
-        then
-            # fill empty fields in ver2 with zeros
-            ver2[i]=0
-        fi
-        if ((10#${ver1[i]} > 10#${ver2[i]}))
-        then
-            return 1
-        fi
-        if ((10#${ver1[i]} < 10#${ver2[i]}))
-        then
-            return 0
-        fi
-    done
-    return 0
-}
-
 printf "${BOLD}Hello, HAL. Do you read me, HAL?${NORMAL}\n"
 printf "${BOLD}Affirmative, Dave. I read you.${NORMAL}\n"
 
@@ -66,28 +31,20 @@ if [[ $? != 0 ]] ; then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 else
     printf "\n"
-    printf "${BLUE}Update Homebrew...${NORMAL}\n"
+    printf "${GREEN}Update Homebrew...${NORMAL}\n"
     brew update
 fi
 
-ANSIBLE_NEEDED="2.2"
 which -s ansible-playbook
 if [[ $? != 0 ]] ; then
     printf "\n"
     printf "${BLUE}Install Ansible...${NORMAL}\n"
     brew install ansible
 else
-    ANSIBLE_VERSION=$(ansible --version | grep ansible | cut -d " " -f 2)
-    if update_needed $ANSIBLE_VERSION $ANSIBLE_NEEDED ; then
-        printf "\n"
-        printf "${RED}Ansible version is too old: $ANSIBLE_VERSION. We need > $ANSIBLE_NEEDED.${NORMAL}\n"
-        printf "${BLUE}Update Ansible...${NORMAL}\n"
-        brew upgrade ansible
-        brew link --overwrite ansible
-    else
-        printf "\n"
-        printf "${BLUE}Ansible version is $ANSIBLE_VERSION. Update not needed.${NORMAL}\n"
-    fi
+    printf "\n"
+    printf "${GREEN}Upgrade Ansible...${NORMAL}\n"
+    brew upgrade ansible || true
+    brew unlink ansible && brew link ansible || true
 fi
 
 REPO_REMOTE=https://github.com/vinta/HAL-9000.git
@@ -99,7 +56,7 @@ if [ ! -d $REPO_ROOT/.git/ ] ; then
     sudo chown -R "$USER":admin $REPO_ROOT
 else
     printf "\n"
-    printf "${BLUE}Pull the GitHub repo...${NORMAL}\n"
+    printf "${GREEN}Pull the GitHub repo...${NORMAL}\n"
     cd $REPO_ROOT
     git fetch
     git pull
