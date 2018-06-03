@@ -1,6 +1,6 @@
-- name: Homebrew tap caskroom/versions
-  homebrew_tap:
-    name: caskroom/versions
+# - name: Homebrew tap caskroom/versions
+#   homebrew_tap:
+#     name: caskroom/versions
 
 - name: Install Java 8
   homebrew_cask:
