@@ -3,7 +3,7 @@ export ZSH_DISABLE_COMPFIX=true
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/vinta/.oh-my-zsh
 
-fpath=(/usr/local/share/zsh-completions $fpath)
+# fpath=(/usr/local/share/zsh-completions $fpath)
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -98,8 +98,12 @@ export DISABLE_AUTO_TITLE="true"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+autoload -U colors; colors
+source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
+RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
+
+# alias stat="gstat"
 alias grep="grep --color=auto"
-alias stat="gstat"
 alias ls="gls --color=auto"
 alias la="ls -AU"
 alias ll="ls -lAU"
@@ -115,6 +119,6 @@ alias docker-rmvall='docker volume rm `docker volume ls -q -f dangling=true`'
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/go/files/go_profile
-source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/gcloud_profile
+source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/k8s_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 source /usr/local/HAL-9000/playbooks/roles/spark/files/spark_profile
