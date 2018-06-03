@@ -1,19 +1,28 @@
 # https://cloud.google.com/sdk/docs/quickstart-macos
 - name: Unarchive Google Cloud SDK
   unarchive:
-    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-198.0.0-darwin-x86_64.tar.gz
+    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-203.0.0-darwin-x86_64.tar.gz
     remote_src: yes
     dest: "{{ ansible_env.HOME }}/vendors"
     creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
 
 - name: Install gcloud components
   command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil"
+  register: command_result
+  changed_when: " 'All components are up to date' not in command_result.stderr"
 
+# https://github.com/johanhaleby/kubetail
 - name: Homebrew tap johanhaleby/kubetail
   homebrew_tap:
     name: johanhaleby/kubetail
 
-- name: Install k8s tools
+# https://github.com/superbrothers/zsh-kubectl-prompt
+- name: Homebrew tap superbrothers/zsh-kubectl-prompt
+  homebrew_tap:
+    name: superbrothers/zsh-kubectl-prompt
+    url: git://github.com/superbrothers/zsh-kubectl-prompt.git
+
+- name: Install Kubernetes tools
   homebrew_cask:
     name: "{{ item }}"
     state: present
@@ -22,12 +31,20 @@
     - kubectx
     - kubetail
     - minikube
+    - zsh-kubectl-prompt
 
-- name: Enable Google Cloud SDK environment in .zshrc
+# https://github.com/kubermatic/fubectl
+- name: Install fubectl
+  shell: sh -c "curl -LO https://rawgit.com/kubermatic/fubectl/master/fubectl.source"
+  args:
+    chdir: "{{ REPO_ROOT }}/playbooks/roles/kubernetes/files/"
+    creates: "{{ REPO_ROOT }}/playbooks/roles/kubernetes/files/fubectl.source"
+
+- name: Enable Kubernetes environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
     create: yes
   with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/kubernetes/files/gcloud_profile
+    - source {{ REPO_ROOT }}/playbooks/roles/kubernetes/files/k8s_profile
   when: ansible_env.SHELL == "/bin/zsh"
