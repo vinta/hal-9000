@@ -23,15 +23,21 @@
     url: git://github.com/superbrothers/zsh-kubectl-prompt.git
 
 - name: Install Kubernetes tools
-  homebrew_cask:
+  homebrew:
     name: "{{ item }}"
     state: present
   with_items:
     - kubernetes-cli
     - kubectx
     - kubetail
-    - minikube
     - zsh-kubectl-prompt
+
+- name: Install Minikube
+  homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - minikube
 
 # https://github.com/kubermatic/fubectl
 - name: Install fubectl
