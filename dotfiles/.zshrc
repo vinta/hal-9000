@@ -111,12 +111,6 @@ alias ll="ls -lAU"
 alias o="a -e open"
 alias v="f -e st"
 
-alias docker-stopall='docker stop $(docker ps -a -q) 2> /dev/null'
-alias docker-rmall='docker rm $(docker ps -a -q) 2> /dev/null'
-alias docker-rmiall='docker rmi $(docker images -q) 2> /dev/null'
-alias docker-rmiallf='docker rmi $(docker images -q) --force'
-alias docker-rmvall='docker volume rm `docker volume ls -q -f dangling=true`'
-
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/go/files/go_profile
 source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/k8s_profile
