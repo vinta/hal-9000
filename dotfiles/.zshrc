@@ -114,5 +114,6 @@ alias v="f -e st"
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/go/files/go_profile
 source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/k8s_profile
+source /usr/local/HAL-9000/playbooks/roles/node/files/node_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 source /usr/local/HAL-9000/playbooks/roles/spark/files/spark_profile
