@@ -7,7 +7,7 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - java8
+    - homebrew/cask-versions/java8
 
 - name: Install Scala 2.11
   homebrew:
