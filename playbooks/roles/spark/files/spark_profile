@@ -5,6 +5,6 @@ fi
 
 export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
 
-export SPARK_HOME="/usr/local/share/apache-spark/spark-2.3.0"
+export SPARK_HOME="/usr/local/share/apache-spark/spark-2.3.1"
 export PATH="$SPARK_HOME/bin:$PATH"
-export PYTHONPATH="$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.6-src.zip:$PYTHONPATH"
+export PYTHONPATH="$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:$PYTHONPATH"

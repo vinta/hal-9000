@@ -19,8 +19,6 @@
 - name: Install GNU tar
   homebrew:
     name: gnu-tar
-    state: present
-    install_options: with-default-names
 
 - name: Create /usr/local/share/apache-spark
   file:
@@ -32,25 +30,25 @@
 # https://spark.apache.org/downloads.html
 - name: Unarchive Spark
   unarchive:
-    src: http://ftp.tc.edu.tw/pub/Apache/spark/spark-2.3.0/spark-2.3.0-bin-hadoop2.7.tgz
+    src: http://apache.stu.edu.tw/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz
     remote_src: yes
     dest: /usr/local/share/apache-spark
-    creates: /usr/local/share/apache-spark/spark-2.3.0
+    creates: /usr/local/share/apache-spark/spark-2.3.1
 
 - name: Rename Spark directory
-  command: mv spark-2.3.0-bin-hadoop2.7 spark-2.3.0
+  command: mv spark-2.3.1-bin-hadoop2.7 spark-2.3.1
   args:
     chdir: /usr/local/share/apache-spark
-    creates: spark-2.3.0
-    removes: spark-2.3.0-bin-hadoop2.7
+    creates: spark-2.3.1
+    removes: spark-2.3.1-bin-hadoop2.7
 
 # https://zeppelin.apache.org/
-- name: Install Zeppelin
-  homebrew:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - apache-zeppelin
+# - name: Install Zeppelin
+#   homebrew:
+#     name: "{{ item }}"
+#     state: present
+#   with_items:
+#     - apache-zeppelin
 
 - name: Enable Spark environment in .zshrc
   lineinfile:

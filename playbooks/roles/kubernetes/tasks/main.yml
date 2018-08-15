@@ -1,3 +1,7 @@
+- name: Install GNU tar
+  homebrew:
+    name: gnu-tar
+
 - name: Create ~/vendors
   file:
     path: "{{ item }}"
