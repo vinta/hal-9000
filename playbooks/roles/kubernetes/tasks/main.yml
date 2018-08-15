@@ -1,3 +1,10 @@
+- name: Create ~/vendors
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/vendors"
+
 # https://cloud.google.com/sdk/docs/quickstart-macos
 - name: Unarchive Google Cloud SDK
   unarchive:
