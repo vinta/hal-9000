@@ -102,11 +102,11 @@ autoload -U colors; colors
 source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
 RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
 
-# alias stat="gstat"
+PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 alias grep="grep --color=auto"
 alias ls="gls --color=auto"
-alias la="ls -AU"
-alias ll="ls -lAU"
+alias ll="ls -lA"
+alias lh="ls -lhA"
 
 alias o="a -e open"
 alias v="f -e st"
