@@ -2,7 +2,6 @@
 
 from __future__ import print_function
 
-from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 import argparse
 import json
@@ -195,6 +194,8 @@ class HAL9000(object):
             self._run('ln -sf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
 
     def clone(self, namespace, extra_args=None):
+        from concurrent.futures import ThreadPoolExecutor
+
         scopes = {
             'work': [
                 {'git_url': 'https://github.com/swaglive/pushd.git.git'},
