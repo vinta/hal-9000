@@ -10,6 +10,7 @@ flake8-string-format
 httpie
 ipdb
 ipython
+jokekappa
 mackup
 pangu
 pep8-naming
