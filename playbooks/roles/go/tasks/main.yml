@@ -6,7 +6,7 @@
     - go
     - dep
 
-- name: Create $GOPATH directory
+- name: Create $GOPATH
   file:
     path: "{{ item }}"
     state: directory
