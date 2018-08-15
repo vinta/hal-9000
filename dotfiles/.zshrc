@@ -98,10 +98,6 @@ export DISABLE_AUTO_TITLE="true"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-autoload -U colors; colors
-source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
-RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
-
 PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 alias grep="grep --color=auto"
 alias ls="gls --color=auto"
@@ -117,3 +113,7 @@ source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/k8s_profile
 source /usr/local/HAL-9000/playbooks/roles/node/files/node_profile
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile
 source /usr/local/HAL-9000/playbooks/roles/spark/files/spark_profile
+
+autoload -U colors; colors
+source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
+RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
