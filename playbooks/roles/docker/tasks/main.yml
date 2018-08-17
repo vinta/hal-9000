@@ -3,4 +3,7 @@
     name: "{{ item }}"
     state: latest
   with_items:
+    # https://github.com/bcicen/ctop
     - ctop
+    # https://github.com/ZZROTDesign/docker-clean
+    - docker-clean
