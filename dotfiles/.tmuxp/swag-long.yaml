@@ -1,0 +1,20 @@
+session_name: swag
+start_directory: ~/Projects/swag-server
+shell_command_before:
+  - clear
+windows:
+  - window_name: db
+    panes:
+    - make up
+  - window_name: web
+    focus: true
+    options:
+      automatic-rename: 'off'
+    panes:
+    - shell_command:
+      - make run_web
+    - shell_command:
+      - make run_worker
+    - focus: true
+      shell_command:
+      - pipenv shell
