@@ -1,20 +1,21 @@
-session_name: swag-logs
+session_name: swag
 start_directory: ~/Projects/swag-server
 shell_command_before:
   - clear
 windows:
-  - window_name: logs
-    layout: tiled
+  - window_name: db
+    panes:
+    - make up
+  - window_name: web
     focus: true
     options:
       automatic-rename: 'off'
+    layout: b6cd,167x107,0,0[167x38,0,0,2,167x38,0,39,3,167x29,0,78,4]
     panes:
     - shell_command:
-      - kubetail mongo-rs0
+      - make run_web
     - shell_command:
-      - kubetail swag-api
-    - shell_command:
-      - kubetail swag-bot
+      - make run_worker
     - focus: true
       shell_command:
-      - kubetail swag-worker
+      - pipenv shell
