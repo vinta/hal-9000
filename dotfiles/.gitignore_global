@@ -3,5 +3,6 @@
 .DS_Store
 
 __pycache__/
-*.py[cod]
+.vscode/
 *.egg-info/
+*.py[cod]
