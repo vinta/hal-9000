@@ -3,7 +3,11 @@ export ZSH_DISABLE_COMPFIX=true
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/vinta/.oh-my-zsh
 
-# fpath=(/usr/local/share/zsh-completions $fpath)
+fpath=(
+    /usr/local/share/zsh-completions
+    /usr/local/share/zsh/site-functions
+    $fpath
+)
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
