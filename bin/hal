@@ -211,10 +211,13 @@ class HAL9000(object):
                 {'git_url': 'https://github.com/vinta/simple-project-on-k8s.git'},
             ],
             'work': [
+                {'git_url': 'https://github.com/swaglive/october.git'},
+                {'git_url': 'https://github.com/swaglive/october.rocks.git'},
                 {'git_url': 'https://github.com/swaglive/swag-bot.git'},
                 {'git_url': 'https://github.com/swaglive/swag-frontend.git'},
                 {'git_url': 'https://github.com/swaglive/swag-server.git'},
                 {'git_url': 'https://github.com/swaglive/swag-stats.git'},
+                {'git_url': 'https://github.com/swaglive/swag.backend.connector.google-cloud-storage.git'},
                 {'git_url': 'https://github.com/swaglive/swag.backend.connector.message-asset-generator.git'},
                 {'git_url': 'https://github.com/swaglive/swag.backend.connector.post-asset-generator.git'},
                 {'git_url': 'https://github.com/swaglive/swag.live.git'},
