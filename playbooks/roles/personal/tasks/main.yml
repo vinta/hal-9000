@@ -7,9 +7,7 @@
     - ctags
     - fasd
     - git
-    - git-extras
     - jq
-    - p7zip
     - s3cmd
     - ssh-copy-id
     - tmux
