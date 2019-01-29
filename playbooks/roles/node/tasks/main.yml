@@ -3,10 +3,10 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - node@8
+    - node@10
 
 - name: Install Node.js tools
-  homebrew:
+  npm:
     name: "{{ item }}"
     state: present
   with_items:
