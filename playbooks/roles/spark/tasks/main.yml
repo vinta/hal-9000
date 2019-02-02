@@ -29,25 +29,17 @@
 # https://spark.apache.org/downloads.html
 - name: Unarchive Spark
   unarchive:
-    src: http://apache.stu.edu.tw/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz
+    src: http://apache.stu.edu.tw/spark/spark-{{ SPARK_VERSION }}/spark-{{ SPARK_VERSION }}-bin-hadoop2.7.tgz
     remote_src: yes
     dest: /usr/local/share/apache-spark
-    creates: /usr/local/share/apache-spark/spark-2.3.1
+    creates: /usr/local/share/apache-spark/spark-{{ SPARK_VERSION }}
 
 - name: Rename Spark directory
-  command: mv spark-2.3.1-bin-hadoop2.7 spark-2.3.1
+  command: mv spark-{{ SPARK_VERSION }}-bin-hadoop2.7 spark-{{ SPARK_VERSION }}
   args:
     chdir: /usr/local/share/apache-spark
-    creates: spark-2.3.1
-    removes: spark-2.3.1-bin-hadoop2.7
-
-# https://zeppelin.apache.org/
-# - name: Install Zeppelin
-#   homebrew:
-#     name: "{{ item }}"
-#     state: present
-#   with_items:
-#     - apache-zeppelin
+    creates: spark-{{ SPARK_VERSION }}
+    removes: spark-{{ SPARK_VERSION }}-bin-hadoop2.7
 
 - name: Enable Spark environment in .zshrc
   lineinfile:
