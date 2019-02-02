@@ -1,11 +1,7 @@
 - name: Install prerequisite packages
   homebrew:
-    name: "{{ item }}"
+    name: ["fzf", "gnu-tar", "jq"]
     state: present
-  with_items:
-    - fzf
-    - gnu-tar
-    - jq
 
 - name: Create ~/vendors
   file:
@@ -40,19 +36,8 @@
 
 - name: Install Kubernetes tools
   homebrew:
-    name: "{{ item }}"
+    name: ["kubernetes-cli", "kubetail", "zsh-kubectl-prompt"]
     state: present
-  with_items:
-    - kubernetes-cli
-    - kubetail
-    - zsh-kubectl-prompt
-
-# - name: Install Minikube
-#   homebrew_cask:
-#     name: "{{ item }}"
-#     state: present
-#   with_items:
-#     - minikube
 
 # https://github.com/kubermatic/fubectl
 - name: Install fubectl

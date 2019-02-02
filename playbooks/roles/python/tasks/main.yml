@@ -1,12 +1,8 @@
 # https://github.com/yyuu/pyenv
-- name: Install pyenv and extras
+- name: Install pyenv
   homebrew:
-    name: "{{ item }}"
+    name: ["openssl", "readline", "zlib", "pyenv"]
     state: present
-  with_items:
-    - readline
-    - openssl
-    - pyenv
 
 - name: Install Python {{ PYTHON_2_VERSION }} via pyenv
   command: "pyenv install {{ PYTHON_2_VERSION }}"

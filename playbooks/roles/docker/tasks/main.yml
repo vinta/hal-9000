@@ -1,9 +1,5 @@
+# https://github.com/bcicen/ctop
+# https://github.com/ZZROTDesign/docker-clean
 - name: Install Docker tools
   homebrew:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    # https://github.com/bcicen/ctop
-    - ctop
-    # https://github.com/ZZROTDesign/docker-clean
-    - docker-clean
+    name: ["ctop", "docker-clean"]

@@ -1,19 +1,7 @@
 - name: Install system packages
   homebrew:
-    name: "{{ item }}"
+    name: ["coreutils", "fasd", "git", "jq", "s3cmd", "ssh-copy-id", "tmux", "tree", "wget", "zsh-completions"]
     state: present
-  with_items:
-    - coreutils
-    - ctags
-    - fasd
-    - git
-    - jq
-    - s3cmd
-    - ssh-copy-id
-    - tmux
-    - tree
-    - wget
-    - zsh-completions
 
 # https://github.com/robbyrussell/oh-my-zsh
 - name: Install oh-my-zsh
