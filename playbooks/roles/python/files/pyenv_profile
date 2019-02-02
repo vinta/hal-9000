@@ -1,9 +1,2 @@
 # https://github.com/yyuu/pyenv
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-
-# https://github.com/yyuu/pyenv-virtualenv
-# https://github.com/yyuu/pyenv-virtualenvwrapper
-# if which pyenv-virtualenv-init > /dev/null; then
-#     eval "$(pyenv virtualenv-init -)";
-#     pyenv virtualenvwrapper_lazy;
-# fi
