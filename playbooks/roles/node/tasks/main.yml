@@ -1,14 +1,13 @@
 - name: Install Node.js
   homebrew:
-    name: "{{ item }}"
+    name: ["node@10"]
     state: present
-  with_items:
-    - node@10
 
 - name: Install Node.js tools
   npm:
     name: "{{ item }}"
     state: present
+    global: yes
   with_items:
     - yarn
 

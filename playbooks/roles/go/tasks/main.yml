@@ -1,10 +1,7 @@
 - name: Install Go
   homebrew:
-    name: "{{ item }}"
+    name: ["go", "dep"]
     state: present
-  with_items:
-    - go
-    - dep
 
 - name: Create $GOPATH
   file:
