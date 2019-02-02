@@ -10,7 +10,11 @@
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}"
 
 - name: Install Python {{ PYTHON_3_VERSION }} via pyenv
-  command: "pyenv install {{ PYTHON_3_VERSION }}"
+  shell: |
+    export CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"
+    export CPPFLAGS="-I/usr/local/opt/zlib/include"
+    export LDFLAGS="-L/usr/local/opt/zlib/lib"
+    pyenv install {{ PYTHON_3_VERSION }}
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}"
 
