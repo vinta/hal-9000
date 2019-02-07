@@ -9,6 +9,7 @@
     state: present
     global: yes
   with_items:
+    - pangu
     - yarn
 
 - name: Enable Node.js environment in .zshrc
