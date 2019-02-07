@@ -46,10 +46,9 @@
 
 # https://github.com/kubermatic/fubectl
 - name: Install fubectl
-  shell: sh -c "curl -LO https://rawgit.com/kubermatic/fubectl/master/fubectl.source"
+  shell: sh -c "curl -s -L https://rawgit.com/kubermatic/fubectl/master/fubectl.source -o .fubectl.source"
   args:
-    chdir: "{{ REPO_ROOT }}/playbooks/roles/kubernetes/files/"
-    creates: "{{ REPO_ROOT }}/playbooks/roles/kubernetes/files/fubectl.source"
+    chdir: "{{ ansible_env.HOME }}"
 
 - name: Enable Kubernetes environment in .zshrc
   lineinfile:

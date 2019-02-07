@@ -7,4 +7,4 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-[ -f /usr/local/HAL-9000/playbooks/roles/kubernetes/files/fubectl.source ] && source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/fubectl.source
+[ -f "$HOME/.fubectl.source" ] && source "$HOME/.fubectl.source"
