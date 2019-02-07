@@ -23,6 +23,11 @@
   register: command_result
   changed_when: " 'All components are up to date' not in command_result.stderr"
 
+# https://github.com/derailed/k9s
+- name: Homebrew tap derailed/k9s
+  homebrew_tap:
+    name: derailed/k9s
+
 # https://github.com/johanhaleby/kubetail
 - name: Homebrew tap johanhaleby/kubetail
   homebrew_tap:
@@ -36,7 +41,7 @@
 
 - name: Install Kubernetes tools
   homebrew:
-    name: ["kubernetes-cli", "kubetail", "zsh-kubectl-prompt"]
+    name: ["kubernetes-cli", "k9s", "kubetail", "zsh-kubectl-prompt"]
     state: present
 
 # https://github.com/kubermatic/fubectl
