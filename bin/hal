@@ -190,7 +190,7 @@ class HAL9000(object):
 
     def sync(self, namespace, extra_args=None):
         for link in self.dotfiles.data['links']:
-            self._run('ln -sf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
+            self._run('ln -sfn {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
 
     def clone(self, namespace, extra_args=None):
         from concurrent.futures import ThreadPoolExecutor
