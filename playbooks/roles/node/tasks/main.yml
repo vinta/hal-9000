@@ -8,6 +8,7 @@
     name: "{{ item }}"
     state: present
     global: yes
+    executable: /usr/local/opt/node@10/bin/npm
   with_items:
     - pangu
     - yarn
