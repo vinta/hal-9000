@@ -13,10 +13,6 @@
             "src": ".gitignore_global"
         },
         {
-            "dest": "/Users/vinta/.iterm2_shell_integration.zsh",
-            "src": ".iterm2_shell_integration.zsh"
-        },
-        {
             "dest": "/Users/vinta/.mackup.cfg",
             "src": ".mackup.cfg"
         },
