@@ -12,7 +12,7 @@ Building a Dockerized development environment with Ansible on macOS.
 
 First, you need to manually:
 
-1. Install Command Line Tools via `$ xcode-select --install`
+1. Install Command Line Tools via `xcode-select --install`
 2. Install [Docker for Mac](https://docs.docker.com/docker-for-mac/install/)
 
 ## Bootstrap
