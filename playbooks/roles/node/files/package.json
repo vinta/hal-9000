@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "bunyan": "latest",
+    "pangu": "latest",
+    "yarn": "latest"
+  }
+}
