@@ -23,7 +23,7 @@
 # https://spark.apache.org/downloads.html
 - name: Unarchive Spark
   unarchive:
-    src: http://apache.stu.edu.tw/spark/spark-{{ SPARK_VERSION }}/spark-{{ SPARK_VERSION }}-bin-hadoop2.7.tgz
+    src: http://ftp.tc.edu.tw/pub/Apache/spark/spark-{{ SPARK_VERSION }}/spark-{{ SPARK_VERSION }}-bin-hadoop2.7.tgz
     remote_src: yes
     dest: /usr/local/share/apache-spark
     creates: /usr/local/share/apache-spark/spark-{{ SPARK_VERSION }}
