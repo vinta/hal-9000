@@ -12,8 +12,8 @@ Dominating your dev environment like cats rule the Internet.
 
 - Docker
 - Kubernetes
-- Python
-- Node.js
+- Python with [libraries](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/python/files/requirements.txt)
+- Node.js with [packages](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/node/files/package.json)
 - Go
 - Apache Spark
 
