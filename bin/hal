@@ -215,7 +215,6 @@ class HAL9000(object):
                 {'git_url': 'https://github.com/swaglive/october.rocks.git'},
                 {'git_url': 'https://github.com/swaglive/swag-bot.git'},
                 {'git_url': 'https://github.com/swaglive/swag-cashout.git'},
-                {'git_url': 'https://github.com/swaglive/swag-cp-revenue.git'},
                 {'git_url': 'https://github.com/swaglive/swag-feature-search.git'},
                 {'git_url': 'https://github.com/swaglive/swag-frontend.git'},
                 {'git_url': 'https://github.com/swaglive/swag-server.git'},
