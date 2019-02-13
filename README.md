@@ -10,12 +10,12 @@ Dominating your dev environment like cats rule the Internet.
 
 ## Includes
 
-- Docker
-- Kubernetes
-- Python with [libraries](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/python/files/requirements.txt)
-- Node.js with [packages](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/node/files/package.json)
-- Go
-- Apache Spark
+- [Docker](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/docker/tasks/main.yml)
+- [Kubernetes](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/kubernetes/tasks/main.yml)
+- [Python](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/python/tasks/main.yml)
+- [Node.js](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/node/tasks/main.yml)
+- [Go](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/go/tasks/main.yml)
+- [Apache Spark](https://github.com/vinta/HAL-9000/blob/master/playbooks/roles/spark/tasks/main.yml)
 
 ## Prerequisite
 
