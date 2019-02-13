@@ -4,9 +4,9 @@
 
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
 
-Dominating your dev environment like cats rule the Internet.
+Managing a Dockerized development environment with Ansible on macOS.
 
-Building a Dockerized development environment with Ansible on macOS.
+Dominating your dev environment like cats rule the Internet.
 
 ## Prerequisite
 
