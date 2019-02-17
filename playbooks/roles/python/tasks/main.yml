@@ -2,7 +2,7 @@
 - name: Install pyenv
   homebrew:
     name: ["openssl", "readline", "zlib", "pyenv"]
-    state: present
+    state: latest
 
 - name: Install Python {{ PYTHON_2_VERSION }} via pyenv
   command: "pyenv install {{ PYTHON_2_VERSION }}"

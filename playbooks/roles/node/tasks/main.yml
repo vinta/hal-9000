@@ -1,12 +1,12 @@
 - name: Install Node.js
   homebrew:
     name: ["node@10"]
-    state: present
+    state: latest
 
 - name: Install Node.js packages
   npm:
     name: "{{ item }}"
-    state: present
+    state: latest
     global: yes
     executable: /usr/local/opt/node@10/bin/npm
   with_items:
