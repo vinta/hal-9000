@@ -6,7 +6,7 @@
 - name: Install Java 8
   homebrew_cask:
     name: homebrew/cask-versions/java8
-    state: latest
+    state: present
 
 - name: Install Scala 2.11
   homebrew:
