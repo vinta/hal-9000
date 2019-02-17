@@ -1,6 +1,6 @@
 - name: Install prerequisite packages
   homebrew:
-    name: ["fzf", "gnu-tar", "jq"]
+    name: ["coreutils", "fzf", "gnu-tar", "jq"]
     state: latest
 
 - name: Create ~/vendors
@@ -24,7 +24,7 @@
   changed_when: " 'All components are up to date' not in command_result.stderr"
 
 - name: Update gcloud components
-  shell: yes 'y' | {{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components update
+  shell: /usr/local/opt/coreutils/libexec/gnubin/yes 'y' | {{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components update
 
 # https://github.com/derailed/k9s
 - name: Homebrew tap derailed/k9s
