@@ -1,7 +1,7 @@
 - name: Install Go
   homebrew:
     name: ["go", "dep"]
-    state: present
+    state: latest
 
 - name: Create $GOPATH
   file:

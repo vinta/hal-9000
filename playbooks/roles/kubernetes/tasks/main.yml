@@ -1,7 +1,7 @@
 - name: Install prerequisite packages
   homebrew:
     name: ["fzf", "gnu-tar", "jq"]
-    state: present
+    state: latest
 
 - name: Create ~/vendors
   file:
@@ -13,7 +13,7 @@
 # https://cloud.google.com/sdk/docs/quickstart-macos
 - name: Unarchive Google Cloud SDK
   unarchive:
-    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-233.0.0-darwin-x86_64.tar.gz
+    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-234.0.0-darwin-x86_64.tar.gz
     remote_src: yes
     dest: "{{ ansible_env.HOME }}/vendors"
     creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
@@ -45,7 +45,7 @@
 - name: Install Kubernetes tools
   homebrew:
     name: ["kubernetes-cli", "k9s", "kubetail", "zsh-kubectl-prompt"]
-    state: present
+    state: latest
 
 # https://github.com/kubermatic/fubectl
 - name: Install fubectl

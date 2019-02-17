@@ -1,17 +1,17 @@
 - name: Install prerequisite packages
   homebrew:
     name: ["gnu-tar"]
-    state: present
+    state: latest
 
 - name: Install Java 8
   homebrew_cask:
     name: homebrew/cask-versions/java8
-    state: present
+    state: latest
 
 - name: Install Scala 2.11
   homebrew:
     name: scala@2.11
-    state: present
+    state: latest
 
 - name: Create /usr/local/share/apache-spark
   file:
