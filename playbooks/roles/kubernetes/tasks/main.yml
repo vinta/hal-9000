@@ -23,6 +23,9 @@
   register: command_result
   changed_when: " 'All components are up to date' not in command_result.stderr"
 
+- name: Update gcloud components
+  shell: yes 'y' | {{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components update
+
 # https://github.com/derailed/k9s
 - name: Homebrew tap derailed/k9s
   homebrew_tap:
