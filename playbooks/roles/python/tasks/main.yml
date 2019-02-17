@@ -18,6 +18,12 @@
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}"
 
+- name: Update Python 3 pip
+  pip:
+    executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
+    name: pip
+    state: latest
+
 - name: Install Python 3 tools
   pip:
     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
