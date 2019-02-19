@@ -49,11 +49,14 @@ HIST_STAMPS="yyyy-mm-dd"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# https://github.com/zsh-users/zsh-syntax-highlighting
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(docker fasd)
+plugins=(fasd docker docker-compose history-substring-search)
 
 # User configuration
 
@@ -64,16 +67,20 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 
+# https://github.com/zsh-users/zsh-autosuggestions
+export ZSH_AUTOSUGGEST_USE_ASYNC="true"
 # export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
-# export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="40"
-# source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+# https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/history-substring-search
+zmodload zsh/terminfo
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
 
 source ~/.iterm2_shell_integration.zsh
 
-# eval "$(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)"
+eval "$(gdircolors ~/.dircolors-solarized/dircolors.ansi-dark)"
 
 eval "$(fasd --init auto)"
 
@@ -102,14 +109,12 @@ export DISABLE_AUTO_TITLE="true"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+
 alias grep="grep --color=auto"
 alias ls="gls --color=auto"
 alias ll="ls -lA"
 alias lh="ls -lhA"
-
-alias o="a -e open"
-alias v="f -e st"
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile
 source /usr/local/HAL-9000/playbooks/roles/go/files/go_profile
