@@ -69,8 +69,8 @@ export LC_CTYPE=en_US.UTF-8
 
 # https://github.com/zsh-users/zsh-autosuggestions
 export ZSH_AUTOSUGGEST_USE_ASYNC="true"
-# export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/history-substring-search
