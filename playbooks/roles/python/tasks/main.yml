@@ -4,6 +4,15 @@
     name: ["openssl", "readline", "zlib", "pyenv"]
     state: latest
 
+- name: Enable pyenv environment in .zshrc
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - source {{ REPO_ROOT }}/playbooks/roles/python/files/pyenv_profile
+  when: ansible_env.SHELL == "/bin/zsh"
+
 - name: Install Python {{ PYTHON_2_VERSION }} via pyenv
   command: "pyenv install {{ PYTHON_2_VERSION }}"
   args:
@@ -31,12 +40,3 @@
 
 - name: Specify the default Python version
   command: "pyenv global {{ PYTHON_3_VERSION }} {{ PYTHON_2_VERSION }}"
-
-- name: Enable pyenv environment in .zshrc
-  lineinfile:
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    line: "{{ item }}"
-    create: yes
-  with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/python/files/pyenv_profile
-  when: ansible_env.SHELL == "/bin/zsh"

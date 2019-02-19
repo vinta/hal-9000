@@ -3,13 +3,6 @@
     name: ["go", "dep"]
     state: latest
 
-- name: Create $GOPATH
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "{{ ansible_env.HOME }}/Projects/oh-my-go"
-
 - name: Enable Go environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
@@ -18,3 +11,10 @@
   with_items:
     - source {{ REPO_ROOT }}/playbooks/roles/go/files/go_profile
   when: ansible_env.SHELL == "/bin/zsh"
+
+- name: Create $GOPATH
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ ansible_env.HOME }}/Projects/oh-my-go"
