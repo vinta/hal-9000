@@ -10,7 +10,7 @@
     creates: "{{ ansible_env.HOME }}/.oh-my-zsh/"
 
 # https://www.iterm2.com/documentation-shell-integration.html
-- name: Install iTerm2 Shell Integration
+- name: Download iTerm2 Shell Integration
   shell: sh -c "curl -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh"
 
 # https://github.com/tarruda/zsh-autosuggestions
