@@ -37,6 +37,7 @@
   pip:
     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
+  ignore_errors: yes
 
 - name: Specify the default Python version
   command: "pyenv global {{ PYTHON_3_VERSION }} {{ PYTHON_2_VERSION }}"
