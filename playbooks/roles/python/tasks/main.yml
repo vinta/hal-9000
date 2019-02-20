@@ -17,6 +17,7 @@
   command: "pyenv install {{ PYTHON_2_VERSION }}"
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}"
+  ignore_errors: yes
 
 - name: Install Python {{ PYTHON_3_VERSION }} via pyenv
   shell: |
@@ -26,12 +27,14 @@
     pyenv install {{ PYTHON_3_VERSION }}
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}"
+  ignore_errors: yes
 
 - name: Update Python 3 pip
   pip:
     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
     name: pip
     state: latest
+  ignore_errors: yes
 
 - name: Install Python 3 tools
   pip:
@@ -41,3 +44,4 @@
 
 - name: Specify the default Python version
   command: "pyenv global {{ PYTHON_3_VERSION }} {{ PYTHON_2_VERSION }}"
+  ignore_errors: yes
