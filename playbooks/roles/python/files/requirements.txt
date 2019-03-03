@@ -15,6 +15,7 @@ httpie
 ipdb
 ipython
 jokekappa
+kube-shell
 mackup
 pangu
 pep8-naming
