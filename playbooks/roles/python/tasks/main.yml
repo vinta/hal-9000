@@ -1,7 +1,7 @@
 # https://github.com/yyuu/pyenv
 - name: Install pyenv
   homebrew:
-    name: ["openssl", "readline", "zlib", "pyenv"]
+    name: ["openssl", "readline", "zlib", "xz", "pyenv"]
     state: latest
 
 - name: Enable pyenv environment in .zshrc
@@ -14,16 +14,18 @@
   when: ansible_env.SHELL == "/bin/zsh"
 
 - name: Install Python {{ PYTHON_2_VERSION }} via pyenv
-  command: "pyenv install {{ PYTHON_2_VERSION }}"
+  shell: |
+    export CFLAGS="-O2 -I$(brew --prefix openssl)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include"
+    export LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib"
+    pyenv install {{ PYTHON_2_VERSION }}
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}"
   ignore_errors: yes
 
 - name: Install Python {{ PYTHON_3_VERSION }} via pyenv
   shell: |
-    export CFLAGS="-I$(xcrun --show-sdk-path)/usr/include"
-    export CPPFLAGS="-I/usr/local/opt/zlib/include"
-    export LDFLAGS="-L/usr/local/opt/zlib/lib"
+    export CFLAGS="-O2 -I$(brew --prefix openssl)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include"
+    export LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib"
     pyenv install {{ PYTHON_3_VERSION }}
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}"
