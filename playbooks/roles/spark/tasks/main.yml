@@ -8,9 +8,9 @@
     name: homebrew/cask-versions/java8
     state: present
 
-- name: Install Scala 2.11
+- name: Install Scala 2.12
   homebrew:
-    name: scala@2.11
+    name: scala@2.12
     state: latest
 
 - name: Create /usr/local/share/apache-spark
