@@ -3,8 +3,8 @@ if which java > /dev/null; then
   export PATH="$JAVA_HOME/bin:$PATH"
 fi
 
-export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
+export PATH="/usr/local/opt/scala@2.12/bin:$PATH"
 
-export SPARK_HOME="/usr/local/share/apache-spark/spark-2.4.0"
+export SPARK_HOME="/usr/local/share/apache-spark/spark-2.4.3"
 export PATH="$SPARK_HOME/bin:$PATH"
-export PYTHONPATH="$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.8.1-src.zip:$PYTHONPATH"
+export PYTHONPATH="$SPARK_HOME/python:$PYTHONPATH"
