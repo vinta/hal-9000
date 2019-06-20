@@ -1,3 +1,6 @@
+# autoload -Uz compinit
+# compinit
+
 export ZSH_DISABLE_COMPFIX=true
 
 # Path to your oh-my-zsh installation.
