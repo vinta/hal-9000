@@ -145,7 +145,7 @@ class HAL9000(object):
         self._run('brew upgrade ansible')
 
         os.chdir(os.path.join(Setting.PROJECT_ROOT, 'playbooks'))
-        command = 'ansible-playbook site.yml -v'
+        command = 'ansible-playbook site.yml -vvvv'
         if extra_args:
             command = ' '.join([command, ] + extra_args)
         returncode = self._run(command)
