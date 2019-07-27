@@ -1,5 +1,5 @@
 ---
-- hosts: discovery-one
+- hosts: discovery_one
   roles:
     - {role: basic, tags: ['basic']}
     - {role: docker, tags: ['docker']}
