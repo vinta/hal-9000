@@ -5,7 +5,7 @@
 
 - name: Install Java 8
   homebrew_cask:
-    name: homebrew/cask-versions/java8
+    name: homebrew/cask-versions/adoptopenjdk8
     state: present
 
 - name: Install Scala 2.12
