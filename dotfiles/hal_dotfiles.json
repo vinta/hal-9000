@@ -13,6 +13,10 @@
             "src": ".gitignore_global"
         },
         {
+            "dest": "/Users/vinta/.mackup",
+            "src": ".mackup"
+        },
+        {
             "dest": "/Users/vinta/.mackup.cfg",
             "src": ".mackup.cfg"
         },
