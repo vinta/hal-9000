@@ -18,4 +18,4 @@ windows:
       - make run_worker
     - focus: true
       shell_command:
-      - pipenv shell
+      - make shell
