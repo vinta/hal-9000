@@ -2,7 +2,8 @@
 
 .DS_Store
 
-__pycache__/
 .vscode/
+
+__pycache__/
 *.egg-info/
 *.py[cod]
