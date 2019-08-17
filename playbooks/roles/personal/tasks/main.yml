@@ -55,24 +55,5 @@
     dest: "{{ ansible_env.HOME }}/Projects/HAL-9000"
     state: link
 
-- name: Setup git config - user.name
-  git_config:
-    name: user.name
-    scope: global
-    value: Vinta
-
-- name: Setup git config - user.email
-  git_config:
-    name: user.email
-    scope: global
-    value: vinta.chen@gmail.com
-
-# https://help.github.com/articles/caching-your-github-password-in-git/
-- name: Setup git config - credential.helper
-  git_config:
-    name: credential.helper
-    scope: global
-    value: osxkeychain
-
 - name: Run hal sync
   command: "{{ REPO_ROOT }}/bin/hal sync"
