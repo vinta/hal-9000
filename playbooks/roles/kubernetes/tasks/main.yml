@@ -31,20 +31,16 @@
   homebrew_tap:
     name: derailed/k9s
 
-# https://github.com/johanhaleby/kubetail
-- name: Homebrew tap johanhaleby/kubetail
-  homebrew_tap:
-    name: johanhaleby/kubetail
-
 # https://github.com/superbrothers/zsh-kubectl-prompt
 - name: Homebrew tap superbrothers/zsh-kubectl-prompt
   homebrew_tap:
     name: superbrothers/zsh-kubectl-prompt
     url: git://github.com/superbrothers/zsh-kubectl-prompt.git
 
+# https://github.com/wercker/stern
 - name: Install Kubernetes tools
   homebrew:
-    name: ["kubernetes-cli", "k9s", "kubetail", "zsh-kubectl-prompt"]
+    name: ["kubernetes-cli", "k9s", "stern", "zsh-kubectl-prompt"]
     state: latest
 
 # https://github.com/kubermatic/fubectl
