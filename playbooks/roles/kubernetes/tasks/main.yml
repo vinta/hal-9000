@@ -19,7 +19,7 @@
     creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
 
 - name: Install gcloud components
-  command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil"
+  command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil cloud_sql_proxy"
   register: command_result
   changed_when: " 'All components are up to date' not in command_result.stderr"
 
