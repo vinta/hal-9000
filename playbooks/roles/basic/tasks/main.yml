@@ -8,5 +8,5 @@
     line: "{{ item }}"
     create: yes
   with_items:
-    - "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile"
+    - "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile.sh"
   when: ansible_env.SHELL == "/bin/zsh"
