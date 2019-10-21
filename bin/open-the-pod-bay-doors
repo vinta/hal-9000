@@ -65,4 +65,4 @@ printf "${BLUE}Run ansible-playbook (will require your sudo password)...${NORMAL
 cd $REPO_ROOT/playbooks
 ansible-playbook site.yml -v "$@"
 
-source $REPO_ROOT/playbooks/roles/basic/files/hal_profile
+source $REPO_ROOT/playbooks/roles/basic/files/hal_profile.sh

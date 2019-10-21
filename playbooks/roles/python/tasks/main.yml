@@ -10,7 +10,7 @@
     line: "{{ item }}"
     create: yes
   with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/python/files/pyenv_profile
+    - source {{ REPO_ROOT }}/playbooks/roles/python/files/pyenv_profile.sh
   when: ansible_env.SHELL == "/bin/zsh"
 
 - name: Install Python {{ PYTHON_2_VERSION }} via pyenv
