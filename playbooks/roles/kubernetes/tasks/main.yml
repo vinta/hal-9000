@@ -40,7 +40,7 @@
 # https://github.com/wercker/stern
 - name: Install Kubernetes tools
   homebrew:
-    name: ["kubernetes-cli", "k9s", "stern", "zsh-kubectl-prompt"]
+    name: ["kubernetes-cli", "k9s", "stern", "zsh-kubectl-prompt", "derailed/popeye/popeye"]
     state: latest
 
 # https://github.com/kubermatic/fubectl
