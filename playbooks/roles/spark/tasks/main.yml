@@ -8,11 +8,6 @@
     name: homebrew/cask-versions/adoptopenjdk8
     state: present
 
-- name: Install Scala 2.12
-  homebrew:
-    name: scala@2.12
-    state: latest
-
 - name: Create /usr/local/share/apache-spark
   file:
     path: "{{ item }}"
