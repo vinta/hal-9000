@@ -19,7 +19,6 @@ kube-shell
 mackup
 pangu
 pep8-naming
-pipenv
 poetry
 pylint
 pylint-celery
