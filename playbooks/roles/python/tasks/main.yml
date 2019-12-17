@@ -13,37 +13,28 @@
     - source {{ REPO_ROOT }}/playbooks/roles/python/files/pyenv_profile.sh
   when: ansible_env.SHELL == "/bin/zsh"
 
-- name: Install Python {{ PYTHON_2_VERSION }} via pyenv
+- name: Install Python {{ PYTHON_VERSION }} via pyenv
   shell: |
     export CFLAGS="-O2 -I$(brew --prefix openssl)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include"
     export LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib"
-    pyenv install {{ PYTHON_2_VERSION }}
+    pyenv install {{ PYTHON_VERSION }}
   args:
-    creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_2_VERSION }}"
-  ignore_errors: yes
-
-- name: Install Python {{ PYTHON_3_VERSION }} via pyenv
-  shell: |
-    export CFLAGS="-O2 -I$(brew --prefix openssl)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include"
-    export LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib"
-    pyenv install {{ PYTHON_3_VERSION }}
-  args:
-    creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}"
+    creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}"
   ignore_errors: yes
 
 - name: Update Python 3 pip
   pip:
-    executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
+    executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}/bin/pip3"
     name: pip
     state: latest
   ignore_errors: yes
 
 - name: Install Python 3 tools
   pip:
-    executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_3_VERSION }}/bin/pip3"
+    executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}/bin/pip3"
     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
   ignore_errors: yes
 
 - name: Specify the default Python version
-  command: "pyenv global {{ PYTHON_3_VERSION }} {{ PYTHON_2_VERSION }}"
+  command: "pyenv global {{ PYTHON_VERSION }}"
   ignore_errors: yes
