@@ -13,7 +13,7 @@
 # https://cloud.google.com/sdk/docs/quickstart-macos
 - name: Unarchive Google Cloud SDK
   unarchive:
-    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-234.0.0-darwin-x86_64.tar.gz
+    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-273.0.0-darwin-x86_64.tar.gz
     remote_src: yes
     dest: "{{ ansible_env.HOME }}/vendors"
     creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
@@ -21,7 +21,7 @@
 - name: Install gcloud components
   command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gsutil cloud_sql_proxy"
   register: command_result
-  changed_when: " 'All components are up to date' not in command_result.stderr"
+  changed_when: "'All components are up to date' not in command_result.stderr"
 
 - name: Update gcloud components
   shell: /usr/local/opt/coreutils/libexec/gnubin/yes 'y' | {{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components update
