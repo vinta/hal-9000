@@ -32,15 +32,16 @@
     name: derailed/k9s
 
 # https://github.com/superbrothers/zsh-kubectl-prompt
-- name: Homebrew tap superbrothers/zsh-kubectl-prompt
-  homebrew_tap:
-    name: superbrothers/zsh-kubectl-prompt
-    url: git://github.com/superbrothers/zsh-kubectl-prompt.git
+- name: Checkout zsh-kubectl-prompt
+  git:
+    repo: https://github.com/superbrothers/zsh-kubectl-prompt.git
+    dest: "{{ ansible_env.HOME }}/vendors/zsh-kubectl-prompt"
+    update: yes
 
 # https://github.com/wercker/stern
 - name: Install Kubernetes tools
   homebrew:
-    name: ["kubernetes-cli", "k9s", "stern", "zsh-kubectl-prompt", "derailed/popeye/popeye"]
+    name: ["kubernetes-cli", "k9s", "stern", "derailed/popeye/popeye"]
     state: latest
 
 # https://github.com/kubermatic/fubectl

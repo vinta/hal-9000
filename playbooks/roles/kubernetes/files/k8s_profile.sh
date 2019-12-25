@@ -8,3 +8,7 @@ if [ $commands[kubectl] ]; then
 fi
 
 [ -f "$HOME/.fubectl.source" ] && source "$HOME/.fubectl.source"
+
+autoload -U colors; colors
+source ~/vendors/zsh-kubectl-prompt/kubectl.zsh
+RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
