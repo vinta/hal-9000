@@ -1,17 +1,17 @@
 # https://github.com/nvm-sh/nvm
 - name: Install nvm
   shell: >
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
 
-- name: Install Node.js {{ NODE_VERSION }}
-  shell: >
-    nvm install {{ NODE_VERSION }} --reinstall-packages-from=default --latest-npm && \
-    nvm use {{ NODE_VERSION }} && \
-    nvm alias default {{ NODE_VERSION }}
-  args:
-    creates: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}"
+# - name: Install Node.js {{ NODE_VERSION }}
+#   shell: >
+#     nvm install {{ NODE_VERSION }} --reinstall-packages-from=default --latest-npm && \
+#     nvm use {{ NODE_VERSION }} && \
+#     nvm alias default {{ NODE_VERSION }}
+#   args:
+#     creates: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}"
 
 - name: Enable Node.js environment in .zshrc
   lineinfile:
@@ -22,14 +22,14 @@
     - "source {{ REPO_ROOT }}/playbooks/roles/node/files/node_profile.sh"
   when: ansible_env.SHELL == "/bin/zsh"
 
-- name: Install Node.js packages
-  npm:
-    name: "{{ item }}"
-    state: latest
-    global: yes
-    executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}/bin/npm"
-  with_items:
-    - bunyan
-    - pangu
-    - yarn
-  ignore_errors: yes
+# - name: Install Node.js packages
+#   npm:
+#     name: "{{ item }}"
+#     state: latest
+#     global: yes
+#     executable: "{{ ansible_env.HOME }}/.nvm/versions/node/v{{ NODE_VERSION }}/bin/npm"
+#   with_items:
+#     - bunyan
+#     - pangu
+#     - yarn
+#   ignore_errors: yes
