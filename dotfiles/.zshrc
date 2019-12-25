@@ -125,7 +125,3 @@ source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/k8s_profile.sh
 source /usr/local/HAL-9000/playbooks/roles/node/files/node_profile.sh
 source /usr/local/HAL-9000/playbooks/roles/python/files/pyenv_profile.sh
 source /usr/local/HAL-9000/playbooks/roles/spark/files/spark_profile.sh
-
-autoload -U colors; colors
-source /usr/local/etc/zsh-kubectl-prompt/kubectl.zsh
-RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
