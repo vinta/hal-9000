@@ -7,7 +7,7 @@
 
 - name: Install Node.js {{ NODE_VERSION }}
   shell: >
-    volta install node@{{ NODE_VERSION }}
+    {{ ansible_env.HOME }}/.volta/bin/volta install node@{{ NODE_VERSION }}
   environment:
     - VOLTA_HOME: "{{ ansible_env.HOME }}/.volta"
     - PATH: "$VOLTA_HOME/bin:$PATH"
@@ -29,6 +29,8 @@
     state: latest
     global: yes
     executable: "{{ ansible_env.HOME }}/.volta/bin/npm"
+  environment:
+    - VOLTA_UNSAFE_GLOBAL: 1
   with_items:
     - bunyan
     - pangu
