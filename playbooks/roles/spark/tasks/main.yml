@@ -3,10 +3,10 @@
     name: ["gnu-tar"]
     state: latest
 
-- name: Install Java 8
-  homebrew_cask:
-    name: homebrew/cask-versions/adoptopenjdk8
-    state: present
+- name: Install Java 11
+  homebrew:
+    name: ["java11"]
+    state: latest
 
 - name: Create /usr/local/share/apache-spark
   file:
