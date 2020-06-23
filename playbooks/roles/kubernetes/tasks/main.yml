@@ -13,7 +13,7 @@
 # https://cloud.google.com/sdk/docs/quickstart-macos
 - name: Unarchive Google Cloud SDK
   unarchive:
-    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-274.0.0-darwin-x86_64.tar.gz
+    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-297.0.1-darwin-x86_64.tar.gz
     remote_src: yes
     dest: "{{ ansible_env.HOME }}/vendors"
     creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
@@ -26,11 +26,6 @@
 - name: Update gcloud components
   shell: /usr/local/opt/coreutils/libexec/gnubin/yes 'y' | {{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components update
 
-# https://github.com/derailed/k9s
-- name: Homebrew tap derailed/k9s
-  homebrew_tap:
-    name: derailed/k9s
-
 # https://github.com/superbrothers/zsh-kubectl-prompt
 - name: Checkout zsh-kubectl-prompt
   git:
@@ -38,10 +33,12 @@
     dest: "{{ ansible_env.HOME }}/vendors/zsh-kubectl-prompt"
     update: yes
 
+# https://github.com/derailed/k9s
+# https://github.com/derailed/popeye
 # https://github.com/wercker/stern
 - name: Install Kubernetes tools
   homebrew:
-    name: ["kubernetes-cli", "k9s", "stern", "derailed/popeye/popeye"]
+    name: ["kubernetes-cli", "derailed/k9s/k9s", "derailed/popeye/popeye", "stern"]
     state: latest
 
 # https://github.com/kubermatic/fubectl
