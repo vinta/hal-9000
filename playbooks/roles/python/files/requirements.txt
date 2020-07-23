@@ -1,6 +1,7 @@
 awscli
 coverage
 flake8
+flake8-alfred
 flake8-bandit
 flake8-blind-except
 flake8-bugbear
@@ -9,14 +10,18 @@ flake8-comprehensions
 flake8-debugger
 flake8-mutable
 flake8-pep3101
+flake8-pie
 flake8-print
 flake8-string-format
 httpie
 ipdb
+ipykernel
 ipython
+jedi
 jokekappa
 kube-shell
 mackup
+mypy
 pangu
 pep8-naming
 poetry
@@ -25,5 +30,7 @@ pylint-celery
 pylint-common
 pylint-django
 pylint-flask
+pytest
+pytest-benchmark
 requests
 tmuxp
