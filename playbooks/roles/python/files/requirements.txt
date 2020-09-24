@@ -24,7 +24,6 @@ mackup
 mypy
 pangu
 pep8-naming
-poetry
 pylint
 pylint-celery
 pylint-common

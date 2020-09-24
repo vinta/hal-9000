@@ -29,6 +29,11 @@
     state: latest
   ignore_errors: yes
 
+# https://python-poetry.org/docs/
+- name: Install Python 3 poetry
+  shell: sh -c "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python"
+  ignore_errors: yes
+
 - name: Install Python 3 tools
   pip:
     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}/bin/pip3"
