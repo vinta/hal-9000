@@ -1,18 +1,9 @@
-# https://volta.sh/
-- name: Install volta
+# https://github.com/nvm-sh/nvm
+- name: Install nvm
   shell: >
-    curl https://get.volta.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
   args:
-    creates: "{{ ansible_env.HOME }}/.volta"
-
-- name: Install Node.js {{ NODE_VERSION }}
-  shell: >
-    {{ ansible_env.HOME }}/.volta/bin/volta install node@{{ NODE_VERSION }}
-  environment:
-    - VOLTA_HOME: "{{ ansible_env.HOME }}/.volta"
-    - PATH: "$VOLTA_HOME/bin:$PATH"
-  register: volta_command_result
-  changed_when: "'success' not in volta_command_result.stdout"
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
 
 - name: Enable Node.js environment in .zshrc
   lineinfile:
@@ -22,17 +13,3 @@
   with_items:
     - "source {{ REPO_ROOT }}/playbooks/roles/node/files/node_profile.sh"
   when: ansible_env.SHELL == "/bin/zsh"
-
-- name: Install Node.js packages
-  npm:
-    name: "{{ item }}"
-    state: latest
-    global: yes
-    executable: "{{ ansible_env.HOME }}/.volta/bin/npm"
-  environment:
-    - VOLTA_UNSAFE_GLOBAL: 1
-  with_items:
-    - bunyan
-    - pangu
-    - yarn
-  ignore_errors: yes
