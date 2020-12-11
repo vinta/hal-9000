@@ -27,10 +27,6 @@
         {
             "dest": "/Users/vinta/.tmux.conf",
             "src": ".tmux.conf"
-        },
-        {
-            "dest": "/Users/vinta/.tmuxp",
-            "src": ".tmuxp"
         }
     ]
 }
