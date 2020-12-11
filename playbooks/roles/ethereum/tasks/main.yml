@@ -1,0 +1,9 @@
+# https://github.com/ethereum/go-ethereum
+- name: Homebrew tap ethereum/ethereum
+  community.general.homebrew_tap:
+    name: ethereum/ethereum
+    state: present
+
+- name: Install go-ethereum
+  homebrew:
+    name: ["ethereum"]

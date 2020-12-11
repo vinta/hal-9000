@@ -3,6 +3,7 @@
   roles:
     - {role: basic, tags: ['basic']}
     - {role: docker, tags: ['docker']}
+    - {role: ethereum, tags: ['ethereum']}
     - {role: go, tags: ['go']}
     - {role: kubernetes, tags: ['kubernetes']}
     - {role: node, tags: ['node']}
