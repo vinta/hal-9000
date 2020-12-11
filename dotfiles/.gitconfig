@@ -2,6 +2,9 @@
 	name = Vinta Chen
 	email = vinta.chen@gmail.com
 
+[pull]
+	rebase = false
+
 [push]
 	default = simple
 
