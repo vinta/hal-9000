@@ -1,4 +1,3 @@
-awscli
 coverage
 flake8
 flake8-alfred
