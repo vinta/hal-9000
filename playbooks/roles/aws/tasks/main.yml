@@ -1,0 +1,4 @@
+# https://github.com/jorgebastida/awslogs
+- name: Install aws packages
+  homebrew:
+    name: ["awslogs"]
