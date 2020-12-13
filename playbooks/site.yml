@@ -2,6 +2,7 @@
 - hosts: discovery_one
   roles:
     - {role: basic, tags: ['basic']}
+    - {role: aws, tags: ['aws']}
     - {role: docker, tags: ['docker']}
     - {role: ethereum, tags: ['ethereum']}
     - {role: go, tags: ['go']}
