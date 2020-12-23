@@ -2,9 +2,9 @@
 - hosts: discovery_one
   roles:
     - {role: basic, tags: ['basic']}
-    - {role: go, tags: ['go']}
-    - {role: node, tags: ['node']}
     - {role: python, tags: ['python']}
+    - {role: node, tags: ['node']}
+    - {role: go, tags: ['go']}
     - {role: docker, tags: ['docker']}
     - {role: kubernetes, tags: ['kubernetes']}
     - {role: spark, tags: ['spark']}
