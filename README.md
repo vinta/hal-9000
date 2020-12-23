@@ -22,18 +22,12 @@ Dominating your dev environment like cats rule the Internet.
 First, you need to manually:
 
 1. Install Command Line Tools via `xcode-select --install`
-2. Install [Docker for Mac](https://docs.docker.com/docker-for-mac/install/)
+2. Install [Docker Desktop on Mac](https://docs.docker.com/docker-for-mac/install/)
 
 ## Bootstrap
 
 ```console
 $ curl -L https://bit.ly/open-the-pod-bay-doors | bash
-```
-
-If you want to install only specific components (see [site.yml](https://github.com/vinta/HAL-9000/blob/master/playbooks/site.yml)):
-
-```console
-$ curl -L https://bit.ly/open-the-pod-bay-doors | bash -s -- --tags docker,kubernetes
 ```
 
 ## Usage
