@@ -7,3 +7,12 @@
 - name: Install go-ethereum
   homebrew:
     name: ["ethereum"]
+
+- name: Enable Ethereum environment in .zshrc
+  lineinfile:
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - "source {{ REPO_ROOT }}/playbooks/roles/ethereum/files/ethereum_profile.sh"
+  when: ansible_env.SHELL == "/bin/zsh"

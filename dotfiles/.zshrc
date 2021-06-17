@@ -120,6 +120,7 @@ alias ll="ls -lA"
 alias lh="ls -lhA"
 
 source /usr/local/HAL-9000/playbooks/roles/basic/files/hal_profile.sh
+source /usr/local/HAL-9000/playbooks/roles/ethereum/files/ethereum_profile.sh
 source /usr/local/HAL-9000/playbooks/roles/go/files/go_profile.sh
 source /usr/local/HAL-9000/playbooks/roles/kubernetes/files/k8s_profile.sh
 source /usr/local/HAL-9000/playbooks/roles/node/files/node_profile.sh
