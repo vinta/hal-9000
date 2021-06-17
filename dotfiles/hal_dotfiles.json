@@ -27,6 +27,10 @@
         {
             "dest": "/Users/vinta/.tmux.conf",
             "src": ".tmux.conf"
+        },
+        {
+            "dest": "/Users/vinta/.huskyrc",
+            "src": ".huskyrc"
         }
     ]
 }
