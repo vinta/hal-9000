@@ -17,7 +17,6 @@ ipdb
 ipykernel
 ipython
 jedi
-jokekappa
 kube-shell
 mypy
 pangu
