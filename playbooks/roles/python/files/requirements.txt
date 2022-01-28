@@ -19,7 +19,6 @@ ipython
 jedi
 jokekappa
 kube-shell
-mackup
 mypy
 pangu
 pep8-naming
