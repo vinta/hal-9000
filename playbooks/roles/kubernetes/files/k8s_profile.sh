@@ -1,7 +1,7 @@
-# if [ -f "$HOME/vendors/google-cloud-sdk/path.zsh.inc" ]; then
-#   source "$HOME/vendors/google-cloud-sdk/path.zsh.inc"
-#   source "$HOME/vendors/google-cloud-sdk/completion.zsh.inc"
-# fi
+if [ -f "$HOME/vendors/google-cloud-sdk/path.zsh.inc" ]; then
+  source "$HOME/vendors/google-cloud-sdk/path.zsh.inc"
+  source "$HOME/vendors/google-cloud-sdk/completion.zsh.inc"
+fi
 
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
