@@ -30,4 +30,3 @@ pylint-flask
 pytest
 pytest-benchmark
 requests
-tmuxp
