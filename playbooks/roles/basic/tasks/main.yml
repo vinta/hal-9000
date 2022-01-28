@@ -4,7 +4,7 @@
 
 - name: Install system packages
   homebrew:
-    name: ["coreutils", "fasd", "git", "jq", "ssh-copy-id", "tmux", "tree", "wget", "zsh-completions"]
+    name: ["coreutils", "fasd", "git", "jq", "tree", "wget", "zsh-completions"]
     state: latest
 
 # https://github.com/robbyrussell/oh-my-zsh
@@ -36,13 +36,6 @@
   git:
     repo: https://github.com/seebi/dircolors-solarized
     dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
-    update: yes
-
-# https://github.com/tmux-plugins/tpm
-- name: Checkout tmux Plugin Manager
-  git:
-    repo: https://github.com/tmux-plugins/tpm
-    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
     update: yes
 
 - name: Create directories
