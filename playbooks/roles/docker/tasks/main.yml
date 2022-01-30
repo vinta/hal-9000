@@ -3,4 +3,4 @@
 # https://github.com/ZZROTDesign/docker-clean
 - name: Install Docker tools
   homebrew:
-    name: ["ctop", "dive", "docker-clean"]
+    name: ["docker-clean"]
