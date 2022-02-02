@@ -1,33 +1,30 @@
-#!/usr/bin/env python
-from __future__ import print_function
-
-from contextlib import contextmanager
+#!/usr/bin/env python3
+from enum import Enum
 import argparse
 import json
 import os
-import re
 import subprocess
 import sys
 
 
-class Setting(object):
+class Color(Enum):
+    HEADER = '\033[95m'
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    END = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+class Setting:
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     DOTFILES_ROOT = os.path.join(PROJECT_ROOT, 'dotfiles/')
     WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.expanduser('~'), 'Projects'))
 
 
-class Color(object):
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
-class Dotfiles(object):
+class Dotfiles:
     DEFAULT_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.json')
     TEMPLATE_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.template.json')
 
@@ -71,7 +68,7 @@ class HAL9000Formatter(argparse.HelpFormatter):
         super(HAL9000Formatter, self).__init__(prog, max_help_position=30)
 
 
-class HAL9000(object):
+class HAL9000:
 
     def __init__(self):
         parser = argparse.ArgumentParser(
@@ -106,20 +103,18 @@ class HAL9000(object):
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, HAL')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
 
-    def _hal_says(self, text, color=Color.ENDC):
-        print('HAL: {0}{1}{2}'.format(color, text, Color.ENDC))
+    def _hal_says(self, text, color=Color.END):
+        print('HAL: {0}{1}{2}'.format(color, text, Color.END))
 
     def _run(self, command, shell=True, verbose=True):
         if verbose:
-            self._hal_says(command, color=Color.OKBLUE)
+            self._hal_says(command, color=Color.BLUE)
 
-        returncode = subprocess.call(command, shell=shell)
-
-        return returncode
+        return subprocess.call(command, shell=shell)
 
     def _run_with_output(self, command, shell=True, verbose=True, print_output=True):
         if verbose:
-            self._hal_says(command, color=Color.OKBLUE)
+            self._hal_says(command, color=Color.BLUE)
 
         try:
             output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=shell)
@@ -201,7 +196,6 @@ class HAL9000(object):
             self.parser.print_help()
             sys.exit(0)
 
-        # https://docs.python.org/2/library/argparse.html#partial-parsing
         namespace, extra_args = self.parser.parse_known_args()
         namespace.func(namespace, extra_args)
 
