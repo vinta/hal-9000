@@ -27,7 +27,7 @@ printf "${BOLD}Affirmative, Dave. I read you.${NORMAL}\n"
 if [[ $(which -s brew) != 0 ]] ; then
     printf "\n"
     printf "${BLUE}Install Homebrew...${NORMAL}\n"
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
     printf "\n"
     printf "${GREEN}Update Homebrew...${NORMAL}\n"
