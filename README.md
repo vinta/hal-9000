@@ -29,26 +29,26 @@ First, you need to manually:
 
 ## Bootstrap
 
-```console
-$ curl -L https://bit.ly/open-the-pod-bay-doors | bash
+```bash
+curl -L https://bit.ly/open-the-pod-bay-doors | bash
 ```
 
 ## Usage
 
-```console
+```bash
 # pull the repo and run ansible-playbook
-$ hal update
-$ hal update --tags docker,kubernetes
+hal update
+hal update --tags docker,kubernetes
 
 # add the file to the dotfiles repository
-$ hal link ~/.zshrc
+hal link ~/.zshrc
 
 # remove the file from the dotfiles repository
-$ hal unlink ~/.zshrc
+hal unlink ~/.zshrc
 
 # force sync dotfiles
-$ hal sync
+hal sync
 
 # open the pod bay doors, please, HAL
-$ hal open-the-pod-bay-doors
+hal open-the-pod-bay-doors
 ```
