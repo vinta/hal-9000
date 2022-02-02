@@ -29,11 +29,11 @@
     state: latest
   ignore_errors: yes
 
-# - name: Install Python 3 tools
-#   pip:
-#     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}/bin/pip3"
-#     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
-#   ignore_errors: yes
+- name: Install Python 3 tools
+  pip:
+    executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}/bin/pip3"
+    requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
+  ignore_errors: yes
 
 - name: Specify the default Python version
   command: "pyenv global {{ PYTHON_VERSION }}"
