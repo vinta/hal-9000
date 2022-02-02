@@ -1,67 +1,47 @@
 #!/usr/bin/env bash
 set -e
 
-# use colors, but only if connected to a terminal, and that terminal supports them
-if which tput >/dev/null 2>&1; then
-    ncolors=$(tput colors)
-fi
-if [ -t 1 ] && [ -n "$ncolors" ] && [ "$ncolors" -ge 8 ]; then
-    BLUE="$(tput setaf 4)"
-    GREEN="$(tput setaf 2)"
-    RED="$(tput setaf 1)"
-    YELLOW="$(tput setaf 3)"
-    BOLD="$(tput bold)"
-    NORMAL="$(tput sgr0)"
-else
-    BLUE=""
-    GREEN=""
-    RED=""
-    YELLOW=""
-    BOLD=""
-    NORMAL=""
-fi
+printf "Hello, HAL. Do you read me, HAL?\n"
+printf "Affirmative, Dave. I read you.\n"
 
-printf "${BOLD}Hello, HAL. Do you read me, HAL?${NORMAL}\n"
-printf "${BOLD}Affirmative, Dave. I read you.${NORMAL}\n"
-
-if [[ $(which -s brew) != 0 ]] ; then
+if [ ! -f /usr/local/bin/brew ]; then
     printf "\n"
-    printf "${BLUE}Install Homebrew...${NORMAL}\n"
+    printf "Install Homebrew...\n"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
     printf "\n"
-    printf "${GREEN}Update Homebrew...${NORMAL}\n"
+    printf "Update Homebrew...\n"
     brew update
 fi
 
-if [[ $(which -s ansible-playbook) != 0 ]] ; then
+if [ ! -f /usr/local/bin/ansible ]; then
     printf "\n"
-    printf "${BLUE}Install Ansible...${NORMAL}\n"
+    printf "Install Ansible...\n"
     brew install ansible
 else
     printf "\n"
-    printf "${GREEN}Upgrade Ansible...${NORMAL}\n"
+    printf "Upgrade Ansible...\n"
     brew upgrade ansible || true
     brew unlink ansible && brew link ansible || true
 fi
 
 REPO_REMOTE=https://github.com/vinta/HAL-9000.git
 REPO_ROOT=/usr/local/HAL-9000
-if [ ! -d $REPO_ROOT/.git/ ] ; then
+if [ ! -d $REPO_ROOT/.git/ ]; then
     printf "\n"
-    printf "${BLUE}Checkout the GitHub repo...${NORMAL}\n"
+    printf "Checkout the GitHub repo...\n"
     sudo git clone $REPO_REMOTE $REPO_ROOT
     sudo chown -R "$USER":admin $REPO_ROOT
 else
     printf "\n"
-    printf "${GREEN}Pull the GitHub repo...${NORMAL}\n"
+    printf "Pull the GitHub repo...\n"
     cd $REPO_ROOT
     git fetch
     git pull
 fi
 
 printf "\n"
-printf "${BLUE}Run ansible-playbook (will require your sudo password)...${NORMAL}\n"
+printf "Run ansible-playbook (will require your sudo password)...\n"
 cd $REPO_ROOT/playbooks
 ansible-playbook site.yml -v "$@"
 
