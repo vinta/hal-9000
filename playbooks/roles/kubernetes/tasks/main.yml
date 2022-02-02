@@ -22,7 +22,7 @@
 # https://github.com/wercker/stern
 - name: Install Kubernetes tools
   homebrew:
-    name: ["kubernetes-cli", "derailed/k9s/k9s", "derailed/popeye/popeye", "kubespy", "stern", "weaveworks/tap/eksctl"]
+    name: ["kubernetes-cli", "derailed/k9s/k9s", "weaveworks/tap/eksctl"]
     state: latest
 
 # https://github.com/kubermatic/fubectl
