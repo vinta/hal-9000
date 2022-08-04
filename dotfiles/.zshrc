@@ -98,6 +98,8 @@ export EDITOR="vim"
 
 export DISABLE_AUTO_TITLE="true"
 
+export GPG_TTY=$(tty)
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
