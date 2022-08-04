@@ -1,6 +1,10 @@
 [user]
 	name = Vinta Chen
 	email = vinta.chen@gmail.com
+	signingkey = B93DE4F003C33630
+
+[commit]
+	gpgsign = true
 
 [pull]
 	rebase = false
