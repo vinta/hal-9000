@@ -1,0 +1,6 @@
+# https://book.getfoundry.sh/getting-started/installation
+- name: Download foundryup
+  shell: sh -c 'curl -L https://foundry.paradigm.xyz | bash'
+
+- name: Install foundry
+  shell: sh -c 'foundryup'

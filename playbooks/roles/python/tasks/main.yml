@@ -15,26 +15,24 @@
 
 - name: Install Python {{ PYTHON_VERSION }} via pyenv
   shell: |
-    export CFLAGS="-O2 -I$(brew --prefix openssl)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include"
-    export LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib"
     pyenv install {{ PYTHON_VERSION }}
   args:
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Update Python 3 pip
   pip:
     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}/bin/pip3"
     name: pip
     state: latest
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Install Python 3 tools
   pip:
     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}/bin/pip3"
     requirements: "{{ REPO_ROOT }}/playbooks/roles/python/files/requirements.txt"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Specify the default Python version
   command: "pyenv global {{ PYTHON_VERSION }}"
-  ignore_errors: yes
+  ignore_errors: true
