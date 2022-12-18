@@ -1,6 +1,6 @@
 - name: Install Go
   homebrew:
-    name: ["go", "dep"]
+    name: ["go"]
     state: latest
 
 - name: Enable Go environment in .zshrc
@@ -11,10 +11,3 @@
   with_items:
     - source {{ REPO_ROOT }}/playbooks/roles/go/files/go_profile.sh
   when: ansible_env.SHELL == "/bin/zsh"
-
-- name: Create $GOPATH
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "{{ ansible_env.HOME }}/Projects/oh-my-go"

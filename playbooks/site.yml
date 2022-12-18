@@ -4,9 +4,9 @@
     - {role: basic, tags: ['basic']}
     - {role: python, tags: ['python']}
     - {role: node, tags: ['node']}
-    # - {role: go, tags: ['go']}
+    - {role: go, tags: ['go']}
     - {role: docker, tags: ['docker']}
     - {role: kubernetes, tags: ['kubernetes']}
-    # - {role: spark, tags: ['spark']}
+    - {role: ethereum, tags: ['ethereum']}
     - {role: aws, tags: ['aws']}
     - {role: gcp, tags: ['aws']}

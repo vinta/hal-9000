@@ -1,22 +1,18 @@
-- name: Create ~/vendors
-  file:
-    path: "{{ item }}"
-    state: directory
-  with_items:
-    - "{{ ansible_env.HOME }}/vendors"
-
 # https://cloud.google.com/sdk/docs/quickstart-macos
-- name: Unarchive Google Cloud SDK
+- name: Download Google Cloud SDK
   unarchive:
-    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-370.0.0-darwin-x86_64.tar.gz
+    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-412.0.0-darwin-x86_64.tar.gz
     remote_src: yes
-    dest: "{{ ansible_env.HOME }}/vendors"
-    creates: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk"
+    dest: "{{ ansible_env.HOME }}/"
+    creates: "{{ ansible_env.HOME }}/google-cloud-sdk"
+
+- name: Rename
+  shell: mv {{ ansible_env.HOME }}/google-cloud-sdk {{ ansible_env.HOME }}/.google-cloud-sdk
 
 - name: Install gcloud components
-  command: "{{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components install gke-gcloud-auth-plugin gsutil"
+  command: "{{ ansible_env.HOME }}/.google-cloud-sdk/bin/gcloud components install gke-gcloud-auth-plugin gsutil"
   register: command_result
   changed_when: "'All components are up to date' not in command_result.stderr"
 
 - name: Update gcloud components
-  shell: /usr/local/opt/coreutils/libexec/gnubin/yes 'y' | {{ ansible_env.HOME }}/vendors/google-cloud-sdk/bin/gcloud components update
+  shell: /usr/local/opt/coreutils/libexec/gnubin/yes 'y' | {{ ansible_env.HOME }}/.google-cloud-sdk/bin/gcloud components update
