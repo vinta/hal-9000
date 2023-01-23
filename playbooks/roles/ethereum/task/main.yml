@@ -1,3 +1,8 @@
+- name: Install prerequisite packages
+  homebrew:
+    name: ["libusb"]
+    state: latest
+
 # https://book.getfoundry.sh/getting-started/installation
 - name: Download foundryup
   shell: sh -c 'curl -L https://foundry.paradigm.xyz | bash'
