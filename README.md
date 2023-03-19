@@ -24,7 +24,7 @@ Dominating your dev environment like cats rule the Internet.
 First, you need to manually:
 
 1. Install Command Line Tools via `xcode-select --install`
-2. Install [Docker Desktop on Mac](https://docs.docker.com/docker-for-mac/install/)
+2. Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/)
 
 ## Bootstrap
 
