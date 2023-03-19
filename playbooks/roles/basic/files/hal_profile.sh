@@ -1,2 +1,2 @@
-# https://github.com/vinta/HAL-9000
-export PATH=$PATH:/usr/local/HAL-9000/bin
+# https://github.com/vinta/hal-9000
+export PATH=$PATH:/usr/local/hal-9000/bin

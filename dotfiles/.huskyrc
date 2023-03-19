@@ -1,1 +1,1 @@
-source /usr/local/HAL-9000/playbooks/roles/node/files/node_profile.sh
+source /usr/local/hal-9000/playbooks/roles/node/files/node_profile.sh
