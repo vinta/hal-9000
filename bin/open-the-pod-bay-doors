@@ -25,8 +25,8 @@ else
     brew unlink ansible && brew link ansible || true
 fi
 
-REPO_REMOTE=https://github.com/vinta/HAL-9000.git
-REPO_ROOT=/usr/local/HAL-9000
+REPO_REMOTE=https://github.com/vinta/hal-9000.git
+REPO_ROOT=/usr/local/hal-9000
 if [ ! -d $REPO_ROOT/.git/ ]; then
     printf "\n"
     printf "Checkout the GitHub repo...\n"

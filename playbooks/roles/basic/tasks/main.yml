@@ -39,10 +39,10 @@
     - "{{ ansible_env.HOME }}/Downloads"
     - "{{ ansible_env.HOME }}/Projects"
 
-- name: Link HAL-9000
+- name: Link hal-9000
   file:
     src: "{{ REPO_ROOT }}"
-    dest: "{{ ansible_env.HOME }}/Projects/HAL-9000"
+    dest: "{{ ansible_env.HOME }}/Projects/hal-9000"
     state: link
 
 - name: Run hal sync
