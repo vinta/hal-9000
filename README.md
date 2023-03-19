@@ -16,7 +16,6 @@ Dominating your dev environment like cats rule the Internet.
 - [Docker](https://github.com/vinta/hal-9000/blob/master/playbooks/roles/docker/tasks/main.yml)
 - [Kubernetes](https://github.com/vinta/hal-9000/blob/master/playbooks/roles/kubernetes/tasks/main.yml)
 - [Ethereum](https://github.com/vinta/hal-9000/blob/master/playbooks/roles/ethereum/tasks/main.yml)
-- [Apache Spark](https://github.com/vinta/hal-9000/blob/master/playbooks/roles/spark/tasks/main.yml)
 - [Amazon Web Services](https://github.com/vinta/hal-9000/blob/master/playbooks/roles/aws/tasks/main.yml)
 - [Google Cloud](https://github.com/vinta/hal-9000/blob/master/playbooks/roles/gcp/tasks/main.yml)
 
