@@ -20,7 +20,7 @@
     creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}"
   ignore_errors: true
 
-- name: Update Python 3 pip
+- name: Upgrade Python 3 pip
   pip:
     executable: "{{ ansible_env.HOME }}/.pyenv/versions/{{ PYTHON_VERSION }}/bin/pip3"
     name: pip
