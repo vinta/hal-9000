@@ -12,12 +12,9 @@ flake8-pep3101
 flake8-pie
 flake8-print
 flake8-string-format
-httpie
 ipdb
-ipykernel
 ipython
 jedi
-kube-shell
 mypy
 pangu
 pep8-naming
