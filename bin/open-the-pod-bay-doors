@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 printf "Hello, HAL. Do you read me, HAL?\n"
 printf "Affirmative, Dave. I read you.\n"
