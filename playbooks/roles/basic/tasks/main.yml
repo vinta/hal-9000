@@ -4,32 +4,14 @@
 
 - name: Install system packages
   homebrew:
-    name: ["coreutils", "fasd", "git", "jq", "tree", "wget", "zsh-completions"]
+    name: ["coreutils", "git", "jq", "tree", "wget"]
     state: latest
 
-# https://github.com/robbyrussell/oh-my-zsh
+# https://github.com/ohmyzsh/ohmyzsh
 - name: Install oh-my-zsh
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   args:
     creates: "{{ ansible_env.HOME }}/.oh-my-zsh/"
-
-# https://www.iterm2.com/documentation-shell-integration.html
-- name: Download iTerm2 Shell Integration
-  shell: sh -c "curl -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh"
-
-# https://github.com/zsh-users/zsh-syntax-highlighting
-- name: Checkout zsh-syntax-highlighting
-  git:
-    repo: https://github.com/zsh-users/zsh-syntax-highlighting
-    dest: "{{ ansible_env.HOME }}/.zsh/zsh-syntax-highlighting"
-    update: yes
-
-# https://github.com/seebi/dircolors-solarized
-- name: Checkout dircolors-solarized
-  git:
-    repo: https://github.com/seebi/dircolors-solarized
-    dest: "{{ ansible_env.HOME }}/.dircolors-solarized"
-    update: yes
 
 - name: Create directories
   file:
