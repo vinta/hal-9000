@@ -74,6 +74,10 @@ plugins=(z history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
 
+# PROMPT='%(?..%B(%?%)%b) %F{green}%n@$(scutil --get ComputerName) %F{yellow}${PWD/#$HOME/~} %F{white}$%F{reset_color} '
+PROMPT="%(?:%{$fg_bold[green]%}➜:%{$fg_bold[red]%}➜) %{$fg[yellow]%}%~%{$reset_color%}"
+PROMPT+=' $(git_prompt_info)'
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
