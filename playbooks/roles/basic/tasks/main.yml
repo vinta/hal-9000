@@ -2,9 +2,19 @@
   homebrew:
     update_homebrew: yes
 
-- name: Install system packages
+- name: Install utility packages
   homebrew:
-    name: ["git", "gh", "jq", "tree", "wget"]
+    name: ["jq", "tree", "wget"]
+    state: latest
+
+- name: Install git packages
+  homebrew:
+    name: ["git", "gh"]
+    state: latest
+
+- name: Install gpg packages
+  homebrew:
+    name: ["gpg2", "pinentry-mac"]
     state: latest
 
 # https://github.com/ohmyzsh/ohmyzsh
