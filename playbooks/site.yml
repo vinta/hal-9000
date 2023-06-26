@@ -9,4 +9,4 @@
     - {role: kubernetes, tags: ['kubernetes']}
     - {role: ethereum, tags: ['ethereum']}
     - {role: aws, tags: ['aws']}
-    - {role: gcp, tags: ['aws']}
+    - {role: gcp, tags: ['gcp']}
