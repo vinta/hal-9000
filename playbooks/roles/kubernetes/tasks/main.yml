@@ -18,13 +18,6 @@
 - name: Install fubectl
   shell: sh -c "curl -L https://rawgit.com/kubermatic/fubectl/master/fubectl.source -o ~/.fubectl.source"
 
-# https://github.com/superbrothers/zsh-kubectl-prompt
-- name: Install zsh-kubectl-prompt
-  git:
-    repo: https://github.com/superbrothers/zsh-kubectl-prompt.git
-    dest: "{{ ansible_env.HOME }}/.zsh-kubectl-prompt"
-    update: yes
-
 - name: Enable Kubernetes environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"

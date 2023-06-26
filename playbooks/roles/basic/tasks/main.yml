@@ -4,7 +4,7 @@
 
 - name: Install system packages
   homebrew:
-    name: ["git", "jq", "tree", "wget"]
+    name: ["git", "gh", "jq", "tree", "wget"]
     state: latest
 
 # https://github.com/ohmyzsh/ohmyzsh
