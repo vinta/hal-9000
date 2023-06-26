@@ -24,12 +24,13 @@ Dominating your dev environment like cats rule the Internet.
 First, you need to manually:
 
 1. Install Command Line Tools via `xcode-select --install`
-2. Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/)
+2. Install Rosetta 2 via `softwareupdate --install-rosetta`
+3. Install [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/)
 
 ## Bootstrap
 
 ```bash
-curl -L https://bit.ly/open-the-pod-bay-doors | bash
+curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod-bay-doors | bash
 ```
 
 ## Usage
