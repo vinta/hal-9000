@@ -2,7 +2,5 @@
 
 .DS_Store
 
-__pycache__/
-.mypy_cache/
-*.egg-info/
-*.py[cod]
+.env*
+!.env.example
