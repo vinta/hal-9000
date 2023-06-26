@@ -5,4 +5,4 @@ if command -v pyenv 1>/dev/null 2>&1; then
 fi
 
 # https://python-poetry.org/docs/#installation
-export PATH="/Users/vinta/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
