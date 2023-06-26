@@ -1,32 +1,28 @@
 # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 - name: Download awscli
   shell: sh -c 'curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"'
+  args:
+    chdir: /tmp
+    creates: /usr/local/bin/aws
 
 - name: Install awscli
   shell: sh -c 'sudo installer -pkg AWSCLIV2.pkg -target /'
-
-- name: Cleanup awscli
-  shell: sh -c 'rm AWSCLIV2.pkg'
+  args:
+    chdir: /tmp
+    creates: /usr/local/bin/aws
 
 # https://github.com/jorgebastida/awslogs
 - name: Install awslogs
   homebrew:
     name: ["awslogs"]
 
-# # https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html
-# - name: Homebrew tap weaveworks/tap
-#   community.general.homebrew_tap:
-#     name: weaveworks/tap
-#     state: present
-
-# - name: Install eksctl
-#   homebrew:
-#     name: ["weaveworks/tap/eksctl"]
-#     state: latest
-
-# https://github.com/weaveworks/eksctl/issues/2846
+# https://github.com/weaveworks/eksctl/blob/main/README.md#installation
 - name: Download eksctl
-  shell: sh -c 'curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp'
+  shell: sh -c 'curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_$(arch).tar.gz" | tar xz -C /tmp'
+  args:
+    creates: /usr/local/bin/eksctl
 
-- name: Install awscli
+- name: Install eksctl
   shell: sh -c 'sudo mv /tmp/eksctl /usr/local/bin'
+  args:
+    creates: /usr/local/bin/eksctl
