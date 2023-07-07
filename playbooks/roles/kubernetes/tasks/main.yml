@@ -3,10 +3,18 @@
     name: ["coreutils", "fzf", "gnu-tar", "jq"]
     state: latest
 
+# https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
+- name: Download kubectl
+  shell: sh -c 'curl -LO "https://dl.k8s.io/release/v1.21.14/bin/darwin/$(arch)/kubectl"'
+  args:
+    chdir: /tmp
+    creates: /usr/local/bin/kubectl
+
 - name: Install kubectl
-  homebrew:
-    name: ["kubernetes-cli"]
-    state: latest
+  shell: sh -c 'sudo mv /tmp/kubectl /usr/local/bin'
+  args:
+    chdir: /tmp
+    creates: /usr/local/bin/kubectl
 
 # https://github.com/derailed/k9s
 - name: Install k9s
