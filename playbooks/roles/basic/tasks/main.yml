@@ -4,7 +4,7 @@
 
 - name: Install utility packages
   homebrew:
-    name: ["jq", "tree", "wget"]
+    name: ["htop", "jq", "pstree", "tree", "wget"]
     state: latest
 
 - name: Install git packages
