@@ -116,5 +116,3 @@ source /usr/local/hal-9000/playbooks/roles/python/files/py_profile.sh
 source /usr/local/hal-9000/playbooks/roles/node/files/node_profile.sh
 source /usr/local/hal-9000/playbooks/roles/kubernetes/files/k8s_profile.sh
 source /usr/local/hal-9000/playbooks/roles/ethereum/files/eth_profile.sh
-
-eval "$(github-copilot-cli alias -- "$0")"
