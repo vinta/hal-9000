@@ -15,6 +15,10 @@
         {
             "dest": "/Users/vinta/.huskyrc",
             "src": ".huskyrc"
+        },
+        {
+            "dest": "/Users/vinta/.claude/CLAUDE.md",
+            "src": "CLAUDE.md"
         }
     ]
 }
