@@ -76,7 +76,7 @@ source $ZSH/oh-my-zsh.sh
 
 # PROMPT='%(?..%B(%?%)%b) %F{green}%n@$(scutil --get ComputerName) %F{yellow}${PWD/#$HOME/~} %F{white}$%F{reset_color} '
 PROMPT="%(?:%{$fg_bold[green]%}➜:%{$fg_bold[red]%}➜) %{$fg[yellow]%}%~%{$reset_color%}"
-PROMPT+=' $(git_prompt_info)'
+PROMPT+=' $(git_prompt_info)' # Must use single quote
 
 # User configuration
 
@@ -106,6 +106,7 @@ export LC_CTYPE=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ll="ls -lA"
+alias npmiv="npm i --verbose"
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
 export HOMEBREW_NO_ANALYTICS=1
