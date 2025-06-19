@@ -1,6 +1,7 @@
+---
 - name: Update Homebrew
   homebrew:
-    update_homebrew: yes
+    update_homebrew: true
 
 - name: Install utility packages
   homebrew:
@@ -27,6 +28,7 @@
   file:
     path: "{{ item }}"
     state: directory
+    mode: '0755'
   with_items:
     - "{{ ansible_env.HOME }}/Downloads"
     - "{{ ansible_env.HOME }}/Projects"
@@ -44,7 +46,8 @@
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
-    create: yes
+    create: true
+    mode: '0644'
   with_items:
     - "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile.sh"
   when: ansible_env.SHELL == "/bin/zsh"

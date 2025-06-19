@@ -1,3 +1,4 @@
+---
 - name: Install prerequisite packages
   homebrew:
     name: ["coreutils", "fzf", "gnu-tar", "jq"]
@@ -11,7 +12,7 @@
     creates: /usr/local/bin/kubectl
 
 - name: Install kubectl
-  shell: sh -c 'sudo mv /tmp/kubectl /usr/local/bin'
+  command: sudo mv /tmp/kubectl /usr/local/bin
   args:
     chdir: /tmp
     creates: /usr/local/bin/kubectl
@@ -24,13 +25,14 @@
 
 # https://github.com/kubermatic/fubectl
 - name: Install fubectl
-  shell: sh -c "curl -L https://rawgit.com/kubermatic/fubectl/master/fubectl.source -o ~/.fubectl.source"
+  command: curl -L https://rawgit.com/kubermatic/fubectl/master/fubectl.source -o ~/.fubectl.source
 
 - name: Enable Kubernetes environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
-    create: yes
+    create: true
+    mode: '0644'
   with_items:
     - source {{ REPO_ROOT }}/playbooks/roles/kubernetes/files/k8s_profile.sh
   when: ansible_env.SHELL == "/bin/zsh"
