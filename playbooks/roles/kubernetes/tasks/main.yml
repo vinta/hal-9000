@@ -25,7 +25,7 @@
 
 # https://github.com/kubermatic/fubectl
 - name: Install fubectl
-  shell: sh -c "curl -L https://rawgit.com/kubermatic/fubectl/master/fubectl.source -o ~/.fubectl.source"
+  command: curl -L https://rawgit.com/kubermatic/fubectl/master/fubectl.source -o ~/.fubectl.source
 
 - name: Enable Kubernetes environment in .zshrc
   lineinfile:
