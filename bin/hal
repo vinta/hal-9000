@@ -5,6 +5,10 @@ import os
 import subprocess  # noqa: S404
 import sys
 
+try:
+    import shtab
+except ImportError:
+    shtab = None
 
 class Setting:
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -90,6 +94,10 @@ class HAL9000:
 
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, HAL')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
+
+        # Add shtab completion support
+        if shtab:
+            shtab.add_argument_to(parser, option_string="--print-completion")
 
     def _hal_says(self, text):
         print(f'HAL: {text}')  # noqa: T001
