@@ -1,6 +1,6 @@
-*~
+**/.DS_Store
 
-.DS_Store
+**/.env*
+!**/.env.example
 
-.env*
-!.env.example
+**/.claude/settings.local.json
