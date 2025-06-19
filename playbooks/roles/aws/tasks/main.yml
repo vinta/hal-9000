@@ -1,12 +1,13 @@
+---
 # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 - name: Download awscli
-  shell: sh -c 'curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"'
+  command: curl https://awscli.amazonaws.com/AWSCLIV2.pkg -o AWSCLIV2.pkg
   args:
     chdir: /tmp
     creates: /usr/local/bin/aws
 
 - name: Install awscli
-  shell: sh -c 'sudo installer -pkg AWSCLIV2.pkg -target /'
+  command: sudo installer -pkg AWSCLIV2.pkg -target /
   args:
     chdir: /tmp
     creates: /usr/local/bin/aws
@@ -18,6 +19,6 @@
     creates: /usr/local/bin/eksctl
 
 - name: Install eksctl
-  shell: sh -c 'sudo mv /tmp/eksctl /usr/local/bin'
+  command: sudo mv /tmp/eksctl /usr/local/bin
   args:
     creates: /usr/local/bin/eksctl

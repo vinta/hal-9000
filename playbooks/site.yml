@@ -1,5 +1,6 @@
 ---
-- hosts: discovery_one
+- name: Configure development environment
+  hosts: discovery_one
   roles:
     - {role: basic, tags: ['basic']}
     - {role: python, tags: ['python']}

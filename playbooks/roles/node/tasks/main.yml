@@ -1,3 +1,4 @@
+---
 # https://github.com/nvm-sh/nvm
 - name: Install nvm
   shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
@@ -8,7 +9,8 @@
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
-    create: yes
+    create: true
+    mode: '0644'
   with_items:
     - "source {{ REPO_ROOT }}/playbooks/roles/node/files/node_profile.sh"
   when: ansible_env.SHELL == "/bin/zsh"
