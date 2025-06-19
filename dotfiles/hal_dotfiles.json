@@ -29,6 +29,10 @@
     {
       "dest": "/Users/vinta/.claude/commands/subagents.md",
       "src": ".claude/commands/subagents.md"
+    },
+    {
+      "dest": "/Users/vinta/.hal_completion.zsh",
+      "src": ".hal_completion.zsh"
     }
   ]
 }
