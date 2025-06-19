@@ -2,12 +2,12 @@
 - name: Configure development environment
   hosts: discovery_one
   roles:
-    - {role: basic, tags: ['basic']}
-    - {role: python, tags: ['python']}
-    - {role: node, tags: ['node']}
-    - {role: go, tags: ['go']}
-    - {role: docker, tags: ['docker']}
-    - {role: kubernetes, tags: ['kubernetes']}
-    - {role: ethereum, tags: ['ethereum']}
-    - {role: aws, tags: ['aws']}
-    - {role: gcp, tags: ['gcp']}
+    - {role: basic, tags: ["basic"]}
+    - {role: python, tags: ["python"]}
+    - {role: node, tags: ["node"]}
+    - {role: go, tags: ["go"]}
+    - {role: docker, tags: ["docker"]}
+    - {role: kubernetes, tags: ["kubernetes"]}
+    - {role: ethereum, tags: ["ethereum"]}
+    - {role: aws, tags: ["aws"]}
+    - {role: gcp, tags: ["gcp"]}
