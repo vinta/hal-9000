@@ -1,3 +1,4 @@
+---
 - name: Install prerequisite packages
   homebrew:
     name: ["libusb"]
@@ -18,7 +19,8 @@
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
-    create: yes
+    create: true
+    mode: '0644'
   with_items:
     - source {{ REPO_ROOT }}/playbooks/roles/ethereum/files/eth_profile.sh
   when: ansible_env.SHELL == "/bin/zsh"

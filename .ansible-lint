@@ -1,0 +1,21 @@
+---
+exclude_paths:
+  - .github/
+  - .git/
+
+skip_list:
+  - command-instead-of-module # Some macOS-specific operations require shell
+  - no-changed-when # Will be addressed in future updates
+  - risky-shell-pipe # Some operations require pipes
+  - fqcn[action-core] # Allow short module names for simplicity
+  - package-latest # Development environment can use latest versions
+
+warn_list:
+  - experimental # Warn on experimental features
+  - no-handler # Warn when handlers could be used
+
+# Mock the homebrew module since it's macOS specific
+mock_modules:
+  - homebrew
+  - homebrew_tap
+  - homebrew_cask
