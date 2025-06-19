@@ -1,3 +1,4 @@
+---
 - name: Install prerequisite packages
   homebrew:
     name: ["libusb"]
@@ -5,12 +6,12 @@
 
 # https://book.getfoundry.sh/getting-started/installation
 - name: Download foundryup
-  shell: sh -c 'curl -L https://foundry.paradigm.xyz | bash'
+  shell: sh -c "curl -L https://foundry.paradigm.xyz | bash"
   args:
     creates: "{{ ansible_env.HOME }}/.foundry/bin/foundryup"
 
 - name: Install foundry
-  shell: sh -c '$HOME/.foundry/bin/foundryup'
+  shell: sh -c "$HOME/.foundry/bin/foundryup"
   args:
     creates: "{{ ansible_env.HOME }}/.foundry/bin/forge"
 
@@ -18,7 +19,8 @@
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
-    create: yes
+    create: true
+    mode: '0644'
   with_items:
     - source {{ REPO_ROOT }}/playbooks/roles/ethereum/files/eth_profile.sh
   when: ansible_env.SHELL == "/bin/zsh"
