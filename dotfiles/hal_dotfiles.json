@@ -1,24 +1,34 @@
 {
-    "links": [
-        {
-            "dest": "/Users/vinta/.zshrc",
-            "src": ".zshrc"
-        },
-        {
-            "dest": "/Users/vinta/.gitconfig",
-            "src": ".gitconfig"
-        },
-        {
-            "dest": "/Users/vinta/.gitignore_global",
-            "src": ".gitignore_global"
-        },
-        {
-            "dest": "/Users/vinta/.huskyrc",
-            "src": ".huskyrc"
-        },
-        {
-            "dest": "/Users/vinta/.claude/CLAUDE.md",
-            "src": "CLAUDE.md"
-        }
-    ]
+  "links": [
+    {
+      "dest": "/Users/vinta/.zshrc",
+      "src": ".zshrc"
+    },
+    {
+      "dest": "/Users/vinta/.gitconfig",
+      "src": ".gitconfig"
+    },
+    {
+      "dest": "/Users/vinta/.gitignore_global",
+      "src": ".gitignore_global"
+    },
+    {
+      "dest": "/Users/vinta/.huskyrc",
+      "src": ".huskyrc"
+    }
+  ],
+  "copies": [
+    {
+      "dest": "/Users/vinta/.claude/CLAUDE.md",
+      "src": ".claude/CLAUDE.md"
+    },
+    {
+      "dest": "/Users/vinta/.claude/commands/commit.md",
+      "src": ".claude/commands/commit.md"
+    },
+    {
+      "dest": "/Users/vinta/.claude/commands/subagents.md",
+      "src": ".claude/commands/subagents.md"
+    }
+  ]
 }
