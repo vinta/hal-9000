@@ -43,11 +43,11 @@ class Dotfiles:
         return some_dict
 
     def show(self):
-        print(json.dumps(self.data, sort_keys=True, indent=4, separators=(',', ': ')))  # noqa: T001
+        print(json.dumps(self.data, sort_keys=True, indent=2, separators=(',', ': ')))  # noqa: T001
 
     def save(self):
         with open(self.path, 'w') as f:
-            json.dump(self.data, f, sort_keys=True, indent=4, separators=(',', ': '))
+            json.dump(self.data, f, sort_keys=True, indent=2, separators=(',', ': '))
 
 
 class HAL9000Formatter(argparse.HelpFormatter):
@@ -171,7 +171,14 @@ class HAL9000:
 
     def sync(self, namespace, extra_args=None):
         for link in self.dotfiles.data['links']:
+            dest_dir = os.path.dirname(link['dest'])
+            self._run('mkdir -p {0}'.format(dest_dir))
             self._run('ln -sfn {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
+
+        for copy in self.dotfiles.data['copies']:
+            dest_dir = os.path.dirname(copy['dest'])
+            self._run('mkdir -p {0}'.format(dest_dir))
+            self._run('cp -rf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, copy['src']), copy['dest']))
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that")
