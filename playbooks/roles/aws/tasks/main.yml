@@ -21,8 +21,3 @@
   shell: sh -c 'sudo mv /tmp/eksctl /usr/local/bin'
   args:
     creates: /usr/local/bin/eksctl
-
-# https://github.com/jorgebastida/awslogs
-- name: Install awslogs
-  homebrew:
-    name: ["awslogs"]
