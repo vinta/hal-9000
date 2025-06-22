@@ -5,6 +5,11 @@ import os
 import subprocess  # noqa: S404
 import sys
 
+try:
+    import argcomplete
+except ImportError:
+    argcomplete = None
+
 
 class Setting:
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -90,6 +95,9 @@ class HAL9000:
 
         pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, HAL')
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
+
+        if argcomplete:
+            argcomplete.autocomplete(parser)
 
     def _hal_says(self, text):
         print(f'HAL: {text}')  # noqa: T001
@@ -181,7 +189,7 @@ class HAL9000:
             self._run('cp -rf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, copy['src']), copy['dest']))
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
-        self._hal_says("I'm sorry Dave, I'm afraid I can't do that")
+        self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
         filepath = os.path.join(Setting.PROJECT_ROOT, 'assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3')
         self._run(f'afplay {filepath}', verbose=False)
