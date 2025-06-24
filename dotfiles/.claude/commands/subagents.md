@@ -1,29 +1,39 @@
 # Parallel Task Execution with Subagents
 
-## Pre-execution Analysis
+## Step 1: Analyze Tasks
 
-- Carefully analyze all requested tasks to identify potential conflicts or dependencies
-- Flag any tasks that may interfere with each other before starting execution
-- If conflicts are detected, propose a resolution strategy before proceeding
-- If you found some tasks will absolutely need to run much longer than others, skip time-consumming tasks, do other tasks in parallel first.
+- Identify dependencies between tasks
+- Detect resource conflicts (files, directories)
+- Estimate execution time: quick (<1min), medium (1-5min), long (>5min)
 
-## Execution Requirements
+## Step 2: Handle Time Disparities
 
-1. **Parallel Processing**: Execute all tasks simultaneously using subagents
-2. **Real-time Reporting**: Report completion of each subtask immediately upon finish
-   - Do NOT wait for all tasks to complete before reporting
-   - Provide status updates as each task progresses
-3. **Independence**: Ensure each subagent operates independently unless dependencies exist
+If one task takes 10+ minutes while others take 1-3 minutes:
 
-## Task List
+- Report: "Task X: ~10+ min, Tasks Y,Z: ~1-3 min. Execute shorter tasks first?"
+- Default: Yes, defer long task
 
-Execute the following tasks in parallel:
+## Step 3: Execute Tasks In Parallel
+
+- Launch all independent tasks simultaneously as subagents
+- Each subagent runs in isolation
+- Dependent tasks wait for prerequisites
+
+## Step 4: Monitor & Report
+
+- Track all subagents continuously
+- Report completion as tasks finish
+- Continue remaining tasks if one fails (unless dependent)
+- Final summary: list each task with ✓ or ✗ status
+
+### Error Handling
+
+- Capture errors without stopping other tasks
+- Halt dependent tasks if prerequisite fails
+- Include actionable fixes in error messages
+
+---
+
+**Tasks to execute:**
 
 $ARGUMENTS
-
-## Expected Behavior
-
-- Start all non-conflicting tasks simultaneously
-- Report each completed task immediately with results
-- Continue processing remaining tasks while reporting
-- If any task fails, report the failure immediately and continue with others
