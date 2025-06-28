@@ -27,6 +27,10 @@
       "src": ".claude/commands/commit.md"
     },
     {
+      "dest": "/Users/vinta/.claude/commands/pair-with-gemini.md",
+      "src": ".claude/commands/pair-with-gemini.md"
+    },
+    {
       "dest": "/Users/vinta/.claude/commands/subagents.md",
       "src": ".claude/commands/subagents.md"
     },
