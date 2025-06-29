@@ -1,43 +1,39 @@
-# Commit Recent Changes
+# Commit Guidelines
 
-Follow the instructions precisely. If it wasn't specified, don't do it.
+## Key Rule: **Separate Unrelated Changes**
 
-### Commit Process:
+Before committing:
 
-1. RUN: `git add .` to stage all changes
-2. RUN: `git commit -m "[message]"` with descriptive commit message
+1. Run `git status` and `git diff` to review changes
+2. Group related changes together
+3. Commit each group separately using `git add [specific files]`
 
-### Commit Message Format:
+## Commit Message Format
 
-Use one of these formats based on the type of change:
+- `feature: [description]` - new features
+- `fix: [description]` - bug fixes
+- `refactor: [description]` - code refactoring
+- `docs: [description]` - documentation updates
+- `test: [description]` - test changes
+- `chore: [description]` - maintenance tasks
 
-- `feature: [feature description]` for new features
-- `fix: [fix description]` for bug fixes
-- `refactor: [refactor description]` for code refactoring
-- `docs: [documentation change]` for documentation updates
-- `test: [test description]` for test additions/changes
-- `chore: [chore description]` for maintenance tasks
+## Rules
 
-### Examples:
-
-- `feature: add user authentication system`
-- `fix: resolve null pointer exception in data parser`
-- `refactor: simplify database connection logic`
-- `docs: update API endpoint documentation`
-
-## Best Practices:
-
-- Atomic commits: Each commit should represent a single, logical change
-- Separate unrelated changes: If you discover unrelated changes, commit them separately
-- Verify code quality: Ensure code is in a working state before committing
-- Pre-commit checks: Do NOT commit if:
-  - Tests are failing
-  - Code has syntax errors
-  - Build is broken
-- Always include co-authorship:
+- One logical change per commit
+- Ensure code works before committing
+- Don't commit if tests fail or build is broken
+- Include co-authorship:
 
 ```
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
+
+## Example
+
+If you've made a bug fix, added a feature, and fixed a typo:
+
+- Commit 1: `fix: resolve auth timeout`
+- Commit 2: `feature: add dashboard widget`
+- Commit 3: `docs: fix typo in README`
