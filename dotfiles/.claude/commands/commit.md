@@ -1,39 +1,54 @@
-# Commit Guidelines
+# Commit Separately By Relevance
 
-## Key Rule: **Separate Unrelated Changes**
+## Core Rule: **One Logical Change Per Commit**
 
-Before committing:
+Never mix unrelated changes. Each commit should do one thing.
 
-1. Run `git status` and `git diff` to review changes
-2. Group related changes together
-3. Commit each group separately using `git add [specific files]`
+## Before Committing
 
-## Commit Message Format
+```bash
+git status        # Check what's changed
+git diff          # Review changes
+```
 
-- `feature: [description]` - new features
-- `fix: [description]` - bug fixes
-- `refactor: [description]` - code refactoring
-- `docs: [description]` - documentation updates
-- `test: [description]` - test changes
-- `chore: [description]` - maintenance tasks
+## Commit Types
 
-## Rules
+- `feat:` - New feature
+- `fix:` - Bug fix
+- `refactor:` - Code restructuring
+- `docs:` - Documentation
+- `test:` - Tests
+- `chore:` - Maintenance
 
-- One logical change per commit
-- Ensure code works before committing
-- Don't commit if tests fail or build is broken
-- Include co-authorship:
+## Separate Commits Example
+
+If you've made a bug fix, added a feature, and updated docs:
+
+```bash
+# Commit 1: Bug fix
+git add src/auth/login.js
+git commit -m "fix: resolve login timeout"
+
+# Commit 2: Feature
+git add src/components/Search.js
+git commit -m "feat: add search functionality"
+
+# Commit 3: Documentation
+git add README.md
+git commit -m "docs: update API examples"
+```
+
+## Attribution
+
+Include in every commit:
 
 ```
-🤖 Generated with [Claude Code](https://claude.ai/code)
-
+🤖 Generated with Claude Code (https://claude.ai/code)
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-## Example
+## Key Commands
 
-If you've made a bug fix, added a feature, and fixed a typo:
-
-- Commit 1: `fix: resolve auth timeout`
-- Commit 2: `feature: add dashboard widget`
-- Commit 3: `docs: fix typo in README`
+- `git add [specific-file]` - Stage only related files
+- `git add -p` - Stage parts of a file
+- `git stash` - Temporarily save unrelated changes
