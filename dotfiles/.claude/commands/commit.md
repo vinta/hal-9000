@@ -1,17 +1,20 @@
-# Commit Separately By Relevance
+---
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), , Bash(git add:*), Bash(git commit:*)
+description: git commit separately by relevance
+---
 
-## Core Rule: **One Logical Change Per Commit**
+## Context
 
-Never mix unrelated changes. Each commit should do one thing.
+- Current git status: !`git status`
+- Current git diff (staged and unstaged changes): !`git diff HEAD`
+- Current branch: !`git branch --show-current`
+- Recent commits: !`git log --oneline -10`
 
-## Before Committing
+## Your task
 
-```bash
-git status        # Check what's changed
-git diff          # Review changes
-```
+Based on the above changes, create git commits separately by relevance. **One logical change per commit**.
 
-## Commit Types
+### Commit Types
 
 - `feat:` - New feature
 - `fix:` - Bug fix
@@ -20,7 +23,7 @@ git diff          # Review changes
 - `test:` - Tests
 - `chore:` - Maintenance
 
-## Separate Commits Example
+### Separate Commits Example
 
 If you've made a bug fix, added a feature, and updated docs:
 
@@ -30,7 +33,7 @@ git add src/auth/login.js
 git commit -m "fix: resolve login timeout"
 
 # Commit 2: Feature
-git add src/components/Search.js
+git add src/components/Search.js src/hooks/useSearch.js
 git commit -m "feat: add search functionality"
 
 # Commit 3: Documentation
@@ -38,7 +41,7 @@ git add README.md
 git commit -m "docs: update API examples"
 ```
 
-## Attribution
+### Attribution
 
 Include in every commit:
 
@@ -47,7 +50,7 @@ Include in every commit:
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-## Key Commands
+### Key Commands
 
 - `git add [specific-file]` - Stage only related files
 - `git add -p` - Stage parts of a file
