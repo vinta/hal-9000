@@ -19,6 +19,14 @@
   ],
   "copies": [
     {
+      "dest": "/Users/vinta/.hal_completion.zsh",
+      "src": ".hal_completion.zsh"
+    },
+    {
+      "dest": "/Users/vinta/.claude/settings.json",
+      "src": ".claude/settings.json"
+    },
+    {
       "dest": "/Users/vinta/.claude/CLAUDE.md",
       "src": ".claude/CLAUDE.md"
     },
@@ -33,10 +41,6 @@
     {
       "dest": "/Users/vinta/.claude/commands/subagents.md",
       "src": ".claude/commands/subagents.md"
-    },
-    {
-      "dest": "/Users/vinta/.hal_completion.zsh",
-      "src": ".hal_completion.zsh"
     }
   ]
 }
