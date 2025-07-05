@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit(~/Projects/*)",
+      "MultiEdit(~/Projects/*)",
+      "Write(~/Projects/*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(git mv:*)",
+      "Bash(git commit:*)",
+      "Bash(git stash:*)"
+    ],
+    "deny": ["Bash(git push:*)"]
+  },
+  "env": {
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1"
+  }
+}
