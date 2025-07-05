@@ -72,6 +72,9 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(z history-substring-search)
 
+ZSHZ_UNCOMMON=1
+ZSHZ_CASE=smart
+
 source $ZSH/oh-my-zsh.sh
 
 # PROMPT='%(?..%B(%?%)%b) %F{green}%n@$(scutil --get ComputerName) %F{yellow}${PWD/#$HOME/~} %F{white}$%F{reset_color} '
