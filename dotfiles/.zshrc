@@ -75,6 +75,9 @@ plugins=(z history-substring-search)
 ZSHZ_UNCOMMON=1
 ZSHZ_CASE=smart
 
+HISTORY_SUBSTRING_SEARCH_FUZZY=1
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
 source $ZSH/oh-my-zsh.sh
 
 # PROMPT='%(?..%B(%?%)%b) %F{green}%n@$(scutil --get ComputerName) %F{yellow}${PWD/#$HOME/~} %F{white}$%F{reset_color} '
