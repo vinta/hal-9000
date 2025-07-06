@@ -146,12 +146,11 @@ class HAL9000:
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
         filename = os.path.basename(filepath)
 
-        if self._run('mv {0} {1}'.format(filepath, Setting.DOTFILES_ROOT)) == 0:
+        if self._run(f'mv {filepath} {Setting.DOTFILES_ROOT}') == 0:
             ln_src = os.path.join(Setting.DOTFILES_ROOT, filename)
             ln_dest = filepath
-            self._run('ln -sf {0} {1}'.format(ln_src, ln_dest))
+            self._run(f'ln -sf {ln_src} {ln_dest}')
 
-            # Store with template placeholder
             template_dest = filepath.replace(os.path.expanduser('~'), '{{HOME}}')
 
             ln_dict = self.dotfiles.find_by_key('src', filename, 'links')
@@ -170,10 +169,9 @@ class HAL9000:
 
         if os.path.islink(filepath):
             real_filepath = os.path.realpath(filepath)
-            self._run('unlink {0}'.format(filepath))
-            self._run('mv {0} {1}'.format(real_filepath, os.path.dirname(filepath)))
+            self._run(f'unlink {filepath}')
+            self._run(f'mv {real_filepath} {os.path.dirname(filepath)}')
 
-            # Search with template placeholder
             template_dest = filepath.replace(os.path.expanduser('~'), '{{HOME}}')
             ln_dict = self.dotfiles.find_by_key('dest', template_dest, 'links')
             if ln_dict:
@@ -189,14 +187,14 @@ class HAL9000:
         for link in self.dotfiles.data['links']:
             dest = self._expand_template(link['dest'])
             dest_dir = os.path.dirname(dest)
-            self._run('mkdir -p {0}'.format(dest_dir))
-            self._run('ln -sfn {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), dest))
+            self._run(f'mkdir -p {dest_dir}')
+            self._run(f"ln -sfn {os.path.join(Setting.DOTFILES_ROOT, link['src'])} {dest}")
 
         for copy in self.dotfiles.data['copies']:
             dest = self._expand_template(copy['dest'])
             dest_dir = os.path.dirname(dest)
-            self._run('mkdir -p {0}'.format(dest_dir))
-            self._run('cp -rf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, copy['src']), dest))
+            self._run(f'mkdir -p {dest_dir}')
+            self._run(f"cp -rf {os.path.join(Setting.DOTFILES_ROOT, copy['src'])} {dest}")
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
