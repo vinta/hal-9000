@@ -102,6 +102,9 @@ class HAL9000:
     def _hal_says(self, text):
         print(f'HAL: {text}')  # noqa: T001
 
+    def _expand_template(self, path):
+        return path.replace('{{HOME}}', os.path.expanduser('~'))
+
     def _run(self, command, shell=True, verbose=True):
         if verbose:
             self._hal_says(command)
@@ -148,12 +151,15 @@ class HAL9000:
             ln_dest = filepath
             self._run('ln -sf {0} {1}'.format(ln_src, ln_dest))
 
+            # Store with template placeholder
+            template_dest = filepath.replace(os.path.expanduser('~'), '{{HOME}}')
+
             ln_dict = self.dotfiles.find_by_key('src', filename, 'links')
             if ln_dict:
-                ln_dict['dest'] = filepath
+                ln_dict['dest'] = template_dest
             else:
                 self.dotfiles.data['links'].append(
-                    {'dest': filepath, 'src': filename},
+                    {'dest': template_dest, 'src': filename},
                 )
 
             self.dotfiles.save()
@@ -167,7 +173,9 @@ class HAL9000:
             self._run('unlink {0}'.format(filepath))
             self._run('mv {0} {1}'.format(real_filepath, os.path.dirname(filepath)))
 
-            ln_dict = self.dotfiles.find_by_key('dest', filepath, 'links')
+            # Search with template placeholder
+            template_dest = filepath.replace(os.path.expanduser('~'), '{{HOME}}')
+            ln_dict = self.dotfiles.find_by_key('dest', template_dest, 'links')
             if ln_dict:
                 self.dotfiles.data['links'].remove(ln_dict)
 
@@ -179,14 +187,16 @@ class HAL9000:
 
     def sync(self, namespace, extra_args=None):
         for link in self.dotfiles.data['links']:
-            dest_dir = os.path.dirname(link['dest'])
+            dest = self._expand_template(link['dest'])
+            dest_dir = os.path.dirname(dest)
             self._run('mkdir -p {0}'.format(dest_dir))
-            self._run('ln -sfn {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), link['dest']))
+            self._run('ln -sfn {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, link['src']), dest))
 
         for copy in self.dotfiles.data['copies']:
-            dest_dir = os.path.dirname(copy['dest'])
+            dest = self._expand_template(copy['dest'])
+            dest_dir = os.path.dirname(dest)
             self._run('mkdir -p {0}'.format(dest_dir))
-            self._run('cp -rf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, copy['src']), copy['dest']))
+            self._run('cp -rf {0} {1}'.format(os.path.join(Setting.DOTFILES_ROOT, copy['src']), dest))
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
