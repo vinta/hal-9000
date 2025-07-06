@@ -1,16 +1,36 @@
 {
   "permissions": {
     "allow": [
+      "Read(~/.claude/comment:claude-code-app-can-access-this-folder-because-it-bypasses-permissions)",
+      "Read(~/.claude/comment:claude-code-ai-cannot-because-it-follows-permissions)",
+      "Write(~/Projects/*)",
       "Edit(~/Projects/*)",
       "MultiEdit(~/Projects/*)",
-      "Write(~/Projects/*)",
       "Bash(git add:*)",
       "Bash(git rm:*)",
       "Bash(git mv:*)",
-      "Bash(git commit:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(git commit:*)"
     ],
-    "deny": ["Bash(git push:*)"]
+    "deny": [
+      "Read(~/.*)",
+      "Write(~/.*)",
+      "Edit(~/.*)",
+      "MultiEdit(~/.*)",
+      "Read(~/Dropbox/*)",
+      "Read(~/Library/CloudStorage/Dropbox/*)",
+      "Read(/etc/passwd)",
+      "Read(/etc/shadow)",
+      "Bash(sudo:*)",
+      "Bash(su:*)",
+      "Bash(nc:*)",
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(history:*)",
+      "Bash(git push:*)"
+    ]
   },
   "env": {
     "DISABLE_TELEMETRY": "1",
