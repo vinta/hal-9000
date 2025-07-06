@@ -21,7 +21,7 @@
   args:
     executable: /bin/bash
 
-- name: Install Python packages from requirements.txt
+- name: Install Python packages
   shell: |
     {{ ansible_env.HOME }}/.pyenv/shims/pip install -r {{ role_path }}/files/requirements.txt
   args:
