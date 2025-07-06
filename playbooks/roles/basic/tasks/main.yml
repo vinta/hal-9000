@@ -17,17 +17,26 @@
 
 - name: Install utility packages
   homebrew:
-    name: ["htop", "jq", "pstree", "tree", "wget"]
+    name:
+      - htop
+      - jq
+      - pstree
+      - tree
+      - wget
     state: latest
 
 - name: Install git packages
   homebrew:
-    name: ["git", "gh"]
+    name:
+      - git
+      - gh
     state: latest
 
 - name: Install gpg packages
   homebrew:
-    name: ["gpg2", "pinentry-mac"]
+    name:
+      - gpg2
+      - pinentry-mac
     state: latest
 
 # https://github.com/ohmyzsh/ohmyzsh
@@ -40,7 +49,7 @@
   file:
     path: "{{ item }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
   with_items:
     - "{{ ansible_env.HOME }}/Downloads"
     - "{{ ansible_env.HOME }}/Projects"
@@ -54,12 +63,9 @@
 - name: Run hal sync
   command: "{{ REPO_ROOT }}/bin/hal sync"
 
-- name: Enable hal environment in .zshrc
+- name: Ensure hal environment is sourced in .zshrc
   lineinfile:
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    line: "{{ item }}"
-    create: true
-    mode: '0644'
-  with_items:
-    - "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile.sh"
+    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile.sh"
+    state: present
   when: ansible_env.SHELL == "/bin/zsh"
