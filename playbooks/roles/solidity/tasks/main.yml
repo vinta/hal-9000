@@ -16,9 +16,9 @@
   args:
     creates: "{{ ansible_env.HOME }}/.foundry/bin/forge"
 
-- name: Ensure eth environment is sourced in .zshrc
+- name: Ensure Solidity environment is sourced in .zshrc
   lineinfile:
     dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
-    line: "source {{ REPO_ROOT }}/playbooks/roles/ethereum/files/eth_profile.sh"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/solidity/files/sol_profile.sh"
     state: present
   when: ansible_env.SHELL == "/bin/zsh"
