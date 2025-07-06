@@ -4,6 +4,7 @@ set -ex
 printf "Hello, HAL. Do you read me, HAL?\n"
 printf "Affirmative, Dave. I read you.\n"
 
+# https://brew.sh/
 if [ ! -f /opt/homebrew/bin/brew ]; then
     printf "\n"
     printf "Install Homebrew...\n"
