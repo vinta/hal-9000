@@ -23,12 +23,12 @@
       "src": ".hal_completion.zsh"
     },
     {
-      "dest": "{{HOME}}/.claude/settings.json",
-      "src": ".claude/settings.json"
-    },
-    {
       "dest": "{{HOME}}/.claude/CLAUDE.md",
       "src": ".claude/CLAUDE.md"
+    },
+    {
+      "dest": "{{HOME}}/.claude/settings.json",
+      "src": ".claude/settings.json"
     },
     {
       "dest": "{{HOME}}/.claude/commands/commit-separately.md",
