@@ -2,7 +2,7 @@
 import argparse
 import json
 import os
-import subprocess  # noqa: S404
+import subprocess
 import sys
 
 try:
@@ -12,14 +12,14 @@ except ImportError:
 
 
 class Setting:
-    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    DOTFILES_ROOT = os.path.join(PROJECT_ROOT, 'dotfiles/')
-    WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.expanduser('~'), 'Projects'))
+    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    DOTFILES_ROOT = os.path.join(PROJECT_ROOT, "dotfiles/")
+    WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.expanduser("~"), "Projects"))
 
 
 class Dotfiles:
-    DEFAULT_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.json')
-    TEMPLATE_CONFIG = os.path.join(Setting.DOTFILES_ROOT, 'hal_dotfiles.template.json')
+    DEFAULT_CONFIG = os.path.join(Setting.DOTFILES_ROOT, "hal_dotfiles.json")
+    TEMPLATE_CONFIG = os.path.join(Setting.DOTFILES_ROOT, "hal_dotfiles.template.json")
 
     def __init__(self, path=None):
         self.path = path or self.DEFAULT_CONFIG
@@ -48,62 +48,58 @@ class Dotfiles:
         return some_dict
 
     def show(self):
-        print(json.dumps(self.data, sort_keys=True, indent=2, separators=(',', ': ')))  # noqa: T001
+        print(json.dumps(self.data, sort_keys=True, indent=2, separators=(",", ": ")))
 
     def save(self):
-        with open(self.path, 'w') as f:
-            json.dump(self.data, f, sort_keys=True, indent=2, separators=(',', ': '))
+        with open(self.path, "w") as f:
+            json.dump(self.data, f, sort_keys=True, indent=2, separators=(",", ": "))
 
 
 class HAL9000Formatter(argparse.HelpFormatter):
-
     def __init__(self, prog):
         super(HAL9000Formatter, self).__init__(prog, max_help_position=30)
 
 
 class HAL9000:
-
     def __init__(self):
         parser = argparse.ArgumentParser(
-            prog='hal',
-            description='I am completely operational, and all my circuits are functioning perfectly',
-            formatter_class=HAL9000Formatter
+            prog="hal",
+            description="I am completely operational, and all my circuits are functioning perfectly",
+            formatter_class=HAL9000Formatter,
         )
         self.parser = parser
 
-        self.parser.add_argument('-v', '--version', action='version', version='9000')
+        self.parser.add_argument("-v", "--version", action="version", version="9000")
 
-        subparsers = parser.add_subparsers(
-            title='sub commands'
-        )
+        subparsers = parser.add_subparsers(title="sub commands")
 
-        update_parser = subparsers.add_parser('update', help='pull the repo and run ansible-playbook')
+        update_parser = subparsers.add_parser("update", help="pull the repo and run ansible-playbook")
         update_parser.set_defaults(func=self.update)
 
         self.dotfiles = Dotfiles()
 
-        link_parser = subparsers.add_parser('link', help='add the file to the dotfiles repository')
+        link_parser = subparsers.add_parser("link", help="add the file to the dotfiles repository")
         link_parser.set_defaults(func=self.link)
-        link_parser.add_argument('filename', type=str)
+        link_parser.add_argument("filename", type=str)
 
-        unlink_parser = subparsers.add_parser('unlink', help='remove the file from the dotfiles repository')
+        unlink_parser = subparsers.add_parser("unlink", help="remove the file from the dotfiles repository")
         unlink_parser.set_defaults(func=self.unlink)
-        unlink_parser.add_argument('filename', type=str)
+        unlink_parser.add_argument("filename", type=str)
 
-        sync_parser = subparsers.add_parser('sync', help='force sync dotfiles')
+        sync_parser = subparsers.add_parser("sync", help="force sync dotfiles")
         sync_parser.set_defaults(func=self.sync)
 
-        pod_bay_doors_parser = subparsers.add_parser('open-the-pod-bay-doors', help='open the pod bay doors, please, HAL')
+        pod_bay_doors_parser = subparsers.add_parser("open-the-pod-bay-doors", help="open the pod bay doors, please, HAL")
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
 
         if argcomplete:
             argcomplete.autocomplete(parser)
 
     def _hal_says(self, text):
-        print(f'HAL: {text}')  # noqa: T001
+        print(f"HAL: {text}")
 
     def _expand_template(self, path):
-        return path.replace('{{HOME}}', os.path.expanduser('~'))
+        return path.replace("{{HOME}}", os.path.expanduser("~"))
 
     def _run(self, command, shell=True, verbose=True):
         if verbose:
@@ -123,84 +119,82 @@ class HAL9000:
             returncode = exc.returncode
         finally:
             if print_output and output:
-                print(output, end='')  # noqa: T001
+                print(output, end="")
 
         return returncode, output
 
-    def update(self, namespace, extra_args=None):
+    def update(self, namespace, extra_args=None):  # noqa: ARG002
         os.chdir(Setting.PROJECT_ROOT)
-        self._run('git fetch')
-        self._run('git pull')
+        self._run("git fetch")
+        self._run("git pull")
 
-        self._run('brew upgrade ansible')
+        self._run("brew upgrade ansible")
 
-        os.chdir(os.path.join(Setting.PROJECT_ROOT, 'playbooks'))
-        command = 'ansible-playbook site.yml -v'
+        os.chdir(os.path.join(Setting.PROJECT_ROOT, "playbooks"))
+        command = "ansible-playbook site.yml -v"
         if extra_args:
-            command = ' '.join([command, ] + extra_args)
+            command = " ".join([command] + extra_args)
         returncode = self._run(command)
         if returncode == 0:
-            self._hal_says('Now open a new shell to active your dev environment')
+            self._hal_says("Now open a new shell to active your dev environment")
 
-    def link(self, namespace, extra_args=None):
+    def link(self, namespace, extra_args=None):  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
         filename = os.path.basename(filepath)
 
-        if self._run(f'mv {filepath} {Setting.DOTFILES_ROOT}') == 0:
+        if self._run(f"mv {filepath} {Setting.DOTFILES_ROOT}") == 0:
             ln_src = os.path.join(Setting.DOTFILES_ROOT, filename)
             ln_dest = filepath
-            self._run(f'ln -sf {ln_src} {ln_dest}')
+            self._run(f"ln -sf {ln_src} {ln_dest}")
 
-            template_dest = filepath.replace(os.path.expanduser('~'), '{{HOME}}')
+            template_dest = filepath.replace(os.path.expanduser("~"), "{{HOME}}")
 
-            ln_dict = self.dotfiles.find_by_key('src', filename, 'links')
+            ln_dict = self.dotfiles.find_by_key("src", filename, "links")
             if ln_dict:
-                ln_dict['dest'] = template_dest
+                ln_dict["dest"] = template_dest
             else:
-                self.dotfiles.data['links'].append(
-                    {'dest': template_dest, 'src': filename},
-                )
+                self.dotfiles.data["links"].append({"dest": template_dest, "src": filename})
 
             self.dotfiles.save()
             self.dotfiles.show()
 
-    def unlink(self, namespace, extra_args=None):
+    def unlink(self, namespace, extra_args=None):  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
 
         if os.path.islink(filepath):
             real_filepath = os.path.realpath(filepath)
-            self._run(f'unlink {filepath}')
-            self._run(f'mv {real_filepath} {os.path.dirname(filepath)}')
+            self._run(f"unlink {filepath}")
+            self._run(f"mv {real_filepath} {os.path.dirname(filepath)}")
 
-            template_dest = filepath.replace(os.path.expanduser('~'), '{{HOME}}')
-            ln_dict = self.dotfiles.find_by_key('dest', template_dest, 'links')
+            template_dest = filepath.replace(os.path.expanduser("~"), "{{HOME}}")
+            ln_dict = self.dotfiles.find_by_key("dest", template_dest, "links")
             if ln_dict:
-                self.dotfiles.data['links'].remove(ln_dict)
+                self.dotfiles.data["links"].remove(ln_dict)
 
             self.dotfiles.save()
             self.dotfiles.show()
         else:
-            self._hal_says(f'{filepath} is not a link file')
+            self._hal_says(f"{filepath} is not a link file")
             sys.exit(1)
 
-    def sync(self, namespace, extra_args=None):
-        for link in self.dotfiles.data['links']:
-            dest = self._expand_template(link['dest'])
+    def sync(self, namespace, extra_args=None):  # noqa: ARG002
+        for link in self.dotfiles.data["links"]:
+            dest = self._expand_template(link["dest"])
             dest_dir = os.path.dirname(dest)
-            self._run(f'mkdir -p {dest_dir}')
+            self._run(f"mkdir -p {dest_dir}")
             self._run(f"ln -sfn {os.path.join(Setting.DOTFILES_ROOT, link['src'])} {dest}")
 
-        for copy in self.dotfiles.data['copies']:
-            dest = self._expand_template(copy['dest'])
+        for copy in self.dotfiles.data["copies"]:
+            dest = self._expand_template(copy["dest"])
             dest_dir = os.path.dirname(dest)
-            self._run(f'mkdir -p {dest_dir}')
+            self._run(f"mkdir -p {dest_dir}")
             self._run(f"cp -rf {os.path.join(Setting.DOTFILES_ROOT, copy['src'])} {dest}")
 
-    def open_the_pod_bay_doors(self, namespace, extra_args=None):
+    def open_the_pod_bay_doors(self, namespace, extra_args=None):  # noqa: ARG002
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
-        filepath = os.path.join(Setting.PROJECT_ROOT, 'assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3')
-        self._run(f'afplay {filepath}', verbose=False)
+        filepath = os.path.join(Setting.PROJECT_ROOT, "assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3")
+        self._run(f"afplay {filepath}", verbose=False)
 
     def read_lips(self):
         if len(sys.argv) == 1:
@@ -211,6 +205,6 @@ class HAL9000:
         namespace.func(namespace, extra_args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     hal_9000 = HAL9000()
     hal_9000.read_lips()
