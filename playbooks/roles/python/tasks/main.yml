@@ -14,18 +14,24 @@
     pyenv global 3.11.7
   args:
     executable: /bin/bash
+  register: pyenv_install
+  changed_when: pyenv_install.stdout != ""
 
 - name: Upgrade pip
   shell: |
     {{ ansible_env.HOME }}/.pyenv/shims/pip install --upgrade pip
   args:
     executable: /bin/bash
+  register: pip_upgrade
+  changed_when: "'Requirement already satisfied' not in pip_upgrade.stdout"
 
 - name: Install Python packages
   shell: |
     {{ ansible_env.HOME }}/.pyenv/shims/pip install -r {{ role_path }}/files/requirements.txt
   args:
     executable: /bin/bash
+  register: pip_packages
+  changed_when: "'Requirement already satisfied' not in pip_packages.stdout"
 
 - name: Enable pyenv environment in .zshrc
   lineinfile:
