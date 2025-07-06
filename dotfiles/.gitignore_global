@@ -1,6 +1,12 @@
+# Simple wildcards like *.log already match recursively, you only need **/ when matching a rule not starts with *
 **/.DS_Store
 
+*.key
+*.pem
 **/.env*
 !**/.env.example
+
+*.log
+*_history
 
 **/.claude/settings.local.json
