@@ -124,6 +124,14 @@ class HAL9000:
         return returncode, output
 
     def update(self, namespace, extra_args=None):  # noqa: ARG002
+        returncode, output = self._run_with_output("which ansible", print_output=False)
+        if returncode == 0:
+            ansible_path = output.decode().strip()
+            if not ansible_path.startswith("/opt/homebrew/bin/"):
+                self._hal_says(f"Found ansible at: {ansible_path}")
+                self._hal_says("You should use Homebrew's ansible")
+                sys.exit(1)
+
         os.chdir(Setting.PROJECT_ROOT)
         self._run("git fetch")
         self._run("git pull")
