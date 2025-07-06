@@ -33,7 +33,7 @@
   register: pip_packages
   changed_when: "'Requirement already satisfied' not in pip_packages.stdout"
 
-- name: Ensure pyenv environment is sourced in .zshrc
+- name: Ensure Python environment is sourced in .zshrc
   lineinfile:
     dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/python/files/py_profile.sh"
