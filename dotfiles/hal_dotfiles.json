@@ -31,8 +31,8 @@
       "src": ".claude/CLAUDE.md"
     },
     {
-      "dest": "{{HOME}}/.claude/commands/commit.md",
-      "src": ".claude/commands/commit.md"
+      "dest": "{{HOME}}/.claude/commands/commit-separately.md",
+      "src": ".claude/commands/commit-separately.md"
     },
     {
       "dest": "{{HOME}}/.claude/commands/pair-with-gemini.md",
