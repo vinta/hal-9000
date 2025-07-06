@@ -1,8 +1,9 @@
 ---
-- name: Install prerequisite packages
-  homebrew:
-    name: ["libusb"]
-    state: latest
+# - name: Install prerequisite packages
+#   homebrew:
+#     name:
+#       - libusb
+#     state: latest
 
 # https://book.getfoundry.sh/getting-started/installation
 - name: Download foundryup
@@ -15,12 +16,9 @@
   args:
     creates: "{{ ansible_env.HOME }}/.foundry/bin/forge"
 
-- name: Enable eth environment in .zshrc
+- name: Ensure Solidity environment is sourced in .zshrc
   lineinfile:
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    line: "{{ item }}"
-    create: true
-    mode: '0644'
-  with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/ethereum/files/eth_profile.sh
+    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/solidity/files/sol_profile.sh"
+    state: present
   when: ansible_env.SHELL == "/bin/zsh"

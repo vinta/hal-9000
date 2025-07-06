@@ -1,45 +1,45 @@
 {
   "links": [
     {
-      "dest": "/Users/vinta/.zshrc",
+      "dest": "{{HOME}}/.zshrc",
       "src": ".zshrc"
     },
     {
-      "dest": "/Users/vinta/.gitconfig",
+      "dest": "{{HOME}}/.gitconfig",
       "src": ".gitconfig"
     },
     {
-      "dest": "/Users/vinta/.gitignore_global",
+      "dest": "{{HOME}}/.gitignore_global",
       "src": ".gitignore_global"
     },
     {
-      "dest": "/Users/vinta/.huskyrc",
+      "dest": "{{HOME}}/.huskyrc",
       "src": ".huskyrc"
     }
   ],
   "copies": [
     {
-      "dest": "/Users/vinta/.hal_completion.zsh",
+      "dest": "{{HOME}}/.hal_completion.zsh",
       "src": ".hal_completion.zsh"
     },
     {
-      "dest": "/Users/vinta/.claude/settings.json",
+      "dest": "{{HOME}}/.claude/settings.json",
       "src": ".claude/settings.json"
     },
     {
-      "dest": "/Users/vinta/.claude/CLAUDE.md",
+      "dest": "{{HOME}}/.claude/CLAUDE.md",
       "src": ".claude/CLAUDE.md"
     },
     {
-      "dest": "/Users/vinta/.claude/commands/commit.md",
+      "dest": "{{HOME}}/.claude/commands/commit.md",
       "src": ".claude/commands/commit.md"
     },
     {
-      "dest": "/Users/vinta/.claude/commands/pair-with-gemini.md",
+      "dest": "{{HOME}}/.claude/commands/pair-with-gemini.md",
       "src": ".claude/commands/pair-with-gemini.md"
     },
     {
-      "dest": "/Users/vinta/.claude/commands/subagents.md",
+      "dest": "{{HOME}}/.claude/commands/subagents.md",
       "src": ".claude/commands/subagents.md"
     }
   ]

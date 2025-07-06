@@ -1,7 +1,11 @@
 ---
 - name: Install prerequisite packages
   homebrew:
-    name: ["coreutils", "fzf", "gnu-tar", "jq"]
+    name:
+      - coreutils
+      - fzf
+      - gnu-tar
+      - jq
     state: latest
 
 # https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
@@ -20,19 +24,17 @@
 # https://github.com/derailed/k9s
 - name: Install k9s
   homebrew:
-    name: ["derailed/k9s/k9s"]
+    name:
+      - derailed/k9s/k9s
     state: latest
 
 # https://github.com/kubermatic/fubectl
 - name: Install fubectl
   command: curl -L https://rawgit.com/kubermatic/fubectl/master/fubectl.source -o ~/.fubectl.source
 
-- name: Enable Kubernetes environment in .zshrc
+- name: Ensure Kubernetes environment is sourced in .zshrc
   lineinfile:
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    line: "{{ item }}"
-    create: true
-    mode: '0644'
-  with_items:
-    - source {{ REPO_ROOT }}/playbooks/roles/kubernetes/files/k8s_profile.sh
+    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/kubernetes/files/k8s_profile.sh"
+    state: present
   when: ansible_env.SHELL == "/bin/zsh"

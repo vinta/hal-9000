@@ -1,5 +1,0 @@
----
-- name: Install Go
-  homebrew:
-    name: ["go"]
-    state: latest

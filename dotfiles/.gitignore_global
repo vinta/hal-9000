@@ -1,6 +1,19 @@
+# simple wildcards like *.log already match recursively,
+# you only need **/ when matching a rule not starts with *
 **/.DS_Store
 
+# secrets
+*.key
+*.pem
 **/.env*
 !**/.env.example
 
+# logs
+*.log
+*_history
+
+# claude code
 **/.claude/settings.local.json
+
+# detect-secrets
+.secrets.baseline
