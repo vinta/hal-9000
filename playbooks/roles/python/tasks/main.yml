@@ -5,12 +5,34 @@
     name: ["openssl", "readline", "sqlite3", "xz", "zlib", "pyenv"]
     state: latest
 
+- name: Install Python 3.11.7
+  shell: |
+    export PYENV_ROOT="${HOME}/.pyenv"
+    export PATH="${PYENV_ROOT}/bin:${PATH}"
+    eval "$(pyenv init -)"
+    pyenv install --skip-existing 3.11.7
+    pyenv global 3.11.7
+  args:
+    executable: /bin/bash
+
+- name: Upgrade pip
+  shell: |
+    {{ ansible_env.HOME }}/.pyenv/shims/pip install --upgrade pip
+  args:
+    executable: /bin/bash
+
+- name: Install Python packages from requirements.txt
+  shell: |
+    {{ ansible_env.HOME }}/.pyenv/shims/pip install -r {{ role_path }}/files/requirements.txt
+  args:
+    executable: /bin/bash
+
 - name: Enable pyenv environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
     create: true
-    mode: '0644'
+    mode: "0644"
   with_items:
     - source {{ REPO_ROOT }}/playbooks/roles/python/files/py_profile.sh
   when: ansible_env.SHELL == "/bin/zsh"
