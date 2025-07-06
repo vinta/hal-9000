@@ -8,24 +8,15 @@ Automatically setup a productive development environment with Ansible on macOS.
 
 Dominating your dev environment like cats rule the Internet.
 
-## Toolkit
+## Development Stack
 
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
-- [Go](playbooks/roles/go/tasks/main.yml)
+- [Solidity](playbooks/roles/solidity/tasks/main.yml)
 - [Docker](playbooks/roles/docker/tasks/main.yml)
 - [Kubernetes](playbooks/roles/kubernetes/tasks/main.yml)
-- [Ethereum](playbooks/roles/ethereum/tasks/main.yml)
 - [Amazon Web Services](playbooks/roles/aws/tasks/main.yml)
 - [Google Cloud](playbooks/roles/gcp/tasks/main.yml)
-
-## Prerequisite
-
-First, you need to manually:
-
-1. Install Command Line Tools via `xcode-select --install`
-2. Install Rosetta 2 via `softwareupdate --install-rosetta`
-3. Install [Docker Desktop on Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
 
 ## Bootstrap
 
