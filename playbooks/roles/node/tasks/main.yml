@@ -1,16 +1,44 @@
 ---
 # https://github.com/nvm-sh/nvm
 - name: Install nvm
-  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+- name: Install Node.js 22.15.0
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm install 22.15.0
+    nvm use 22.15.0
+    nvm alias default 22.15.0
+  args:
+    executable: /bin/bash
+
+- name: Upgrade npm
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install -g npm@latest
+  args:
+    executable: /bin/bash
+
+- name: Install Node.js packages
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install -g pangu
+    npm install -g @anthropic-ai/claude-code
+    npm install -g @google/gemini-cli
+  args:
+    executable: /bin/bash
 
 - name: Enable Node.js environment in .zshrc
   lineinfile:
     dest: "{{ ansible_env.HOME }}/.zshrc"
     line: "{{ item }}"
     create: true
-    mode: '0644'
+    mode: "0644"
   with_items:
     - "source {{ REPO_ROOT }}/playbooks/roles/node/files/node_profile.sh"
   when: ansible_env.SHELL == "/bin/zsh"
