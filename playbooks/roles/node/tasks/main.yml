@@ -35,12 +35,9 @@
   args:
     executable: /bin/bash
 
-- name: Enable Node.js environment in .zshrc
+- name: Ensure Node.js environment is sourced in .zshrc
   lineinfile:
-    dest: "{{ ansible_env.HOME }}/.zshrc"
-    line: "{{ item }}"
-    create: true
-    mode: "0644"
-  with_items:
-    - "source {{ REPO_ROOT }}/playbooks/roles/node/files/node_profile.sh"
+    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/node/files/node_profile.sh"
+    state: present
   when: ansible_env.SHELL == "/bin/zsh"
