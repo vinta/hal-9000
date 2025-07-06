@@ -15,4 +15,5 @@
 # claude code
 **/.claude/settings.local.json
 
+# detect-secrets
 .secrets.baseline
