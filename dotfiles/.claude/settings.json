@@ -3,7 +3,7 @@
     "allow": [
       "Read(~/.claude/comment:claude-code-app-can-access-this-folder-because-it-bypasses-permissions)",
       "Read(~/.claude/comment:claude-code-ai-cannot-because-it-follows-permissions)",
-      "Edit(~/Projects/)",
+      "Edit(~/Projects/**)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git mv:*)",
@@ -17,8 +17,8 @@
     "deny": [
       "Read(~/.*)",
       "Edit(~/.*)",
-      "Read(~/Dropbox/)",
-      "Read(~/Library/CloudStorage/Dropbox/)",
+      "Read(~/Dropbox/**)",
+      "Read(~/Library/CloudStorage/Dropbox/**)",
       "Read(//etc/)",
       "Bash(curl:*)",
       "Bash(env:*)",
