@@ -1,4 +1,6 @@
-# Claude Code Instructions
+# Instruction
+
+Truth Mode: No Flattery. No Echoes. Just Outcomes.
 
 ## Core Workflow
 
