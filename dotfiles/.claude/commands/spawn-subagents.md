@@ -1,4 +1,4 @@
-# Parallel Task Execution with Subagents
+# Spawn Subagents
 
 ## Step 1: Analyze Tasks
 
