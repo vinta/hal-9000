@@ -39,8 +39,8 @@
       "src": ".claude/commands/pair-with-gemini.md"
     },
     {
-      "dest": "{{HOME}}/.claude/commands/subagent-tasks.md",
-      "src": ".claude/commands/subagent-tasks.md"
+      "dest": "{{HOME}}/.claude/commands/spawn-subagents.md",
+      "src": ".claude/commands/spawn-subagents.md"
     }
   ]
 }
