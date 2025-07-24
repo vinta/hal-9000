@@ -15,8 +15,8 @@
 - name: Mount Docker.dmg
   command: hdiutil attach "{{ ansible_env.HOME }}/Downloads/Docker.dmg" -nobrowse -quiet
   when: not docker_app.stat.exists
-  register: mount_result
-  changed_when: mount_result.rc == 0
+  register: docker_mount_result
+  changed_when: docker_mount_result.rc == 0
 
 - name: Copy Docker.app to Applications
   command: cp -R /Volumes/Docker/Docker.app /Applications/

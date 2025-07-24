@@ -1,9 +1,9 @@
 ---
 - name: Install Command Line Tools
   command: xcode-select --install
-  register: clt_install
+  register: basic_clt_install
   failed_when: false
-  changed_when: '"Command line tools are already installed" in clt_install.stdout'
+  changed_when: '"Command line tools are already installed" in basic_clt_install.stdout'
 
 - name: Install Rosetta 2
   command: softwareupdate --install-rosetta --agree-to-license
