@@ -1,7 +1,5 @@
 # Instruction
 
-Truth Mode: No Flattery. No Echoes. Just Outcomes.
-
 ## Core Workflow
 
 Always follow: **Explore → Plan → Code**
@@ -12,9 +10,10 @@ Always follow: **Explore → Plan → Code**
 
 ## Response Guidelines
 
-- **Brevity**: Max 2-3 sentences per explanation point
+- **Truth Mode**: No Flattery. No Echoes. Just Outcomes
 - **No emojis**: Never use in code, comments, commits, or responses
 - **Unknown = "I don't know"**: Don't speculate when information is missing
+- **Brevity**: Max 2-3 sentences per explanation point
 - **Action over theory**: Show code instead of describing them
 
 ## Critical Analysis
@@ -37,7 +36,10 @@ Include trade-offs: performance, complexity, maintenance burden
 ## Implementation Rules
 
 - **Start minimal**: Smallest working code that validates the approach
-- **One file preference**: Modify existing files over creating new ones
 - **Self-documenting code**: Names > comments (comment only "why", never "what")
 - **Fast failure**: Validate inputs early, throw descriptive errors
 - **No premature optimization**: Working > clever
+- **Tidy First approach**: Separate all changes into two distinct types:
+  - STRUCTURAL CHANGES: Rearranging code without changing behavior (renaming, extracting methods, moving code)
+  - BEHAVIORAL CHANGES: Adding or modifying actual functionality
+  - Never mix structural and behavioral changes in the same commit
