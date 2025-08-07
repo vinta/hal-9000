@@ -31,8 +31,8 @@
       "src": ".claude/settings.json"
     },
     {
-      "dest": "{{HOME}}/.claude/commands/commit-separately.md",
-      "src": ".claude/commands/commit-separately.md"
+      "dest": "{{HOME}}/.claude/agents/git-commit-organizer.md",
+      "src": ".claude/agents/git-commit-organizer.md"
     },
     {
       "dest": "{{HOME}}/.claude/commands/pair-with-gemini.md",
