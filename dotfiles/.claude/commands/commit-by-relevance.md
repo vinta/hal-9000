@@ -1,6 +1,6 @@
 ---
+description: create git commits separately by relevance
 allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), , Bash(git add:*), Bash(git commit:*)
-description: git commit separately by relevance
 ---
 
 ## Context
@@ -25,16 +25,14 @@ Based on the above changes, create git commits separately by relevance. **One lo
 
 ### Separate Commits Example
 
-If you've made a bug fix, added a feature, and updated docs:
-
 ```bash
 # Commit 1: Bug fix
 git add src/auth/login.js
 git commit -m "fix: resolve login timeout"
 
-# Commit 2: Feature
+# Commit 2: Refactor
 git add src/components/Search.js src/hooks/useSearch.js
-git commit -m "feat: add search functionality"
+git commit -m "refactor: improve readability"
 
 # Commit 3: Documentation
 git add README.md
@@ -49,9 +47,3 @@ Include in every commit:
 🤖 Generated with Claude Code (https://claude.ai/code)
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
-
-### Key Commands
-
-- `git add [specific-file]` - Stage only related files
-- `git add -p` - Stage parts of a file
-- `git stash` - Temporarily save unrelated changes

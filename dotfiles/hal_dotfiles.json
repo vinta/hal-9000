@@ -35,6 +35,10 @@
       "src": ".claude/agents/git-commit-organizer.md"
     },
     {
+      "dest": "{{HOME}}/.claude/commands/commit-by-relevance.md",
+      "src": ".claude/commands/commit-by-relevance.md"
+    },
+    {
       "dest": "{{HOME}}/.claude/commands/pair-with-gemini.md",
       "src": ".claude/commands/pair-with-gemini.md"
     },
