@@ -50,5 +50,7 @@ After modifying hal functions, regenerate the zsh completion script:
 
 ```bash
 python scripts/generate-completion.py
-hal sync  # Update local completion
+
+# update local completion
+hal sync
 ```
