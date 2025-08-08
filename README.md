@@ -31,15 +31,24 @@ curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod
 hal update
 hal update --tags docker,kubernetes
 
-# add the file to the dotfiles repository
+# add the file to the dotfiles repository (creates symlink)
 hal link ~/.zshrc
 
-# remove the file from the dotfiles repository
-hal unlink ~/.zshrc
+# copy the file to the dotfiles repository (preserves directory structure)
+hal copy ~/.config/some-app/config.toml
 
 # force sync dotfiles
 hal sync
 
 # open the pod bay doors, please, HAL
 hal open-the-pod-bay-doors
+```
+
+## Development
+
+After modifying hal functions, regenerate the zsh completion script:
+
+```bash
+python scripts/generate-completion.py
+hal sync  # Update local completion
 ```
