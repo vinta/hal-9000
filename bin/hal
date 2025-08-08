@@ -82,9 +82,9 @@ class HAL9000:
         link_parser.set_defaults(func=self.link)
         link_parser.add_argument("filename", type=str)
 
-        unlink_parser = subparsers.add_parser("unlink", help="remove the file from the dotfiles repository")
-        unlink_parser.set_defaults(func=self.unlink)
-        unlink_parser.add_argument("filename", type=str)
+        copy_parser = subparsers.add_parser("copy", help="copy the file to the dotfiles repository")
+        copy_parser.set_defaults(func=self.copy)
+        copy_parser.add_argument("filename", type=str)
 
         sync_parser = subparsers.add_parser("sync", help="force sync dotfiles")
         sync_parser.set_defaults(func=self.sync)
@@ -148,42 +148,67 @@ class HAL9000:
 
     def link(self, namespace, extra_args=None):  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
-        filename = os.path.basename(filepath)
+        
+        # Get relative path from home directory
+        home = os.path.expanduser("~")
+        if filepath.startswith(home):
+            relative_path = os.path.relpath(filepath, home)
+        else:
+            relative_path = os.path.basename(filepath)
+        
+        # Create destination path preserving directory structure
+        dest_path = os.path.join(Setting.DOTFILES_ROOT, relative_path)
+        dest_dir = os.path.dirname(dest_path)
+        
+        # Create directory if it doesn't exist
+        if dest_dir != Setting.DOTFILES_ROOT:
+            self._run(f"mkdir -p {dest_dir}")
 
-        if self._run(f"mv {filepath} {Setting.DOTFILES_ROOT}") == 0:
-            ln_src = os.path.join(Setting.DOTFILES_ROOT, filename)
+        if self._run(f"mv {filepath} {dest_path}") == 0:
+            ln_src = dest_path
             ln_dest = filepath
             self._run(f"ln -sf {ln_src} {ln_dest}")
 
-            template_dest = filepath.replace(os.path.expanduser("~"), "{{HOME}}")
+            template_dest = filepath.replace(home, "{{HOME}}")
 
-            ln_dict = self.dotfiles.find_by_key("src", filename, "links")
+            ln_dict = self.dotfiles.find_by_key("src", relative_path, "links")
             if ln_dict:
                 ln_dict["dest"] = template_dest
             else:
-                self.dotfiles.data["links"].append({"dest": template_dest, "src": filename})
+                self.dotfiles.data["links"].append({"dest": template_dest, "src": relative_path})
 
             self.dotfiles.save()
             self.dotfiles.show()
 
-    def unlink(self, namespace, extra_args=None):  # noqa: ARG002
+    def copy(self, namespace, extra_args=None):  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
+        
+        # Get relative path from home directory
+        home = os.path.expanduser("~")
+        if filepath.startswith(home):
+            relative_path = os.path.relpath(filepath, home)
+        else:
+            relative_path = os.path.basename(filepath)
+        
+        # Create destination path preserving directory structure
+        dest_path = os.path.join(Setting.DOTFILES_ROOT, relative_path)
+        dest_dir = os.path.dirname(dest_path)
+        
+        # Create directory if it doesn't exist
+        if dest_dir != Setting.DOTFILES_ROOT:
+            self._run(f"mkdir -p {dest_dir}")
+        
+        if self._run(f"cp -f {filepath} {dest_path}") == 0:
+            template_dest = filepath.replace(home, "{{HOME}}")
 
-        if os.path.islink(filepath):
-            real_filepath = os.path.realpath(filepath)
-            self._run(f"unlink {filepath}")
-            self._run(f"mv {real_filepath} {os.path.dirname(filepath)}")
-
-            template_dest = filepath.replace(os.path.expanduser("~"), "{{HOME}}")
-            ln_dict = self.dotfiles.find_by_key("dest", template_dest, "links")
-            if ln_dict:
-                self.dotfiles.data["links"].remove(ln_dict)
+            cp_dict = self.dotfiles.find_by_key("src", relative_path, "copies")
+            if cp_dict:
+                cp_dict["dest"] = template_dest
+            else:
+                self.dotfiles.data["copies"].append({"dest": template_dest, "src": relative_path})
 
             self.dotfiles.save()
             self.dotfiles.show()
-        else:
-            self._hal_says(f"{filepath} is not a link file")
-            sys.exit(1)
 
     def sync(self, namespace, extra_args=None):  # noqa: ARG002
         for link in self.dotfiles.data["links"]:
