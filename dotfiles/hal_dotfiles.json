@@ -1,4 +1,34 @@
 {
+  "copies": [
+    {
+      "dest": "{{HOME}}/.hal_completion.zsh",
+      "src": ".hal_completion.zsh"
+    },
+    {
+      "dest": "{{HOME}}/.claude/CLAUDE.md",
+      "src": ".claude/CLAUDE.md"
+    },
+    {
+      "dest": "{{HOME}}/.claude/settings.json",
+      "src": ".claude/settings.json"
+    },
+    {
+      "dest": "{{HOME}}/.claude/commands/commit.md",
+      "src": ".claude/commands/commit.md"
+    },
+    {
+      "dest": "{{HOME}}/.claude/commands/pair-with-gemini.md",
+      "src": ".claude/commands/pair-with-gemini.md"
+    },
+    {
+      "dest": "{{HOME}}/.claude/commands/spawn-subagents.md",
+      "src": ".claude/commands/spawn-subagents.md"
+    },
+    {
+      "dest": "{{HOME}}/.claude/agents/git-commit-organizer.md",
+      "src": ".claude/agents/git-commit-organizer.md"
+    }
+  ],
   "links": [
     {
       "dest": "{{HOME}}/.zshrc",
@@ -15,36 +45,6 @@
     {
       "dest": "{{HOME}}/.huskyrc",
       "src": ".huskyrc"
-    }
-  ],
-  "copies": [
-    {
-      "dest": "{{HOME}}/.hal_completion.zsh",
-      "src": ".hal_completion.zsh"
-    },
-    {
-      "dest": "{{HOME}}/.claude/CLAUDE.md",
-      "src": ".claude/CLAUDE.md"
-    },
-    {
-      "dest": "{{HOME}}/.claude/settings.json",
-      "src": ".claude/settings.json"
-    },
-    {
-      "dest": "{{HOME}}/.claude/agents/git-commit-organizer.md",
-      "src": ".claude/agents/git-commit-organizer.md"
-    },
-    {
-      "dest": "{{HOME}}/.claude/commands/commit.md",
-      "src": ".claude/commands/commit.md"
-    },
-    {
-      "dest": "{{HOME}}/.claude/commands/pair-with-gemini.md",
-      "src": ".claude/commands/pair-with-gemini.md"
-    },
-    {
-      "dest": "{{HOME}}/.claude/commands/spawn-subagents.md",
-      "src": ".claude/commands/spawn-subagents.md"
     }
   ]
 }
