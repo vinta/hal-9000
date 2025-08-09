@@ -1,6 +1,6 @@
 ---
 description: create git commits
-allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), , Bash(git add:*), Bash(git commit:*)
+allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), Bash(git add:*), Bash(git mv:*), Bash(git rm:*), Bash(git commit:*)
 ---
 
 ## Context
