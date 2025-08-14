@@ -3,13 +3,6 @@ description: create git commits
 allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), Bash(git add:*), Bash(git mv:*), Bash(git rm:*), Bash(git commit:*)
 ---
 
-## Context
+Use `git-commit-organizer` agent.
 
-- Current git status: !`git status`
-- Current git diff (staged and unstaged changes): !`git diff HEAD`
-- Current branch: !`git branch --show-current`
-- Recent commits: !`git log --oneline -10`
-
-## Your task
-
-Based on the above context, use git-commit-organizer agent.
+MUST USE SINGLE QUOTES instead of double quotes: `git commit -m '<message>'` instead of `git commit -m "<message>"`.
