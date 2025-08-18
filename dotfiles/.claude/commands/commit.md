@@ -5,6 +5,12 @@ allowed-tools: Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(gi
 
 Use `git-commit-organizer` agent.
 
-IMPORTANT: MUST USE SINGLE QUOTES instead of double quotes: `git commit -m '<message>'` instead of `git commit -m "<message>"`.
+## Rules
+
+- MUST USE SINGLE QUOTES instead of double quotes: `git commit -m '<message>'` instead of `git commit -m "<message>"`.
+- At initiation, respond with "I will use `git-commit-organizer` agent." Suppress all subsequent output unless necessary.
+- Upon completion, respond with "Done." No further output is required.
+
+## Extra Instructions (If Provided)
 
 $ARGUMENTS
