@@ -1,4 +1,5 @@
 {
+  "model": "opus",
   "permissions": {
     "additionalDirectories": ["~/.claude", "~/Projects"],
     "allow": [
@@ -22,6 +23,7 @@
       "Bash(which:*)",
       "mcp__ide__getDiagnostics"
     ],
+    "ask": ["Bash(git push:*)", "Bash(curl:*)", "Bash(wget:*)"],
     "deny": [
       "Read(~/.*)",
       "Edit(~/.*)",
@@ -37,8 +39,6 @@
       "Bash(printenv:*)",
       "Bash(passwd:*)",
       "Bash(history:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)",
       "Bash(rsync:*)",
       "Bash(scp:*)",
       "Bash(sftp:*)",
@@ -47,8 +47,7 @@
       "Bash(nc:*)",
       "Bash(ncat:*)",
       "Bash(netcat:*)",
-      "Bash(nmap:*)",
-      "Bash(git push:*)"
+      "Bash(nmap:*)"
     ]
   },
   "env": {
