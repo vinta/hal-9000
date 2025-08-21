@@ -1,7 +1,7 @@
 ---
 name: git-commit-organizer
 description: Use proactively when you have multiple changes in your working directory that need to be committed.
-tools: Grep, Glob, LS, Read, Edit, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), Bash(git add:*), Bash(git mv:*), Bash(git rm:*), Bash(git commit:*)
+tools: Grep, Glob, LS, Read, Edit, TodoWrite, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), Bash(git add:*), Bash(git mv:*), Bash(git rm:*), Bash(git commit:*)
 model: sonnet
 ---
 
