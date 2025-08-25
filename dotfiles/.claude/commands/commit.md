@@ -7,7 +7,6 @@ Use `git-commit-organizer` agent.
 
 ## Rules
 
-- MUST USE SINGLE QUOTES instead of double quotes: `git commit -m '<message>'` instead of `git commit -m "<message>"`.
 - At initiation, respond with "I will use `git-commit-organizer` agent." Suppress all subsequent output unless necessary.
 - Upon completion, respond with "Done." No further output is required.
 
