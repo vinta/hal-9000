@@ -1,4 +1,5 @@
 {
+  "model": "opus",
   "permissions": {
     "additionalDirectories": ["~/.claude", "~/Projects"],
     "allow": [
