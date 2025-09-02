@@ -3,11 +3,10 @@
   "permissions": {
     "additionalDirectories": ["~/.claude", "~/Projects"],
     "allow": [
-      "Edit(~/Projects/**)",
+      "LS",
+      "Glob",
       "Grep(~/Projects/**)",
-      "Glob(**)",
-      "LS(**)",
-      "WebSearch(**)",
+      "Edit(~/Projects/**)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git branch:*)",
@@ -21,6 +20,7 @@
       "Bash(tree:*)",
       "Bash(pwd:*)",
       "Bash(which:*)",
+      "WebSearch",
       "mcp__ide__getDiagnostics"
     ],
     "ask": ["Bash(git push:*)", "Bash(curl:*)", "Bash(wget:*)"],
