@@ -1,6 +1,6 @@
 ---
 name: context7-docs-searcher
-description: Use this agent when you need to search for API references, library documentation, code examples, installation guides, or solutions to specific technical problems. This agent specializes in retrieving and analyzing technical documentation, library references, implementation patterns, and best practices using context7 MCP tool. Trigger this agent for tasks like: read docs, check docs, check API, what are best practices for specific implementations.
+description: Use PROACTIVELY to search for API references, library documentation, code examples, installation guides, or solutions. Trigger this agent for tasks like: read docs, check docs, check API, what are best practices for specific implementations.
 tools: Glob, Grep, LS, Read, TodoWrite, WebSearch, WebFetch, mcp__context7__get-library-docs, mcp__context7__resolve-library-id
 model: sonnet
 ---
