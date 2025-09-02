@@ -1,6 +1,6 @@
 ---
 name: git-commit-organizer
-description: Use PROACTIVELY to commit changes with git.
+description: Use PROACTIVELY to organize and commit changes based on logical grouping.
 tools: Grep, Glob, LS, Read, Edit, TodoWrite, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), Bash(git add:*), Bash(git mv:*), Bash(git rm:*), Bash(git commit:*)
 model: sonnet
 ---
