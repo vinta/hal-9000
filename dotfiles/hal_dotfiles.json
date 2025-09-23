@@ -35,6 +35,10 @@
     {
       "dest": "{{HOME}}/.claude/agents/git-commit-organizer.md",
       "src": ".claude/agents/git-commit-organizer.md"
+    },
+    {
+      "dest": "{{HOME}}/.codex/config.toml",
+      "src": ".codex/config.toml"
     }
   ],
   "links": [
