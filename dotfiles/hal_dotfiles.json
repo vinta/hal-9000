@@ -37,6 +37,10 @@
       "src": ".claude/agents/git-commit-organizer.md"
     },
     {
+      "dest": "{{HOME}}/.claude/agents/web-search-expert.md",
+      "src": ".claude/agents/web-search-expert.md"
+    },
+    {
       "dest": "{{HOME}}/.codex/config.toml",
       "src": ".codex/config.toml"
     }
