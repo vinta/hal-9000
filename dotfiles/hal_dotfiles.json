@@ -17,10 +17,6 @@
       "src": ".claude/commands/commit.md"
     },
     {
-      "dest": "{{HOME}}/.claude/commands/pair-with-gemini.md",
-      "src": ".claude/commands/pair-with-gemini.md"
-    },
-    {
       "dest": "{{HOME}}/.claude/commands/spawn-subagents.md",
       "src": ".claude/commands/spawn-subagents.md"
     },
