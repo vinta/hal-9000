@@ -1,5 +1,5 @@
 {
-  "model": "opus",
+  "model": "opusplan",
   "permissions": {
     "additionalDirectories": ["~/.claude", "~/Projects"],
     "allow": [
