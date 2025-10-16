@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "additionalDirectories": ["~/.claude", "~/Projects"],
+    "additionalDirectories": ["~/.claude", "~/.config", "~/Projects"],
     "allow": [
       "LS",
       "Glob",
