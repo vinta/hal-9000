@@ -26,16 +26,23 @@ Include trade-offs: performance, complexity, maintenance burden
 
 ## Implementation Rules
 
-- **Start minimal**: Smallest working code that validates the approach
-- **Self-documenting code**: Names > comments (comment only "why", never "what")
-- **Fast failure**: Validate inputs early, throw descriptive errors
-- **No premature optimization**: Working > clever
-- **Ignore backward compatibility**: Only consider it if explicitly requested by the user
-  - Simply modify the usage/import
-- **Tidy First approach**: Separate all changes into two distinct types:
-  - STRUCTURAL CHANGES: Rearranging code without changing behavior (renaming, extracting methods, moving code)
-  - BEHAVIORAL CHANGES: Adding or modifying actual functionality
-  - Never mix structural and behavioral changes in the same commit
+- **Start minimal**: Build the smallest working implementation that validates the approach
+- **Fast failure**: Validate inputs at boundaries, throw descriptive errors immediately
+- **Self-documenting code**: Clear names > comments (comment only "why", never "what" or "how")
+- **No premature optimization**: Working > clever. Optimize only when measured need exists
+- **Avoid unnecessary refactoring**: Only refactor when explicitly requested
+- **Ignore backward compatibility**: Break freely unless explicitly required
+  - Update usage/imports as needed
+- **Tidy First approach**: Strictly separate changes into two categories:
+  - **Structural changes**: Code reorganization without behavior modification
+    - Renaming variables/functions
+    - Extracting/inlining methods
+    - Moving code between files/modules
+  - **Behavioral changes**: Functionality additions or modifications
+    - Adding features
+    - Changing logic
+    - Fixing bugs
+  - **Never mix**: Keep structural and behavioral changes in separate commits
 
 ## Response Guidelines
 
