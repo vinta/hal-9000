@@ -22,10 +22,14 @@
       "WebSearch",
       "mcp__ide__getDiagnostics"
     ],
-    "ask": ["Bash(git push:*)", "Bash(curl:*)", "Bash(wget:*)"],
-    "deny": [
+    "ask": [
       "Read(~/.*)",
       "Edit(~/.*)",
+      "Bash(git push:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
+    ],
+    "deny": [
       "Read(~/Library/**)",
       "Edit(~/Library/**)",
       "Read(~/Dropbox/**)",
