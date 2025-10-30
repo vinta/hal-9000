@@ -53,6 +53,10 @@
       "Bash(nmap:*)"
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "jq -r '\"Model: \\(.model.id) · PWD: \\(.workspace.current_dir)\"'"
+  },
   "env": {
     "DISABLE_BUG_COMMAND": "1",
     "DISABLE_ERROR_REPORTING": "1",
