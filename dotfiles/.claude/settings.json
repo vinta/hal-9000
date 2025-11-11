@@ -55,7 +55,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "jq -r '\"Model: \\(.model.id) · PWD: \\(.workspace.current_dir)\"'"
+    "command": "jq -r '\"\\(.model.id) · \\(.workspace.current_dir)\"'"
   },
   "env": {
     "DISABLE_BUG_COMMAND": "1",
