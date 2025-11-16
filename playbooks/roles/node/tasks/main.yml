@@ -25,6 +25,14 @@
   args:
     executable: /bin/bash
 
+- name: Configure npm
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm config set ignore-scripts true
+  args:
+    executable: /bin/bash
+
 - name: Install Node.js packages
   shell: |
     export NVM_DIR="${HOME}/.nvm"
