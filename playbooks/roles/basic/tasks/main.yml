@@ -18,11 +18,16 @@
 - name: Install utility packages
   homebrew:
     name:
+      - ast-grep
+      - fd
+      - fzf
       - htop
       - jq
       - pstree
+      - ripgrep
       - tree
       - wget
+      - yq
     state: latest
 
 - name: Install git packages
