@@ -68,7 +68,7 @@ Keep changes atomic and separate:
 
 ## Shell Tools Usage Guidelines
 
-**IMPORTANT**: Use the following specialized tools instead of traditional Unix commands: (Install if missing)
+**IMPORTANT**: Use the following specialized tools instead of traditional Unix commands:
 
 | Task Type              | Must Use       | Do Not Use            |
 | ---------------------- | -------------- | --------------------- |
