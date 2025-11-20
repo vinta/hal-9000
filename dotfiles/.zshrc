@@ -85,19 +85,21 @@ source $ZSH/oh-my-zsh.sh
 k8s_prompt_info() {
   local context=$(kubectl config current-context 2>/dev/null)
   if [[ -n "$context" ]]; then
-    echo "%{$fg[cyan]%}k8s:%{$fg[red]%}$context%{$reset_color%}"
+    echo " %{$fg[magenta]%}k8s%{$fg[white]%}:%{$fg[cyan]%}$context%{$reset_color%}"
   fi
 }
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[cyan]%}git:%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY=""
-ZSH_THEME_GIT_PROMPT_CLEAN=""
+git_prompt_info() {
+  local branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+  if [[ -n "$branch" ]]; then
+    echo " %{$fg[magenta]%}git%{$fg[white]%}:%{$fg[cyan]%}$branch%{$reset_color%}"
+  fi
+}
 
-# PROMPT='%(?..%B(%?%)%b) %F{green}%n@$(scutil --get ComputerName) %F{yellow}${PWD/#$HOME/~} %F{white}$%F{reset_color% '
 PROMPT="%(?:%{$fg_bold[green]%}➜:%{$fg_bold[red]%}➜) %{$fg[yellow]%}%~%{$reset_color%}"
-PROMPT+=' $(k8s_prompt_info)' # Must use single quote
-PROMPT+=' $(git_prompt_info) ' # Must use single quote
+PROMPT+='$(k8s_prompt_info)' # Must use single quote
+PROMPT+='$(git_prompt_info)' # Must use single quote
+PROMPT+=' ' # Must use single quote
 
 # User configuration
 
@@ -139,6 +141,3 @@ source /usr/local/hal-9000/playbooks/roles/python/files/py_profile.sh
 source /usr/local/hal-9000/playbooks/roles/node/files/node_profile.sh
 source /usr/local/hal-9000/playbooks/roles/solidity/files/sol_profile.sh
 source /usr/local/hal-9000/playbooks/roles/kubernetes/files/k8s_profile.sh
-
-# Added by Antigravity
-export PATH="/Users/vinta/.antigravity/antigravity/bin:$PATH"
