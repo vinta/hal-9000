@@ -139,3 +139,6 @@ source /usr/local/hal-9000/playbooks/roles/python/files/py_profile.sh
 source /usr/local/hal-9000/playbooks/roles/node/files/node_profile.sh
 source /usr/local/hal-9000/playbooks/roles/solidity/files/sol_profile.sh
 source /usr/local/hal-9000/playbooks/roles/kubernetes/files/k8s_profile.sh
+
+# Added by Antigravity
+export PATH="/Users/vinta/.antigravity/antigravity/bin:$PATH"
