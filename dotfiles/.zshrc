@@ -82,6 +82,8 @@ HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
 
 source $ZSH/oh-my-zsh.sh
 
+# User configuration
+
 k8s_prompt_info() {
   local context=$(kubectl config current-context 2>/dev/null)
   if [[ -n "$context" ]]; then
@@ -101,16 +103,12 @@ PROMPT+='$(k8s_prompt_info)' # Must use single quote
 PROMPT+='$(git_prompt_info)' # Must use single quote
 PROMPT+=' ' # Must use single quote
 
-# User configuration
-
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
-
-export PATH="$HOME/.local/bin:$PATH"
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -135,6 +133,8 @@ alias ll="ls -lA"
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
+
+export PATH="$HOME/.local/bin:$PATH"
 
 source /usr/local/hal-9000/playbooks/roles/basic/files/hal_profile.sh
 source /usr/local/hal-9000/playbooks/roles/python/files/py_profile.sh
