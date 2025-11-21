@@ -5,13 +5,14 @@
     name: ["openssl", "readline", "sqlite3", "xz", "zlib", "pyenv"]
     state: latest
 
-- name: Install Python 3.11.7
+# https://www.python.org/downloads/
+- name: Install Python 3.13.9
   shell: |
     export PYENV_ROOT="${HOME}/.pyenv"
     export PATH="${PYENV_ROOT}/bin:${PATH}"
     eval "$(pyenv init -)"
-    pyenv install --skip-existing 3.11.7
-    pyenv global 3.11.7
+    pyenv install --skip-existing 3.13.9
+    pyenv global 3.13.9
   args:
     executable: /bin/bash
   register: python_pyenv_install
