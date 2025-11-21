@@ -7,5 +7,3 @@ fi
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
-
-# [ -f "$HOME/.fubectl.source" ] && source "$HOME/.fubectl.source"
