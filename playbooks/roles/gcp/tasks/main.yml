@@ -2,7 +2,7 @@
 # https://cloud.google.com/sdk/docs/quickstart-macos
 - name: Download Google Cloud SDK
   unarchive:
-    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-436.0.0-darwin-arm.tar.gz
+    src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-darwin-arm.tar.gz
     remote_src: true
     dest: "{{ ansible_env.HOME }}/"
     creates: "{{ ansible_env.HOME }}/.google-cloud-sdk"
