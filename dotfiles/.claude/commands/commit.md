@@ -10,7 +10,6 @@ Use `git-commit-organizer` subagent.
 - **One logical change per commit.**
 - At initiation, respond with "I will use `git-commit-organizer` subagent." Suppress all subsequent output unless necessary.
 - Upon completion, respond with "Done." No further output is required.
-- DO NOT use `y`, just fucking commit!
 
 ## Extra Instructions (If Provided)
 
