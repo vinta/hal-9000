@@ -1,238 +1,184 @@
-# fd File Finding
+# fd Reference
 
-Expert knowledge for using `fd` as a fast, user-friendly alternative to `find` with smart defaults and powerful filtering.
+fd is a fast, user-friendly alternative to `find`. It respects `.gitignore` automatically and uses parallel execution.
 
-## Core Expertise
-
-**fd Advantages**
-
-- Fast parallel execution (written in Rust)
-- Colorized output by default
-- Respects `.gitignore` automatically
-- Smart case-insensitive search
-- Simpler syntax than `find`
-- Regular expression support
-
-## Basic Usage
-
-### Simple File Search
+## CLI Basics
 
 ```bash
-# Find all files named config
-fd config
-
-# Find files with extension
-fd -e rs                    # All Rust files
-fd -e md                    # All Markdown files
-fd -e js -e ts              # JavaScript and TypeScript
-
-# Case-sensitive search
-fd -s Config                # Only exact case match
+fd PATTERN [PATH...]              # Search for files matching pattern
+fd -e EXT                         # Search by extension
+fd -t TYPE                        # Search by type (f=file, d=dir, l=link, x=exec)
+fd -H                             # Include hidden files
+fd -I                             # Include gitignored files
 ```
+
+## Essential Flags
 
 ### Pattern Matching
 
-```bash
-# Regex patterns
-fd '^test_.*\.py$'          # Python test files
-fd '\.config$'              # Files ending in .config
-fd '^[A-Z]'                 # Files starting with uppercase
-
-# Glob patterns
-fd '*.lua'                  # All Lua files
-fd 'test-*.js'              # test-*.js files
-```
-
-## Advanced Filtering
+| Flag               | Short | Description                            |
+| ------------------ | ----- | -------------------------------------- |
+| (default)          |       | Regex pattern matching                 |
+| `--glob`           | `-g`  | Glob pattern instead of regex          |
+| `--fixed-strings`  | `-F`  | Treat pattern as literal               |
+| `--case-sensitive` | `-s`  | Case-sensitive (default is smart-case) |
+| `--ignore-case`    | `-i`  | Force case-insensitive                 |
 
 ### Type Filtering
 
-```bash
-# Search only files
-fd -t f pattern             # Files only
-fd -t d pattern             # Directories only
-fd -t l pattern             # Symlinks only
-fd -t x pattern             # Executable files
+| Flag                | Short    | Description                      |
+| ------------------- | -------- | -------------------------------- |
+| `--type file`       | `-t f`   | Only files                       |
+| `--type directory`  | `-t d`   | Only directories                 |
+| `--type symlink`    | `-t l`   | Only symlinks                    |
+| `--type executable` | `-t x`   | Only executables                 |
+| `--extension`       | `-e EXT` | Filter by extension (repeatable) |
 
-# Multiple types
-fd -t f -t l pattern        # Files and symlinks
-```
+### Visibility Filtering
 
-### Depth Control
+| Flag             | Short | Description                        |
+| ---------------- | ----- | ---------------------------------- |
+| `--hidden`       | `-H`  | Include hidden files/dirs          |
+| `--no-ignore`    | `-I`  | Include gitignored files           |
+| `--unrestricted` | `-u`  | Hidden + ignored (repeat for more) |
 
-```bash
-# Limit search depth
-fd -d 1 pattern             # Only current directory
-fd -d 3 pattern             # Max 3 levels deep
-fd --max-depth 2 pattern    # Alternative syntax
+### Path Filtering
 
-# Minimum depth
-fd --min-depth 2 pattern    # Skip current directory
-```
+| Flag                         | Description                    |
+| ---------------------------- | ------------------------------ |
+| `--max-depth NUM` / `-d NUM` | Maximum search depth           |
+| `--min-depth NUM`            | Minimum search depth           |
+| `--exclude PATTERN` / `-E`   | Exclude paths matching pattern |
+| `--full-path` / `-p`         | Match against full path        |
 
-### Hidden and Ignored Files
+### Time Filtering
 
-```bash
-# Include hidden files
-fd -H pattern               # Include hidden files (starting with .)
-
-# Include ignored files
-fd -I pattern               # Include .gitignore'd files
-fd -u pattern               # Unrestricted: hidden + ignored
-
-# Show all files
-fd -H -I pattern            # Show everything
-```
+| Flag                    | Description               |
+| ----------------------- | ------------------------- |
+| `--changed-within TIME` | Modified within timeframe |
+| `--changed-before TIME` | Modified before timeframe |
 
 ### Size Filtering
 
-```bash
-# File size filters
-fd --size +10m              # Files larger than 10 MB
-fd --size -1k               # Files smaller than 1 KB
-fd --size +100k --size -10m # Between 100 KB and 10 MB
-```
+| Flag           | Description       |
+| -------------- | ----------------- |
+| `--size +SIZE` | Larger than SIZE  |
+| `--size -SIZE` | Smaller than SIZE |
 
-### Modification Time
+### Execution
 
-```bash
-# Files modified recently
-fd --changed-within 1d      # Last 24 hours
-fd --changed-within 2w      # Last 2 weeks
-fd --changed-within 3m      # Last 3 months
+| Flag               | Short | Description                  |
+| ------------------ | ----- | ---------------------------- |
+| `--exec CMD`       | `-x`  | Execute CMD for each result  |
+| `--exec-batch CMD` | `-X`  | Execute CMD with all results |
 
-# Files modified before
-fd --changed-before 1y      # Older than 1 year
-```
+## Pattern Matching
 
-## Execution and Processing
-
-### Execute Commands
+### Regex (Default)
 
 ```bash
-# Execute command for each result
-fd -e jpg -x convert {} {.}.png     # Convert all JPG to PNG
-
-# Parallel execution
-fd -e rs -x rustfmt                 # Format all Rust files
-
-# Execute with multiple results
-fd -e md -X wc -l                   # Word count on all Markdown files
+fd '^test_.*\.py$'            # Python test files
+fd '\.config$'                # Files ending in .config
+fd '^[A-Z]'                   # Files starting with uppercase
+fd 'component.*\.tsx$'        # Component TSX files
 ```
 
-### Integration with Other Tools
+### Glob Mode
 
 ```bash
-# Pipe to other commands
-fd -e log | xargs rm                # Delete all log files
-fd -e rs | xargs cat | wc -l        # Count lines in Rust files
-
-# Use with rg for powerful search
-fd -e py | xargs rg "import numpy"  # Find numpy imports in Python files
-
-# Open files in editor
-fd -e md | xargs nvim               # Open all Markdown in Neovim
+fd -g '*.lua'                 # All Lua files
+fd -g 'test-*.js'             # test-*.js files
+fd -g '*.{json,yaml,toml}'    # Config files
 ```
 
-## Common Patterns
-
-### Development Workflows
+### Fixed Strings
 
 ```bash
-# Find test files
-fd -e test.js -e spec.js            # JavaScript tests
-fd '^test_.*\.py$'                  # Python tests
-fd '_test\.go$'                     # Go tests
-
-# Find configuration files
-fd -g '*.config.js'                 # Config files
-fd -g '.env*'                       # Environment files
-fd -g '*rc' -H                      # RC files (include hidden)
-
-# Find source files
-fd -e rs -e toml -t f               # Rust project files
-fd -e py --exclude __pycache__      # Python excluding cache
-fd -e ts -e tsx src/                # TypeScript in src/
+fd -F 'my.config'             # Exact match (no regex)
 ```
 
-### Cleanup Operations
+## Extension Filtering
 
 ```bash
-# Find and remove
-fd -e pyc -x rm                     # Remove Python bytecode
-fd node_modules -t d -x rm -rf      # Remove node_modules
-fd -g '*.log' --changed-before 30d -X rm  # Remove old logs
+# Single extension
+fd -e rs                      # Rust files
+fd -e md                      # Markdown files
 
-# Find large files
-fd --size +100m -t f                # Files over 100 MB
-fd --size +1g -t f -x du -h         # Size of files over 1 GB
+# Multiple extensions
+fd -e ts -e tsx               # TypeScript files
+fd -e jpg -e jpeg -e png      # Image files
+fd -e json -e yaml -e toml    # Config files
 ```
 
-### Path-Based Search
+## Type Filtering
 
 ```bash
-# Search in specific directories
-fd pattern src/                     # Only in src/
-fd pattern src/ tests/              # Multiple directories
+# Files only
+fd -t f PATTERN
 
-# Exclude paths
-fd -e rs -E target/                 # Exclude target directory
-fd -e js -E node_modules -E dist    # Exclude multiple paths
+# Directories only
+fd -t d PATTERN
 
-# Full path matching
-fd -p src/components/.*\.tsx$       # Match full path
+# Executable files
+fd -t x
+
+# Symlinks
+fd -t l
+
+# Combine types
+fd -t f -t l PATTERN          # Files and symlinks
 ```
 
-## Best Practices
-
-**When to Use fd**
-
-- Finding files by name or pattern
-- Searching with gitignore awareness
-- Fast directory traversal
-- Type-specific searches
-- Time-based file queries
-
-**When to Use find Instead**
-
-- Complex boolean logic
-- POSIX compatibility required
-- Advanced permission checks
-- Non-standard file attributes
-
-**Performance Tips**
-
-- Use `-j 1` for sequential search if order matters
-- Combine with `--max-depth` to limit scope
-- Use `-t f` to skip directory processing
-- Leverage gitignore for faster searches in repos
-
-**Integration with rg**
+## Depth Control
 
 ```bash
-# Two-step search: find files, then search content
-fd -e py | xargs rg "class.*Test"   # Find test classes in Python
-fd -e rs | xargs rg "TODO"          # Find TODOs in Rust files
-fd -e md | xargs rg "# "            # Find headers in Markdown
+# Current directory only
+fd -d 1 PATTERN
+
+# Max 3 levels deep
+fd -d 3 PATTERN
+fd --max-depth 3 PATTERN
+
+# Skip current directory (min depth 2)
+fd --min-depth 2 PATTERN
 ```
 
-## Quick Reference
+## Hidden and Ignored Files
 
-### Essential Options
+```bash
+# Include hidden files (starting with .)
+fd -H PATTERN
+fd --hidden PATTERN
 
-| Option     | Purpose                  | Example              |
-| ---------- | ------------------------ | -------------------- |
-| `-e EXT`   | Filter by extension      | `fd -e rs`           |
-| `-t TYPE`  | Filter by type (f/d/l/x) | `fd -t d`            |
-| `-d DEPTH` | Max search depth         | `fd -d 3`            |
-| `-H`       | Include hidden files     | `fd -H .env`         |
-| `-I`       | Include ignored files    | `fd -I build`        |
-| `-u`       | Unrestricted (no ignore) | `fd -u pattern`      |
-| `-E PATH`  | Exclude path             | `fd -E node_modules` |
-| `-x CMD`   | Execute command          | `fd -e log -x rm`    |
-| `-X CMD`   | Batch execute            | `fd -e md -X cat`    |
-| `-s`       | Case-sensitive           | `fd -s Config`       |
-| `-g GLOB`  | Glob pattern             | `fd -g '*.json'`     |
+# Include gitignored files
+fd -I PATTERN
+fd --no-ignore PATTERN
+
+# Include both
+fd -HI PATTERN
+fd -u PATTERN                 # Shorthand
+
+# Include all (hidden, ignored, and no global ignore)
+fd -uu PATTERN
+```
+
+## Exclusions
+
+```bash
+# Exclude directories
+fd PATTERN -E node_modules
+fd PATTERN -E node_modules -E dist -E build
+
+# Exclude patterns
+fd -e js -E '*.min.js'
+fd -e py -E '__pycache__'
+fd -e rs -E target
+
+# Combine with hidden
+fd -H -E .git
+```
+
+## Time-Based Search
 
 ### Time Units
 
@@ -243,6 +189,24 @@ fd -e md | xargs rg "# "            # Find headers in Markdown
 - `w` = weeks
 - `y` = years
 
+### Examples
+
+```bash
+# Recently modified
+fd --changed-within 1d        # Last 24 hours
+fd --changed-within 2w        # Last 2 weeks
+fd --changed-within 3h        # Last 3 hours
+
+# Older files
+fd --changed-before 1y        # Older than 1 year
+fd --changed-before 30d       # Older than 30 days
+
+# Combine with other filters
+fd -e log --changed-before 7d # Old log files
+```
+
+## Size-Based Search
+
 ### Size Units
 
 - `b` = bytes
@@ -251,26 +215,153 @@ fd -e md | xargs rg "# "            # Find headers in Markdown
 - `g` = gigabytes
 - `t` = terabytes
 
-## Common Command Patterns
+### Examples
 
 ```bash
-# Find recently modified source files
-fd -e rs --changed-within 1d
+# Large files
+fd --size +10m                # Larger than 10 MB
+fd --size +1g                 # Larger than 1 GB
 
-# Find large files in current directory
-fd -d 1 -t f --size +10m
+# Small files
+fd --size -1k                 # Smaller than 1 KB
 
-# Find executable scripts
-fd -t x -e sh
-
-# Find config files including hidden
-fd -H -g '*config*'
-
-# Find and count lines
-fd -e py -X wc -l
-
-# Find files excluding build artifacts
-fd -e js -E dist -E node_modules -E build
+# Range
+fd --size +100k --size -10m   # Between 100 KB and 10 MB
 ```
 
-This makes fd the preferred tool for fast, intuitive file finding in development workflows.
+## Command Execution
+
+### Per-Result Execution (-x)
+
+```bash
+# Placeholders:
+#   {}   Full path
+#   {/}  Basename
+#   {//} Parent directory
+#   {.}  Path without extension
+#   {/.} Basename without extension
+
+# Delete files
+fd -e log -x rm {}
+
+# Convert images
+fd -e jpg -x convert {} {.}.png
+
+# Format code
+fd -e rs -x rustfmt {}
+fd -e py -x black {}
+
+# Show file info
+fd -e py -x wc -l {}
+```
+
+### Batch Execution (-X)
+
+```bash
+# Single command with all files
+fd -e md -X wc -l             # Word count all markdown
+fd -e rs -X cargo fmt --       # Format all Rust files
+fd -e py -X cat | wc -l       # Total lines in Python files
+```
+
+## Integration with Other Tools
+
+### With ripgrep
+
+```bash
+# Find files, then search content
+fd -e py | xargs rg 'import numpy'
+fd -e ts | xargs rg 'TODO'
+fd -e md | xargs rg '# '
+
+# More complex pipelines
+fd -e js -E node_modules | xargs rg 'console\.log'
+```
+
+### With xargs
+
+```bash
+# Delete files
+fd -e pyc | xargs rm
+fd node_modules -t d | xargs rm -rf
+
+# Open in editor
+fd -e md | xargs vim
+fd -e tsx | xargs code
+```
+
+## Common Patterns
+
+### Development Workflows
+
+```bash
+# Find test files
+fd -e test.js -e spec.js
+fd '^test_.*\.py$'
+fd '_test\.go$'
+
+# Find configuration
+fd -g '*.config.js'
+fd -g '.env*' -H
+fd -g '*rc' -H
+
+# Find source files
+fd -e rs -e toml -t f
+fd -e py -E __pycache__
+fd -e ts -e tsx src/
+```
+
+### Cleanup
+
+```bash
+# Remove build artifacts
+fd -e pyc -x rm
+fd -t d node_modules -x rm -rf
+fd -g '*.log' --changed-before 30d -X rm
+
+# Find large files
+fd --size +100m -t f
+fd --size +1g -t f -x du -h
+```
+
+### Path-Based Search
+
+```bash
+# Only in specific directories
+fd PATTERN src/
+fd PATTERN src/ tests/
+
+# Full path matching
+fd -p 'src/components/.*\.tsx$'
+fd -p 'tests/.*test.*\.py$'
+```
+
+## Performance Tips
+
+1. **Use depth limits when possible**:
+
+   ```bash
+   fd -d 2 PATTERN             # Faster than unlimited
+   ```
+
+2. **Exclude heavy directories**:
+
+   ```bash
+   fd PATTERN -E node_modules -E .git -E target
+   ```
+
+3. **Use type filters**:
+
+   ```bash
+   fd -t f PATTERN             # Skip directory processing
+   ```
+
+4. **Leverage gitignore** (default behavior):
+
+   - fd automatically respects `.gitignore`
+   - Use `-I` only when needed
+
+5. **Sequential search if order matters**:
+   ```bash
+   fd PATTERN -j 1             # Single-threaded
+   ```
