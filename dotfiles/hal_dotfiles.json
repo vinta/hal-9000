@@ -9,32 +9,16 @@
       "src": ".claude/CLAUDE.md"
     },
     {
-      "dest": "{{HOME}}/.claude/settings.json",
-      "src": ".claude/settings.json"
+      "dest": "{{HOME}}/.claude/agents/",
+      "src": ".claude/agents/"
     },
     {
-      "dest": "{{HOME}}/.claude/commands/commit.md",
-      "src": ".claude/commands/commit.md"
+      "dest": "{{HOME}}/.claude/commands/",
+      "src": ".claude/commands/"
     },
     {
-      "dest": "{{HOME}}/.claude/commands/spawn-subagents.md",
-      "src": ".claude/commands/spawn-subagents.md"
-    },
-    {
-      "dest": "{{HOME}}/.claude/agents/blockchain-developer.md",
-      "src": ".claude/agents/blockchain-developer.md"
-    },
-    {
-      "dest": "{{HOME}}/.claude/agents/context7-docs-checker.md",
-      "src": ".claude/agents/context7-docs-checker.md"
-    },
-    {
-      "dest": "{{HOME}}/.claude/agents/git-commit-organizer.md",
-      "src": ".claude/agents/git-commit-organizer.md"
-    },
-    {
-      "dest": "{{HOME}}/.claude/agents/web-search-expert.md",
-      "src": ".claude/agents/web-search-expert.md"
+      "dest": "{{HOME}}/.claude/skills/",
+      "src": ".claude/skills/"
     },
     {
       "dest": "{{HOME}}/.codex/config.toml",
