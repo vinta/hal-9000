@@ -1,20 +1,20 @@
 ---
 name: code-search
-description: Systematic code understanding and search using AST-based structural patterns (ast-grep) and fast text search (ripgrep). Use when exploring unfamiliar codebases, finding function/class usages before refactoring, locating security issues (hardcoded credentials, SQL injection, eval usage), analyzing imports/dependencies, or finding specific code constructs (error handling, API calls). Triggers on questions like "where is X used", "find all calls to", "show me functions that", "how is this pattern implemented", and security audits.
+description: Use when exploring codebase, architecture, or call flows.
 allowed-tools: Bash(ast-grep:*), Bash(sg:*), Bash(rg:*), Bash(fd:*)
 ---
 
 # Code Search
 
-AST-based structural search reveals hidden relationships, security vulnerabilities, and architectural issues that text-based grep misses. Combine with fast text search for comprehensive codebase understanding.
+Use when navigating code, tracing how functions/classes connect, finding where symbols are defined or called, or answering "how does this work" questions about a codebase.
 
 ## Tool Selection
 
-| Need                                             | Tool            |
-| ------------------------------------------------ | --------------- |
-| Structural patterns (functions, classes, syntax) | `sg` (ast-grep) |
-| Text patterns (strings, comments, names)         | `rg` (ripgrep)  |
-| File discovery by name/extension                 | `fd`            |
+| Need                                                         | Tool            |
+| ------------------------------------------------------------ | --------------- |
+| Structural patterns (functions, classes, syntax, call flows) | `sg` (ast-grep) |
+| Text patterns (strings, comments, names)                     | `rg` (ripgrep)  |
+| File discovery by name/extension                             | `fd`            |
 
 ### Choose ripgrep (`rg`) for:
 
