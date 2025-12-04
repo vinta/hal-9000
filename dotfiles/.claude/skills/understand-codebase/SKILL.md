@@ -1,10 +1,10 @@
 ---
-name: code-search
+name: understand-codebase
 description: Use when exploring codebase, architecture, or call flows.
 allowed-tools: Bash(ast-grep:*), Bash(sg:*), Bash(rg:*), Bash(fd:*)
 ---
 
-# Code Search
+# Understand Codebase
 
 Use when navigating code, tracing how functions/classes connect, finding where symbols are defined or called, or answering "how does this work" questions about a codebase.
 
