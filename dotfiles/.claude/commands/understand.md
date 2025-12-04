@@ -3,11 +3,11 @@ description: Understand codebase by finding functions, classes, usages, and patt
 allowed-tools: Bash(ast-grep:*), Bash(sg:*), Bash(rg:*), Bash(fd:*)
 ---
 
-Use `code-search` skill.
+Use `understand-codebase` skill.
 
 ## Rules
 
-- At initiation, respond with "I will use `code-search` skill." Suppress all subsequent output unless necessary.
+- At initiation, respond with "I will use `understand-codebase` skill." Suppress all subsequent output unless necessary.
 - Upon completion, respond with the search results. No further output is required.
 
 ## Extra Instructions (If Provided)
