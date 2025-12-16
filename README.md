@@ -2,6 +2,9 @@
 
 # HAL 9000
 
+[![Run in Smithery](https://smithery.ai/badge/skills/vinta)](https://smithery.ai/skills?ns=vinta&utm_source=github&utm_medium=badge)
+
+
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
 
 Automatically setup a productive development environment with Ansible on macOS.
