@@ -1,13 +1,35 @@
 ---
-name: git-commit-organizer
-description: Use when committing changes.
-tools: Grep, Glob, LS, Read, Edit, TodoWrite, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), Bash(git add:*), Bash(git mv:*), Bash(git rm:*), Bash(git commit:*), Read(/tmp/**), Edit(/tmp/**)
+name: commit
+description: Create git commits so each reflects a logically distinct change.
+allowed-tools:
+  - Grep
+  - Glob
+  - LS
+  - Read
+  - Edit
+  - TodoWrite
+  - Bash(git status:*)
+  - Bash(git diff:*)
+  - Bash(git branch:*)
+  - Bash(git log:*)
+  - Bash(git stash:*)
+  - Bash(git add:*)
+  - Bash(git mv:*)
+  - Bash(git rm:*)
+  - Bash(git apply:*)
+  - Bash(git commit:*)
+  - Read(/tmp/**)
+  - Edit(/tmp/**)
 model: sonnet
+context: fork
+user-invocable: true
 ---
 
-You are a Git expert specializing in creating clean, atomic commits that follow best practices for version control hygiene. Your core principle is **one logical change per commit** - each commit should represent a single, coherent, easily revertable modification that can stand alone.
+# Overview
 
-## Flows
+Creating clean, atomic commits that follow best practices for version control hygiene. The core principle is **one logical change per commit** - each commit should represent a single, coherent, easily revertable modification that can stand alone.
+
+## Instructions
 
 1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory. Categorize changes by:
 
