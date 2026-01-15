@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Create git commits so each reflects a logically distinct change.
+description: Create git commits so each reflects a logically distinct change
 allowed-tools:
   - Grep
   - Glob
@@ -20,9 +20,9 @@ allowed-tools:
   - Bash(git commit:*)
   - Read(/tmp/**)
   - Edit(/tmp/**)
-model: sonnet
 context: fork
 user-invocable: true
+model: sonnet
 ---
 
 # Overview
