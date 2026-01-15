@@ -10,6 +10,7 @@ Dominating your dev environment like cats rule the Internet.
 
 ## Development Stack
 
+- [Claude Code](dotfiles/.claude)
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
 - [Solidity](playbooks/roles/solidity/tasks/main.yml)
