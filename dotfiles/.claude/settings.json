@@ -14,6 +14,7 @@
       "Bash(git add:*)",
       "Bash(git mv:*)",
       "Bash(git rm:*)",
+      "Bash(git apply:*)",
       "Bash(git commit:*)",
       "Bash(ls:*)",
       "Bash(tree:*)",
