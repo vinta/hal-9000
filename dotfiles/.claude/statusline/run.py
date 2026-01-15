@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import json
+import os
+import subprocess
 import sys
+
+CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
 # https://code.claude.com/docs/en/statusline
 # data looks like this:
@@ -110,6 +114,7 @@ print(f"Current: {data['model']['id']} · {data['workspace']['current_dir']}")
 # }
 transcript_path = data.get("transcript_path")
 latest_user_input = ""
+latest_user_uuid = ""
 if transcript_path:
     with open(transcript_path, "r") as f:
         lines = f.readlines()
@@ -123,6 +128,7 @@ if transcript_path:
                 and not content.startswith("<local-command-caveat>")
             ):
                 latest_user_input = content
+                latest_user_uuid = entry.get("uuid", "")
                 break
 
 grammar_check_prompt = f"""
@@ -170,14 +176,27 @@ Grammar 2: why it "keeps" crashing (第三人稱單數 it 要用 keeps)
 
 Here is the user input: {latest_user_input}
 """
-if latest_user_input:
-    import subprocess
+if latest_user_input and latest_user_uuid:
+    cached_uuid = ""
+    cached_result = ""
+    if os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, "r") as f:
+            cache = json.load(f)
+            cached_uuid = cache.get("uuid", "")
+            cached_result = cache.get("result", "")
 
-    result = subprocess.run(
-        ["claude", "--model", "sonnet", "-p", f"{grammar_check_prompt}"],
-        capture_output=True,
-        text=True,
-    )
-    grammar_check_result = result.stdout.strip()
-    if grammar_check_result:
-        print(grammar_check_result)
+    if cached_uuid == latest_user_uuid:
+        if cached_result:
+            print(cached_result)
+    else:
+        result = subprocess.run(
+            ["claude", "--model", "sonnet", "-p", grammar_check_prompt],
+            capture_output=True,
+            text=True,
+        )
+        grammar_check_result = result.stdout.strip()
+        if grammar_check_result:
+            print(grammar_check_result)
+
+        with open(CACHE_FILE, "w") as f:
+            json.dump({"uuid": latest_user_uuid, "result": grammar_check_result}, f)
