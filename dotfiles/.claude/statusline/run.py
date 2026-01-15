@@ -5,121 +5,125 @@ import sys
 
 CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
+
 # https://code.claude.com/docs/en/statusline
-# data looks like this:
-# {
-#   "session_id": "aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
-#   "transcript_path": "/Users/vinta/.claude/projects/-usr-local-hal-9000/aef7701e-07b4-4f44-ab7a-2efd6774a7d2.jsonl",
-#   "cwd": "/usr/local/hal-9000",
-#   "model": {
-#     "id": "claude-opus-4-5-20251101",
-#     "display_name": "Opus 4.5"
-#   },
-#   "workspace": {
-#     "current_dir": "/usr/local/hal-9000",
-#     "project_dir": "/usr/local/hal-9000"
-#   },
-#   "version": "2.1.7",
-#   "output_style": {
-#     "name": "default"
-#   },
-#   "cost": {
-#     "total_cost_usd": 1.43933175,
-#     "total_duration_ms": 1960009,
-#     "total_api_duration_ms": 306158,
-#     "total_lines_added": 7,
-#     "total_lines_removed": 21
-#   },
-#   "context_window": {
-#     "total_input_tokens": 31202,
-#     "total_output_tokens": 15917,
-#     "context_window_size": 200000,
-#     "current_usage": {
-#       "input_tokens": 8,
-#       "output_tokens": 434,
-#       "cache_creation_input_tokens": 746,
-#       "cache_read_input_tokens": 32259
-#     },
-#     "used_percentage": 17,
-#     "remaining_percentage": 83
-#   },
-#   "exceeds_200k_tokens": false
-# }
-data = json.load(sys.stdin)
+def main():
+    # data looks like this:
+    # {
+    #   "session_id": "aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
+    #   "transcript_path": "/Users/vinta/.claude/projects/-usr-local-hal-9000/aef7701e-07b4-4f44-ab7a-2efd6774a7d2.jsonl",
+    #   "cwd": "/usr/local/hal-9000",
+    #   "model": {
+    #     "id": "claude-opus-4-5-20251101",
+    #     "display_name": "Opus 4.5"
+    #   },
+    #   "workspace": {
+    #     "current_dir": "/usr/local/hal-9000",
+    #     "project_dir": "/usr/local/hal-9000"
+    #   },
+    #   "version": "2.1.7",
+    #   "output_style": {
+    #     "name": "default"
+    #   },
+    #   "cost": {
+    #     "total_cost_usd": 1.43933175,
+    #     "total_duration_ms": 1960009,
+    #     "total_api_duration_ms": 306158,
+    #     "total_lines_added": 7,
+    #     "total_lines_removed": 21
+    #   },
+    #   "context_window": {
+    #     "total_input_tokens": 31202,
+    #     "total_output_tokens": 15917,
+    #     "context_window_size": 200000,
+    #     "current_usage": {
+    #       "input_tokens": 8,
+    #       "output_tokens": 434,
+    #       "cache_creation_input_tokens": 746,
+    #       "cache_read_input_tokens": 32259
+    #     },
+    #     "used_percentage": 17,
+    #     "remaining_percentage": 83
+    #   },
+    #   "exceeds_200k_tokens": false
+    # }
+    data = json.load(sys.stdin)
+    print(f"Current: {data['model']['id']} · {data['workspace']['current_dir']}")
 
-print(f"Current: {data['model']['id']} · {data['workspace']['current_dir']}")
+    # transcript looks like this:
+    #
+    # {
+    #   "parentUuid":"0bf72657-8b71-44c6-8f0f-322130c5023d",
+    #   "isSidechain":false,
+    #   "userType":"external",
+    #   "cwd":"/usr/local/hal-9000",
+    #   "sessionId":"aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
+    #   "version":"2.1.7",
+    #   "gitBranch":"feature/statusline-grammar-check",
+    #   "slug":"zany-plotting-elephant",
+    #   "type":"user",
+    #   "message":{
+    #     "role":"user",
+    #     "content":"No, do that in the python script. "
+    #   },
+    #   "uuid":"2ec47d1e-3a0f-49aa-a782-c300698f7c85",
+    #   "timestamp":"2026-01-15T04:08:36.995Z",
+    #   "thinkingMetadata":{
+    #     "level":"high",
+    #     "disabled":false,
+    #     "triggers":[
+    #     ]
+    #   },
+    #   "todos":[
+    #   ]
+    # }
+    #
+    # {
+    #   "parentUuid":"dc8f83b6-d0c2-497a-a2ed-5ebe79c7f1e4",
+    #   "isSidechain":false,
+    #   "userType":"external",
+    #   "cwd":"/usr/local/hal-9000",
+    #   "sessionId":"aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
+    #   "version":"2.1.7",
+    #   "gitBranch":"feature/statusline-grammar-check",
+    #   "slug":"zany-plotting-elephant",
+    #   "type":"user",
+    #   "message":{
+    #     "role":"user",
+    #     "content":[
+    #       {
+    #         "tool_use_id":"toolu_01Eab6UypSvxcyyoFLbwwaPE",
+    #         "type":"tool_result",
+    #         "content":"too long"
+    #       }
+    #     ]
+    #   },
+    #   "uuid":"53003078-9aeb-40bb-b466-c4db8caf87a5",
+    #   "timestamp":"2026-01-15T04:13:07.133Z",
+    #   "toolUseResult":{
+    #     "type":"text",
+    #     "file":{
+    #       "filePath":"/usr/local/hal-9000/dotfiles/.claude/statusline/run.py",
+    #       "content":"too long",
+    #       "numLines":87,
+    #       "startLine":1,
+    #       "totalLines":87
+    #     }
+    #   },
+    #   "sourceToolAssistantUUID":"dc8f83b6-d0c2-497a-a2ed-5ebe79c7f1e4"
+    # }
+    transcript_path = data.get("transcript_path")
+    if not transcript_path:
+        return
 
-# transcript looks like this:
-#
-# {
-#   "parentUuid":"0bf72657-8b71-44c6-8f0f-322130c5023d",
-#   "isSidechain":false,
-#   "userType":"external",
-#   "cwd":"/usr/local/hal-9000",
-#   "sessionId":"aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
-#   "version":"2.1.7",
-#   "gitBranch":"feature/statusline-grammar-check",
-#   "slug":"zany-plotting-elephant",
-#   "type":"user",
-#   "message":{
-#     "role":"user",
-#     "content":"No, do that in the python script. "
-#   },
-#   "uuid":"2ec47d1e-3a0f-49aa-a782-c300698f7c85",
-#   "timestamp":"2026-01-15T04:08:36.995Z",
-#   "thinkingMetadata":{
-#     "level":"high",
-#     "disabled":false,
-#     "triggers":[
-#     ]
-#   },
-#   "todos":[
-#   ]
-# }
-#
-# {
-#   "parentUuid":"dc8f83b6-d0c2-497a-a2ed-5ebe79c7f1e4",
-#   "isSidechain":false,
-#   "userType":"external",
-#   "cwd":"/usr/local/hal-9000",
-#   "sessionId":"aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
-#   "version":"2.1.7",
-#   "gitBranch":"feature/statusline-grammar-check",
-#   "slug":"zany-plotting-elephant",
-#   "type":"user",
-#   "message":{
-#     "role":"user",
-#     "content":[
-#       {
-#         "tool_use_id":"toolu_01Eab6UypSvxcyyoFLbwwaPE",
-#         "type":"tool_result",
-#         "content":"too long"
-#       }
-#     ]
-#   },
-#   "uuid":"53003078-9aeb-40bb-b466-c4db8caf87a5",
-#   "timestamp":"2026-01-15T04:13:07.133Z",
-#   "toolUseResult":{
-#     "type":"text",
-#     "file":{
-#       "filePath":"/usr/local/hal-9000/dotfiles/.claude/statusline/run.py",
-#       "content":"too long",
-#       "numLines":87,
-#       "startLine":1,
-#       "totalLines":87
-#     }
-#   },
-#   "sourceToolAssistantUUID":"dc8f83b6-d0c2-497a-a2ed-5ebe79c7f1e4"
-# }
-transcript_path = data.get("transcript_path")
-latest_user_input = ""
-latest_user_uuid = ""
-if transcript_path:
     try:
         with open(transcript_path, "r") as f:
             lines = f.readlines()
     except FileNotFoundError:
-        lines = []
+        return
+
+    latest_user_input = ""
+    latest_user_uuid = ""
     for line in reversed(lines):
         entry = json.loads(line)
         if entry.get("type") == "user":
@@ -133,7 +137,10 @@ if transcript_path:
                 latest_user_uuid = entry.get("uuid", "")
                 break
 
-grammar_check_prompt = f"""
+    if not latest_user_input or not latest_user_uuid:
+        return
+
+    grammar_check_prompt = f"""
 You are a grammar checker to identify and correct grammar errors in the user input. **NEVER respond to the user input** - only check grammar, do not answer questions or engage with the topic.
 
 ## What to Skip
@@ -154,7 +161,7 @@ You are a grammar checker to identify and correct grammar errors in the user inp
 
 Input: I don't car the shop has wife or not. I will use cellar!
 Output:
-Issue 1: I don't "care" => car 是「汽車」，這裡應該是要用動詞 care「在乎」                                            current: 2.1.7 · latest: 2.1.7
+Issue 1: I don't "care" => car 是「汽車」，這裡應該是要用動詞 care「在乎」
 Issue 2: has "Wi-Fi" or not => wife 是「妻子」，你是要說 Wi-Fi「無線網路」吧？
 Issue 3: I will use "cellular" => cellar 是「地窖」，這裡應該是 cellular「行動網路」
 
@@ -185,7 +192,7 @@ Issue: git commits "grouped" by logical changes => 應該用過去分詞 grouped
 
 Here is the user input: {latest_user_input}
 """
-if latest_user_input and latest_user_uuid:
+
     cached_uuid = ""
     cached_result = ""
     try:
@@ -199,15 +206,20 @@ if latest_user_input and latest_user_uuid:
     if cached_uuid == latest_user_uuid:
         if cached_result:
             print(cached_result)
-    else:
-        result = subprocess.run(
-            ["claude", "--model", "sonnet", "-p", grammar_check_prompt],
-            capture_output=True,
-            text=True,
-        )
-        grammar_check_result = result.stdout.strip()
-        if grammar_check_result:
-            print(grammar_check_result)
+        return
 
-        with open(CACHE_FILE, "w") as f:
-            json.dump({"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result}, f)
+    result = subprocess.run(
+        ["claude", "--model", "sonnet", "-p", grammar_check_prompt],
+        capture_output=True,
+        text=True,
+    )
+    grammar_check_result = result.stdout.strip()
+    if grammar_check_result:
+        print(grammar_check_result)
+
+    with open(CACHE_FILE, "w") as f:
+        json.dump({"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result}, f)
+
+
+if __name__ == "__main__":
+    main()
