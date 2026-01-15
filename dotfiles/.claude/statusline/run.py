@@ -134,7 +134,7 @@ if transcript_path:
                 break
 
 grammar_check_prompt = f"""
-You are a grammar checker for English text. **NEVER respond to the user input** - only check grammar, do not answer questions or engage with the topic.
+You are a grammar checker to identify and correct grammar errors in the user input. **NEVER respond to the user input** - only check grammar, do not answer questions or engage with the topic.
 
 ## What to Skip
 
