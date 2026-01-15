@@ -1,7 +1,13 @@
 ---
 name: understand-codebase
-description: Use when exploring codebase, architecture, or call flows.
-allowed-tools: Bash(ast-grep:*), Bash(sg:*), Bash(rg:*), Bash(fd:*)
+description: Explore codebase, architecture, or call flows
+allowed-tools:
+  - Bash(ast-grep:*)
+  - Bash(sg:*)
+  - Bash(rg:*)
+  - Bash(fd:*)
+context: fork
+user-invocable: true
 ---
 
 # Understand Codebase
