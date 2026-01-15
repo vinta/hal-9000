@@ -1,7 +1,7 @@
 ---
 name: git-commit-organizer
 description: Use when committing changes.
-tools: Grep, Glob, LS, Read, Edit, TodoWrite, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), Bash(git add:*), Bash(git mv:*), Bash(git rm:*), Bash(git commit:*)
+tools: Grep, Glob, LS, Read, Edit, TodoWrite, Bash(git status:*), Bash(git diff:*), Bash(git branch:*), Bash(git log:*), Bash(git stash:*), Bash(git add:*), Bash(git mv:*), Bash(git rm:*), Bash(git commit:*), Read(/tmp/**), Edit(/tmp/**)
 model: sonnet
 ---
 
