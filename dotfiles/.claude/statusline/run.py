@@ -210,4 +210,4 @@ if latest_user_input and latest_user_uuid:
             print(grammar_check_result)
 
         with open(CACHE_FILE, "w") as f:
-            json.dump({"uuid": latest_user_uuid, "result": grammar_check_result}, f)
+            json.dump({"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result}, f)
