@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import json
-import os
 import subprocess
 import sys
 
@@ -116,8 +115,11 @@ transcript_path = data.get("transcript_path")
 latest_user_input = ""
 latest_user_uuid = ""
 if transcript_path:
-    with open(transcript_path, "r") as f:
-        lines = f.readlines()
+    try:
+        with open(transcript_path, "r") as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        lines = []
     for line in reversed(lines):
         entry = json.loads(line)
         if entry.get("type") == "user":
@@ -179,11 +181,13 @@ Here is the user input: {latest_user_input}
 if latest_user_input and latest_user_uuid:
     cached_uuid = ""
     cached_result = ""
-    if os.path.exists(CACHE_FILE):
+    try:
         with open(CACHE_FILE, "r") as f:
             cache = json.load(f)
             cached_uuid = cache.get("uuid", "")
             cached_result = cache.get("result", "")
+    except FileNotFoundError:
+        pass
 
     if cached_uuid == latest_user_uuid:
         if cached_result:
