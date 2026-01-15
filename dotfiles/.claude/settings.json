@@ -56,7 +56,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "jq -r '\"\\(.model.id) · \\(.workspace.current_dir)\"'"
+    "command": "python3 ~/.claude/statusline/run.py"
   },
   "env": {
     "DISABLE_BUG_COMMAND": "1",
