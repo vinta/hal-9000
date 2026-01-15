@@ -39,10 +39,6 @@
       "src": ".gitignore_global"
     },
     {
-      "dest": "{{HOME}}/.huskyrc",
-      "src": ".huskyrc"
-    },
-    {
       "dest": "{{HOME}}/.claude/settings.json",
       "src": ".claude/settings.json"
     },
