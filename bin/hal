@@ -136,7 +136,8 @@ class HAL9000:
         self._run("git fetch")
         self._run("git pull")
 
-        self._run("brew upgrade ansible")
+        # it seems no reason to upgrade ansible every time
+        # self._run("brew upgrade ansible")
 
         os.chdir(os.path.join(Setting.PROJECT_ROOT, "playbooks"))
         command = "ansible-playbook site.yml -v"
