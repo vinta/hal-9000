@@ -1,4 +1,4 @@
-.PHONY: help install hooks-update hooks-run secrets-scan secrets-audit
+.PHONY: help install hooks-update hooks-run secrets-scan secrets-audit completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -6,26 +6,29 @@ help: ## Show this help message
 	@echo 'Targets:'
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-install:
-	pip install -r requirements.txt
-	pre-commit install
+install: ## Install dependencies and setup pre-commit hooks
+	uv sync --extra dev
+	uv run pre-commit install
 	$(MAKE) hooks-update
 
 hooks-update: ## Update pre-commit hooks to latest versions
-	pre-commit autoupdate
+	uv run pre-commit autoupdate
 
 hooks-run: ## Run all pre-commit hooks on all files
-	pre-commit run --all-files
+	uv run pre-commit run --all-files
 
 secrets-scan: ## Scan for secrets in the codebase
 	@if [ ! -f .secrets.baseline ]; then \
 		echo "Creating new baseline..."; \
-		detect-secrets scan | tee .secrets.baseline; \
+		uv run detect-secrets scan | tee .secrets.baseline; \
 	else \
 		echo "Updating existing baseline..."; \
-		detect-secrets scan --baseline .secrets.baseline; \
+		uv run detect-secrets scan --baseline .secrets.baseline; \
 	fi
 
 secrets-audit: ## Interactively review detected secrets
-	detect-secrets audit .secrets.baseline
+	uv run detect-secrets audit .secrets.baseline
 
+completion: ## Regenerate zsh completion script
+	uv run python scripts/generate-completion.py
+	hal sync
