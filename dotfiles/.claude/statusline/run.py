@@ -6,50 +6,28 @@ import sys
 CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
 
-# https://code.claude.com/docs/en/statusline
-def main():
-    # data looks like this:
-    # {
-    #   "session_id": "aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
-    #   "transcript_path": "/Users/vinta/.claude/projects/-usr-local-hal-9000/aef7701e-07b4-4f44-ab7a-2efd6774a7d2.jsonl",
-    #   "cwd": "/usr/local/hal-9000",
-    #   "model": {
-    #     "id": "claude-opus-4-5-20251101",
-    #     "display_name": "Opus 4.5"
-    #   },
-    #   "workspace": {
-    #     "current_dir": "/usr/local/hal-9000",
-    #     "project_dir": "/usr/local/hal-9000"
-    #   },
-    #   "version": "2.1.7",
-    #   "output_style": {
-    #     "name": "default"
-    #   },
-    #   "cost": {
-    #     "total_cost_usd": 1.43933175,
-    #     "total_duration_ms": 1960009,
-    #     "total_api_duration_ms": 306158,
-    #     "total_lines_added": 7,
-    #     "total_lines_removed": 21
-    #   },
-    #   "context_window": {
-    #     "total_input_tokens": 31202,
-    #     "total_output_tokens": 15917,
-    #     "context_window_size": 200000,
-    #     "current_usage": {
-    #       "input_tokens": 8,
-    #       "output_tokens": 434,
-    #       "cache_creation_input_tokens": 746,
-    #       "cache_read_input_tokens": 32259
-    #     },
-    #     "used_percentage": 17,
-    #     "remaining_percentage": 83
-    #   },
-    #   "exceeds_200k_tokens": false
-    # }
-    data = json.load(sys.stdin)
-    print(f"Current: {data['model']['id']} · {data['workspace']['current_dir']}")
+def basic_info(data):
+    git_branch = ""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=data["workspace"]["current_dir"],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode == 0:
+            git_branch = result.stdout.strip()
+    except Exception:
+        pass
 
+    status_parts = [data["model"]["id"], data["workspace"]["current_dir"]]
+    if git_branch:
+        status_parts.append(git_branch)
+
+    print(f"Current: {' · '.join(status_parts)}")
+
+
+def grammar_check(data):
     # transcript looks like this:
     #
     # {
@@ -71,11 +49,9 @@ def main():
     #   "thinkingMetadata":{
     #     "level":"high",
     #     "disabled":false,
-    #     "triggers":[
-    #     ]
+    #     "triggers":[]
     #   },
-    #   "todos":[
-    #   ]
+    #   "todos":[]
     # }
     #
     # {
@@ -94,7 +70,7 @@ def main():
     #       {
     #         "tool_use_id":"toolu_01Eab6UypSvxcyyoFLbwwaPE",
     #         "type":"tool_result",
-    #         "content":"too long"
+    #         "content":"too long; didn't show"
     #       }
     #     ]
     #   },
@@ -104,7 +80,7 @@ def main():
     #     "type":"text",
     #     "file":{
     #       "filePath":"/usr/local/hal-9000/dotfiles/.claude/statusline/run.py",
-    #       "content":"too long",
+    #       "content":"too long; didn't show",
     #       "numLines":87,
     #       "startLine":1,
     #       "totalLines":87
@@ -219,6 +195,53 @@ Here is the user input: {latest_user_input}
 
     with open(CACHE_FILE, "w") as f:
         json.dump({"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result}, f)
+
+
+# https://code.claude.com/docs/en/statusline
+def main():
+    # data looks like this:
+    # {
+    #   "session_id": "aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
+    #   "transcript_path": "/Users/vinta/.claude/projects/-usr-local-hal-9000/aef7701e-07b4-4f44-ab7a-2efd6774a7d2.jsonl",
+    #   "cwd": "/usr/local/hal-9000",
+    #   "model": {
+    #     "id": "claude-opus-4-5-20251101",
+    #     "display_name": "Opus 4.5"
+    #   },
+    #   "workspace": {
+    #     "current_dir": "/usr/local/hal-9000",
+    #     "project_dir": "/usr/local/hal-9000"
+    #   },
+    #   "version": "2.1.7",
+    #   "output_style": {
+    #     "name": "default"
+    #   },
+    #   "cost": {
+    #     "total_cost_usd": 1.43933175,
+    #     "total_duration_ms": 1960009,
+    #     "total_api_duration_ms": 306158,
+    #     "total_lines_added": 7,
+    #     "total_lines_removed": 21
+    #   },
+    #   "context_window": {
+    #     "total_input_tokens": 31202,
+    #     "total_output_tokens": 15917,
+    #     "context_window_size": 200000,
+    #     "current_usage": {
+    #       "input_tokens": 8,
+    #       "output_tokens": 434,
+    #       "cache_creation_input_tokens": 746,
+    #       "cache_read_input_tokens": 32259
+    #     },
+    #     "used_percentage": 17,
+    #     "remaining_percentage": 83
+    #   },
+    #   "exceeds_200k_tokens": false
+    # }
+    data = json.load(sys.stdin)
+
+    basic_info(data)
+    grammar_check(data)
 
 
 if __name__ == "__main__":
