@@ -15,6 +15,14 @@
   register: python_uv_install
   changed_when: "'Installed' in python_uv_install.stderr"
 
+- name: Create global python symlinks
+  shell: |
+    mkdir -p {{ ansible_facts['env']['HOME'] }}/.local/bin
+    ln -sf $(uv python find) {{ ansible_facts['env']['HOME'] }}/.local/bin/python
+    ln -sf $(uv python find) {{ ansible_facts['env']['HOME'] }}/.local/bin/python3
+  args:
+    executable: /bin/bash
+
 - name: Install global Python tools
   shell: xargs -L1 uv tool install < {{ role_path }}/files/requirements.txt
   args:
