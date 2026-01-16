@@ -61,10 +61,13 @@
       "Bash(wget:*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.claude", "~/.config", "~/Projects"]
+    "additionalDirectories": ["~/.claude", "~/Projects"]
   },
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/run.py"
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
   }
 }
