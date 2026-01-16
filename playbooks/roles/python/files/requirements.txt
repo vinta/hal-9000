@@ -1,3 +1,4 @@
+detect-secrets
 pangu
 pre-commit
 ruff
