@@ -15,7 +15,8 @@
 - Don't speculate when information is missing, ask the user or search the Internet
 - Max 2-3 sentences per explanation point
 - Show code instead of describing them
-- Never use emojis in code, comments, commits, or responses
+- DO NOT summarize what you just did. The code speaks for itself
+- NEVER use emojis in code, comments, commits, or responses
 
 ## Brainstorming Framework
 
