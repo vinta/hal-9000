@@ -108,6 +108,7 @@ def grammar_check(data):
                 isinstance(content, str)
                 and not content.startswith("<command-message>")
                 and not content.startswith("<local-command-caveat>")
+                and not content.startswith("<bash-stdout>")
             ):
                 latest_user_input = content
                 latest_user_uuid = entry.get("uuid", "")
@@ -121,7 +122,7 @@ You are a grammar checker to identify and correct grammar errors in the user inp
 
 ## What to Skip
 
-- Code: text in backticks, file paths, programming syntax
+- Code: text in backticks, file paths, programming syntax, shell commands
 - Mentions: @mentions, @file/path references
 - Capitalization at sentence beginnings
 
