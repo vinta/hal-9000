@@ -4,7 +4,7 @@
 
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
 
-One-command setup for an opinionated macOS development environment.
+Opinionated macOS development environment automation.
 
 Dominating your dev environment like cats rule the Internet.
 
@@ -49,10 +49,12 @@ hal open-the-pod-bay-doors
 
 ## Development
 
-After modifying hal functions, regenerate the zsh completion script:
-
 ```bash
-python scripts/generate-completion.py
+# install dev dependencies and pre-commit hooks
+make install
+
+# after modifying bin/hal, regenerate zsh completion
+make completion
 
 # update local completion
 hal sync
