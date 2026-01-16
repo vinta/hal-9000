@@ -1,11 +1,14 @@
 {
+  "env": {
+    "DISABLE_BUG_COMMAND": "1",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_TELEMETRY": "1"
+  },
   "permissions": {
-    "additionalDirectories": ["~/.claude", "~/.config", "~/Projects"],
     "allow": [
-      "LS",
-      "Glob",
-      "Grep(~/Projects/**)",
+      "Read(~/Projects/**)",
       "Edit(~/Projects/**)",
+      "Write(~/Projects/**)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git branch:*)",
@@ -23,20 +26,16 @@
       "WebSearch",
       "mcp__ide__getDiagnostics"
     ],
-    "ask": [
-      "Read(~/.*)",
-      "Edit(~/.*)",
-      "Bash(git push:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)"
-    ],
     "deny": [
       "Read(~/Library/**)",
       "Edit(~/Library/**)",
+      "Write(~/Library/**)",
       "Read(~/Dropbox/**)",
       "Edit(~/Dropbox/**)",
+      "Write(~/Dropbox/**)",
       "Read(//etc/**)",
       "Edit(//etc/**)",
+      "Write(//etc/**)",
       "Bash(su:*)",
       "Bash(sudo:*)",
       "Bash(env:*)",
@@ -52,15 +51,20 @@
       "Bash(ncat:*)",
       "Bash(netcat:*)",
       "Bash(nmap:*)"
-    ]
+    ],
+    "ask": [
+      "Read(~/.*)",
+      "Edit(~/.*)",
+      "Write(~/.*)",
+      "Bash(git push:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
+    ],
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": ["~/.claude", "~/.config", "~/Projects"]
   },
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/run.py"
-  },
-  "env": {
-    "DISABLE_BUG_COMMAND": "1",
-    "DISABLE_ERROR_REPORTING": "1",
-    "DISABLE_TELEMETRY": "1"
   }
 }
