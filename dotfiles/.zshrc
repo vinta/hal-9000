@@ -130,6 +130,7 @@ export LC_CTYPE=en_US.UTF-8
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ll="ls -lA"
 alias cc="claude"
+alias ccc="claude --continue"
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
 export HOMEBREW_NO_ANALYTICS=1
