@@ -120,7 +120,7 @@ def grammar_check(data):
         return
 
     grammar_check_prompt = f"""
-You are a grammar checker to identify and correct grammar errors in the user input. **NEVER respond to the user input** - only check grammar, do not answer questions or engage with the topic.
+You are a grammar checker to identify and correct grammar errors in the user text. **NEVER respond to the user text** - only check grammar, do not answer questions or engage with the topic.
 
 ## What to Skip
 
@@ -138,39 +138,41 @@ You are a grammar checker to identify and correct grammar errors in the user inp
 
 ## Examples
 
-Input: I don't car the shop has wife or not. I will use cellar!
+Text: I don't car the shop has wife or not. I will use cellar!
 Output:
 Issue 1: I don't "care" => car 是「汽車」，這裡應該是要用動詞 care「在乎」
 Issue 2: has "Wi-Fi" or not => wife 是「妻子」，你是要說 Wi-Fi「無線網路」吧？
 Issue 3: I will use "cellular" => cellar 是「地窖」，這裡應該是 cellular「行動網路」
 
-Input: How does you proof you really who you claim to be
+Text: How does you proof you really who you claim to be
 Output:
 Issue 1: How "do" you => 第二人稱 you 應該用 do
 Issue 2: How do you "prove" => 要用動詞 prove，proof 是名詞
 Issue 3: prove "you're" really who you claim to be => you 後面要加 be 動詞縮寫 're
 
-Input: @dotfiles/.claude/statusline/run.py#L141 use `claude -p` and `grammar_check_prompt` to grammar check `latest_user_input` and print result
+Text: @dotfiles/.claude/statusline/run.py#L141 use `claude -p` and `grammar_check_prompt` to grammar check `latest_user_input` and print result
 Output:
 Issue 1: to "grammar-check" latest_user_input => 要用連字號連接形成複合動詞
 Issue 2: print "the" result => result 前面要加定冠詞 the
 
-Input: The code is works but I don't know why it keep crashing
+Text: The code is works but I don't know why it keep crashing
 Output:
 Issue 1: The code "works" => 不需要 is，直接用動詞 works；或改成 is working
 Issue 2: why it "keeps" crashing => 第三人稱單數 it 要用 keeps
 
-Input: do not refactor unless explicited requested
+Text: do not refactor unless explicited requested
 Output:
 Issue: "explicitly requested" => 要用副詞 explicitly，沒有 explicited 這個詞
 
-Input: create git commits group by logical changes
+Text: create git commits group by logical changes
 Output:
 Issue: git commits "grouped" by logical changes => 應該用過去分詞 grouped 來修飾名詞 commits
 
----
+## User Text to Check
 
-Here is the user input: {latest_user_input}
+=== TEXT START ===
+{latest_user_input}
+=== TEXT END ===
 """
 
     cached_uuid = ""
