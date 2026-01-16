@@ -1,0 +1,28 @@
+---
+# https://github.com/oven-sh/bun
+- name: Install Bun
+  shell: curl -fsSL https://bun.com/install | bash
+  args:
+    creates: "{{ ansible_facts['env']['HOME'] }}/.bun/bin/bun"
+
+- name: Upgrade Bun
+  shell: |
+    export PATH="${HOME}/.bun/bin:$PATH"
+    bun upgrade
+  args:
+    executable: /bin/bash
+
+- name: Install global Bun packages
+  shell: |
+    export PATH="${HOME}/.bun/bin:$PATH"
+    bun install -g pangu
+    bun install -g npm-check-updates
+  args:
+    executable: /bin/bash
+
+- name: Ensure Bun environment is sourced in .zshrc
+  lineinfile:
+    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/bun/files/bun_profile.sh"
+    state: present
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
