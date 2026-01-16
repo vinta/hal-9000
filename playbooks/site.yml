@@ -5,8 +5,10 @@
     - { role: basic, tags: ["basic"] }
     - { role: python, tags: ["python"] }
     - { role: node, tags: ["node"] }
+    - { role: bun, tags: ["bun"] }
     - { role: solidity, tags: ["solidity"] }
     - { role: docker, tags: ["docker"] }
     - { role: kubernetes, tags: ["kubernetes"] }
     - { role: aws, tags: ["aws"] }
     - { role: gcp, tags: ["gcp"] }
+    - { role: ai, tags: ["ai"] }
