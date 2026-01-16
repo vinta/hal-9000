@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import argparse
 import json
 import os
@@ -148,18 +148,18 @@ class HAL9000:
 
     def link(self, namespace, extra_args=None):  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
-        
+
         # Get relative path from home directory
         home = os.path.expanduser("~")
         if filepath.startswith(home):
             relative_path = os.path.relpath(filepath, home)
         else:
             relative_path = os.path.basename(filepath)
-        
+
         # Create destination path preserving directory structure
         dest_path = os.path.join(Setting.DOTFILES_ROOT, relative_path)
         dest_dir = os.path.dirname(dest_path)
-        
+
         # Create directory if it doesn't exist
         if dest_dir != Setting.DOTFILES_ROOT:
             self._run(f"mkdir -p {dest_dir}")
@@ -182,22 +182,22 @@ class HAL9000:
 
     def copy(self, namespace, extra_args=None):  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
-        
+
         # Get relative path from home directory
         home = os.path.expanduser("~")
         if filepath.startswith(home):
             relative_path = os.path.relpath(filepath, home)
         else:
             relative_path = os.path.basename(filepath)
-        
+
         # Create destination path preserving directory structure
         dest_path = os.path.join(Setting.DOTFILES_ROOT, relative_path)
         dest_dir = os.path.dirname(dest_path)
-        
+
         # Create directory if it doesn't exist
         if dest_dir != Setting.DOTFILES_ROOT:
             self._run(f"mkdir -p {dest_dir}")
-        
+
         if self._run(f"cp -f {filepath} {dest_path}") == 0:
             template_dest = filepath.replace(home, "{{HOME}}")
 
