@@ -4,15 +4,14 @@
 
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
 
-Opinionated macOS development environment automation.
-
-Dominating your dev environment like cats rule the Internet.
+Opinionated macOS development environment automation that dominates your dev setup like cats rule the Internet.
 
 ## Development Stack
 
 - [Claude Code](dotfiles/.claude)
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
+- [Bun](playbooks/roles/bun/tasks/main.yml)
 - [Solidity](playbooks/roles/solidity/tasks/main.yml)
 - [Docker](playbooks/roles/docker/tasks/main.yml)
 - [Kubernetes](playbooks/roles/kubernetes/tasks/main.yml)
@@ -32,7 +31,7 @@ curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod
 hal update
 
 # if you only want to install specific components
-hal update --tags docker,kubernetes
+hal update --tags python,node
 
 # add the file to the dotfiles repository (creates symlink)
 hal link ~/.zshrc
