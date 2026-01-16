@@ -1,0 +1,16 @@
+[project]
+name = "hal-9000"
+version = "0.1.0"
+description = "Opinionated macOS development environment automation"
+authors = [{ name = "Vinta Chen", email = "vinta.chen@gmail.com" }]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.urls]
+Homepage = "https://vinta.ws/code/"
+Repository = "https://github.com/vinta/hal-9000"
+
+[project.optional-dependencies]
+dev = ["argcomplete>=3.6.3", "detect-secrets>=1.5.0", "pre-commit>=4.5.1"]
