@@ -4,7 +4,7 @@
 
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
 
-Automatically setup a productive development environment with Ansible on macOS.
+One-command setup for an opinionated macOS development environment.
 
 Dominating your dev environment like cats rule the Internet.
 
@@ -28,8 +28,10 @@ curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod
 ## Usage
 
 ```bash
-# pull the repo and run ansible-playbook
+# all you need is hal update
 hal update
+
+# if you only want to install specific components
 hal update --tags docker,kubernetes
 
 # add the file to the dotfiles repository (creates symlink)
