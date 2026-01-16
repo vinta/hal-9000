@@ -8,12 +8,12 @@
 - name: Download Docker.dmg
   get_url:
     url: "https://desktop.docker.com/mac/main/{{ ansible_machine }}/Docker.dmg"
-    dest: "{{ ansible_env.HOME }}/Downloads/Docker.dmg"
+    dest: "{{ ansible_facts['env']['HOME'] }}/Downloads/Docker.dmg"
     mode: "0644"
   when: not docker_app.stat.exists
 
 - name: Mount Docker.dmg
-  command: hdiutil attach "{{ ansible_env.HOME }}/Downloads/Docker.dmg" -nobrowse -quiet
+  command: hdiutil attach "{{ ansible_facts['env']['HOME'] }}/Downloads/Docker.dmg" -nobrowse -quiet
   when: not docker_app.stat.exists
   register: docker_mount_result
   changed_when: docker_mount_result.rc == 0

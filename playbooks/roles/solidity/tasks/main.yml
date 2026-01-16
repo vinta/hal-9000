@@ -3,16 +3,16 @@
 - name: Download foundryup
   shell: sh -c "curl -L https://foundry.paradigm.xyz | bash"
   args:
-    creates: "{{ ansible_env.HOME }}/.foundry/bin/foundryup"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.foundry/bin/foundryup"
 
 - name: Install foundry
   shell: sh -c "$HOME/.foundry/bin/foundryup"
   args:
-    creates: "{{ ansible_env.HOME }}/.foundry/bin/forge"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.foundry/bin/forge"
 
 - name: Ensure Solidity environment is sourced in .zshrc
   lineinfile:
     dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/solidity/files/sol_profile.sh"
     state: present
-  when: ansible_env.SHELL == "/bin/zsh"
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"

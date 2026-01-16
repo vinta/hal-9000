@@ -4,20 +4,20 @@
   unarchive:
     src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-darwin-arm.tar.gz
     remote_src: true
-    dest: "{{ ansible_env.HOME }}/"
-    creates: "{{ ansible_env.HOME }}/.google-cloud-sdk"
+    dest: "{{ ansible_facts['env']['HOME'] }}/"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk"
 
 - name: Rename
-  command: mv {{ ansible_env.HOME }}/google-cloud-sdk {{ ansible_env.HOME }}/.google-cloud-sdk
+  command: mv {{ ansible_facts['env']['HOME'] }}/google-cloud-sdk {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk
   args:
-    creates: "{{ ansible_env.HOME }}/.google-cloud-sdk"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk"
 
 - name: Install gcloud components
-  command: "{{ ansible_env.HOME }}/.google-cloud-sdk/bin/gcloud components install gke-gcloud-auth-plugin"
+  command: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk/bin/gcloud components install gke-gcloud-auth-plugin"
   register: gcp_command_result
   changed_when: "'All components are up to date' not in gcp_command_result.stderr"
 
 - name: Update gcloud components
-  shell: yes 'y' | {{ ansible_env.HOME }}/.google-cloud-sdk/bin/gcloud components update
+  shell: yes 'y' | {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk/bin/gcloud components update
   register: gcp_command_result
   changed_when: "'All components are up to date' not in gcp_command_result.stderr"
