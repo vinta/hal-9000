@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import json
+import shlex
 import subprocess
 import sys
+import time
 
 CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
@@ -165,6 +167,7 @@ Issue: "explicitly requested" => 要用副詞 explicitly，沒有 explicited 這
 Input: create git commits group by logical changes
 Output:
 Issue: git commits "grouped" by logical changes => 應該用過去分詞 grouped 來修飾名詞 commits
+
 ---
 
 Here is the user input: {latest_user_input}
@@ -185,17 +188,33 @@ Here is the user input: {latest_user_input}
             print(cached_result)
         return
 
+    cmd = """
+        claude
+        --model sonnet
+        --max-turns 1
+        --tools ""
+        --no-chrome
+        --no-session-persistence
+        --disable-slash-commands
+        --print
+    """
+
+    start_time = time.time()
     result = subprocess.run(
-        ["claude", "--model", "sonnet", "-p", grammar_check_prompt],
+        shlex.split(cmd) + [grammar_check_prompt],
         capture_output=True,
         text=True,
     )
+    elapsed = time.time() - start_time
+
     grammar_check_result = result.stdout.strip()
     if grammar_check_result:
         print(grammar_check_result)
 
     with open(CACHE_FILE, "w") as f:
-        json.dump({"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result}, f)
+        json.dump(
+            {"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result, "elapsed": elapsed}, f
+        )
 
 
 # https://code.claude.com/docs/en/statusline
