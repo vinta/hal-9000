@@ -14,6 +14,7 @@ allowed-tools:
   - Bash(git log:*)
   - Bash(git stash:*)
   - Bash(git add:*)
+  - Bash(git restore:*)
   - Bash(git mv:*)
   - Bash(git rm:*)
   - Bash(git apply:*)
@@ -43,14 +44,25 @@ Creating clean, atomic commits that follow best practices for version control hy
    - Addresses a single purpose or problem
    - Structure changes to be atomic and easily revertable for safe rollback
    - Would make sense to revert as a unit
-   - For hunk-by-hunk staging: `git diff <file> > /tmp/patch.diff`, edit the patch to keep only specific hunks, then `git apply --cached /tmp/patch.diff`
 
-3. **Create Atomic Commits**: For each logical group:
+3. **Stage Changes**: Use appropriate staging strategy:
+
+   - Whole file: `git add <file>`
+   - Hunk-by-hunk: `git diff <file> > /tmp/patch.diff`, edit the patch to keep only specific hunks, then `git apply --cached /tmp/patch.diff`
+   - NEVER use `git reset` to unstage - use `git restore --staged` if needed
+
+4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes:
+
+   - Stash unstaged changes first: `git stash push -p -m "temp: unstaged changes"` (select hunks to stash)
+   - Or stash all unstaged: `git stash push --keep-index -m "temp: unstaged changes"`
+   - Commit, then restore: `git stash pop`
+
+5. **Create Atomic Commits**: For each logical group:
 
    - Write clear, descriptive commit messages following conventional format
    - Keep first line under 50 characters
    - Include context in body when necessary
-   - IMPORTANT: DO NOT run any linter/formatter before commiting. You should commit what exactly user changed
+   - IMPORTANT: DO NOT run any linter/formatter before committing. Commit exactly what the user changed
 
 ## Rules
 
