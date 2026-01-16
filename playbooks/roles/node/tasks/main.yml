@@ -3,7 +3,7 @@
 - name: Install nvm
   shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
   args:
-    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.nvm/nvm.sh"
 
 # https://nodejs.org/en/about/previous-releases
 - name: Install Node.js 24.11.1
@@ -51,4 +51,4 @@
     dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/node/files/node_profile.sh"
     state: present
-  when: ansible_env.SHELL == "/bin/zsh"
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"

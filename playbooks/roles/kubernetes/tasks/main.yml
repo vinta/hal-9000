@@ -34,4 +34,4 @@
     dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/kubernetes/files/k8s_profile.sh"
     state: present
-  when: ansible_env.SHELL == "/bin/zsh"
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
