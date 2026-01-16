@@ -1,0 +1,24 @@
+---
+# https://github.com/anthropics/claude-code
+- name: Install Claude Code
+  shell: curl -fsSL https://claude.ai/install.sh | bash
+  args:
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/claude"
+
+# https://github.com/openai/codex
+- name: Install Codex
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install -g @openai/codex
+  args:
+    executable: /bin/bash
+
+# https://github.com/google-gemini/gemini-cli
+- name: Install Gemini CLI
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install -g @google/gemini-cli
+  args:
+    executable: /bin/bash
