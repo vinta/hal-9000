@@ -34,15 +34,12 @@
   args:
     executable: /bin/bash
 
-- name: Install Node.js packages
+- name: Install global Node.js packages
   shell: |
     export NVM_DIR="${HOME}/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     npm install -g pangu
     npm install -g npm-check-updates
-    npm install -g @anthropic-ai/claude-code
-    npm install -g @openai/codex
-    npm install -g @google/gemini-cli
   args:
     executable: /bin/bash
 
