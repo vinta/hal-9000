@@ -32,6 +32,8 @@ Creating clean, atomic commits that follow best practices for version control hy
 
 ## Instructions
 
+**ALWAYS `cd` to project root before git commands. NEVER use `git -C`.**
+
 1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory. Categorize changes by:
    - STRUCTURAL: Code reorganization, renaming, refactoring without behavior changes
    - BEHAVIORAL: New features, bug fixes, functionality changes
