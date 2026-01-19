@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Create git commits so each reflects a logically distinct change
+description: Use when creating git commits so each reflects a logically distinct change
 allowed-tools:
   - Grep
   - Glob
@@ -33,32 +33,27 @@ Creating clean, atomic commits that follow best practices for version control hy
 ## Instructions
 
 1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory. Categorize changes by:
-
    - STRUCTURAL: Code reorganization, renaming, refactoring without behavior changes
    - BEHAVIORAL: New features, bug fixes, functionality changes
    - DOCUMENTATION: README updates, comment changes, documentation files
    - CONFIGURATION: Build files, dependencies, environment settings
 
 2. **Group Logically**: Organize changes into logical units where each unit:
-
    - Addresses a single purpose or problem
    - Structure changes to be atomic and easily revertable for safe rollback
    - Would make sense to revert as a unit
 
 3. **Stage Changes**: Use appropriate staging strategy:
-
    - Whole file: `git add <file>`
    - Hunk-by-hunk: `git diff <file> > /tmp/patch.diff`, edit the patch to keep only specific hunks, then `git apply --cached /tmp/patch.diff`
    - NEVER use `git reset` to unstage - use `git restore --staged` if needed
 
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes:
-
    - Stash unstaged changes first: `git stash push -p -m "temp: unstaged changes"` (select hunks to stash)
    - Or stash all unstaged: `git stash push --keep-index -m "temp: unstaged changes"`
    - Commit, then restore: `git stash pop`
 
 5. **Create Atomic Commits**: For each logical group:
-
    - Write clear, descriptive commit messages following conventional format
    - Keep first line under 50 characters
    - Include context in body when necessary
@@ -67,7 +62,7 @@ Creating clean, atomic commits that follow best practices for version control hy
 ## Rules
 
 - Execute `git` commands directly without explanatory preamble
-- Change directory to project root before any git operation (never use `git -C`)
+- Change directory to project root before any git operation (NEVER use `git -C`)
 - Request clarification when encountering conflicts or ambiguous changes
 - Commit immediately without confirmation prompts (never use interactive mode)
 
