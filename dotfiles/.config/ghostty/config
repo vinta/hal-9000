@@ -1,3 +1,10 @@
+# https://ghostty.org/docs/config/reference
+
 theme = Bluloco Dark
 
 maximize = true
+
+cursor-style = bar
+cursor-style-blink = false
+
+shell-integration-features = no-cursor
