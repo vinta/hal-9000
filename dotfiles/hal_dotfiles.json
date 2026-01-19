@@ -39,6 +39,10 @@
       "src": ".gitignore_global"
     },
     {
+      "dest": "{{HOME}}/.config/ghostty/config",
+      "src": ".config/ghostty/config"
+    },
+    {
       "dest": "{{HOME}}/.claude/settings.json",
       "src": ".claude/settings.json"
     },
