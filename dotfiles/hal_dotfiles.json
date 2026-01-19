@@ -19,10 +19,6 @@
     {
       "dest": "{{HOME}}/.claude/CLAUDE.md",
       "src": ".claude/CLAUDE.md"
-    },
-    {
-      "dest": "{{HOME}}/.codex/config.toml",
-      "src": ".codex/config.toml"
     }
   ],
   "links": [
@@ -49,6 +45,14 @@
     {
       "dest": "{{HOME}}/.claude/statusline/run.py",
       "src": ".claude/statusline/run.py"
+    },
+    {
+      "dest": "{{HOME}}/.codex/config.toml",
+      "src": ".codex/config.toml"
+    },
+    {
+      "dest": "{{HOME}}/.gemini/settings.json",
+      "src": ".gemini/settings.json"
     }
   ]
 }
