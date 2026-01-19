@@ -1,10 +1,15 @@
+# Reference of all Ghostty configuration options
 # https://ghostty.org/docs/config/reference
 
+# https://ghostty.org/docs/config/reference#theme
 theme = Bluloco Dark
 
+# https://ghostty.org/docs/config/reference#maximize
 maximize = true
 
+# https://ghostty.org/docs/config/reference#cursor-style
 cursor-style = bar
 cursor-style-blink = false
 
+# https://ghostty.org/docs/config/reference#shell-integration-features
 shell-integration-features = no-cursor
