@@ -1,9 +1,9 @@
-model = "gpt-5-codex"
-# model_reasoning_effort = "high"
-
 approval_policy = "on-failure"
 sandbox_mode = "workspace-write"
 
 [sandbox_workspace_write]
 writable_roots = ["/Users/vinta/Projects"]
 network_access = true
+
+[features]
+web_search_request = true
