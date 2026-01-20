@@ -7,8 +7,8 @@
   "permissions": {
     "allow": [
       "Read(~/Projects/**)",
-      "Edit(~/Projects/**)",
       "Write(~/Projects/**)",
+      "Edit(~/Projects/**)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git branch:*)",
@@ -28,14 +28,14 @@
     ],
     "deny": [
       "Read(~/Library/**)",
-      "Edit(~/Library/**)",
       "Write(~/Library/**)",
+      "Edit(~/Library/**)",
       "Read(~/Dropbox/**)",
-      "Edit(~/Dropbox/**)",
       "Write(~/Dropbox/**)",
+      "Edit(~/Dropbox/**)",
       "Read(//etc/**)",
-      "Edit(//etc/**)",
       "Write(//etc/**)",
+      "Edit(//etc/**)",
       "Bash(su:*)",
       "Bash(sudo:*)",
       "Bash(env:*)",
@@ -54,8 +54,8 @@
     ],
     "ask": [
       "Read(~/.*)",
-      "Edit(~/.*)",
       "Write(~/.*)",
+      "Edit(~/.*)",
       "Bash(git push:*)",
       "Bash(curl:*)",
       "Bash(wget:*)"
