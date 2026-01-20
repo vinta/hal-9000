@@ -1,13 +1,12 @@
 ---
 name: commit
-description: Use when creating git commits so each reflects a logically distinct change
+description: Use when creating git commits. Groups changes into atomic, single-purpose commits.
 allowed-tools:
   - Grep
   - Glob
-  - LS
   - Read
+  - Write
   - Edit
-  - TodoWrite
   - Bash(git status:*)
   - Bash(git diff:*)
   - Bash(git branch:*)
@@ -19,8 +18,9 @@ allowed-tools:
   - Bash(git rm:*)
   - Bash(git apply:*)
   - Bash(git commit:*)
-  - Read(/tmp/**)
-  - Edit(/tmp/**)
+  - Read(//tmp/**)
+  - Write(//tmp/**)
+  - Edit(//tmp/**)
 context: fork
 user-invocable: true
 model: sonnet
@@ -32,7 +32,7 @@ Creating clean, atomic commits that follow best practices for version control hy
 
 ## Instructions
 
-**ALWAYS `cd` to project root before git commands. NEVER use `git -C`.**
+**ALWAYS `cd` to project root before git commands. NEVER use `git -C`.** Execute git commands directly without explanatory preamble. Commit immediately without confirmation prompts (never use interactive mode).
 
 1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory. Categorize changes by:
    - STRUCTURAL: Code reorganization, renaming, refactoring without behavior changes
@@ -60,13 +60,6 @@ Creating clean, atomic commits that follow best practices for version control hy
    - Keep first line under 50 characters
    - Include context in body when necessary
    - IMPORTANT: DO NOT run any linter/formatter before committing. Commit exactly what the user changed
-
-## Rules
-
-- Execute `git` commands directly without explanatory preamble
-- Change directory to project root before any git operation (NEVER use `git -C`)
-- Request clarification when encountering conflicts or ambiguous changes
-- Commit immediately without confirmation prompts (never use interactive mode)
 
 ## Attribution
 
