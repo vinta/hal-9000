@@ -24,7 +24,12 @@ const COMMANDS: Command[] = [
   {
     cmd: "hal link ~/.zshrc",
     description: "Symlink dotfiles to version control",
-    delay: 1.5,
+    delay: 1,
+  },
+  {
+    cmd: "hal copy ~/.claude/CLAUDE.md",
+    description: "Copy dotfiles to version control",
+    delay: 2,
   },
   {
     cmd: "hal sync",
