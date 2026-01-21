@@ -1,6 +1,6 @@
 ![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/HAL_9000.jpg "HAL 9000")
 
-https://github.com/user-attachments/assets/hal-9000-video.mp4
+<video src="https://github.com/user-attachments/assets/REPLACE_WITH_UPLOADED_VIDEO_ID" width="960" height="540"></video>
 
 # HAL 9000
 
