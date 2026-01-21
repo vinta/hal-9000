@@ -68,7 +68,7 @@ export const IntroScene: React.FC = () => {
 
       {/* HAL 9000 eye */}
       <Img
-        src={staticFile("HAL_9000.jpg")}
+        src={staticFile("hal-9000.jpg")}
         style={{
           width: 280,
           height: 280,
