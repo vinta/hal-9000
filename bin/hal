@@ -227,7 +227,7 @@ class HAL9000:
     def open_the_pod_bay_doors(self, namespace, extra_args=None):  # noqa: ARG002
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
-        filepath = os.path.join(Setting.PROJECT_ROOT, "assets/Im_sorry_Dave_Im_afraid_I_cant_do_that.mp3")
+        filepath = os.path.join(Setting.PROJECT_ROOT, "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3")
         self._run(f"afplay {filepath}", verbose=False)
 
     def read_lips(self):
