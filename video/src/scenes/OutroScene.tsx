@@ -75,7 +75,7 @@ export const OutroScene: React.FC = () => {
 
       {/* HAL eye */}
       <Img
-        src={staticFile("HAL_9000.jpg")}
+        src={staticFile("hal-9000.jpg")}
         style={{
           width: 200,
           height: 200,
