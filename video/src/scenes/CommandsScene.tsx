@@ -1,3 +1,4 @@
+import { loadFont } from "@remotion/google-fonts/SpaceMono";
 import {
   AbsoluteFill,
   interpolate,
@@ -5,7 +6,6 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { loadFont } from "@remotion/google-fonts/SpaceMono";
 
 const { fontFamily } = loadFont();
 
