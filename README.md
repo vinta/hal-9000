@@ -60,3 +60,7 @@ make completion
 # update local completion
 hal sync
 ```
+
+## Demo
+
+<video src="https://github.com/user-attachments/assets/e86ead6d-189b-4361-a98b-4453ac0e8c25" width="800" height="450"></video>
