@@ -1,5 +1,7 @@
 ![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/HAL_9000.jpg "HAL 9000")
 
+https://github.com/user-attachments/assets/hal-9000-video.mp4
+
 # HAL 9000
 
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
