@@ -15,8 +15,8 @@ export const IntroScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // HAL eye fade in
-  const eyeOpacity = interpolate(frame, [0, 1 * fps], [0, 1], {
+  // HAL eye fade in (start visible for thumbnail)
+  const eyeOpacity = interpolate(frame, [0, 0.5 * fps], [0.8, 1], {
     extrapolateRight: "clamp",
   });
 
