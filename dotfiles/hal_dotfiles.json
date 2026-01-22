@@ -13,8 +13,12 @@
       "src": ".claude/commands/"
     },
     {
-      "dest": "{{HOME}}/.claude/skills/",
-      "src": ".claude/skills/"
+      "dest": "{{HOME}}/.claude/skills/commit/",
+      "src": ".claude/skills/commit/"
+    },
+    {
+      "dest": "{{HOME}}/.claude/skills/understand-codebase/",
+      "src": ".claude/skills/understand-codebase/"
     },
     {
       "dest": "{{HOME}}/.claude/CLAUDE.md",
