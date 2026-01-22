@@ -5,14 +5,6 @@
       "src": ".hal_completion.zsh"
     },
     {
-      "dest": "{{HOME}}/.claude/agents/",
-      "src": ".claude/agents/"
-    },
-    {
-      "dest": "{{HOME}}/.claude/commands/",
-      "src": ".claude/commands/"
-    },
-    {
       "dest": "{{HOME}}/.claude/skills/commit/",
       "src": ".claude/skills/commit/"
     },
