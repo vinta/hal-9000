@@ -236,7 +236,7 @@ class HAL9000:
             dest_dir = os.path.dirname(dest)
 
             if os.path.lexists(dest) and os.path.isdir(dest):
-                self._run(f"rm -rf {dest.rstrip('/')}")
+                self._run(f"rm -rf {dest.rstrip('/')}", verbose=False)
             if os.path.isdir(src):
                 shutil.copytree(src, dest)
             else:
