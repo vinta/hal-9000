@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 
@@ -213,16 +214,34 @@ class HAL9000:
 
     def sync(self, namespace, extra_args=None):  # noqa: ARG002
         for link in self.dotfiles.data["links"]:
+            src = os.path.join(Setting.DOTFILES_ROOT, link["src"])
+            if not os.path.exists(src):
+                self._hal_says(f"not found {src}")
+                continue
+
             dest = self._expand_template(link["dest"])
             dest_dir = os.path.dirname(dest)
-            self._run(f"mkdir -p {dest_dir}")
-            self._run(f"ln -sfn {os.path.join(Setting.DOTFILES_ROOT, link['src'])} {dest}")
+
+            os.makedirs(dest_dir, exist_ok=True)
+            self._run(f"ln -sfn {src} {dest}", verbose=False)
+            self._hal_says(f"link {src} -> {dest}")
 
         for copy in self.dotfiles.data["copies"]:
+            src = os.path.join(Setting.DOTFILES_ROOT, copy["src"])
+            if not os.path.exists(src):
+                self._hal_says(f"not found {src}")
+                continue
+
             dest = self._expand_template(copy["dest"])
             dest_dir = os.path.dirname(dest)
-            self._run(f"mkdir -p {dest_dir}")
-            self._run(f"cp -rf {os.path.join(Setting.DOTFILES_ROOT, copy['src'])} {dest}")
+
+            if os.path.lexists(dest) and os.path.isdir(dest):
+                self._run(f"rm -rf {dest.rstrip('/')}")
+            if os.path.isdir(src):
+                shutil.copytree(src, dest)
+            else:
+                shutil.copy2(src, dest)
+            self._hal_says(f"copy {src} -> {dest}")
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):  # noqa: ARG002
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
