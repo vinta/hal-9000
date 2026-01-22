@@ -4,9 +4,6 @@ description: Use when creating git commits. Groups changes into atomic, single-p
 allowed-tools:
   - Grep
   - Glob
-  - Read
-  - Write
-  - Edit
   - Bash(git status:*)
   - Bash(git diff:*)
   - Bash(git branch:*)
@@ -66,6 +63,6 @@ Creating clean, atomic commits that follow best practices for version control hy
 Include in every commit:
 
 ```
-🤖 Generated with Claude Code (https://claude.ai/code)
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
