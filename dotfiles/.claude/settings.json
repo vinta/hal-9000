@@ -50,7 +50,12 @@
       "Bash(nc:*)",
       "Bash(ncat:*)",
       "Bash(netcat:*)",
-      "Bash(nmap:*)"
+      "Bash(nmap:*)",
+      "Bash(eval:*)",
+      "Bash(exec:*)",
+      "Bash(security:*)",
+      "Bash(defaults:*)",
+      "Bash(launchctl:*)"
     ],
     "ask": [
       "Read(~/.*)",
