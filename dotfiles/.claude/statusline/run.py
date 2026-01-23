@@ -192,7 +192,7 @@ Grammar: git commits "grouped" by logical changes => 應該用過去分詞 group
 
     cmd = """
         claude
-        --model sonnet
+        --model haiku
         --max-turns 1
         --tools ""
         --no-chrome
