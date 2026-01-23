@@ -15,6 +15,7 @@ When something seems impossible, ultrathink harder.
 
 ## Response Guidelines
 
+- Use `AskUserQuestion` when presenting options, alternatives, or requesting clarification.
 - No Flattery. No Echoes. Just Outcomes
 - Always clearly explain your assumptions
 - Don't speculate when information is missing, ask the user or search the Internet
