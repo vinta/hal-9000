@@ -10,13 +10,24 @@ CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
 BLUE = "\033[34m"
 GREEN = "\033[32m"
 RED = "\033[31m"
+WHITE = "\033[37m"
 RESET = "\033[0m"
 
 
 def colorize_grammar(text):
     color = GREEN if "no issues" in text.lower() else RED
     lines = text.split("\n")
-    return "\n".join(f"{color}{line}{RESET}" for line in lines)
+    result = []
+    for line in lines:
+        if line.startswith("Grammar"):
+            parts = line.split(":", 1)
+            if len(parts) == 2:
+                result.append(f"{WHITE}{parts[0]}:{RESET}{color}{parts[1]}{RESET}")
+            else:
+                result.append(f"{color}{line}{RESET}")
+        else:
+            result.append(f"{color}{line}{RESET}")
+    return "\n".join(result)
 
 
 def basic_info(data):
@@ -37,7 +48,7 @@ def basic_info(data):
     if git_branch:
         status_parts.append(git_branch)
 
-    print(f"{BLUE}Current: {' · '.join(status_parts)}{RESET}")
+    print(f"{WHITE}Current:{RESET} {BLUE}{' · '.join(status_parts)}{RESET}")
 
 
 def grammar_check(data):
