@@ -152,7 +152,7 @@ Grammar 3: prove "you're" really who you claim to be => you 後面要加 be 動�
 
 Text: @dotfiles/.claude/statusline/run.py#L141 use `claude -p` and `grammar_check_prompt` to grammar check `latest_user_input` and print result
 Output:
-Grammar 1: to "grammar-check" latest_user_input => 要用連字號連接形成複合動詞
+Grammar 1: to "grammar-check" latest_user_input => 要用連字號 "-" 連接形成複合動詞
 Grammar 2: print "the" result => result 前面要加定冠詞 the
 
 Text: The code is works but I don't know why it keep crashing
@@ -167,6 +167,16 @@ Grammar: "explicitly requested" => 要用副詞 explicitly，沒有 explicited �
 Text: create git commits group by logical changes
 Output:
 Grammar: git commits "grouped" by logical changes => 應該用過去分詞 grouped 來修飾名詞 commits
+
+Text: should I use Tech Stack or Development Stack? or anything else?
+Output:
+Grammar: Should I use "Tech Stack" or "Development Stack"? => 加個雙引號會比較好區分
+
+Text: Wait, i seems broke it. check codebase again
+Output:
+Grammar 1: "I" seems => 代名詞 I 永遠要大寫
+Grammar 2: I "seem to have broken" it => 用 seem to have + 過去分詞表示「好像已經...」
+Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 
 ## User Text to Check
 
