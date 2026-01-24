@@ -53,66 +53,6 @@ def basic_info(data):
 
 
 def grammar_check(data):
-    # transcript looks like this:
-    #
-    # {
-    #   "parentUuid":"0bf72657-8b71-44c6-8f0f-322130c5023d",
-    #   "isSidechain":false,
-    #   "userType":"external",
-    #   "cwd":"/usr/local/hal-9000",
-    #   "sessionId":"aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
-    #   "version":"2.1.7",
-    #   "gitBranch":"feature/statusline-grammar-check",
-    #   "slug":"zany-plotting-elephant",
-    #   "type":"user",
-    #   "message":{
-    #     "role":"user",
-    #     "content":"No, do that in the python script. "
-    #   },
-    #   "uuid":"2ec47d1e-3a0f-49aa-a782-c300698f7c85",
-    #   "timestamp":"2026-01-15T04:08:36.995Z",
-    #   "thinkingMetadata":{
-    #     "level":"high",
-    #     "disabled":false,
-    #     "triggers":[]
-    #   },
-    #   "todos":[]
-    # }
-    #
-    # {
-    #   "parentUuid":"dc8f83b6-d0c2-497a-a2ed-5ebe79c7f1e4",
-    #   "isSidechain":false,
-    #   "userType":"external",
-    #   "cwd":"/usr/local/hal-9000",
-    #   "sessionId":"aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
-    #   "version":"2.1.7",
-    #   "gitBranch":"feature/statusline-grammar-check",
-    #   "slug":"zany-plotting-elephant",
-    #   "type":"user",
-    #   "message":{
-    #     "role":"user",
-    #     "content":[
-    #       {
-    #         "tool_use_id":"toolu_01Eab6UypSvxcyyoFLbwwaPE",
-    #         "type":"tool_result",
-    #         "content":"too long; didn't show"
-    #       }
-    #     ]
-    #   },
-    #   "uuid":"53003078-9aeb-40bb-b466-c4db8caf87a5",
-    #   "timestamp":"2026-01-15T04:13:07.133Z",
-    #   "toolUseResult":{
-    #     "type":"text",
-    #     "file":{
-    #       "filePath":"/usr/local/hal-9000/dotfiles/.claude/statusline/run.py",
-    #       "content":"too long; didn't show",
-    #       "numLines":87,
-    #       "startLine":1,
-    #       "totalLines":87
-    #     }
-    #   },
-    #   "sourceToolAssistantUUID":"dc8f83b6-d0c2-497a-a2ed-5ebe79c7f1e4"
-    # }
     transcript_path = data.get("transcript_path")
     if not transcript_path:
         return
@@ -254,45 +194,6 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 
 # https://code.claude.com/docs/en/statusline
 def main():
-    # data looks like this:
-    # {
-    #   "session_id": "aef7701e-07b4-4f44-ab7a-2efd6774a7d2",
-    #   "transcript_path": "/Users/vinta/.claude/projects/-usr-local-hal-9000/aef7701e-07b4-4f44-ab7a-2efd6774a7d2.jsonl",
-    #   "cwd": "/usr/local/hal-9000",
-    #   "model": {
-    #     "id": "claude-opus-4-5-20251101",
-    #     "display_name": "Opus 4.5"
-    #   },
-    #   "workspace": {
-    #     "current_dir": "/usr/local/hal-9000",
-    #     "project_dir": "/usr/local/hal-9000"
-    #   },
-    #   "version": "2.1.7",
-    #   "output_style": {
-    #     "name": "default"
-    #   },
-    #   "cost": {
-    #     "total_cost_usd": 1.43933175,
-    #     "total_duration_ms": 1960009,
-    #     "total_api_duration_ms": 306158,
-    #     "total_lines_added": 7,
-    #     "total_lines_removed": 21
-    #   },
-    #   "context_window": {
-    #     "total_input_tokens": 31202,
-    #     "total_output_tokens": 15917,
-    #     "context_window_size": 200000,
-    #     "current_usage": {
-    #       "input_tokens": 8,
-    #       "output_tokens": 434,
-    #       "cache_creation_input_tokens": 746,
-    #       "cache_read_input_tokens": 32259
-    #     },
-    #     "used_percentage": 17,
-    #     "remaining_percentage": 83
-    #   },
-    #   "exceeds_200k_tokens": false
-    # }
     data = json.load(sys.stdin)
 
     basic_info(data)
