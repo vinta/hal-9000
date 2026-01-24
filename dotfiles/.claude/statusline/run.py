@@ -7,6 +7,16 @@ import time
 
 CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
+GREEN = "\033[32m"
+RED = "\033[31m"
+RESET = "\033[0m"
+
+
+def colorize_grammar(text):
+    color = GREEN if "no issues" in text.lower() else RED
+    lines = text.split("\n")
+    return "\n".join(f"{color}{line}{RESET}" for line in lines)
+
 
 def basic_info(data):
     git_branch = ""
@@ -197,7 +207,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 
     if cached_uuid == latest_user_uuid:
         if cached_result:
-            print(cached_result)
+            print(colorize_grammar(cached_result))
         return
 
     cmd = """
@@ -221,7 +231,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 
     grammar_check_result = result.stdout.strip()
     if grammar_check_result:
-        print(grammar_check_result)
+        print(colorize_grammar(grammar_check_result))
 
     with open(CACHE_FILE, "w") as f:
         json.dump(
