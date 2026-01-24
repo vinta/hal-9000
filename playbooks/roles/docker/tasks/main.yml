@@ -1,29 +1,7 @@
 ---
-# https://docs.docker.com/desktop/setup/install/mac-install/#install-from-the-command-line
-- name: Check if Docker Desktop is installed
-  stat:
-    path: /Applications/Docker.app
-  register: docker_app
-
-- name: Download Docker.dmg
-  get_url:
-    url: "https://desktop.docker.com/mac/main/{{ ansible_machine }}/Docker.dmg"
-    dest: "{{ ansible_facts['env']['HOME'] }}/Downloads/Docker.dmg"
-    mode: "0644"
-  when: not docker_app.stat.exists
-
-- name: Mount Docker.dmg
-  command: hdiutil attach "{{ ansible_facts['env']['HOME'] }}/Downloads/Docker.dmg" -nobrowse -quiet
-  when: not docker_app.stat.exists
-  register: docker_mount_result
-  changed_when: docker_mount_result.rc == 0
-
-- name: Copy Docker.app to Applications
-  command: cp -R /Volumes/Docker/Docker.app /Applications/
-  when: not docker_app.stat.exists
-  changed_when: true
-
-- name: Unmount Docker.dmg
-  command: hdiutil detach /Volumes/Docker -quiet
-  when: not docker_app.stat.exists
-  changed_when: true
+# https://orbstack.dev/
+- name: Install OrbStack
+  homebrew:
+    name:
+      - orbstack
+    state: present
