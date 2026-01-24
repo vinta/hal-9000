@@ -1,21 +1,19 @@
 ![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/hal-9000.jpg "HAL 9000")
 
-<video src="https://github.com/user-attachments/assets/REPLACE_WITH_UPLOADED_VIDEO_ID" width="960" height="540"></video>
-
 # HAL 9000
 
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
 
 Opinionated macOS development environment automation that dominates your dev setup like cats rule the Internet.
 
-## Development Stack
+## Tech Stack
 
 - [Claude Code](dotfiles/.claude)
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
 - [Bun](playbooks/roles/bun/tasks/main.yml)
 - [Solidity](playbooks/roles/solidity/tasks/main.yml)
-- [Docker](playbooks/roles/docker/tasks/main.yml)
+- [Docker](playbooks/roles/docker/tasks/main.yml) (OrbStack)
 - [Kubernetes](playbooks/roles/kubernetes/tasks/main.yml)
 - [Amazon Web Services](playbooks/roles/aws/tasks/main.yml)
 - [Google Cloud](playbooks/roles/gcp/tasks/main.yml)
