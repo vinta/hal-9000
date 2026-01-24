@@ -6,6 +6,8 @@
   },
   "permissions": {
     "allow": [
+      "Glob",
+      "Grep",
       "Read(~/Projects/**)",
       "Write(~/Projects/**)",
       "Edit(~/Projects/**)",
