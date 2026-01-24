@@ -7,6 +7,7 @@ import time
 
 CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
+BLUE = "\033[34m"
 GREEN = "\033[32m"
 RED = "\033[31m"
 RESET = "\033[0m"
@@ -36,7 +37,7 @@ def basic_info(data):
     if git_branch:
         status_parts.append(git_branch)
 
-    print(f"Current: {' · '.join(status_parts)}")
+    print(f"{BLUE}Current: {' · '.join(status_parts)}{RESET}")
 
 
 def grammar_check(data):
