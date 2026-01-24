@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import json
-import os
 import shlex
 import subprocess
 import sys
+import time
 
 CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
@@ -175,46 +175,21 @@ Grammar: git commits "grouped" by logical changes => 應該用過去分詞 group
 === TEXT END ===
 """
 
-    cache = {}
+    cached_uuid = ""
+    cached_result = ""
     try:
         with open(CACHE_FILE, "r") as f:
             cache = json.load(f)
+            cached_uuid = cache.get("uuid", "")
+            cached_result = cache.get("result", "")
     except FileNotFoundError:
         pass
 
-    # Cache hit - show cached result
-    if cache.get("uuid") == latest_user_uuid:
-        if cache.get("result"):
-            print(cache["result"])
-        elif cache.get("pid"):
-            # Check if background process finished
-            pid = cache["pid"]
-            output_file = cache.get("output_file", "")
-            try:
-                os.kill(pid, 0)  # Check if process still running
-                print("Grammar: checking...")
-            except OSError:
-                # Process finished, read result
-                grammar_check_result = ""
-                try:
-                    with open(output_file, "r") as f:
-                        grammar_check_result = f.read().strip()
-                    os.remove(output_file)
-                except FileNotFoundError:
-                    pass
-
-                if grammar_check_result:
-                    print(grammar_check_result)
-
-                cache["result"] = grammar_check_result or "Grammar: no issues"
-                cache.pop("pid", None)
-                cache.pop("output_file", None)
-
-                with open(CACHE_FILE, "w") as f:
-                    json.dump(cache, f)
+    if cached_uuid == latest_user_uuid:
+        if cached_result:
+            print(cached_result)
         return
 
-    # Cache miss - start background check
     cmd = """
         claude
         --model haiku
@@ -226,18 +201,22 @@ Grammar: git commits "grouped" by logical changes => 應該用過去分詞 group
         --print
     """
 
-    output_file = f"/tmp/claude-code-statusline-grammar-check-{latest_user_uuid}.txt"
-    with open(output_file, "w") as f:
-        process = subprocess.Popen(
-            shlex.split(cmd) + [grammar_check_prompt],
-            stdout=f,
-            stderr=subprocess.DEVNULL,
-        )
+    start_time = time.time()
+    result = subprocess.run(
+        shlex.split(cmd) + [grammar_check_prompt],
+        capture_output=True,
+        text=True,
+    )
+    elapsed = time.time() - start_time
+
+    grammar_check_result = result.stdout.strip()
+    if grammar_check_result:
+        print(grammar_check_result)
 
     with open(CACHE_FILE, "w") as f:
-        json.dump({"uuid": latest_user_uuid, "input": latest_user_input, "pid": process.pid, "output_file": output_file}, f)
-
-    print("Grammar: checking...")
+        json.dump(
+            {"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result, "elapsed": elapsed}, f
+        )
 
 
 # https://code.claude.com/docs/en/statusline
