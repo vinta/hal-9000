@@ -48,7 +48,8 @@ def basic_info(data):
     if git_branch:
         status_parts.append(git_branch)
 
-    print(f"{WHITE}Current:{RESET} {BLUE}{' · '.join(status_parts)}{RESET}")
+    separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
+    print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
 
 
 def grammar_check(data):
