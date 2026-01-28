@@ -26,6 +26,8 @@
       "Bash(pwd:*)",
       "Bash(which:*)",
       "WebSearch",
+      "Skill(commit)",
+      "Skill(understand-codebase)",
       "mcp__ide__getDiagnostics"
     ],
     "deny": [
@@ -45,10 +47,8 @@
       "Bash(passwd:*)",
       "Bash(history:*)",
       "Bash(rsync:*)",
-      "Bash(scp:*)",
       "Bash(sftp:*)",
       "Bash(socat:*)",
-      "Bash(ssh:*)",
       "Bash(nc:*)",
       "Bash(ncat:*)",
       "Bash(netcat:*)",
@@ -63,7 +63,6 @@
       "Read(~/.*)",
       "Write(~/.*)",
       "Edit(~/.*)",
-      "Bash(git push:*)",
       "Bash(curl:*)",
       "Bash(wget:*)"
     ],
