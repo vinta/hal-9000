@@ -1,4 +1,7 @@
 {
+  "general": {
+    "enableAutoUpdate": false
+  },
   "privacy": {
     "usageStatisticsEnabled": false
   }
