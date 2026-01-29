@@ -131,6 +131,7 @@ export LC_CTYPE=en_US.UTF-8
 alias ll="ls -lA"
 alias cc="claude"
 alias ccc="claude --continue"
+ccp() { claude --no-chrome --no-session-persistence -p "$*"; }
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
 export HOMEBREW_NO_ANALYTICS=1
