@@ -13,6 +13,10 @@
       "src": ".claude/skills/understand-codebase/"
     },
     {
+      "dest": "{{HOME}}/.claude/skills/update-allowed-tools/",
+      "src": ".claude/skills/update-allowed-tools/"
+    },
+    {
       "dest": "{{HOME}}/.claude/CLAUDE.md",
       "src": ".claude/CLAUDE.md"
     }
