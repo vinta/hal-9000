@@ -71,9 +71,10 @@ def grammar_check(data):
             content = entry["message"]["content"]
             if (
                 isinstance(content, str)
+                and not content.startswith("<bash-stdout>")
                 and not content.startswith("<command-message>")
                 and not content.startswith("<local-command-caveat>")
-                and not content.startswith("<bash-stdout>")
+                and not content.startswith("<local-command-stdout>")
             ):
                 latest_user_input = content
                 latest_user_uuid = entry.get("uuid", "")
