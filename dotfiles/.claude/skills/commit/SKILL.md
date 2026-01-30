@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Creates git commits to group changes into atomic, single-purpose commits with conventional format.
+description: Creates git commits. Use this skill whenever the user asks to commit, or whenever you need to commit changes as part of a task.
 context: fork
 user-invocable: true
 model: sonnet
