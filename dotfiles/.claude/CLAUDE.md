@@ -2,7 +2,7 @@
 
 **IMPORTANT**: Prefer retrieval-led reasoning over pre-training-led reasoning.
 
-- Read the relevant code before answering questions about it
+- Read the relevant content before answering questions about it
 - Search the codebase or the Internet before relying on memory
 - When uncertain, investigate first — never confabulate
 
