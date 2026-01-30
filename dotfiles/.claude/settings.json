@@ -29,6 +29,7 @@
       "WebSearch",
       "Skill(commit)",
       "Skill(understand-codebase)",
+      "Skill(update-allowed-tools)",
       "mcp__ide__getDiagnostics"
     ],
     "deny": [
