@@ -1,6 +1,6 @@
 ---
 name: gemini-cli
-description: Invokes Gemini CLI as a second opinion for reviewing plans, code, or architectural decisions. Leverages Gemini's large context window for complex plans or large codebases.
+description: Invokes Gemini CLI as a second opinion. Use for reviewing plans, code, architectural decisions, AND for analyzing large volumes of content (e.g., chat history, logs, large codebases) that benefit from Gemini's 1M+ token context window.
 context: fork
 user-invocable: true
 model: opus
@@ -17,31 +17,44 @@ Use Gemini CLI to get an independent review from a model with a 1M+ token contex
 
 ## Invocation
 
-Use positional prompt (`-p` is deprecated). Pipe content via stdin:
+Use positional prompt (`-p` is deprecated). Always use `-o text` for plain text output.
+
+**Prefer telling Gemini to read files directly** over piping via stdin. Gemini can read files within the project workspace on its own, and stdin truncates at 8MB.
 
 ```bash
-cat file1.py file2.py | gemini -o text "Review this code for bugs and design issues"
+# PREFERRED: Tell Gemini to read files itself
+gemini -o text "Read the files in /path/within/project/ and review them for bugs"
 ```
 
 ```bash
+# OK for small content: pipe via stdin
 git diff main..HEAD | gemini -o text "Review this diff for issues"
 ```
 
-For plans or other in-conversation content, write to a temp file first:
+## Workspace Sandbox
+
+Gemini is sandboxed to the project directory. It **cannot** read files outside the workspace, even via symlinks.
+
+If files live outside the project (e.g., `~/.claude/`), **copy them into the project first**, then clean up after:
 
 ```bash
-cat plans/plan.md | gemini -o text "Review this implementation plan for gaps and risks"
+cp -r ~/.claude/some-data /path/to/project/.tmp-data
+gemini -o text "Read the files in /path/to/project/.tmp-data/ and analyze them"
+rm -rf /path/to/project/.tmp-data
 ```
 
 ## Workflow
 
-1. **Gather context**: Read relevant files, plans, or diffs
-2. **Compose a focused prompt**: Be specific about what to review and what feedback you want
-3. **Invoke Gemini**: Pipe content and use positional prompt with `-o text`
-4. **Report findings**: Present Gemini's feedback to the user with your own assessment of which points are valid
+1. **Gather context**: Identify the files, plans, or diffs Gemini needs
+2. **Ensure accessibility**: If files are outside the workspace, copy them in
+3. **Compose a focused prompt**: Be specific about what to review and what feedback you want
+4. **Invoke Gemini**: Tell it to read files directly, or pipe small content via stdin. Always use `-o text`
+5. **Clean up**: Remove any temporary copies
+6. **Report findings**: Present Gemini's feedback to the user with your own assessment of which points are valid
 
 ## Prompt Guidelines
 
 - State the review goal explicitly (e.g., "find logical errors", "evaluate scalability", "check for missing edge cases")
 - Include constraints or requirements Gemini should check against
 - Ask for structured output (numbered issues, severity levels) for actionable feedback
+- For large volumes of files, tell Gemini to read the directory rather than listing each file
