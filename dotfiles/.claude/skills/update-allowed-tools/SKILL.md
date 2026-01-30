@@ -5,6 +5,7 @@ allowed-tools:
   - Grep
   - Glob
   - Read
+  - Edit
 context: fork
 user-invocable: true
 disable-model-invocation: true
@@ -13,34 +14,33 @@ model: haiku
 
 # Overview
 
-Analyzes a skill's body content to find tools it references or requires, then compares against that same skill's `allowed-tools` frontmatter to find missing entries.
+Analyzes a skill's full content -- SKILL.md and any sibling files in the same directory -- to find tools it references or requires, then compares against the skill's `allowed-tools` frontmatter to find missing entries.
 
 ## Usage
 
 ```
+/update-allowed-tools <skill name>
 /update-allowed-tools @path/to/SKILL.md
 ```
 
 ## Instructions
 
-1. **Parse argument**: The argument is a file path to a SKILL.md file.
+1. **Parse argument**: The argument is either a file path to a SKILL.md file, or a skill name/description. If no file path is provided, search for the skill using Glob (e.g., `**/skills/**/<name>/SKILL.md`).
 
-2. **Read the skill file** and separate the YAML frontmatter from the body content.
+2. **Read the skill file** and separate the YAML frontmatter from the body content. Also read any other files in the same directory (sibling files referenced by or bundled with the skill).
 
 3. **Extract declared allowed-tools**: Parse all entries under `allowed-tools:` in the frontmatter.
 
-4. **Scan the body content** for tool usage. Look for:
-   - Explicit tool names: `Read`, `Write`, `Edit`, `Glob`, `Grep`, `Bash`, `WebFetch`, `WebSearch`, `Task`, `AskUserQuestion`, `NotebookEdit`, `Skill`
-   - Bash command patterns: any mention of `git status`, `git diff`, `git add`, `git commit`, `git stash`, `git restore`, `git log`, `git branch`, `git mv`, `git rm`, `git apply`, `git reset`, `git push`, `git pull`, `git rebase`, `git cherry-pick`, `git checkout`, `git merge`, `git tag`, `git fetch`, `git clone`, `git init`, `git remote`, `make`, `npm`, `yarn`, `pip`, `uv`, `docker`, `ansible`, `pytest`, `python`, `node`, `ls`, `tree`, `pwd`, `which`, `cd`, `mkdir`, `cp`, `mv`, `rm`, `cat`, `head`, `tail`, `jq`, `curl`, `wget`, etc.
+4. **Scan all skill content** (SKILL.md body + sibling files) for tool usage. Look for:
+   - Explicit tool names: e.g., `Read`, `Write`, `Edit`, `Bash`, `WebFetch`, `WebSearch`, `Task`, `AskUserQuestion`, `Skill`, etc.
+   - Bash command patterns: e.g., `git diff`, `git commit`, `make`, `npm`, `docker`, `python`, `curl`, etc.
    - For Bash commands found, the required allowed-tool format is `Bash(<command>:*)` (e.g., `git stash push` needs `Bash(git stash:*)`)
    - For file tools with path patterns (Read, Write, Edit), note the paths referenced (e.g., `/tmp/` needs `Read(//tmp/**)`)
 
-5. **Compare**: For each tool detected in the body, check if it's covered by an entry in `allowed-tools`. A tool is covered if:
-   - Exact match exists (e.g., `Grep` matches `Grep`)
-   - A Bash pattern covers the command (e.g., `Bash(git stash:*)` covers `git stash push`)
-   - A path pattern covers referenced paths
+5. **Compare**: For each tool detected in the body, check if it's covered by an entry in `allowed-tools`. Rules:
+   - `Glob`, `Grep`, `Read`, `Write`, `Edit` are available by default for files within the project directory. Only add these when the skill needs to access files **outside** the project (e.g., `Read(//tmp/**)`, `Write(~/.config/**)`).
+   - `Bash` commands always need explicit `Bash(<command>:*)` entries.
+   - A Bash pattern covers subcommands (e.g., `Bash(git stash:*)` covers `git stash push`).
+   - Exact match counts as covered (e.g., `WebSearch` matches `WebSearch`).
 
-6. **Report**: Output:
-   - **Missing**: Tools the body uses but `allowed-tools` doesn't declare
-   - **Suggestion**: The exact `allowed-tools` entries to add
-   - **Already covered**: Tools that are properly declared (brief summary)
+6. **Update the skill file**: For any missing tools found, add them to the `allowed-tools` list in the skill's YAML frontmatter using the Edit tool. Then report what was added.
