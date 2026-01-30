@@ -1,8 +1,22 @@
 {
   "general": {
-    "enableAutoUpdate": false
+    "disableAutoUpdate": true,
+    "enableAutoUpdate": false,
+    "enablePromptCompletion": true,
+    "previewFeatures": true
   },
   "privacy": {
     "usageStatisticsEnabled": false
+  },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    },
+    "enablePermanentToolApproval": true
+  },
+  "tools": {
+    "shell": {
+      "showColor": true
+    }
   }
 }
