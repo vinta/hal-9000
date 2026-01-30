@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use when creating git commits. Groups changes into atomic, single-purpose commits.
+description: Creates git commits to group changes into atomic, single-purpose commits with conventional format.
 context: fork
 user-invocable: true
 model: sonnet

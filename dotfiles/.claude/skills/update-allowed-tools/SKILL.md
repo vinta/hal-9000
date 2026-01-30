@@ -1,15 +1,14 @@
 ---
 name: update-allowed-tools
-description: Find tools a skill's content needs but its allowed-tools frontmatter is missing
+description: Finds tools a skill's content needs but its allowed-tools frontmatter is missing.
+context: fork
+user-invocable: true
+model: haiku
 allowed-tools:
   - Grep
   - Glob
   - Read
   - Edit
-context: fork
-user-invocable: true
-disable-model-invocation: true
-model: haiku
 ---
 
 # Overview

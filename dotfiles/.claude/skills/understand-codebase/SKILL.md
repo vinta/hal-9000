@@ -1,13 +1,14 @@
 ---
 name: understand-codebase
-description: Use when exploring codebase, architecture, or call flows
+description: Explores codebase architecture, call flows, and code structure using ast-grep and search tools.
+context: fork
+user-invocable: true
+model: opus
 allowed-tools:
   - Bash(ast-grep:*)
   - Bash(sg:*)
   - Bash(rg:*)
   - Bash(fd:*)
-context: fork
-user-invocable: true
 ---
 
 # Understand Codebase
