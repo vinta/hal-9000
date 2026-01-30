@@ -1,6 +1,9 @@
 ---
 name: commit
 description: Use when creating git commits. Groups changes into atomic, single-purpose commits.
+context: fork
+user-invocable: true
+model: sonnet
 allowed-tools:
   - Grep
   - Glob
@@ -18,9 +21,6 @@ allowed-tools:
   - Read(//tmp/**)
   - Write(//tmp/**)
   - Edit(//tmp/**)
-context: fork
-user-invocable: true
-model: sonnet
 ---
 
 # Overview
