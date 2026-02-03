@@ -1,9 +1,19 @@
 approval_policy = "on-failure"
+check_for_update_on_startup = false
+model = "gpt-5.2-codex"
+model_reasoning_effort = "high"
+model_reasoning_summary = "auto"
+model_verbosity = "high"
+personality = "pragmatic"
 sandbox_mode = "workspace-write"
 
+[history]
+persistence = "save-all"
+
 [sandbox_workspace_write]
-writable_roots = ["/Users/vinta/Projects"]
 network_access = true
+writable_roots = ["/Users/vinta/Projects"]
 
 [features]
-web_search_request = true
+shell_snapshot = true
+unified_exec = true
