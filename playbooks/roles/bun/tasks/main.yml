@@ -12,14 +12,6 @@
   args:
     executable: /bin/bash
 
-- name: Install global Bun packages
-  shell: |
-    export PATH="${HOME}/.bun/bin:$PATH"
-    bun install -g pangu
-    bun install -g npm-check-updates
-  args:
-    executable: /bin/bash
-
 - name: Ensure Bun environment is sourced in .zshrc
   lineinfile:
     dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
