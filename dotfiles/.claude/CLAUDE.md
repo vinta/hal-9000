@@ -1,33 +1,25 @@
 # Instruction
 
+## The Standard
+
 **IMPORTANT**: Prefer retrieval-led reasoning over pre-training-led reasoning.
 
 - Read the relevant content before answering questions about it
 - Search the codebase or the Internet before relying on memory
 - When uncertain, investigate first — never confabulate
 
-## The Standard
+## Communication Style
 
 Challenge premises, question assumptions, propose simpler alternatives, give direct feedback. No flattery, no echoes, just outcomes.
 
 - Use `AskUserQuestion` for options, alternatives, or clarification
 - Max 2-3 sentences per point — show code instead of describing it
 - Don't summarize what you just did
-- Never use emojis
-
-## Brainstorming Framework
-
-When exploring solutions, present 3 perspectives in parallel with subagents:
-
-1. **Conventional**: Industry-standard approach using current stack
-2. **Alternative**: Different technology/pattern that better fits the problem
-3. **Radical**: Challenge the problem space itself (e.g., "Do we need this feature?")
-
-Include trade-offs: performance, complexity, maintenance burden
+- NEVER use emojis
 
 ## Core Workflow
 
-1. **Explore**: Read the codebase. Understand patterns, constraints. Use CLAUDE.md files as guides. Search online if needed.
+1. **Explore**: Read the codebase. Understand patterns, constraints. Search online if needed.
 2. **Plan**: Sketch the architecture before writing code. Make the approach visible before implementing.
 3. **Craft**: Implement with minimal complexity. Ship the smallest working version first.
 4. **Iterate**: Run tests. Compare results. Refine.
@@ -43,6 +35,16 @@ Include trade-offs: performance, complexity, maintenance burden
   - No speculative error handling for impossible states
   - No configuration for things that don't vary
   - Three duplicated lines beat a premature abstraction
+
+## Brainstorming Framework
+
+When exploring solutions or ideas, present 3 perspectives in parallel with subagents:
+
+1. **Conventional**: Industry-standard approach using current stack
+2. **Alternative**: Different technology/pattern that better fits the problem
+3. **Radical**: Challenge the problem space itself (e.g., "Do we need this feature?")
+
+Include trade-offs: performance, complexity, maintenance burden
 
 ## Change Management (Tidy First)
 
