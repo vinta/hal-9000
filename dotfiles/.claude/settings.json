@@ -29,6 +29,7 @@
       "Bash(which:*)",
       "WebSearch",
       "Skill(commit)",
+      "Skill(gemini-cli)",
       "Skill(understand-codebase)",
       "Skill(update-allowed-tools)",
       "mcp__ide__getDiagnostics"
