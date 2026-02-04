@@ -9,8 +9,12 @@
       "src": ".claude/skills/commit/"
     },
     {
-      "dest": "{{HOME}}/.claude/skills/gemini-cli/",
-      "src": ".claude/skills/gemini-cli/"
+      "dest": "{{HOME}}/.claude/skills/codex/",
+      "src": ".claude/skills/codex/"
+    },
+    {
+      "dest": "{{HOME}}/.claude/skills/gemini/",
+      "src": ".claude/skills/gemini/"
     },
     {
       "dest": "{{HOME}}/.claude/skills/understand-codebase/",

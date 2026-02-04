@@ -1,5 +1,5 @@
 ---
-name: gemini-cli
+name: gemini
 description: Invokes Gemini CLI as a second opinion. Use for reviewing plans, code, architectural decisions, AND for analyzing large volumes of content (e.g., chat history, logs, large codebases) that benefit from Gemini's 1M+ token context window.
 context: fork
 user-invocable: true
@@ -11,9 +11,9 @@ allowed-tools:
   - Bash(gemini:*)
 ---
 
-# Gemini CLI Second Opinion
+# Gemini Second Opinion
 
-Use Gemini CLI to get an independent review from a model with a 1M+ token context window.
+Use Gemini to get an independent review from a model with a 1M+ token context window.
 
 ## Invocation
 
