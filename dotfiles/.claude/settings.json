@@ -24,6 +24,7 @@
       "Bash(git commit:*)",
       "Bash(ls:*)",
       "Bash(tree:*)",
+      "Bash(grep:*)",
       "Bash(pwd:*)",
       "Bash(which:*)",
       "WebSearch",
