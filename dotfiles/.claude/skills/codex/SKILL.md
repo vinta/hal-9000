@@ -1,6 +1,6 @@
 ---
 name: codex
-description: Invokes OpenAI Codex as a second opinion. Use for reviewing plans, code, architectural decisions, or getting an independent perspective from OpenAI's reasoning models.
+description: Invokes Codex CLI as a second opinion. Use for reviewing plans, code, architectural decisions, or getting an independent perspective from OpenAI's reasoning models.
 context: fork
 user-invocable: true
 model: opus
@@ -38,8 +38,10 @@ git diff main..HEAD | codex exec "Review this diff for issues"
 ## Key Options
 
 - `-m MODEL`: Select model (always use the most capable available: `gpt-5.2-codex`)
+- `-c key=value`: Override config values inline (e.g., `-c model="gpt-5.2-codex"`)
+- `-p PROFILE`: Use a config profile from `~/.codex/config.toml` to avoid repeating flags
 - `-C DIR`: Set working directory
-- `--full-auto`: Automatic execution with workspace-write sandbox
+- `--full-auto`: Automatic execution with workspace-write sandbox (fewer approval pauses)
 - `-s SANDBOX_POLICY`: Sandbox policy (`read-only`, `workspace-write`)
 - `--skip-git-repo-check`: Skip repo detection (saves time outside git)
 
@@ -69,7 +71,13 @@ git diff main..HEAD | codex exec "Review this diff for issues"
 - Ask for structured output (numbered issues, severity levels) for actionable feedback
 - Ask for concrete references (file:line) when reviewing code or diffs
 
-## Prompt Templates
+## Interpreting Results
+
+- Treat Codex feedback as a second opinion, not authority.
+- Verify any claims that seem uncertain or conflict with known constraints.
+- Prefer actionable items: bugs, regressions, missing tests, and unclear requirements.
+
+## Prompt Examples
 
 ### Plan Review
 
@@ -99,15 +107,11 @@ cat design.md | codex exec -m gpt-5.2-codex -s read-only \
 Call out assumptions and suggest alternatives where applicable."
 ```
 
-## Speed Tips
+### Large Codebase Review
 
-- Use `--full-auto` to avoid approval pauses when you are comfortable with the sandbox policy.
-- Use `-p PROFILE` or `-c model="gpt-5.2-codex"` to avoid repeating flags.
-- Use `--skip-git-repo-check` when running outside a git repo.
-- Use `-C DIR` to avoid extra repo discovery work in large monorepos.
-
-## Interpreting Results
-
-- Treat Codex feedback as a second opinion, not authority.
-- Verify any claims that seem uncertain or conflict with known constraints.
-- Prefer actionable items: bugs, regressions, missing tests, and unclear requirements.
+```bash
+codex exec -m gpt-5.2-codex -s read-only \
+"Review the codebase with focus on correctness, edge cases, and missing tests.
+Read these folders: src/, scripts/, and packages/.
+Return numbered findings with severity and file:line references."
+```
