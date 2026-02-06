@@ -17,6 +17,7 @@
   - Each teammate must own separate files — no overlapping edits
   - Spawn with full context — teammates don't inherit conversation history
 - For scanning or analyzing large volumes of content: use an agent team or `/gemini` (1M+ context) to parallelize
+- For library/API documentation, code generation, setup, or configuration steps: use `context7` MCP automatically — don't rely on pre-training knowledge for library specifics
 - For implementation tasks, execute directly — don't explore alternatives unless asked
 
 ## Communication Style
