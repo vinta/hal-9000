@@ -73,20 +73,29 @@ class HAL9000:
 
         subparsers = parser.add_subparsers(title="sub commands")
 
-        update_parser = subparsers.add_parser("update", help="pull the repo and run ansible-playbook")
+        update_parser = subparsers.add_parser("update", help="pull repo and run ansible-playbook")
         update_parser.set_defaults(func=self.update)
 
         self.dotfiles = Dotfiles()
 
-        link_parser = subparsers.add_parser("link", help="add the file to the dotfiles repository")
+        link_parser = subparsers.add_parser("link", help="move file into dotfiles and symlink it back")
         link_parser.set_defaults(func=self.link)
         link_parser.add_argument("filename", type=str)
 
-        copy_parser = subparsers.add_parser("copy", help="copy the file to the dotfiles repository")
+        unlink_parser = subparsers.add_parser("unlink", help="restore file from dotfiles and remove symlink")
+        unlink_parser.set_defaults(func=self.unlink)
+        unlink_parser.add_argument("filename", type=str)
+
+        copy_parser = subparsers.add_parser("copy", help="copy file into dotfiles (no symlink)")
         copy_parser.set_defaults(func=self.copy)
         copy_parser.add_argument("filename", type=str)
 
-        sync_parser = subparsers.add_parser("sync", help="force sync dotfiles")
+        backup_parser = subparsers.add_parser("backup", help="backup arbitrary src to arbitrary dest")
+        backup_parser.set_defaults(func=self.backup)
+        backup_parser.add_argument("src", type=str, help="source path to back up")
+        backup_parser.add_argument("dest", type=str, help="destination path")
+
+        sync_parser = subparsers.add_parser("sync", help="sync all links, copies, and backups")
         sync_parser.set_defaults(func=self.sync)
 
         pod_bay_doors_parser = subparsers.add_parser("open-the-pod-bay-doors", help="open the pod bay doors, please, HAL")
@@ -181,6 +190,33 @@ class HAL9000:
             self.dotfiles.save()
             self.dotfiles.show()
 
+    def unlink(self, namespace, extra_args=None):  # noqa: ARG002
+        relative_path = namespace.filename.removeprefix("~/")
+
+        ln_dict = self.dotfiles.find_by_key("src", relative_path, "links")
+        if not ln_dict:
+            self._hal_says(f"not found in manifest: {relative_path}")
+            return
+
+        src_path = os.path.join(Setting.DOTFILES_ROOT, relative_path)
+        dest_path = self._expand_template(ln_dict["dest"])
+
+        if not os.path.exists(src_path):
+            self._hal_says(f"not found in dotfiles: {src_path}")
+            return
+
+        # Remove symlink and move file back
+        if os.path.islink(dest_path):
+            os.remove(dest_path)
+        shutil.copy2(src_path, dest_path)
+        os.remove(src_path)
+
+        # Remove from manifest
+        self.dotfiles.data["links"].remove(ln_dict)
+
+        self.dotfiles.save()
+        self.dotfiles.show()
+
     def copy(self, namespace, extra_args=None):  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
 
@@ -210,6 +246,20 @@ class HAL9000:
 
             self.dotfiles.save()
             self.dotfiles.show()
+
+    def backup(self, namespace, extra_args=None):  # noqa: ARG002
+        home = os.path.expanduser("~")
+        src = os.path.abspath(namespace.src).replace(home, "{{HOME}}")
+        dest = os.path.abspath(namespace.dest).replace(home, "{{HOME}}")
+
+        existing = self.dotfiles.find_by_key("src", src, "backups")
+        if existing:
+            existing["dest"] = dest
+        else:
+            self.dotfiles.data.setdefault("backups", []).append({"src": src, "dest": dest})
+
+        self.dotfiles.save()
+        self.dotfiles.show()
 
     def _sync_links(self, link):
         src = os.path.join(Setting.DOTFILES_ROOT, link["src"])
