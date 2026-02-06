@@ -72,7 +72,10 @@ def grammar_check(data):
     latest_user_input = ""
     latest_user_uuid = ""
     for line in reversed(lines):
-        entry = json.loads(line)
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
         if entry.get("type") == "user":
             content = entry["message"]["content"]
             if (
@@ -163,7 +166,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
             cache = json.load(f)
             cached_uuid = cache.get("uuid", "")
             cached_result = cache.get("result", "")
-    except FileNotFoundError:
+    except (FileNotFoundError, json.JSONDecodeError):
         pass
 
     if cached_uuid == latest_user_uuid:
