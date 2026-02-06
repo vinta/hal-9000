@@ -46,6 +46,13 @@ When exploring solutions or ideas, present 3 perspectives in parallel with subag
 
 Include trade-offs: performance, complexity, maintenance burden
 
+## Skills
+
+- `/commit` -- Create clean, atomic git commits. One logical change per commit.
+- `/gemini` -- Second opinion via Gemini CLI. Best for large content (1M+ token window) and reviewing plans, code, or architecture.
+- `/codex` -- Second opinion via Codex CLI. Use for reviewing plans, diffs, or getting an independent perspective from OpenAI's reasoning models.
+- `/update-allowed-tools <skill>` -- Audit a skill's `allowed-tools` frontmatter against its actual tool usage. Run after editing a skill.
+
 ## Change Management (Tidy First)
 
 Never mix structural and behavioral changes in the same commit.
