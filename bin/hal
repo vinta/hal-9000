@@ -238,7 +238,7 @@ class HAL9000:
             if os.path.lexists(dest) and os.path.isdir(dest):
                 shutil.rmtree(dest)
             if os.path.isdir(src):
-                shutil.copytree(src, dest)
+                shutil.copytree(src, dest, ignore=shutil.ignore_patterns(".DS_Store"))
             else:
                 shutil.copy2(src, dest)
             self._hal_says(f"copy {src} -> {dest}")
@@ -251,7 +251,7 @@ class HAL9000:
                 continue
 
             if os.path.isdir(src):
-                shutil.copytree(src, dest, dirs_exist_ok=True)
+                shutil.copytree(src, dest, dirs_exist_ok=True, ignore=shutil.ignore_patterns(".DS_Store"))
             else:
                 os.makedirs(os.path.dirname(dest), exist_ok=True)
                 shutil.copy2(src, dest)
