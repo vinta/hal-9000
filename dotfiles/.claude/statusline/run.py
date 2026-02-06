@@ -48,7 +48,7 @@ def basic_info(data):
     current_dir = data["workspace"]["current_dir"]
     home = os.path.expanduser("~")
     if current_dir.startswith(home):
-        current_dir = "~" + current_dir[len(home):]
+        current_dir = "~" + current_dir[len(home) :]
 
     status_parts = [data["model"]["id"], current_dir]
     if git_branch:
