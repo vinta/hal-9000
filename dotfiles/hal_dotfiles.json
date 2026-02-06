@@ -1,7 +1,7 @@
 {
   "backups": [
     {
-      "dest": "{{HOME}}/Library/CloudStorage/Dropbox/Apps/Claude Code/projects",
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
       "src": "{{HOME}}/.claude/projects"
     }
   ],
