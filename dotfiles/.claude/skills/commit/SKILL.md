@@ -45,15 +45,17 @@ Creating clean, atomic commits that follow best practices for version control hy
 3. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`
    - Hunk-by-hunk: `git diff <file> > /tmp/patch.diff`, edit the patch to keep only specific hunks, then `git apply --cached /tmp/patch.diff`
-   - NEVER use `git reset` to unstage - use `git restore --staged` if needed
+   - NEVER use `git reset --hard`. To unstage, use `git restore --staged`
+   - Fallback: If `git apply --cached` fails (malformed patch), stage the whole file with `git add <file>` instead
 
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes:
    - Stash unstaged changes first: `git stash push -p -m "temp: unstaged changes"` (select hunks to stash)
    - Or stash all unstaged: `git stash push --keep-index -m "temp: unstaged changes"`
    - Commit, then restore: `git stash pop`
+   - If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit
 
 5. **Create Atomic Commits**: For each logical group:
    - Write clear, descriptive commit messages following conventional format
-   - Keep first line under 50 characters
+   - Keep first line under 72 characters (aim for 50)
    - Include context in body when necessary
    - IMPORTANT: DO NOT run any linter/formatter before committing. Commit exactly what the user changed

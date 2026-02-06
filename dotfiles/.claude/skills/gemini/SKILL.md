@@ -9,6 +9,8 @@ allowed-tools:
   - Grep
   - Read
   - Bash(gemini:*)
+  - Bash(cp:*)
+  - Bash(rm:*)
 ---
 
 # Gemini Second Opinion
@@ -17,18 +19,18 @@ Use Gemini to get an independent review from a model with a 1M+ token context wi
 
 ## Invocation
 
-Use positional prompt (`-p` is deprecated). Always use `-o text` for plain text output.
+Use `-p` for non-interactive (headless) mode. Always use `-o text` for plain text output.
 
 **Prefer telling Gemini to read files directly** over piping via stdin. Gemini can read files within the project workspace on its own, and stdin truncates at 8MB.
 
 ```bash
-# PREFERRED: Tell Gemini to read files itself
-gemini -o text "Read the files in /path/within/project/ and review them for bugs"
+# PREFERRED: Tell Gemini to read files itself (non-interactive)
+gemini -p "Read the files in /path/within/project/ and review them for bugs" -o text
 ```
 
 ```bash
 # OK for small content: pipe via stdin
-git diff main..HEAD | gemini -o text "Review this diff for issues"
+git diff main..HEAD | gemini -p "Review this diff for issues" -o text
 ```
 
 ## Workspace Sandbox
@@ -48,7 +50,7 @@ rm -rf /path/to/project/.tmp-data
 1. **Gather context**: Identify the files, plans, or diffs Gemini needs
 2. **Ensure accessibility**: If files are outside the workspace, copy them in
 3. **Compose a focused prompt**: Be specific about what to review and what feedback you want
-4. **Invoke Gemini**: Tell it to read files directly, or pipe small content via stdin. Always use `-o text`
+4. **Invoke Gemini**: Tell it to read files directly, or pipe small content via stdin. Always use `-p` and `-o text`
 5. **Clean up**: Remove any temporary copies
 6. **Report findings**: Present Gemini's feedback to the user with your own assessment of which points are valid
 
