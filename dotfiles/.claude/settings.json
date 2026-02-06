@@ -90,7 +90,9 @@
       "Bash(wget:*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/Projects"]
+    "additionalDirectories": [
+      "~/Projects"
+    ]
   },
   "statusLine": {
     "type": "command",
@@ -98,6 +100,7 @@
   },
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
-    "context7@claude-plugins-official": true
+    "context7@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true
   }
 }
