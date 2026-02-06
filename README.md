@@ -39,9 +39,12 @@ hal update --tags python,node
 hal link ~/.zshrc
 
 # copy the file to the dotfiles repository (preserves directory structure)
-hal copy ~/.config/some-app/config.toml
+hal copy ~/.config/ghostty/
 
-# force sync dotfiles
+# backup the src to the dest
+hal backup ~/.claude/projects "~/Dropbox/Apps/Claude Code/projects"
+
+# force sync dotfiles and backups
 hal sync
 
 # open the pod bay doors, please, HAL
