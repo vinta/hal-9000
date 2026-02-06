@@ -5,10 +5,12 @@ _hal() {
 
     # Commands extracted from hal script
     commands=(
-        'update:pull the repo and run ansible-playbook'
-        'link:add the file to the dotfiles repository'
-        'copy:copy the file to the dotfiles repository'
-        'sync:force sync dotfiles'
+        'update:pull repo and run ansible-playbook'
+        'link:move file into dotfiles and symlink it back'
+        'unlink:restore file from dotfiles and remove symlink'
+        'copy:copy file into dotfiles (no symlink)'
+        'backup:backup arbitrary src to arbitrary dest'
+        'sync:sync all links, copies, and backups'
         'open-the-pod-bay-doors:open the pod bay doors, please, HAL'
     )
 
@@ -21,7 +23,7 @@ _hal() {
     else
         # Additional arguments based on command
         case "$words[2]" in
-            link|copy)
+            link|unlink|copy)
                 _files
                 ;;
             *)
