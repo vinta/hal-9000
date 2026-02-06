@@ -11,12 +11,11 @@
 - Validate intermediate results before building on them — don't chain assumptions
 - Before removing a dependency, import, or function: search for all usages first
 
-## Exploration Limits
+## Exploration Strategy
 
-- For changes under 50 lines or touching fewer than 3 files: implement directly, skip broad exploration
-- For implementation tasks, pick the best approach and execute — don't explore alternatives unless asked
-- For design or architecture decisions, present conventional, alternative, and radical perspectives with trade-offs
-- When I interrupt exploration or say "just do X", stop researching and execute immediately
+- For design, architecture, brainstorming, or competing hypotheses: use an agent team so multiple perspectives run in parallel
+  - Spawn with full context — teammates don't inherit conversation history
+- For implementation tasks, execute directly — don't explore alternatives unless asked
 
 ## Communication Style
 
