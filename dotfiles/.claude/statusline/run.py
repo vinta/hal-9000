@@ -81,6 +81,7 @@ def grammar_check(data):
                 and not content.startswith("<command-message>")
                 and not content.startswith("<local-command-caveat>")
                 and not content.startswith("<local-command-stdout>")
+                and not content.startswith("<teammate-message")
             ):
                 latest_user_input = content
                 latest_user_uuid = entry.get("uuid", "")
