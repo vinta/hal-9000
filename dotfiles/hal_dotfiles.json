@@ -5,12 +5,12 @@
       "src": ".hal_completion.zsh"
     },
     {
-      "dest": "{{HOME}}/.claude/skills/commit/",
-      "src": ".claude/skills/commit/"
-    },
-    {
       "dest": "{{HOME}}/.claude/skills/codex/",
       "src": ".claude/skills/codex/"
+    },
+    {
+      "dest": "{{HOME}}/.claude/skills/commit/",
+      "src": ".claude/skills/commit/"
     },
     {
       "dest": "{{HOME}}/.claude/skills/gemini/",
