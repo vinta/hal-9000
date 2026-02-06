@@ -1,6 +1,6 @@
 [project]
 name = "hal-9000"
-version = "0.1.0"
+version = "2001"
 description = "Opinionated macOS development environment automation"
 authors = [{ name = "Vinta Chen", email = "vinta.chen@gmail.com" }]
 readme = "README.md"
