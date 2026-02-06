@@ -29,8 +29,10 @@
       "Bash(ls:*)",
       "Bash(tree:*)",
       "Bash(grep:*)",
+      "Bash(find:*)",
       "Bash(pwd:*)",
       "Bash(which:*)",
+      "Bash(mkdir:*)",
       "WebSearch",
       "Skill(commit)",
       "Skill(codex)",
@@ -90,9 +92,7 @@
       "Bash(wget:*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": [
-      "~/Projects"
-    ]
+    "additionalDirectories": ["~/Projects"]
   },
   "statusLine": {
     "type": "command",
