@@ -4,6 +4,7 @@ import os
 import shlex
 import subprocess
 import sys
+import tempfile
 import time
 
 CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
@@ -197,10 +198,18 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     if grammar_check_result:
         print(colorize_grammar(grammar_check_result))
 
-    with open(CACHE_FILE, "w") as f:
-        json.dump(
-            {"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result, "elapsed": elapsed}, f
-        )
+    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="claude-code-statusline-")
+    try:
+        with os.fdopen(fd, "w") as f:
+            json.dump(
+                {"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result, "elapsed": elapsed}, f
+            )
+        os.rename(tmp_path, CACHE_FILE)
+    except Exception:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
 
 
 # https://code.claude.com/docs/en/statusline
