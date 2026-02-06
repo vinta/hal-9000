@@ -14,7 +14,9 @@
 ## Exploration Strategy
 
 - For design, architecture, brainstorming, or competing hypotheses: use an agent team so multiple perspectives run in parallel
+  - Each teammate must own separate files — no overlapping edits
   - Spawn with full context — teammates don't inherit conversation history
+- For scanning or analyzing large volumes of content: use an agent team or `/gemini` (1M+ context) to parallelize
 - For implementation tasks, execute directly — don't explore alternatives unless asked
 
 ## Communication Style
@@ -35,6 +37,7 @@ Challenge premises, question assumptions, propose simpler alternatives, give dir
   - No speculative error handling for impossible states
   - No configuration for things that don't vary
   - Three duplicated lines beat a premature abstraction
+  - Never remove existing code, config, or metadata you deem "unnecessary" — only remove what's explicitly asked
 
 ## Change Management (Tidy First)
 
