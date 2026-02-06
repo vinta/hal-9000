@@ -23,6 +23,10 @@
     {
       "dest": "{{HOME}}/.claude/CLAUDE.md",
       "src": ".claude/CLAUDE.md"
+    },
+    {
+      "dest": "{{HOME}}/Library/CloudStorage/Dropbox/Apps/Claude Code/projects",
+      "src": ".claude/projects"
     }
   ],
   "links": [
