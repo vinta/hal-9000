@@ -236,12 +236,26 @@ class HAL9000:
             dest_dir = os.path.dirname(dest)
 
             if os.path.lexists(dest) and os.path.isdir(dest):
-                self._run(f"rm -rf {dest.rstrip('/')}", verbose=False)
+                shutil.rmtree(dest)
             if os.path.isdir(src):
                 shutil.copytree(src, dest)
             else:
                 shutil.copy2(src, dest)
             self._hal_says(f"copy {src} -> {dest}")
+
+        for backup in self.dotfiles.data.get("backups", []):
+            src = self._expand_template(backup["src"])
+            dest = self._expand_template(backup["dest"])
+            if not os.path.exists(src):
+                self._hal_says(f"not found {src}")
+                continue
+
+            if os.path.isdir(src):
+                shutil.copytree(src, dest, dirs_exist_ok=True)
+            else:
+                os.makedirs(os.path.dirname(dest), exist_ok=True)
+                shutil.copy2(src, dest)
+            self._hal_says(f"backup {src} -> {dest}")
 
     def open_the_pod_bay_doors(self, namespace, extra_args=None):  # noqa: ARG002
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
