@@ -23,6 +23,9 @@
       "Bash(git rm:*)",
       "Bash(git apply:*)",
       "Bash(git commit:*)",
+      "Bash(git restore:*)",
+      "Bash(git show:*)",
+      "Bash(git rev-parse:*)",
       "Bash(ls:*)",
       "Bash(tree:*)",
       "Bash(grep:*)",
@@ -62,7 +65,22 @@
       "Bash(exec:*)",
       "Bash(security:*)",
       "Bash(defaults:*)",
-      "Bash(launchctl:*)"
+      "Bash(launchctl:*)",
+      "Bash(open:*)",
+      "Bash(osascript:*)",
+      "Bash(kill:*)",
+      "Bash(killall:*)",
+      "Bash(pkill:*)",
+      "Bash(diskutil:*)",
+      "Bash(dscl:*)",
+      "Bash(networksetup:*)",
+      "Bash(scutil:*)",
+      "Bash(systemsetup:*)",
+      "Bash(pmset:*)",
+      "Bash(xattr:*)",
+      "Bash(chmod:*)",
+      "Bash(chown:*)",
+      "Bash(chflags:*)"
     ],
     "ask": [
       "Read(~/.*)",
@@ -72,7 +90,7 @@
       "Bash(wget:*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.claude", "~/Projects"]
+    "additionalDirectories": ["~/Projects"]
   },
   "statusLine": {
     "type": "command",

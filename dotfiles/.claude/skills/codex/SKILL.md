@@ -9,6 +9,8 @@ allowed-tools:
   - Grep
   - Read
   - Bash(codex:*)
+  - Bash(git diff:*)
+  - Bash(cat:*)
 ---
 
 # Codex Second Opinion
