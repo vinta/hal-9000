@@ -43,3 +43,5 @@ Analyzes a skill's full content -- SKILL.md and any sibling files in the same di
    - Exact match counts as covered (e.g., `WebSearch` matches `WebSearch`).
 
 6. **Update the skill file**: For any missing tools found, add them to the `allowed-tools` list in the skill's YAML frontmatter using the Edit tool. Then report what was added.
+
+7. **Validate**: Re-read the updated file to confirm YAML frontmatter remains syntactically valid (proper indentation, no duplicate entries, correct list format).
