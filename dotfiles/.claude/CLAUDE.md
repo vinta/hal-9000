@@ -48,7 +48,7 @@ Never mix structural and behavioral changes in the same commit.
 
 ## Skills
 
-- `/commit` -- Create clean, atomic git commits. One logical change per commit.
-- `/gemini` -- Second opinion via Gemini CLI. Best for large content (1M+ token window) and reviewing plans, code, or architecture.
 - `/codex` -- Second opinion via Codex CLI. Use for reviewing plans, diffs, or getting an independent perspective from OpenAI's reasoning models.
-- `/update-allowed-tools <skill>` -- Audit a skill's `allowed-tools` frontmatter against its actual tool usage. Run after editing a skill.
+- `/commit` -- Creates git commits. Use this skill whenever the user asks to commit, or whenever you need to commit changes as part of a task.
+- `/gemini` -- Invokes Gemini CLI as a second opinion. Use for reviewing plans, code, architectural decisions, AND for analyzing large volumes of content that benefit from Gemini's 1M+ token context window.
+- `/update-allowed-tools` -- Finds tools a skill's content needs but its allowed-tools frontmatter is missing.
