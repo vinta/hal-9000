@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 
+# Only needed for generating shell completion during local development
 try:
     import argcomplete
 except ImportError:
@@ -16,7 +17,6 @@ except ImportError:
 class Setting:
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     DOTFILES_ROOT = os.path.join(PROJECT_ROOT, "dotfiles/")
-    WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.expanduser("~"), "Projects"))
 
 
 class Dotfiles:
@@ -145,7 +145,7 @@ class HAL9000:
         self._run("git fetch")
         self._run("git pull")
 
-        # it seems no reason to upgrade ansible every time
+        # It seems no reason to upgrade ansible every time
         # self._run("brew upgrade ansible")
 
         os.chdir(os.path.join(Setting.PROJECT_ROOT, "playbooks"))
