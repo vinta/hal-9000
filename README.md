@@ -36,16 +36,13 @@ hal update
 # if you only want to install specific components
 hal update --tags python,node
 
-# add the file to the dotfiles repository (creates symlink)
+# move file into dotfiles/ and symlink it back
 hal link ~/.zshrc
 
-# copy the file to the dotfiles repository (preserves directory structure)
+# copy file into dotfiles/ (no symlink)
 hal copy ~/.config/ghostty/
 
-# backup the src to the dest
-hal backup ~/.claude/projects "~/Dropbox/Apps/Claude Code/projects"
-
-# force sync dotfiles and backups
+# sync all links and copies
 hal sync
 
 # open the pod bay doors, please, HAL
