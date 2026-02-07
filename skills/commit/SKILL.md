@@ -59,3 +59,27 @@ Creating clean, atomic commits that follow best practices for version control hy
    - Keep first line under 72 characters (aim for 50)
    - Include context in body when necessary
    - IMPORTANT: DO NOT run any linter/formatter before committing. Commit exactly what the user changed
+
+## Attribution
+
+Include `Co-Authored-By` at the end of in every commit:
+
+If you're an Anthropic Claude model:
+
+```
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+If you're an OpenAI ChatGPT model:
+
+```
+Co-Authored-By: Codex <noreply@openai.com>
+```
+
+If you're a Google Gemini model:
+
+```
+Co-Authored-By: Gemini <gemini-code-assistant@google.com>
+```
+
+Skip if you're not above models.
