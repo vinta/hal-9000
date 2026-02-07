@@ -3,6 +3,7 @@ import argparse
 import concurrent.futures
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -167,12 +168,12 @@ class HAL9000:
 
         # Create directory if it doesn't exist
         if dest_dir != Setting.DOTFILES_ROOT:
-            self._run(f"mkdir -p {dest_dir}")
+            self._run(f"mkdir -p {shlex.quote(dest_dir)}")
 
-        if self._run(f"mv {filepath} {dest_path}") == 0:
+        if self._run(f"mv {shlex.quote(filepath)} {shlex.quote(dest_path)}") == 0:
             ln_src = dest_path
             ln_dest = filepath
-            self._run(f"ln -sf {ln_src} {ln_dest}")
+            self._run(f"ln -sf {shlex.quote(ln_src)} {shlex.quote(ln_dest)}")
 
             template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
             template_dest = filepath.replace(home, "{{HOME}}")
@@ -230,9 +231,9 @@ class HAL9000:
 
         # Create directory if it doesn't exist
         if dest_dir != Setting.DOTFILES_ROOT:
-            self._run(f"mkdir -p {dest_dir}")
+            self._run(f"mkdir -p {shlex.quote(dest_dir)}")
 
-        if self._run(f"cp -f {filepath} {dest_path}") == 0:
+        if self._run(f"cp -f {shlex.quote(filepath)} {shlex.quote(dest_path)}") == 0:
             template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
             template_dest = filepath.replace(home, "{{HOME}}")
 
@@ -245,7 +246,6 @@ class HAL9000:
             self.dotfiles.save()
             self.dotfiles.show()
 
-
     def _sync_links(self, link):
         src = self._expand_template(link["src"])
         if not os.path.exists(src):
@@ -254,7 +254,12 @@ class HAL9000:
 
         dest = self._expand_template(link["dest"]).rstrip("/")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
-        self._run(f"ln -sfn {src} {dest}", verbose=False)
+
+        # If dest already exists as a real directory, `ln` will create the symlink "inside" it
+        if os.path.isdir(dest) and not os.path.islink(dest):
+            shutil.rmtree(dest)
+
+        self._run(f"ln -sfn {shlex.quote(src)} {shlex.quote(dest)}", verbose=False)
         self._hal_says(f"link {src} -> {dest}")
 
     def _sync_copies(self, copy):
@@ -285,7 +290,7 @@ class HAL9000:
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
         filepath = os.path.join(Setting.REPO_ROOT, "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3")
-        self._run(f"afplay {filepath}", verbose=False)
+        self._run(f"afplay {shlex.quote(filepath)}", verbose=False)
 
     def read_lips(self):
         if len(sys.argv) == 1:
