@@ -52,7 +52,7 @@ Never mix structural and behavioral changes in the same commit.
 
 ## Skills
 
-- `/codex` -- Second opinion via Codex CLI. Use for reviewing plans, diffs, or getting an independent perspective from OpenAI's reasoning models.
+- `/codex` -- Invokes Codex CLI as a second opinion. Use for reviewing plans, code, architectural decisions, or getting an independent perspective from OpenAI's reasoning models.
 - `/commit` -- Creates git commits. Use this skill whenever the user asks to commit, or whenever you need to commit changes as part of a task.
 - `/gemini` -- Invokes Gemini CLI as a second opinion. Use for reviewing plans, code, architectural decisions, AND for analyzing large volumes of content that benefit from Gemini's 1M+ token context window.
 - `/update-allowed-tools` -- Finds tools a skill's content needs but its allowed-tools frontmatter is missing.
