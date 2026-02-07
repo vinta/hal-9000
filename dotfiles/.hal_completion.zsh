@@ -9,8 +9,7 @@ _hal() {
         'link:move file into dotfiles and symlink it back'
         'unlink:restore file from dotfiles and remove symlink'
         'copy:copy file into dotfiles (no symlink)'
-        'backup:backup arbitrary src to arbitrary dest'
-        'sync:sync all links, copies, and backups'
+        'sync:sync all links and copies'
         'open-the-pod-bay-doors:open the pod bay doors, please, HAL'
     )
 
