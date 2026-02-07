@@ -8,6 +8,7 @@ Opinionated macOS development environment automation that dominates your dev set
 
 ## Tech Stack
 
+- [Agent Skills](skills)
 - [Claude Code](dotfiles/.claude)
 - [Codex](dotfiles/.codex)
 - [Gemini CLI](dotfiles/.gemini)
