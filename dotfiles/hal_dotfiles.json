@@ -1,5 +1,43 @@
 {
-  "backups": [
+  "copies": [
+    {
+      "dest": "{{HOME}}/.hal_completion.zsh",
+      "src": "{{REPO_ROOT}}/dotfiles/.hal_completion.zsh"
+    },
+    {
+      "dest": "{{HOME}}/.claude/CLAUDE.md",
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md"
+    },
+    {
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
+      "src": "{{HOME}}/.claude/projects"
+    }
+  ],
+  "links": [
+    {
+      "dest": "{{HOME}}/.zshrc",
+      "src": "{{REPO_ROOT}}/dotfiles/.zshrc"
+    },
+    {
+      "dest": "{{HOME}}/.gitconfig",
+      "src": "{{REPO_ROOT}}/dotfiles/.gitconfig"
+    },
+    {
+      "dest": "{{HOME}}/.gitignore_global",
+      "src": "{{REPO_ROOT}}/dotfiles/.gitignore_global"
+    },
+    {
+      "dest": "{{HOME}}/.config/ghostty/config",
+      "src": "{{REPO_ROOT}}/dotfiles/.config/ghostty/config"
+    },
+    {
+      "dest": "{{HOME}}/.claude/settings.json",
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.json"
+    },
+    {
+      "dest": "{{HOME}}/.claude/statusline/run.py",
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/statusline/run.py"
+    },
     {
       "dest": "{{HOME}}/.claude/skills/codex/",
       "src": "{{REPO_ROOT}}/skills/codex/"
@@ -17,52 +55,12 @@
       "src": "{{REPO_ROOT}}/skills/update-allowed-tools/"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
-      "src": "{{HOME}}/.claude/projects"
-    }
-  ],
-  "copies": [
-    {
-      "dest": "{{HOME}}/.hal_completion.zsh",
-      "src": ".hal_completion.zsh"
-    },
-    {
-      "dest": "{{HOME}}/.claude/CLAUDE.md",
-      "src": ".claude/CLAUDE.md"
-    }
-  ],
-  "links": [
-    {
-      "dest": "{{HOME}}/.zshrc",
-      "src": ".zshrc"
-    },
-    {
-      "dest": "{{HOME}}/.gitconfig",
-      "src": ".gitconfig"
-    },
-    {
-      "dest": "{{HOME}}/.gitignore_global",
-      "src": ".gitignore_global"
-    },
-    {
-      "dest": "{{HOME}}/.config/ghostty/config",
-      "src": ".config/ghostty/config"
-    },
-    {
-      "dest": "{{HOME}}/.claude/settings.json",
-      "src": ".claude/settings.json"
-    },
-    {
-      "dest": "{{HOME}}/.claude/statusline/run.py",
-      "src": ".claude/statusline/run.py"
-    },
-    {
       "dest": "{{HOME}}/.codex/config.toml",
-      "src": ".codex/config.toml"
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/config.toml"
     },
     {
       "dest": "{{HOME}}/.gemini/settings.json",
-      "src": ".gemini/settings.json"
+      "src": "{{REPO_ROOT}}/dotfiles/.gemini/settings.json"
     }
   ]
 }
