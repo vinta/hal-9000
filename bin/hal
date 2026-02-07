@@ -179,26 +179,28 @@ class HAL9000:
             ln_dest = filepath
             self._run(f"ln -sf {ln_src} {ln_dest}")
 
+            template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
             template_dest = filepath.replace(home, "{{HOME}}")
 
-            ln_dict = self.dotfiles.find_by_key("src", relative_path, "links")
+            ln_dict = self.dotfiles.find_by_key("src", template_src, "links")
             if ln_dict:
                 ln_dict["dest"] = template_dest
             else:
-                self.dotfiles.data["links"].append({"dest": template_dest, "src": relative_path})
+                self.dotfiles.data["links"].append({"dest": template_dest, "src": template_src})
 
             self.dotfiles.save()
             self.dotfiles.show()
 
     def unlink(self, namespace, extra_args=None):  # noqa: ARG002
         relative_path = namespace.filename.removeprefix("~/")
+        template_dest = "{{HOME}}/" + relative_path
 
-        ln_dict = self.dotfiles.find_by_key("src", relative_path, "links")
+        ln_dict = self.dotfiles.find_by_key("dest", template_dest, "links")
         if not ln_dict:
             self._hal_says(f"not found in manifest: {relative_path}")
             return
 
-        src_path = os.path.join(Setting.DOTFILES_ROOT, relative_path)
+        src_path = self._expand_template(ln_dict["src"])
         dest_path = self._expand_template(ln_dict["dest"])
 
         if not os.path.exists(src_path):
@@ -236,13 +238,14 @@ class HAL9000:
             self._run(f"mkdir -p {dest_dir}")
 
         if self._run(f"cp -f {filepath} {dest_path}") == 0:
+            template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
             template_dest = filepath.replace(home, "{{HOME}}")
 
-            cp_dict = self.dotfiles.find_by_key("src", relative_path, "copies")
+            cp_dict = self.dotfiles.find_by_key("src", template_src, "copies")
             if cp_dict:
                 cp_dict["dest"] = template_dest
             else:
-                self.dotfiles.data["copies"].append({"dest": template_dest, "src": relative_path})
+                self.dotfiles.data["copies"].append({"dest": template_dest, "src": template_src})
 
             self.dotfiles.save()
             self.dotfiles.show()
@@ -262,18 +265,18 @@ class HAL9000:
         self.dotfiles.show()
 
     def _sync_links(self, link):
-        src = os.path.join(Setting.DOTFILES_ROOT, link["src"])
+        src = self._expand_template(link["src"])
         if not os.path.exists(src):
             self._hal_says(f"not found {src}")
             return
 
-        dest = self._expand_template(link["dest"])
+        dest = self._expand_template(link["dest"]).rstrip("/")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         self._run(f"ln -sfn {src} {dest}", verbose=False)
         self._hal_says(f"link {src} -> {dest}")
 
     def _sync_copies(self, copy):
-        src = os.path.join(Setting.DOTFILES_ROOT, copy["src"])
+        src = self._expand_template(copy["src"])
         if not os.path.exists(src):
             self._hal_says(f"not found {src}")
             return
