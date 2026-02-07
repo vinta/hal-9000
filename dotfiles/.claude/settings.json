@@ -93,7 +93,7 @@
       "Bash(wget:*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/Projects"]
+    "additionalDirectories": ["~/Projects", "/usr/local/hal-9000"]
   },
   "statusLine": {
     "type": "command",
