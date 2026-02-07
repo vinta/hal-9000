@@ -1,6 +1,6 @@
 approval_policy = "on-failure"
 check_for_update_on_startup = false
-model = "gpt-5.2-codex"
+model = "gpt-5.3-codex"
 model_reasoning_effort = "high"
 model_reasoning_summary = "auto"
 model_verbosity = "high"
