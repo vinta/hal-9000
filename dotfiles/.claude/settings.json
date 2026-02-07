@@ -34,8 +34,8 @@
       "Bash(which:*)",
       "Bash(mkdir:*)",
       "WebSearch",
-      "Skill(codex)",
       "Skill(commit)",
+      "Skill(codex)",
       "Skill(gemini)",
       "Skill(update-allowed-tools)",
       "mcp__ide__getDiagnostics"
