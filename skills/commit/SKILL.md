@@ -31,7 +31,7 @@ Creating clean, atomic commits that follow best practices for version control hy
 
 **ALWAYS `cd` to project root before git commands. NEVER use `git -C`.** Execute git commands directly without explanatory preamble. Commit immediately without confirmation prompts (never use interactive mode).
 
-1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory. **Untracked files shown in `git status` are part of the changeset** -- include them in your analysis and commits unless the user explicitly says to skip or exclude them. Categorize changes by:
+1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory. Categorize changes by:
    - STRUCTURAL: Code reorganization, renaming, refactoring without behavior changes
    - BEHAVIORAL: New features, bug fixes, functionality changes
    - DOCUMENTATION: README updates, comment changes, documentation files
@@ -43,7 +43,7 @@ Creating clean, atomic commits that follow best practices for version control hy
    - Would make sense to revert as a unit
 
 3. **Stage Changes**: Use appropriate staging strategy:
-   - Whole file (tracked or untracked): `git add <file>`
+   - Whole file: `git add <file>`
    - Hunk-by-hunk: `git diff <file> > /tmp/patch.diff`, edit the patch to keep only specific hunks, then `git apply --cached /tmp/patch.diff`
    - NEVER use `git reset --hard`. To unstage, use `git restore --staged`
    - Fallback: If `git apply --cached` fails (malformed patch), stage the whole file with `git add <file>` instead
