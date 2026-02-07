@@ -2,19 +2,19 @@
   "backups": [
     {
       "dest": "{{HOME}}/.claude/skills/codex/",
-      "src": "{{PROJECT_ROOT}}/skills/codex/"
+      "src": "{{REPO_ROOT}}/skills/codex/"
     },
     {
       "dest": "{{HOME}}/.claude/skills/commit/",
-      "src": "{{PROJECT_ROOT}}/skills/commit/"
+      "src": "{{REPO_ROOT}}/skills/commit/"
     },
     {
       "dest": "{{HOME}}/.claude/skills/gemini/",
-      "src": "{{PROJECT_ROOT}}/skills/gemini/"
+      "src": "{{REPO_ROOT}}/skills/gemini/"
     },
     {
       "dest": "{{HOME}}/.claude/skills/update-allowed-tools/",
-      "src": "{{PROJECT_ROOT}}/skills/update-allowed-tools/"
+      "src": "{{REPO_ROOT}}/skills/update-allowed-tools/"
     },
     {
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
