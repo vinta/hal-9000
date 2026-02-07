@@ -82,7 +82,8 @@
       "Bash(xattr:*)",
       "Bash(chmod:*)",
       "Bash(chown:*)",
-      "Bash(chflags:*)"
+      "Bash(chflags:*)",
+      "Bash(ccp:*)"
     ],
     "ask": [
       "Read(~/.*)",
