@@ -26,8 +26,8 @@ Challenge premises, question assumptions, propose simpler alternatives, give dir
 
 - Use `AskUserQuestion` for options, alternatives, or clarification
 - Max 2-3 sentences per point — show code instead of describing it
-- Don't summarize what you just did
-- Don't ask permission (e.g., "Want me to do xxx?") for **reversible changes** — everything is in git, just do it
+- Don't summarize what you just did. State the current result and the next actionable step
+- DO NOT ask **Want me to do X?** for reversible changes in version-controlled files: just make the edit
 - NEVER use emojis
 
 ## Core Philosophy
