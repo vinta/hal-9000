@@ -1,12 +1,12 @@
 {
   "copies": [
     {
-      "dest": "{{HOME}}/.hal_completion.zsh",
-      "src": "{{REPO_ROOT}}/dotfiles/.hal_completion.zsh"
-    },
-    {
       "dest": "{{HOME}}/.claude/CLAUDE.md",
       "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md"
+    },
+    {
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/history.jsonl",
+      "src": "{{HOME}}/.claude/history.jsonl"
     },
     {
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
@@ -14,6 +14,10 @@
     }
   ],
   "links": [
+    {
+      "dest": "{{HOME}}/.hal_completion.zsh",
+      "src": "{{REPO_ROOT}}/dotfiles/.hal_completion.zsh"
+    },
     {
       "dest": "{{HOME}}/.zshrc",
       "src": "{{REPO_ROOT}}/dotfiles/.zshrc"
