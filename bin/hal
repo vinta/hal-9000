@@ -108,7 +108,7 @@ class HAL9000:
         print(f"HAL: {text}")
 
     def _expand_template(self, path):
-        return path.replace("{{HOME}}", os.path.expanduser("~"))
+        return path.replace("{{HOME}}", os.path.expanduser("~")).replace("{{PROJECT_ROOT}}", Setting.PROJECT_ROOT)
 
     def _run(self, command, shell=True, verbose=True):
         if verbose:
