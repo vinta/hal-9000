@@ -151,7 +151,7 @@ wheels = [
 
 [[package]]
 name = "hal-9000"
-version = "0.1.0"
+version = "2001"
 source = { virtual = "." }
 
 [package.optional-dependencies]
