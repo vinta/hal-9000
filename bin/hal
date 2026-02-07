@@ -15,8 +15,8 @@ except ImportError:
 
 
 class Setting:
-    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    DOTFILES_ROOT = os.path.join(PROJECT_ROOT, "dotfiles/")
+    REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    DOTFILES_ROOT = os.path.join(REPO_ROOT, "dotfiles/")
 
 
 class Dotfiles:
@@ -108,7 +108,7 @@ class HAL9000:
         print(f"HAL: {text}")
 
     def _expand_template(self, path):
-        return path.replace("{{HOME}}", os.path.expanduser("~")).replace("{{PROJECT_ROOT}}", Setting.PROJECT_ROOT)
+        return path.replace("{{HOME}}", os.path.expanduser("~")).replace("{{REPO_ROOT}}", Setting.REPO_ROOT)
 
     def _run(self, command, shell=True, verbose=True):
         if verbose:
@@ -141,14 +141,14 @@ class HAL9000:
                 self._hal_says("You should use Homebrew's ansible")
                 sys.exit(1)
 
-        os.chdir(Setting.PROJECT_ROOT)
+        os.chdir(Setting.REPO_ROOT)
         self._run("git fetch")
         self._run("git pull")
 
         # It seems no reason to upgrade ansible every time
         # self._run("brew upgrade ansible")
 
-        os.chdir(os.path.join(Setting.PROJECT_ROOT, "playbooks"))
+        os.chdir(os.path.join(Setting.REPO_ROOT, "playbooks"))
         command = "ansible-playbook site.yml -v"
         if extra_args:
             command = " ".join([command] + extra_args)
@@ -314,7 +314,7 @@ class HAL9000:
     def open_the_pod_bay_doors(self, namespace, extra_args=None):  # noqa: ARG002
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
-        filepath = os.path.join(Setting.PROJECT_ROOT, "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3")
+        filepath = os.path.join(Setting.REPO_ROOT, "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3")
         self._run(f"afplay {filepath}", verbose=False)
 
     def read_lips(self):
