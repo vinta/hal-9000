@@ -62,7 +62,7 @@ Creating clean, atomic commits that follow best practices for version control hy
 
 ## Attribution
 
-Include `Co-Authored-By` at the end of in every commit:
+Include a `Co-Authored-By` footer in every commit message:
 
 If you're an Anthropic Claude model:
 
@@ -82,4 +82,4 @@ If you're a Google Gemini model:
 Co-Authored-By: Gemini <gemini-code-assistant@google.com>
 ```
 
-Skip if you're not above models.
+Skip if you're not one of the above models.
