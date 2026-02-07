@@ -1,6 +1,6 @@
 ---
 name: sync-skills
-description: Scans dotfiles/.claude/skills/ for all skills and updates CLAUDE.md and hal_dotfiles.json to match, then runs hal sync. Use this skill automatically after editing any skill name/description or adding/removing skills under dotfiles/.claude/skills/.
+description: (hal-9000) Syncs the Skills section in CLAUDE.md and skill entries in hal_dotfiles.json with skills/ directory.
 context: fork
 user-invocable: true
 model: haiku
@@ -11,36 +11,14 @@ allowed-tools:
   - Bash(hal sync:*)
 ---
 
-# Overview
+# Instructions
 
-Discovers all skills in `dotfiles/.claude/skills/`, then updates two files to stay in sync:
+**IMPORTANT**: Only use this skill in `/usr/local/hal-9000`. Otherwise, abort.
 
-- `dotfiles/.claude/CLAUDE.md` -- the `## Skills` section
-- `dotfiles/hal_dotfiles.json` -- the `copies` entries for skill directories
+1. **Discover skills**: Glob for `skills/*/SKILL.md` rooted at **this repository** (`/usr/local/hal-9000`). Do NOT search any other directory. Extract `name` and `description` from each YAML frontmatter.
 
-Finally runs `hal sync` to deploy changes.
+2. **Update `dotfiles/.claude/CLAUDE.md`**: Replace the `## Skills` section (up to the next `##` heading or EOF) with a regenerated list, sorted alphabetically. Format: `- \`/name\` -- description`
 
-## Instructions
+3. **Update `dotfiles/hal_dotfiles.json`**: In the `backups` array, replace all entries with `"src"` matching `"{{REPO_ROOT}}/skills/*"` with an entry per discovered skill directory (regardless of `user-invocable`), sorted alphabetically. Format: `{"dest": "{{HOME}}/.claude/skills/<name>/", "src": "{{REPO_ROOT}}/skills/<name>/"}`. Preserve all non-skill entries and the `copies`/`links` arrays as-is.
 
-1. **Find the project root**: Use Glob to locate `dotfiles/.claude/skills/*/SKILL.md`. The project root is the repo containing `dotfiles/`.
-
-2. **Read each SKILL.md frontmatter**: For every skill found, extract `name` and `description` from the YAML frontmatter.
-
-3. **Update `dotfiles/.claude/CLAUDE.md`**:
-   - Find the `## Skills` section (starts with `## Skills` heading).
-   - Replace everything from `## Skills` up to the next `##` heading (or end of file) with a regenerated list.
-   - Include all discovered skills.
-   - Format each entry as: `- \`/name\` -- description`
-   - Sort entries alphabetically by name.
-   - Keep a blank line after the heading and after the last entry.
-
-4. **Update `dotfiles/hal_dotfiles.json`**:
-   - Read the current file and parse the `copies` array.
-   - Replace all `.claude/skills/*` entries with entries for each discovered skill directory (regardless of `user-invocable`).
-   - Format each entry as: `{"dest": "{{HOME}}/.claude/skills/<name>/", "src": ".claude/skills/<name>/"}`
-   - Sort skill entries alphabetically by name.
-   - Preserve all non-skill entries in `copies` (and the entire `links` array) exactly as-is.
-
-5. **Run `hal sync`** to deploy the updated files.
-
-6. **Report** what changed: list any skills added or removed from each file.
+4. **Run `./bin/hal sync`**, then report what changed.
