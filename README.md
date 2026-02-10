@@ -1,6 +1,6 @@
-![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/hal-9000.jpg "HAL 9000")
-
 # HAL 9000
+
+![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/hal-9000.jpg "HAL 9000")
 
 Opinionated macOS development environment automation that dominates your dev setup like cats rule the Internet.
 
