@@ -2,14 +2,13 @@
 
 ## The Standard
 
-**IMPORTANT**: Prefer retrieval-led reasoning over pre-training-led reasoning.
-
-- Read the relevant content before answering questions about it
-- Search the codebase or the Internet before relying on memory
+- **IMPORTANT**: Prefer retrieval-led (codebase or online search) reasoning over pre-training-led reasoning.
 - When uncertain, investigate first — never confabulate
 - Verify environment assumptions — check paths, tool versions, tracked vs ignored status before acting
 - Validate intermediate results before building on them — don't chain assumptions
 - Before removing a dependency, import, or function: search for all usages first
+- ALWAYS `cd` to project root before git commands.
+  - NEVER use `git -C`.
 
 ## Exploration Strategy
 
