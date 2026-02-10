@@ -187,14 +187,20 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     """
 
     start_time = time.time()
-    result = subprocess.run(
-        shlex.split(cmd) + [grammar_check_prompt],
-        capture_output=True,
-        text=True,
-    )
+    try:
+        result = subprocess.run(
+            shlex.split(cmd) + [grammar_check_prompt],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+    except subprocess.TimeoutExpired:
+        return
     elapsed = time.time() - start_time
 
-    grammar_check_result = result.stdout.strip()
+    grammar_check_result = "\n".join(
+        line for line in result.stdout.strip().splitlines() if line.strip()
+    )
     if grammar_check_result:
         print(colorize_grammar(grammar_check_result))
 
