@@ -1,6 +1,6 @@
 ---
 name: explore-codebase
-description: Explores codebase architecture, call flows, and code structure using ast-grep, ripgrep, and fd. Use for navigating unfamiliar code, tracing symbol usage, or answering "how does this work" questions.
+description: Explores codebase with structural and text search using ast-grep (syntax-aware AST matching), ripgrep (fast text/regex search), and fd (file discovery). Use when (1) navigating unfamiliar code or understanding architecture, (2) tracing call flows, symbol definitions, or usages, (3) answering "how does this work" or "where is this defined/called" questions, (4) finding files by name, extension, or path pattern, (5) pre-refactoring analysis to locate all references before changing code.
 context: fork
 user-invocable: true
 model: opus
@@ -11,187 +11,65 @@ allowed-tools:
   - Bash(fd:*)
 ---
 
-# Understand Codebase
-
-Use when navigating code, tracing how functions/classes connect, finding where symbols are defined or called, or answering "how does this work" questions about a codebase.
+# Explore Codebase
 
 ## Tool Selection
 
-| Need                                                         | Tool            |
-| ------------------------------------------------------------ | --------------- |
-| Structural patterns (functions, classes, syntax, call flows) | `sg` (ast-grep) |
-| Text patterns (strings, comments, names)                     | `rg` (ripgrep)  |
-| File discovery by name/extension                             | `fd`            |
+| Need                                       | Tool              |
+| ------------------------------------------ | ----------------- |
+| Structural patterns (functions, classes)   | `sg` (ast-grep)   |
+| Text/regex patterns (strings, names)       | `rg` (ripgrep)    |
+| File discovery by name/extension           | `fd`              |
 
-### Choose ripgrep (`rg`) for:
+**Decision flow**: Find files first? `fd` → pipe to `rg`/`sg`. Syntax-aware match needed? `sg`. Fast text search? `rg`. Uncertain? Start with `rg`, escalate to `sg` if structure matters.
 
-- Text-based searches (strings, comments, variable names)
-- Fast, simple pattern matching across many files
-- When exact code structure doesn't matter
-- Regex searches with context lines
-- Searching binary files or non-code text
+## ast-grep Essentials
 
-### Choose ast-grep (`sg`) for:
-
-- Structural code searches (function signatures, class definitions)
-- Syntax-aware matching that understands code semantics
-- Finding patterns that span multiple lines naturally
-- Refactoring analysis (matching specific AST node types)
-- When you need to match code regardless of formatting/whitespace
-
-### Choose fd for:
-
-- Finding files by name, extension, or path pattern
-- Filtering by modification time or file size
-- Building file lists to pipe into `rg` or `sg`
-- Batch operations on matched files
-
-### Decision Flow
-
-1. Need to find files first? → `fd`, then pipe to `rg` or `sg`
-2. Need syntax-aware matching (functions, classes, imports)? → `sg`
-3. Need fast text/regex search? → `rg`
-4. Uncertain? Start with `rg` (faster), escalate to `sg` if structure matters
-
-## Quick Start
-
-### ast-grep (structural search)
+ast-grep is the least familiar tool -- key syntax summarized here. See [references/ast-grep.md](references/ast-grep.md) for language-specific patterns and YAML rule files.
 
 ```bash
-# Find pattern with metavariables
-sg -p 'console.log($MSG)' -l js
+sg -p 'PATTERN' -l LANG [PATH]
+sg -p 'PATTERN' --has 'INNER' -l LANG       # Must contain
+sg -p 'PATTERN' --not-has 'INNER' -l LANG   # Must not contain
+sg -p 'PATTERN' --inside 'OUTER' -l LANG    # Must be within
+```
 
-# Find function definitions
+### Metavariables
+
+| Syntax   | Captures              | Example                              |
+| -------- | --------------------- | ------------------------------------ |
+| `$VAR`   | Single node           | `console.log($MSG)`                  |
+| `$$$VAR` | Zero or more nodes    | `function($$$ARGS)` -- any arity     |
+| `$_`     | Non-capturing         | `$_FUNC($_)` -- match without capture |
+
+Rules: must be UPPERCASE, same name = same content (`$A == $A` matches `x == x` not `x == y`).
+
+### Examples
+
+```bash
 sg -p 'function $NAME($$$ARGS) { $$$ }' -l js
-
-# Find async functions containing await
 sg -p 'async function $NAME($$$) { $$$ }' --has 'await $EXPR' -l js
+sg -p 'class $NAME extends $PARENT { $$$ }' -l ts
+sg -p 'def $NAME($$$): $$$' -l py
 ```
 
-### ripgrep (text search)
+## ripgrep / fd Quick Reference
+
+Standard CLI tools -- use [references/ripgrep.md](references/ripgrep.md) and [references/fd.md](references/fd.md) for full flag tables.
 
 ```bash
-# Basic search
-rg 'TODO' --type js
+rg PATTERN -t TYPE [PATH]         # Search by file type
+rg -F 'LITERAL' -t TYPE           # Fixed string (no regex)
+rg PATTERN -l                     # List matching files only
+rg PATTERN -C 3                   # With context lines
 
-# Case-insensitive with context
-rg -i 'error' -C 2
-
-# Fixed string (no regex)
-rg -F 'user.email' src/
+fd -e EXT [PATH]                  # Find by extension
+fd PATTERN [PATH]                 # Find by name regex
+fd -e py | xargs rg 'pattern'    # Pipe fd into rg
 ```
 
-### fd (file finding)
+## Performance
 
-```bash
-# Find by extension
-fd -e ts -e tsx src/
-
-# Find files, then search content
-fd -e py | xargs rg 'import numpy'
-```
-
-## Common Patterns
-
-### Codebase Exploration
-
-```bash
-# Find entry points
-sg -p 'export default $COMPONENT' -l tsx
-rg 'if __name__.*main' --type py
-
-# Find class definitions
-sg -p 'class $NAME { $$$ }' -l ts
-rg '^class \w+' --type py
-
-# Find all imports of a module
-sg -p 'import $$$IMPORTS from "react"' -l tsx
-rg '^import.*from ["\x27]lodash' --type ts
-```
-
-### Pre-Refactoring Analysis
-
-```bash
-# Find all usages of a function
-sg -p '$FUNC($$$)' -l js   # where $FUNC matches your function name
-rg 'myFunction\(' --type js
-
-# Find method calls on objects
-sg -p '$OBJ.methodName($$$)' -l js
-
-# Find variable assignments
-sg -p 'const $VAR = $VALUE' -l ts
-```
-
-### Security Audits
-
-```bash
-# Hardcoded secrets
-rg '(password|secret|api_key)\s*[:=]\s*["\x27][^"\x27]+["\x27]' -i
-
-# SQL injection risks
-sg -p 'query($SQL)' -l js
-rg 'execute\(.*\+.*\)' --type py
-
-# Eval usage
-sg -p 'eval($CODE)' -l js
-rg '\beval\s*\(' --type py
-
-# Console statements (for cleanup)
-sg -p 'console.$METHOD($$$)' -l js
-```
-
-### Error Handling Analysis
-
-```bash
-# Find try-catch blocks
-sg -p 'try { $$$ } catch ($E) { $$$ }' -l js
-
-# Find empty catch blocks
-sg -p 'try { $$$ } catch ($E) { }' -l js
-
-# Find functions without error handling
-sg -p 'async function $NAME($$$) { $$$ }' --not-has 'try' -l js
-```
-
-### Dependency Analysis
-
-```bash
-# Find all imports from a package
-rg '^import.*from ["\x27]@company/' --type ts
-
-# Find require statements
-sg -p 'require($PATH)' -l js
-
-# Find dynamic imports
-sg -p 'import($PATH)' -l js
-```
-
-## Performance Tips
-
-1. **Limit scope first**: Use `fd` to narrow files, then search content
-
-   ```bash
-   fd -e py src/ | xargs rg 'class.*Test'
-   ```
-
-2. **Use file type filters**: Both `rg` and `sg` are faster with type hints
-
-   ```bash
-   rg 'pattern' --type rust    # vs searching all files
-   sg -p 'pattern' -l rs       # language-specific parsing
-   ```
-
-3. **Exclude build artifacts**:
-   ```bash
-   rg 'pattern' -g '!node_modules' -g '!dist' -g '!build'
-   fd -e js -E node_modules -E dist
-   ```
-
-## References
-
-Read these for advanced usage:
-
-- [references/ast-grep.md](references/ast-grep.md) - Metavariables, relational rules, composite patterns
-- [references/ripgrep.md](references/ripgrep.md) - Regex syntax, filtering, replacements
-- [references/fd.md](references/fd.md) - Type filters, execution, time-based search
+- Narrow scope first: `fd -e py src/ | xargs rg 'class.*Test'`
+- Always use type filters: `rg PATTERN -t rust`, `sg -p 'PATTERN' -l rs`
+- Exclude artifacts: `rg PATTERN -g '!node_modules' -g '!dist'`
