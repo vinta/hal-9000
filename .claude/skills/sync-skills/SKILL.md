@@ -15,10 +15,20 @@ allowed-tools:
 
 **IMPORTANT**: Only use this skill in `/usr/local/hal-9000`. Otherwise, abort.
 
-1. **Discover skills**: Glob for `skills/*/SKILL.md` rooted at **this repository** (`/usr/local/hal-9000`). Do NOT search any other directory. Extract `name` and `description` from each YAML frontmatter.
+1. **Discover skills**
+   - Glob `skills/*/SKILL.md` in `/usr/local/hal-9000` only
+   - Extract `name` and `description` from each YAML frontmatter
 
-2. **Update `dotfiles/.claude/CLAUDE.md`**: In the `## Skills` section (up to the next `##` heading or EOF), sync entries with discovered skills: add new skills, remove deleted skills, and **update descriptions for existing skills whose frontmatter description has changed**. **Do NOT reorder existing entries — preserve their exact current order.** Append new entries at the end. Format: `- \`name\`: description`. **Description must be a single short sentence (max ~15 words) saying what the skill does — no "Use when" triggers, no verbatim frontmatter.**
+2. **Update `dotfiles/.claude/CLAUDE.md`** (the `## Skills` section)
+   - Format: `- \`name\`: description`
+   - Add new skills, remove deleted skills, update changed descriptions
+   - Preserve existing entry order; append new entries at end
+   - Description: one short sentence (~10 words max) saying what it does — no "Use when" triggers, no verbatim frontmatter
 
-3. **Update `dotfiles/hal_dotfiles.json`**: In the `links` array, add entries for newly discovered skill directories and remove entries whose `"src"` matches `"{{REPO_ROOT}}/skills/*"` but no longer has a corresponding skill. **Do NOT reorder existing entries — preserve their exact current order.** Append new entries at the end. Format: `{"dest": "{{HOME}}/.claude/skills/<name>/", "src": "{{REPO_ROOT}}/skills/<name>/"}`. Preserve all non-skill entries and the `copies` array as-is.
+3. **Update `dotfiles/hal_dotfiles.json`** (the `links` array)
+   - Format: `{"dest": "{{HOME}}/.claude/skills/<name>/", "src": "{{REPO_ROOT}}/skills/<name>/"}`
+   - Add new skill dirs, remove entries whose `"src"` matches `{{REPO_ROOT}}/skills/*` but no longer has a matching skill
+   - Preserve existing entry order; append new entries at end
+   - Leave non-skill entries and `copies` array as-is
 
 4. **Run `./bin/hal sync`**, then report what changed.
