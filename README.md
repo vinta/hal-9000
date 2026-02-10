@@ -1,8 +1,10 @@
-# HAL 9000 [^1]
+# HAL 9000
 
 ![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/hal-9000.jpg "HAL 9000")
 
 Opinionated macOS development environment automation that dominates your dev setup like cats rule the Internet.
+
+> This project is named after Arthur C. Clarke's 2001: A Space Odyssey, a heuristic algorithmic computer designed for sentient processing and total mission control.
 
 ## Tech Stack
 
@@ -94,5 +96,3 @@ hal sync
 ## Demo
 
 <video src="https://github.com/user-attachments/assets/e86ead6d-189b-4361-a98b-4453ac0e8c25" width="800" height="450"></video>
-
-[^1]: This project is named after Arthur C. Clarke's 2001: A Space Odyssey, a heuristic algorithmic computer designed for sentient processing and total mission control.
