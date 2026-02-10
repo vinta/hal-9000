@@ -47,6 +47,13 @@ hal sync
 hal open-the-pod-bay-doors
 ```
 
+## Skills
+
+```bash
+# if you only need agent skills
+npx skills add vinta/hal-9000
+```
+
 ## Development
 
 ```bash
