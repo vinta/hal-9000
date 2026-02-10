@@ -56,4 +56,5 @@ Never mix structural and behavioral changes in the same commit.
 - `commit` -- Creates git commits. Use this skill whenever the user asks to commit, or whenever you need to commit changes as part of a task.
 - `codex` -- Invokes Codex CLI as a second opinion. Use for reviewing plans, code, architectural decisions, or getting an independent perspective from OpenAI's reasoning models.
 - `gemini` -- Invokes Gemini CLI as a second opinion. Use for reviewing plans, code, architectural decisions, AND for analyzing large volumes of content that benefit from Gemini's 1M+ token context window.
+- `explore-codebase` -- Explores codebase architecture, call flows, and code structure using ast-grep, ripgrep, and fd. Use for navigating unfamiliar code, tracing symbol usage, or answering "how does this work" questions.
 - `update-allowed-tools` -- Finds tools a skill's content needs but its allowed-tools frontmatter is missing.
