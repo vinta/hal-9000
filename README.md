@@ -9,7 +9,7 @@ Opinionated macOS development environment automation that dominates your dev set
 - [Agent Skills](skills)
 - [Claude Code](dotfiles/.claude)
 - [Codex](dotfiles/.codex)
-- [Gemini CLI](dotfiles/.gemini)
+- [Gemini](dotfiles/.gemini)
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
 - [Bun](playbooks/roles/bun/tasks/main.yml)
