@@ -1,4 +1,4 @@
-.PHONY: help install hooks-update hooks-run secrets-scan secrets-audit completion
+.PHONY: help install update-hooks run-hooks scan-secrets run-gitleaks run-detect-secrets audit-detect-secrets-report hal-completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -12,13 +12,18 @@ install: ## Install dependencies and setup pre-commit hooks
 	brew install gitleaks
 	$(MAKE) hooks-update
 
-hooks-update: ## Update pre-commit hooks to latest versions
+update-hooks: ## Update pre-commit hooks to latest versions
 	uv run pre-commit autoupdate
 
-hooks-run: ## Run all pre-commit hooks on all files
+run-hooks: ## Run all pre-commit hooks on all files
 	uv run pre-commit run --all-files
 
-secrets-scan: ## Scan for secrets in the codebase
+scan-secrets: run-gitleaks run-detect-secrets  ## Scan for secrets using all scanners
+
+run-gitleaks: ## Scan full git history for secrets
+	gitleaks detect --source . --verbose --redact
+
+run-detect-secrets: ## Scan for secrets in the codebase
 	@if [ ! -f .secrets.baseline ]; then \
 		echo "Creating new baseline..."; \
 		uv run detect-secrets scan | tee .secrets.baseline; \
@@ -27,9 +32,9 @@ secrets-scan: ## Scan for secrets in the codebase
 		uv run detect-secrets scan --baseline .secrets.baseline; \
 	fi
 
-secrets-audit: ## Interactively review detected secrets
+audit-detect-secrets-report: ## Interactively review detected secrets
 	uv run detect-secrets audit .secrets.baseline
 
-completion: ## Regenerate zsh completion script
+hal-completion: ## Regenerate zsh completion script for hal
 	uv run python scripts/generate-completion.py
 	hal sync
