@@ -13,15 +13,15 @@ HAL 9000 is a macOS development environment automation tool that bootstraps and 
 make install                             # uv sync + pre-commit install
 
 # Pre-commit hooks
-make hooks-run                           # Run all hooks on all files
-make hooks-update                        # Update hooks to latest versions
+make run-hooks                           # Run all hooks on all files
+make update-hooks                        # Update hooks to latest versions
 
 # Secret scanning
-make secrets-scan                        # Create/update .secrets.baseline
-make secrets-audit                       # Interactive review of detected secrets
+make scan-secrets                        # Run all secret scanners
+make audit-detect-secrets-report         # Interactive review of detected secrets
 
 # After modifying bin/hal
-make completion                          # Regenerate zsh completion
+make hal-completion                      # Regenerate zsh completion
 
 # Ansible playbooks
 hal update                               # Run all roles
