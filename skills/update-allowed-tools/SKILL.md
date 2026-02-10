@@ -1,6 +1,6 @@
 ---
 name: update-allowed-tools
-description: Finds tools a skill's content needs but its allowed-tools frontmatter is missing.
+description: Scans a skill's SKILL.md and sibling files for tool references (Bash commands, file tools, skill invocations) and adds missing entries to the allowed-tools frontmatter. Use when creating or editing a skill that uses Bash commands or external tools
 context: fork
 user-invocable: true
 model: haiku

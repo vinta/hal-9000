@@ -1,6 +1,6 @@
 ---
 name: gemini
-description: Invokes Gemini CLI as a second opinion. Use for reviewing plans, code, architectural decisions, AND for analyzing large volumes of content that benefit from Gemini's 1M+ token context window.
+description: Invokes Google Gemini CLI for an independent second opinion with a 1M+ token context window. Use when (1) reviewing plans, diffs, or architecture decisions before acting, (2) analyzing large volumes of files or content that exceed normal context limits, (3) wanting a competing perspective from a different model family, (4) scanning or summarizing entire directories or large codebases.
 context: fork
 user-invocable: true
 model: opus

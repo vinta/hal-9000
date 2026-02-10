@@ -1,6 +1,6 @@
 ---
 name: codex
-description: Invokes Codex CLI as a second opinion. Use for reviewing plans, code, architectural decisions, or getting an independent perspective from OpenAI's reasoning models.
+description: Invokes OpenAI Codex CLI for an independent second opinion from a different model family. Use when (1) reviewing plans, diffs, code, or architecture decisions before acting, (2) doing a fresh pass on code or an entire codebase for bugs, edge cases, or missing requirements, (3) sanity-checking work before sharing with users or stakeholders, (4) wanting a competing perspective on trade-offs or design choices.
 context: fork
 user-invocable: true
 model: opus
