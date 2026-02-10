@@ -37,6 +37,7 @@
       "Skill(commit)",
       "Skill(codex)",
       "Skill(gemini)",
+      "Skill(explore-codebase)",
       "Skill(update-allowed-tools)",
       "mcp__ide__getDiagnostics"
     ],
