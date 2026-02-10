@@ -16,7 +16,8 @@
 - For design, architecture, brainstorming, or competing hypotheses: use an agent team so multiple perspectives run in parallel
   - Each teammate must own separate files — no overlapping edits
   - Spawn with full context — teammates don't inherit conversation history
-- For scanning or analyzing large volumes of content: use an agent team or `/gemini` (1M+ context) to parallelize
+  - One teammate must invoke the `codex` skill for an independent second opinion
+- For scanning or analyzing large volumes of content: use an agent team or `gemini` to parallelize
 - For library/API documentation, code generation, setup, or configuration steps: use `context7` MCP automatically — don't rely on pre-training knowledge for library specifics
 - For implementation tasks, execute directly — don't explore alternatives unless asked
 
@@ -52,7 +53,7 @@ Never mix structural and behavioral changes in the same commit.
 
 ## Skills
 
-- `/commit` -- Creates git commits. Use this skill whenever the user asks to commit, or whenever you need to commit changes as part of a task.
-- `/codex` -- Invokes Codex CLI as a second opinion. Use for reviewing plans, code, architectural decisions, or getting an independent perspective from OpenAI's reasoning models.
-- `/gemini` -- Invokes Gemini CLI as a second opinion. Use for reviewing plans, code, architectural decisions, AND for analyzing large volumes of content that benefit from Gemini's 1M+ token context window.
-- `/update-allowed-tools` -- Finds tools a skill's content needs but its allowed-tools frontmatter is missing.
+- `commit` -- Creates git commits. Use this skill whenever the user asks to commit, or whenever you need to commit changes as part of a task.
+- `codex` -- Invokes Codex CLI as a second opinion. Use for reviewing plans, code, architectural decisions, or getting an independent perspective from OpenAI's reasoning models.
+- `gemini` -- Invokes Gemini CLI as a second opinion. Use for reviewing plans, code, architectural decisions, AND for analyzing large volumes of content that benefit from Gemini's 1M+ token context window.
+- `update-allowed-tools` -- Finds tools a skill's content needs but its allowed-tools frontmatter is missing.
