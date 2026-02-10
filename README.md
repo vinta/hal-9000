@@ -27,43 +27,67 @@ curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod
 
 ## Usage
 
+All you need is one command:
+
 ```bash
-# all you need is hal update
 hal update
+```
 
-# if you only want to install specific components
+If you only want to install specific components:
+
+```bash
 hal update --tags python,node
+```
 
-# move file into dotfiles/ and symlink it back
+Move file into dotfiles/ and symlink it back:
+
+```bash
 hal link ~/.zshrc
+```
 
-# copy file into dotfiles/ (no symlink)
+Copy file into dotfiles/ (no symlink):
+
+```bash
 hal copy ~/.config/ghostty/
+```
 
-# sync all links and copies
+Sync all links and copies:
+
+```bash
 hal sync
+```
 
-# open the pod bay doors, please, HAL
+Open the pod bay doors, please, HAL:
+
+```bash
 hal open-the-pod-bay-doors
 ```
 
 ## Skills
 
+If you only need agent skills:
+
 ```bash
-# if you only need agent skills
 npx skills add vinta/hal-9000
 ```
 
 ## Development
 
+Install dev dependencies and pre-commit hooks:
+
 ```bash
-# install dev dependencies and pre-commit hooks
 make install
+```
 
-# after modifying bin/hal, regenerate zsh completion
+After modifying `./bin/hal`, regenerate zsh completion:
+
+```bash
 make completion
+```
 
-# update local completion
+Update local completion:
+
+```bash
 hal sync
 ```
 
