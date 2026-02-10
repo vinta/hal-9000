@@ -2,8 +2,6 @@
 
 # HAL 9000
 
-[![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://vinta.ws/code/)
-
 Opinionated macOS development environment automation that dominates your dev setup like cats rule the Internet.
 
 ## Tech Stack
