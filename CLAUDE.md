@@ -38,19 +38,21 @@ bin/
 
 playbooks/
   site.yml               # Main playbook importing all roles
-  roles/                 # Ansible roles: basic, python, node, docker, kubernetes, aws, gcp, solidity
+  roles/                 # Ansible roles
 
 dotfiles/
   .claude/               # Claude Code config (symlinked to ~/.claude)
-    statusline/run.py    # Grammar-checking statusline using Claude API
-    skills/              # Custom skills for commit and codebase navigation
+  .codex/                # Codex CLI config (symlinked to ~/.codex)
+  .gemini/               # Gemini CLI config (symlinked to ~/.gemini)
   hal_dotfiles.json      # Manifest tracking managed dotfiles
 ```
 
 ## Key Patterns
 
 **Dotfile operations** (`bin/hal`):
+
 - `link`: Symlinks file from home to dotfiles/ (for small configs)
+- `unlink`: Restores file from dotfiles and removes symlink
 - `copy`: Copies with directory structure (for large configs)
 - `sync`: Force-syncs all tracked dotfiles
 
