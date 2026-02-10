@@ -53,8 +53,8 @@ Never mix structural and behavioral changes in the same commit.
 
 ## Skills
 
-- `commit` -- Creates clean, atomic git commits with one logical change per commit. Supports hunk-level staging to split changes across commits and handles pre-commit hook failures. Use when (1) the user asks to commit, (2) completing an implementation task that should be committed, (3) changes need to be split into multiple logical commits (structural vs behavioral vs config).
-- `codex` -- Invokes OpenAI Codex CLI for an independent second opinion from a different model family. Use when (1) reviewing plans, diffs, code, or architecture decisions before acting, (2) doing a fresh pass on code or an entire codebase for bugs, edge cases, or missing requirements, (3) sanity-checking work before sharing with users or stakeholders, (4) wanting a competing perspective on trade-offs or design choices.
-- `gemini` -- Invokes Google Gemini CLI for an independent second opinion with a 1M+ token context window. Use when (1) reviewing plans, diffs, or architecture decisions before acting, (2) analyzing large volumes of files or content that exceed normal context limits, (3) wanting a competing perspective from a different model family, (4) scanning or summarizing entire directories or large codebases.
-- `explore-codebase` -- Explores codebase with structural and text search using ast-grep (syntax-aware AST matching), ripgrep (fast text/regex search), and fd (file discovery). Use when (1) navigating unfamiliar code or understanding architecture, (2) tracing call flows, symbol definitions, or usages, (3) answering "how does this work" or "where is this defined/called" questions, (4) finding files by name, extension, or path pattern, (5) pre-refactoring analysis to locate all references before changing code.
-- `update-allowed-tools` -- Scans a skill's SKILL.md and sibling files for tool references (Bash commands, file tools, skill invocations) and adds missing entries to the allowed-tools frontmatter. Use when creating or editing a skill that uses Bash commands or external tools
+- `commit`: Creates clean, atomic git commits.
+- `codex`: Invokes OpenAI Codex CLI for an independent second opinion.
+- `gemini`: Invokes Google Gemini CLI for a second opinion or large-content analysis.
+- `explore-codebase`: Searches codebase structure with ast-grep, ripgrep, and fd.
+- `update-allowed-tools`: Adds missing tool entries to a skill's allowed-tools frontmatter.
