@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Creates git commits. Use this skill whenever the user asks to commit, or whenever you need to commit changes as part of a task.
+description: Creates clean, atomic git commits with one logical change per commit. Supports hunk-level staging to split changes across commits and handles pre-commit hook failures. Use when (1) the user asks to commit, (2) completing an implementation task that should be committed, (3) changes need to be split into multiple logical commits (structural vs behavioral vs config).
 context: fork
 user-invocable: true
 model: sonnet
