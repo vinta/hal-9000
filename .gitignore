@@ -1,3 +1,5 @@
 playbooks/site.retry
 
 node_modules/
+
+video/out/
