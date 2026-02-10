@@ -6,6 +6,14 @@ repos:
       - id: check-case-conflict
       - id: mixed-line-ending
 
+  - repo: local
+    hooks:
+      - id: gitleaks
+        name: gitleaks
+        entry: gitleaks git --pre-commit --redact --staged --verbose
+        language: system
+        pass_filenames: false
+
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0
     hooks:
