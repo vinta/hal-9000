@@ -9,6 +9,7 @@ help: ## Show this help message
 install: ## Install dependencies and setup pre-commit hooks
 	uv sync --extra dev
 	uv run pre-commit install
+	brew install gitleaks
 	$(MAKE) hooks-update
 
 hooks-update: ## Update pre-commit hooks to latest versions
