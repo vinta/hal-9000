@@ -84,7 +84,7 @@ make install
 After modifying `./bin/hal`, regenerate zsh completion:
 
 ```bash
-make completion
+make hal-completion
 ```
 
 Update local completion:
