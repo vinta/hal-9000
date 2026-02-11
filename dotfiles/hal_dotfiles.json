@@ -67,6 +67,10 @@
       "src": "{{REPO_ROOT}}/skills/update-allowed-tools/"
     },
     {
+      "dest": "{{HOME}}/.claude/skills/magi/",
+      "src": "{{REPO_ROOT}}/skills/magi/"
+    },
+    {
       "dest": "{{HOME}}/.codex/config.toml",
       "src": "{{REPO_ROOT}}/dotfiles/.codex/config.toml"
     },
