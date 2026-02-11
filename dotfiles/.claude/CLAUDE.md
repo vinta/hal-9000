@@ -57,3 +57,4 @@ Never mix structural and behavioral changes in the same commit.
 - `gemini`: Invokes Google Gemini CLI for a second opinion or large-content analysis.
 - `explore-codebase`: Searches codebase structure with ast-grep, ripgrep, and fd.
 - `update-allowed-tools`: Adds missing tool entries to a skill's allowed-tools frontmatter.
+- `magi`: Three-agent deliberation system for competing perspectives.
