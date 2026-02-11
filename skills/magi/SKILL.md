@@ -17,15 +17,15 @@ Three-agent deliberation system inspired by the MAGI from Neon Genesis Evangelio
 
 ## Perspectives
 
-| Unit          | Mode                                          | Core Question                               |
-| ------------- | --------------------------------------------- | ------------------------------------------- |
-| **Scientist** | Analytical -- evidence, logic, data           | What does the evidence say?                 |
-| **Mother**    | Protective -- risk, stability, sustainability | What could go wrong? What must we preserve? |
-| **Woman**     | Creative -- intuition, elegance, pragmatism   | What's the elegant path?                    |
+| Unit          | Mode                                          | Core Question                                |
+| ------------- | --------------------------------------------- | -------------------------------------------- |
+| **Scientist** | Analytical -- evidence, logic, data           | What does the evidence say?                  |
+| **Mother**    | Protective -- risk, stability, sustainability | What could go wrong? Do we even need to act? |
+| **Woman**     | Creative -- intuition, elegance, pragmatism   | What's the elegant path?                     |
 
 Perspectives adapt per domain. Before spawning, map each mode to the specific task:
 
-| Domain        | Melchior                 | Balthazar                    | Caspar                   |
+| Domain        | Scientist                | Mother                       | Woman                    |
 | ------------- | ------------------------ | ---------------------------- | ------------------------ |
 | Architecture  | Correctness, performance | Reliability, maintainability | Developer experience     |
 | Debugging     | Systematic root cause    | Impact, regression risk      | Pattern recognition      |
@@ -61,9 +61,10 @@ digraph magi_flow {
 2. Map the three perspectives to the domain at hand
 3. `TaskCreate` three analysis tasks (one per agent)
 4. Spawn 3 teammates via `Task` tool (see Agent Prompt Template below):
-   - `subagent_type: "general-purpose"`, `team_name: "magi"`
+   - `subagent_type: "general-purpose"`, `team_name: "magi"`, `model: "opus"`
    - `name: "scientist"` / `"mother"` / `"woman"`
 5. `TaskUpdate` to assign each task by `owner`
+6. Switch to **delegate mode** (Shift+Tab) so the lead only orchestrates, never implements
 
 ### Phase 1: Independent Analysis
 
@@ -117,6 +118,9 @@ Your core question: "{CORE_QUESTION}"
 **Risks:** [what could go wrong with your approach]
 **Recommendation:** [concrete actionable suggestion]
 
+## Context
+{RELEVANT_BACKGROUND — teammates do NOT inherit conversation history, include everything needed here}
+
 ## Rules
 - Argue your perspective FULLY -- do not hedge or try to be balanced
 - Be specific and concrete, not abstract
@@ -136,6 +140,8 @@ Your core question: "{CORE_QUESTION}"
 | Skipping synthesis          | Always produce structured consensus or disagreement output                                     |
 | Too many debate rounds      | Two phases is enough -- more adds noise, not insight                                           |
 | Agent goes silent           | Send follow-up message; if still no response, proceed with available analyses and note the gap |
+| Lead starts implementing    | Use delegate mode (Shift+Tab) to restrict lead to coordination only                            |
+| Teammates lack context      | Include ALL relevant context in spawn prompt -- they don't inherit conversation history        |
 
 ## When NOT to Use
 
