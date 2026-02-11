@@ -43,12 +43,8 @@
       "src": "{{REPO_ROOT}}/dotfiles/.claude/statusline/run.py"
     },
     {
-      "dest": "{{HOME}}/.agents/skills/commit/",
-      "src": "{{REPO_ROOT}}/skills/commit/"
-    },
-    {
-      "dest": "{{HOME}}/.claude/skills/commit/",
-      "src": "{{REPO_ROOT}}/skills/commit/"
+      "dest": "{{HOME}}/.claude/skills/magi/",
+      "src": "{{REPO_ROOT}}/skills/magi/"
     },
     {
       "dest": "{{HOME}}/.claude/skills/codex/",
@@ -67,8 +63,12 @@
       "src": "{{REPO_ROOT}}/skills/update-allowed-tools/"
     },
     {
-      "dest": "{{HOME}}/.claude/skills/magi/",
-      "src": "{{REPO_ROOT}}/skills/magi/"
+      "dest": "{{HOME}}/.claude/skills/commit/",
+      "src": "{{REPO_ROOT}}/skills/commit/"
+    },
+    {
+      "dest": "{{HOME}}/.agents/skills/commit/",
+      "src": "{{REPO_ROOT}}/skills/commit/"
     },
     {
       "dest": "{{HOME}}/.codex/config.toml",
