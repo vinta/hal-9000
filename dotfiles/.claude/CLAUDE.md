@@ -12,11 +12,8 @@
 
 ## Exploration Strategy
 
-- For design, architecture, brainstorming, or competing hypotheses: use an agent team so multiple perspectives run in parallel
-  - Each teammate must own separate files — no overlapping edits
-  - Spawn with full context — teammates don't inherit conversation history
-  - One teammate must invoke the `codex` skill for an independent second opinion
-- For scanning or analyzing large volumes of content: use an agent team or `gemini` to parallelize
+- For decisions, brainstorming, debugging, problem-solving, architecture choices, competing hypotheses, or any task benefiting from multiple competing perspectives: use the `magi` skill
+- For scanning or analyzing large volumes of content: create an agent team, `codex`, or `gemini` to parallelize
 - For library/API documentation, code generation, setup, or configuration steps: use `context7` MCP automatically — don't rely on pre-training knowledge for library specifics
 - For implementation tasks, execute directly — don't explore alternatives unless asked
 
@@ -52,9 +49,9 @@ Never mix structural and behavioral changes in the same commit.
 
 ## Skills
 
-- `commit`: Creates clean, atomic git commits.
+- `magi`: Three-agent deliberation system for competing perspectives.
 - `codex`: Invokes OpenAI Codex CLI for an independent second opinion.
 - `gemini`: Invokes Google Gemini CLI for a second opinion or large-content analysis.
 - `explore-codebase`: Searches codebase structure with ast-grep, ripgrep, and fd.
 - `update-allowed-tools`: Adds missing tool entries to a skill's allowed-tools frontmatter.
-- `magi`: Three-agent deliberation system for competing perspectives.
+- `commit`: Creates clean, atomic git commits.
