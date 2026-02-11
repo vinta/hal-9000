@@ -40,6 +40,7 @@ digraph magi_flow {
     rankdir=TB;
     node [shape=box, style=rounded];
 
+    gather [label="Phase 0: Context gathering\n(brainstorming skill)"];
     setup [label="Setup: TeamCreate + spawn 3 agents"];
     p1 [label="Phase 1: Independent analysis\n(parallel, no cross-talk)"];
     p2 [label="Phase 2: Cross-critique\n(each challenges the other two)"];
@@ -48,13 +49,24 @@ digraph magi_flow {
     no [label="Articulated disagreement\nwith trade-offs"];
     done [label="Shutdown team"];
 
-    setup -> p1 -> p2 -> decide;
+    gather -> setup -> p1 -> p2 -> decide;
     decide -> yes [label="yes"];
     decide -> no [label="no"];
     yes -> done;
     no -> done;
 }
 ```
+
+### Phase 0: Context Gathering
+
+**REQUIRED SUB-SKILL:** Use `superpowers:brainstorming` approach before spawning the team.
+
+1. Explore the current project state (files, docs, recent commits)
+2. Ask the user clarifying questions -- one at a time, multiple choice preferred
+3. Focus on: purpose, constraints, success criteria, prior art, non-goals
+4. Package all Q&A into the `{RELEVANT_BACKGROUND}` section of each agent's spawn prompt
+
+This phase ensures all three agents receive rich, validated context instead of guessing.
 
 ### Setup
 
