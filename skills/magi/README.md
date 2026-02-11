@@ -16,7 +16,7 @@ Named after the Biblical Magi -- the three wise men who followed the star to Bet
 
 ## From Anime to Agentic Skill
 
-The `magi` skill translates this into a three-agent deliberation system built on Claude Code's **Agent Team**. When you face a decision with real trade-offs -- architecture choices, debugging hypotheses, design directions -- it spawns three persistent agents, each locked into one of the MAGI's cognitive modes:
+The [magi](SKILL.md) skill translates this into a three-agent deliberation system built on Claude Code's **Agent Team**. When you face a decision with real trade-offs -- architecture choices, debugging hypotheses, design directions -- it spawns three persistent agents, each locked into one of the MAGI's cognitive modes:
 
 | Agent         | Mode       | Asks                                         |
 | ------------- | ---------- | -------------------------------------------- |
