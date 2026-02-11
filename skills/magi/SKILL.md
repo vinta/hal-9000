@@ -2,6 +2,7 @@
 name: magi
 description: Use when facing decisions, brainstorming, problem-solving, debugging, architecture choices, or any task benefiting from multiple competing perspectives
 allowed-tools:
+  - AskUserQuestion
   - TeamCreate
   - TaskCreate
   - TaskUpdate
