@@ -1,6 +1,9 @@
 ---
 name: magi
-description: Use when facing decisions, brainstorming, problem-solving, debugging, architecture choices, or any task benefiting from multiple competing perspectives
+description: Use when facing decisions, brainstorming, debugging, architecture choices, competing hypotheses, or any task benefiting from multiple competing perspectives
+argument-hint: "[question-or-topic]"
+user-invocable: true
+model: opus
 allowed-tools:
   - AskUserQuestion
   - TeamCreate
@@ -61,10 +64,11 @@ digraph magi_flow {
 
 **REQUIRED SUB-SKILL:** Use `superpowers:brainstorming` approach before spawning the team.
 
-1. Explore the current project state (files, docs, recent commits)
-2. Ask the user clarifying questions -- one at a time, multiple choice preferred
-3. Focus on: purpose, constraints, success criteria, prior art, non-goals
-4. Package all Q&A into the `{RELEVANT_BACKGROUND}` section of each agent's spawn prompt
+1. Start from the user's question: **$ARGUMENTS**
+2. Explore the current project state (files, docs, recent commits)
+3. Ask the user clarifying questions -- one at a time, multiple choice preferred
+4. Focus on: purpose, constraints, success criteria, prior art, non-goals
+5. Package all Q&A into the `{RELEVANT_BACKGROUND}` section of each agent's spawn prompt
 
 This phase ensures all three agents receive rich, validated context instead of guessing.
 
