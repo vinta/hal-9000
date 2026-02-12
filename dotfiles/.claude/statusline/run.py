@@ -6,20 +6,39 @@ import subprocess
 import sys
 import tempfile
 import time
+from typing import TypedDict
 
-CACHE_FILE = "/tmp/claude-code-statusline-grammar-check-cache.json"
-
-BLUE = "\033[34m"
-GREEN = "\033[32m"
-RED = "\033[31m"
-WHITE = "\033[37m"
-RESET = "\033[0m"
+CACHE_FILE: str = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
 
-def colorize_grammar(text):
+class _Model(TypedDict):
+    id: str
+
+
+class _Workspace(TypedDict):
+    current_dir: str
+
+
+class _StatusLineDataRequired(TypedDict):
+    model: _Model
+    workspace: _Workspace
+
+
+class StatusLineData(_StatusLineDataRequired, total=False):
+    transcript_path: str
+
+
+BLUE: str = "\033[34m"
+GREEN: str = "\033[32m"
+RED: str = "\033[31m"
+WHITE: str = "\033[37m"
+RESET: str = "\033[0m"
+
+
+def colorize_grammar(text: str) -> str:
     color = GREEN if "no issues" in text.lower() else RED
     lines = text.split("\n")
-    result = []
+    result: list[str] = []
     for line in lines:
         if line.startswith("Grammar"):
             parts = line.split(":", 1)
@@ -32,8 +51,8 @@ def colorize_grammar(text):
     return "\n".join(result)
 
 
-def basic_info(data):
-    git_branch = ""
+def basic_info(data: StatusLineData) -> None:
+    git_branch: str = ""
     try:
         result = subprocess.run(
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],
@@ -46,21 +65,21 @@ def basic_info(data):
     except Exception:
         pass
 
-    current_dir = data["workspace"]["current_dir"]
-    home = os.path.expanduser("~")
+    current_dir: str = data["workspace"]["current_dir"]
+    home: str = os.path.expanduser("~")
     if current_dir.startswith(home):
         current_dir = "~" + current_dir[len(home) :]
 
-    status_parts = [data["model"]["id"], current_dir]
+    status_parts: list[str] = [data["model"]["id"], current_dir]
     if git_branch:
         status_parts.append(git_branch)
 
-    separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
+    separator: str = f"{RESET} {WHITE}·{RESET} {BLUE}"
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
 
 
-def grammar_check(data):
-    transcript_path = data.get("transcript_path")
+def grammar_check(data: StatusLineData) -> None:
+    transcript_path: str | None = data.get("transcript_path")
     if not transcript_path:
         return
 
@@ -70,8 +89,8 @@ def grammar_check(data):
     except FileNotFoundError:
         return
 
-    latest_user_input = ""
-    latest_user_uuid = ""
+    latest_user_input: str = ""
+    latest_user_uuid: str = ""
     for line in reversed(lines):
         try:
             entry = json.loads(line)
@@ -160,8 +179,8 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 === TEXT END ===
 """
 
-    cached_uuid = ""
-    cached_result = ""
+    cached_uuid: str = ""
+    cached_result: str = ""
     try:
         with open(CACHE_FILE, "r") as f:
             cache = json.load(f)
@@ -175,7 +194,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
             print(colorize_grammar(cached_result))
         return
 
-    cmd = """
+    cmd: str = """
         claude
         --model haiku
         --max-turns 1
@@ -186,24 +205,25 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
         --print
     """
 
-    start_time = time.time()
+    start_time: float = time.time()
     try:
         result = subprocess.run(
             shlex.split(cmd) + [grammar_check_prompt],
             capture_output=True,
             text=True,
             timeout=15,
+            cwd="/tmp",
         )
     except subprocess.TimeoutExpired:
         return
-    elapsed = time.time() - start_time
+    elapsed: float = time.time() - start_time
 
-    grammar_check_result = "\n".join(
-        line for line in result.stdout.strip().splitlines() if line.strip()
-    )
+    grammar_check_result: str = "\n".join(line for line in result.stdout.strip().splitlines() if line.strip())
     if grammar_check_result:
         print(colorize_grammar(grammar_check_result))
 
+    fd: int
+    tmp_path: str
     fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="claude-code-statusline-")
     try:
         with os.fdopen(fd, "w") as f:
@@ -219,8 +239,8 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 
 
 # https://code.claude.com/docs/en/statusline
-def main():
-    data = json.load(sys.stdin)
+def main() -> None:
+    data: StatusLineData = json.load(sys.stdin)
 
     basic_info(data)
     grammar_check(data)
