@@ -7,6 +7,7 @@ model: opus
 allowed-tools:
   - AskUserQuestion
   - TeamCreate
+  - Task
   - TaskCreate
   - TaskUpdate
   - TaskList
@@ -91,14 +92,9 @@ Before spawning the team:
    - At least 3 evaluation criteria
    - No known hard constraints left unaddressed
 5. Present the final Decision Packet to the user via `AskUserQuestion` with options like "Looks good, start deliberation" / "I want to adjust something". Only proceed after confirmation.
-6. `TeamCreate` with team name `"magi"`
-7. Map the three perspectives to the domain at hand
-8. `TaskCreate` three analysis tasks (one per agent)
-9. Spawn 3 teammates via `Task` tool (see Agent Prompt Template below):
-   - `subagent_type: "general-purpose"`, `team_name: "magi"`, `model: "opus"`
-   - `name: "scientist"` / `"mother"` / `"woman"`
-10. `TaskUpdate` to assign each task by `owner`
-11. Switch to **delegate mode** (Shift+Tab) so the lead only orchestrates, never implements
+6. `TeamCreate` with team name `"magi"`, map perspectives to domain
+7. `TaskCreate` three analysis tasks (one per agent)
+8. Spawn 3 teammates via `Task` tool (see Agent Prompt Template): `subagent_type: "general-purpose"`, `team_name: "magi"`, `model: "opus"`, names: `"scientist"` / `"mother"` / `"woman"`. Assign each task via `TaskUpdate` by `owner`.
 
 Role constraint (prevents convergence): In Phase 1, each agent must evaluate all options against the criteria, but must also nominate a default favorite under their lens:
 
@@ -106,55 +102,26 @@ Role constraint (prevents convergence): In Phase 1, each agent must evaluate all
 - Mother: safest failure modes and rollback story
 - Woman: the option we choose because it best serves the underlying desire/meaning/experience, with pragmatic guardrails
 
+**Unresponsive agent rule (all phases):** Nudge once. If still no response, proceed with available analyses and note the gap. In voting, mark as "NO VOTE"; treat any 1/2 result as "weak majority."
+
 ### Phase 1: Independent Analysis
 
-Each agent works from their perspective only. **No cross-communication.** Each produces:
-
-- **Thesis**: Core position (2-3 sentences)
-- **Evidence**: Specific supporting arguments
-- **Risks**: What could go wrong with this approach
-- **Recommendation**: Concrete actionable suggestion
-
-**User clarification:** Teammates cannot call `AskUserQuestion` directly -- they are background processes with no terminal access. If an agent needs user input, it must `SendMessage` to the team lead, who relays via `AskUserQuestion` and forwards the answer back.
+Each agent works independently -- **no cross-communication**. Output format (Thesis, Evidence, Risks, Recommendation) is defined in the Agent Prompt Template. If an agent needs user input, it will `SendMessage` the lead, who relays via `AskUserQuestion`.
 
 Wait for all 3 to complete (idle notifications + TaskList showing all completed).
 
-- If an agent hasn't responded after the others have completed, send one nudge asking for a "minimum viable" Thesis + Recommendation in 3 bullets.
-- If still no response after nudge, proceed with available analyses. Record: "No response from {agent}; missing perspective = {mode}; confidence reduced."
-
 ### Phase 2: Debate
 
-The agents must talk to each other directly -- not just report back to the lead. This is the core of the MAGI's "working in tandem."
+Agents must talk to each other directly -- not just report back to the lead.
 
-1. Lead `SendMessage`s each agent with the other two's Phase 1 outputs
-2. Each agent sends critiques **directly to the other agents** via peer `SendMessage`:
-   - Challenge at least one specific claim from each position
-   - Identify blind spots the others missed
-3. Agents respond to incoming peer critiques -- defend or revise their position
-4. One rebuttal round per peer, then stop
-
-The lead monitors via idle notifications (which include peer DM summaries) but does not intervene. Wait for debate to settle (all agents idle after rebuttals).
-
-Cap at 2 rounds (challenge + rebuttal). More adds noise, not insight. If debate stalls, end it and move to Phase 3 with whatever critiques exist.
-
-Agents follow the debate format defined in their spawn prompt (quote, explain, test, improve).
+1. Lead `SendMessage`s each agent with the other two's Phase 1 outputs.
+2. Agents debate peer-to-peer via peer `SendMessage` (critique format in Agent Prompt Template).
+3. Lead monitors via idle notifications (which include peer DM summaries) but does not intervene.
+4. Lead waits for all agents idle after rebuttals. Allow 2 full exchanges (challenge + rebuttal + second challenge + rebuttal); if debate stalls, move to Phase 3.
 
 ### Phase 3: Consensus Vote
 
-After debate, the lead `SendMessage`s each agent requesting a formal vote:
-
-> Based on the full debate, state your **final position** (you may have revised based on debate) and cast your vote:
->
-> - **AGREE**: You endorse the strongest emerging direction
-> - **CONDITIONAL**: You agree IF [specific condition]
-> - **DISAGREE**: Fundamental objection remains -- state what would change your vote
->
-> One-sentence justification. Send vote to team lead.
-
-Wait for all 3 votes. Tally:
-
-- If an agent fails to vote after a nudge, mark vote as "NO VOTE" and proceed with tally using available votes.
-- Treat any 1/2 majority as a "weak majority" and explicitly highlight the missing perspective.
+Lead `SendMessage`s each agent: "Cast your final vote (AGREE / CONDITIONAL / DISAGREE). Format in your prompt." Wait for all 3, then tally:
 
 | Result            | Meaning                                                           |
 | ----------------- | ----------------------------------------------------------------- |
@@ -218,9 +185,9 @@ When the lead sends you the other agents' analyses:
    - One concrete test / evidence / scenario that would resolve the dispute.
    - One actionable improvement.
 3. When you receive critique:
-   - Respond once per peer.
+   - Respond to each peer.
    - Either defend with evidence OR revise your position and say what changed.
-4. Stop after one challenge + one rebuttal round.
+4. 2 full exchanges: after rebuttals, you may send a second challenge addressing their defense, and respond to their second challenge. Then stop.
 
 ## Phase 3: Consensus Vote
 When the lead requests your vote:
@@ -251,9 +218,9 @@ When the lead requests your vote:
 | Skipping the vote           | Always run Phase 3 -- the vote is how MAGI reaches decisions, not the lead's editorial judgment |
 | Perspectives too similar    | Verify domain mapping creates genuine tension before spawning                                   |
 | Skipping synthesis          | Always produce structured consensus or disagreement output with vote tally                      |
-| Too many debate rounds      | Cap at 2 rounds (challenge + rebuttal) -- more adds noise, not insight                          |
+| Too many debate rounds      | Cap at 2 full exchanges (4 messages per peer pair) -- more adds noise, not insight              |
 | Agent goes silent           | Send follow-up message; if still no response, proceed with available analyses and note the gap  |
-| Lead starts implementing    | Use delegate mode (Shift+Tab) to restrict lead to coordination only                             |
+| Lead starts implementing    | Lead only orchestrates -- never writes code, edits files, or makes decisions for agents         |
 | Teammates lack context      | Include ALL relevant context in spawn prompt -- they don't inherit conversation history         |
 | Agent needs user input      | Teammates can't use AskUserQuestion -- they must SendMessage to lead, who relays to user        |
 
