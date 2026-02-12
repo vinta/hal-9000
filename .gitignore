@@ -1,5 +1,11 @@
+# Ansible
 playbooks/site.retry
 
+# Python
+.venv/
+
+# Node.js
 node_modules/
 
+# Remotion
 video/out/
