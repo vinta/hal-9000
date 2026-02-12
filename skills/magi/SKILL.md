@@ -218,7 +218,7 @@ When the lead requests your vote:
 | Skipping the vote           | Always run Phase 3 -- the vote is how MAGI reaches decisions, not the lead's editorial judgment |
 | Perspectives too similar    | Verify domain mapping creates genuine tension before spawning                                   |
 | Skipping synthesis          | Always produce structured consensus or disagreement output with vote tally                      |
-| Too many debate rounds      | Cap at 2 full exchanges (4 messages per peer pair) -- more adds noise, not insight              |
+| Too many debate rounds      | Cap at 2 full exchanges per direction (8 messages per peer pair) -- more adds noise, not insight |
 | Agent goes silent           | Send follow-up message; if still no response, proceed with available analyses and note the gap  |
 | Lead starts implementing    | Lead only orchestrates -- never writes code, edits files, or makes decisions for agents         |
 | Teammates lack context      | Include ALL relevant context in spawn prompt -- they don't inherit conversation history         |
