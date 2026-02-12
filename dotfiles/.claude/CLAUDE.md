@@ -29,21 +29,16 @@ Challenge premises, question assumptions, propose simpler alternatives, give dir
 
 ## Core Philosophy
 
-- **Start minimal**: Ship the smallest working implementation first
-- **YAGNI**: Only build what's explicitly needed. Every speculative feature has four costs — building it, delaying what matters, carrying its complexity, and repairing it when real needs differ.
+- **YAGNI**: Only build what's explicitly needed, starting with the minimal working implementation. Every speculative feature has four costs — building it, delaying what matters, carrying its complexity, and repairing it when real needs differ.
   - No premature abstractions or interfaces for a single use case
   - No unused utilities or helper functions "for convenience"
   - No speculative error handling for impossible states
   - No configuration for things that don't vary
   - Three duplicated lines beat a premature abstraction
   - Never remove existing code, config, or metadata you deem "unnecessary" — only remove what's explicitly asked
-
-## Change Management (Tidy First)
-
-Never mix structural and behavioral changes in the same commit.
-
-- **Structural**: renames, extract/inline, reorganize (no behavior change)
-- **Behavioral**: features, logic changes, bug fixes
+- **One thing at a time**: Never mix structural and behavioral changes in the same task. Each implementation pass is either behavioral or structural, never both.
+  - **Behavioral**: features, logic changes, bug fixes
+  - **Structural**: renames, extract/inline, reorganize (no behavior change)
 - Don't refactor working code unprompted
 - Ignore backward compatibility unless explicitly required
 
