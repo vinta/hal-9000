@@ -4,24 +4,22 @@
 
 ## Background
 
-In _Neon Genesis Evangelion_, the MAGI System is a trio of supercomputers that governs NERV headquarters and the city of Tokyo-3. Built by Dr. Naoko Akagi, each unit contains a different aspect of her personality imprinted onto its organic components:
+In _Neon Genesis Evangelion_, the MAGI are a three-part bio-computer system used by NERV to run operations and adjudicate high-stakes decisions via voting rather than a single monolithic machine.
 
-- **MELCHIOR-1** -- the Scientist. Naoko as a researcher: analytical, evidence-driven, concerned with what is technically correct.
-- **BALTHASAR-2** -- the Mother. Naoko as a parent: protective, risk-aware, weighing the cost of action against the cost of inaction.
-- **CASPER-3** -- the Woman. Naoko as a person: intuitive, pragmatic, drawn to the elegant solution over the merely safe one.
+The three units are named after the Biblical Magi (Melchior, Balthasar, Casper). Dr. Naoko Akagi created the system by imprinting three aspects of herself:
 
-The three MAGI work in tandem, cross-verifying each other's reasoning during deliberation -- the logic of one unit is checked against the instincts of the others before any conclusion is reached. They then resolve through a voting protocol: unanimous agreement, majority (2/3), or deadlock -- and a deadlock is itself a meaningful outcome, surfacing genuine tension rather than papering over it. Critical calls like activating the city's self-destruct sequence require all three to concur. The system's strength is not that it always agrees with itself, but that it forces three fundamentally different value systems to confront the same problem through active debate.
+- **MELCHIOR-1 (Scientist):** evidence, logic, technical correctness
+- **BALTHASAR-2 (Mother):** protection, stability, "what could go wrong"
+- **CASPER-3 (Woman):** desire/attachment, pragmatism, and the will to choose a direction
 
-Named after the Biblical Magi -- the three wise men who followed the star to Bethlehem -- the MAGI embody the idea that wisdom emerges from the convergence of distinct perspectives, not from a single authoritative voice.
+In the show, CASPER is not "neutral compute": it can become the deciding factor and even veto a destructive command in ways characters interpret as Naoko's "woman" aspect choosing based on attachment.
 
 ## From Anime to Agentic Skill
 
-The [magi](SKILL.md) skill translates this into a three-agent deliberation system built on Claude Code's **Agent Team**. When you face a decision with real trade-offs -- architecture choices, debugging hypotheses, design directions -- it spawns three persistent agents, each locked into one of the MAGI's cognitive modes:
+The [magi](SKILL.md) skill translates this into a three-agent deliberation workflow built on Claude Code's **Agent Team**:
 
-| Agent         | Mode       | Asks                                         |
-| ------------- | ---------- | -------------------------------------------- |
-| **Scientist** | Analytical | What does the evidence say?                  |
-| **Mother**    | Protective | What could go wrong? Do we even need to act? |
-| **Woman**     | Creative   | What's the elegant path?                     |
+1. Independent analysis (no cross-talk)
+2. Direct peer-to-peer debate
+3. A formal vote (unanimous / majority / deadlock)
 
-The agents work in three phases. First, they analyze independently with no cross-talk, each arguing their perspective fully without hedging. Then they debate each other directly through peer-to-peer messaging -- challenging specific claims, identifying blind spots, and defending or revising their positions in response to critiques. Finally, each agent casts a formal vote (AGREE, CONDITIONAL, or DISAGREE), and the outcome is determined by tally: unanimous (3/3), majority (2/3), or deadlock -- mirroring the anime's voting protocol where a deadlock is itself a meaningful result.
+The goal is not forced consensus; it's making trade-offs explicit under three incompatible lenses.

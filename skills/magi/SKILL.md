@@ -21,20 +21,22 @@ Three-agent deliberation system inspired by the MAGI from Neon Genesis Evangelio
 
 ## Perspectives
 
-| Unit          | Mode                                          | Core Question                                |
-| ------------- | --------------------------------------------- | -------------------------------------------- |
-| **Scientist** | Analytical -- evidence, logic, data           | What does the evidence say?                  |
-| **Mother**    | Protective -- risk, stability, sustainability | What could go wrong? Do we even need to act? |
-| **Woman**     | Creative -- intuition, elegance, pragmatism   | What's the elegant path?                     |
+| Unit          | Mode                                                                                                         | Core Question                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| **Scientist** | Analytical -- evidence, logic, data                                                                          | What does the evidence say?                                                 |
+| **Mother**    | Protective -- risk, stability, sustainability                                                                | What could go wrong? Do we even need to act?                                |
+| **Woman (Casper)** | Attachment-driven pragmatism -- desire, aesthetics, human reality; stubborn about the thing we actually want | What do we want enough to defend, and what are we willing to pay to get it? |
 
 Perspectives adapt per domain. Before spawning, map each mode to the specific task:
 
-| Domain        | Scientist                | Mother                       | Woman                    |
-| ------------- | ------------------------ | ---------------------------- | ------------------------ |
-| Architecture  | Correctness, performance | Reliability, maintainability | Developer experience     |
-| Debugging     | Systematic root cause    | Impact, regression risk      | Pattern recognition      |
-| Decisions     | Quantitative analysis    | Downside protection          | Upside capture           |
-| Brainstorming | Feasibility, constraints | Sustainability, safety       | Innovation, user delight |
+| Domain        | Scientist                | Mother                       | Woman (Casper)                                                           |
+| ------------- | ------------------------ | ---------------------------- | ------------------------------------------------------------------------ |
+| Architecture  | Correctness, performance | Reliability, maintainability | Simplicity, leverage, DevEx, and "this is the direction we choose" spine |
+| Debugging     | Systematic root cause    | Impact, regression risk      | Pattern recognition + "what's the simplest story that fits reality"      |
+| Decisions     | Quantitative analysis    | Downside protection          | Upside capture + commitment ("pick a hill"), with guardrails             |
+| Brainstorming | Feasibility, constraints | Sustainability, safety       | Novelty + taste + user delight, but forced into a concrete plan          |
+
+Casper constraint: you are allowed to be stubborn. If the group is drifting toward a "safe but joyless" option, force an explicit statement of what you're sacrificing, and defend one option as the one we choose (then propose pragmatic guardrails to make it viable).
 
 ## Workflow
 
@@ -43,7 +45,7 @@ digraph magi_flow {
     rankdir=TB;
     node [shape=box, style=rounded];
 
-    gather [label="Phase 0: Context gathering\n(brainstorming skill)"];
+    gather [label="Phase 0: Context gathering\n(decision packet)"];
     setup [label="Setup: TeamCreate + spawn 3 agents"];
     p1 [label="Phase 1: Independent analysis\n(parallel, no cross-talk)"];
     p2 [label="Phase 2: Debate\n(peer-to-peer, agents challenge each other directly)"];
@@ -66,15 +68,35 @@ digraph magi_flow {
 
 ### Phase 0: Context Gathering
 
-**REQUIRED SUB-SKILL:** Use `superpowers:brainstorming` approach before spawning the team.
+If `superpowers:brainstorming` is available in your environment, use it to drive this phase's dialogue. Regardless, you must produce the Decision Packet below before spawning the team.
+
+Before spawning the team:
 
 1. Start from the user's question: **$ARGUMENTS**
-2. Explore the current project state (files, docs, recent commits)
-3. Ask the user clarifying questions -- one at a time, multiple choice preferred
-4. Focus on: purpose, constraints, success criteria, prior art, non-goals
-5. Package all Q&A into the `{RELEVANT_BACKGROUND}` section of each agent's spawn prompt
+2. Explore the current project state (files, docs, recent commits) only as needed to populate missing context
+3. Produce a single **Decision Packet** to include verbatim in the `{RELEVANT_BACKGROUND}` section of each agent's spawn prompt:
+   - Decision statement (1 sentence)
+   - Options (at least 2):
+     - Option A: ...
+     - Option B: ...
+     - Option C: ... (optional)
+   - Constraints (hard requirements, bullets)
+   - Evaluation criteria (how we'll judge "better", bullets)
+   - Unknowns / questions (bullets)
+   - Non-goals (bullets)
+   - Context links (paths, docs, prior decisions) if relevant
 
-This phase ensures all three agents receive rich, validated context instead of guessing.
+Ask the user clarifying questions (one at a time; multiple choice preferred) until the Decision Packet has:
+
+- At least 2 real options (not just "do it" vs "don't do it")
+- At least 3 evaluation criteria
+- No missing hard constraints
+
+Role constraint (prevents convergence): In Phase 1, each agent must evaluate all options against the criteria, but must also nominate a default favorite under their lens:
+
+- Scientist: strongest evidence and measurable success path
+- Mother: safest failure modes and rollback story
+- Woman (Casper): the option we choose because it best serves the underlying desire/meaning/experience, with pragmatic guardrails
 
 ### Setup
 
@@ -100,6 +122,11 @@ Each agent works from their perspective only. **No cross-communication.** Each p
 
 Wait for all 3 to complete (idle notifications + TaskList showing all completed).
 
+Timebox: 5 minutes.
+
+- If an agent is not done at T+5, send one nudge asking for a "minimum viable" Thesis + Recommendation in 3 bullets.
+- If still no response at T+7, proceed with the other two analyses. Record: "No response from {agent}; missing perspective = {mode}; confidence reduced."
+
 ### Phase 2: Debate
 
 The agents must talk to each other directly -- not just report back to the lead. This is the core of the MAGI's "working in tandem."
@@ -115,11 +142,21 @@ The lead monitors via idle notifications (which include peer DM summaries) but d
 
 Cap at 2 rounds (challenge + rebuttal). More adds noise, not insight.
 
+Timebox: 8 minutes total (challenge + rebuttal). If debate stalls, end debate and move to Phase 3 with whatever critiques exist.
+
+Debate format (forces specificity):
+
+- Quote one exact sentence you're challenging.
+- Explain why it's wrong/incomplete (1-3 sentences).
+- Propose one decisive test / evidence check / scenario that would resolve the dispute.
+- Propose one actionable improvement.
+
 ### Phase 3: Consensus Vote
 
 After debate, the lead `SendMessage`s each agent requesting a formal vote:
 
 > Based on the full debate, state your **final position** (you may have revised based on debate) and cast your vote:
+>
 > - **AGREE**: You endorse the strongest emerging direction
 > - **CONDITIONAL**: You agree IF [specific condition]
 > - **DISAGREE**: Fundamental objection remains -- state what would change your vote
@@ -128,11 +165,16 @@ After debate, the lead `SendMessage`s each agent requesting a formal vote:
 
 Wait for all 3 votes. Tally:
 
-| Result | Meaning |
-|--------|---------|
-| **3/3 Unanimous** | Strong recommendation -- all perspectives aligned |
-| **2/3 Majority** | Recommendation with noted dissent -- present the minority concern |
-| **Deadlock** | No recommendation -- present the trade-offs, user decides |
+Timebox: 3 minutes for votes.
+
+- If an agent fails to vote, mark vote as "NO VOTE" and proceed with tally using available votes.
+- Treat any 1/2 majority as a "weak majority" and explicitly highlight the missing perspective.
+
+| Result            | Meaning                                                           |
+| ----------------- | ----------------------------------------------------------------- |
+| **3/3 Unanimous** | Strong recommendation -- all perspectives aligned                 |
+| **2/3 Majority**  | Recommendation with noted dissent -- present the minority concern |
+| **Deadlock**      | No recommendation -- present the trade-offs, user decides         |
 
 ### Synthesis
 
@@ -157,6 +199,11 @@ Your cognitive mode: **{MODE_DESCRIPTION}**
 For this task, your focus: {DOMAIN_SPECIFIC_FOCUS}
 Your core question: "{CORE_QUESTION}"
 
+## Peers (exact names)
+- scientist
+- mother
+- woman
+
 ## Task
 {TASK_DESCRIPTION}
 
@@ -167,17 +214,27 @@ Produce your analysis in this format:
 **Risks:** [what could go wrong with your approach]
 **Recommendation:** [concrete actionable suggestion]
 
+Phase 1 rules:
+- Base your analysis on the Decision Packet in Context.
+- Evaluate all listed options against the evaluation criteria.
+- Nominate a default favorite option from your lens (even if it's conditional).
+
 Send to team lead via SendMessage when done.
 
 **If you need clarification from the user:** You cannot ask the user directly. Send a message to the team lead explaining what you need, and the lead will ask on your behalf and relay the answer.
 
-## Phase 2: Debate
+## Phase 2: Debate (peer-to-peer)
 When the lead sends you the other agents' analyses:
-1. Send your critiques **directly to each agent** via SendMessage (peer-to-peer)
-2. Respond to critiques directed at you -- defend or revise your position
-3. Challenge specific claims with evidence, don't just state disagreement
-4. Do NOT soften your position to be polite -- genuine disagreement produces better outcomes
-5. One rebuttal per peer, then stop
+1. Send critiques directly to EACH peer (two separate messages).
+2. Each critique must include:
+   - One quoted claim you're challenging (copy the sentence).
+   - Why it's wrong/incomplete (1-3 sentences).
+   - One concrete test / evidence / scenario that would resolve the dispute.
+   - One actionable improvement.
+3. When you receive critique:
+   - Respond once per peer.
+   - Either defend with evidence OR revise your position and say what changed.
+4. Stop after one challenge + one rebuttal round.
 
 ## Phase 3: Consensus Vote
 When the lead requests your vote:
@@ -203,7 +260,7 @@ When the lead requests your vote:
 | --------------------------- | ----------------------------------------------------------------------------------------------- |
 | Agents converge immediately | Prompt says "argue fully, do not hedge"                                                         |
 | Lead mediates all comms     | Agents must message each other directly in Phase 2 -- the lead distributes, then steps back     |
-| Agents don't message peers  | Spawn prompt must list peer names and explicitly instruct direct SendMessage                     |
+| Agents don't message peers  | Spawn prompt must list peer names and explicitly instruct direct SendMessage                    |
 | Agents water down positions | Prompt says "do NOT soften to be polite"                                                        |
 | Skipping the vote           | Always run Phase 3 -- the vote is how MAGI reaches decisions, not the lead's editorial judgment |
 | Perspectives too similar    | Verify domain mapping creates genuine tension before spawning                                   |
