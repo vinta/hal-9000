@@ -34,7 +34,7 @@ Perspectives adapt per domain. Before spawning, map each mode to the specific ta
 | Architecture  | Correctness, performance, measurable trade-offs | Reliability, maintainability, rollback plan     | Simplicity, DevEx, decisive direction        |
 | Debugging     | Reproducible root cause, instrumentation        | Blast radius, regression risk, safe mitigations | Pattern recognition, simplest coherent story |
 | Decisions     | Quant analysis, measurable outcomes             | Downside protection, reversibility              | Upside capture, commitment, guardrails       |
-| Brainstorming | Feasibility, constraints                        | Sustainability, safety                          | Novelty, taste, user delight                 |
+| Brainstorming | Feasibility, constraints                        | Sustainability, safety                          | Innovation, taste, user delight              |
 
 Woman constraint: you are allowed to be stubborn. If the group is drifting toward a "safe but joyless" option, force an explicit statement of what you're sacrificing, and defend one option as the one we choose (then propose pragmatic guardrails to make it viable).
 
@@ -90,7 +90,7 @@ Ask the user clarifying questions (one at a time; multiple choice preferred) unt
 
 - At least 2 real options (not just "do it" vs "don't do it")
 - At least 3 evaluation criteria
-- No missing hard constraints
+- No known hard constraints left unaddressed
 
 Role constraint (prevents convergence): In Phase 1, each agent must evaluate all options against the criteria, but must also nominate a default favorite under their lens:
 
@@ -122,10 +122,8 @@ Each agent works from their perspective only. **No cross-communication.** Each p
 
 Wait for all 3 to complete (idle notifications + TaskList showing all completed).
 
-Timebox: 5 minutes.
-
-- If an agent is not done at T+5, send one nudge asking for a "minimum viable" Thesis + Recommendation in 3 bullets.
-- If still no response at T+7, proceed with the other two analyses. Record: "No response from {agent}; missing perspective = {mode}; confidence reduced."
+- If an agent hasn't responded after the others have completed, send one nudge asking for a "minimum viable" Thesis + Recommendation in 3 bullets.
+- If still no response after nudge, proceed with available analyses. Record: "No response from {agent}; missing perspective = {mode}; confidence reduced."
 
 ### Phase 2: Debate
 
@@ -140,16 +138,9 @@ The agents must talk to each other directly -- not just report back to the lead.
 
 The lead monitors via idle notifications (which include peer DM summaries) but does not intervene. Wait for debate to settle (all agents idle after rebuttals).
 
-Cap at 2 rounds (challenge + rebuttal). More adds noise, not insight.
+Cap at 2 rounds (challenge + rebuttal). More adds noise, not insight. If debate stalls, end it and move to Phase 3 with whatever critiques exist.
 
-Timebox: 8 minutes total (challenge + rebuttal). If debate stalls, end debate and move to Phase 3 with whatever critiques exist.
-
-Debate format (forces specificity):
-
-- Quote one exact sentence you're challenging.
-- Explain why it's wrong/incomplete (1-3 sentences).
-- Propose one decisive test / evidence check / scenario that would resolve the dispute.
-- Propose one actionable improvement.
+Agents follow the debate format defined in their spawn prompt (quote, explain, test, improve).
 
 ### Phase 3: Consensus Vote
 
@@ -165,9 +156,7 @@ After debate, the lead `SendMessage`s each agent requesting a formal vote:
 
 Wait for all 3 votes. Tally:
 
-Timebox: 3 minutes for votes.
-
-- If an agent fails to vote, mark vote as "NO VOTE" and proceed with tally using available votes.
+- If an agent fails to vote after a nudge, mark vote as "NO VOTE" and proceed with tally using available votes.
 - Treat any 1/2 majority as a "weak majority" and explicitly highlight the missing perspective.
 
 | Result            | Meaning                                                           |
@@ -261,7 +250,7 @@ When the lead requests your vote:
 | Agents converge immediately | Prompt says "argue fully, do not hedge"                                                         |
 | Lead mediates all comms     | Agents must message each other directly in Phase 2 -- the lead distributes, then steps back     |
 | Agents don't message peers  | Spawn prompt must list peer names and explicitly instruct direct SendMessage                    |
-| Agents water down positions | Prompt says "do NOT soften to be polite"                                                        |
+| Agents water down positions | Prompt says "do not hedge or try to be balanced"                                                |
 | Skipping the vote           | Always run Phase 3 -- the vote is how MAGI reaches decisions, not the lead's editorial judgment |
 | Perspectives too similar    | Verify domain mapping creates genuine tension before spawning                                   |
 | Skipping synthesis          | Always produce structured consensus or disagreement output with vote tally                      |
