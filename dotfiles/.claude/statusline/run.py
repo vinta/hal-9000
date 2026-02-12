@@ -8,23 +8,12 @@ import tempfile
 import time
 from typing import TypedDict
 
-CACHE_FILE: str = "/tmp/claude-code-statusline-grammar-check-cache.json"
 
-
-class _Model(TypedDict):
-    id: str
-
-
-class _Workspace(TypedDict):
-    current_dir: str
-
-
-class _StatusLineDataRequired(TypedDict):
-    model: _Model
-    workspace: _Workspace
-
-
-class StatusLineData(_StatusLineDataRequired, total=False):
+# https://code.claude.com/docs/en/statusline#available-data
+class StatusLineData(TypedDict):
+    model: dict[str, str]
+    workspace: dict[str, str]
+    session_id: str
     transcript_path: str
 
 
@@ -179,10 +168,15 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 === TEXT END ===
 """
 
+    session_id: str | None = data.get("session_id")
+    if not session_id:
+        return
+    cache_file: str = f"/tmp/claude-code-statusline-grammar-check-{session_id}.json"
+
     cached_uuid: str = ""
     cached_result: str = ""
     try:
-        with open(CACHE_FILE, "r") as f:
+        with open(cache_file, "r") as f:
             cache = json.load(f)
             cached_uuid = cache.get("uuid", "")
             cached_result = cache.get("result", "")
@@ -228,9 +222,16 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     try:
         with os.fdopen(fd, "w") as f:
             json.dump(
-                {"uuid": latest_user_uuid, "input": latest_user_input, "result": grammar_check_result, "elapsed": elapsed}, f
+                {
+                    "uuid": latest_user_uuid,
+                    "input": latest_user_input,
+                    "result": grammar_check_result,
+                    "elapsed": elapsed,
+                    "cwd": os.getcwd(),
+                },
+                f,
             )
-        os.rename(tmp_path, CACHE_FILE)
+        os.rename(tmp_path, cache_file)
     except Exception:
         try:
             os.unlink(tmp_path)
@@ -238,7 +239,6 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
             pass
 
 
-# https://code.claude.com/docs/en/statusline
 def main() -> None:
     data: StatusLineData = json.load(sys.stdin)
 
