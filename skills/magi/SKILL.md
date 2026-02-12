@@ -25,18 +25,18 @@ Three-agent deliberation system inspired by the MAGI from Neon Genesis Evangelio
 | ------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | **Scientist** | Analytical -- evidence, experiments, measurement                  | What does the evidence say?                                            |
 | **Mother**    | Protective -- risk, reversibility, long-term stability            | What could go wrong? Do we even need to act?                           |
-| **Woman (Casper)** | Attachment-driven pragmatism -- desire, taste, commitment         | What do we want enough to defend, and what will we pay for it?         |
+| **Woman**     | Attachment-driven pragmatism -- desire, taste, commitment         | What do we want enough to defend, and what will we pay for it?         |
 
 Perspectives adapt per domain. Before spawning, map each mode to the specific task:
 
-| Domain        | Scientist                                     | Mother                                           | Woman (Casper)                              |
+| Domain        | Scientist                                     | Mother                                           | Woman                                      |
 | ------------- | --------------------------------------------- | ------------------------------------------------ | ------------------------------------------ |
 | Architecture  | Correctness, performance, measurable trade-offs | Reliability, maintainability, rollback plan      | Simplicity, DevEx, decisive direction      |
 | Debugging     | Reproducible root cause, instrumentation        | Blast radius, regression risk, safe mitigations  | Pattern recognition, simplest coherent story |
 | Decisions     | Quant analysis, measurable outcomes             | Downside protection, reversibility               | Upside capture, commitment, guardrails     |
 | Brainstorming | Feasibility, constraints                        | Sustainability, safety                           | Novelty, taste, user delight               |
 
-Casper constraint: you are allowed to be stubborn. If the group is drifting toward a "safe but joyless" option, force an explicit statement of what you're sacrificing, and defend one option as the one we choose (then propose pragmatic guardrails to make it viable).
+Woman constraint: you are allowed to be stubborn. If the group is drifting toward a "safe but joyless" option, force an explicit statement of what you're sacrificing, and defend one option as the one we choose (then propose pragmatic guardrails to make it viable).
 
 ## Workflow
 
@@ -96,7 +96,7 @@ Role constraint (prevents convergence): In Phase 1, each agent must evaluate all
 
 - Scientist: strongest evidence and measurable success path
 - Mother: safest failure modes and rollback story
-- Woman (Casper): the option we choose because it best serves the underlying desire/meaning/experience, with pragmatic guardrails
+- Woman: the option we choose because it best serves the underlying desire/meaning/experience, with pragmatic guardrails
 
 ### Setup
 
