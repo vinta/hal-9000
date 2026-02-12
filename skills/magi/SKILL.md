@@ -45,10 +45,9 @@ digraph magi_flow {
     rankdir=TB;
     node [shape=box, style=rounded];
 
-    gather [label="Phase 0: Context gathering\n(decision packet)"];
-    setup [label="Setup: TeamCreate + spawn 3 agents"];
-    p1 [label="Phase 1: Independent analysis\n(parallel, no cross-talk)"];
-    p2 [label="Phase 2: Debate\n(peer-to-peer, agents challenge each other directly)"];
+    gather [label="Phase 0: Context gathering\n+ team setup"];
+    analysis [label="Phase 1: Independent analysis\n(parallel, no cross-talk)"];
+    debate [label="Phase 2: Debate\n(peer-to-peer, agents challenge each other directly)"];
     vote [label="Phase 3: Consensus vote\n(each agent casts final position)"];
     tally [label="Tally" shape=diamond style=""];
     unanimous [label="3/3 Unanimous\nStrong recommendation"];
@@ -56,7 +55,7 @@ digraph magi_flow {
     deadlock [label="Deadlock\nArticulated trade-offs"];
     done [label="Shutdown team"];
 
-    gather -> setup -> p1 -> p2 -> vote -> tally;
+    gather -> analysis -> debate -> vote -> tally;
     tally -> unanimous [label="3/3"];
     tally -> majority [label="2/3"];
     tally -> deadlock [label="split"];
@@ -68,13 +67,15 @@ digraph magi_flow {
 
 ### Phase 0: Context Gathering
 
-If `superpowers:brainstorming` is available in your environment, use it to drive this phase's dialogue. Regardless, you must produce the Decision Packet below before spawning the team.
+**HARD GATE: Do NOT call `TeamCreate` or spawn any agents until the Decision Packet is complete and the user has confirmed the framing.**
+
+If `superpowers:brainstorming` is available in your environment, use it to drive this phase's dialogue.
 
 Before spawning the team:
 
 1. Start from the user's question: **$ARGUMENTS**
 2. Explore the current project state (files, docs, recent commits) only as needed to populate missing context
-3. Produce a single **Decision Packet** to include verbatim in the `{RELEVANT_BACKGROUND}` section of each agent's spawn prompt:
+3. Draft a **Decision Packet**:
    - Decision statement (1 sentence)
    - Options (at least 2):
      - Option A: ...
@@ -85,29 +86,25 @@ Before spawning the team:
    - Unknowns / questions (bullets)
    - Non-goals (bullets)
    - Context links (paths, docs, prior decisions) if relevant
-
-Ask the user clarifying questions (one at a time; multiple choice preferred) until the Decision Packet has:
-
-- At least 2 real options (not just "do it" vs "don't do it")
-- At least 3 evaluation criteria
-- No known hard constraints left unaddressed
+4. Use `AskUserQuestion` (one round at a time; multiple-choice preferred) to fill gaps until the Decision Packet has:
+   - At least 2 real options (not just "do it" vs "don't do it")
+   - At least 3 evaluation criteria
+   - No known hard constraints left unaddressed
+5. Present the final Decision Packet to the user via `AskUserQuestion` with options like "Looks good, start deliberation" / "I want to adjust something". Only proceed after confirmation.
+6. `TeamCreate` with team name `"magi"`
+7. Map the three perspectives to the domain at hand
+8. `TaskCreate` three analysis tasks (one per agent)
+9. Spawn 3 teammates via `Task` tool (see Agent Prompt Template below):
+   - `subagent_type: "general-purpose"`, `team_name: "magi"`, `model: "opus"`
+   - `name: "scientist"` / `"mother"` / `"woman"`
+10. `TaskUpdate` to assign each task by `owner`
+11. Switch to **delegate mode** (Shift+Tab) so the lead only orchestrates, never implements
 
 Role constraint (prevents convergence): In Phase 1, each agent must evaluate all options against the criteria, but must also nominate a default favorite under their lens:
 
 - Scientist: strongest evidence and measurable success path
 - Mother: safest failure modes and rollback story
 - Woman: the option we choose because it best serves the underlying desire/meaning/experience, with pragmatic guardrails
-
-### Setup
-
-1. `TeamCreate` with team name `"magi"`
-2. Map the three perspectives to the domain at hand
-3. `TaskCreate` three analysis tasks (one per agent)
-4. Spawn 3 teammates via `Task` tool (see Agent Prompt Template below):
-   - `subagent_type: "general-purpose"`, `team_name: "magi"`, `model: "opus"`
-   - `name: "scientist"` / `"mother"` / `"woman"`
-5. `TaskUpdate` to assign each task by `owner`
-6. Switch to **delegate mode** (Shift+Tab) so the lead only orchestrates, never implements
 
 ### Phase 1: Independent Analysis
 
