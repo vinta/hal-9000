@@ -14,6 +14,9 @@ allowed-tools:
   - TaskList
   - TaskGet
   - SendMessage
+  - Bash(mkdir)
+  - Read
+  - Write
 ---
 
 # MAGI
@@ -54,15 +57,17 @@ digraph magi_flow {
     unanimous [label="3/3 Unanimous\nStrong recommendation"];
     majority [label="2/3 Majority\nRecommendation + noted dissent"];
     deadlock [label="Deadlock\nArticulated trade-offs"];
+    log [label="Write decision log\ndocs/magi/YYYY-MM-DD-<topic>.md"];
     done [label="Shutdown team"];
 
     gather -> analysis -> debate -> vote -> tally;
     tally -> unanimous [label="3/3"];
     tally -> majority [label="2/3"];
     tally -> deadlock [label="split"];
-    unanimous -> done;
-    majority -> done;
-    deadlock -> done;
+    unanimous -> log;
+    majority -> log;
+    deadlock -> log;
+    log -> done;
 }
 ```
 
@@ -70,27 +75,27 @@ digraph magi_flow {
 
 **HARD GATE: Do NOT call `TeamCreate` or spawn any agents until the Decision Packet is complete and the user has confirmed the framing.**
 
-If `superpowers:brainstorming` is available in your environment, use it to drive this phase's dialogue.
-
 Before spawning the team:
 
 1. Start from the user's question: **$ARGUMENTS**
 2. Explore the current project state (files, docs, recent commits) only as needed to populate missing context
-3. Draft a **Decision Packet**:
+3. **Ask clarifying questions** to understand the decision space (see `superpowers:brainstorming` for questioning technique):
+   - One question per message -- do not bundle multiple questions
+   - Prefer multiple-choice via `AskUserQuestion` when possible
+   - Focus on: purpose, constraints, what success looks like, what's off the table
+   - If a topic needs more exploration, break it into multiple questions
+   - Keep going until you understand the problem well enough to frame it
+4. Draft a **Decision Packet** from what you've learned:
    - Decision statement (1 sentence)
-   - Options (at least 2):
+   - Options (at least 2, not just "do it" vs "don't do it"):
      - Option A: ...
      - Option B: ...
      - Option C: ... (optional)
    - Constraints (hard requirements, bullets)
-   - Evaluation criteria (how we'll judge "better", bullets)
+   - Evaluation criteria (at least 3 -- how we'll judge "better", bullets)
    - Unknowns / questions (bullets)
    - Non-goals (bullets)
    - Context links (paths, docs, prior decisions) if relevant
-4. Use `AskUserQuestion` (one round at a time; multiple-choice preferred) to fill gaps until the Decision Packet has:
-   - At least 2 real options (not just "do it" vs "don't do it")
-   - At least 3 evaluation criteria
-   - No known hard constraints left unaddressed
 5. Present the final Decision Packet to the user via `AskUserQuestion` with options like "Looks good, start deliberation" / "I want to adjust something". Only proceed after confirmation.
 6. `TeamCreate` with team name `"magi"`, map perspectives to domain
 7. `TaskCreate` three analysis tasks (one per agent)
@@ -138,6 +143,52 @@ Team lead reads the votes and full debate record, then presents to the user:
 **Majority (2/3):** Recommendation from the majority, with the dissenting perspective's core concern highlighted. State what conditions would flip the dissent.
 
 **Deadlock:** Each position summarized, the core dilemma articulated, trade-offs mapped. A deadlock is a meaningful outcome that surfaces real trade-offs the user must resolve. The MAGI system provides analysis, not forced consensus -- state your recommendation noting which perspective carries most weight, but the user decides.
+
+### Decision Log
+
+After synthesis, write the deliberation record to `docs/magi/YYYY-MM-DD-<topic>.md` (create the directory if needed) and commit it. Use this template:
+
+```markdown
+# <Decision Statement>
+
+**Date:** YYYY-MM-DD
+**Vote:** Unanimous | Majority (2/3) | Deadlock
+
+## Options Considered
+
+- **Option A:** ...
+- **Option B:** ...
+
+## Debate Transcript
+
+Full peer-to-peer exchange from Phase 2, organized by pairing:
+
+### Scientist vs Mother
+
+<paste each critique and rebuttal in order>
+
+### Scientist vs Woman
+
+<paste each critique and rebuttal in order>
+
+### Mother vs Woman
+
+<paste each critique and rebuttal in order>
+
+## Verdict
+
+<Recommendation or articulated trade-offs if deadlock>
+
+**Scientist:** <final position + key evidence>
+**Mother:** <final position + key risks>
+**Woman:** <final position + key desires>
+
+## Dissent
+
+<Minority concern and conditions that would flip the decision. Omit if unanimous.>
+```
+
+Include the full debate transcript -- the critiques and rebuttals are the most valuable part of the record. The verdict section should stay concise.
 
 ### Cleanup
 
