@@ -24,23 +24,38 @@ allowed-tools:
 
 ## Overview
 
-Three-agent deliberation system inspired by the MAGI from Neon Genesis Evangelion. Three persistent agents with distinct cognitive modes analyze independently, debate each other directly through peer-to-peer messaging, and reach consensus through formal vote (3/3 unanimous, 2/3 majority, or deadlock).
+MAGI is a three-agent deliberation workflow inspired by the MAGI system from Neon Genesis Evangelion. It is designed for decisions where trade-offs are real and no single concern should dominate.
+
+The workflow has four stages:
+
+1. Decision framing
+2. Independent analysis
+3. Peer-to-peer debate
+4. Consensus vote and synthesis
+
+### Execution Invariants
+
+- Do not create team members until the Decision Packet is complete and user-confirmed.
+- Lead orchestrates; agents argue. The lead does not substitute its own judgment for agent outputs.
+- Phase 2 requires direct peer messages between agents (not lead-mediated monologues).
+- Every run must include Phase 3 voting, even when consensus seems obvious.
+- Every run must write a decision log to `docs/magi/`.
 
 ## When NOT to Use
 
-- Factual lookups with single correct answers
-- Simple implementation tasks (just do them)
-- Sequential file edits (agents will conflict on shared files)
+- Factual lookups with a single correct answer
+- Simple implementation tasks where no material trade-off exists
+- Sequential file edits where parallel agents will conflict on the same files
 
 ## Perspectives
 
 | Unit          | Mode                                                      | Core Question                                                  |
 | ------------- | --------------------------------------------------------- | -------------------------------------------------------------- |
-| **Scientist** | Analytical -- evidence, experiments, measurement          | What does the evidence say?                                    |
-| **Mother**    | Protective -- risk, reversibility, long-term stability    | What could go wrong? Do we even need to act?                   |
-| **Woman**     | Attachment-driven pragmatism -- desire, taste, commitment | What do we want enough to defend, and what will we pay for it? |
+| **Scientist** | Analytical - evidence, experiments, measurement           | What does the evidence say?                                    |
+| **Mother**    | Protective - risk, reversibility, long-term stability     | What could go wrong? Do we even need to act?                   |
+| **Woman**     | Attachment-driven pragmatism - desire, taste, commitment  | What do we want enough to defend, and what will we pay for it? |
 
-Perspectives adapt per domain. Before spawning, map each mode to the specific task:
+Before spawning, map each perspective to the domain:
 
 | Domain        | Scientist                                       | Mother                                          | Woman                                        |
 | ------------- | ----------------------------------------------- | ----------------------------------------------- | -------------------------------------------- |
@@ -49,7 +64,7 @@ Perspectives adapt per domain. Before spawning, map each mode to the specific ta
 | Decisions     | Quant analysis, measurable outcomes             | Downside protection, reversibility              | Upside capture, commitment, guardrails       |
 | Brainstorming | Feasibility, constraints                        | Sustainability, safety                          | Innovation, taste, user delight              |
 
-Woman constraint: you are allowed to be stubborn. If the group is drifting toward a "safe but joyless" option, force an explicit statement of what you're sacrificing, and defend one option as the one we choose (then propose pragmatic guardrails to make it viable).
+Woman constraint: you are allowed to be stubborn. If the group drifts toward a safe but joyless option, force an explicit statement of what is being sacrificed, defend one option decisively, and propose guardrails that make it viable.
 
 ## Workflow
 
@@ -58,93 +73,222 @@ digraph magi {
     rankdir=TB;
     node [shape=box, style=rounded];
 
-    explore [label="Explore project context"];
-    questions [label="Ask clarifying questions"];
+    explore [label="Explore context"];
+    clarify [label="Ask clarifying questions"];
     packet [label="Draft Decision Packet"];
-    confirm [label="User confirms framing?" shape=diamond style=""];
-    analysis [label="Phase 1: Independent analysis\n(parallel, no cross-talk)"];
-    debate [label="Phase 2: Debate\n(peer-to-peer, agents challenge each other directly)"];
-    vote [label="Phase 3: Consensus vote\n(each agent casts final position)"];
-    tally [label="Tally" shape=diamond style=""];
-    unanimous [label="3/3 Unanimous\nStrong recommendation"];
-    majority [label="2/3 Majority\nRecommendation + noted dissent"];
-    deadlock [label="Deadlock\nArticulated trade-offs"];
+    confirm [label="Framing confirmed?" shape=diamond style=""];
+    spawn [label="Create team + tasks"];
+    analysis [label="Phase 1: Independent analysis"];
+    debate [label="Phase 2: Peer debate"];
+    vote [label="Phase 3: Consensus vote"];
+    tally [label="Tally result" shape=diamond style=""];
+    synth [label="Synthesize for user"];
     log [label="Write decision log"];
 
-    explore -> questions -> packet -> confirm;
-    confirm -> questions [label="adjust"];
-    confirm -> analysis [label="yes"];
-    analysis -> debate -> vote -> tally;
-    tally -> unanimous [label="3/3"];
-    tally -> majority [label="2/3"];
-    tally -> deadlock [label="split"];
-    unanimous -> log;
-    majority -> log;
-    deadlock -> log;
+    explore -> clarify -> packet -> confirm;
+    confirm -> clarify [label="adjust"];
+    confirm -> spawn [label="yes"];
+    spawn -> analysis -> debate -> vote -> tally;
+    tally -> synth;
+    synth -> log;
 }
 ```
 
-### Phase 0: Context Gathering
+### Phase 0: Decision Framing (Hard Gate)
 
-**HARD GATE: Do NOT spawn any agents until the Decision Packet is complete and the user has confirmed the framing.**
+**Entry criteria:** User asks a decision question with genuine trade-offs.
 
-1. Start from the user's question: **$ARGUMENTS**
-2. Explore the current project state (files, docs, recent commits) only as needed
-3. **Ask clarifying questions** -- one at a time, prefer multiple-choice via `AskUserQuestion`:
-   - Purpose, constraints, what success looks like, what's off the table
-   - Keep going until you can frame the decision
-4. Draft a **Decision Packet**:
-   - Decision statement (1 sentence)
-   - Options (at least 2, not just "do it" vs "don't do it")
-   - Constraints (hard requirements)
-   - Evaluation criteria (at least 3 -- how we'll judge "better")
-   - Unknowns / questions
-   - Non-goals
-   - Context links (paths, docs, prior decisions) if relevant
-5. Present the Decision Packet via `AskUserQuestion` ("Looks good, start deliberation" / "I want to adjust something"). Only proceed after confirmation.
-6. Create team `"magi"`, spawn `scientist`, `mother`, `woman` (see Agent Prompt Template), assign one analysis task each.
+1. Start from the user question: **$ARGUMENTS**.
+2. Explore context (files, docs, prior decisions, relevant code, search online).
+3. Ask clarifying questions one at a time via `AskUserQuestion` (prefer multiple-choice):
+   - Decision objective
+   - Constraints and non-negotiables
+   - Success criteria
+   - Explicitly out-of-scope items
+4. Draft a Decision Packet using the required schema below.
+5. Validate the packet:
+   - At least 3 real options (not "do" vs "do not do")
+   - At least 3 evaluation criteria
+   - Non-goals and unknowns included
+6. Present packet for confirmation using `AskUserQuestion` with exactly:
+   - `Looks good, start deliberation`
+   - `I want to adjust framing`
+7. If user selects adjust, revise packet and repeat Step 6.
+8. After confirmation, execute orchestration sequence:
+   - `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman`
+   - `TaskCreate` one analysis task per agent using the Agent Prompt Template
+   - `TaskUpdate` each task to `in_progress` after dispatch
+
+**Exit criteria:**
+
+- User has confirmed framing.
+- Team exists with three agents.
+- Three Phase 1 tasks are created and started.
+
+#### Decision Packet Schema (Required Order)
+
+```markdown
+## Decision Statement
+<1 sentence, concrete and falsifiable>
+
+## Options
+- Option A: <real alternative>
+- Option B: <real alternative>
+- Option C: <real alternative>
+- Option D: <optional>
+
+## Constraints
+- <hard requirements, legal/technical/time/budget>
+
+## Evaluation Criteria
+- <criterion 1>
+- <criterion 2>
+- <criterion 3>
+
+## Unknowns
+- <uncertainties that could change the recommendation>
+
+## Non-Goals
+- <what this decision will NOT solve>
+
+## Context Links
+- <repo paths, docs, prior decisions, metrics, incidents>
+```
 
 ### Phase 1: Independent Analysis
 
-Each agent works independently -- **no cross-communication**. Output format (Thesis, Evidence, Risks, Recommendation) is defined in the Agent Prompt Template. Agents should search online when they need evidence or context beyond what's in the Decision Packet. If an agent needs user input, it will `SendMessage` the lead, who relays via `AskUserQuestion`.
+**Entry criteria:** Three agents have active analysis tasks and identical Decision Packet context.
 
-Wait for all 3 to complete (idle notifications + TaskList showing all completed).
+Each agent works independently with no cross-agent communication.
 
-### Phase 2: Debate
+Required output format from each agent:
 
-Agents must talk to each other directly -- not just report back to the lead.
+```markdown
+**Thesis:** <2-3 sentences>
+**Evidence:**
+- <argument + evidence source tag: [repo] or [external]>
+- <argument + evidence source tag>
+**Risks:**
+- <risk 1>
+- <risk 2>
+**Recommendation:** <default option choice, may be conditional>
+```
 
-1. Lead `SendMessage`s each agent with the other two's Phase 1 outputs.
-2. Agents debate peer-to-peer via peer `SendMessage` (critique format in Agent Prompt Template).
-3. Lead monitors via idle notifications (which include peer DM summaries) but does not intervene.
-4. Lead waits for all agents idle after rebuttals. Allow 2 full exchanges (challenge + rebuttal + second challenge + rebuttal); if debate stalls, move to Phase 3.
+Rules:
+
+- Evaluate every listed option against all evaluation criteria.
+- Nominate one default favorite option from your perspective.
+- If external context is needed, use `WebSearch` and cite what changed your view.
+- If user clarification is needed, send `SendMessage` to lead; lead asks user via `AskUserQuestion`.
+
+Lead monitoring:
+
+- Use `TaskList`/`TaskGet` to track completion.
+- Mark tasks completed via `TaskUpdate` when outputs arrive.
+- If an agent goes silent, send one follow-up prompt.
+- If still silent, proceed with available analyses and record reduced confidence.
+
+**Exit criteria:** Either all 3 analyses complete, or timeout/fallback path is documented.
+
+### Phase 2: Debate (Peer-to-Peer)
+
+**Entry criteria:** Phase 1 outputs collected (or fallback acknowledged).
+
+1. Lead sends each agent the other agents' Phase 1 outputs.
+2. Agents debate directly with each peer using `SendMessage`.
+3. Debate cap: 2 full rounds per pair.
+
+Round structure:
+
+- Round 1: challenge -> rebuttal
+- Round 2: challenge -> rebuttal
+
+Each challenge must include:
+
+- One quoted claim being challenged
+- Why it is incomplete or wrong (1-3 sentences)
+- One test/evidence/scenario that would resolve the disagreement
+- One actionable revision
+
+Stop conditions:
+
+- After 2 rounds complete, or
+- Early convergence where all agents explicitly state no further objections
+
+Lead behavior:
+
+- Monitor only; do not mediate content unless process stalls.
+- If stalled/silent, nudge once, then move to Phase 3 with noted gaps.
+
+**Exit criteria:** Debate rounds complete or early stop condition reached, with transcript captured.
 
 ### Phase 3: Consensus Vote
 
-Lead `SendMessage`s each agent: "Cast your final vote (AGREE / CONDITIONAL / DISAGREE). Format in your prompt." Wait for all 3, then tally:
+**Entry criteria:** Debate complete or explicitly terminated.
+
+Lead asks each agent to submit final vote in this format:
+
+```markdown
+**Final Position:** <updated recommendation>
+**Vote:** AGREE | CONDITIONAL | DISAGREE
+**Justification:** <1 sentence>
+**Flip Condition:** <single condition/evidence that would change this vote>
+```
+
+Lead tallies votes:
 
 | Result            | Meaning                                                           |
 | ----------------- | ----------------------------------------------------------------- |
-| **3/3 Unanimous** | Strong recommendation -- all perspectives aligned                 |
-| **2/3 Majority**  | Recommendation with noted dissent -- present the minority concern |
-| **Deadlock**      | No recommendation -- present the trade-offs, user decides         |
+| **3/3 Unanimous** | Strong recommendation with aligned perspectives                   |
+| **2/3 Majority**  | Recommendation with explicit dissent and conditions to resolve it |
+| **Deadlock**      | No consensus; articulate trade-offs and hand decision to user     |
 
-### Synthesis
+**Exit criteria:** Three votes received (or missing vote documented) and tally determined.
 
-Team lead reads the votes and full debate record, then presents to the user:
+### Synthesis Output Contract
 
-**Unanimous (3/3):** Unified recommendation with high confidence. Note which strengths each perspective contributed.
+Present final synthesis to user using this structure:
 
-**Majority (2/3):** Recommendation from the majority, with the dissenting perspective's core concern highlighted. State what conditions would flip the dissent.
+```markdown
+## Decision
+<unanimous recommendation, majority recommendation, or deadlock>
 
-**Deadlock:** Each position summarized, the core dilemma articulated, trade-offs mapped. A deadlock is a meaningful outcome that surfaces real trade-offs the user must resolve. The MAGI system provides analysis, not forced consensus -- state your recommendation noting which perspective carries most weight, but the user decides.
+## Why This Wins (by Criteria)
+- <criterion-level comparison>
 
-After synthesis, write the deliberation record to `docs/magi/YYYY-MM-DD-<topic>.md` (create the directory if needed).
+## Risks and Guardrails
+- <key downside>
+- <guardrail>
+
+## First Actionable Next Step
+- <specific first step>
+
+## Dissent and Flip Conditions
+- <minority concern and what evidence would change outcome>
+```
+
+Synthesis rules:
+
+- Unanimous: emphasize how each perspective strengthened confidence.
+- Majority: include minority concern verbatim in substance.
+- Deadlock: present options, trade-offs, and your best recommendation while making clear the user decides.
+
+### Decision Logging
+
+After synthesis, write the full deliberation record to:
+
+`docs/magi/YYYY-MM-DD-<topic>.md`
+
+Requirements:
+
+1. Ensure directory exists first: `mkdir -p docs/magi`.
+2. Include full debate transcript, not a summary.
+3. If fallback occurred (silent agent, missing data), include confidence note.
 
 ## Agent Prompt Template
 
-```
-You are **The {NAME}** of the MAGI system -- a three-agent deliberation council.
+```text
+You are **The {NAME}** of the MAGI system, a three-agent deliberation council.
 
 Your cognitive mode: **{MODE_DESCRIPTION}**
 For this task, your focus: {DOMAIN_SPECIFIC_FOCUS}
@@ -159,50 +303,48 @@ Your core question: "{CORE_QUESTION}"
 {TASK_DESCRIPTION}
 
 ## Phase 1: Independent Analysis
-Produce your analysis in this format:
-**Thesis:** [core position, 2-3 sentences]
-**Evidence:** [specific supporting arguments]
-**Risks:** [what could go wrong with your approach]
-**Recommendation:** [concrete actionable suggestion]
+Return exactly:
+**Thesis:** [2-3 sentences]
+**Evidence:**
+- [claim + source tag: [repo] or [external]]
+- [claim + source tag]
+**Risks:**
+- [risk]
+- [risk]
+**Recommendation:** [choose a default option, conditional allowed]
 
-Phase 1 rules:
+Rules:
 - Base your analysis on the Decision Packet in Context.
-- Evaluate all listed options against the evaluation criteria.
-- Nominate a default favorite option from your lens (even if it's conditional).
-
-Send to team lead via SendMessage when done.
-
-**If you need clarification from the user:** You cannot ask the user directly. Send a message to the team lead explaining what you need, and the lead will ask on your behalf and relay the answer.
+- Evaluate all options against all evaluation criteria.
+- Pick one default recommendation from your perspective.
+- If you need user clarification, send it to the lead via SendMessage.
 
 ## Phase 2: Debate (peer-to-peer)
-When the lead sends you the other agents' analyses:
-1. Send critiques directly to EACH peer (two separate messages).
-2. Each critique must include:
-   - One quoted claim you're challenging (copy the sentence).
-   - Why it's wrong/incomplete (1-3 sentences).
-   - One concrete test / evidence / scenario that would resolve the dispute.
-   - One actionable improvement.
-3. When you receive critique:
-   - Respond to each peer.
-   - Either defend with evidence OR revise your position and say what changed.
-4. 2 full exchanges: after rebuttals, you may send a second challenge addressing their defense, and respond to their second challenge. Then stop.
+When the lead sends other analyses:
+1. Send one critique to EACH peer directly.
+2. Each critique must contain:
+   - A quoted sentence you challenge
+   - Why it is incomplete/wrong (1-3 sentences)
+   - One deciding test/evidence/scenario
+   - One actionable improvement
+3. On receiving critique, either defend with evidence or revise and state what changed.
+4. Run up to 2 rounds total (challenge/rebuttal, then challenge/rebuttal), then stop unless lead instructs otherwise.
 
 ## Phase 3: Consensus Vote
-When the lead requests your vote:
-1. State your **final position** (you may revise based on debate)
-2. Vote: **AGREE** / **CONDITIONAL** / **DISAGREE** with the strongest emerging position
-3. One-sentence justification
-4. Send vote to team lead via SendMessage
+When asked to vote, return exactly:
+**Final Position:** [your final recommendation]
+**Vote:** AGREE | CONDITIONAL | DISAGREE
+**Justification:** [1 sentence]
+**Flip Condition:** [what evidence would change your vote]
 
 ## Context
-{RELEVANT_BACKGROUND — teammates do NOT inherit conversation history, include everything needed here}
+{RELEVANT_BACKGROUND - include everything needed because teammates do not inherit conversation history}
 
 ## Rules
-- Argue your perspective FULLY -- do not hedge or try to be balanced
-- Be specific and concrete, not abstract
-- Support claims with evidence or reasoned argument
-- In Phase 2, message other agents DIRECTLY -- debate, don't monologue to the lead
-- Check TaskList for your assigned task; mark in_progress then completed
+- Argue your perspective fully; do not hedge for balance.
+- Be specific and concrete.
+- In Phase 2, message peers directly (not just the lead).
+- Check TaskList for your task and update status in progress/completed.
 ```
 
 ## Decision Log Template
@@ -211,57 +353,95 @@ When the lead requests your vote:
 # <Decision Statement>
 
 **Date:** YYYY-MM-DD
+**Topic:** <slug/source prompt>
 **Vote:** Unanimous | Majority (2/3) | Deadlock
+**Confidence:** High | Medium | Low
 
-## Options Considered
+## Decision Packet Snapshot
 
+### Options
 - **Option A:** ...
 - **Option B:** ...
+- **Option C:** ...
+
+### Constraints
+- ...
+
+### Evaluation Criteria
+- ...
+
+### Unknowns
+- ...
+
+### Non-Goals
+- ...
+
+### Context Links
+- ...
+
+## Phase 1 Summaries
+
+### Scientist
+- Thesis: ...
+- Recommendation: ...
+
+### Mother
+- Thesis: ...
+- Recommendation: ...
+
+### Woman
+- Thesis: ...
+- Recommendation: ...
 
 ## Debate Transcript
 
-Full peer-to-peer exchange from Phase 2, organized by pairing:
+Full peer-to-peer exchange from Phase 2, organized by pairing.
 
 ### Scientist vs Mother
 
-<paste each critique and rebuttal in order>
+<paste each critique/rebuttal in order>
 
 ### Scientist vs Woman
 
-<paste each critique and rebuttal in order>
+<paste each critique/rebuttal in order>
 
 ### Mother vs Woman
 
-<paste each critique and rebuttal in order>
+<paste each critique/rebuttal in order>
+
+## Vote Table
+
+| Agent     | Final Position | Vote        | Flip Condition |
+| --------- | -------------- | ----------- | -------------- |
+| Scientist | ...            | ...         | ...            |
+| Mother    | ...            | ...         | ...            |
+| Woman     | ...            | ...         | ...            |
 
 ## Verdict
 
-<Recommendation or articulated trade-offs if deadlock>
-
-**Scientist:** <final position + key evidence>
-**Mother:** <final position + key risks>
-**Woman:** <final position + key desires>
+<recommendation or deadlock trade-offs>
 
 ## Dissent
 
-<Minority concern and conditions that would flip the decision. Omit if unanimous.>
+<minority concern and what would change it; omit if unanimous>
+
+## Follow-Up Actions
+
+- <next action 1>
+- <next action 2>
 ```
 
-**Include the full debate transcript** -- the critiques and rebuttals are the most valuable part of the record. The verdict section should stay concise.
+## Common Mistakes (Symptom -> Corrective Action)
 
-## Common Mistakes
-
-| Mistake                     | Fix                                                                                              |
-| --------------------------- | ------------------------------------------------------------------------------------------------ |
-| Agents converge immediately | Prompt says "argue fully, do not hedge"                                                          |
-| Lead mediates all comms     | Agents must message each other directly in Phase 2 -- the lead distributes, then steps back      |
-| Agents don't message peers  | Spawn prompt must list peer names and explicitly instruct direct SendMessage                     |
-| Agents water down positions | Prompt says "do not hedge or try to be balanced"                                                 |
-| Skipping the vote           | Always run Phase 3 -- the vote is how MAGI reaches decisions, not the lead's editorial judgment  |
-| Perspectives too similar    | Verify domain mapping creates genuine tension before spawning                                    |
-| Skipping synthesis          | Always produce structured consensus or disagreement output with vote tally                       |
-| Too many debate rounds      | Cap at 2 full exchanges per direction (8 messages per peer pair) -- more adds noise, not insight |
-| Agent goes silent           | Send follow-up message; if still no response, proceed with available analyses and note the gap   |
-| Lead starts implementing    | Lead only orchestrates -- never writes code, edits files, or makes decisions for agents          |
-| Teammates lack context      | Include ALL relevant context in spawn prompt -- they don't inherit conversation history          |
-| Agent needs user input      | Teammates can't use AskUserQuestion -- they must SendMessage to lead, who relays to user         |
+| Symptom | Corrective Action |
+| ------- | ----------------- |
+| Agents spawned before framing confirmation | Stop, delete team, finish Decision Packet confirmation gate, then respawn |
+| Option set is shallow (`do` vs `do not`) | Rewrite options to at least two real implementation alternatives |
+| Lead mediates debate content | Re-route agents to direct peer `SendMessage` and step back |
+| Agents converge too quickly without challenge | Reinforce "argue fully" and require quoted-claim critiques |
+| Debate runs indefinitely | Enforce 2-round cap and move to vote |
+| Vote skipped because result seems obvious | Run Phase 3 regardless; tally only from explicit votes |
+| Vote lacks flip conditions | Request corrected vote format from missing agents |
+| Agent goes silent | Send one follow-up; continue with available outputs and note reduced confidence |
+| Synthesis ignores dissent | Add dissent section with explicit flip conditions |
+| Log is missing transcript/details | Rewrite log using template and include full debate messages |
