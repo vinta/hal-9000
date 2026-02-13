@@ -45,11 +45,15 @@ Woman constraint: you are allowed to be stubborn. If the group is drifting towar
 ## Workflow
 
 ```dot
-digraph magi_flow {
+digraph magi {
     rankdir=TB;
     node [shape=box, style=rounded];
 
-    gather [label="Phase 0: Context gathering\n+ team setup"];
+    explore [label="Explore project context"];
+    questions [label="Ask clarifying questions"];
+    packet [label="Draft Decision Packet"];
+    confirm [label="User confirms framing?" shape=diamond style=""];
+    setup [label="Create team + spawn agents"];
     analysis [label="Phase 1: Independent analysis\n(parallel, no cross-talk)"];
     debate [label="Phase 2: Debate\n(peer-to-peer, agents challenge each other directly)"];
     vote [label="Phase 3: Consensus vote\n(each agent casts final position)"];
@@ -60,7 +64,10 @@ digraph magi_flow {
     log [label="Write decision log\ndocs/magi/YYYY-MM-DD-<topic>.md"];
     done [label="Shutdown team"];
 
-    gather -> analysis -> debate -> vote -> tally;
+    explore -> questions -> packet -> confirm;
+    confirm -> questions [label="adjust"];
+    confirm -> setup [label="yes"];
+    setup -> analysis -> debate -> vote -> tally;
     tally -> unanimous [label="3/3"];
     tally -> majority [label="2/3"];
     tally -> deadlock [label="split"];
@@ -79,7 +86,7 @@ Before spawning the team:
 
 1. Start from the user's question: **$ARGUMENTS**
 2. Explore the current project state (files, docs, recent commits) only as needed to populate missing context
-3. **Ask clarifying questions** to understand the decision space (see `superpowers:brainstorming` for questioning technique):
+3. **Ask clarifying questions** to understand the decision space (see `brainstorming` skill for questioning technique):
    - One question per message -- do not bundle multiple questions
    - Prefer multiple-choice via `AskUserQuestion` when possible
    - Focus on: purpose, constraints, what success looks like, what's off the table
