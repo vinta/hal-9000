@@ -169,10 +169,6 @@ Role constraint (prevents convergence): each agent must evaluate all options aga
 
 If an agent needs user input, it sends `SendMessage` to lead, who relays via `AskUserQuestion`.
 
-Lead monitoring: if an agent goes silent, send one follow-up prompt. If still silent, proceed with available analyses and note reduced confidence.
-
-**Unresponsive agent rule (all phases):** Nudge once. If still no response, proceed with available analyses and note the gap. In voting, mark as "NO VOTE"; treat any 1/2 result as "weak majority."
-
 **Exit criteria:** Either all 3 analyses complete, or timeout/fallback path is documented.
 
 ### Phase 2: Debate (Peer-to-Peer)
@@ -180,30 +176,11 @@ Lead monitoring: if an agent goes silent, send one follow-up prompt. If still si
 **Entry criteria:** Phase 1 outputs collected (or fallback acknowledged).
 
 1. Lead sends each agent the other agents' Phase 1 outputs.
-2. Agents debate directly with each peer using `SendMessage`.
-3. Debate cap: 2 full rounds per pair.
+2. Agents debate directly with each peer using `SendMessage` (critique format defined in Agent Prompt Template).
+3. Debate cap: 2 full rounds per pair (challenge -> rebuttal -> challenge -> rebuttal), then stop.
+4. Early stop: all agents explicitly state no further objections.
 
-Round structure:
-
-- Round 1: challenge -> rebuttal
-- Round 2: challenge -> rebuttal
-
-Each challenge must include:
-
-- One quoted claim being challenged
-- Why it is incomplete or wrong (1-3 sentences)
-- One test/evidence/scenario that would resolve the disagreement
-- One actionable revision
-
-Stop conditions:
-
-- After 2 rounds complete, or
-- Early convergence where all agents explicitly state no further objections
-
-Lead behavior:
-
-- Monitor only; do not mediate content unless process stalls.
-- If stalled/silent, nudge once, then move to Phase 3 with noted gaps.
+Lead behavior: monitor only; do not mediate content. If stalled, apply the unresponsive agent rule.
 
 **Exit criteria:** Debate rounds complete or early stop condition reached, with transcript captured.
 
@@ -433,6 +410,6 @@ Full peer-to-peer exchange from Phase 2, organized by pairing.
 | Debate runs indefinitely | Enforce 2-round cap and move to vote |
 | Vote skipped because result seems obvious | Run Phase 3 regardless; tally only from explicit votes |
 | Vote lacks flip conditions | Request corrected vote format from missing agents |
-| Agent goes silent | Send one follow-up; continue with available outputs and note reduced confidence |
+| Agent goes silent | Nudge once; if still silent, proceed with available outputs and note reduced confidence. In voting, mark as "NO VOTE"; treat 1/2 as weak majority |
 | Synthesis ignores dissent | Add dissent section with explicit flip conditions |
 | Log is missing transcript/details | Rewrite log using template and include full debate messages |
