@@ -26,12 +26,16 @@ allowed-tools:
 
 MAGI is a three-agent deliberation workflow inspired by the MAGI system from Neon Genesis Evangelion. It is designed for decisions where trade-offs are real and no single concern should dominate.
 
-The workflow has four stages:
+MAGI supports two entry modes:
 
-1. Decision framing
-2. Independent analysis
-3. Peer-to-peer debate
-4. Consensus vote and synthesis
+1. Discovery mode (open-ended brainstorming before scoping)
+2. Decision mode (directly evaluate already-scoped alternatives)
+
+Once framing is complete, both modes use the same deliberation pipeline:
+
+1. Independent analysis
+2. Peer-to-peer debate
+3. Consensus vote and synthesis
 
 ### Execution Invariants
 
@@ -40,6 +44,7 @@ The workflow has four stages:
 - Phase 2 requires direct peer messages between agents (not lead-mediated monologues).
 - Every run must include Phase 3 voting, even when consensus seems obvious.
 - Every run must write a decision log to `docs/magi/`.
+- For open-ended prompts, run Discovery mode first; do not collapse to a narrow option set before generating a broad opportunity backlog.
 
 ## When NOT to Use
 
@@ -67,6 +72,15 @@ Before spawning, map each perspective to the domain:
 
 Woman constraint: you are allowed to be stubborn. If the group drifts toward a safe but joyless option, force an explicit statement of what is being sacrificed, defend one option decisively, and propose guardrails that make it viable.
 
+## Intent Routing (Critical)
+
+Choose mode before drafting the Decision Packet:
+
+- Use **Discovery mode** when the user asks open prompts such as "anything to improve," "brainstorm," "surprise me," or provides no predefined alternatives.
+- Use **Decision mode** when the user already supplied a concrete decision statement and candidate alternatives.
+
+Routing rule: if ambiguous, default to Discovery mode and only narrow after presenting a broad opportunity backlog.
+
 ## Workflow
 
 ```dot
@@ -75,6 +89,9 @@ digraph magi {
     node [shape=box, style=rounded];
 
     explore [label="Explore context"];
+    route [label="Route intent"];
+    discover [label="Discovery mode:\nDraft Opportunity Backlog"];
+    select [label="Select focus area" shape=diamond style=""];
     clarify [label="Ask clarifying questions"];
     packet [label="Draft Decision Packet"];
     confirm [label="Framing confirmed?" shape=diamond style=""];
@@ -86,7 +103,13 @@ digraph magi {
     synth [label="Synthesize for user"];
     log [label="Write decision log"];
 
-    explore -> clarify -> packet -> confirm;
+    explore -> route;
+    route -> discover [label="open-ended"];
+    route -> clarify [label="already scoped"];
+    discover -> select;
+    select -> discover [label="expand ideation"];
+    select -> clarify [label="focus chosen"];
+    clarify -> packet -> confirm;
     confirm -> clarify [label="adjust"];
     confirm -> spawn [label="yes"];
     spawn -> analysis -> debate -> vote -> tally;
@@ -95,35 +118,74 @@ digraph magi {
 }
 ```
 
-### Phase 0: Decision Framing (Hard Gate)
+### Phase 0: Framing and Scope Selection (Hard Gate)
 
-**Entry criteria:** User asks a decision question with genuine trade-offs.
+**Entry criteria:** User asks for recommendations, trade-off analysis, or open-ended prioritization.
 
 1. Start from the user question: **$ARGUMENTS**.
 2. Explore context (files, docs, prior decisions, relevant code, search online).
-3. Ask clarifying questions one at a time via `AskUserQuestion` (prefer multiple-choice):
+3. Route intent:
+   - If open-ended, run Discovery mode first.
+   - If already scoped, skip to Decision Packet drafting.
+4. Discovery mode (required for open-ended prompts):
+   - Draft an Opportunity Backlog using the required schema below.
+   - Generate **8-15 candidate opportunities** across at least **4 distinct lenses** (for example: product UX, reliability, growth, operations, DevEx, quality, trust/safety, monetization).
+   - Include **2-3 surprise bets** that are non-obvious or contrarian.
+   - For each candidate, include impact hypothesis, effort band, confidence, and primary risk.
+   - Ask the user to choose next step using `AskUserQuestion` with exactly:
+     - `Proceed with recommended focus`
+     - `Choose a different focus from backlog`
+     - `Expand ideation before deciding`
+   - If user selects expand ideation, refine backlog and repeat this step.
+5. Ask clarifying questions one at a time via `AskUserQuestion` (prefer multiple-choice):
    - Decision objective
    - Constraints and non-negotiables
    - Success criteria
    - Explicitly out-of-scope items
-4. Draft a Decision Packet using the required schema below.
-5. Validate the packet:
+6. Draft a Decision Packet using the required schema below.
+7. Validate the packet:
    - At least 3 real options (not "do" vs "do not do")
+   - For Discovery-mode runs: at least 4 options, with at least 1 wildcard/contrarian option
+   - Options must span at least 3 distinct themes (not variants of one idea)
    - At least 3 evaluation criteria
    - Non-goals and unknowns included
-6. Present packet for confirmation using `AskUserQuestion` with exactly:
+8. Present packet for confirmation using `AskUserQuestion` with exactly:
    - `Looks good, start deliberation`
    - `I want to adjust framing`
-7. If user selects adjust, revise packet and repeat Step 6.
-8. After confirmation, execute orchestration sequence:
+9. If user selects adjust, revise packet and repeat Step 8.
+10. After confirmation, execute orchestration sequence:
    - `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman`
    - `TaskCreate` one analysis task per agent using the Agent Prompt Template
 
 **Exit criteria:**
 
+- If Discovery mode ran, backlog has been produced and user-selected focus is explicit.
 - User has confirmed framing.
 - Team exists with three agents.
 - Three Phase 1 tasks are created and started.
+
+#### Opportunity Backlog Schema (Required for Discovery Mode)
+
+```markdown
+## Opportunity Surface
+- <lenses covered and why they matter for this context>
+
+## Candidate Opportunities (8-15)
+- O1: <title> -- Impact: <hypothesis>; Effort: <S/M/L>; Confidence: <low/med/high>; Risk: <main downside>
+- O2: ...
+
+## Surprise Bets (2-3)
+- S1: <non-obvious or contrarian idea + why it might win>
+- S2: ...
+
+## Coverage Gaps
+- <areas not yet explored that could hide important opportunities>
+
+## Recommended Focus Set (Top 3)
+- R1: <candidate ID + why now>
+- R2: ...
+- R3: ...
+```
 
 #### Decision Packet Schema (Required Order)
 
@@ -135,7 +197,7 @@ digraph magi {
 - Option A: <real alternative>
 - Option B: <real alternative>
 - Option C: <real alternative>
-- Option D: <optional>
+- Option D: <optional; required for Discovery-mode runs and should be wildcard/contrarian>
 
 ## Constraints
 - <hard requirements, legal/technical/time/budget>
@@ -150,6 +212,9 @@ digraph magi {
 
 ## Non-Goals
 - <what this decision will NOT solve>
+
+## Option Source Notes
+- <for Discovery-mode runs: map each option to Opportunity Backlog IDs and note what was intentionally excluded>
 
 ## Context Links
 - <repo paths, docs, prior decisions, metrics, incidents>
@@ -271,6 +336,7 @@ Produce your analysis in this format:
 Phase 1 rules:
 - Base your analysis on the Decision Packet in Context.
 - Evaluate all listed options against the evaluation criteria.
+- If options came from Discovery mode, challenge whether any excluded backlog candidate should replace a listed option.
 - Nominate a default favorite option from your lens (even if it's conditional).
 - If you need user clarification, send it to the lead via SendMessage. You cannot ask the user directly.
 
@@ -327,6 +393,11 @@ Send vote to team lead via SendMessage.
 
 ## Decision Packet Snapshot
 
+### Opportunity Backlog Snapshot (Discovery mode only)
+- Top candidates considered: ...
+- Surprise bets: ...
+- Why this focus was selected: ...
+
 ### Options
 - **Option A:** ...
 - **Option B:** ...
@@ -342,6 +413,9 @@ Send vote to team lead via SendMessage.
 - ...
 
 ### Non-Goals
+- ...
+
+### Option Source Notes
 - ...
 
 ### Context Links
@@ -404,7 +478,9 @@ Full peer-to-peer exchange from Phase 2, organized by pairing.
 | Symptom | Corrective Action |
 | ------- | ----------------- |
 | Agents spawned before framing confirmation | Stop, delete team, finish Decision Packet confirmation gate, then respawn |
+| Open-ended request was narrowed too early | Run Discovery mode first and produce Opportunity Backlog before locking options |
 | Option set is shallow (`do` vs `do not`) | Rewrite options to at least two real implementation alternatives |
+| Option set is broad in count but narrow in type | Enforce theme diversity and include at least one wildcard option |
 | Lead mediates debate content | Re-route agents to direct peer `SendMessage` and step back |
 | Agents converge too quickly without challenge | Reinforce "argue fully" and require quoted-claim critiques |
 | Debate runs indefinitely | Enforce 2-round cap and move to vote |
