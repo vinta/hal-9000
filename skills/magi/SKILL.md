@@ -1,6 +1,6 @@
 ---
 name: magi
-description: Use when facing decisions, brainstorming, debugging, architecture choices, competing hypotheses, or any task benefiting from multiple competing perspectives
+description: Use when facing decisions with genuine trade-offs, brainstorming under competing constraints, debugging with multiple plausible root causes, architecture choices between viable alternatives, or evaluating options where no single concern dominates
 argument-hint: "[question-or-topic]"
 user-invocable: true
 model: opus
