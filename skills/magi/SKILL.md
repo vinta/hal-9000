@@ -41,6 +41,7 @@ Once framing is complete, both modes use the same deliberation pipeline:
 
 - In Decision mode, do not create team members until the Decision Packet is complete and user-confirmed.
 - In Discovery mode, create the MAGI team before backlog drafting so each agent can ideate independently.
+- In Discovery mode, do not block on lead-led repository exploration before spawning agents; launch council tasks first.
 - Lead orchestrates; agents argue. The lead does not substitute its own judgment for agent outputs.
 - Phase 2 requires direct peer messages between agents (not lead-mediated monologues).
 - Every run must include Phase 3 voting, even when consensus seems obvious.
@@ -90,10 +91,10 @@ digraph magi {
     rankdir=TB;
     node [shape=box, style=rounded];
 
-    explore [label="Explore context"];
     route [label="Route intent"];
     discover [label="Discovery mode:\n3-agent ideation + backlog"];
     select [label="Select focus area" shape=diamond style=""];
+    orient [label="Focused context pass\n(for selected focus only)"];
     clarify [label="Ask clarifying questions"];
     packet [label="Draft Decision Packet"];
     confirm [label="Framing confirmed?" shape=diamond style=""];
@@ -105,12 +106,12 @@ digraph magi {
     synth [label="Synthesize for user"];
     log [label="Write discovery + decision logs"];
 
-    explore -> route;
     route -> discover [label="open-ended"];
     route -> clarify [label="already scoped"];
     discover -> select;
     select -> discover [label="expand ideation"];
-    select -> clarify [label="focus chosen"];
+    select -> orient [label="focus chosen"];
+    orient -> clarify;
     clarify -> packet -> confirm;
     confirm -> clarify [label="adjust"];
     confirm -> spawn [label="yes"];
@@ -125,16 +126,17 @@ digraph magi {
 **Entry criteria:** User asks for recommendations, trade-off analysis, or open-ended prioritization.
 
 1. Start from the user question: **$ARGUMENTS**.
-2. Explore context (files, docs, prior decisions, relevant code, search online).
-3. Route intent:
+2. Route intent first from the prompt itself (do not block on lead exploration):
    - If open-ended, run Discovery mode first.
    - If already scoped, skip to Decision Packet drafting.
-4. Discovery mode (required for open-ended prompts):
+3. Discovery mode (required for open-ended prompts):
    - Default to **Council Discovery** (3-agent ideation), unless user explicitly asks for a lightweight run.
+   - Spawn quickly: create the team and discovery tasks immediately. Do not run a lead pre-explore pass first.
    - Council Discovery sequence:
      - `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman` (if not already created for this run).
      - `TaskCreate` one discovery task per agent using the Discovery Task Variant in the Agent Prompt Template.
      - Each agent independently proposes **5-7 opportunities** from its lens, including **1 crazy-but-plausible** bet.
+   - Optional lead micro-orientation may run in parallel *after* tasks are launched (README + top-level tree only) and must not delay agent kickoff.
    - Consolidate agent outputs into an Opportunity Backlog using the required schema below.
    - Generate **12-20 consolidated candidate opportunities** across at least **5 distinct lenses** (for example: product UX, reliability, growth, operations, DevEx, quality, trust/safety, monetization).
    - Preserve source attribution for each consolidated candidate (which agent(s) proposed it).
@@ -148,6 +150,7 @@ digraph magi {
      - `Choose a different focus from backlog`
      - `Expand ideation before deciding`
    - If user selects expand ideation, refine backlog and repeat this step.
+4. After focus selection, run a focused context pass only for the chosen candidate(s). Read only files/docs needed to validate selected opportunities; avoid broad repo tours.
 5. Ask clarifying questions one at a time via `AskUserQuestion` (prefer multiple-choice):
    - Decision objective
    - Constraints and non-negotiables
@@ -593,6 +596,7 @@ Full peer-to-peer exchange from Phase 2, organized by pairing.
 
 | Symptom | Corrective Action |
 | ------- | ----------------- |
+| Discovery kickoff is delayed by lead pre-explore | Start Council Discovery immediately (`TeamCreate` + 3 `TaskCreate`), then do only optional micro-orientation in parallel |
 | Agents spawned before framing confirmation in Decision mode | Stop, delete team, finish Decision Packet confirmation gate, then respawn |
 | Open-ended prompt ran without 3-agent discovery | Run Council Discovery first: 5-7 opportunities per agent, then consolidate |
 | Open-ended request was narrowed too early | Run Discovery mode first and produce Opportunity Backlog before locking options |
