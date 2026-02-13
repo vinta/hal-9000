@@ -27,22 +27,22 @@ allowed-tools:
 
 MAGI is a three-agent deliberation workflow inspired by the MAGI system from Neon Genesis Evangelion. It is designed for decisions where trade-offs are real and no single concern should dominate.
 
-Every run starts with Discovery -- even when the user supplies predefined options. The three lenses may surface alternatives the user hasn't considered, or confirm the option space is well-scoped. User-supplied options are seeded as input to Discovery, not used to skip it.
+Every run starts with Analysis -- even when the user supplies predefined options. Analysis includes opportunity generation, option evaluation, and framing before debate.
 
 Pipeline:
 
-1. Discovery (3-agent ideation + opportunity backlog)
-2. Independent analysis
-3. Peer-to-peer debate
-4. Consensus vote and synthesis
+1. Analysis (3-agent ideation + option evaluation + framing)
+2. Debate (peer-to-peer)
+3. Vote (consensus tally + synthesis)
 
 ### Execution Invariants
 
 - Launch agents with the user's prompt and basic project context (e.g., CLAUDE.md contents). Do not run a lead-led codebase exploration pass -- agents will self-orient through their own lens.
-- Create the MAGI team before backlog drafting so each agent can ideate independently.
+- Create the MAGI team before backlog drafting so each agent can ideate and analyze independently.
 - Lead orchestrates; agents argue. The lead does not substitute its own judgment for agent outputs.
-- Phase 2 requires direct peer messages between agents (not lead-mediated monologues).
-- Every run must include Phase 3 voting, even when consensus seems obvious.
+- Discovery and option evaluation happen in the same Analysis task.
+- Debate requires direct peer messages between agents (not lead-mediated monologues).
+- Every run must include voting, even when consensus seems obvious.
 - Every run must write two logs to `docs/magi/`: `YYYY-MM-DD-<topic>-discovery.md` and `YYYY-MM-DD-<topic>-decision.md`.
 - Never collapse to a narrow option set before generating a broad opportunity backlog, even when the user supplies predefined options.
 
@@ -65,7 +65,7 @@ Domain-specific focus mappings and the Woman stubbornness constraint are defined
 
 ## Input Handling
 
-- If the user supplies predefined options (e.g., "A vs B"), seed those as context for Discovery agents. Agents must evaluate the supplied options AND propose alternatives from their lens.
+- If the user supplies predefined options (e.g., "A vs B"), seed those as context for Analysis agents. Agents must evaluate the supplied options AND propose alternatives from their lens.
 - If the user asks an open-ended prompt ("anything to improve," "brainstorm," "surprise me"), agents ideate freely with no seed options.
 
 ## Workflow
@@ -75,40 +75,43 @@ digraph magi {
     rankdir=TB;
     node [shape=box, style=rounded];
 
-    discover [label="3-agent ideation\n+ opportunity backlog"];
+    analysis [label="Analysis\n(3-agent)"];
     disc_log [label="Log discovery"];
     select [label="Select focus" shape=diamond style=""];
     clarify [label="Clarify constraints\n+ success criteria"];
     packet [label="Draft Decision Packet"];
     confirm [label="Framing confirmed?" shape=diamond style=""];
-    analysis [label="Independent analysis"];
     debate [label="Peer-to-peer debate"];
     vote [label="Vote + tally"];
     synth [label="Synthesize recommendation"];
     dec_log [label="Log decision"];
 
-    discover -> disc_log -> select;
-    select -> discover [label="expand"];
+    analysis -> disc_log -> select;
+    select -> analysis [label="expand"];
     select -> clarify [label="focus chosen"];
     clarify -> packet -> confirm;
     confirm -> clarify [label="adjust"];
-    confirm -> analysis [label="confirmed"];
-    analysis -> debate -> vote;
+    confirm -> debate [label="confirmed"];
+    debate -> vote;
     vote -> synth;
     synth -> dec_log;
 }
 ```
 
-### Phase 0: Discovery and Framing (Hard Gate)
+### Analysis (Hard Gate)
 
 **Entry criteria:** User asks for recommendations, trade-off analysis, or open-ended prioritization.
 
 1. Start from the user question: **$ARGUMENTS**.
-2. Spawn Discovery immediately:
+2. Start the team and launch Analysis immediately:
    - `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman`.
-   - `TaskCreate` one discovery task per agent using the Discovery Task Variant in `templates/agent-prompt-template.md`.
+   - `TaskCreate` one Analysis task per agent using `templates/agent-prompt-template.md`.
    - Pass the user's prompt, any user-supplied options, and basic project context. Do not run a lead-led exploration pass -- agents self-orient through their own lens.
-   - Each agent independently proposes **5-7 opportunities** from its lens, including **1 crazy-but-plausible** bet. If the user supplied options, agents must evaluate those AND propose alternatives.
+   - Each agent independently:
+     - proposes **5-7 opportunities** from its lens, including **1 crazy-but-plausible** bet and a 2-item kill list
+     - evaluates supplied options (if any) and proposes additional alternatives
+     - evaluates options against provided criteria, or proposes provisional criteria if none are provided yet
+     - nominates a default favorite under its lens
 3. Consolidate agent outputs into an Opportunity Backlog using the required schema below.
    - Generate **12-20 consolidated candidate opportunities** across at least **5 distinct lenses** (for example: product UX, reliability, growth, operations, DevEx, quality, trust/safety, monetization).
    - Preserve source attribution for each consolidated candidate (which agent(s) proposed it).
@@ -120,7 +123,7 @@ digraph magi {
    - `Proceed with recommended focus`
    - `Choose a different focus from backlog`
    - `Expand ideation before deciding`
-   - If user selects expand ideation, refine backlog and repeat from step 3.
+   - If user selects expand ideation, run another Analysis iteration with gap-targeted prompts, then repeat from step 3.
 6. Ask clarifying questions one at a time via `AskUserQuestion` (prefer multiple-choice):
    - Decision objective
    - Constraints and non-negotiables
@@ -136,14 +139,14 @@ digraph magi {
    - `Looks good, start deliberation`
    - `I want to adjust framing`
 10. If user selects adjust, revise packet and repeat Step 9.
-11. `TaskCreate` one analysis task per agent using `templates/agent-prompt-template.md`.
+11. Share the confirmed Decision Packet with all three agents as final Analysis context for debate.
 
 **Exit criteria:**
 
 - Backlog has been produced and user-selected focus is explicit.
 - User has confirmed framing.
 - Team exists with three agents.
-- Three Phase 1 tasks are created and started.
+- Three Analysis outputs are available (or fallback documented).
 
 #### Opportunity Backlog Schema
 
@@ -152,11 +155,11 @@ digraph magi {
 
 - <lenses covered and why they matter for this context>
 
-## Agent Discovery Inputs
+## Agent Analysis Inputs
 
-- Scientist: <5-7 opportunities submitted>
-- Mother: <5-7 opportunities submitted>
-- Woman: <5-7 opportunities submitted>
+- Scientist: <lens thesis, 5-7 opportunities, crazy bet, kill list, default favorite>
+- Mother: <lens thesis, 5-7 opportunities, crazy bet, kill list, default favorite>
+- Woman: <lens thesis, 5-7 opportunities, crazy bet, kill list, default favorite>
 
 ## Candidate Opportunities (12-20 consolidated)
 
@@ -226,27 +229,13 @@ digraph magi {
 - <repo paths, docs, prior decisions, metrics, incidents>
 ```
 
-### Phase 1: Independent Analysis
+### Debate (Peer-to-Peer)
 
-**Entry criteria:** Three agents have active analysis tasks and identical Decision Packet context.
+**Entry criteria:** Analysis outputs collected, Decision Packet confirmed, or fallback acknowledged.
 
-Each agent works independently with no cross-agent communication. Output format is defined in `templates/agent-prompt-template.md` (Thesis, Evidence, Risks, Recommendation).
-
-Role constraint (prevents convergence): each agent must evaluate all options against the criteria, but must also nominate a default favorite under their lens:
-
-- Scientist: strongest evidence and measurable success path
-- Mother: safest failure modes and rollback story
-- Woman: the option that best serves the underlying desire/meaning/experience, with pragmatic guardrails
-
-If an agent needs user input, it sends `SendMessage` to lead, who relays via `AskUserQuestion`.
-
-**Exit criteria:** Either all 3 analyses complete, or timeout/fallback path is documented.
-
-### Phase 2: Debate (Peer-to-Peer)
-
-**Entry criteria:** Phase 1 outputs collected (or fallback acknowledged).
-
-1. Lead sends each agent the other agents' Phase 1 outputs.
+1. Lead sends each agent:
+   - the other agents' Analysis outputs
+   - the confirmed Decision Packet
 2. Agents debate directly with each peer using `SendMessage` (critique format defined in `templates/agent-prompt-template.md`).
 3. Debate cap: 2 full rounds per pair (challenge -> rebuttal -> challenge -> rebuttal), then stop.
 4. Early stop: all agents explicitly state no further objections.
@@ -255,7 +244,7 @@ Lead behavior: monitor only; do not mediate content. If stalled, apply the unres
 
 **Exit criteria:** Debate rounds complete or early stop condition reached, with transcript captured.
 
-### Phase 3: Consensus Vote
+### Vote
 
 **Entry criteria:** Debate complete or explicitly terminated.
 
@@ -315,12 +304,12 @@ Requirements:
 
 1. Ensure directory exists first: `mkdir -p docs/magi`.
 2. Discovery log must include the full opportunity surface (all raw agent proposals and full consolidated backlog), not only shortlisted items.
-3. Decision log must include full debate transcript, not a summary.
+3. Decision log must include Analysis summaries and full debate transcript, not a summary.
 4. If fallback occurred (silent agent, missing data), include confidence note in decision log.
 
 ## Templates (read on demand, not at skill load)
 
-- **Agent Prompt Template:** `templates/agent-prompt-template.md` -- read when spawning agents. Includes domain focus mappings, Woman constraint, and phase-specific output formats.
+- **Agent Prompt Template:** `templates/agent-prompt-template.md` -- read when spawning agents. Includes domain focus mappings, Woman constraint, and Analysis/Debate/Vote output formats.
 - **Discovery Log Template:** `templates/discovery-log-template.md` -- read when writing discovery artifacts.
 - **Decision Log Template:** `templates/decision-log-template.md` -- read when writing decision artifacts.
 
@@ -328,10 +317,10 @@ Requirements:
 
 | Symptom                                                     | Corrective Action                                                                                                                                 |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Discovery kickoff is delayed by lead pre-explore            | Start Council Discovery immediately (`TeamCreate` + 3 `TaskCreate`); agents self-orient through their own lens                                    |
-| Analysis tasks created before framing confirmation          | Stop; Discovery agents are already running but Phase 1 tasks require confirmed Decision Packet first                                              |
-| Open-ended prompt ran without 3-agent discovery             | Run Council Discovery first: 5-7 opportunities per agent, then consolidate                                                                        |
-| User-supplied options treated as final without Discovery     | Seed user options as input to Discovery agents; always produce full Opportunity Backlog before locking options                                     |
+| Discovery kickoff is delayed by lead pre-explore            | Start Analysis immediately (`TeamCreate` + 3 `TaskCreate`); agents self-orient through their own lens                                              |
+| Separate discovery and analysis tasks are created           | Use one Analysis task per agent; do not split opportunity generation from option evaluation                                                         |
+| Open-ended prompt ran without 3-agent opportunity generation | Run Analysis first: each agent must produce 5-7 opportunities, then consolidate                                                                     |
+| User-supplied options treated as final without expansion     | Seed user options as input to Analysis agents; always produce full Opportunity Backlog before locking options                                       |
 | Option set is shallow (`do` vs `do not`)                    | Rewrite options to at least two real implementation alternatives                                                                                  |
 | Option set is broad in count but narrow in type             | Enforce theme diversity and include at least one wildcard option                                                                                  |
 | Backlog is high-volume but still bland                      | Enforce novelty quota and require one crazy-but-plausible bet per perspective                                                                     |
@@ -339,7 +328,7 @@ Requirements:
 | Lead mediates debate content                                | Re-route agents to direct peer `SendMessage` and step back                                                                                        |
 | Agents converge too quickly without challenge               | Reinforce "argue fully" and require quoted-claim critiques                                                                                        |
 | Debate runs indefinitely                                    | Enforce 2-round cap and move to vote                                                                                                              |
-| Vote skipped because result seems obvious                   | Run Phase 3 regardless; tally only from explicit votes                                                                                            |
+| Vote skipped because result seems obvious                   | Run Vote regardless; tally only from explicit votes                                                                                               |
 | Vote lacks flip conditions                                  | Request corrected vote format from missing agents                                                                                                 |
 | Agent goes silent                                           | Nudge once; if still silent, proceed with available outputs and note reduced confidence. In voting, mark as "NO VOTE"; treat 1/2 as weak majority |
 | Synthesis ignores dissent                                   | Add dissent section with explicit flip conditions                                                                                                 |
