@@ -75,28 +75,27 @@ digraph magi {
     rankdir=TB;
     node [shape=box, style=rounded];
 
-    discover [label="Discovery:\n3-agent ideation + backlog"];
-    select [label="Select focus area" shape=diamond style=""];
-    clarify [label="Ask clarifying questions"];
+    discover [label="3-agent ideation\n+ opportunity backlog"];
+    disc_log [label="Log discovery"];
+    select [label="Select focus" shape=diamond style=""];
+    clarify [label="Clarify constraints\n+ success criteria"];
     packet [label="Draft Decision Packet"];
     confirm [label="Framing confirmed?" shape=diamond style=""];
-    spawn [label="Create tasks"];
-    analysis [label="Phase 1: Independent analysis"];
-    debate [label="Phase 2: Peer debate"];
-    vote [label="Phase 3: Consensus vote"];
-    tally [label="Tally result" shape=diamond style=""];
-    synth [label="Synthesize for user"];
-    log [label="Write discovery + decision logs"];
+    analysis [label="Independent analysis"];
+    debate [label="Peer-to-peer debate"];
+    vote [label="Vote + tally"];
+    synth [label="Synthesize recommendation"];
+    dec_log [label="Log decision"];
 
-    discover -> select;
-    select -> discover [label="expand ideation"];
+    discover -> disc_log -> select;
+    select -> discover [label="expand"];
     select -> clarify [label="focus chosen"];
     clarify -> packet -> confirm;
     confirm -> clarify [label="adjust"];
-    confirm -> spawn [label="yes"];
-    spawn -> analysis -> debate -> vote -> tally;
-    tally -> synth;
-    synth -> log;
+    confirm -> analysis [label="confirmed"];
+    analysis -> debate -> vote;
+    vote -> synth;
+    synth -> dec_log;
 }
 ```
 
@@ -153,7 +152,7 @@ digraph magi {
 
 - <lenses covered and why they matter for this context>
 
-## Agent Discovery Inputs (Council Discovery default)
+## Agent Discovery Inputs
 
 - Scientist: <5-7 opportunities submitted>
 - Mother: <5-7 opportunities submitted>

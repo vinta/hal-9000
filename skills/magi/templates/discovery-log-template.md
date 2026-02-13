@@ -2,7 +2,7 @@
 
 **Date:** YYYY-MM-DD
 **Topic:** <slug/source prompt>
-**Mode:** Council Discovery | Lightweight Discovery | Discovery Skipped
+**Mode:** Council Discovery
 
 ## Prompt
 
@@ -13,8 +13,6 @@
 - <repo paths, docs, prior decisions, metrics, incidents>
 
 ## Agent Discovery Inputs (raw; do not summarize away opportunities)
-
-If mode is `Discovery Skipped`, set this section to `N/A (skipped)` and include reason.
 
 ### Scientist
 
@@ -44,8 +42,6 @@ If mode is `Discovery Skipped`, set this section to `N/A (skipped)` and include 
 - Kill List: ...
 
 ## Consolidated Opportunity Backlog (full)
-
-If mode is `Discovery Skipped`, set this section to `N/A (skipped)` and include reason.
 
 ### Candidate Opportunities
 

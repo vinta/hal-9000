@@ -11,7 +11,7 @@
 
 ## Decision Packet Snapshot
 
-### Opportunity Backlog Snapshot (Discovery mode only)
+### Opportunity Backlog Snapshot
 
 - Top candidates considered: ...
 - Surprise bets: ...
