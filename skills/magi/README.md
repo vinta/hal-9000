@@ -18,7 +18,7 @@ In the show, CASPER is not "neutral compute": it can become the deciding factor 
 
 The [magi](SKILL.md) skill translates this into a three-agent deliberation workflow built on Claude Code's **Agent Team**:
 
-1. Independent analysis (no cross-talk)
+1. Analysis (includes discovery, option evaluation, and framing; no cross-talk)
 2. Direct peer-to-peer debate
 3. A formal vote (unanimous / majority / deadlock)
 
