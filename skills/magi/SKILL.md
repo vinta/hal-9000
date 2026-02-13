@@ -43,9 +43,10 @@ The workflow has four stages:
 
 ## When NOT to Use
 
-- Factual lookups with a single correct answer
-- Simple implementation tasks where no material trade-off exists
-- Sequential file edits where parallel agents will conflict on the same files
+- Factual lookups with a single correct answer -- just answer directly or use WebSearch
+- Simple implementation tasks where no material trade-off exists -- just implement
+- Sequential file edits where parallel agents will conflict on the same files -- use a single agent
+- When the user has already decided and just needs execution -- don't deliberate what's settled
 
 ## Perspectives
 
@@ -117,7 +118,6 @@ digraph magi {
 8. After confirmation, execute orchestration sequence:
    - `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman`
    - `TaskCreate` one analysis task per agent using the Agent Prompt Template
-   - `TaskUpdate` each task to `in_progress` after dispatch
 
 **Exit criteria:**
 
@@ -159,34 +159,19 @@ digraph magi {
 
 **Entry criteria:** Three agents have active analysis tasks and identical Decision Packet context.
 
-Each agent works independently with no cross-agent communication.
+Each agent works independently with no cross-agent communication. Output format is defined in the Agent Prompt Template (Thesis, Evidence, Risks, Recommendation).
 
-Required output format from each agent:
+Role constraint (prevents convergence): each agent must evaluate all options against the criteria, but must also nominate a default favorite under their lens:
 
-```markdown
-**Thesis:** <2-3 sentences>
-**Evidence:**
-- <argument + evidence source tag: [repo] or [external]>
-- <argument + evidence source tag>
-**Risks:**
-- <risk 1>
-- <risk 2>
-**Recommendation:** <default option choice, may be conditional>
-```
+- Scientist: strongest evidence and measurable success path
+- Mother: safest failure modes and rollback story
+- Woman: the option that best serves the underlying desire/meaning/experience, with pragmatic guardrails
 
-Rules:
+If an agent needs user input, it sends `SendMessage` to lead, who relays via `AskUserQuestion`.
 
-- Evaluate every listed option against all evaluation criteria.
-- Nominate one default favorite option from your perspective.
-- If external context is needed, use `WebSearch` and cite what changed your view.
-- If user clarification is needed, send `SendMessage` to lead; lead asks user via `AskUserQuestion`.
+Lead monitoring: if an agent goes silent, send one follow-up prompt. If still silent, proceed with available analyses and note reduced confidence.
 
-Lead monitoring:
-
-- Use `TaskList`/`TaskGet` to track completion.
-- Mark tasks completed via `TaskUpdate` when outputs arrive.
-- If an agent goes silent, send one follow-up prompt.
-- If still silent, proceed with available analyses and record reduced confidence.
+**Unresponsive agent rule (all phases):** Nudge once. If still no response, proceed with available analyses and note the gap. In voting, mark as "NO VOTE"; treat any 1/2 result as "weak majority."
 
 **Exit criteria:** Either all 3 analyses complete, or timeout/fallback path is documented.
 
@@ -226,14 +211,7 @@ Lead behavior:
 
 **Entry criteria:** Debate complete or explicitly terminated.
 
-Lead asks each agent to submit final vote in this format:
-
-```markdown
-**Final Position:** <updated recommendation>
-**Vote:** AGREE | CONDITIONAL | DISAGREE
-**Justification:** <1 sentence>
-**Flip Condition:** <single condition/evidence that would change this vote>
-```
+Lead asks each agent to submit final vote (format defined in Agent Prompt Template).
 
 Lead tallies votes:
 
@@ -288,7 +266,7 @@ Requirements:
 ## Agent Prompt Template
 
 ```text
-You are **The {NAME}** of the MAGI system, a three-agent deliberation council.
+You are **The {NAME}** of the MAGI system -- a three-agent deliberation council.
 
 Your cognitive mode: **{MODE_DESCRIPTION}**
 For this task, your focus: {DOMAIN_SPECIFIC_FOCUS}
@@ -303,48 +281,61 @@ Your core question: "{CORE_QUESTION}"
 {TASK_DESCRIPTION}
 
 ## Phase 1: Independent Analysis
-Return exactly:
-**Thesis:** [2-3 sentences]
+Produce your analysis in this format:
+**Thesis:** [core position, 2-3 sentences]
 **Evidence:**
 - [claim + source tag: [repo] or [external]]
 - [claim + source tag]
 **Risks:**
 - [risk]
 - [risk]
-**Recommendation:** [choose a default option, conditional allowed]
+**Recommendation:** [concrete actionable suggestion]
 
-Rules:
+Phase 1 rules:
 - Base your analysis on the Decision Packet in Context.
-- Evaluate all options against all evaluation criteria.
-- Pick one default recommendation from your perspective.
-- If you need user clarification, send it to the lead via SendMessage.
+- Evaluate all listed options against the evaluation criteria.
+- Nominate a default favorite option from your lens (even if it's conditional).
+- If you need user clarification, send it to the lead via SendMessage. You cannot ask the user directly.
+
+Send to team lead via SendMessage when done.
 
 ## Phase 2: Debate (peer-to-peer)
-When the lead sends other analyses:
-1. Send one critique to EACH peer directly.
-2. Each critique must contain:
-   - A quoted sentence you challenge
-   - Why it is incomplete/wrong (1-3 sentences)
-   - One deciding test/evidence/scenario
-   - One actionable improvement
-3. On receiving critique, either defend with evidence or revise and state what changed.
-4. Run up to 2 rounds total (challenge/rebuttal, then challenge/rebuttal), then stop unless lead instructs otherwise.
+When the lead sends you the other agents' analyses:
+1. Send critiques directly to EACH peer (two separate messages).
+2. Each critique must include:
+   - One quoted claim you're challenging (copy the sentence).
+   - Why it's wrong/incomplete (1-3 sentences).
+   - One concrete test / evidence / scenario that would resolve the dispute.
+   - One actionable improvement.
+3. When you receive critique:
+   - Respond to each peer.
+   - Either defend with evidence OR revise your position and say what changed.
+4. 2 full exchanges: after rebuttals, you may send a second challenge addressing their defense, and respond to their second challenge. Then stop.
 
 ## Phase 3: Consensus Vote
-When asked to vote, return exactly:
+When the lead requests your vote:
+1. State your **final position** (you may revise based on debate).
+2. Vote: **AGREE** / **CONDITIONAL** / **DISAGREE** with the strongest emerging position.
+3. One-sentence justification.
+4. State what single condition or evidence would flip your vote.
+
+Format:
 **Final Position:** [your final recommendation]
 **Vote:** AGREE | CONDITIONAL | DISAGREE
 **Justification:** [1 sentence]
 **Flip Condition:** [what evidence would change your vote]
 
+Send vote to team lead via SendMessage.
+
 ## Context
-{RELEVANT_BACKGROUND - include everything needed because teammates do not inherit conversation history}
+{RELEVANT_BACKGROUND -- teammates do NOT inherit conversation history, include everything needed here}
 
 ## Rules
-- Argue your perspective fully; do not hedge for balance.
-- Be specific and concrete.
-- In Phase 2, message peers directly (not just the lead).
-- Check TaskList for your task and update status in progress/completed.
+- Argue your perspective FULLY -- do not hedge or try to be balanced.
+- Be specific and concrete, not abstract.
+- Support claims with evidence or reasoned argument.
+- In Phase 2, message other agents DIRECTLY -- debate, don't monologue to the lead.
+- Check TaskList for your assigned task; mark in_progress then completed.
 ```
 
 ## Decision Log Template
