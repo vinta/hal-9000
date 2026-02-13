@@ -14,6 +14,7 @@ allowed-tools:
   - TaskList
   - TaskGet
   - SendMessage
+  - WebSearch
   - Bash(mkdir)
   - Read
   - Write
@@ -53,7 +54,6 @@ digraph magi {
     questions [label="Ask clarifying questions"];
     packet [label="Draft Decision Packet"];
     confirm [label="User confirms framing?" shape=diamond style=""];
-    setup [label="Create team + spawn agents"];
     analysis [label="Phase 1: Independent analysis\n(parallel, no cross-talk)"];
     debate [label="Phase 2: Debate\n(peer-to-peer, agents challenge each other directly)"];
     vote [label="Phase 3: Consensus vote\n(each agent casts final position)"];
@@ -61,64 +61,44 @@ digraph magi {
     unanimous [label="3/3 Unanimous\nStrong recommendation"];
     majority [label="2/3 Majority\nRecommendation + noted dissent"];
     deadlock [label="Deadlock\nArticulated trade-offs"];
-    log [label="Write decision log\ndocs/magi/YYYY-MM-DD-<topic>.md"];
-    done [label="Shutdown team"];
+    log [label="Write decision log"];
 
     explore -> questions -> packet -> confirm;
     confirm -> questions [label="adjust"];
-    confirm -> setup [label="yes"];
-    setup -> analysis -> debate -> vote -> tally;
+    confirm -> analysis [label="yes"];
+    analysis -> debate -> vote -> tally;
     tally -> unanimous [label="3/3"];
     tally -> majority [label="2/3"];
     tally -> deadlock [label="split"];
     unanimous -> log;
     majority -> log;
     deadlock -> log;
-    log -> done;
 }
 ```
 
 ### Phase 0: Context Gathering
 
-**HARD GATE: Do NOT call `TeamCreate` or spawn any agents until the Decision Packet is complete and the user has confirmed the framing.**
-
-Before spawning the team:
+**HARD GATE: Do NOT spawn any agents until the Decision Packet is complete and the user has confirmed the framing.**
 
 1. Start from the user's question: **$ARGUMENTS**
-2. Explore the current project state (files, docs, recent commits) only as needed to populate missing context
-3. **Ask clarifying questions** to understand the decision space (see `brainstorming` skill for questioning technique):
-   - One question per message -- do not bundle multiple questions
-   - Prefer multiple-choice via `AskUserQuestion` when possible
-   - Focus on: purpose, constraints, what success looks like, what's off the table
-   - If a topic needs more exploration, break it into multiple questions
-   - Keep going until you understand the problem well enough to frame it
-4. Draft a **Decision Packet** from what you've learned:
+2. Explore the current project state (files, docs, recent commits) only as needed
+3. **Ask clarifying questions** -- one at a time, prefer multiple-choice via `AskUserQuestion`:
+   - Purpose, constraints, what success looks like, what's off the table
+   - Keep going until you can frame the decision
+4. Draft a **Decision Packet**:
    - Decision statement (1 sentence)
-   - Options (at least 2, not just "do it" vs "don't do it"):
-     - Option A: ...
-     - Option B: ...
-     - Option C: ... (optional)
-   - Constraints (hard requirements, bullets)
-   - Evaluation criteria (at least 3 -- how we'll judge "better", bullets)
-   - Unknowns / questions (bullets)
-   - Non-goals (bullets)
+   - Options (at least 2, not just "do it" vs "don't do it")
+   - Constraints (hard requirements)
+   - Evaluation criteria (at least 3 -- how we'll judge "better")
+   - Unknowns / questions
+   - Non-goals
    - Context links (paths, docs, prior decisions) if relevant
-5. Present the final Decision Packet to the user via `AskUserQuestion` with options like "Looks good, start deliberation" / "I want to adjust something". Only proceed after confirmation.
-6. `TeamCreate` with team name `"magi"`, map perspectives to domain
-7. `TaskCreate` three analysis tasks (one per agent)
-8. Spawn 3 teammates via `Task` tool (see Agent Prompt Template): `subagent_type: "general-purpose"`, `team_name: "magi"`, `model: "opus"`, names: `"scientist"` / `"mother"` / `"woman"`. Assign each task via `TaskUpdate` by `owner`.
-
-Role constraint (prevents convergence): In Phase 1, each agent must evaluate all options against the criteria, but must also nominate a default favorite under their lens:
-
-- Scientist: strongest evidence and measurable success path
-- Mother: safest failure modes and rollback story
-- Woman: the option we choose because it best serves the underlying desire/meaning/experience, with pragmatic guardrails
-
-**Unresponsive agent rule (all phases):** Nudge once. If still no response, proceed with available analyses and note the gap. In voting, mark as "NO VOTE"; treat any 1/2 result as "weak majority."
+5. Present the Decision Packet via `AskUserQuestion` ("Looks good, start deliberation" / "I want to adjust something"). Only proceed after confirmation.
+6. Create team `"magi"`, spawn `scientist`, `mother`, `woman` (see Agent Prompt Template), assign one analysis task each.
 
 ### Phase 1: Independent Analysis
 
-Each agent works independently -- **no cross-communication**. Output format (Thesis, Evidence, Risks, Recommendation) is defined in the Agent Prompt Template. If an agent needs user input, it will `SendMessage` the lead, who relays via `AskUserQuestion`.
+Each agent works independently -- **no cross-communication**. Output format (Thesis, Evidence, Risks, Recommendation) is defined in the Agent Prompt Template. Agents should search online when they need evidence or context beyond what's in the Decision Packet. If an agent needs user input, it will `SendMessage` the lead, who relays via `AskUserQuestion`.
 
 Wait for all 3 to complete (idle notifications + TaskList showing all completed).
 
@@ -153,7 +133,7 @@ Team lead reads the votes and full debate record, then presents to the user:
 
 ### Decision Log
 
-After synthesis, write the deliberation record to `docs/magi/YYYY-MM-DD-<topic>.md` (create the directory if needed) and commit it. Use this template:
+After synthesis, write the deliberation record to `docs/magi/YYYY-MM-DD-<topic>.md` (create the directory if needed). Use this template:
 
 ```markdown
 # <Decision Statement>
@@ -196,10 +176,6 @@ Full peer-to-peer exchange from Phase 2, organized by pairing:
 ```
 
 Include the full debate transcript -- the critiques and rebuttals are the most valuable part of the record. The verdict section should stay concise.
-
-### Cleanup
-
-`SendMessage` with `type: "shutdown_request"` to each agent. Wait for all shutdown responses before calling `TeamDelete`.
 
 ## Agent Prompt Template
 
