@@ -77,7 +77,6 @@ digraph magi {
 
     discover [label="Discovery:\n3-agent ideation + backlog"];
     select [label="Select focus area" shape=diamond style=""];
-    orient [label="Focused context pass\n(for selected focus only)"];
     clarify [label="Ask clarifying questions"];
     packet [label="Draft Decision Packet"];
     confirm [label="Framing confirmed?" shape=diamond style=""];
@@ -91,8 +90,7 @@ digraph magi {
 
     discover -> select;
     select -> discover [label="expand ideation"];
-    select -> orient [label="focus chosen"];
-    orient -> clarify;
+    select -> clarify [label="focus chosen"];
     clarify -> packet -> confirm;
     confirm -> clarify [label="adjust"];
     confirm -> spawn [label="yes"];
@@ -124,23 +122,22 @@ digraph magi {
    - `Choose a different focus from backlog`
    - `Expand ideation before deciding`
    - If user selects expand ideation, refine backlog and repeat from step 3.
-6. After focus selection, run a focused context pass only for the chosen candidate(s). Read only files/docs needed to validate selected opportunities; avoid broad repo tours.
-7. Ask clarifying questions one at a time via `AskUserQuestion` (prefer multiple-choice):
+6. Ask clarifying questions one at a time via `AskUserQuestion` (prefer multiple-choice):
    - Decision objective
    - Constraints and non-negotiables
    - Success criteria
    - Explicitly out-of-scope items
-8. Draft a Decision Packet using the required schema below.
-9. Validate the packet:
+7. Draft a Decision Packet using the required schema below.
+8. Validate the packet:
    - At least 4 options, with at least 1 wildcard/contrarian option
    - Options must span at least 3 distinct themes (not variants of one idea)
    - At least 3 evaluation criteria
    - Non-goals and unknowns included
-10. Present packet for confirmation using `AskUserQuestion` with exactly:
-    - `Looks good, start deliberation`
-    - `I want to adjust framing`
-11. If user selects adjust, revise packet and repeat Step 10.
-12. `TaskCreate` one analysis task per agent using `templates/agent-prompt-template.md`.
+9. Present packet for confirmation using `AskUserQuestion` with exactly:
+   - `Looks good, start deliberation`
+   - `I want to adjust framing`
+10. If user selects adjust, revise packet and repeat Step 9.
+11. `TaskCreate` one analysis task per agent using `templates/agent-prompt-template.md`.
 
 **Exit criteria:**
 
