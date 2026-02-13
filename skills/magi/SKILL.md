@@ -22,7 +22,15 @@ allowed-tools:
 
 # MAGI
 
+## Overview
+
 Three-agent deliberation system inspired by the MAGI from Neon Genesis Evangelion. Three persistent agents with distinct cognitive modes analyze independently, debate each other directly through peer-to-peer messaging, and reach consensus through formal vote (3/3 unanimous, 2/3 majority, or deadlock).
+
+## When NOT to Use
+
+- Factual lookups with single correct answers
+- Simple implementation tasks (just do them)
+- Sequential file edits (agents will conflict on shared files)
 
 ## Perspectives
 
@@ -131,51 +139,7 @@ Team lead reads the votes and full debate record, then presents to the user:
 
 **Deadlock:** Each position summarized, the core dilemma articulated, trade-offs mapped. A deadlock is a meaningful outcome that surfaces real trade-offs the user must resolve. The MAGI system provides analysis, not forced consensus -- state your recommendation noting which perspective carries most weight, but the user decides.
 
-### Decision Log
-
-After synthesis, write the deliberation record to `docs/magi/YYYY-MM-DD-<topic>.md` (create the directory if needed). Use this template:
-
-```markdown
-# <Decision Statement>
-
-**Date:** YYYY-MM-DD
-**Vote:** Unanimous | Majority (2/3) | Deadlock
-
-## Options Considered
-
-- **Option A:** ...
-- **Option B:** ...
-
-## Debate Transcript
-
-Full peer-to-peer exchange from Phase 2, organized by pairing:
-
-### Scientist vs Mother
-
-<paste each critique and rebuttal in order>
-
-### Scientist vs Woman
-
-<paste each critique and rebuttal in order>
-
-### Mother vs Woman
-
-<paste each critique and rebuttal in order>
-
-## Verdict
-
-<Recommendation or articulated trade-offs if deadlock>
-
-**Scientist:** <final position + key evidence>
-**Mother:** <final position + key risks>
-**Woman:** <final position + key desires>
-
-## Dissent
-
-<Minority concern and conditions that would flip the decision. Omit if unanimous.>
-```
-
-Include the full debate transcript -- the critiques and rebuttals are the most valuable part of the record. The verdict section should stay concise.
+After synthesis, write the deliberation record to `docs/magi/YYYY-MM-DD-<topic>.md` (create the directory if needed).
 
 ## Agent Prompt Template
 
@@ -241,6 +205,50 @@ When the lead requests your vote:
 - Check TaskList for your assigned task; mark in_progress then completed
 ```
 
+## Decision Log Template
+
+```markdown
+# <Decision Statement>
+
+**Date:** YYYY-MM-DD
+**Vote:** Unanimous | Majority (2/3) | Deadlock
+
+## Options Considered
+
+- **Option A:** ...
+- **Option B:** ...
+
+## Debate Transcript
+
+Full peer-to-peer exchange from Phase 2, organized by pairing:
+
+### Scientist vs Mother
+
+<paste each critique and rebuttal in order>
+
+### Scientist vs Woman
+
+<paste each critique and rebuttal in order>
+
+### Mother vs Woman
+
+<paste each critique and rebuttal in order>
+
+## Verdict
+
+<Recommendation or articulated trade-offs if deadlock>
+
+**Scientist:** <final position + key evidence>
+**Mother:** <final position + key risks>
+**Woman:** <final position + key desires>
+
+## Dissent
+
+<Minority concern and conditions that would flip the decision. Omit if unanimous.>
+```
+
+**Include the full debate transcript** -- the critiques and rebuttals are the most valuable part of the record. The verdict section should stay concise.
+
 ## Common Mistakes
 
 | Mistake                     | Fix                                                                                              |
@@ -257,9 +265,3 @@ When the lead requests your vote:
 | Lead starts implementing    | Lead only orchestrates -- never writes code, edits files, or makes decisions for agents          |
 | Teammates lack context      | Include ALL relevant context in spawn prompt -- they don't inherit conversation history          |
 | Agent needs user input      | Teammates can't use AskUserQuestion -- they must SendMessage to lead, who relays to user         |
-
-## When NOT to Use
-
-- Factual lookups with single correct answers
-- Simple implementation tasks (just do them)
-- Sequential file edits (agents will conflict on shared files)
