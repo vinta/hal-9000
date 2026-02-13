@@ -129,8 +129,9 @@ digraph magi {
    - If already scoped, skip to Decision Packet drafting.
 4. Discovery mode (required for open-ended prompts):
    - Draft an Opportunity Backlog using the required schema below.
-   - Generate **8-15 candidate opportunities** across at least **4 distinct lenses** (for example: product UX, reliability, growth, operations, DevEx, quality, trust/safety, monetization).
-   - Include **2-3 surprise bets** that are non-obvious or contrarian.
+   - Generate **12-20 candidate opportunities** across at least **5 distinct lenses** (for example: product UX, reliability, growth, operations, DevEx, quality, trust/safety, monetization).
+   - Enforce a novelty quota: at least **30%** of candidates must be non-obvious or contrarian relative to current roadmap direction.
+   - Include surprise bets from each perspective: at least **1 Scientist**, **1 Mother**, and **1 Woman** "crazy-but-plausible" bet.
    - For each candidate, include impact hypothesis, effort band, confidence, and primary risk.
    - Ask the user to choose next step using `AskUserQuestion` with exactly:
      - `Proceed with recommended focus`
@@ -170,13 +171,18 @@ digraph magi {
 ## Opportunity Surface
 - <lenses covered and why they matter for this context>
 
-## Candidate Opportunities (8-15)
+## Candidate Opportunities (12-20)
 - O1: <title> -- Impact: <hypothesis>; Effort: <S/M/L>; Confidence: <low/med/high>; Risk: <main downside>
 - O2: ...
 
-## Surprise Bets (2-3)
-- S1: <non-obvious or contrarian idea + why it might win>
-- S2: ...
+## Surprise Bets (minimum 3; one per perspective)
+- S1 [Scientist]: <crazy-but-plausible idea + why it might win>
+- S2 [Mother]: <crazy-but-plausible idea + safety/reversibility guardrails>
+- S3 [Woman]: <crazy-but-plausible idea + user/desire upside>
+
+## Novelty Mix
+- Conventional candidates: <count>
+- Non-obvious/contrarian candidates: <count and %>
 
 ## Coverage Gaps
 - <areas not yet explored that could hide important opportunities>
@@ -481,6 +487,7 @@ Full peer-to-peer exchange from Phase 2, organized by pairing.
 | Open-ended request was narrowed too early | Run Discovery mode first and produce Opportunity Backlog before locking options |
 | Option set is shallow (`do` vs `do not`) | Rewrite options to at least two real implementation alternatives |
 | Option set is broad in count but narrow in type | Enforce theme diversity and include at least one wildcard option |
+| Backlog is high-volume but still bland | Enforce novelty quota and require one crazy-but-plausible bet per perspective |
 | Lead mediates debate content | Re-route agents to direct peer `SendMessage` and step back |
 | Agents converge too quickly without challenge | Reinforce "argue fully" and require quoted-claim critiques |
 | Debate runs indefinitely | Enforce 2-round cap and move to vote |
