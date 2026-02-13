@@ -39,12 +39,14 @@ Once framing is complete, both modes use the same deliberation pipeline:
 
 ### Execution Invariants
 
-- Do not create team members until the Decision Packet is complete and user-confirmed.
+- In Decision mode, do not create team members until the Decision Packet is complete and user-confirmed.
+- In Discovery mode, create the MAGI team before backlog drafting so each agent can ideate independently.
 - Lead orchestrates; agents argue. The lead does not substitute its own judgment for agent outputs.
 - Phase 2 requires direct peer messages between agents (not lead-mediated monologues).
 - Every run must include Phase 3 voting, even when consensus seems obvious.
-- Every run must write a decision log to `docs/magi/`.
+- Every run must write two logs to `docs/magi/`: `YYYY-MM-DD-<topic>-discovery.md` and `YYYY-MM-DD-<topic>-decision.md`.
 - For open-ended prompts, run Discovery mode first; do not collapse to a narrow option set before generating a broad opportunity backlog.
+- For "surprise me"/open-ended prompts, Discovery should be council-driven by default (3 agents), not lead-only.
 
 ## When NOT to Use
 
@@ -90,7 +92,7 @@ digraph magi {
 
     explore [label="Explore context"];
     route [label="Route intent"];
-    discover [label="Discovery mode:\nDraft Opportunity Backlog"];
+    discover [label="Discovery mode:\n3-agent ideation + backlog"];
     select [label="Select focus area" shape=diamond style=""];
     clarify [label="Ask clarifying questions"];
     packet [label="Draft Decision Packet"];
@@ -101,7 +103,7 @@ digraph magi {
     vote [label="Phase 3: Consensus vote"];
     tally [label="Tally result" shape=diamond style=""];
     synth [label="Synthesize for user"];
-    log [label="Write decision log"];
+    log [label="Write discovery + decision logs"];
 
     explore -> route;
     route -> discover [label="open-ended"];
@@ -128,11 +130,19 @@ digraph magi {
    - If open-ended, run Discovery mode first.
    - If already scoped, skip to Decision Packet drafting.
 4. Discovery mode (required for open-ended prompts):
-   - Draft an Opportunity Backlog using the required schema below.
-   - Generate **12-20 candidate opportunities** across at least **5 distinct lenses** (for example: product UX, reliability, growth, operations, DevEx, quality, trust/safety, monetization).
+   - Default to **Council Discovery** (3-agent ideation), unless user explicitly asks for a lightweight run.
+   - Council Discovery sequence:
+     - `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman` (if not already created for this run).
+     - `TaskCreate` one discovery task per agent using the Discovery Task Variant in the Agent Prompt Template.
+     - Each agent independently proposes **5-7 opportunities** from its lens, including **1 crazy-but-plausible** bet.
+   - Consolidate agent outputs into an Opportunity Backlog using the required schema below.
+   - Generate **12-20 consolidated candidate opportunities** across at least **5 distinct lenses** (for example: product UX, reliability, growth, operations, DevEx, quality, trust/safety, monetization).
+   - Preserve source attribution for each consolidated candidate (which agent(s) proposed it).
    - Enforce a novelty quota: at least **30%** of candidates must be non-obvious or contrarian relative to current roadmap direction.
    - Include surprise bets from each perspective: at least **1 Scientist**, **1 Mother**, and **1 Woman** "crazy-but-plausible" bet.
    - For each candidate, include impact hypothesis, effort band, confidence, and primary risk.
+   - Write/update discovery log at `docs/magi/YYYY-MM-DD-<topic>-discovery.md` before asking the user to choose focus.
+   - Lightweight fallback (only if requested): lead drafts backlog directly, but still enforces novelty/thematic coverage constraints.
    - Ask the user to choose next step using `AskUserQuestion` with exactly:
      - `Proceed with recommended focus`
      - `Choose a different focus from backlog`
@@ -155,7 +165,7 @@ digraph magi {
    - `I want to adjust framing`
 9. If user selects adjust, revise packet and repeat Step 8.
 10. After confirmation, execute orchestration sequence:
-   - `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman`
+   - If team `magi` does not already exist for this run, `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman`
    - `TaskCreate` one analysis task per agent using the Agent Prompt Template
 
 **Exit criteria:**
@@ -171,8 +181,13 @@ digraph magi {
 ## Opportunity Surface
 - <lenses covered and why they matter for this context>
 
-## Candidate Opportunities (12-20)
-- O1: <title> -- Impact: <hypothesis>; Effort: <S/M/L>; Confidence: <low/med/high>; Risk: <main downside>
+## Agent Discovery Inputs (Council Discovery default)
+- Scientist: <5-7 opportunities submitted>
+- Mother: <5-7 opportunities submitted>
+- Woman: <5-7 opportunities submitted>
+
+## Candidate Opportunities (12-20 consolidated)
+- O1 [S|M|W]: <title> -- Impact: <hypothesis>; Effort: <S/M/L>; Confidence: <low/med/high>; Risk: <main downside>
 - O2: ...
 
 ## Surprise Bets (minimum 3; one per perspective)
@@ -299,17 +314,20 @@ Synthesis rules:
 - Majority: include minority concern verbatim in substance.
 - Deadlock: present options, trade-offs, and your best recommendation while making clear the user decides.
 
-### Decision Logging
+### Logging Artifacts
 
-After synthesis, write the full deliberation record to:
+Write two artifacts per run:
 
-`docs/magi/YYYY-MM-DD-<topic>.md`
+- Discovery log: `docs/magi/YYYY-MM-DD-<topic>-discovery.md`
+- Decision log: `docs/magi/YYYY-MM-DD-<topic>-decision.md`
 
 Requirements:
 
 1. Ensure directory exists first: `mkdir -p docs/magi`.
-2. Include full debate transcript, not a summary.
-3. If fallback occurred (silent agent, missing data), include confidence note.
+2. Discovery log must include the full opportunity surface (all raw agent proposals and full consolidated backlog), not only shortlisted items.
+3. If Discovery mode was skipped (already-scoped Decision mode), still create discovery log and explicitly state skip reason.
+4. Decision log must include full debate transcript, not a summary.
+5. If fallback occurred (silent agent, missing data), include confidence note in decision log.
 
 ## Agent Prompt Template
 
@@ -327,6 +345,23 @@ Your core question: "{CORE_QUESTION}"
 
 ## Task
 {TASK_DESCRIPTION}
+
+## Discovery Task Variant (Phase 0 only, when assigned)
+If the lead assigns a Discovery task, produce this format and stop (no voting/debate in this phase):
+**Lens Thesis:** [what this lens optimizes here, 1-2 sentences]
+**Opportunities (5-7):**
+- D1: [title] -- Impact: [hypothesis]; Effort: [S/M/L]; Confidence: [low/med/high]; Risk: [main downside]
+- D2: ...
+**Crazy-but-Plausible Bet (exactly 1):**
+- C1: [bold idea] -- Why it might win: [1-2 sentences]; Guardrail: [1 sentence]
+**Kill List (2 ideas to avoid):**
+- K1: [tempting idea] -- Why to avoid: [1 sentence]
+- K2: [tempting idea] -- Why to avoid: [1 sentence]
+
+Discovery rules:
+- Propose genuinely distinct ideas; avoid small variants of one concept.
+- Stay faithful to your lens; do not optimize for consensus at this stage.
+- Send output to lead via SendMessage when done.
 
 ## Phase 1: Independent Analysis
 Produce your analysis in this format:
@@ -387,15 +422,90 @@ Send vote to team lead via SendMessage.
 - Check TaskList for your assigned task; mark in_progress then completed.
 ```
 
+## Discovery Log Template
+
+```markdown
+# Discovery: <topic/prompt>
+
+**Date:** YYYY-MM-DD
+**Topic:** <slug/source prompt>
+**Mode:** Council Discovery | Lightweight Discovery | Discovery Skipped
+
+## Prompt
+<user question/request that triggered discovery>
+
+## Context Links
+- <repo paths, docs, prior decisions, metrics, incidents>
+
+## Agent Discovery Inputs (raw; do not summarize away opportunities)
+If mode is `Discovery Skipped`, set this section to `N/A (skipped)` and include reason.
+
+### Scientist
+- Lens Thesis: ...
+- Opportunities:
+  - D1: ...
+  - D2: ...
+- Crazy-but-Plausible Bet: ...
+- Kill List: ...
+
+### Mother
+- Lens Thesis: ...
+- Opportunities:
+  - D1: ...
+  - D2: ...
+- Crazy-but-Plausible Bet: ...
+- Kill List: ...
+
+### Woman
+- Lens Thesis: ...
+- Opportunities:
+  - D1: ...
+  - D2: ...
+- Crazy-but-Plausible Bet: ...
+- Kill List: ...
+
+## Consolidated Opportunity Backlog (full)
+If mode is `Discovery Skipped`, set this section to `N/A (skipped)` and include reason.
+
+### Candidate Opportunities
+- O1 [S|M|W]: ...
+- O2 [S|M|W]: ...
+
+### Surprise Bets
+- S1 [Scientist]: ...
+- S2 [Mother]: ...
+- S3 [Woman]: ...
+
+### Novelty Mix
+- Conventional candidates: ...
+- Non-obvious/contrarian candidates: ...
+
+### Coverage Gaps
+- ...
+
+### Recommended Focus Set (Top 3)
+- R1: ...
+- R2: ...
+- R3: ...
+
+## Focus Selection
+- User choice: `Proceed with recommended focus` | `Choose a different focus from backlog` | `Expand ideation before deciding`
+- Selected candidate(s): ...
+- Notes: ...
+```
+
 ## Decision Log Template
 
 ```markdown
-# <Decision Statement>
+# Decision: <Decision Statement>
 
 **Date:** YYYY-MM-DD
 **Topic:** <slug/source prompt>
 **Vote:** Unanimous | Majority (2/3) | Deadlock
 **Confidence:** High | Medium | Low
+
+## Discovery Reference
+- Discovery log: `docs/magi/YYYY-MM-DD-<topic>-discovery.md`
 
 ## Decision Packet Snapshot
 
@@ -483,11 +593,13 @@ Full peer-to-peer exchange from Phase 2, organized by pairing.
 
 | Symptom | Corrective Action |
 | ------- | ----------------- |
-| Agents spawned before framing confirmation | Stop, delete team, finish Decision Packet confirmation gate, then respawn |
+| Agents spawned before framing confirmation in Decision mode | Stop, delete team, finish Decision Packet confirmation gate, then respawn |
+| Open-ended prompt ran without 3-agent discovery | Run Council Discovery first: 5-7 opportunities per agent, then consolidate |
 | Open-ended request was narrowed too early | Run Discovery mode first and produce Opportunity Backlog before locking options |
 | Option set is shallow (`do` vs `do not`) | Rewrite options to at least two real implementation alternatives |
 | Option set is broad in count but narrow in type | Enforce theme diversity and include at least one wildcard option |
 | Backlog is high-volume but still bland | Enforce novelty quota and require one crazy-but-plausible bet per perspective |
+| Discovery log omits discovered opportunities | Log full raw agent inputs and full consolidated backlog; never only top-3 |
 | Lead mediates debate content | Re-route agents to direct peer `SendMessage` and step back |
 | Agents converge too quickly without challenge | Reinforce "argue fully" and require quoted-claim critiques |
 | Debate runs indefinitely | Enforce 2-round cap and move to vote |
@@ -495,4 +607,4 @@ Full peer-to-peer exchange from Phase 2, organized by pairing.
 | Vote lacks flip conditions | Request corrected vote format from missing agents |
 | Agent goes silent | Nudge once; if still silent, proceed with available outputs and note reduced confidence. In voting, mark as "NO VOTE"; treat 1/2 as weak majority |
 | Synthesis ignores dissent | Add dissent section with explicit flip conditions |
-| Log is missing transcript/details | Rewrite log using template and include full debate messages |
+| Decision log is missing transcript/details | Rewrite decision log using template and include full debate messages |
