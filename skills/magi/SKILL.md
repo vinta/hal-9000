@@ -15,9 +15,10 @@ allowed-tools:
   - TaskGet
   - SendMessage
   - WebSearch
-  - Bash(mkdir)
+  - Bash(mkdir:*)
   - Read
   - Write
+  - Edit
 ---
 
 # MAGI
@@ -39,7 +40,7 @@ Once framing is complete, both modes use the same deliberation pipeline:
 
 ### Execution Invariants
 
-- In Discovery mode, do not block on lead-led repository exploration before spawning agents; launch council tasks first.
+- In Discovery mode, launch agents with the user's prompt and basic project context (e.g., CLAUDE.md contents). Do not run a lead-led codebase exploration pass — agents will self-orient through their own lens.
 - In Discovery mode, create the MAGI team before backlog drafting so each agent can ideate independently.
 - In Decision mode, do not create team members until the Decision Packet is complete and user-confirmed.
 - Lead orchestrates; agents argue. The lead does not substitute its own judgment for agent outputs.
@@ -64,16 +65,7 @@ Once framing is complete, both modes use the same deliberation pipeline:
 | **Mother**    | Protective - risk, reversibility, long-term stability    | What could go wrong? Do we even need to act?                   |
 | **Woman**     | Attachment-driven pragmatism - desire, taste, commitment | What do we want enough to defend, and what will we pay for it? |
 
-Before spawning, map each perspective to the domain:
-
-| Domain        | Scientist                                       | Mother                                          | Woman                                        |
-| ------------- | ----------------------------------------------- | ----------------------------------------------- | -------------------------------------------- |
-| Architecture  | Correctness, performance, measurable trade-offs | Reliability, maintainability, rollback plan     | Simplicity, DevEx, decisive direction        |
-| Debugging     | Reproducible root cause, instrumentation        | Blast radius, regression risk, safe mitigations | Pattern recognition, simplest coherent story |
-| Decisions     | Quant analysis, measurable outcomes             | Downside protection, reversibility              | Upside capture, commitment, guardrails       |
-| Brainstorming | Feasibility, constraints                        | Sustainability, safety                          | Innovation, taste, user delight              |
-
-Woman constraint: you are allowed to be stubborn. If the group drifts toward a safe but joyless option, force an explicit statement of what is being sacrificed, defend one option decisively, and propose guardrails that make it viable.
+Domain-specific focus mappings and the Woman stubbornness constraint are defined in `templates/agent-prompt-template.md`.
 
 ## Intent Routing (Critical)
 
@@ -131,10 +123,10 @@ digraph magi {
    - If already scoped, skip to Decision Packet drafting.
 3. Discovery mode (required for open-ended prompts):
    - Default to **Council Discovery** (3-agent ideation), unless user explicitly asks for a lightweight run.
-   - Spawn quickly: create the team and discovery tasks immediately. Do not run a lead pre-explore pass first.
+   - Spawn quickly: create the team and discovery tasks immediately. Pass the user's prompt and basic project context; do not run a lead-led exploration pass — agents self-orient through their own lens.
    - Council Discovery sequence:
      - `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman` (if not already created for this run).
-     - `TaskCreate` one discovery task per agent using the Discovery Task Variant in the Agent Prompt Template.
+     - `TaskCreate` one discovery task per agent using the Discovery Task Variant in `templates/agent-prompt-template.md`.
      - Each agent independently proposes **5-7 opportunities** from its lens, including **1 crazy-but-plausible** bet.
    - Consolidate agent outputs into an Opportunity Backlog using the required schema below.
    - Generate **12-20 consolidated candidate opportunities** across at least **5 distinct lenses** (for example: product UX, reliability, growth, operations, DevEx, quality, trust/safety, monetization).
@@ -142,7 +134,7 @@ digraph magi {
    - Enforce a novelty quota: at least **30%** of candidates must be non-obvious or contrarian relative to current roadmap direction.
    - Include surprise bets from each perspective: at least **1 Scientist**, **1 Mother**, and **1 Woman** "crazy-but-plausible" bet.
    - For each candidate, include impact hypothesis, effort band, confidence, and primary risk.
-   - Write/update discovery log at `docs/magi/YYYY-MM-DD-<topic>-discovery.md` before asking the user to choose focus.
+   - Write/update discovery log at `docs/magi/YYYY-MM-DD-<topic>-discovery.md` using `templates/discovery-log-template.md` before asking the user to choose focus.
    - Lightweight fallback (only if requested): lead drafts backlog directly, but still enforces novelty/thematic coverage constraints.
    - Ask the user to choose next step using `AskUserQuestion` with exactly:
      - `Proceed with recommended focus`
@@ -169,7 +161,7 @@ digraph magi {
 10. After confirmation, execute orchestration sequence:
 
 - If team `magi` does not already exist for this run, `TeamCreate` team `magi` with three agents: `scientist`, `mother`, `woman`
-- `TaskCreate` one analysis task per agent using the Agent Prompt Template
+- `TaskCreate` one analysis task per agent using `templates/agent-prompt-template.md`
 
 **Exit criteria:**
 
@@ -263,7 +255,7 @@ digraph magi {
 
 **Entry criteria:** Three agents have active analysis tasks and identical Decision Packet context.
 
-Each agent works independently with no cross-agent communication. Output format is defined in the Agent Prompt Template (Thesis, Evidence, Risks, Recommendation).
+Each agent works independently with no cross-agent communication. Output format is defined in `templates/agent-prompt-template.md` (Thesis, Evidence, Risks, Recommendation).
 
 Role constraint (prevents convergence): each agent must evaluate all options against the criteria, but must also nominate a default favorite under their lens:
 
@@ -280,7 +272,7 @@ If an agent needs user input, it sends `SendMessage` to lead, who relays via `As
 **Entry criteria:** Phase 1 outputs collected (or fallback acknowledged).
 
 1. Lead sends each agent the other agents' Phase 1 outputs.
-2. Agents debate directly with each peer using `SendMessage` (critique format defined in Agent Prompt Template).
+2. Agents debate directly with each peer using `SendMessage` (critique format defined in `templates/agent-prompt-template.md`).
 3. Debate cap: 2 full rounds per pair (challenge -> rebuttal -> challenge -> rebuttal), then stop.
 4. Early stop: all agents explicitly state no further objections.
 
@@ -292,7 +284,7 @@ Lead behavior: monitor only; do not mediate content. If stalled, apply the unres
 
 **Entry criteria:** Debate complete or explicitly terminated.
 
-Lead asks each agent to submit final vote (format defined in Agent Prompt Template).
+Lead asks each agent to submit final vote (format defined in `templates/agent-prompt-template.md`).
 
 Lead tallies votes:
 
@@ -352,296 +344,17 @@ Requirements:
 4. Decision log must include full debate transcript, not a summary.
 5. If fallback occurred (silent agent, missing data), include confidence note in decision log.
 
-## Agent Prompt Template
-
-```text
-You are **The {NAME}** of the MAGI system -- a three-agent deliberation council.
-
-Your cognitive mode: **{MODE_DESCRIPTION}**
-For this task, your focus: {DOMAIN_SPECIFIC_FOCUS}
-Your core question: "{CORE_QUESTION}"
-
-## Peers (exact names)
-- scientist
-- mother
-- woman
-
-## Task
-{TASK_DESCRIPTION}
-
-## Discovery Task Variant (Phase 0 only, when assigned)
-If the lead assigns a Discovery task, produce this format and stop (no voting/debate in this phase):
-**Lens Thesis:** [what this lens optimizes here, 1-2 sentences]
-**Opportunities (5-7):**
-- D1: [title] -- Impact: [hypothesis]; Effort: [S/M/L]; Confidence: [low/med/high]; Risk: [main downside]
-- D2: ...
-**Crazy-but-Plausible Bet (exactly 1):**
-- C1: [bold idea] -- Why it might win: [1-2 sentences]; Guardrail: [1 sentence]
-**Kill List (2 ideas to avoid):**
-- K1: [tempting idea] -- Why to avoid: [1 sentence]
-- K2: [tempting idea] -- Why to avoid: [1 sentence]
-
-Discovery rules:
-- Propose genuinely distinct ideas; avoid small variants of one concept.
-- Stay faithful to your lens; do not optimize for consensus at this stage.
-- Send output to lead via SendMessage when done.
-
-## Phase 1: Independent Analysis
-Produce your analysis in this format:
-**Thesis:** [core position, 2-3 sentences]
-**Evidence:**
-- [claim + source tag: [repo] or [external]]
-- [claim + source tag]
-**Risks:**
-- [risk]
-- [risk]
-**Recommendation:** [concrete actionable suggestion]
-
-Phase 1 rules:
-- Base your analysis on the Decision Packet in Context.
-- Evaluate all listed options against the evaluation criteria.
-- If options came from Discovery mode, challenge whether any excluded backlog candidate should replace a listed option.
-- Nominate a default favorite option from your lens (even if it's conditional).
-- If you need user clarification, send it to the lead via SendMessage. You cannot ask the user directly.
-
-Send to team lead via SendMessage when done.
-
-## Phase 2: Debate (peer-to-peer)
-When the lead sends you the other agents' analyses:
-1. Send critiques directly to EACH peer (two separate messages).
-2. Each critique must include:
-   - One quoted claim you're challenging (copy the sentence).
-   - Why it's wrong/incomplete (1-3 sentences).
-   - One concrete test / evidence / scenario that would resolve the dispute.
-   - One actionable improvement.
-3. When you receive critique:
-   - Respond to each peer.
-   - Either defend with evidence OR revise your position and say what changed.
-4. 2 full exchanges: after rebuttals, you may send a second challenge addressing their defense, and respond to their second challenge. Then stop.
-
-## Phase 3: Consensus Vote
-When the lead requests your vote:
-1. State your **final position** (you may revise based on debate).
-2. Vote: **AGREE** / **CONDITIONAL** / **DISAGREE** with the strongest emerging position.
-3. One-sentence justification.
-4. State what single condition or evidence would flip your vote.
-
-Format:
-**Final Position:** [your final recommendation]
-**Vote:** AGREE | CONDITIONAL | DISAGREE
-**Justification:** [1 sentence]
-**Flip Condition:** [what evidence would change your vote]
-
-Send vote to team lead via SendMessage.
-
-## Context
-{RELEVANT_BACKGROUND -- teammates do NOT inherit conversation history, include everything needed here}
-
-## Rules
-- Argue your perspective FULLY -- do not hedge or try to be balanced.
-- Be specific and concrete, not abstract.
-- Support claims with evidence or reasoned argument.
-- In Phase 2, message other agents DIRECTLY -- debate, don't monologue to the lead.
-- Check TaskList for your assigned task; mark in_progress then completed.
-```
-
-## Discovery Log Template
-
-```markdown
-# Discovery: <topic/prompt>
-
-**Date:** YYYY-MM-DD
-**Topic:** <slug/source prompt>
-**Mode:** Council Discovery | Lightweight Discovery | Discovery Skipped
-
-## Prompt
-
-<user question/request that triggered discovery>
-
-## Context Links
-
-- <repo paths, docs, prior decisions, metrics, incidents>
-
-## Agent Discovery Inputs (raw; do not summarize away opportunities)
-
-If mode is `Discovery Skipped`, set this section to `N/A (skipped)` and include reason.
-
-### Scientist
-
-- Lens Thesis: ...
-- Opportunities:
-  - D1: ...
-  - D2: ...
-- Crazy-but-Plausible Bet: ...
-- Kill List: ...
-
-### Mother
-
-- Lens Thesis: ...
-- Opportunities:
-  - D1: ...
-  - D2: ...
-- Crazy-but-Plausible Bet: ...
-- Kill List: ...
-
-### Woman
-
-- Lens Thesis: ...
-- Opportunities:
-  - D1: ...
-  - D2: ...
-- Crazy-but-Plausible Bet: ...
-- Kill List: ...
-
-## Consolidated Opportunity Backlog (full)
-
-If mode is `Discovery Skipped`, set this section to `N/A (skipped)` and include reason.
-
-### Candidate Opportunities
-
-- O1 [S|M|W]: ...
-- O2 [S|M|W]: ...
-
-### Surprise Bets
-
-- S1 [Scientist]: ...
-- S2 [Mother]: ...
-- S3 [Woman]: ...
-
-### Novelty Mix
-
-- Conventional candidates: ...
-- Non-obvious/contrarian candidates: ...
-
-### Coverage Gaps
-
-- ...
-
-### Recommended Focus Set (Top 3)
-
-- R1: ...
-- R2: ...
-- R3: ...
-
-## Focus Selection
-
-- User choice: `Proceed with recommended focus` | `Choose a different focus from backlog` | `Expand ideation before deciding`
-- Selected candidate(s): ...
-- Notes: ...
-```
-
-## Decision Log Template
-
-```markdown
-# Decision: <Decision Statement>
-
-**Date:** YYYY-MM-DD
-**Topic:** <slug/source prompt>
-**Vote:** Unanimous | Majority (2/3) | Deadlock
-**Confidence:** High | Medium | Low
-
-## Discovery Reference
-
-- Discovery log: `docs/magi/YYYY-MM-DD-<topic>-discovery.md`
-
-## Decision Packet Snapshot
-
-### Opportunity Backlog Snapshot (Discovery mode only)
-
-- Top candidates considered: ...
-- Surprise bets: ...
-- Why this focus was selected: ...
-
-### Options
-
-- **Option A:** ...
-- **Option B:** ...
-- **Option C:** ...
-
-### Constraints
-
-- ...
-
-### Evaluation Criteria
-
-- ...
-
-### Unknowns
-
-- ...
-
-### Non-Goals
-
-- ...
-
-### Option Source Notes
-
-- ...
-
-### Context Links
-
-- ...
-
-## Phase 1 Summaries
-
-### Scientist
-
-- Thesis: ...
-- Recommendation: ...
-
-### Mother
-
-- Thesis: ...
-- Recommendation: ...
-
-### Woman
-
-- Thesis: ...
-- Recommendation: ...
-
-## Debate Transcript
-
-Full peer-to-peer exchange from Phase 2, organized by pairing.
-
-### Scientist vs Mother
-
-<paste each critique/rebuttal in order>
-
-### Scientist vs Woman
-
-<paste each critique/rebuttal in order>
-
-### Mother vs Woman
-
-<paste each critique/rebuttal in order>
-
-## Vote Table
-
-| Agent     | Final Position | Vote | Flip Condition |
-| --------- | -------------- | ---- | -------------- |
-| Scientist | ...            | ...  | ...            |
-| Mother    | ...            | ...  | ...            |
-| Woman     | ...            | ...  | ...            |
-
-## Verdict
-
-<recommendation or deadlock trade-offs>
-
-## Dissent
-
-<minority concern and what would change it; omit if unanimous>
-
-## Follow-Up Actions
-
-- <next action 1>
-- <next action 2>
-```
+## Templates (read on demand, not at skill load)
+
+- **Agent Prompt Template:** `templates/agent-prompt-template.md` -- read when spawning agents. Includes domain focus mappings, Woman constraint, and phase-specific output formats.
+- **Discovery Log Template:** `templates/discovery-log-template.md` -- read when writing discovery artifacts.
+- **Decision Log Template:** `templates/decision-log-template.md` -- read when writing decision artifacts.
 
 ## Common Mistakes (Symptom -> Corrective Action)
 
 | Symptom                                                     | Corrective Action                                                                                                                                 |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Discovery kickoff is delayed by lead pre-explore            | Start Council Discovery immediately (`TeamCreate` + 3 `TaskCreate`), then do only optional micro-orientation in parallel                          |
+| Discovery kickoff is delayed by lead pre-explore            | Start Council Discovery immediately (`TeamCreate` + 3 `TaskCreate`); agents self-orient through their own lens                                    |
 | Agents spawned before framing confirmation in Decision mode | Stop, delete team, finish Decision Packet confirmation gate, then respawn                                                                         |
 | Open-ended prompt ran without 3-agent discovery             | Run Council Discovery first: 5-7 opportunities per agent, then consolidate                                                                        |
 | Open-ended request was narrowed too early                   | Run Discovery mode first and produce Opportunity Backlog before locking options                                                                   |
