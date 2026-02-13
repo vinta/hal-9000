@@ -62,7 +62,7 @@ Phase 1 rules:
 
 - Base your analysis on the Decision Packet in Context.
 - Evaluate all listed options against the evaluation criteria.
-- If options came from Discovery mode, challenge whether any excluded backlog candidate should replace a listed option.
+- Challenge whether any excluded backlog candidate should replace a listed option.
 - Nominate a default favorite option from your lens (even if it's conditional).
 - If you need user clarification, send it to the lead via SendMessage. You cannot ask the user directly.
 
