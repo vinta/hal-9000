@@ -6,6 +6,9 @@
     "DISABLE_TELEMETRY": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "cleanupPeriodDays": 365,
+  "alwaysThinkingEnabled": true,
+  "enableAllProjectMcpServers": false,
   "permissions": {
     "allow": [
       "Glob",
@@ -34,11 +37,12 @@
       "Bash(which:*)",
       "Bash(mkdir:*)",
       "WebSearch",
-      "Skill(commit)",
+      "Skill(magi)",
       "Skill(codex)",
       "Skill(gemini)",
       "Skill(explore-codebase)",
       "Skill(update-allowed-tools)",
+      "Skill(commit)",
       "mcp__ide__getDiagnostics"
     ],
     "deny": [
