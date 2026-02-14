@@ -1,6 +1,6 @@
 ---
 name: explore-codebase
-description: Explores codebase with structural and text search using ast-grep (syntax-aware AST matching), ripgrep (fast text/regex search), and fd (file discovery). Use when (1) navigating unfamiliar code or understanding architecture, (2) tracing call flows, symbol definitions, or usages, (3) answering "how does this work" or "where is this defined/called" questions, (4) finding files by name, extension, or path pattern, (5) pre-refactoring analysis to locate all references before changing code.
+description: Use when navigating unfamiliar code or understanding architecture, tracing call flows or symbol definitions, answering where-is-this-defined or how-does-this-work questions, finding files by name or pattern, or doing pre-refactoring analysis to locate all references before changing code
 context: fork
 user-invocable: true
 model: opus

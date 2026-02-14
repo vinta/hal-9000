@@ -1,6 +1,6 @@
 ---
 name: sync-skills
-description: (hal-9000) Syncs the Skills section in CLAUDE.md and skill entries in hal_dotfiles.json with skills/ directory.
+description: (hal-9000) Syncs CLAUDE.md skills section, settings.json Skill() permissions, and hal_dotfiles.json entries with skills/ directory.
 context: fork
 user-invocable: true
 model: haiku
@@ -25,10 +25,18 @@ allowed-tools:
    - Preserve existing entry order; append new entries at end
    - Description: one short sentence (~10 words max) saying what it does — no "Use when" triggers, no verbatim frontmatter
 
-3. **Update `dotfiles/hal_dotfiles.json`** (the `links` array)
+3. **Update `dotfiles/.claude/settings.json`** (the `permissions.allow` array)
+   - Sync the `Skill(...)` entries to match discovered user-invocable skills
+   - Only include skills with `user-invocable: true` in frontmatter
+   - Format: `"Skill(<name>)"`
+   - Add new skills, remove entries whose skill no longer exists
+   - Preserve existing entry order; append new entries at end
+   - Keep the entries in the same position block (between other tool entries)
+
+4. **Update `dotfiles/hal_dotfiles.json`** (the `links` array)
    - Format: `{"dest": "{{HOME}}/.claude/skills/<name>/", "src": "{{REPO_ROOT}}/skills/<name>/"}`
    - Add new skill dirs, remove entries whose `"src"` matches `{{REPO_ROOT}}/skills/*` but no longer has a matching skill
    - Preserve existing entry order; append new entries at end
    - Leave non-skill entries and `copies` array as-is
 
-4. **Run `./bin/hal sync`**, then report what changed.
+5. **Run `./bin/hal sync`**, then report what changed.
