@@ -45,8 +45,8 @@ Challenge premises, question assumptions, propose simpler alternatives, give dir
 ## Skills
 
 - `magi`: Three-agent deliberation system for competing perspectives.
-- `codex`: Invokes OpenAI Codex CLI for an independent second opinion.
-- `gemini`: Invokes Google Gemini CLI for a second opinion or large-content analysis.
+- `codex`: Independent review from OpenAI's reasoning models.
+- `gemini`: Independent review with 1M+ token context window.
 - `explore-codebase`: Searches codebase structure with ast-grep, ripgrep, and fd.
 - `update-allowed-tools`: Adds missing tool entries to a skill's allowed-tools frontmatter.
 - `commit`: Creates clean, atomic git commits.
