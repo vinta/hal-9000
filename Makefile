@@ -9,8 +9,8 @@ help: ## Show this help message
 install: ## Install dependencies and setup pre-commit hooks
 	uv sync --extra dev
 	uv run pre-commit install
-	brew install gitleaks
-	$(MAKE) hooks-update
+	HOMEBREW_NO_AUTO_UPDATE=1 brew install gitleaks
+	$(MAKE) update-hooks
 
 update-hooks: ## Update pre-commit hooks to latest versions
 	uv run pre-commit autoupdate
