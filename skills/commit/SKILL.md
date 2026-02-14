@@ -1,6 +1,7 @@
 ---
 name: commit
-description: Creates clean, atomic git commits with one logical change per commit. Supports hunk-level staging to split changes across commits and handles pre-commit hook failures. Use when (1) the user asks to commit, (2) completing an implementation task that should be committed, (3) changes need to be split into multiple logical commits (structural vs behavioral vs config).
+description: Use when the user asks to commit, after completing an implementation task that should be committed, or when changes span multiple concerns and need to be split into separate logical commits (structural vs behavioral vs config)
+argument-hint: "[extra-instructions]"
 context: fork
 user-invocable: true
 model: sonnet
@@ -58,7 +59,11 @@ Creating clean, atomic commits that follow best practices for version control hy
    - Write clear, descriptive commit messages following conventional format
    - Keep first line under 72 characters (aim for 50)
    - Include context in body when necessary
-   - IMPORTANT: DO NOT run any linter/formatter before committing. Commit exactly what the user changed
+   - IMPORTANT: DO NOT run any linter/formatter before committing. Commit the working tree state as-is
+
+## Extra Instructions
+
+**$ARGUMENTS**
 
 ## Attribution
 
