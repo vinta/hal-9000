@@ -13,3 +13,7 @@ cursor-style-blink = false
 
 # https://ghostty.org/docs/config/reference#shell-integration-features
 shell-integration-features = no-cursor,title,ssh-env,ssh-terminfo
+
+copy-on-select = clipboard
+scrollback-limit = 50000000
+
