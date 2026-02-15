@@ -15,13 +15,19 @@ allowed-tools:
   - TaskGet
   - SendMessage
   - WebSearch
-  - Bash(mkdir:*)
   - Read
-  - Write
-  - Edit
 ---
 
 # MAGI
+
+## Checklist
+
+You MUST create a task for each of these items and complete them in order:
+
+1. Setup agent team
+2. Parallel exploration
+3. Consolidate and present options
+4. Present final options
 
 ## Workflow
 
@@ -30,19 +36,19 @@ digraph magi {
     rankdir=TB;
     node [shape=box, style=rounded];
 
-    setup [label="Setup an agent team with 3 distinct perspectives"];
-    explore [label="Explore non-obvious ideas per agent (parallel)"];
-    ask [label="Ask clarifying questions per agent (parallel)"];
-    propose [label="Propose 2-3 approaches per agent (parallel)"];
-    confirm [label="User confirms all options to debate (debate or adjust)"];
-    debate [label="Debate (peer-to-peer)"];
-    vote [label="Vote + Tally"];
+    setup [label="Setup 3-agent team"];
+    explore [label="Agents explore in parallel\n(read project, search online, propose 2-3 approaches)"];
+    consolidate [label="Lead consolidates proposals\n+ lightweight stance per agent"];
+    present [label="Present options to user"];
+    decide [label="User picks option" shape=diamond];
+    debate [label="Debate round\n(peer-to-peer, 1 exchange)"];
 
     setup -> explore;
-    explore -> ask -> propose;
-    confirm -> debate;
-    confirm -> adjust;
-    debate -> vote;
+    explore -> consolidate;
+    consolidate -> present;
+    present -> decide;
+    decide -> debate [label="debate"];
+    debate -> present;
 }
 ```
 
@@ -50,51 +56,52 @@ digraph magi {
 
 ### Setup
 
+- Create tasks for each checklist item (with activeForm for spinner display)
 - Create an agent team with 3 agents:
   - Use [MAGI-1.md](templates/MAGI-1.md) as prompt template when creating `Scientist` agent
   - Use [MAGI-2.md](templates/MAGI-2.md) as prompt template when creating `Mother` agent
   - Use [MAGI-3.md](templates/MAGI-3.md) as prompt template when creating `Woman` agent
 
-### Explore, Ask, Propose (parallel)
+### Parallel Exploration
 
-3 agents do the following in parallel:
+Send the user's question + relevant project context to all 3 agents simultaneously. Each agent:
 
-- If the user is open-ended, agents generate options from scratch.
-- If the user supplies options (for example, `A vs B`), agents must evaluate those options AND propose alternatives from their own lens.
-- In both cases, each agent must surface non-obvious ideas. Don't just analyze what's given -- discover what's missing.
+- Checks the current project state (files, docs, recent commits)
+- **Searches online** for relevant information. DO NOT rely solely on pre-training data.
+- If the user is open-ended, generates options from scratch
+- If the user supplies options (e.g. `Should I do A?` or `Which is better? A vs B`), evaluates those AND proposes alternatives from their own lens
+- In both cases, surfaces non-obvious ideas -- discover what's missing, don't just analyze what's given
+- Proposes 2-3 approaches with trade-offs from their persona's lens
+- Tags their top pick with a one-line rationale
 
-Understanding the idea:
+Each agent may send clarifying questions to the lead. The lead consolidates and asks the user via `AskUserQuestion`:
 
-- Check out the current project state first (files, docs, recent commits)
-- **Search online** for relevant information. DO NOT rely solely on your training data.
-
-Ask clarifying questions:
-
-- Ask questions one at a time to refine the idea
-- Prefer multiple choice questions when possible, but open-ended is fine too
-- Only one question per message - if a topic needs more exploration, break it into multiple questions
+- One question at a time
+- Prefer multiple choice when possible
 - Focus on understanding: purpose, constraints, success criteria
 
-Exploring approaches:
+### Consolidate + Present
 
-- Propose 2-3 different approaches with trade-offs
-- Present options conversationally with your recommendation and reasoning
-- Lead with your recommended option and explain why
+Lead collects all proposals from the 3 agents, then:
 
-### Confirm
+1. Deduplicates similar proposals (attributing to all agents who proposed it)
+2. Groups by theme if there are many proposals
+3. Presents each option with:
+   - Which agent(s) proposed it
+   - Trade-off analysis from each perspective
+   - Who tagged it as their top pick and why
+4. Asks the user: pick an option, or say "debate" for deeper analysis
 
-Lead consolidates all options across agents and present them to the user for confirmation before debate.
+### Optional Debate (user-triggered)
 
-Each option should be clearly labeled with which agent proposed it, and which one they recommended, and the reasoning behind it.
+Only runs if the user requests it. When triggered:
 
-### Debate
+1. Create a "Debate" task
+2. Send the consolidated option list to all agents
+3. Each agent sends direct messages to each other agent critiquing their proposals
+4. Each agent gets one response to defend or concede
+5. Lead collects updated stances and re-presents
 
-- Agents debate each other through peer-to-peer messaging, directly challenging each other's proposals and reasoning.
-- Each agent must respond to critiques of their proposals, defending their position or conceding points.
-- The debate runs 1 full exchnage (each agent gets to respond once to each other agent's proposals) before moving to vote.
+### Optional Handoff
 
-### Vote
-
-- Each agent votes "Approve" or "Deny" on each proposal, with explanations rooted in their perspective.
-- The lead tallies the votes and presents the final decision to the user, along with the reasoning from each agent.
-- The user can then choose to implement the winning proposal, or ask for another round of debate with adjusted proposals.
+After the user picks an option, ask whether to transition to implementation planning with `writing-plans` skill. If yes, pass the chosen approach as context.
