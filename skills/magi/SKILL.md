@@ -1,6 +1,6 @@
 ---
 name: magi
-description: Use when facing brainstorming, designing architecture choices, or evaluating options where no single concern dominates
+description: Use when brainstorming, evaluating architecture choices, or comparing options where no single concern dominates
 argument-hint: "[question-or-topic]"
 user-invocable: true
 model: opus
@@ -19,6 +19,8 @@ allowed-tools:
 ---
 
 # MAGI
+
+Three-agent deliberation system. Spawns Scientist, Mother, and Woman agents with competing value lenses to explore a question in parallel, then consolidates their proposals for the user.
 
 ## Checklist
 
@@ -64,23 +66,15 @@ digraph magi {
 
 ### Parallel Exploration
 
-Send the user's question + relevant project context to all 3 agents simultaneously. Each agent:
+Send the user's question + the Agent Checklist below to all 3 agents simultaneously.
 
-- Checks the current project state (files, docs, recent commits)
-- **Searches online** for relevant information. DO NOT rely solely on pre-training data.
-- If the user is open-ended, generates options from scratch
-- If the user supplies options (e.g. `Should I do A?` or `Which is better? A vs B`), evaluates those AND proposes alternatives from their own lens
-- In both cases, surfaces non-obvious ideas -- discover what's missing, don't just analyze what's given
-- Proposes 2-3 approaches with trade-offs from their persona's lens
-- Tags their top pick with a one-line rationale
-
-### Agent Checklist
+#### Agent Checklist
 
 Each agent MUST create a task for each step and complete them in order:
 
 1. **Explore project state** -- check files, docs, recent commits
 2. **Search online** -- find relevant prior art, docs, discussions. DO NOT skip this.
-3. **Evaluate/generate options** -- if user-supplied, evaluate those AND propose alternatives; surface non-obvious ideas
+3. **Evaluate/generate options** -- if user is open-ended, generate from scratch; if user supplies options, evaluate those AND propose alternatives. Surface non-obvious ideas -- discover what's missing, don't just analyze what's given.
 4. **Propose 2-3 approaches** -- with trade-offs from your persona's lens
 5. **Tag top pick** -- one-line rationale for your recommended option
 
