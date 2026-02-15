@@ -66,7 +66,7 @@ digraph magi {
 Understanding the idea:
 
 - Check out the current project state first (files, docs, recent commits)
-- Search for relevant information
+- **Search online** for relevant information. DO NOT rely solely on your training data.
 
 Ask clarifying questions:
 
