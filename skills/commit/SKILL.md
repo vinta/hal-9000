@@ -75,12 +75,6 @@ If you're an Anthropic Claude model:
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-If you're an OpenAI ChatGPT model:
-
-```
-Co-Authored-By: Codex <noreply@openai.com>
-```
-
 If you're a Google Gemini model:
 
 ```
