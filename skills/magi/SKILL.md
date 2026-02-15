@@ -29,7 +29,8 @@ You MUST create a task for each of these items and complete them in order:
 1. Setup agent team
 2. Parallel exploration
 3. Consolidate and present options
-4. Present final options
+4. Wait for user decision (debate loop or done)
+5. Tear down agent team
 
 ## Workflow
 
@@ -41,15 +42,17 @@ digraph magi {
     setup [label="Setup 3-agent team"];
     explore [label="Agents explore in parallel\n(read project, search online, propose 2-3 approaches)"];
     consolidate [label="Lead consolidates proposals\n+ lightweight stance per agent"];
-    present [label="Present options to user"];
-    decide [label="User picks option" shape=diamond];
+    present [label="Present options to user\n(AskUserQuestion: Debate / Done)"];
+    decide [label="User decision" shape=diamond];
     debate [label="Debate round\n(peer-to-peer, 1 exchange)"];
+    teardown [label="Shut down agent team"];
 
     setup -> explore;
     explore -> consolidate;
     consolidate -> present;
     present -> decide;
     decide -> debate [label="debate"];
+    decide -> teardown [label="done"];
     debate -> present;
 }
 ```
@@ -94,7 +97,10 @@ Lead collects all proposals from the 3 agents, then:
    - Which agent(s) proposed it
    - Trade-off analysis from each perspective
    - Who tagged it as their top pick and why
-4. Asks the user: pick an option, or say "debate" for deeper analysis
+4. Asks the user via `AskUserQuestion` with 2 options:
+   - **Debate** — agents critique each other's proposals (triggers debate round below)
+   - **Done** — shut down the agent team
+   - The user can also type option letters or follow-ups via the "Other" free-text field
 
 ### Optional Debate (user-triggered)
 
@@ -109,3 +115,11 @@ Only runs if the user requests it. When triggered:
 ### Optional Handoff
 
 After the user picks an option, ask whether to transition to implementation planning with `writing-plans` skill. If yes, pass the chosen approach as context.
+
+### Teardown
+
+The agent team stays alive until one of:
+- The user selects **Done** in the AskUserQuestion prompt
+- The optional handoff completes
+
+Do NOT shut down the team after presenting proposals. The debate loop requires live agents.
