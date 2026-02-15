@@ -42,10 +42,11 @@ digraph magi {
     setup [label="Setup 3-agent team"];
     explore [label="Agents explore in parallel\n(read project, search online, propose 2-3 approaches)"];
     consolidate [label="Lead consolidates proposals\n+ lightweight stance per agent"];
-    present [label="Present options to user\n(AskUserQuestion: Debate / Done)"];
+    present [label="Present options to user\n(AskUserQuestion: Implement / Debate / Done)"];
     decide [label="User decision" shape=diamond];
     debate [label="Debate round\n(peer-to-peer, 1 exchange)"];
     teardown [label="Shut down agent team"];
+    handoff [label="Handoff to writing-plans"];
 
     setup -> explore;
     explore -> consolidate;
@@ -53,6 +54,8 @@ digraph magi {
     present -> decide;
     decide -> debate [label="debate"];
     decide -> teardown [label="done"];
+    decide -> teardown [label="implement"];
+    teardown -> handoff [label="implement"];
     debate -> present;
 }
 ```
@@ -62,14 +65,23 @@ digraph magi {
 ### Setup
 
 - Create tasks for each checklist item (with activeForm for spinner display)
-- Create an agent team with 3 agents:
-  - Use [MAGI-1.md](templates/MAGI-1.md) as prompt template when creating `Scientist` agent
-  - Use [MAGI-2.md](templates/MAGI-2.md) as prompt template when creating `Mother` agent
-  - Use [MAGI-3.md](templates/MAGI-3.md) as prompt template when creating `Woman` agent
+- Read all 3 template files: [MAGI-1.md](templates/MAGI-1.md), [MAGI-2.md](templates/MAGI-2.md), [MAGI-3.md](templates/MAGI-3.md)
+- `TeamCreate` with a descriptive team name `magi-{topic}` (e.g., `magi-auth-strategy`)
+- Spawn all 3 teammates in a **single message** (3 parallel `Task` calls):
+  - `subagent_type`: `"general-purpose"`
+  - `team_name`: team name from above
+  - `name`: `"Scientist"` / `"Mother"` / `"Woman"`
+  - `prompt`: template content + user's question + Agent Checklist (below)
+
+Teammates don't inherit the lead's conversation history -- include all context in the spawn prompt.
 
 ### Parallel Exploration
 
-Send the user's question + the Agent Checklist below to all 3 agents simultaneously.
+Agents begin working immediately upon spawning. The lead's role is **coordination only**:
+
+- Wait for teammates to send their proposals via `SendMessage`
+- If an agent sends a clarifying question, consolidate and ask the user via `AskUserQuestion`
+- Do NOT explore, research, or generate proposals yourself
 
 #### Agent Checklist
 
@@ -80,6 +92,7 @@ Each agent MUST create a task for each step and complete them in order:
 3. **Evaluate/generate options** -- if user is open-ended, generate from scratch; if user supplies options, evaluate those AND propose alternatives. Surface non-obvious ideas -- discover what's missing, don't just analyze what's given.
 4. **Propose 2-3 approaches** -- with trade-offs from your persona's lens
 5. **Tag top pick** -- one-line rationale for your recommended option
+6. **Report to lead** -- send your proposals and top pick to the lead via `SendMessage`
 
 Each agent may send clarifying questions to the lead. The lead consolidates and asks the user via `AskUserQuestion`:
 
@@ -97,10 +110,14 @@ Lead collects all proposals from the 3 agents, then:
    - Which agent(s) proposed it
    - Trade-off analysis from each perspective
    - Who tagged it as their top pick and why
-4. Asks the user via `AskUserQuestion` with 2 options:
+4. Asks the user via `AskUserQuestion` with 3 options:
+   - **Implement** — pick option(s) to implement (triggers teardown + handoff to `writing-plans`)
    - **Debate** — agents critique each other's proposals (triggers debate round below)
-   - **Done** — shut down the agent team
-   - The user can also type option letters or follow-ups via the "Other" free-text field
+   - **Done** — shut down the agent team, no further action
+
+### Optional Handoff (user-triggered)
+
+After the user picks an option, ask whether to transition to implementation planning with `writing-plans` skill. If yes, pass the chosen approach as context.
 
 ### Optional Debate (user-triggered)
 
@@ -112,14 +129,19 @@ Only runs if the user requests it. When triggered:
 4. Each agent gets one response to defend or concede
 5. Lead collects updated stances and re-presents
 
-### Optional Handoff
-
-After the user picks an option, ask whether to transition to implementation planning with `writing-plans` skill. If yes, pass the chosen approach as context.
-
 ### Teardown
 
 The agent team stays alive until one of:
-- The user selects **Done** in the AskUserQuestion prompt
-- The optional handoff completes
 
-Do NOT shut down the team after presenting proposals. The debate loop requires live agents.
+- The user selects **Done**
+- The user picks one or more options to implement (e.g., "implement option A")
+
+Shut down the team **before** the optional handoff to `writing-plans` -- the deliberation agents are not needed for implementation planning.
+
+Do NOT shut down the team after merely presenting proposals. The debate loop requires live agents.
+
+When shutting down:
+
+1. Send `shutdown_request` to each teammate (Scientist, Mother, Woman)
+2. Wait for shutdown approvals
+3. Call `TeamDelete` to clean up team resources
