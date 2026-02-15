@@ -47,6 +47,6 @@ Challenge premises, question assumptions, propose simpler alternatives, give dir
 - `magi`: Three-agent deliberation system for competing perspectives.
 - `codex`: Independent review from OpenAI's reasoning models.
 - `gemini`: Independent review with 1M+ token context window.
-- `explore-codebase`: Searches codebase structure with ast-grep, ripgrep, and fd.
-- `update-allowed-tools`: Adds missing tool entries to a skill's allowed-tools frontmatter.
+- `explore-codebase`: Searches codebase with ast-grep, ripgrep, and fd.
+- `update-allowed-tools`: Updates skill allowed-tools frontmatter.
 - `commit`: Creates clean, atomic git commits.
