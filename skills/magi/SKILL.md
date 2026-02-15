@@ -74,6 +74,16 @@ Send the user's question + relevant project context to all 3 agents simultaneous
 - Proposes 2-3 approaches with trade-offs from their persona's lens
 - Tags their top pick with a one-line rationale
 
+### Agent Checklist
+
+Each agent MUST create a task for each step and complete them in order:
+
+1. **Explore project state** -- check files, docs, recent commits
+2. **Search online** -- find relevant prior art, docs, discussions. DO NOT skip this.
+3. **Evaluate/generate options** -- if user-supplied, evaluate those AND propose alternatives; surface non-obvious ideas
+4. **Propose 2-3 approaches** -- with trade-offs from your persona's lens
+5. **Tag top pick** -- one-line rationale for your recommended option
+
 Each agent may send clarifying questions to the lead. The lead consolidates and asks the user via `AskUserQuestion`:
 
 - One question at a time
