@@ -29,7 +29,7 @@ You MUST create a task for each of these items and complete them in order:
 1. Setup agent team
 2. Parallel exploration
 3. Consolidate and present options
-4. Wait for user decision (debate loop or done)
+4. Wait for user decision (implement, debate, or done)
 5. Tear down agent team
 
 ## Workflow
@@ -115,10 +115,6 @@ Lead collects all proposals from the 3 agents, then:
    - **Debate** — agents critique each other's proposals (triggers debate round below)
    - **Done** — shut down the agent team, no further action
 
-### Optional Handoff (user-triggered)
-
-After the user picks an option, ask whether to transition to implementation planning with `writing-plans` skill. If yes, pass the chosen approach as context.
-
 ### Optional Debate (user-triggered)
 
 Only runs if the user requests it. When triggered:
@@ -133,7 +129,7 @@ Only runs if the user requests it. When triggered:
 
 #### When to tear down
 
-- User selects **Implement** (tear down _before_ handoff to `writing-plans`)
+- User selects **Implement**
 - User selects **Done**
 
 #### When NOT to tear down
@@ -145,3 +141,7 @@ Only runs if the user requests it. When triggered:
 1. `shutdown_request` to each teammate (Scientist, Mother, Woman)
 2. Wait for all shutdown approvals
 3. `TeamDelete` (fails if teammates are still active)
+
+### Handoff (implement path only)
+
+After teardown, invoke `writing-plans` skill with the chosen option(s) as context.
