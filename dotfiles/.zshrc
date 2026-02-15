@@ -129,8 +129,9 @@ export LC_CTYPE=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ll="ls -lA"
-alias cc="claude"
-alias ccc="claude --continue"
+alias cc="claude --teammate-mode tmux"
+alias ccc="claude --continue --teammate-mode tmux"
+alias cc-yolo="claude --dangerously-skip-permissions --teammate-mode tmux"
 ccp() { claude --no-chrome --no-session-persistence -p "$*"; }
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment

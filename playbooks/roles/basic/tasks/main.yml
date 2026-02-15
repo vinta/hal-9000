@@ -25,6 +25,7 @@
       - jq
       - pstree
       - ripgrep
+      - tmux
       - tree
       - wget
       - yq
