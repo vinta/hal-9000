@@ -131,17 +131,17 @@ Only runs if the user requests it. When triggered:
 
 ### Teardown
 
-The agent team stays alive until one of:
+#### When to tear down
 
-- The user selects **Done**
-- The user picks one or more options to implement (e.g., "implement option A")
+- User selects **Implement** (tear down _before_ handoff to `writing-plans`)
+- User selects **Done**
 
-Shut down the team **before** the optional handoff to `writing-plans` -- the deliberation agents are not needed for implementation planning.
+#### When NOT to tear down
 
-Do NOT shut down the team after merely presenting proposals. The debate loop requires live agents.
+- After presenting proposals -- the debate loop requires live agents
 
-When shutting down:
+#### Shutdown sequence
 
-1. Send `shutdown_request` to each teammate (Scientist, Mother, Woman)
-2. Wait for shutdown approvals
-3. Call `TeamDelete` to clean up team resources
+1. `shutdown_request` to each teammate (Scientist, Mother, Woman)
+2. Wait for all shutdown approvals
+3. `TeamDelete` (fails if teammates are still active)
