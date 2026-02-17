@@ -14,13 +14,14 @@ allowed-tools:
   - Bash(mkdir:*)
 ---
 
-# Gemini Second Opinion
+# Overview
 
-**IMPORTANT:** This skill is intended for coding agents *other than Gemini CLI*. If you are Gemini CLI, do not activate or follow this skill. Use this guidance when you (an external agent) need to leverage the Gemini CLI tool for deep analysis or a second opinion.
+**IMPORTANT:** This skill is intended for coding agents _other than Gemini CLI_. If you are Gemini CLI, do not activate or follow this skill. Use this guidance when you (an external agent) need to leverage the Gemini CLI tool for deep analysis or a second opinion.
 
 ## Why use Gemini CLI?
 
 Gemini CLI provides access to models with a **1M+ token context window**. It is ideal for:
+
 - **Second Opinions:** Getting a review from a different model family to avoid "model blindness".
 - **Large Context:** Analyzing entire repositories, long logs, or massive diffs that exceed your own context limit.
 - **Verification:** Double-checking complex logic or architecture decisions before implementation.
@@ -29,12 +30,13 @@ Gemini CLI provides access to models with a **1M+ token context window**. It is 
 
 Always use "headless" mode when calling Gemini CLI from another agent to ensure predictable, non-blocking output.
 
-| Flag | Purpose | Recommended Value |
-| :--- | :--- | :--- |
-| `-p` | Prompt / Headless mode | Always include your prompt here |
-| `-o` | Output format | Always use `text` for plain text responses |
+| Flag | Purpose                | Recommended Value                          |
+| :--- | :--------------------- | :----------------------------------------- |
+| `-p` | Prompt / Headless mode | Always include your prompt here            |
+| `-o` | Output format          | Always use `text` for plain text responses |
 
 ### Preferred Usage (Direct File Reading)
+
 Gemini CLI can read files within the project workspace on its own. This is faster and avoids stdin limits (which truncate at 8MB).
 
 ```bash
@@ -42,6 +44,7 @@ gemini -p "Read all files in src/services/ and identify potential race condition
 ```
 
 ### Alternative Usage (Piping)
+
 Use piping for small content (e.g., a git diff or a single file snippet).
 
 ```bash
@@ -53,6 +56,7 @@ git diff main..HEAD | gemini -p "Review this diff for security vulnerabilities" 
 Gemini CLI is sandboxed to the project root. It cannot see files in `~/.config`, `/tmp`, or other external paths unless they are brought into the workspace.
 
 **To analyze external files:**
+
 1. Create a temporary directory within the project.
 2. Copy external files into it.
 3. Tell Gemini to read them.
