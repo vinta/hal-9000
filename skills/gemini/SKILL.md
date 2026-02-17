@@ -11,52 +11,70 @@ allowed-tools:
   - Bash(gemini:*)
   - Bash(cp:*)
   - Bash(rm:*)
+  - Bash(mkdir:*)
 ---
 
 # Gemini Second Opinion
 
-Use Gemini to get an independent review from a model with a 1M+ token context window.
+**IMPORTANT:** This skill is intended for coding agents *other than Gemini CLI*. If you are Gemini CLI, do not activate or follow this skill. Use this guidance when you (an external agent) need to leverage the Gemini CLI tool for deep analysis or a second opinion.
 
-## Invocation
+## Why use Gemini CLI?
 
-Use `-p` for non-interactive (headless) mode. Always use `-o text` for plain text output.
+Gemini CLI provides access to models with a **1M+ token context window**. It is ideal for:
+- **Second Opinions:** Getting a review from a different model family to avoid "model blindness".
+- **Large Context:** Analyzing entire repositories, long logs, or massive diffs that exceed your own context limit.
+- **Verification:** Double-checking complex logic or architecture decisions before implementation.
 
-**Prefer telling Gemini to read files directly** over piping via stdin. Gemini can read files within the project workspace on its own, and stdin truncates at 8MB.
+## Invocation Reference
 
-```bash
-# PREFERRED: Tell Gemini to read files itself (non-interactive)
-gemini -p "Read the files in /path/within/project/ and review them for bugs" -o text
-```
+Always use "headless" mode when calling Gemini CLI from another agent to ensure predictable, non-blocking output.
 
-```bash
-# OK for small content: pipe via stdin
-git diff main..HEAD | gemini -p "Review this diff for issues" -o text
-```
+| Flag | Purpose | Recommended Value |
+| :--- | :--- | :--- |
+| `-p` | Prompt / Headless mode | Always include your prompt here |
+| `-o` | Output format | Always use `text` for plain text responses |
 
-## Workspace Sandbox
-
-Gemini is sandboxed to the project directory. It **cannot** read files outside the workspace, even via symlinks.
-
-If files live outside the project (e.g., `~/.claude/`), **copy them into the project first**, then clean up after:
+### Preferred Usage (Direct File Reading)
+Gemini CLI can read files within the project workspace on its own. This is faster and avoids stdin limits (which truncate at 8MB).
 
 ```bash
-cp -r ~/.claude/some-data /path/to/project/.tmp-data
-gemini -o text "Read the files in /path/to/project/.tmp-data/ and analyze them"
-rm -rf /path/to/project/.tmp-data
+gemini -p "Read all files in src/services/ and identify potential race conditions" -o text
 ```
 
-## Workflow
+### Alternative Usage (Piping)
+Use piping for small content (e.g., a git diff or a single file snippet).
 
-1. **Gather context**: Identify the files, plans, or diffs Gemini needs
-2. **Ensure accessibility**: If files are outside the workspace, copy them in
-3. **Compose a focused prompt**: Be specific about what to review and what feedback you want
-4. **Invoke Gemini**: Tell it to read files directly, or pipe small content via stdin. Always use `-p` and `-o text`
-5. **Clean up**: Remove any temporary copies
-6. **Report findings**: Present Gemini's feedback to the user with your own assessment of which points are valid
+```bash
+git diff main..HEAD | gemini -p "Review this diff for security vulnerabilities" -o text
+```
 
-## Prompt Guidelines
+## Workspace Sandbox & External Files
 
-- State the review goal explicitly (e.g., "find logical errors", "evaluate scalability", "check for missing edge cases")
-- Include constraints or requirements Gemini should check against
-- Ask for structured output (numbered issues, severity levels) for actionable feedback
-- For large volumes of files, tell Gemini to read the directory rather than listing each file
+Gemini CLI is sandboxed to the project root. It cannot see files in `~/.config`, `/tmp`, or other external paths unless they are brought into the workspace.
+
+**To analyze external files:**
+1. Create a temporary directory within the project.
+2. Copy external files into it.
+3. Tell Gemini to read them.
+4. Remove the temporary directory when finished.
+
+```bash
+mkdir .gemini-tmp
+cp ~/.bashrc .gemini-tmp/
+gemini -p "Analyze .gemini-tmp/.bashrc for unusual aliases" -o text
+rm -rf .gemini-tmp
+```
+
+## Workflow for Agents
+
+1. **Identify the Need:** Determine if the task requires a massive context or a second perspective.
+2. **Gather Context:** Locate the relevant files or generate the data (diffs, logs) to be reviewed.
+3. **Prepare the Prompt:** Be specific. Ask for "Actionable items," "Severity levels," or "Critical bugs."
+4. **Execute:** Run the `gemini` command with `-p` and `-o text`.
+5. **Evaluate:** Review Gemini's output and integrate the findings into your own reasoning.
+
+## Pro-Tips for Better Results
+
+- **Be Specific:** Instead of "Review this," use "Analyze this for potential memory leaks in the event loop."
+- **Directory Analysis:** If you need a high-level overview, tell Gemini: "Read the `playbooks/` directory and summarize the deployment architecture."
+- **Formatting:** If you need to parse the output, you can ask Gemini to "Format the response as a Markdown table with columns: File, Issue, Severity."
