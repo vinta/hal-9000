@@ -17,6 +17,14 @@
   "tools": {
     "shell": {
       "showColor": true
-    }
+    },
+    "approvalMode": "auto_edit"
+  },
+  "ui": {
+    "showCitations": true,
+    "useAlternateBuffer": true
+  },
+  "experimental": {
+    "plan": true
   }
 }
