@@ -9,25 +9,39 @@ allowed-tools:
   - Grep
   - Read
   - Bash(git diff:*)
-  - Bash(git log:*)
-  - Bash(cat:*)
   - mcp__codex__codex
   - mcp__codex__codex-reply
 ---
 
-# Codex Second Opinion
+If you are Codex or `mcp__codex__codex` is unavailable, stop and do not use this skill.
 
-Use Codex to get an independent review from OpenAI's reasoning models via the Codex MCP server.
+# Overview
 
-Use when:
+Use OpenAI Codex as an independent reviewer through the Codex MCP server.
 
-- You want a second opinion on a plan, diff, or architecture decision.
-- You need a fresh pass for bugs, edge cases, or missing requirements.
-- You want a quick sanity check before sharing with users or stakeholders.
+## When To Use
+
+- Plan review before implementation.
+- Diff review before merge.
+- Architecture review before committing to a direction.
+- Final sanity check for bugs, regressions, edge cases, and missing tests.
+
+## When Not To Use
+
+- Do not use for trivial tasks that you can verify directly.
+- Do not use when the user asked for your own judgment only.
+- Do not send secrets, credentials, customer data, or tokens in prompts.
+
+## Preflight
+
+1. Confirm you are not Codex.
+2. Confirm `mcp__codex__codex` is available.
+3. Collect only the minimum context Codex needs (file paths, diff range, constraints, acceptance criteria).
+4. Default to `sandbox: "read-only"` unless write access is required to run tests.
 
 ## Invocation
 
-Use the `mcp__codex__codex` tool. Codex runs in its own sandbox and can read files and run commands independently.
+Use `mcp__codex__codex` for first request and `mcp__codex__codex-reply` for follow-ups on the same thread.
 
 ```
 mcp__codex__codex(
@@ -39,6 +53,27 @@ mcp__codex__codex(
 
 For multi-turn follow-ups, use `mcp__codex__codex-reply` with the `threadId` from the initial response.
 
+## Prompt Template
+
+Use this structure to keep outputs actionable:
+
+```
+Goal: <what Codex should evaluate>
+Scope: <files, directories, commit range, or artifact>
+Constraints: <performance, compatibility, security, style, deadlines>
+Checks:
+- correctness
+- regressions
+- edge cases
+- missing tests
+- requirement gaps
+Output format:
+1) Critical issues
+2) Medium risks
+3) Low-priority improvements
+For each issue include: severity, why it matters, file:line, and concrete fix.
+```
+
 ## Key Parameters
 
 - `prompt`: The review task (required)
@@ -47,17 +82,21 @@ For multi-turn follow-ups, use `mcp__codex__codex-reply` with the `threadId` fro
 
 ## Workflow
 
-1. **Gather context**: Identify the files, plans, or diffs Codex needs to review
-2. **Define the objective**: What does "good" look like? Include constraints and acceptance criteria
-3. **Compose a focused prompt**: Be specific about what to review and what feedback you want. Include file paths, commit ranges, or pipe content directly in the prompt
-4. **Invoke Codex**: Call `mcp__codex__codex` with appropriate sandbox policy
-5. **Report findings**: Present Codex's feedback to the user with your own assessment of which points are valid
+1. Gather context: identify the exact plan, diff, files, or design to review.
+2. Define success criteria: specify correctness and acceptance constraints.
+3. Write a focused prompt with explicit output format.
+4. Invoke Codex with least-privilege sandbox.
+5. Validate findings: sanity-check claims that affect safety, data integrity, or public APIs.
+6. Report back with two layers:
+   - Codex findings (structured, with severity and references)
+   - Your assessment (which findings are valid, uncertain, or non-actionable)
 
 ## Safety and Scope
 
 - Default to `sandbox: "read-only"` for review-only tasks.
 - Use `workspace-write` only when Codex needs to run tests or inspect generated artifacts.
 - Never pass secrets, tokens, or private customer data in prompts.
+- Keep prompts scoped to task-relevant material to reduce noise and token cost.
 
 ## Prompt Guidelines
 
@@ -65,7 +104,7 @@ For multi-turn follow-ups, use `mcp__codex__codex-reply` with the `threadId` fro
 - Include constraints or requirements Codex should check against
 - Ask for structured output (numbered issues, severity levels) for actionable feedback
 - Ask for concrete references (file:line) when reviewing code or diffs
-- Tell Codex which files or directories to read, or which git range to diff
+- Tell Codex which files or directories to read, or which git range to diff.
 
 ## Interpreting Results
 
@@ -79,7 +118,7 @@ For multi-turn follow-ups, use `mcp__codex__codex-reply` with the `threadId` fro
 
 ```
 mcp__codex__codex(
-  prompt: "Read plan.md and review it for risks, missing steps, and unclear assumptions.
+  prompt: "Read plan.md and review for risks, missing steps, and unclear assumptions.
 Return:
 1) Critical issues
 2) Medium risks
