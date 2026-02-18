@@ -8,7 +8,6 @@
   },
   "cleanupPeriodDays": 365,
   "alwaysThinkingEnabled": true,
-  "enableAllProjectMcpServers": false,
   "permissions": {
     "allow": [
       "Glob",
