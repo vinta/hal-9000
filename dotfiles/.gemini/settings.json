@@ -3,7 +3,8 @@
     "disableAutoUpdate": true,
     "enableAutoUpdate": false,
     "enablePromptCompletion": true,
-    "previewFeatures": true
+    "previewFeatures": true,
+    "defaultApprovalMode": "auto_edit"
   },
   "privacy": {
     "usageStatisticsEnabled": false
