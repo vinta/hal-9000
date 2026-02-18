@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use when the user asks to commit, after completing an implementation task, or when changes span multiple concerns and need separate logical commits (structural vs behavioral vs config)
+description: Use after completing an implementation task, when the user asks to commit, or when changes span multiple concerns and need separate logical commits (structural vs behavioral vs config)
 argument-hint: "[extra-instructions]"
 context: fork
 user-invocable: true
