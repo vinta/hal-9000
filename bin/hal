@@ -16,29 +16,30 @@ except ImportError:
 
 
 class Setting:
-    REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    DOTFILES_ROOT = os.path.join(REPO_ROOT, "dotfiles/")
+    REPO_ROOT: str = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    DOTFILES_ROOT: str = os.path.join(REPO_ROOT, "dotfiles/")
 
 
 class Dotfiles:
-    DEFAULT_CONFIG = os.path.join(Setting.DOTFILES_ROOT, "hal_dotfiles.json")
+    DEFAULT_CONFIG: str = os.path.join(Setting.DOTFILES_ROOT, "hal_dotfiles.json")
 
-    def __init__(self, path=None):
-        self.path = path or self.DEFAULT_CONFIG
-        self._data = None
+    def __init__(self, path: str | None = None) -> None:
+        self.path: str = path or self.DEFAULT_CONFIG
+        self._data: dict[str, list[dict[str, str]]] | None = None
 
     @property
-    def data(self):
-        if not self._data:
+    def data(self) -> dict[str, list[dict[str, str]]]:
+        if self._data is None:
             try:
                 with open(self.path) as f:
                     self._data = json.load(f)
             except FileNotFoundError:
                 self._data = {"links": [], "copies": []}
 
+        assert self._data is not None
         return self._data
 
-    def find_by_key(self, key, value, field_name):
+    def find_by_key(self, key: str, value: str, field_name: str) -> dict[str, str] | None:
         some_list = self.data[field_name]
 
         try:
@@ -48,25 +49,25 @@ class Dotfiles:
 
         return some_dict
 
-    def show(self):
+    def show(self) -> None:
         print(json.dumps(self.data, sort_keys=True, indent=2, separators=(",", ": ")))
 
-    def save(self):
+    def save(self) -> None:
         with open(self.path, "w") as f:
             json.dump(self.data, f, sort_keys=True, indent=2, separators=(",", ": "))
 
 
-class HAL9000Formatter(argparse.HelpFormatter):
-    def __init__(self, prog):
-        super(HAL9000Formatter, self).__init__(prog, max_help_position=30)
+class Formatter(argparse.HelpFormatter):
+    def __init__(self, prog: str) -> None:
+        super(Formatter, self).__init__(prog, max_help_position=30)
 
 
 class HAL9000:
-    def __init__(self):
+    def __init__(self) -> None:
         parser = argparse.ArgumentParser(
             prog="hal",
             description="I am completely operational, and all my circuits are functioning perfectly",
-            formatter_class=HAL9000Formatter,
+            formatter_class=Formatter,
         )
         self.parser = parser
 
@@ -100,22 +101,25 @@ class HAL9000:
         if argcomplete:
             argcomplete.autocomplete(parser)
 
-    def _hal_says(self, text):
+    def _hal_says(self, text: str) -> None:
         print(f"HAL: {text}")
 
-    def _expand_template(self, path):
+    def _expand_template(self, path: str) -> str:
         return path.replace("{{HOME}}", os.path.expanduser("~")).replace("{{REPO_ROOT}}", Setting.REPO_ROOT)
 
-    def _run(self, command, shell=True, verbose=True):
+    def _run(self, command: str, shell: bool = True, verbose: bool = True) -> int:
         if verbose:
             self._hal_says(command)
 
         return subprocess.call(command, shell=shell)  # noqa: S602
 
-    def _run_with_output(self, command, shell=True, verbose=True, print_output=True):
+    def _run_with_output(
+        self, command: str, shell: bool = True, verbose: bool = True, print_output: bool = True
+    ) -> tuple[int, bytes]:
         if verbose:
             self._hal_says(command)
 
+        output = b""
         try:
             output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=shell)  # noqa: S602
             returncode = 0
@@ -128,7 +132,7 @@ class HAL9000:
 
         return returncode, output
 
-    def update(self, namespace, extra_args=None):  # noqa: ARG002
+    def update(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002
         returncode, output = self._run_with_output("which ansible", print_output=False)
         if returncode == 0:
             ansible_path = output.decode().strip()
@@ -152,7 +156,7 @@ class HAL9000:
         if returncode == 0:
             self._hal_says("Now open a new shell to active your dev environment")
 
-    def link(self, namespace, extra_args=None):  # noqa: ARG002
+    def link(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
 
         # Get relative path from home directory
@@ -187,7 +191,7 @@ class HAL9000:
             self.dotfiles.save()
             self.dotfiles.show()
 
-    def unlink(self, namespace, extra_args=None):  # noqa: ARG002
+    def unlink(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002
         relative_path = namespace.filename.removeprefix("~/")
         template_dest = "{{HOME}}/" + relative_path
 
@@ -215,7 +219,7 @@ class HAL9000:
         self.dotfiles.save()
         self.dotfiles.show()
 
-    def copy(self, namespace, extra_args=None):  # noqa: ARG002
+    def copy(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002
         filepath = os.path.abspath(os.path.join(os.getcwd(), namespace.filename))
 
         # Get relative path from home directory
@@ -246,7 +250,7 @@ class HAL9000:
             self.dotfiles.save()
             self.dotfiles.show()
 
-    def _sync_links(self, link):
+    def _sync_links(self, link: dict[str, str]) -> None:
         src = self._expand_template(link["src"])
         if not os.path.exists(src):
             self._hal_says(f"not found {src}")
@@ -262,7 +266,7 @@ class HAL9000:
         self._run(f"ln -sfn {shlex.quote(src)} {shlex.quote(dest)}", verbose=False)
         self._hal_says(f"link {src} -> {dest}")
 
-    def _sync_copies(self, copy):
+    def _sync_copies(self, copy: dict[str, str]) -> None:
         src = self._expand_template(copy["src"])
         if not os.path.exists(src):
             self._hal_says(f"not found {src}")
@@ -278,21 +282,21 @@ class HAL9000:
             shutil.copy2(src, dest)
         self._hal_says(f"copy {src} -> {dest}")
 
-    def sync(self, namespace, extra_args=None):  # noqa: ARG002
+    def sync(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = []
+            futures: list[concurrent.futures.Future[None]] = []
             futures.extend(executor.submit(self._sync_links, link) for link in self.dotfiles.data["links"])
             futures.extend(executor.submit(self._sync_copies, copy) for copy in self.dotfiles.data["copies"])
             for f in concurrent.futures.as_completed(futures):
                 f.result()
 
-    def open_the_pod_bay_doors(self, namespace, extra_args=None):  # noqa: ARG002
+    def open_the_pod_bay_doors(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
         filepath = os.path.join(Setting.REPO_ROOT, "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3")
         self._run(f"afplay {shlex.quote(filepath)}", verbose=False)
 
-    def read_lips(self):
+    def read_lips(self) -> None:
         if len(sys.argv) == 1:
             self.parser.print_help()
             sys.exit(0)
