@@ -39,9 +39,9 @@
       "Skill(magi)",
       "Skill(codex)",
       "Skill(gemini)",
+      "Skill(commit)",
       "Skill(explore-codebase)",
       "Skill(update-allowed-tools)",
-      "Skill(commit)",
       "mcp__ide__getDiagnostics"
     ],
     "deny": [

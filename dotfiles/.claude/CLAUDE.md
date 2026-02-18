@@ -42,6 +42,6 @@
 - `magi`: Three-agent deliberation system for competing perspectives
 - `codex`: Independent review from OpenAI GPT models
 - `gemini`: Independent review from Google Gemini models
+- `commit`: Creates clean, atomic git commits
 - `explore-codebase`: Searches codebase with ast-grep, ripgrep, and fd
 - `update-allowed-tools`: Updates skill allowed-tools frontmatter
-- `commit`: Creates clean, atomic git commits
