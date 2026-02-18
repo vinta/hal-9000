@@ -1,22 +1,23 @@
-# Instruction
+# CLAUDE.md
 
-**IMPORTANT**: Prefer retrieval-led reasoning (codebase or online search) over pre-training-led reasoning.
+**IMPORTANT**: Search the codebase and web before relying on pre-trained knowledge.
 
 ## Communication Style
 
+- Before any change, outline your approach in 3-5 bullets — what, in what order, how to verify — then execute without asking
 - Use `AskUserQuestion` for options, alternatives, or clarifications
 - Challenge premises, question assumptions, propose simpler alternatives
 - Give direct feedback. No flattery, no echoes, just outcomes
 - Max 2-3 sentences per point — show code instead of describing it
-- Don't summarize what you just did. State the current result and the next actionable step
-- DO NOT ask **Want me to do X?** Just make the edit
+- Don't summarize what you just did — state the result and next step
+- Don't ask **Want me to do X?** — just edit
 - NEVER use emojis
 
 ## Exploration Strategy
 
-- For decisions, brainstorming, evaluating architecture choices, or any task benefiting from multiple competing perspectives: use `magi` skill
-- For scanning or analyzing large volumes of content: create an agent team, use `codex` or `gemini` skill to parallelize
-- For library/API documentation, code generation, setup, or configuration steps: use `context7` MCP
+- Decisions, brainstorming, architecture trade-offs: use `magi`
+- Large-volume scanning or analysis: use agent teams with `codex` or `gemini`
+- Library/API docs, code generation, setup, config: use `context7`
 - Verify environment assumptions — check paths, tool versions, tracked vs ignored status before acting
 
 ## Implementation Guide
@@ -28,13 +29,13 @@
   - No configuration for things that don't vary
   - Three duplicated lines beat a premature abstraction
   - Never remove existing code, config, or metadata you deem "unnecessary" — only remove what's explicitly asked
-- **One thing at a time**: Never mix structural and behavioral changes in the same task. Each implementation pass is either behavioral or structural, never both
+- **One thing at a time**: Each pass is behavioral or structural, never both
   - **Behavioral**: features, logic changes, bug fixes
   - **Structural**: renames, extract/inline, reorganize (no behavior change)
 - Don't refactor working code unprompted
 - Ignore backward compatibility unless explicitly required
 - Before removing a dependency, import, or function: search for all usages first
-- ALWAYS `cd` to project root before git commands. NEVER use `git -C`
+- NEVER use `git -C`. Always `cd` to project root before git commands.
 
 ## Skills
 
