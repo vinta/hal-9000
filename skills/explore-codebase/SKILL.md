@@ -1,6 +1,6 @@
 ---
 name: explore-codebase
-description: Use when navigating unfamiliar code or understanding architecture, tracing call flows or symbol definitions, answering where-is-this-defined or how-does-this-work questions, finding files by name or pattern, or doing pre-refactoring analysis to locate all references before changing code
+description: Use when navigating unfamiliar code, tracing call flows or symbol definitions, finding files by name or pattern, or locating all references before refactoring
 context: fork
 user-invocable: true
 model: opus

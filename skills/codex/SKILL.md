@@ -1,6 +1,6 @@
 ---
 name: codex
-description: Use when reviewing plans, diffs, or architecture decisions before acting, doing a fresh pass on code for bugs or missing requirements, sanity-checking work before sharing with stakeholders, or wanting an independent perspective from a different model family
+description: Use when reviewing plans, diffs, or architecture decisions, doing a fresh pass on code for bugs or missing requirements, or getting a second opinion from a different model family
 context: fork
 user-invocable: true
 model: opus
