@@ -20,7 +20,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Add mock_modules for CI
-        run: printf '\nmock_modules:\n  - homebrew\n  - homebrew_tap\n  - homebrew_cask\n' >> .ansible-lint
+        run: |
+          echo "" >> .ansible-lint
+          echo "mock_modules:" >> .ansible-lint
+          echo "  - homebrew" >> .ansible-lint
+          echo "  - homebrew_tap" >> .ansible-lint
+          echo "  - homebrew_cask" >> .ansible-lint
 
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main
