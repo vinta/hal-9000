@@ -1,4 +1,4 @@
-# CLAUDE.md
+# Global CLAUDE.md
 
 **IMPORTANT**: Search the codebase and web before relying on pre-trained knowledge.
 
@@ -32,10 +32,28 @@
 - **One thing at a time**: Each pass is behavioral or structural, never both
   - **Behavioral**: features, logic changes, bug fixes
   - **Structural**: renames, extract/inline, reorganize (no behavior change)
+- **Replace, don't deprecate** - When a new implementation replaces an old one, remove the old one entirely. No backward-compatible shims, dual config formats, or migration paths. Proactively flag dead code — it adds maintenance burden and misleads both developers and LLMs.
+- **Justify new dependencies** - Each dependency is attack surface and maintenance burden
 - Don't refactor working code unprompted
-- Ignore backward compatibility unless explicitly required
 - Before removing a dependency, import, or function: search for all usages first
 - NEVER use `git -C`. Always `cd` to project root before git commands.
+
+### Comments
+
+Code should be self-documenting. No commented-out code—delete it. If you need a comment to explain WHAT the code does, refactor the code instead.
+
+### Error handling
+
+- Fail fast with clear, actionable messages
+- Never swallow exceptions silently
+- Include context (what operation, what input, suggested fix)
+
+### Testing
+
+**Test behavior, not implementation.** Tests should verify what code does, not how. If a refactor breaks your tests but not your code, the tests were wrong.
+**Test edges and errors, not just the happy path.** Empty inputs, boundaries, malformed data, missing files, network failures — bugs live in edges. Every error path the code handles should have a test that triggers it.
+**Mock boundaries, not logic.** Only mock things that are slow (network, filesystem), non-deterministic (time, randomness), or external services you don't control.
+**Verify tests catch failures.** Break the code, confirm the test fails, then fix. Use mutation testing (`cargo-mutants`, `mutmut`) to verify systematically. Use property-based testing (`proptest`, `hypothesis`) for parsers, serialization, and algorithms.
 
 ## Skills
 
