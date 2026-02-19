@@ -8,7 +8,7 @@
 - name: Install Rosetta 2
   command: softwareupdate --install-rosetta --agree-to-license
   when:
-    - ansible_machine == "arm64"
+    - ansible_facts["machine"] == "arm64"
     - not ansible_check_mode
 
 - name: Update Homebrew
@@ -23,6 +23,7 @@
       - fzf
       - htop
       - jq
+      - macos-trash
       - pstree
       - ripgrep
       - tmux
@@ -44,6 +45,15 @@
     name:
       - gpg2
       - pinentry-mac
+    state: latest
+
+- name: Install linter packages
+  homebrew:
+    name:
+      - actionlint
+      - shellcheck
+      - shfmt
+      - zizmor
     state: latest
 
 # https://github.com/ohmyzsh/ohmyzsh
