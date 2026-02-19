@@ -1,4 +1,5 @@
 {
+  "cleanupPeriodDays": 365,
   "env": {
     "DISABLE_AUTOUPDATER": "1",
     "DISABLE_BUG_COMMAND": "1",
@@ -7,8 +8,6 @@
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
-  "cleanupPeriodDays": 365,
-  "alwaysThinkingEnabled": true,
   "permissions": {
     "allow": [
       "Glob",
@@ -38,8 +37,7 @@
       "Bash(mkdir:*)",
       "WebSearch",
       "Skill(magi)",
-      "Skill(codex)",
-      "Skill(gemini)",
+      "Skill(second-opinions)",
       "Skill(commit)",
       "Skill(explore-codebase)",
       "Skill(update-allowed-tools)",
@@ -106,10 +104,13 @@
     "command": "python3 ~/.claude/statusline/run.py"
   },
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
     "ask-questions-if-underspecified@trailofbits": true,
+    "building-secure-contracts@trailofbits": true,
+    "code-simplifier@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
     "gh-cli@trailofbits": true,
-    "modern-python@trailofbits": true
-  }
+    "modern-python@trailofbits": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true
 }

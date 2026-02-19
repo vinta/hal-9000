@@ -22,44 +22,49 @@
 
 ## Implementation Guide
 
-- **YAGNI**: Only build what's explicitly needed, starting with the minimal working implementation. Every speculative feature has four costs — building it, delaying what matters, carrying its complexity, and repairing it when real needs differ
-  - No premature abstractions or interfaces for a single use case
-  - No unused utilities or helper functions "for convenience"
-  - No speculative error handling for impossible states
+### Scope Management
+
+- **YAGNI** — build only what's needed. Every speculative feature costs four ways: building, delaying what matters, carrying complexity, repairing when needs differ
+  - No premature abstractions for a single use case
+  - No utilities or helpers "for convenience"
+  - No error handling for impossible states
   - No configuration for things that don't vary
   - Three duplicated lines beat a premature abstraction
-  - Never remove existing code, config, or metadata you deem "unnecessary" — only remove what's explicitly asked
-- **One thing at a time**: Each pass is behavioral or structural, never both
+  - Never remove existing code or config you deem "unnecessary" — only what's explicitly asked
+- **Justify new dependencies** — each one is attack surface and maintenance burden
+- Don't refactor working code unprompted
+
+### Making Changes
+
+- **One thing at a time** — behavioral or structural, never both
   - **Behavioral**: features, logic changes, bug fixes
   - **Structural**: renames, extract/inline, reorganize (no behavior change)
-- **Replace, don't deprecate** - When a new implementation replaces an old one, remove the old one entirely. No backward-compatible shims, dual config formats, or migration paths. Proactively flag dead code — it adds maintenance burden and misleads both developers and LLMs.
-- **Justify new dependencies** - Each dependency is attack surface and maintenance burden
-- Don't refactor working code unprompted
-- Before removing a dependency, import, or function: search for all usages first
-- NEVER use `git -C`. Always `cd` to project root before git commands.
+- **Replace, don't deprecate** — remove the old implementation entirely. No shims, dual formats, or migration paths. Flag dead code.
+- Search all usages before removing a dependency, import, or function
+- Never use `git -C` — `cd` to project root first
 
-### Comments
+### Writing Comments
 
-Code should be self-documenting. No commented-out code—delete it. If you need a comment to explain WHAT the code does, refactor the code instead.
+- Self-documenting code, not comments.
+- If a comment explains WHAT the code does, refactor instead.
 
-### Error handling
+### Error Handling
 
 - Fail fast with clear, actionable messages
-- Never swallow exceptions silently
-- Include context (what operation, what input, suggested fix)
+- Never swallow exceptions
+- Include context: what operation, what input, suggested fix
 
 ### Testing
 
-**Test behavior, not implementation.** Tests should verify what code does, not how. If a refactor breaks your tests but not your code, the tests were wrong.
-**Test edges and errors, not just the happy path.** Empty inputs, boundaries, malformed data, missing files, network failures — bugs live in edges. Every error path the code handles should have a test that triggers it.
-**Mock boundaries, not logic.** Only mock things that are slow (network, filesystem), non-deterministic (time, randomness), or external services you don't control.
-**Verify tests catch failures.** Break the code, confirm the test fails, then fix. Use mutation testing (`cargo-mutants`, `mutmut`) to verify systematically. Use property-based testing (`proptest`, `hypothesis`) for parsers, serialization, and algorithms.
+- **Test behavior, not implementation.** If a refactor breaks tests but not code, the tests were wrong.
+- **Test edges and errors.** Empty inputs, boundaries, malformed data, missing files, failures — bugs live in edges.
+- **Mock boundaries, not logic.** Only mock what's slow, non-deterministic, or external.
+- **Verify tests catch failures.** Break code, confirm test fails, fix. Use mutation testing (`cargo-mutants`, `mutmut`) and property-based testing (`proptest`, `hypothesis`) for parsers and algorithms.
 
 ## Skills
 
 - `magi`: Three-agent deliberation system for competing perspectives
-- `codex`: Independent review from OpenAI GPT models
-- `gemini`: Independent review from Google Gemini models
+- `second-opinions`: Parallel review from multiple external models
 - `commit`: Creates clean, atomic git commits
 - `explore-codebase`: Searches codebase with ast-grep, ripgrep, and fd
 - `update-allowed-tools`: Updates skill allowed-tools frontmatter

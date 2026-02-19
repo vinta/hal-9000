@@ -1,10 +1,6 @@
 {
   "copies": [
     {
-      "dest": "{{HOME}}/.claude/settings.json",
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.json"
-    },
-    {
       "dest": "{{HOME}}/.claude/CLAUDE.md",
       "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md"
     },
@@ -41,6 +37,10 @@
     {
       "dest": "{{HOME}}/.config/ghostty/config",
       "src": "{{REPO_ROOT}}/dotfiles/.config/ghostty/config"
+    },
+    {
+      "dest": "{{HOME}}/.claude/settings.json",
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.json"
     },
     {
       "dest": "{{HOME}}/.claude/statusline/run.py",
