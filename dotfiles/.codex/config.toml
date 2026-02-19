@@ -1,3 +1,5 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
 # https://developers.openai.com/codex/config-reference
 model = "gpt-5.3-codex"
 model_reasoning_effort = "xhigh"
@@ -24,3 +26,4 @@ writable_roots = [
 [features]
 shell_snapshot = true
 unified_exec = true
+multi_agent = true
