@@ -1,8 +1,13 @@
 # Ansible
+.ansible/
 playbooks/site.retry
 
 # Python
 .venv/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.ty/
 
 # Node.js
 node_modules/
