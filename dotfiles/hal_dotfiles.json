@@ -51,12 +51,8 @@
       "src": "{{REPO_ROOT}}/skills/magi/"
     },
     {
-      "dest": "{{HOME}}/.claude/skills/codex/",
-      "src": "{{REPO_ROOT}}/skills/codex/"
-    },
-    {
-      "dest": "{{HOME}}/.claude/skills/gemini/",
-      "src": "{{REPO_ROOT}}/skills/gemini/"
+      "dest": "{{HOME}}/.claude/skills/second-opinions/",
+      "src": "{{REPO_ROOT}}/skills/second-opinions/"
     },
     {
       "dest": "{{HOME}}/.claude/skills/commit/",
