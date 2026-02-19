@@ -105,7 +105,6 @@
   },
   "enabledPlugins": {
     "ask-questions-if-underspecified@trailofbits": true,
-    "building-secure-contracts@trailofbits": true,
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "gh-cli@trailofbits": true,
