@@ -9,12 +9,16 @@
       "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md"
     },
     {
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
+      "src": "{{HOME}}/.claude/projects"
+    },
+    {
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/history.jsonl",
       "src": "{{HOME}}/.claude/history.jsonl"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
-      "src": "{{HOME}}/.claude/projects"
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/history.jsonl",
+      "src": "{{HOME}}/.codex/history.jsonl"
     }
   ],
   "links": [
