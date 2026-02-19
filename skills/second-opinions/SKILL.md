@@ -9,11 +9,11 @@ allowed-tools:
   - Read
   - Glob
   - Grep
-  - Bash(git diff *)
-  - Bash(git ls-files *)
-  - Bash(git symbolic-ref *)
-  - Bash(timeout *)
-  - Bash(gemini *)
+  - Bash(git diff:*)
+  - Bash(git ls-files:*)
+  - Bash(git symbolic-ref:*)
+  - Bash(timeout:*)
+  - Bash(gemini:*)
   - mcp__codex__codex
   - mcp__codex__codex-reply
 ---

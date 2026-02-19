@@ -8,7 +8,7 @@ allowed-tools:
   - Glob
   - Read
   - Edit
-  - Bash(hal sync *)
+  - Bash(hal sync:*)
 ---
 
 # Instructions
