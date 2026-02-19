@@ -13,9 +13,3 @@ skip_list:
 warn_list:
   - experimental # Warn on experimental features
   - no-handler # Warn when handlers could be used
-
-# Mock the homebrew module since it's macOS specific
-mock_modules:
-  - homebrew
-  - homebrew_tap
-  - homebrew_cask
