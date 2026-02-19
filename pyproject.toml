@@ -5,12 +5,54 @@ description = "Opinionated macOS development environment automation"
 authors = [{ name = "Vinta Chen", email = "vinta.chen@gmail.com" }]
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = []
 
 [project.urls]
 Homepage = "https://vinta.ws/code/"
 Repository = "https://github.com/vinta/hal-9000"
 
-[project.optional-dependencies]
-dev = ["argcomplete>=3.6.3", "detect-secrets>=1.5.0", "pre-commit>=4.5.1"]
+[dependency-groups]
+dev = [
+    { include-group = "lint" },
+    "ansible-lint>=26.1.1",
+    "argcomplete>=3.6.3",
+    "detect-secrets>=1.5.0",
+    "pre-commit>=4.5.1",
+]
+lint = ["ruff", "ty"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.ruff]
+line-length = 200
+target-version = "py311"
+extend-include = ["bin/hal"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D",      # pydocstyle
+    "COM812", # trailing comma (formatter conflict)
+    "ISC001", # string concat (formatter conflict)
+    "INP001", # implicit namespace package (no packages, all scripts)
+    "T20",    # print statements (CLI tools)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 200
+
+[tool.ty.src]
+include = ["scripts", "dotfiles/.claude/statusline"]
+
+[tool.ty.terminal]
+error-on-warning = true
+
+[tool.ty.environment]
+python-version = "3.11"
