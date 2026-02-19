@@ -9,7 +9,7 @@ allowed-tools:
   - Glob
   - Read
   - Edit
-  - Bash(find:*)
+  - Bash(find *)
 ---
 
 # Overview
@@ -34,14 +34,14 @@ Analyzes a skill's full content -- SKILL.md and any sibling files in the same di
 4. **Scan all skill content** (SKILL.md body + sibling files) for tool usage. Look for:
    - Explicit tool names: e.g., `Read`, `Write`, `Edit`, `Bash`, `WebFetch`, `WebSearch`, `Task`, `AskUserQuestion`, `Skill`, etc.
    - Bash command patterns: e.g., `git diff`, `git commit`, `make`, `npm`, `docker`, `python`, `curl`, etc.
-   - For Bash commands found, the required allowed-tool format is `Bash(<command>:*)` (e.g., `git stash push` needs `Bash(git stash:*)`)
+   - For Bash commands found, the required allowed-tool format is `Bash(<command> *)` (e.g., `git stash push` needs `Bash(git stash *)`)
    - For file tools with path patterns (Read, Write, Edit), note the paths referenced (e.g., `/tmp/` needs `Read(//tmp/**)`)
    - Skill invocations: e.g., `commit`, `Use the commit skill`, `Skill(commit)`. The required allowed-tool format is `Skill(<name>)` (e.g., `commit` needs `Skill(commit)`)
 
 5. **Compare**: For each tool detected in the body, check if it's covered by an entry in `allowed-tools`. Rules:
    - `Glob`, `Grep`, `Read`, `Write`, `Edit` are available by default for files within the project directory. Only add these when the skill needs to access files **outside** the project (e.g., `Read(//tmp/**)`, `Write(~/.config/**)`).
-   - `Bash` commands always need explicit `Bash(<command>:*)` entries.
-   - A Bash pattern covers subcommands (e.g., `Bash(git stash:*)` covers `git stash push`).
+   - `Bash` commands always need explicit `Bash(<command> *)` entries.
+   - A Bash pattern covers subcommands (e.g., `Bash(git stash *)` covers `git stash push`).
    - Exact match counts as covered (e.g., `WebSearch` matches `WebSearch`).
 
 6. **Update the skill file**: For any missing tools found, add them to the `allowed-tools` list in the skill's YAML frontmatter using the Edit tool. Then report what was added.

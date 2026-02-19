@@ -5,10 +5,10 @@ context: fork
 user-invocable: true
 model: opus
 allowed-tools:
-  - Bash(ast-grep:*)
-  - Bash(sg:*)
-  - Bash(rg:*)
-  - Bash(fd:*)
+  - Bash(ast-grep *)
+  - Bash(sg *)
+  - Bash(rg *)
+  - Bash(fd *)
 ---
 
 # Explore Codebase
