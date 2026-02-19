@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: RUF001 ambiguous-unicode-character-string
 import json
 import os
 import shlex
@@ -6,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from pathlib import Path
 from typing import TypedDict
 
 
@@ -31,7 +33,7 @@ def colorize_grammar(text: str) -> str:
     for line in lines:
         if line.startswith("Grammar"):
             parts = line.split(":", 1)
-            if len(parts) == 2:
+            if len(parts) == 2:  # noqa: PLR2004 magic-value-comparison
                 result.append(f"{WHITE}{parts[0]}:{RESET}{color}{parts[1]}{RESET}")
             else:
                 result.append(f"{color}{line}{RESET}")
@@ -43,19 +45,19 @@ def colorize_grammar(text: str) -> str:
 def basic_info(data: StatusLineData) -> None:
     git_branch: str = ""
     try:
-        result = subprocess.run(
-            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        result = subprocess.run(  # noqa: PLW1510 subprocess-run-without-check
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],  # noqa: S607 start-process-with-partial-path
             cwd=data["workspace"]["current_dir"],
             capture_output=True,
             text=True,
         )
         if result.returncode == 0:
             git_branch = result.stdout.strip()
-    except Exception:
+    except Exception:  # noqa: BLE001 S110 blind-exception try-except-pass
         pass
 
     current_dir: str = data["workspace"]["current_dir"]
-    home: str = os.path.expanduser("~")
+    home: str = str(Path.home())
     if current_dir.startswith(home):
         current_dir = "~" + current_dir[len(home) :]
 
@@ -67,13 +69,13 @@ def basic_info(data: StatusLineData) -> None:
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
 
 
-def grammar_check(data: StatusLineData) -> None:
+def grammar_check(data: StatusLineData) -> None:  # noqa: C901 PLR0912 PLR0915 complex-structure too-many-branches too-many-statements
     transcript_path: str | None = data.get("transcript_path")
     if not transcript_path:
         return
 
     try:
-        with open(transcript_path, "r") as f:
+        with Path(transcript_path).open() as f:
             lines = f.readlines()
     except FileNotFoundError:
         return
@@ -171,12 +173,12 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     session_id: str | None = data.get("session_id")
     if not session_id:
         return
-    cache_file: str = f"/tmp/claude-code-statusline-grammar-check-{session_id}.json"
+    cache_file: str = f"/tmp/claude-code-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
 
     cached_uuid: str = ""
     cached_result: str = ""
     try:
-        with open(cache_file, "r") as f:
+        with Path(cache_file).open() as f:
             cache = json.load(f)
             cached_uuid = cache.get("uuid", "")
             cached_result = cache.get("result", "")
@@ -201,12 +203,12 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 
     start_time: float = time.time()
     try:
-        result = subprocess.run(
-            shlex.split(cmd) + [grammar_check_prompt],
+        result = subprocess.run(  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
+            [*shlex.split(cmd), grammar_check_prompt],
             capture_output=True,
             text=True,
             timeout=15,
-            cwd="/tmp",
+            cwd="/tmp",  # noqa: S108 hardcoded-temp-file
         )
     except subprocess.TimeoutExpired:
         return
@@ -227,14 +229,14 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
                     "input": latest_user_input,
                     "result": grammar_check_result,
                     "elapsed": elapsed,
-                    "cwd": os.getcwd(),
+                    "cwd": str(Path.cwd()),
                 },
                 f,
             )
-        os.rename(tmp_path, cache_file)
-    except Exception:
-        try:
-            os.unlink(tmp_path)
+        Path(tmp_path).rename(cache_file)
+    except Exception:  # noqa: BLE001 blind-exception
+        try:  # noqa: SIM105 suppressible-exception
+            Path(tmp_path).unlink()
         except OSError:
             pass
 
