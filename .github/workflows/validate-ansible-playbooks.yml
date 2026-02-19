@@ -19,8 +19,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Ansible collections
-        run: ansible-galaxy collection install community.general
+      - name: Add mock_modules for CI
+        run: printf '\nmock_modules:\n  - homebrew\n  - homebrew_tap\n  - homebrew_cask\n' >> .ansible-lint
 
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main
