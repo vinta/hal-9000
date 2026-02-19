@@ -1,3 +1,5 @@
 it2
 pangu
+pip-audit
 ruff
+ty
