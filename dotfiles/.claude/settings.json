@@ -95,7 +95,8 @@
       "Write(~/.*)",
       "Edit(~/.*)",
       "Bash(curl:*)",
-      "Bash(wget:*)"
+      "Bash(wget:*)",
+      "Bash(git checkout:*)"
     ],
     "defaultMode": "acceptEdits",
     "additionalDirectories": ["~/Projects", "/usr/local/hal-9000"]
