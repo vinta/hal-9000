@@ -4,6 +4,7 @@
     "DISABLE_BUG_COMMAND": "1",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_TELEMETRY": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "cleanupPeriodDays": 365,
@@ -105,6 +106,9 @@
   },
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
-    "context7@claude-plugins-official": true
+    "context7@claude-plugins-official": true,
+    "ask-questions-if-underspecified@trailofbits": true,
+    "gh-cli@trailofbits": true,
+    "modern-python@trailofbits": true
   }
 }
