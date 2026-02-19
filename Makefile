@@ -1,4 +1,4 @@
-.PHONY: help install update-hooks run-hooks scan-secrets run-gitleaks run-detect-secrets audit-detect-secrets-report hal-completion
+.PHONY: help install lint format typecheck update-hooks run-hooks scan-secrets run-gitleaks run-detect-secrets audit-detect-secrets-report hal-completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -7,10 +7,23 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 install: ## Install dependencies and setup pre-commit hooks
-	uv sync --extra dev
+	uv sync
+	uv run ansible-galaxy collection install community.general
 	uv run pre-commit install
 	HOMEBREW_NO_AUTO_UPDATE=1 brew install gitleaks
 	$(MAKE) update-hooks
+
+lint: ## Run ruff linter, formatter check, and ansible-lint
+	uv run ruff format --check .
+	uv run ruff check .
+	uv run ansible-lint playbooks/
+
+format: ## Auto-format and fix lint issues
+	uv run ruff format .
+	uv run ruff check --fix .
+
+typecheck: ## Run ty type checker
+	uv run ty check bin/hal
 
 update-hooks: ## Update pre-commit hooks to latest versions
 	uv run pre-commit autoupdate
