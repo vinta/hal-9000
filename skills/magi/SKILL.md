@@ -1,6 +1,6 @@
 ---
 name: magi
-description: Use only when the user explicitly requests for brainstorming, evaluating architecture choices, or comparing options where no single concern dominates.
+description: Use only when the user explicitly requests for brainstorming, evaluating architecture choices, or comparing options where no single concern dominates
 argument-hint: "[question-or-topic]"
 disable-model-invocation: true
 user-invocable: true
@@ -62,6 +62,10 @@ digraph magi {
 ```
 
 ## The Process
+
+### User Question
+
+**$ARGUMENTS**
 
 ### Setup
 
