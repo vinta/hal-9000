@@ -1,7 +1,6 @@
 ---
 name: explore-codebase
 description: Use when navigating unfamiliar code, tracing call flows or symbol definitions, finding files by name or pattern, or locating all references before refactoring
-context: fork
 user-invocable: true
 model: opus
 allowed-tools:
@@ -15,11 +14,11 @@ allowed-tools:
 
 ## Tool Selection
 
-| Need                                       | Tool              |
-| ------------------------------------------ | ----------------- |
-| Structural patterns (functions, classes)   | `sg` (ast-grep)   |
-| Text/regex patterns (strings, names)       | `rg` (ripgrep)    |
-| File discovery by name/extension           | `fd`              |
+| Need                                     | Tool            |
+| ---------------------------------------- | --------------- |
+| Structural patterns (functions, classes) | `sg` (ast-grep) |
+| Text/regex patterns (strings, names)     | `rg` (ripgrep)  |
+| File discovery by name/extension         | `fd`            |
 
 **Decision flow**: Find files first? `fd` → pipe to `rg`/`sg`. Syntax-aware match needed? `sg`. Fast text search? `rg`. Uncertain? Start with `rg`, escalate to `sg` if structure matters.
 
@@ -36,11 +35,11 @@ sg -p 'PATTERN' --inside 'OUTER' -l LANG    # Must be within
 
 ### Metavariables
 
-| Syntax   | Captures              | Example                              |
-| -------- | --------------------- | ------------------------------------ |
-| `$VAR`   | Single node           | `console.log($MSG)`                  |
-| `$$$VAR` | Zero or more nodes    | `function($$$ARGS)` -- any arity     |
-| `$_`     | Non-capturing         | `$_FUNC($_)` -- match without capture |
+| Syntax   | Captures           | Example                               |
+| -------- | ------------------ | ------------------------------------- |
+| `$VAR`   | Single node        | `console.log($MSG)`                   |
+| `$$$VAR` | Zero or more nodes | `function($$$ARGS)` -- any arity      |
+| `$_`     | Non-capturing      | `$_FUNC($_)` -- match without capture |
 
 Rules: must be UPPERCASE, same name = same content (`$A == $A` matches `x == x` not `x == y`).
 
