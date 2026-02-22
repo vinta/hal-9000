@@ -1,4 +1,4 @@
-# Global CLAUDE.md
+# CLAUDE.md
 
 **IMPORTANT**: Search the codebase and web before relying on pre-trained knowledge.
 
