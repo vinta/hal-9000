@@ -6,6 +6,7 @@ import importlib.util
 import shlex
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 
@@ -83,3 +84,76 @@ class TestUpdateSanitization:
         ansible_cmd = next(c for c in commands_run if "ansible-playbook" in c)
         # The dangerous string must be quoted -- bare ;rm should not appear
         assert ";rm" not in ansible_cmd or shlex.quote("foo;rm -rf ~") in ansible_cmd
+
+
+class TestFileOpsUseStdlib:
+    """Verify link() and copy() don't shell out for mkdir/mv/cp."""
+
+    def test_link_no_shell_mkdir(self, hal_instance, tmp_path):
+        """link() should use Path.mkdir() not shell mkdir."""
+        commands_run = []
+        original_run = hal_instance._run
+
+        def tracking_run(command, *, shell=True, verbose=True):
+            commands_run.append(command)
+            return original_run(command, shell=shell, verbose=verbose)
+
+        hal_instance._run = tracking_run
+
+        test_file = tmp_path / "testfile"
+        test_file.write_text("content")
+
+        ns = argparse.Namespace(filename=str(test_file))
+
+        with (
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+            patch("pathlib.Path.cwd", return_value=tmp_path),
+            patch.object(hal_instance, "_validate_path"),
+        ):
+            mock_dotfiles.find_by_key.return_value = None
+            mock_dotfiles.data = {"links": [], "copies": []}
+            hal_instance.link(ns)
+
+        mkdir_cmds = [c for c in commands_run if c.startswith("mkdir ")]
+        assert len(mkdir_cmds) == 0, f"Should not shell out to mkdir: {mkdir_cmds}"
+        mv_cmds = [c for c in commands_run if c.startswith("mv ")]
+        assert len(mv_cmds) == 0, f"Should not shell out to mv: {mv_cmds}"
+
+    def test_copy_no_shell_cp(self, hal_instance, tmp_path):
+        """copy() should use shutil.copy2() not shell cp."""
+        commands_run = []
+
+        def tracking_run(command, *, shell=True, verbose=True):  # noqa: ARG001 unused-function-argument
+            commands_run.append(command)
+            return 0
+
+        hal_instance._run = tracking_run
+
+        test_file = tmp_path / "testfile"
+        test_file.write_text("content")
+
+        ns = argparse.Namespace(filename=str(test_file))
+
+        with (
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+            patch("pathlib.Path.cwd", return_value=tmp_path),
+            patch.object(hal_instance, "_validate_path"),
+        ):
+            mock_dotfiles.find_by_key.return_value = None
+            mock_dotfiles.data = {"links": [], "copies": []}
+            hal_instance.copy(ns)
+
+        cp_cmds = [c for c in commands_run if c.startswith("cp ")]
+        assert len(cp_cmds) == 0, f"Should not shell out to cp: {cp_cmds}"
+
+
+class TestUserFilenameValidation:
+    def test_link_validates_filename(self, hal_instance, tmp_path):
+        ns = argparse.Namespace(filename="../../../etc/passwd")
+        with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(SystemExit):
+            hal_instance.link(ns)
+
+    def test_copy_validates_filename(self, hal_instance, tmp_path):
+        ns = argparse.Namespace(filename="../../../etc/passwd")
+        with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(SystemExit):
+            hal_instance.copy(ns)
