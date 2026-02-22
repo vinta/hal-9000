@@ -104,8 +104,17 @@ class HAL9000:
     def _hal_says(self, text: str) -> None:
         print(f"HAL: {text}")
 
+    def _validate_path(self, path: str) -> None:
+        resolved = str(Path(path).resolve())
+        allowed_prefixes = (str(Path.home()), Setting.REPO_ROOT)
+        if not resolved.startswith(allowed_prefixes):
+            self._hal_says(f"I'm sorry, Dave. I'm afraid I can't do that: {resolved}")
+            sys.exit(1)
+
     def _expand_template(self, path: str) -> str:
-        return path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", Setting.REPO_ROOT)
+        expanded = path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", Setting.REPO_ROOT)
+        self._validate_path(expanded)
+        return expanded
 
     def _run(self, command: str, *, shell: bool = True, verbose: bool = True) -> int:
         if verbose:
