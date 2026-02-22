@@ -1,4 +1,4 @@
-.PHONY: help install lint format typecheck update-hooks run-hooks scan-secrets run-gitleaks run-detect-secrets audit-detect-secrets-report hal-completion
+.PHONY: help install lint format typecheck test update-hooks run-hooks scan-secrets run-gitleaks run-detect-secrets audit-detect-secrets-report hal-completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -26,6 +26,9 @@ format: ## Auto-format and fix lint issues
 
 typecheck: ## Run ty type checker
 	uv run ty check bin/hal
+
+test: ## Run tests
+	uv run pytest tests/ -v
 
 update-hooks: ## Update pre-commit hooks to latest versions
 	uv run pre-commit autoupdate
