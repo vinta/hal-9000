@@ -8,6 +8,7 @@ help: ## Show this help message
 
 install: ## Install dependencies and setup pre-commit hooks
 	uv sync
+	uv run pip-audit
 	uv run ansible-galaxy collection install community.general
 	uv run pre-commit install
 	HOMEBREW_NO_AUTO_UPDATE=1 brew install gitleaks
