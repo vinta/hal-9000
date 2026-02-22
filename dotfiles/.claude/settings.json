@@ -97,7 +97,10 @@
       "Bash(git checkout:*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/Projects", "/usr/local/hal-9000"]
+    "additionalDirectories": [
+      "~/Projects",
+      "/usr/local/hal-9000"
+    ]
   },
   "statusLine": {
     "type": "command",
@@ -111,5 +114,6 @@
     "modern-python@trailofbits": true,
     "superpowers@claude-plugins-official": true
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }
