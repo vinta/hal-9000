@@ -4,13 +4,17 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-case-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: detect-aws-credentials
+        args: ["--allow-missing-credentials"]
+      - id: detect-private-key
       - id: mixed-line-ending
 
   - repo: local
     hooks:
       - id: gitleaks
         name: gitleaks
-        entry: gitleaks git --pre-commit --redact --staged --verbose
+        entry: gitleaks git --pre-commit --redact --staged --verbose --no-banner
         language: system
         pass_filenames: false
 

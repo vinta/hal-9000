@@ -34,7 +34,7 @@ run-hooks: ## Run all pre-commit hooks on all files
 scan-secrets: run-gitleaks run-detect-secrets  ## Scan for secrets using all scanners
 
 run-gitleaks: ## Scan full git history for secrets
-	gitleaks detect --source . --verbose --redact
+	gitleaks git . --verbose --no-banner
 
 run-detect-secrets: ## Scan for secrets in the codebase
 	@if [ ! -f .secrets.baseline ]; then \
