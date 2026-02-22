@@ -157,3 +157,21 @@ class TestUserFilenameValidation:
         ns = argparse.Namespace(filename="../../../etc/passwd")
         with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(SystemExit):
             hal_instance.copy(ns)
+
+
+class TestArgParsing:
+    def test_unknown_args_rejected_for_link(self, hal_module):
+        """Non-update commands should reject unknown arguments."""
+        sys.argv = ["hal", "link", "--bogus", "somefile"]
+        hal = hal_module.HAL9000()
+        with pytest.raises(SystemExit) as exc_info:
+            hal.read_lips()
+        assert exc_info.value.code == 2  # noqa: PLR2004 argparse-usage-error
+
+    def test_unknown_args_rejected_for_sync(self, hal_module):
+        """sync should also reject unknown arguments."""
+        sys.argv = ["hal", "sync", "--unknown"]
+        hal = hal_module.HAL9000()
+        with pytest.raises(SystemExit) as exc_info:
+            hal.read_lips()
+        assert exc_info.value.code == 2  # noqa: PLR2004 argparse-usage-error

@@ -305,6 +305,10 @@ class HAL9000:
             sys.exit(0)
 
         namespace, extra_args = self.parser.parse_known_args()
+
+        if extra_args and namespace.func != self.update:
+            self.parser.parse_args()  # Will error with usage message on unrecognized args
+
         namespace.func(namespace, extra_args)
 
 
