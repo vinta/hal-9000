@@ -1,8 +1,4 @@
 ---
-exclude_paths:
-  - .github/
-  - .git/
-
 skip_list:
   - command-instead-of-module # Some macOS-specific operations require shell
   - no-changed-when # Will be addressed in future updates
