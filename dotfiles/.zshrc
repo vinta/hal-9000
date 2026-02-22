@@ -138,8 +138,6 @@ ccp() { claude --no-chrome --no-session-persistence -p "$*"; }
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 
-export PATH="$HOME/.local/bin:$PATH"
-
 source /usr/local/hal-9000/playbooks/roles/basic/files/hal_profile.sh
 source /usr/local/hal-9000/playbooks/roles/python/files/py_profile.sh
 source /usr/local/hal-9000/playbooks/roles/node/files/node_profile.sh
