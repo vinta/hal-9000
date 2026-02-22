@@ -1,4 +1,9 @@
 ---
+mock_modules:
+  - homebrew
+  - homebrew_tap
+  - homebrew_cask
+
 skip_list:
   - command-instead-of-module # Some macOS-specific operations require shell
   - no-changed-when # Will be addressed in future updates

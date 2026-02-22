@@ -18,6 +18,7 @@ lint: ## Run ruff linter, formatter check, and ansible-lint
 	uv run ruff format --check .
 	uv run ruff check .
 	uv run ansible-lint playbooks/
+	cd playbooks && ansible-playbook site.yml --syntax-check
 
 format: ## Auto-format and fix lint issues
 	uv run ruff format .

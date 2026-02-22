@@ -19,14 +19,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Add mock_modules for CI
-        run: |
-          echo "" >> .ansible-lint
-          echo "mock_modules:" >> .ansible-lint
-          echo "  - homebrew" >> .ansible-lint
-          echo "  - homebrew_tap" >> .ansible-lint
-          echo "  - homebrew_cask" >> .ansible-lint
-
       - name: Run ansible-lint
         uses: ansible/ansible-lint@main
 
@@ -48,4 +40,5 @@ jobs:
 
       - name: Check Ansible playbook syntax
         run: |
-          ansible-playbook playbooks/site.yml --syntax-check
+          cd playbooks
+          ansible-playbook site.yml --syntax-check
