@@ -1,6 +1,6 @@
 ---
 name: magi
-description: Use only when the user explicitly requests for brainstorming, evaluating architecture choices, or comparing options where no single concern dominates
+description: Use only when the user explicitly requests brainstorming, evaluating architecture choices, or comparing options where no single concern dominates
 argument-hint: "[question-or-topic]"
 disable-model-invocation: true
 user-invocable: true
@@ -21,7 +21,7 @@ allowed-tools:
 
 # MAGI
 
-Three-agent deliberation system. Spawns Scientist, Mother, and Woman agents with competing value lenses to explore a question in parallel, then consolidates their proposals for the user.
+Three-agent deliberation system. Spawns Scientist, Mother, and Woman teammates with competing value lenses to explore a question in parallel, then consolidates their proposals for the user.
 
 ## Checklist
 
@@ -44,7 +44,7 @@ digraph magi {
     clarify [label="Lead clarifies question\n(AskUserQuestion if underspecified)"];
     setup [label="Setup 3-agent team"];
     explore [label="Teammates explore in parallel\n(read project, search online, propose 2-3 approaches)"];
-    consolidate [label="Lead consolidates proposals\n+ lightweight stance per agent"];
+    consolidate [label="Lead consolidates proposals\n+ lightweight stance per teammate"];
     present [label="Present options to user\n(AskUserQuestion: Implement / Debate / Done)"];
     decide [label="User decision" shape=diamond];
     debate [label="Debate round\n(peer-to-peer, 1 exchange)"];
@@ -72,14 +72,14 @@ digraph magi {
 
 ### Clarify
 
-Before spawning agents, the lead asks via `AskUserQuestion` to understand the idea or topic:
+Before spawning teammates, the lead asks via `AskUserQuestion` to understand the idea or topic:
 
 - Ask questions one at a time to refine the idea
 - Prefer multiple choice questions when possible, but open-ended is fine too
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
 - Focus on understanding: purpose, constraints, success criteria
 
-Skip if the question is already clear and actionable. Include all clarified context in agent spawn prompts.
+Skip if the question is already clear and actionable. Include all clarified context in teammate spawn prompts.
 
 ### Setup
 
@@ -99,7 +99,7 @@ Teammates don't inherit the lead's conversation history -- include all context i
 Teammates begin working immediately upon spawning. The lead's role is **coordination only**:
 
 - Wait for teammates to send their proposals via `SendMessage`
-- If an teammate sends a clarifying question, consolidate and ask the user via `AskUserQuestion`
+- If a teammate sends a clarifying question, consolidate and ask the user via `AskUserQuestion`
 - Do NOT explore, research, or generate proposals yourself
 
 #### Teammate Checklist
@@ -116,9 +116,9 @@ Each teammate MUST create a task for each step and complete them in order:
 
 ### Consolidate + Present
 
-Lead collects all proposals from the 3 agents, then:
+Lead collects all proposals from the 3 teammates, then:
 
-1. Deduplicates similar proposals (attributing to all agents who proposed it)
+1. Deduplicates similar proposals (attributing to all teammates who proposed it)
 2. Groups by theme if there are many proposals
 3. Presents each option with:
    - Which teammate(s) proposed it
@@ -127,7 +127,7 @@ Lead collects all proposals from the 3 agents, then:
 4. Asks the user via `AskUserQuestion` to **select an option** (one option per choice)
 5. Asks the user via `AskUserQuestion` what to do next:
    - **Implement** — triggers teardown + handoff to `writing-plans` with the selected option
-   - **Debate** — agents critique each other's proposals (triggers debate round below)
+   - **Debate** — teammates critique each other's proposals (triggers debate round below)
    - **Done** — shut down the agent team, no further action
 
 ### Optional Debate (user-triggered)
@@ -135,9 +135,9 @@ Lead collects all proposals from the 3 agents, then:
 Only runs if the user requests it. When triggered:
 
 1. Create a "Debate" task
-2. Send the consolidated option list to all agents
-3. Each agent sends direct messages to each other agent critiquing their proposals
-4. Each agent gets one response to defend or concede
+2. Send the consolidated option list to all teammates
+3. Each teammate sends direct messages to each other teammate critiquing their proposals
+4. Each teammate gets one response to defend or concede
 5. Lead collects updated stances and re-presents
 
 ### Teardown
@@ -149,7 +149,7 @@ Only runs if the user requests it. When triggered:
 
 #### When NOT to tear down
 
-- After presenting proposals -- the debate loop requires live agents
+- After presenting proposals -- the debate loop requires live teammates
 
 #### Shutdown sequence
 
