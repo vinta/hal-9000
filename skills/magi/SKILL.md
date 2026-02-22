@@ -3,6 +3,7 @@ name: magi
 description: Use only when the user explicitly requests brainstorming, evaluating architecture choices, or comparing options where no single concern dominates
 argument-hint: "[question-or-topic]"
 disable-model-invocation: true
+compatibility: Designed for Claude Code
 user-invocable: true
 model: opus
 allowed-tools:
