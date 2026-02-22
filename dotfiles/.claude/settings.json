@@ -92,15 +92,12 @@
       "Read(~/.*)",
       "Write(~/.*)",
       "Edit(~/.*)",
+      "Bash(git checkout:*)",
       "Bash(curl:*)",
-      "Bash(wget:*)",
-      "Bash(git checkout:*)"
+      "Bash(wget:*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": [
-      "~/Projects",
-      "/usr/local/hal-9000"
-    ]
+    "additionalDirectories": ["~/Projects", "/usr/local/hal-9000"]
   },
   "statusLine": {
     "type": "command",
@@ -108,6 +105,7 @@
   },
   "enabledPlugins": {
     "ask-questions-if-underspecified@trailofbits": true,
+    "claude-md-management@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "gh-cli@trailofbits": true,
