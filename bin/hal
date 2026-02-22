@@ -157,7 +157,7 @@ class HAL9000:
         os.chdir(str(Path(Setting.REPO_ROOT) / "playbooks"))
         command = "ansible-playbook site.yml -v"
         if extra_args:
-            command = " ".join([command, *extra_args])
+            command = " ".join([command, *(shlex.quote(arg) for arg in extra_args)])
         returncode = self._run(command)
         if returncode == 0:
             self._hal_says("Now open a new shell to active your dev environment")

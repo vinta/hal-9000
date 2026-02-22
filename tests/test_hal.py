@@ -1,7 +1,9 @@
 """Tests for bin/hal security hardening."""
 
+import argparse
 import importlib.machinery
 import importlib.util
+import shlex
 import sys
 from pathlib import Path
 
@@ -57,3 +59,27 @@ class TestValidatePath:
     def test_normal_template_expansion(self, hal_instance):
         result = hal_instance._expand_template("{{HOME}}/.zshrc")
         assert result == f"{Path.home()}/.zshrc"
+
+
+class TestUpdateSanitization:
+    def test_extra_args_are_quoted(self, hal_instance):
+        """extra_args with shell metacharacters must be quoted."""
+        commands_run = []
+
+        def mock_run(command, *, shell=True, verbose=True):  # noqa: ARG001 unused-function-argument
+            commands_run.append(command)
+            return 0
+
+        def mock_run_with_output(command, *, shell=True, verbose=True, print_output=True):  # noqa: ARG001 unused-function-argument
+            commands_run.append(command)
+            return 0, b"/opt/homebrew/bin/ansible\n"
+
+        hal_instance._run = mock_run
+        hal_instance._run_with_output = mock_run_with_output
+
+        ns = argparse.Namespace(func=hal_instance.update)
+        hal_instance.update(ns, extra_args=["--tags", "foo;rm -rf ~"])
+
+        ansible_cmd = next(c for c in commands_run if "ansible-playbook" in c)
+        # The dangerous string must be quoted -- bare ;rm should not appear
+        assert ";rm" not in ansible_cmd or shlex.quote("foo;rm -rf ~") in ansible_cmd
