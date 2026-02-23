@@ -47,6 +47,7 @@ scripts/
 
 ## Gotchas
 
+- **Skills are symlinked**: `~/.claude/skills/` entries are symlinks to `skills/` in this repo. Always edit files under `skills/`, never under `~/.claude/skills/`, to keep changes in the repo working tree.
 - **`bin/hal` is extensionless Python**: Ruff includes it via `extend-include`. ty checks it explicitly (`ty check bin/hal`) since `[tool.ty.src] include` only accepts directories.
 - **Ruff enables all rules**: `select = ["ALL"]` with specific ignores in `pyproject.toml`. New code may trigger unexpected rules.
 - **ty strict mode**: `error-on-warning = true` — warnings fail the type check.
