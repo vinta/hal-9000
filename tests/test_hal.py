@@ -109,6 +109,7 @@ class TestFileOpsUseStdlib:
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
             patch("pathlib.Path.cwd", return_value=tmp_path),
             patch.object(hal_instance, "_validate_path"),
+            patch("shutil.move"),
         ):
             mock_dotfiles.find_by_key.return_value = None
             mock_dotfiles.data = {"links": [], "copies": []}
@@ -138,6 +139,7 @@ class TestFileOpsUseStdlib:
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
             patch("pathlib.Path.cwd", return_value=tmp_path),
             patch.object(hal_instance, "_validate_path"),
+            patch("shutil.copy2"),
         ):
             mock_dotfiles.find_by_key.return_value = None
             mock_dotfiles.data = {"links": [], "copies": []}
