@@ -1,5 +1,3 @@
-"""Tests for bin/hal security hardening."""
-
 import argparse
 import importlib.machinery
 import importlib.util
