@@ -11,10 +11,6 @@ allowed-tools:
   - TeamCreate
   - TeamDelete
   - Task
-  - TaskCreate
-  - TaskUpdate
-  - TaskList
-  - TaskGet
   - SendMessage
   - WebSearch
   - Read
@@ -26,10 +22,10 @@ Three-agent deliberation system. Spawns Scientist, Mother, and Woman teammates w
 
 ## Checklist
 
-You MUST create a task for each of these items and complete them in order:
+Follow these steps in order.
 
 1. Clarify the question
-2. Setup agent team
+2. Set up agent team
 3. Parallel exploration
 4. Consolidate and present options
 5. Wait for user decision (implement, debate, or done)
@@ -84,7 +80,6 @@ Skip if the question is already clear and actionable. Include all clarified cont
 
 ### Setup
 
-- Create tasks for each checklist item (with activeForm for spinner display)
 - Read all 3 template files: [MAGI-1.md](templates/MAGI-1.md), [MAGI-2.md](templates/MAGI-2.md), [MAGI-3.md](templates/MAGI-3.md)
 - `TeamCreate` with a descriptive team name `magi-{topic}` (e.g., `magi-auth-strategy`)
 - Spawn all 3 teammates in a **single message** (3 parallel `Task` calls):
@@ -108,7 +103,7 @@ Teammates begin working immediately upon spawning. The lead's role is **coordina
 Each teammate MUST create a task for each step and complete them in order:
 
 1. **Explore project state** -- check files, docs, recent commits
-2. **Ask clarifying questions** -- if anything is unclear, ask the lead to ask the user. DO NOT skip this.
+2. **Ask clarifying questions** -- if anything is unclear, ask the lead to ask the user. The lead should note which teammate asked. DO NOT skip this.
 3. **Search online** -- find relevant prior art, docs, discussions. DO NOT skip this.
 4. **Evaluate/generate options** -- if user is open-ended, generate from scratch; if user supplies options, evaluate those AND propose alternatives. Surface non-obvious ideas -- discover what's missing, don't just analyze what's given.
 5. **Propose 2-3 approaches** -- with trade-offs from your persona's lens
@@ -135,11 +130,10 @@ Lead collects all proposals from the 3 teammates, then:
 
 Only runs if the user requests it. When triggered:
 
-1. Create a "Debate" task
-2. Send the consolidated option list to all teammates
-3. Each teammate sends direct messages to each other teammate critiquing their proposals
-4. Each teammate gets one response to defend or concede
-5. Lead collects updated stances and re-presents
+1. Send the consolidated option list to all teammates
+2. Each teammate sends direct messages to each other teammate critiquing their proposals
+3. Each teammate gets one response to defend or concede
+4. Lead collects updated stances and re-presents
 
 ### Teardown
 
