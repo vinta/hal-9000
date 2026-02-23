@@ -515,6 +515,9 @@ lint = [
     { name = "ruff" },
     { name = "ty" },
 ]
+test = [
+    { name = "pytest" },
+]
 
 [package.metadata]
 
@@ -530,7 +533,7 @@ dev = [
     { name = "detect-secrets", specifier = ">=1.5.0" },
     { name = "pip-audit", specifier = ">=2.10.0" },
     { name = "pre-commit", specifier = ">=4.5.1" },
-    { name = "pytest", specifier = ">=8.0.0" },
+    { name = "pytest", specifier = ">=9.0.2" },
     { name = "ruff", specifier = ">=0.15.2" },
     { name = "ty", specifier = ">=0.0.18" },
 ]
@@ -539,6 +542,7 @@ lint = [
     { name = "ruff", specifier = ">=0.15.2" },
     { name = "ty", specifier = ">=0.0.18" },
 ]
+test = [{ name = "pytest", specifier = ">=9.0.2" }]
 
 [[package]]
 name = "identify"
