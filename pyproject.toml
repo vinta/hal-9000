@@ -14,10 +14,12 @@ Repository = "https://github.com/vinta/hal-9000"
 
 [dependency-groups]
 dev = [
+    { include-group = "test" },
     { include-group = "lint" },
     { include-group = "audit" },
     "argcomplete>=3.6.3",
 ]
+test = ["pytest>=9.0.2"]
 lint = ["ansible-lint>=26.1.1", "ruff>=0.15.2", "ty>=0.0.18"]
 audit = ["detect-secrets>=1.5.0", "pip-audit>=2.10.0", "pre-commit>=4.5.1"]
 
@@ -39,6 +41,13 @@ ignore = [
     "T20",    # print statements (CLI tools)
 ]
 
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "ANN",    # type annotations not needed in tests
+    "S101",   # assert is the standard for pytest
+    "SLF001", # testing private methods is intentional
+]
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
@@ -52,6 +61,10 @@ include = ["scripts", "dotfiles/.claude/statusline"]
 
 [tool.ty.terminal]
 error-on-warning = true
+
+[tool.ty.rules]
+possibly-unresolved-reference = "error"
+unused-ignore-comment = "error"
 
 [tool.ty.environment]
 python-version = "3.11"

@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
+import importlib.machinery
+import importlib.util
 import sys
 from pathlib import Path
-from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-sys.path.insert(0, str(REPO_ROOT))
-
 hal_path = REPO_ROOT / "bin" / "hal"
-hal_content = hal_path.read_text()
-hal_content = hal_content.replace("__file__", repr(str(hal_path)))
+loader = importlib.machinery.SourceFileLoader("hal", str(hal_path))
+spec = importlib.util.spec_from_file_location("hal", hal_path, loader=loader)
+assert spec is not None  # noqa: S101 assert
+assert spec.loader is not None  # noqa: S101 assert
+module = importlib.util.module_from_spec(spec)
+sys.modules["hal"] = module
+spec.loader.exec_module(module)
 
-namespace: dict[str, Any] = {"__name__": "__hal_module__"}
-exec(hal_content, namespace)  # noqa: S102 exec-builtin
-
-HAL9000 = namespace["HAL9000"]
+HAL9000 = module.HAL9000  # type: ignore[attr-defined]
 hal = HAL9000()
 
 commands = []

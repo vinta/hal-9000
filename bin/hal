@@ -104,8 +104,17 @@ class HAL9000:
     def _hal_says(self, text: str) -> None:
         print(f"HAL: {text}")
 
+    def _validate_path(self, path: str) -> None:
+        resolved = str(Path(path).resolve())
+        allowed_prefixes = (str(Path.home()), Setting.REPO_ROOT)
+        if not resolved.startswith(allowed_prefixes):
+            self._hal_says(f"I'm sorry, Dave. I'm afraid I can't do that: {resolved}")
+            sys.exit(1)
+
     def _expand_template(self, path: str) -> str:
-        return path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", Setting.REPO_ROOT)
+        expanded = path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", Setting.REPO_ROOT)
+        self._validate_path(expanded)
+        return expanded
 
     def _run(self, command: str, *, shell: bool = True, verbose: bool = True) -> int:
         if verbose:
@@ -148,13 +157,14 @@ class HAL9000:
         os.chdir(str(Path(Setting.REPO_ROOT) / "playbooks"))
         command = "ansible-playbook site.yml -v"
         if extra_args:
-            command = " ".join([command, *extra_args])
+            command = " ".join([command, *(shlex.quote(arg) for arg in extra_args)])
         returncode = self._run(command)
         if returncode == 0:
             self._hal_says("Now open a new shell to active your dev environment")
 
     def link(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
-        filepath = str(Path.cwd() / namespace.filename)
+        filepath = str((Path.cwd() / namespace.filename).resolve())
+        self._validate_path(filepath)
 
         # Get relative path from home directory
         home = str(Path.home())
@@ -164,26 +174,26 @@ class HAL9000:
         dest_path = str(Path(Setting.DOTFILES_ROOT) / relative_path)
         dest_dir = str(Path(dest_path).parent)
 
-        # Create directory if it doesn't exist
         if dest_dir != Setting.DOTFILES_ROOT:
-            self._run(f"mkdir -p {shlex.quote(dest_dir)}")
+            Path(dest_dir).mkdir(parents=True, exist_ok=True)
 
-        if self._run(f"mv {shlex.quote(filepath)} {shlex.quote(dest_path)}") == 0:
-            ln_src = dest_path
-            ln_dest = filepath
-            self._run(f"ln -sf {shlex.quote(ln_src)} {shlex.quote(ln_dest)}")
+        shutil.move(filepath, dest_path)
+        self._hal_says(f"mv {filepath} -> {dest_path}")
+        ln_src = dest_path
+        ln_dest = filepath
+        self._run(f"ln -sf {shlex.quote(ln_src)} {shlex.quote(ln_dest)}")
 
-            template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
-            template_dest = filepath.replace(home, "{{HOME}}")
+        template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
+        template_dest = filepath.replace(home, "{{HOME}}")
 
-            ln_dict = self.dotfiles.find_by_key("src", template_src, "links")
-            if ln_dict:
-                ln_dict["dest"] = template_dest
-            else:
-                self.dotfiles.data["links"].append({"dest": template_dest, "src": template_src})
+        ln_dict = self.dotfiles.find_by_key("src", template_src, "links")
+        if ln_dict:
+            ln_dict["dest"] = template_dest
+        else:
+            self.dotfiles.data["links"].append({"dest": template_dest, "src": template_src})
 
-            self.dotfiles.save()
-            self.dotfiles.show()
+        self.dotfiles.save()
+        self.dotfiles.show()
 
     def unlink(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         relative_path = namespace.filename.removeprefix("~/")
@@ -214,7 +224,8 @@ class HAL9000:
         self.dotfiles.show()
 
     def copy(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
-        filepath = str(Path.cwd() / namespace.filename)
+        filepath = str((Path.cwd() / namespace.filename).resolve())
+        self._validate_path(filepath)
 
         # Get relative path from home directory
         home = str(Path.home())
@@ -224,22 +235,23 @@ class HAL9000:
         dest_path = str(Path(Setting.DOTFILES_ROOT) / relative_path)
         dest_dir = str(Path(dest_path).parent)
 
-        # Create directory if it doesn't exist
         if dest_dir != Setting.DOTFILES_ROOT:
-            self._run(f"mkdir -p {shlex.quote(dest_dir)}")
+            Path(dest_dir).mkdir(parents=True, exist_ok=True)
 
-        if self._run(f"cp -f {shlex.quote(filepath)} {shlex.quote(dest_path)}") == 0:
-            template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
-            template_dest = filepath.replace(home, "{{HOME}}")
+        shutil.copy2(filepath, dest_path)
+        self._hal_says(f"cp {filepath} -> {dest_path}")
 
-            cp_dict = self.dotfiles.find_by_key("src", template_src, "copies")
-            if cp_dict:
-                cp_dict["dest"] = template_dest
-            else:
-                self.dotfiles.data["copies"].append({"dest": template_dest, "src": template_src})
+        template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
+        template_dest = filepath.replace(home, "{{HOME}}")
 
-            self.dotfiles.save()
-            self.dotfiles.show()
+        cp_dict = self.dotfiles.find_by_key("src", template_src, "copies")
+        if cp_dict:
+            cp_dict["dest"] = template_dest
+        else:
+            self.dotfiles.data["copies"].append({"dest": template_dest, "src": template_src})
+
+        self.dotfiles.save()
+        self.dotfiles.show()
 
     def _sync_links(self, link: dict[str, str]) -> None:
         src = self._expand_template(link["src"])
@@ -293,6 +305,10 @@ class HAL9000:
             sys.exit(0)
 
         namespace, extra_args = self.parser.parse_known_args()
+
+        if extra_args and namespace.func != self.update:
+            self.parser.parse_args()  # Will error with usage message on unrecognized args
+
         namespace.func(namespace, extra_args)
 
 
