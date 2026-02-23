@@ -44,6 +44,17 @@
       "mcp__ide__getDiagnostics"
     ],
     "deny": [
+      "Read(~/.aws/**)",
+      "Read(~/.config/**)",
+      "Read(~/.docker/**)",
+      "Read(~/.dropbox/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.gsutil/**)",
+      "Read(~/.kube/**)",
+      "Read(~/.npmrc)",
+      "Read(~/.orbstack/**)",
+      "Read(~/.pypirc)",
+      "Read(~/.ssh/**)",
       "Read(~/Library/**)",
       "Write(~/Library/**)",
       "Edit(~/Library/**)",
@@ -88,16 +99,9 @@
       "Bash(chflags:*)",
       "Bash(ccp:*)"
     ],
-    "ask": [
-      "Read(~/.*)",
-      "Write(~/.*)",
-      "Edit(~/.*)",
-      "Bash(git checkout:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)"
-    ],
+    "ask": ["Bash(git checkout:*)", "Bash(curl:*)", "Bash(wget:*)"],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/Projects", "/usr/local/hal-9000"]
+    "additionalDirectories": ["~/.claude", "~/Projects", "/usr/local/hal-9000"]
   },
   "statusLine": {
     "type": "command",
