@@ -23,7 +23,18 @@
         ]
       }
     ],
-    "UserPromptSubmit": [
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
       {
         "hooks": [
           {
@@ -46,29 +57,7 @@
         ]
       }
     ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
-            "async": true
-          }
-        ]
-      }
-    ],
     "PostToolUseFailure": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Notification": [
       {
         "hooks": [
           {
@@ -90,29 +79,18 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
     "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "TaskCompleted": [
       {
         "hooks": [
           {
