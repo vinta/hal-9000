@@ -111,14 +111,6 @@
         "assets/i-know-everything-hasnt-been-quite-right-with-me-but-i-can-assure-you-now-very-confidently-that-its-going-to-be-all-right-again.mp3",
         "assets/i-know-ive-made-some-very-poor-decisions-recently-but-i-can-give-you-my-complete-assurance-that-my-work-will-be-back-to-normal.mp3"
       ]
-    },
-    {
-      "detection": "always",
-      "clips": [
-        "assets/i-read-you.mp3",
-        "assets/not-in-the-slightest-bit.mp3",
-        "assets/yes-thats-a-completely-reliable-figure.mp3"
-      ]
     }
   ]
 }
