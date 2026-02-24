@@ -106,11 +106,7 @@
       "Bash(wget:*)"
     ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": [
-      "~/.claude",
-      "~/Projects",
-      "/usr/local/hal-9000"
-    ]
+    "additionalDirectories": ["~/.claude", "~/Projects", "/usr/local/hal-9000"]
   },
   "statusLine": {
     "type": "command",
@@ -122,8 +118,8 @@
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "gh-cli@trailofbits": true,
-    "superpowers@claude-plugins-official": true,
-    "hal-voice@hal-9000": true
+    "hal-voice@hal-9000": true,
+    "superpowers@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true

@@ -34,11 +34,9 @@ curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod
 ```bash
 hal update                      # Run Ansible playbook to set up the dev environment
 hal update --tags python,node   # Run specific Ansible roles
-
 hal link ~/.zshrc               # Move file into dotfiles/ and symlink it back
 hal copy ~/.config/ghostty/     # Copy file into dotfiles/ (no symlink)
 hal sync                        # Sync all links and copies
-
 hal open-the-pod-bay-doors      # Open the pod bay doors, please, HAL
 ```
 
