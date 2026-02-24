@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "volume": 0.5,
+  "debounce_seconds": 5,
+  "replay_suppression_seconds": 3,
+  "suppress_subagent_complete": true
+}

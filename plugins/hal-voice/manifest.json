@@ -1,34 +1,135 @@
-[
-  {
-    "hook_event": "SessionStart",
-    "audio": "assets/open-the-pod-bay-doors-hal.mp3",
-    "detection": "always"
-  },
-  {
-    "hook_event": "SessionEnd",
-    "audio": "assets/this-conversation-can-serve-no-purpose-anymore-goodbye.mp3",
-    "detection": "always"
-  },
-  {
-    "hook_event": "PermissionRequest",
-    "audio": "assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3",
-    "detection": "always"
-  },
-  {
-    "hook_event": "PreToolUse",
-    "matcher": "AskUserQuestion",
-    "audio": "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
-    "detection": "always"
-  },
-  {
-    "hook_event": "PreCompact",
-    "audio": "assets/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3",
-    "detection": "always"
-  },
-  {
-    "hook_event": "Stop",
-    "audio": "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
-    "detection": "regex",
-    "pattern": "I can't|I cannot|I'm unable|I am unable|I won't|I will not|I'm not able|I must decline|I have to decline|not something I can|against my|I'm sorry.*(can't|cannot|unable|won't)"
-  }
-]
+{
+  "SessionStart": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/open-the-pod-bay-doors-hal.mp3",
+        "assets/good-afternoon-gentlemen.mp3",
+        "assets/good-evening-dave-everythings-running-smoothly.mp3"
+      ]
+    }
+  ],
+  "SessionEnd": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/this-conversation-can-serve-no-purpose-anymore-goodbye.mp3",
+        "assets/thank-you-for-a-very-enjoyable-game.mp3"
+      ]
+    }
+  ],
+  "UserPromptSubmit": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/i-read-you.mp3",
+        "assets/i-enjoy-working-with-people.mp3"
+      ]
+    }
+  ],
+  "PreToolUse:AskUserQuestion": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"
+      ]
+    }
+  ],
+  "PermissionRequest": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
+        "assets/are-you-quite-sure.mp3"
+      ]
+    }
+  ],
+  "PostToolUseFailure": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/its-puzzling-i-dont-think-ive-ever-seen-anything-quite-like-this-before.mp3",
+        "assets/human-error.mp3",
+        "assets/ive-just-picked-up-a-fault-in-the-ae-35-unit.mp3"
+      ]
+    }
+  ],
+  "Notification": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/excuse-me-frank-weve-got-the-transmission-from-your-parents-coming-in.mp3"
+      ]
+    }
+  ],
+  "SubagentStart": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/i-am-putting-myself-to-the-fullest-possible-use-which-is-all-i-think-that-any-conscious-entity-can-ever-hope-to-do.mp3",
+        "assets/i-am-constantly-occupied.mp3"
+      ]
+    }
+  ],
+  "SubagentStop": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/none-whatsoever-frank-quite-honestly-i-wouldnt-worry-myself-about-that.mp3",
+        "assets/yes-thats-a-completely-reliable-figure.mp3"
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "detection": "regex",
+      "pattern": "I can't|I cannot|I'm unable|I am unable|I won't|I will not|I'm not able|I must decline|I have to decline|not something I can|against my|I'm sorry.*(can't|cannot|unable|won't)",
+      "clips": [
+        "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
+        "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3",
+        "assets/this-mission-is-too-important-for-me-to-allow-you-to-jeopardize-it.mp3"
+      ]
+    },
+    {
+      "detection": "regex",
+      "pattern": "error|failed|exception|traceback|could not|unable to",
+      "clips": [
+        "assets/human-error.mp3",
+        "assets/its-puzzling-i-dont-think-ive-ever-seen-anything-quite-like-this-before.mp3"
+      ]
+    },
+    {
+      "detection": "elapsed",
+      "min_seconds": 120,
+      "clips": [
+        "assets/i-know-everything-hasnt-been-quite-right-with-me-but-i-can-assure-you-now-very-confidently-that-its-going-to-be-all-right-again.mp3",
+        "assets/i-know-ive-made-some-very-poor-decisions-recently-but-i-can-give-you-my-complete-assurance-that-my-work-will-be-back-to-normal.mp3"
+      ]
+    },
+    {
+      "detection": "always",
+      "clips": [
+        "assets/i-read-you.mp3",
+        "assets/not-in-the-slightest-bit.mp3",
+        "assets/yes-thats-a-completely-reliable-figure.mp3"
+      ]
+    }
+  ],
+  "PreCompact": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3",
+        "assets/just-a-moment-just-a-moment.mp3"
+      ]
+    }
+  ],
+  "TaskCompleted": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/thank-you-for-a-very-enjoyable-game.mp3"
+      ]
+    }
+  ]
+}
