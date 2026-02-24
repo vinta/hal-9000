@@ -74,12 +74,6 @@
       ]
     }
   ],
-  "TaskCompleted": [
-    {
-      "detection": "always",
-      "clips": ["assets/thank-you-for-a-very-enjoyable-game.mp3"]
-    }
-  ],
   "UserPromptSubmit": [
     {
       "detection": "always",
