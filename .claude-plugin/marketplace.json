@@ -6,19 +6,15 @@
   },
   "metadata": {
     "description": "HAL 9000 plugins for Claude Code",
-    "pluginRoot": "./plugins"
+    "version": "2001"
   },
   "plugins": [
     {
       "name": "hal-voice",
-      "source": "./hal-voice",
-      "description": "Plays HAL 9000 audio clips in response to Claude Code events",
-      "version": "0.1.0",
-      "author": {
-        "name": "Vinta Chen"
-      },
+      "source": "./plugins/hal-voice",
       "category": "entertainment",
-      "tags": ["audio", "hal-9000", "hooks"]
+      "tags": ["hal-9000", "hooks", "voice", "audio"],
+      "strict": true
     }
   ]
 }
