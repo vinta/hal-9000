@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+import fcntl
 import json
 import logging
 import os
@@ -18,6 +19,7 @@ PLUGIN_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve()
 MANIFEST_PATH = PLUGIN_ROOT / "manifest.json"
 CONFIG_PATH = PLUGIN_ROOT / "config.json"
 STATE_PATH = Path("/tmp/hal-voice-state.json")  # noqa: S108 hardcoded-temp-file
+LOCK_PATH = Path("/tmp/hal-voice.lock")  # noqa: S108 hardcoded-temp-file
 LOG_PATH = Path("/tmp/hal-voice.log")  # noqa: S108 hardcoded-temp-file
 
 DEFAULT_CONFIG = {
@@ -289,50 +291,59 @@ def main() -> None:
     now = time.time()
 
     config = load_config(CONFIG_PATH)
-    state = load_state(STATE_PATH)
-
     if not config["enabled"]:
         return
 
-    _record_tracking(hook_event, hook_input, state, session_id=session_id, now=now)
+    # Serialize concurrent hook invocations with an exclusive file lock.
+    # Without this, rapid hooks race on state read/write and sounds overlap.
+    lock_fd = os.open(str(LOCK_PATH), os.O_CREAT | os.O_RDWR)
+    try:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX)
 
-    if _is_suppressed(hook_event, state, config, session_id=session_id, now=now):
+        state = load_state(STATE_PATH)
+
+        _record_tracking(hook_event, hook_input, state, session_id=session_id, now=now)
+
+        if _is_suppressed(hook_event, state, config, session_id=session_id, now=now):
+            save_state(STATE_PATH, state)
+            return
+
+        # Match manifest
+        if not MANIFEST_PATH.is_file():
+            logger.error("manifest not found: %s", MANIFEST_PATH)
+            save_state(STATE_PATH, state)
+            return
+
+        manifest = json.loads(MANIFEST_PATH.read_text())
+        tool_name = hook_input.get("tool_name", "")
+        result = match_manifest(manifest, hook_event, tool_name, hook_input, state)
+
+        if result is None:
+            logger.info("no match for %s", hook_event)
+            save_state(STATE_PATH, state)
+            return
+
+        category, clip = result
+        logger.info("matched %s -> %s", category, clip)
+
+        # Kill previous sound and play new one
+        kill_previous_sound(state)
+        pid = play_sound(PLUGIN_ROOT / clip, config["volume"])
+
+        # Update state
+        state["last_played"][category] = clip
+        if hook_event == "Stop":
+            state["last_stop_time"] = now
+        state["sound_pid"] = pid
+
+        # Cleanup on SessionEnd
+        if hook_event == "SessionEnd":
+            cleanup_old_sessions(state, now=now)
+
         save_state(STATE_PATH, state)
-        return
-
-    # Match manifest
-    if not MANIFEST_PATH.is_file():
-        logger.error("manifest not found: %s", MANIFEST_PATH)
-        save_state(STATE_PATH, state)
-        return
-
-    manifest = json.loads(MANIFEST_PATH.read_text())
-    tool_name = hook_input.get("tool_name", "")
-    result = match_manifest(manifest, hook_event, tool_name, hook_input, state)
-
-    if result is None:
-        logger.info("no match for %s", hook_event)
-        save_state(STATE_PATH, state)
-        return
-
-    category, clip = result
-    logger.info("matched %s -> %s", category, clip)
-
-    # Kill previous sound and play new one
-    kill_previous_sound(state)
-    pid = play_sound(PLUGIN_ROOT / clip, config["volume"])
-
-    # Update state
-    state["last_played"][category] = clip
-    if hook_event == "Stop":
-        state["last_stop_time"] = now
-    state["sound_pid"] = pid
-
-    # Cleanup on SessionEnd
-    if hook_event == "SessionEnd":
-        cleanup_old_sessions(state, now=now)
-
-    save_state(STATE_PATH, state)
+    finally:
+        fcntl.flock(lock_fd, fcntl.LOCK_UN)
+        os.close(lock_fd)
 
 
 if __name__ == "__main__":
