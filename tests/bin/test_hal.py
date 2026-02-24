@@ -1,34 +1,10 @@
 import argparse
-import importlib.machinery
-import importlib.util
 import shlex
 import sys
 from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-
-
-@pytest.fixture
-def hal_module():
-    """Import bin/hal as a module."""
-    hal_path = str(Path(__file__).resolve().parent.parent / "bin" / "hal")
-    spec = importlib.util.spec_from_loader(
-        "hal",
-        loader=importlib.machinery.SourceFileLoader("hal", hal_path),
-    )
-    assert spec is not None
-    assert spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["hal"] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-@pytest.fixture
-def hal_instance(hal_module):
-    """Create a HAL9000 instance."""
-    return hal_module.HAL9000()
 
 
 class TestValidatePath:
@@ -166,7 +142,7 @@ class TestArgParsing:
         hal = hal_module.HAL9000()
         with pytest.raises(SystemExit) as exc_info:
             hal.read_lips()
-        assert exc_info.value.code == 2  # noqa: PLR2004 argparse-usage-error
+        assert exc_info.value.code == 2
 
     def test_unknown_args_rejected_for_sync(self, hal_module):
         """sync should also reject unknown arguments."""
@@ -174,4 +150,4 @@ class TestArgParsing:
         hal = hal_module.HAL9000()
         with pytest.raises(SystemExit) as exc_info:
             hal.read_lips()
-        assert exc_info.value.code == 2  # noqa: PLR2004 argparse-usage-error
+        assert exc_info.value.code == 2
