@@ -92,20 +92,28 @@ class TestEvaluateDetection:
         hook_input = {"hook_event_name": "UserPromptSubmit", "prompt": "hello world"}
         assert hal.evaluate_detection(rule, hook_input, {}) is True
 
-    def test_matcher_source_match(self, hal):
+    def test_matcher_session_start_source(self, hal):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
-        assert hal.evaluate_detection(rule, {"source": "startup"}, {}) is True
-        assert hal.evaluate_detection(rule, {"source": "resume"}, {}) is True
+        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "startup"}, {}) is True
+        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "resume"}, {}) is True
 
-    def test_matcher_source_no_match(self, hal):
+    def test_matcher_session_start_no_match(self, hal):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
-        assert hal.evaluate_detection(rule, {"source": "compact"}, {}) is False
+        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "compact"}, {}) is False
 
-    def test_matcher_tool_name_fallback(self, hal):
+    def test_matcher_tool_name(self, hal):
         rule = {"detection": "matcher", "matcher": "Bash"}
-        assert hal.evaluate_detection(rule, {"tool_name": "Bash"}, {}) is True
+        assert hal.evaluate_detection(rule, {"hook_event_name": "PreToolUse", "tool_name": "Bash"}, {}) is True
 
-    def test_matcher_missing_field(self, hal):
+    def test_matcher_notification_type(self, hal):
+        rule = {"detection": "matcher", "matcher": "idle_prompt"}
+        assert hal.evaluate_detection(rule, {"hook_event_name": "Notification", "notification_type": "idle_prompt"}, {}) is True
+
+    def test_matcher_unknown_event(self, hal):
+        rule = {"detection": "matcher", "matcher": "startup"}
+        assert hal.evaluate_detection(rule, {"hook_event_name": "Unknown"}, {}) is False
+
+    def test_matcher_missing_event(self, hal):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
         assert hal.evaluate_detection(rule, {}, {}) is False
 

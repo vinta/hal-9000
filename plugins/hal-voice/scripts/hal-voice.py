@@ -77,30 +77,56 @@ def save_state(state_path: Path, state: dict) -> None:
 
 # -- Detection --
 
+# Maps hook_event_name to the hook_input field that matcher regexes test against.
+# Mirrors MATCHER_FIELD in types.py. Events not listed have no matcher support.
+_MATCHER_FIELD: dict[str, str] = {
+    "SessionStart": "source",
+    "SessionEnd": "reason",
+    "PreToolUse": "tool_name",
+    "PostToolUse": "tool_name",
+    "PostToolUseFailure": "tool_name",
+    "PermissionRequest": "tool_name",
+    "Notification": "notification_type",
+    "SubagentStart": "agent_type",
+    "SubagentStop": "agent_type",
+    "PreCompact": "trigger",
+    "ConfigChange": "source",
+}
+
+
+def _detect_regex(rule: dict, hook_input: dict) -> bool:
+    event = hook_input.get("hook_event_name", "")
+    text = hook_input.get("prompt", "") if event == "UserPromptSubmit" else hook_input.get("last_assistant_message", "")
+    if not text:
+        return False
+    return bool(re.search(rule["pattern"], text, re.IGNORECASE))
+
+
+def _detect_matcher(rule: dict, hook_input: dict) -> bool:
+    pattern = rule.get("matcher", "")
+    field = _MATCHER_FIELD.get(hook_input.get("hook_event_name", ""), "")
+    text = hook_input.get(field, "") if field else ""
+    return bool(re.search(pattern, text, re.IGNORECASE))
+
+
+def _detect_elapsed(rule: dict, state: dict) -> bool:
+    last_prompt = state.get("last_prompt_time", 0.0)
+    if last_prompt == 0.0:
+        return False
+    return (time.time() - last_prompt) >= rule["min_seconds"]
+
 
 def evaluate_detection(rule: dict, hook_input: dict, state: dict) -> bool:
     detection = rule["detection"]
 
     if detection == "always":
         return True
-
     if detection == "regex":
-        event = hook_input.get("hook_event_name", "")
-        text = hook_input.get("prompt", "") if event == "UserPromptSubmit" else hook_input.get("last_assistant_message", "")
-        if not text:
-            return False
-        return bool(re.search(rule["pattern"], text, re.IGNORECASE))
-
+        return _detect_regex(rule, hook_input)
     if detection == "matcher":
-        pattern = rule.get("matcher", "")
-        text = hook_input.get("source") or hook_input.get("tool_name") or ""
-        return bool(re.search(pattern, text, re.IGNORECASE))
-
+        return _detect_matcher(rule, hook_input)
     if detection == "elapsed":
-        last_prompt = state.get("last_prompt_time", 0.0)
-        if last_prompt == 0.0:
-            return False
-        return (time.time() - last_prompt) >= rule["min_seconds"]
+        return _detect_elapsed(rule, state)
 
     logger.error("unknown detection type: %s", detection)
     return False
