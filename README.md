@@ -9,7 +9,7 @@ Opinionated macOS development environment automation that dominates your dev set
 ## Tech Stack
 
 - [Agent Skills](skills)
-- [Claude Code](dotfiles/.claude)
+- [Claude Code](dotfiles/.claude) / [Plugins](plugins)
 - [Codex](dotfiles/.codex)
 - [Gemini](dotfiles/.gemini)
 - [Python](playbooks/roles/python/tasks/main.yml)
@@ -32,20 +32,22 @@ curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod
 ### CLI: `hal`
 
 ```bash
-hal update                      # Run all roles to set up the whole dev environment
-hal update --tags python,node   # Run specific roles
+hal update                      # Run Ansible playbook to set up the dev environment
+hal update --tags python,node   # Run specific Ansible roles
+
 hal link ~/.zshrc               # Move file into dotfiles/ and symlink it back
 hal copy ~/.config/ghostty/     # Copy file into dotfiles/ (no symlink)
 hal sync                        # Sync all links and copies
+
 hal open-the-pod-bay-doors      # Open the pod bay doors, please, HAL
 ```
 
 ### Agent Skills
 
-- [commit](skills/commit): Creates clean, atomic git commits
-- [explore-codebase](skills/explore-codebase): Searches codebase with ast-grep, ripgrep, and fd
 - [magi](skills/magi): Three-agent deliberation system for competing perspectives
 - [second-opinions](skills/second-opinions): Parallel review from multiple external models
+- [commit](skills/commit): Creates clean, atomic git commits
+- [explore-codebase](skills/explore-codebase): Searches codebase with ast-grep, ripgrep, and fd
 - [update-allowed-tools](skills/update-allowed-tools): Updates skill allowed-tools frontmatter
 
 ```bash
@@ -58,27 +60,15 @@ npx skills add vinta/hal-9000
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-voice
+claude plugin install hal-voice@vinta/hal-9000
 ```
 
 ## Development
 
-Install dev dependencies and pre-commit hooks:
-
 ```bash
-make install
-```
-
-After modifying `./bin/hal`, regenerate zsh completion:
-
-```bash
-make hal-completion
-```
-
-Update local completion:
-
-```bash
-hal sync
+make install          # Install dev dependencies and pre-commit hooks
+make hal-completion   # Regenerate zsh completion after modifying bin/hal
+hal sync              # Update local completion
 ```
 
 ## Demo
