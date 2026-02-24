@@ -11,6 +11,7 @@
   "plugins": [
     {
       "name": "hal-voice",
+      "version": "0.2.2",
       "source": "./plugins/hal-voice",
       "category": "entertainment",
       "tags": ["hal-9000", "hooks", "voice", "audio"],
