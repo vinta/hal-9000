@@ -190,6 +190,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
             print(colorize_grammar(cached_result))
         return
 
+    # We use `--setting-sources ""` to disable hooks
     cmd: str = """
         claude
         --model haiku
@@ -198,6 +199,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
         --no-chrome
         --no-session-persistence
         --disable-slash-commands
+        --setting-sources ""
         --print
     """
 
@@ -218,8 +220,6 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     if grammar_check_result:
         print(colorize_grammar(grammar_check_result))
 
-    fd: int
-    tmp_path: str
     fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="claude-code-statusline-")
     try:
         with os.fdopen(fd, "w") as f:
