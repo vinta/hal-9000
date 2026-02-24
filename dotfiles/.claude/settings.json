@@ -113,7 +113,6 @@
     "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "gh-cli@trailofbits": true,
-    "modern-python@trailofbits": true,
     "superpowers@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
