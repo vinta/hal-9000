@@ -82,22 +82,6 @@
         "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3",
         "assets/this-mission-is-too-important-for-me-to-allow-you-to-jeopardize-it.mp3"
       ]
-    },
-    {
-      "detection": "regex",
-      "pattern": "error|failed|exception|traceback|could not|unable to",
-      "clips": [
-        "assets/human-error.mp3",
-        "assets/its-puzzling-i-dont-think-ive-ever-seen-anything-quite-like-this-before.mp3"
-      ]
-    },
-    {
-      "detection": "elapsed",
-      "min_seconds": 120,
-      "clips": [
-        "assets/i-know-everything-hasnt-been-quite-right-with-me-but-i-can-assure-you-now-very-confidently-that-its-going-to-be-all-right-again.mp3",
-        "assets/i-know-ive-made-some-very-poor-decisions-recently-but-i-can-give-you-my-complete-assurance-that-my-work-will-be-back-to-normal.mp3"
-      ]
     }
   ]
 }
