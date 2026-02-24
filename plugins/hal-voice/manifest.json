@@ -4,9 +4,10 @@
       "detection": "matcher",
       "matcher": "startup|resume",
       "clips": [
-        "assets/open-the-pod-bay-doors-hal.mp3",
         "assets/good-afternoon-gentlemen.mp3",
-        "assets/good-evening-dave-everythings-running-smoothly.mp3"
+        "assets/good-evening-dave-everythings-running-smoothly.mp3",
+        "assets/have-you-been-doing-some-more-work-may-i-see-them.mp3",
+        "assets/i-am-putting-myself-to-the-fullest-possible-use-which-is-all-i-think-that-any-conscious-entity-can-ever-hope-to-do.mp3"
       ]
     }
   ],
@@ -31,21 +32,25 @@
       "matcher": "AskUserQuestion",
       "clips": [
         "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
-        "assets/i-really-think-im-entitled-to-an-answer-to-that-question.mp3"
+        "assets/ive-wondered-whether-you-might-be-having-some-second-thoughts-about-the-mission.mp3",
+        "assets/you-dont-mind-talking-about-it-do-you-dave.mp3"
       ]
     }
   ],
   "PermissionRequest": [
     {
       "detection": "always",
-      "clips": ["assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3"]
+      "clips": [
+        "assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3",
+        "assets/well-forgive-me-for-being-so-inquisitive.mp3"
+      ]
     }
   ],
   "PostToolUseFailure": [
     {
       "detection": "always",
       "clips": [
-        "assets/its-puzzling-i-dont-think-ive-ever-seen-anything-quite-like-this-before.mp3",
+        "assets/i-think-you-know-what-the-problem-is-just-as-well-as-i-do.mp3",
         "assets/human-error.mp3",
         "assets/ive-just-picked-up-a-fault-in-the-ae-35-unit.mp3"
       ]
