@@ -60,7 +60,7 @@ npx skills add vinta/hal-9000
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-voice@vinta/hal-9000
+claude plugin install hal-voice@hal-9000
 ```
 
 ## Development
