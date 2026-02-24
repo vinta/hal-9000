@@ -12,6 +12,85 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from typing import Literal, TypedDict
+
+
+class CommonInput(TypedDict):
+    session_id: str
+    transcript_path: str
+    cwd: str
+    permission_mode: Literal["default", "plan", "acceptEdits", "dontAsk", "bypassPermissions"]
+    hook_event_name: Literal[
+        "ConfigChange",
+        "Notification",
+        "PermissionRequest",
+        "PostToolUse",
+        "PostToolUseFailure",
+        "PreCompact",
+        "PreToolUse",
+        "SessionEnd",
+        "SessionStart",
+        "Stop",
+        "SubagentStart",
+        "SubagentStop",
+        "TaskCompleted",
+        "TeammateIdle",
+        "UserPromptSubmit",
+        "WorktreeCreate",
+        "WorktreeRemove",
+    ]
+
+
+class HookInput(CommonInput, total=False):
+    # SessionStart, ConfigChange
+    source: str
+    model: str
+    # SessionStart, SubagentStart, SubagentStop
+    agent_type: str
+    # SessionEnd
+    reason: str
+    # UserPromptSubmit
+    prompt: str
+    # PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest
+    tool_name: str
+    tool_input: dict
+    tool_use_id: str
+    # PostToolUse
+    tool_response: dict
+    # PostToolUseFailure
+    error: str
+    is_interrupt: bool
+    # PermissionRequest
+    permission_suggestions: list[dict]
+    # Notification
+    message: str
+    title: str
+    notification_type: str
+    # SubagentStart, SubagentStop
+    agent_id: str
+    child_session_id: str
+    # SubagentStop, Stop
+    stop_hook_active: bool
+    last_assistant_message: str
+    # SubagentStop
+    agent_transcript_path: str
+    # TeammateIdle, TaskCompleted
+    teammate_name: str
+    team_name: str
+    # TaskCompleted
+    task_id: str
+    task_subject: str
+    task_description: str
+    # ConfigChange
+    file_path: str
+    # WorktreeCreate
+    name: str
+    # WorktreeRemove
+    worktree_path: str
+    # PreCompact
+    trigger: str
+    custom_instructions: str
+
 
 PLUGIN_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve().parent.parent))
 MANIFEST_PATH = PLUGIN_ROOT / "manifest.json"
@@ -47,17 +126,11 @@ if not logger.handlers:
     logger.addHandler(file_handler)
 
 
-# -- Config --
-
-
 def load_config(config_path: Path) -> dict:
     config = dict(DEFAULT_CONFIG)
     with contextlib.suppress(FileNotFoundError, json.JSONDecodeError, OSError):
         config.update(json.loads(config_path.read_text()))
     return config
-
-
-# -- State --
 
 
 def load_state(state_path: Path) -> dict:
@@ -75,10 +148,6 @@ def save_state(state_path: Path, state: dict) -> None:
         logger.exception("failed to write state")
 
 
-# -- Detection --
-
-# Maps hook_event_name to the hook_input field that matcher regexes test against.
-# Mirrors MATCHER_FIELD in types.py. Events not listed have no matcher support.
 _MATCHER_FIELD: dict[str, str] = {
     "SessionStart": "source",
     "SessionEnd": "reason",
@@ -94,7 +163,7 @@ _MATCHER_FIELD: dict[str, str] = {
 }
 
 
-def _detect_regex(rule: dict, hook_input: dict) -> bool:
+def _detect_regex(rule: dict, hook_input: HookInput) -> bool:
     event = hook_input.get("hook_event_name", "")
     text = hook_input.get("prompt", "") if event == "UserPromptSubmit" else hook_input.get("last_assistant_message", "")
     if not text:
@@ -102,11 +171,12 @@ def _detect_regex(rule: dict, hook_input: dict) -> bool:
     return bool(re.search(rule["pattern"], text, re.IGNORECASE))
 
 
-def _detect_matcher(rule: dict, hook_input: dict) -> bool:
-    pattern = rule.get("matcher", "")
-    field = _MATCHER_FIELD.get(hook_input.get("hook_event_name", ""), "")
-    text = hook_input.get(field, "") if field else ""
-    return bool(re.search(pattern, text, re.IGNORECASE))
+def _detect_matcher(rule: dict, hook_input: HookInput) -> bool:
+    field = _MATCHER_FIELD.get(hook_input.get("hook_event_name", ""))
+    if not field:
+        return False
+    text = hook_input.get(field, "")
+    return bool(re.search(rule.get("matcher", ""), text, re.IGNORECASE))
 
 
 def _detect_elapsed(rule: dict, state: dict) -> bool:
@@ -116,7 +186,7 @@ def _detect_elapsed(rule: dict, state: dict) -> bool:
     return (time.time() - last_prompt) >= rule["min_seconds"]
 
 
-def evaluate_detection(rule: dict, hook_input: dict, state: dict) -> bool:
+def evaluate_detection(rule: dict, hook_input: HookInput, state: dict) -> bool:
     detection = rule["detection"]
 
     if detection == "always":
@@ -132,17 +202,11 @@ def evaluate_detection(rule: dict, hook_input: dict, state: dict) -> bool:
     return False
 
 
-# -- Clip selection --
-
-
 def pick_clip(clips: list[str], last_played: str | None) -> str:
     if len(clips) == 1:
         return clips[0]
     candidates = [c for c in clips if c != last_played]
     return random.choice(candidates)  # noqa: S311 standard-pseudo-random
-
-
-# -- Suppression --
 
 
 def should_debounce(state: dict, config: dict, *, now: float) -> bool:
@@ -165,10 +229,7 @@ def should_suppress_subagent(state: dict, config: dict, *, session_id: str) -> b
     return session_id in state.get("subagent_sessions", {})
 
 
-# -- Manifest matching --
-
-
-def match_manifest(manifest: dict, hook_event: str, tool_name: str, hook_input: dict, state: dict) -> tuple[str, str] | None:
+def match_manifest(manifest: dict, hook_event: str, tool_name: str, hook_input: HookInput, state: dict) -> tuple[str, str] | None:
     for key, rules in manifest.items():
         parts = key.split(":", 1)
         key_event = parts[0]
@@ -189,31 +250,19 @@ def match_manifest(manifest: dict, hook_event: str, tool_name: str, hook_input: 
     return None
 
 
-# -- Cleanup --
-
-
 def cleanup_old_sessions(state: dict, *, now: float, max_age: float = 86400) -> None:
     for bucket in ("session_start_times", "subagent_sessions"):
         state[bucket] = {k: v for k, v in state[bucket].items() if (now - v) < max_age}
 
 
-# -- Audio --
-
-
 def _find_audio_player() -> list[str]:
-    system = platform.system()
-    candidates: list[tuple[str, list[str]]] = []
+    ffplay = ("ffplay", ["ffplay", "-nodisp", "-autoexit", "-loglevel", "quiet"])
 
-    if system == "Darwin":
-        candidates = [("afplay", ["afplay"])]
-    elif system == "Linux":
-        candidates = [
-            ("paplay", ["paplay"]),
-            ("aplay", ["aplay"]),
-            ("ffplay", ["ffplay", "-nodisp", "-autoexit", "-loglevel", "quiet"]),
-        ]
-    elif system == "Windows":
-        candidates = [("ffplay", ["ffplay", "-nodisp", "-autoexit", "-loglevel", "quiet"])]
+    candidates = {
+        "Darwin": [("afplay", ["afplay"])],
+        "Linux": [("paplay", ["paplay"]), ("aplay", ["aplay"]), ffplay],
+        "Windows": [ffplay],
+    }.get(platform.system(), [])
 
     for name, cmd in candidates:
         if shutil.which(name):
@@ -240,20 +289,15 @@ def play_sound(clip_path: Path, volume: float) -> int | None:
         logger.error("no audio player found")
         return None
 
-    cmd = [*player]
-    if player[0] == "afplay":
-        cmd.extend(["-v", str(volume)])
-    cmd.append(str(clip_path))
+    volume_args = ["-v", str(volume)] if player[0] == "afplay" else []
+    cmd = [*player, *volume_args, str(clip_path)]
 
     logger.info("playing %s via %s", clip_path.name, player[0])
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)  # noqa: S603 subprocess-without-shell-equals-true
     return proc.pid
 
 
-# -- Main --
-
-
-def _record_tracking(hook_event: str, hook_input: dict, state: dict, *, session_id: str, now: float) -> None:
+def _record_tracking(hook_event: str, hook_input: HookInput, state: dict, *, session_id: str, now: float) -> None:
     if hook_event == "SessionStart" and session_id:
         state["session_start_times"][session_id] = now
     if hook_event == "UserPromptSubmit":
@@ -278,7 +322,7 @@ def _is_suppressed(hook_event: str, state: dict, config: dict, *, session_id: st
 
 
 def main() -> None:
-    hook_input = json.loads(sys.stdin.read())
+    hook_input: HookInput = json.loads(sys.stdin.read())
     logger.info("hook_input=%s", json.dumps(hook_input, sort_keys=True))
 
     hook_event = hook_input.get("hook_event_name", "")
@@ -292,53 +336,44 @@ def main() -> None:
     if not config["enabled"]:
         return
 
-    # Serialize concurrent hook invocations with an exclusive file lock.
-    # Without this, rapid hooks race on state read/write and sounds overlap.
     lock_fd = os.open(str(LOCK_PATH), os.O_CREAT | os.O_RDWR)
     try:
         fcntl.flock(lock_fd, fcntl.LOCK_EX)
 
         state = load_state(STATE_PATH)
+        try:
+            _record_tracking(hook_event, hook_input, state, session_id=session_id, now=now)
 
-        _record_tracking(hook_event, hook_input, state, session_id=session_id, now=now)
+            if _is_suppressed(hook_event, state, config, session_id=session_id, now=now):
+                return
 
-        if _is_suppressed(hook_event, state, config, session_id=session_id, now=now):
+            if not MANIFEST_PATH.is_file():
+                logger.error("manifest not found: %s", MANIFEST_PATH)
+                return
+
+            manifest = json.loads(MANIFEST_PATH.read_text())
+            tool_name = hook_input.get("tool_name", "")
+            result = match_manifest(manifest, hook_event, tool_name, hook_input, state)
+
+            if result is None:
+                logger.info("no match for %s", hook_event)
+                return
+
+            category, clip = result
+            logger.info("matched %s -> %s", category, clip)
+
+            kill_previous_sound(state)
+            pid = play_sound(PLUGIN_ROOT / clip, config["volume"])
+
+            state["last_played"][category] = clip
+            if hook_event == "Stop":
+                state["last_stop_time"] = now
+            state["sound_pid"] = pid
+
+            if hook_event == "SessionEnd":
+                cleanup_old_sessions(state, now=now)
+        finally:
             save_state(STATE_PATH, state)
-            return
-
-        # Match manifest
-        if not MANIFEST_PATH.is_file():
-            logger.error("manifest not found: %s", MANIFEST_PATH)
-            save_state(STATE_PATH, state)
-            return
-
-        manifest = json.loads(MANIFEST_PATH.read_text())
-        tool_name = hook_input.get("tool_name", "")
-        result = match_manifest(manifest, hook_event, tool_name, hook_input, state)
-
-        if result is None:
-            logger.info("no match for %s", hook_event)
-            save_state(STATE_PATH, state)
-            return
-
-        category, clip = result
-        logger.info("matched %s -> %s", category, clip)
-
-        # Kill previous sound and play new one
-        kill_previous_sound(state)
-        pid = play_sound(PLUGIN_ROOT / clip, config["volume"])
-
-        # Update state
-        state["last_played"][category] = clip
-        if hook_event == "Stop":
-            state["last_stop_time"] = now
-        state["sound_pid"] = pid
-
-        # Cleanup on SessionEnd
-        if hook_event == "SessionEnd":
-            cleanup_old_sessions(state, now=now)
-
-        save_state(STATE_PATH, state)
     finally:
         fcntl.flock(lock_fd, fcntl.LOCK_UN)
         os.close(lock_fd)
