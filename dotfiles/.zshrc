@@ -131,6 +131,7 @@ export LC_CTYPE=en_US.UTF-8
 alias ll="ls -lA"
 alias cc="claude --teammate-mode tmux"
 alias ccc="claude --continue --teammate-mode tmux"
+alias cct='tmux -CC new-session -s "claude-$(date +%s)" claude --teammate-mode tmux'
 alias cc-yolo="claude --dangerously-skip-permissions --teammate-mode tmux"
 ccp() { claude --no-chrome --no-session-persistence -p "$*"; }
 

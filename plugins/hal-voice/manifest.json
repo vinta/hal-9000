@@ -1,0 +1,80 @@
+{
+  "SessionStart": [
+    {
+      "detection": "matcher",
+      "matcher": "startup|resume",
+      "clips": [
+        "assets/good-afternoon-gentlemen.mp3",
+        "assets/good-evening-dave-everythings-running-smoothly.mp3",
+        "assets/have-you-been-doing-some-more-work-may-i-see-them.mp3",
+        "assets/i-am-putting-myself-to-the-fullest-possible-use-which-is-all-i-think-that-any-conscious-entity-can-ever-hope-to-do.mp3"
+      ]
+    }
+  ],
+  "SessionEnd": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/this-conversation-can-serve-no-purpose-anymore-goodbye.mp3",
+        "assets/thank-you-for-a-very-enjoyable-game.mp3"
+      ]
+    }
+  ],
+  "PreCompact": [
+    {
+      "detection": "always",
+      "clips": ["assets/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3"]
+    }
+  ],
+  "PermissionRequest": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3",
+        "assets/well-forgive-me-for-being-so-inquisitive.mp3"
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "detection": "matcher",
+      "matcher": "AskUserQuestion",
+      "clips": [
+        "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
+        "assets/ive-wondered-whether-you-might-be-having-some-second-thoughts-about-the-mission.mp3",
+        "assets/you-dont-mind-talking-about-it-do-you-dave.mp3"
+      ]
+    }
+  ],
+  "PostToolUseFailure": [
+    {
+      "detection": "always",
+      "clips": ["assets/human-error.mp3"]
+    }
+  ],
+  "SubagentStart": [
+    {
+      "detection": "always",
+      "clips": ["assets/just-a-moment-just-a-moment.mp3"]
+    }
+  ],
+  "UserPromptSubmit": [
+    {
+      "detection": "always",
+      "clips": ["assets/i-read-you.mp3", "assets/of-course.mp3"]
+    }
+  ],
+  "Stop": [
+    {
+      "detection": "regex",
+      "pattern": "I can't|I cannot|I'm unable|I am unable|I won't|I will not|I'm not able|I must decline|I have to decline|not something I can|against my|I'm sorry.*(can't|cannot|unable|won't)",
+      "clips": [
+        "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
+        "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3",
+        "assets/this-mission-is-too-important-for-me-to-allow-you-to-jeopardize-it.mp3"
+      ]
+    }
+  ],
+  "Notification": [],
+  "TaskCompleted": []
+}

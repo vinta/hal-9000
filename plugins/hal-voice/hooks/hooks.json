@@ -1,0 +1,105 @@
+{
+  "description": "HAL 9000 voice clips on Claude Code events",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}

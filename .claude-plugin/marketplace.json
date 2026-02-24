@@ -1,0 +1,20 @@
+{
+  "name": "hal-9000",
+  "owner": {
+    "name": "Vinta Chen",
+    "email": "vinta.chen@gmail.com"
+  },
+  "metadata": {
+    "description": "HAL 9000 plugins for Claude Code",
+    "version": "2001"
+  },
+  "plugins": [
+    {
+      "name": "hal-voice",
+      "source": "./plugins/hal-voice",
+      "category": "entertainment",
+      "tags": ["hal-9000", "hooks", "voice", "audio"],
+      "strict": true
+    }
+  ]
+}

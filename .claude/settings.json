@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "plugin-dev@claude-plugins-official": true,
+    "modern-python@trailofbits": true
+  }
+}

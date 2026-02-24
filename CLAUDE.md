@@ -31,18 +31,16 @@ scripts/
 
 ## Components
 
-**CLI tool: `hal`** (`bin/hal`): Main CLI for managing the dev environment — syncs dotfiles, runs Ansible playbooks, regenerates completions. Extensionless Python 3 script.
-
-**Ansible roles**: Each role in `playbooks/roles/` is independent and tagged. Roles use Homebrew for package management. Run specific roles with `hal update --tags python,node`.
-
-**Dotfile management**: Files in `dotfiles/` are tracked in `hal_dotfiles.json` with `{{HOME}}` and `{{REPO_ROOT}}` template variables. Two modes: `link` (symlink, for small configs) and `copy` (for large configs or files synced elsewhere). `hal sync` reconciles the manifest to disk using concurrent threads.
-
-**Skills**: Agent skills live in `skills/` and are symlinked to `~/.claude/skills/`. After adding or modifying a skill, run `hal sync` to update symlinks.
+- **CLI tool: `hal`** (`bin/hal`): Main CLI for managing the dev environment — syncs dotfiles, runs Ansible playbooks, regenerates completions. Extensionless Python 3 script.
+- **Ansible roles**: Each role in `playbooks/roles/` is independent and tagged. Roles use Homebrew for package management. Run specific roles with `hal update --tags python,node`.
+- **Dotfile management**: Files in `dotfiles/` are tracked in `hal_dotfiles.json` with `{{HOME}}` and `{{REPO_ROOT}}` template variables. Two modes: `link` (symlink, for small configs) and `copy` (for large configs or files synced elsewhere). `hal sync` reconciles the manifest to disk using concurrent threads.
+- **Skills**: Agent skills live in `skills/` and are symlinked to `~/.claude/skills/`. After adding or modifying a skill, run `hal sync` to update symlinks.
 
 ## Workflow
 
+- **Load `modern-python` skill before writing or modifying any Python file**.
+- **Load `writing-skills` skill before creating or editing any skill file**.
 - Use `make` targets when available — don't run underlying commands directly. Check the Makefile before composing ad-hoc commands.
-- Use the `writing-skills` skill when creating or editing files under `skills/`.
 - Run `make lint`, `make format`, `make typecheck` after editing Python or Ansible files.
 
 ## Gotchas
