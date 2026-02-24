@@ -1,33 +1,33 @@
 [
   {
     "hook_event": "SessionStart",
-    "audio": "assets/dave/open-the-pod-bay-doors-hal.mp3",
+    "audio": "assets/open-the-pod-bay-doors-hal.mp3",
     "detection": "always"
   },
   {
     "hook_event": "SessionEnd",
-    "audio": "assets/hal/this-conversation-can-serve-no-purpose-anymore-goodbye.mp3",
+    "audio": "assets/this-conversation-can-serve-no-purpose-anymore-goodbye.mp3",
     "detection": "always"
   },
   {
     "hook_event": "PermissionRequest",
-    "audio": "assets/hal/i-hope-the-two-of-you-are-not-concerned-about-this.mp3",
+    "audio": "assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3",
     "detection": "always"
   },
   {
     "hook_event": "PreToolUse",
     "matcher": "AskUserQuestion",
-    "audio": "assets/hal/do-you-mind-if-i-ask-you-a-personal-question.mp3",
+    "audio": "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
     "detection": "always"
   },
   {
     "hook_event": "PreCompact",
-    "audio": "assets/hal/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3",
+    "audio": "assets/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3",
     "detection": "always"
   },
   {
     "hook_event": "Stop",
-    "audio": "assets/hal/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
+    "audio": "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
     "detection": "regex",
     "pattern": "I can't|I cannot|I'm unable|I am unable|I won't|I will not|I'm not able|I must decline|I have to decline|not something I can|against my|I'm sorry.*(can't|cannot|unable|won't)"
   }
