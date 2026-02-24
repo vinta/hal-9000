@@ -1,13 +1,35 @@
 {
-  "description": "Plays HAL 9000 audio clips on session start, context compaction, tool use, and refusal",
+  "description": "HAL 9000 voice clips on Claude Code events",
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "startup",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
           }
         ]
       }
@@ -18,29 +40,96 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
           }
         ]
       }
     ],
-    "PreCompact": [
+    "PermissionRequest": [
       {
-        "matcher": ".",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
           }
         ]
       }
     ],
     "Stop": [
       {
-        "matcher": ".",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "async": true
           }
         ]
       }
