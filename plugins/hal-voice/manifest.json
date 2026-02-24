@@ -31,9 +31,7 @@
   "PreToolUse:AskUserQuestion": [
     {
       "detection": "always",
-      "clips": [
-        "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"
-      ]
+      "clips": ["assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"]
     }
   ],
   "PermissionRequest": [
@@ -128,9 +126,7 @@
   "TaskCompleted": [
     {
       "detection": "always",
-      "clips": [
-        "assets/thank-you-for-a-very-enjoyable-game.mp3"
-      ]
+      "clips": ["assets/thank-you-for-a-very-enjoyable-game.mp3"]
     }
   ]
 }
