@@ -120,24 +120,17 @@ class HAL9000:
         if verbose:
             self._hal_says(command)
 
-        return subprocess.call(command, shell=shell)  # noqa: S603 subprocess-without-shell-equals-true
+        return subprocess.run(command, shell=shell).returncode  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
 
     def _run_with_output(self, command: str, *, shell: bool = True, verbose: bool = True, print_output: bool = True) -> tuple[int, bytes]:
         if verbose:
             self._hal_says(command)
 
-        output = b""
-        try:
-            output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=shell)  # noqa: S603 subprocess-without-shell-equals-true
-            returncode = 0
-        except subprocess.CalledProcessError as exc:
-            output = exc.output
-            returncode = exc.returncode
-        finally:
-            if print_output and output:
-                print(output, end="")
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=shell)  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
+        if print_output and result.stdout:
+            print(result.stdout, end="")
 
-        return returncode, output
+        return result.returncode, result.stdout
 
     def update(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         returncode, output = self._run_with_output("which ansible", print_output=False)
