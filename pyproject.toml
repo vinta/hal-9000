@@ -46,6 +46,7 @@ ignore = [
     "ANN",    # type annotations not needed in tests
     "S101",   # assert is the standard for pytest
     "SLF001", # testing private methods is intentional
+    "PLR2004", # magic values are clear in test assertions
 ]
 
 [tool.ruff.format]
