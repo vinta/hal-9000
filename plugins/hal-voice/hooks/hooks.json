@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -51,7 +51,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -73,7 +73,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -84,7 +84,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -95,7 +95,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -106,7 +106,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -117,7 +117,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
@@ -128,7 +128,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "/usr/bin/python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
             "async": true
           }
         ]
