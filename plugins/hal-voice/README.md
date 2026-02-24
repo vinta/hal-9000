@@ -23,3 +23,7 @@ Settings live in `config.json`:
 | `volume`                     | `0.5`   | Playback volume (0.0--1.0)               |
 | `debounce_seconds`           | `5`     | Minimum gap between any two clips        |
 | `replay_suppression_seconds` | `3`     | Cooldown before the same clip can repeat |
+
+## Demo
+
+<video src="https://github.com/user-attachments/assets/b25c4944-3251-4bd5-ba86-2607139f0dfe" width="800" height="450"></video>
