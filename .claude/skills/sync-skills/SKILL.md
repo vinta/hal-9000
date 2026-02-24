@@ -1,6 +1,6 @@
 ---
 name: sync-skills
-description: (hal-9000) Syncs README.md, CLAUDE.md, settings.json, and hal_dotfiles.json with skills/ directory.
+description: (hal-9000) Syncs README.md, CLAUDE.md, settings.json, and hal_dotfiles.json with skills/ directory
 context: fork
 user-invocable: true
 model: haiku
@@ -8,7 +8,7 @@ allowed-tools:
   - Glob
   - Read
   - Edit
-  - Bash(hal sync:*)
+  - Bash(./bin/hal sync:*)
 ---
 
 # Instructions
