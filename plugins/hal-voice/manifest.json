@@ -67,19 +67,7 @@
   "SubagentStart": [
     {
       "detection": "always",
-      "clips": [
-        "assets/i-am-putting-myself-to-the-fullest-possible-use-which-is-all-i-think-that-any-conscious-entity-can-ever-hope-to-do.mp3",
-        "assets/i-am-constantly-occupied.mp3"
-      ]
-    }
-  ],
-  "SubagentStop": [
-    {
-      "detection": "always",
-      "clips": [
-        "assets/none-whatsoever-frank-quite-honestly-i-wouldnt-worry-myself-about-that.mp3",
-        "assets/yes-thats-a-completely-reliable-figure.mp3"
-      ]
+      "clips": ["assets/i-am-constantly-occupied.mp3"]
     }
   ],
   "Stop": [
