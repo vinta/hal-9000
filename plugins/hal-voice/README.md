@@ -1,6 +1,6 @@
 # hal-voice
 
-Claude Code plugin that plays HAL 9000 voice clips in response to hook events -- session start/end, compaction, permission prompts, tool failures, subagent launches, and more. Each event maps to contextually appropriate movie quotes (e.g. "My mind is going..." on memory compaction).
+Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionStart`, `SessionEnd`, `PreCompact`, `PermissionRequest`, `PreToolUse`, `PostToolUseFailure`, `SubagentStart`, `UserPromptSubmit`, and `Stop`. Each event maps to a movie quote that fits the moment ("My mind is going..." on `PreCompact`).
 
 ## Install
 
@@ -11,11 +11,13 @@ claude plugin install hal-voice@hal-9000
 
 ## Usage
 
-Toggle on/off during a session with the `/hal-voice-toggle` command.
+Just use Claude Code as usual -- you will hear HAL 9000 talking to you when the time is right.
+
+For silence, toggle with the `/hal-voice-toggle` command.
 
 ## Configuration
 
-Settings live in `config.json`:
+Settings live in `${PLUGIN_ROOT}/config.json`:
 
 | Key                          | Default | Description                              |
 | ---------------------------- | ------- | ---------------------------------------- |
