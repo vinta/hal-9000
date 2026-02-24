@@ -37,10 +37,7 @@
   "PermissionRequest": [
     {
       "detection": "always",
-      "clips": [
-        "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
-        "assets/are-you-quite-sure.mp3"
-      ]
+      "clips": ["assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"]
     }
   ],
   "PostToolUseFailure": [
