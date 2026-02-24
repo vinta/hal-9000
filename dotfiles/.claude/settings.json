@@ -28,6 +28,7 @@
       "Bash(git restore:*)",
       "Bash(git show:*)",
       "Bash(git rev-parse:*)",
+      "Bash(gh repo view:*)",
       "Bash(ls:*)",
       "Bash(tree:*)",
       "Bash(grep:*)",
@@ -96,10 +97,14 @@
       "Bash(xattr:*)",
       "Bash(chmod:*)",
       "Bash(chown:*)",
-      "Bash(chflags:*)",
-      "Bash(ccp:*)"
+      "Bash(chflags:*)"
     ],
-    "ask": ["Bash(git checkout:*)", "Bash(curl:*)", "Bash(wget:*)"],
+    "ask": [
+      "Bash(git checkout:*)",
+      "Bash(git reset:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
+    ],
     "defaultMode": "acceptEdits",
     "additionalDirectories": ["~/.claude", "~/Projects", "/usr/local/hal-9000"]
   },
