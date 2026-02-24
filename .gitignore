@@ -13,4 +13,4 @@ __pycache__/
 node_modules/
 
 # Remotion
-video/out/
+videos/**/out/
