@@ -43,7 +43,7 @@ logger.propagate = False
 
 if not logger.handlers:
     file_handler = logging.FileHandler(LOG_PATH)
-    file_handler.setFormatter(logging.Formatter("hal-voice: %(message)s"))
+    file_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
     logger.addHandler(file_handler)
 
 
