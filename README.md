@@ -56,7 +56,7 @@ npx skills add vinta/hal-9000
 
 ### Claude Code Plugins
 
-- [hal-voice](plugins/hal-voice): HAL 9000 voice clips on Claude Code hook events
+- [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
