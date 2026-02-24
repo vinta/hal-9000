@@ -19,11 +19,11 @@ class StatusLineData(TypedDict):
     transcript_path: str
 
 
-BLUE: str = "\033[34m"
-GREEN: str = "\033[32m"
-RED: str = "\033[31m"
-WHITE: str = "\033[37m"
-RESET: str = "\033[0m"
+BLUE = "\033[34m"
+GREEN = "\033[32m"
+RED = "\033[31m"
+WHITE = "\033[37m"
+RESET = "\033[0m"
 
 
 def colorize_grammar(text: str) -> str:
@@ -43,7 +43,7 @@ def colorize_grammar(text: str) -> str:
 
 
 def basic_info(data: StatusLineData) -> None:
-    git_branch: str = ""
+    git_branch = ""
     try:
         result = subprocess.run(  # noqa: PLW1510 subprocess-run-without-check
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],  # noqa: S607 start-process-with-partial-path
@@ -56,16 +56,16 @@ def basic_info(data: StatusLineData) -> None:
     except Exception:  # noqa: BLE001 S110 blind-exception try-except-pass
         pass
 
-    current_dir: str = data["workspace"]["current_dir"]
-    home: str = str(Path.home())
+    current_dir = data["workspace"]["current_dir"]
+    home = str(Path.home())
     if current_dir.startswith(home):
         current_dir = "~" + current_dir[len(home) :]
 
-    status_parts: list[str] = [data["model"]["id"], current_dir]
+    status_parts = [data["model"]["id"], current_dir]
     if git_branch:
         status_parts.append(git_branch)
 
-    separator: str = f"{RESET} {WHITE}·{RESET} {BLUE}"
+    separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
 
 
@@ -80,8 +80,8 @@ def grammar_check(data: StatusLineData) -> None:  # noqa: C901 PLR0912 PLR0915 c
     except FileNotFoundError:
         return
 
-    latest_user_input: str = ""
-    latest_user_uuid: str = ""
+    latest_user_input = ""
+    latest_user_uuid = ""
     for line in reversed(lines):
         try:
             entry = json.loads(line)
@@ -173,10 +173,10 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     session_id: str | None = data.get("session_id")
     if not session_id:
         return
-    cache_file: str = f"/tmp/claude-code-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
+    cache_file = f"/tmp/claude-code-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
 
-    cached_uuid: str = ""
-    cached_result: str = ""
+    cached_uuid = ""
+    cached_result = ""
     try:
         with Path(cache_file).open() as f:
             cache = json.load(f)
@@ -191,7 +191,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
         return
 
     # We use `--setting-sources ""` to disable hooks
-    cmd: str = """
+    cmd = """
         claude
         --model haiku
         --max-turns 1
@@ -203,7 +203,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
         --print
     """
 
-    start_time: float = time.time()
+    start_time = time.time()
     try:
         result = subprocess.run(  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
             [*shlex.split(cmd), grammar_check_prompt],
@@ -214,9 +214,9 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
         )
     except subprocess.TimeoutExpired:
         return
-    elapsed: float = time.time() - start_time
+    elapsed = time.time() - start_time
 
-    grammar_check_result: str = "\n".join(line for line in result.stdout.strip().splitlines() if line.strip())
+    grammar_check_result = "\n".join(line for line in result.stdout.strip().splitlines() if line.strip())
     if grammar_check_result:
         print(colorize_grammar(grammar_check_result))
 
