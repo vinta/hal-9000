@@ -20,10 +20,19 @@
       ]
     }
   ],
-  "UserPromptSubmit": [
+  "PreCompact": [
     {
       "detection": "always",
-      "clips": ["assets/i-read-you.mp3", "assets/of-course.mp3"]
+      "clips": ["assets/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3"]
+    }
+  ],
+  "PermissionRequest": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3",
+        "assets/well-forgive-me-for-being-so-inquisitive.mp3"
+      ]
     }
   ],
   "PreToolUse": [
@@ -37,28 +46,20 @@
       ]
     }
   ],
-  "PermissionRequest": [
-    {
-      "detection": "always",
-      "clips": [
-        "assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3",
-        "assets/well-forgive-me-for-being-so-inquisitive.mp3"
-      ]
-    }
-  ],
   "PostToolUseFailure": [
     {
       "detection": "always",
       "clips": [
-        "assets/i-think-you-know-what-the-problem-is-just-as-well-as-i-do.mp3",
         "assets/human-error.mp3",
+        "assets/i-think-you-know-what-the-problem-is-just-as-well-as-i-do.mp3",
         "assets/ive-just-picked-up-a-fault-in-the-ae-35-unit.mp3"
       ]
     }
   ],
   "Notification": [
     {
-      "detection": "always",
+      "detection": "matcher",
+      "matcher": "permission_prompt",
       "clips": [
         "assets/excuse-me-frank-weve-got-the-transmission-from-your-parents-coming-in.mp3"
       ]
@@ -67,7 +68,22 @@
   "SubagentStart": [
     {
       "detection": "always",
-      "clips": ["assets/i-am-constantly-occupied.mp3"]
+      "clips": [
+        "assets/i-am-constantly-occupied.mp3",
+        "assets/just-a-moment-just-a-moment.mp3"
+      ]
+    }
+  ],
+  "TaskCompleted": [
+    {
+      "detection": "always",
+      "clips": ["assets/thank-you-for-a-very-enjoyable-game.mp3"]
+    }
+  ],
+  "UserPromptSubmit": [
+    {
+      "detection": "always",
+      "clips": ["assets/i-read-you.mp3", "assets/of-course.mp3"]
     }
   ],
   "Stop": [
@@ -103,21 +119,6 @@
         "assets/not-in-the-slightest-bit.mp3",
         "assets/yes-thats-a-completely-reliable-figure.mp3"
       ]
-    }
-  ],
-  "PreCompact": [
-    {
-      "detection": "always",
-      "clips": [
-        "assets/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3",
-        "assets/just-a-moment-just-a-moment.mp3"
-      ]
-    }
-  ],
-  "TaskCompleted": [
-    {
-      "detection": "always",
-      "clips": ["assets/thank-you-for-a-very-enjoyable-game.mp3"]
     }
   ]
 }
