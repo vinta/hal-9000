@@ -1,0 +1,49 @@
+{
+  "description": "Plays HAL 9000 audio clips on session start, context compaction, tool use, and refusal",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": ".",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "hal-voice",
+  "version": "0.1.0",
+  "description": "Plays HAL 9000 audio clips in response to Claude Code events",
+  "author": {
+    "name": "Vinta Chen",
+    "email": "vinta.chen@gmail.com"
+  },
+  "repository": "https://github.com/vinta/hal-9000",
+  "license": "MIT"
+}
