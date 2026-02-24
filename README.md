@@ -27,50 +27,38 @@ Opinionated macOS development environment automation that dominates your dev set
 curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod-bay-doors | bash
 ```
 
-## Usage
+## Components
 
-All you need is one command:
-
-```bash
-hal update
-```
-
-If you only want to install specific components:
+### CLI: `hal`
 
 ```bash
-hal update --tags python,node
+hal update                      # Run all roles to set up the whole dev environment
+hal update --tags python,node   # Run specific roles
+hal link ~/.zshrc               # Move file into dotfiles/ and symlink it back
+hal copy ~/.config/ghostty/     # Copy file into dotfiles/ (no symlink)
+hal sync                        # Sync all links and copies
+hal open-the-pod-bay-doors      # Open the pod bay doors, please, HAL
 ```
 
-Move file into dotfiles/ and symlink it back:
+### Agent Skills
 
-```bash
-hal link ~/.zshrc
-```
-
-Copy file into dotfiles/ (no symlink):
-
-```bash
-hal copy ~/.config/ghostty/
-```
-
-Sync all links and copies:
-
-```bash
-hal sync
-```
-
-Open the pod bay doors, please, HAL:
-
-```bash
-hal open-the-pod-bay-doors
-```
-
-## Skills
-
-If you only need agent skills:
+- [commit](skills/commit): Creates clean, atomic git commits
+- [explore-codebase](skills/explore-codebase): Searches codebase with ast-grep, ripgrep, and fd
+- [magi](skills/magi): Three-agent deliberation system for competing perspectives
+- [second-opinions](skills/second-opinions): Parallel review from multiple external models
+- [update-allowed-tools](skills/update-allowed-tools): Updates skill allowed-tools frontmatter
 
 ```bash
 npx skills add vinta/hal-9000
+```
+
+### Claude Code Plugins
+
+- [hal-voice](plugins/hal-voice): HAL 9000 voice clips on Claude Code hook events
+
+```bash
+claude plugin marketplace add vinta/hal-9000
+claude plugin install hal-voice
 ```
 
 ## Development
