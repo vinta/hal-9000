@@ -1,7 +1,8 @@
 {
   "SessionStart": [
     {
-      "detection": "always",
+      "detection": "matcher",
+      "matcher": "startup|resume",
       "clips": [
         "assets/open-the-pod-bay-doors-hal.mp3",
         "assets/good-afternoon-gentlemen.mp3",

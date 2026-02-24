@@ -92,6 +92,23 @@ class TestEvaluateDetection:
         hook_input = {"hook_event_name": "UserPromptSubmit", "prompt": "hello world"}
         assert hal.evaluate_detection(rule, hook_input, {}) is True
 
+    def test_matcher_source_match(self, hal):
+        rule = {"detection": "matcher", "matcher": "startup|resume"}
+        assert hal.evaluate_detection(rule, {"source": "startup"}, {}) is True
+        assert hal.evaluate_detection(rule, {"source": "resume"}, {}) is True
+
+    def test_matcher_source_no_match(self, hal):
+        rule = {"detection": "matcher", "matcher": "startup|resume"}
+        assert hal.evaluate_detection(rule, {"source": "compact"}, {}) is False
+
+    def test_matcher_tool_name_fallback(self, hal):
+        rule = {"detection": "matcher", "matcher": "Bash"}
+        assert hal.evaluate_detection(rule, {"tool_name": "Bash"}, {}) is True
+
+    def test_matcher_missing_field(self, hal):
+        rule = {"detection": "matcher", "matcher": "startup|resume"}
+        assert hal.evaluate_detection(rule, {}, {}) is False
+
     def test_elapsed_above_threshold(self, hal):
         rule = {"detection": "elapsed", "min_seconds": 120}
         state = {"last_prompt_time": 1000.0}

@@ -91,6 +91,11 @@ def evaluate_detection(rule: dict, hook_input: dict, state: dict) -> bool:
             return False
         return bool(re.search(rule["pattern"], text, re.IGNORECASE))
 
+    if detection == "matcher":
+        pattern = rule.get("matcher", "")
+        text = hook_input.get("source") or hook_input.get("tool_name") or ""
+        return bool(re.search(pattern, text, re.IGNORECASE))
+
     if detection == "elapsed":
         last_prompt = state.get("last_prompt_time", 0.0)
         if last_prompt == 0.0:
