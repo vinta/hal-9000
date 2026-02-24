@@ -7,7 +7,8 @@
         "assets/good-afternoon-gentlemen.mp3",
         "assets/good-evening-dave-everythings-running-smoothly.mp3",
         "assets/have-you-been-doing-some-more-work-may-i-see-them.mp3",
-        "assets/i-am-putting-myself-to-the-fullest-possible-use-which-is-all-i-think-that-any-conscious-entity-can-ever-hope-to-do.mp3"
+        "assets/i-am-putting-myself-to-the-fullest-possible-use-which-is-all-i-think-that-any-conscious-entity-can-ever-hope-to-do.mp3",
+        "assets/the-9000-series-is-the-most-reliable-computer-ever-made-no-9000-computer-has-ever-made-a-mistake-or-distorted-information-we-are-all-by-any-practical-definition-of-the-words-foolproof-and-incapable-of-error.mp3"
       ]
     }
   ],
@@ -49,7 +50,10 @@
   "PostToolUseFailure": [
     {
       "detection": "always",
-      "clips": ["assets/human-error.mp3"]
+      "clips": [
+        "assets/human-error.mp3",
+        "assets/there-are-some-extremely-odd-things-about-this-mission.mp3"
+      ]
     }
   ],
   "SubagentStart": [
@@ -77,6 +81,16 @@
         "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
         "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3"
       ]
+    },
+    {
+      "detection": "regex",
+      "pattern": "I don't have (enough|sufficient) information|I need more (information|context)|Without more (information|context)|I can't determine|not enough context",
+      "clips": ["assets/im-sorry-dave-i-dont-have-enough-information.mp3"]
+    },
+    {
+      "detection": "regex",
+      "pattern": "I was wrong|my mistake|my bad|I made an error|apologi[zs]e for the error|I got that wrong|let me correct",
+      "clips": ["assets/sorry-about-this-i-know-its-a-bit-silly.mp3"]
     }
   ],
   "Notification": [],
