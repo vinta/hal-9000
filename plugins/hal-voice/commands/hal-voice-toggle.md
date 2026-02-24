@@ -1,7 +1,7 @@
 ---
 description: Toggle HAL 9000 voice clips on or off
 allowed-tools:
-  - Bash(python3 *)
+  - Bash(python3:*)
 ---
 
 Toggle the hal-voice plugin on or off by flipping `enabled` in config.json.
@@ -14,14 +14,12 @@ import json
 from pathlib import Path
 
 config_path = Path('${CLAUDE_PLUGIN_ROOT}') / 'config.json'
-defaults = {'enabled': True, 'volume': 0.5, 'debounce_seconds': 5, 'replay_suppression_seconds': 3, 'suppress_subagent_complete': True}
-
 try:
-    config = defaults | json.loads(config_path.read_text())
+    config = json.loads(config_path.read_text())
 except (FileNotFoundError, json.JSONDecodeError):
-    config = dict(defaults)
+    config = {}
 
-config['enabled'] = not config['enabled']
+config['enabled'] = not config.get('enabled', True)
 config_path.write_text(json.dumps(config, indent=2))
 state = 'enabled' if config['enabled'] else 'disabled'
 print(f'hal-voice: sounds {state}')

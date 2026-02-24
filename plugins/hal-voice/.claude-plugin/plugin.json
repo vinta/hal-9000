@@ -1,7 +1,7 @@
 {
   "name": "hal-voice",
-  "version": "0.2.0",
-  "description": "Plays HAL 9000 audio clips in response to Claude Code hook events",
+  "version": "0.2.1",
+  "description": "Play HAL 9000 voice clips on Claude Code hook events",
   "author": {
     "name": "Vinta Chen",
     "email": "vinta.chen@gmail.com"
