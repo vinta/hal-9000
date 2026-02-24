@@ -38,7 +38,6 @@ scripts/
 
 ## Workflow
 
-- **Load `modern-python` skill before writing or modifying any Python file**.
 - **Load `writing-skills` skill before creating or editing any skill file**.
 - Use `make` targets when available — don't run underlying commands directly. Check the Makefile before composing ad-hoc commands.
 - Run `make lint`, `make format`, `make typecheck` after editing Python or Ansible files.
