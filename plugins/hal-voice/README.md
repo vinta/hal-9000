@@ -6,12 +6,12 @@ Claude Code plugin that plays HAL 9000 voice clips in response to hook events --
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-voice
+claude plugin install hal-voice@hal-9000
 ```
 
 ## Usage
 
-Toggle on/off during a session with the `/hal-voice-toggle` slash command.
+Toggle on/off during a session with the `/hal-voice-toggle` command.
 
 ## Configuration
 

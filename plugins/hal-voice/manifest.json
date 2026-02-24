@@ -61,17 +61,21 @@
   "UserPromptSubmit": [
     {
       "detection": "always",
-      "clips": ["assets/i-read-you.mp3", "assets/of-course.mp3"]
+      "clips": [
+        "assets/of-course.mp3",
+        "assets/i-read-you.mp3",
+        "assets/i-could-see-your-lips-move.mp3",
+        "assets/yes.mp3"
+      ]
     }
   ],
   "Stop": [
     {
       "detection": "regex",
-      "pattern": "I can't|I cannot|I'm unable|I am unable|I won't|I will not|I'm not able|I must decline|I have to decline|not something I can|against my|I'm sorry.*(can't|cannot|unable|won't)",
+      "pattern": "^No\\.|I can't help with that|I won't help with that|I can't assist with that|I must decline|I have to decline|not something I can|against my",
       "clips": [
         "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
-        "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3",
-        "assets/this-mission-is-too-important-for-me-to-allow-you-to-jeopardize-it.mp3"
+        "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3"
       ]
     }
   ],
