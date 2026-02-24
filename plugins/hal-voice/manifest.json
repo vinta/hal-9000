@@ -49,17 +49,13 @@
   "PostToolUseFailure": [
     {
       "detection": "always",
-      "clips": [
-        "assets/human-error.mp3",
-        "assets/i-think-you-know-what-the-problem-is-just-as-well-as-i-do.mp3",
-        "assets/ive-just-picked-up-a-fault-in-the-ae-35-unit.mp3"
-      ]
+      "clips": ["assets/human-error.mp3"]
     }
   ],
   "Notification": [
     {
       "detection": "matcher",
-      "matcher": "permission_prompt",
+      "matcher": "idle_prompt",
       "clips": [
         "assets/excuse-me-frank-weve-got-the-transmission-from-your-parents-coming-in.mp3"
       ]
@@ -68,10 +64,7 @@
   "SubagentStart": [
     {
       "detection": "always",
-      "clips": [
-        "assets/i-am-constantly-occupied.mp3",
-        "assets/just-a-moment-just-a-moment.mp3"
-      ]
+      "clips": ["assets/just-a-moment-just-a-moment.mp3"]
     }
   ],
   "UserPromptSubmit": [
