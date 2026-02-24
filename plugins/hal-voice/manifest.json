@@ -22,22 +22,23 @@
   "UserPromptSubmit": [
     {
       "detection": "always",
-      "clips": [
-        "assets/i-read-you.mp3",
-        "assets/i-enjoy-working-with-people.mp3"
-      ]
+      "clips": ["assets/i-read-you.mp3", "assets/of-course.mp3"]
     }
   ],
-  "PreToolUse:AskUserQuestion": [
+  "PreToolUse": [
     {
-      "detection": "always",
-      "clips": ["assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"]
+      "detection": "matcher",
+      "matcher": "AskUserQuestion",
+      "clips": [
+        "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
+        "assets/i-really-think-im-entitled-to-an-answer-to-that-question.mp3"
+      ]
     }
   ],
   "PermissionRequest": [
     {
       "detection": "always",
-      "clips": ["assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"]
+      "clips": ["assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3"]
     }
   ],
   "PostToolUseFailure": [
