@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # ruff: noqa: RUF001 ambiguous-unicode-character-string
 import json
+import logging
 import os
 import shlex
 import subprocess
@@ -9,6 +10,17 @@ import tempfile
 import time
 from pathlib import Path
 from typing import TypedDict
+
+LOG_PATH = Path("/tmp/claude-code-statusline.log")  # noqa: S108 hardcoded-temp-file
+
+logger = logging.getLogger("statusline")
+logger.setLevel(logging.DEBUG)
+logger.propagate = False
+
+if not logger.handlers:
+    file_handler = logging.FileHandler(LOG_PATH)
+    file_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+    logger.addHandler(file_handler)
 
 
 # https://code.claude.com/docs/en/statusline#available-data
@@ -249,4 +261,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        logger.exception("unhandled error")
+    finally:
+        sys.exit(0)
