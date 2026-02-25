@@ -135,6 +135,104 @@ class TestUserFilenameValidation:
             hal_instance.copy(ns)
 
 
+class TestSyncCopiesMerge:
+    """_sync_copies merges directories instead of replacing them."""
+
+    def test_preserves_dest_only_files(self, hal_instance, tmp_path):
+        """Files in dest that don't exist in src survive the sync."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "from_src.txt").write_text("source content")
+
+        dest = tmp_path / "dest"
+        dest.mkdir()
+        (dest / "dest_only.txt").write_text("preserve me")
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_copies(copy_entry)
+
+        assert (dest / "from_src.txt").read_text() == "source content"
+        assert (dest / "dest_only.txt").read_text() == "preserve me"
+
+    def test_overwrites_matching_files(self, hal_instance, tmp_path):
+        """Files present in both src and dest get overwritten by src."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "shared.txt").write_text("updated")
+
+        dest = tmp_path / "dest"
+        dest.mkdir()
+        (dest / "shared.txt").write_text("old")
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_copies(copy_entry)
+
+        assert (dest / "shared.txt").read_text() == "updated"
+
+    def test_merges_nested_directories(self, hal_instance, tmp_path):
+        """Nested subdirectories are merged, not replaced."""
+        src = tmp_path / "src" / "sub"
+        src.mkdir(parents=True)
+        (src / "new.txt").write_text("new")
+
+        dest = tmp_path / "dest" / "sub"
+        dest.mkdir(parents=True)
+        (dest / "existing.txt").write_text("keep")
+
+        copy_entry = {"src": str(tmp_path / "src"), "dest": str(tmp_path / "dest")}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_copies(copy_entry)
+
+        assert (tmp_path / "dest" / "sub" / "new.txt").read_text() == "new"
+        assert (tmp_path / "dest" / "sub" / "existing.txt").read_text() == "keep"
+
+    def test_creates_dest_if_missing(self, hal_instance, tmp_path):
+        """Copies work when the dest directory doesn't exist yet."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "file.txt").write_text("content")
+
+        dest = tmp_path / "dest"
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_copies(copy_entry)
+
+        assert (dest / "file.txt").read_text() == "content"
+
+    def test_single_file_copy_still_overwrites(self, hal_instance, tmp_path):
+        """Non-directory copies still do a straight overwrite."""
+        src = tmp_path / "src.txt"
+        src.write_text("new content")
+
+        dest = tmp_path / "dest.txt"
+        dest.write_text("old content")
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_copies(copy_entry)
+
+        assert dest.read_text() == "new content"
+
+    def test_skips_ds_store(self, hal_instance, tmp_path):
+        """.DS_Store files in src are not copied to dest."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / ".DS_Store").write_text("junk")
+        (src / "real.txt").write_text("content")
+
+        dest = tmp_path / "dest"
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_copies(copy_entry)
+
+        assert (dest / "real.txt").exists()
+        assert not (dest / ".DS_Store").exists()
+
+
 class TestArgParsing:
     def test_unknown_args_rejected_for_link(self, hal_module):
         """Non-update commands should reject unknown arguments."""

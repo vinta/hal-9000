@@ -270,10 +270,8 @@ class HAL9000:
 
         dest = self._expand_template(copy["dest"])
 
-        if Path(dest).exists() and Path(dest).is_dir():
-            shutil.rmtree(dest)
         if Path(src).is_dir():
-            shutil.copytree(src, dest, ignore=shutil.ignore_patterns(".DS_Store"))
+            shutil.copytree(src, dest, ignore=shutil.ignore_patterns(".DS_Store"), dirs_exist_ok=True)
         else:
             shutil.copy2(src, dest)
         self._hal_says(f"copy {src} -> {dest}")
