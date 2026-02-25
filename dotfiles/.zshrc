@@ -132,7 +132,7 @@ alias ll="ls -lA"
 alias cc="claude --teammate-mode tmux"
 alias ccc="claude --continue --teammate-mode tmux"
 alias cct='tmux -CC new-session -s "claude-$(date +%s)" claude --teammate-mode tmux'
-alias cc-yolo="claude --dangerously-skip-permissions --teammate-mode tmux"
+alias ccy="claude --dangerously-skip-permissions"
 ccp() { claude --no-chrome --no-session-persistence -p "$*"; }
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
