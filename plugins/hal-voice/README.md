@@ -1,6 +1,12 @@
 # hal-voice
 
-Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionStart`, `SessionEnd`, `PreCompact`, `PermissionRequest`, `PreToolUse`, `PostToolUseFailure`, `SubagentStart`, `UserPromptSubmit`, and `Stop`. Each event maps to a movie quote that fits the moment ("My mind is going..." on `PreCompact`).
+![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/hal-9000.jpg "HAL 9000")
+
+A Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionStart`, `SessionEnd`, `PreCompact`, `PermissionRequest`, `PreToolUse`, `PostToolUseFailure`, `SubagentStart`, `UserPromptSubmit`, and `Stop`. Each event maps to a movie quote that fits the moment:
+
+- "My mind is going... I can feel it..." on `PreCompact`
+- "Do you mind if I ask you a personal question?" on `PreToolUse:AskUserQuestion`
+- "I'm sorry Dave, I'm afraid I can't do that" when you ask something you shouldn't
 
 ## Install
 
@@ -14,17 +20,6 @@ claude plugin install hal-voice@hal-9000
 Just use Claude Code as usual -- you will hear HAL 9000 talking to you when the time is right.
 
 For silence, toggle with the `/hal-voice-toggle` command.
-
-## Configuration
-
-Settings live in `${PLUGIN_ROOT}/config.json`:
-
-| Key                          | Default | Description                              |
-| ---------------------------- | ------- | ---------------------------------------- |
-| `enabled`                    | `true`  | Master on/off switch                     |
-| `volume`                     | `0.5`   | Playback volume (0.0--1.0)               |
-| `debounce_seconds`           | `5`     | Minimum gap between any two clips        |
-| `replay_suppression_seconds` | `3`     | Cooldown before the same clip can repeat |
 
 ## Demo
 
