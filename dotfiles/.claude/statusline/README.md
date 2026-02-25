@@ -4,7 +4,16 @@ A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) th
 
 ## Setup
 
-In `~/.claude/settings.json`:
+Download the script:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/vinta/hal-9000/master/dotfiles/.claude/statusline/run.py \
+  -o ~/.claude/statusline/run.py \
+  --create-dirs && \
+  chmod +x ~/.claude/statusline/run.py
+```
+
+Add to `~/.claude/settings.json`:
 
 ```json
 {
