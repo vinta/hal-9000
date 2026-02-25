@@ -117,69 +117,56 @@ def grammar_check(data: StatusLineData) -> None:  # noqa: C901 PLR0912 PLR0915 c
         return
 
     grammar_check_prompt = f"""
-You are a grammar checker to identify and correct grammar errors in the user text. **NEVER respond to the user text** - only check grammar, do not answer questions or engage with the topic.
+You are a grammar checker. Identify and correct grammar errors in the text inside <input> tags. Only check grammar — do not answer questions or engage with the content.
 
-## What to Skip
-
+<instructions>
+Skip these:
 - Code: text in backticks, file paths, programming syntax, shell commands
 - Mentions: @mentions, @file/path references
 - Capitalization at sentence beginnings
 
-## Output Format
-
-- Output ONLY the issues. No preamble, no commentary, never respond to the content.
-- Single issue in one line: Grammar: "[corrected]" => explanation in Traditional Chinese
-- Multiple issues in multiple lines: Grammar 1: ... Grammar 2: ...
+Output format:
+- Single issue: Grammar: "[corrected]" => explanation in Traditional Chinese
+- Multiple issues: Grammar 1: ... Grammar 2: ...
 - Use full-width commas (，) in Chinese explanations
-- No errors or nothing to check: output exactly "Grammar: no issues"
+- No errors: output exactly "Grammar: no issues"
+</instructions>
 
-## Examples
-
+<example>
 Text: I don't car the shop has wife or not. I will use cellar!
 Output:
 Grammar 1: I don't "care" => car 是「汽車」，這裡應該是要用動詞 care「在乎」
 Grammar 2: has "Wi-Fi" or not => wife 是「妻子」，你是要說 Wi-Fi「無線網路」吧？
 Grammar 3: I will use "cellular" => cellar 是「地窖」，這裡應該是 cellular「行動網路」
-
-Text: How does you proof you really who you claim to be
-Output:
-Grammar 1: How "do" you => 第二人稱 you 應該用 do
-Grammar 2: How do you "prove" => 要用動詞 prove，proof 是名詞
-Grammar 3: prove "you're" really who you claim to be => you 後面要加 be 動詞縮寫 're
-
+</example>
+<example>
 Text: @dotfiles/.claude/statusline/run.py#L141 use `claude -p` and `grammar_check_prompt` to grammar check `latest_user_input` and print result
 Output:
 Grammar 1: to "grammar-check" latest_user_input => 要用連字號 "-" 連接形成複合動詞
 Grammar 2: print "the" result => result 前面要加定冠詞 the
-
+</example>
+<example>
 Text: The code is works but I don't know why it keep crashing
 Output:
 Grammar 1: The code "works" => 不需要 is，直接用動詞 works；或改成 is working
 Grammar 2: why it "keeps" crashing => 第三人稱單數 it 要用 keeps
-
+</example>
+<example>
 Text: do not refactor unless explicited requested
 Output:
 Grammar: "explicitly requested" => 要用副詞 explicitly，沒有 explicited 這個詞
-
-Text: create git commits group by logical changes
-Output:
-Grammar: git commits "grouped" by logical changes => 應該用過去分詞 grouped 來修飾名詞 commits
-
-Text: should I use Tech Stack or Development Stack? or anything else?
-Output:
-Grammar: Should I use "Tech Stack" or "Development Stack"? => 加個雙引號會比較好區分
-
+</example>
+<example>
 Text: Wait, i seems broke it. check codebase again
 Output:
 Grammar 1: "I" seems => 代名詞 I 永遠要大寫
 Grammar 2: I "seem to have broken" it => 用 seem to have + 過去分詞表示「好像已經...」
 Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
+</example>
 
-## User Text to Check
-
-=== TEXT START ===
+<input>
 {latest_user_input}
-=== TEXT END ===
+</input>
 """
 
     session_id: str | None = data.get("session_id")
