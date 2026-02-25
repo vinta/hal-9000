@@ -132,6 +132,7 @@ Output format:
 - No errors: output exactly "Grammar: no issues"
 </instructions>
 
+<examples>
 <example>
 Text: I don't car the shop has wife or not. I will use cellar!
 Output:
@@ -163,6 +164,7 @@ Grammar 1: "I" seems => 代名詞 I 永遠要大寫
 Grammar 2: I "seem to have broken" it => 用 seem to have + 過去分詞表示「好像已經...」
 Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 </example>
+</examples>
 
 <input>
 {latest_user_input}
