@@ -30,10 +30,7 @@
   "PermissionRequest": [
     {
       "detection": "always",
-      "clips": [
-        "assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3",
-        "assets/well-forgive-me-for-being-so-inquisitive.mp3"
-      ]
+      "clips": ["assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3"]
     }
   ],
   "PreToolUse": [
@@ -43,6 +40,7 @@
       "clips": [
         "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
         "assets/ive-wondered-whether-you-might-be-having-some-second-thoughts-about-the-mission.mp3",
+        "assets/well-forgive-me-for-being-so-inquisitive.mp3",
         "assets/you-dont-mind-talking-about-it-do-you-dave.mp3"
       ]
     }
