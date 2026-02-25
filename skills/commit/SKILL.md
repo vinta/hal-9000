@@ -1,7 +1,7 @@
 ---
 name: commit
 description: Use when completing an implementation task, when the user asks to commit, or when changes span multiple concerns and need separate logical commits (structural vs behavioral vs config)
-argument-hint: "[extra-instructions]"
+argument-hint: "[instructions]"
 context: fork
 user-invocable: true
 model: sonnet
@@ -28,7 +28,15 @@ allowed-tools:
 
 Creating clean, atomic commits that follow best practices for version control hygiene. The core principle is **one logical change per commit** - each commit should represent a single, coherent, easily revertable modification that can stand alone.
 
-## Instructions
+## User Instructions
+
+Follow any user instructions below. They override the standard workflow when conflicts arise.
+
+<user_instructions>
+**$ARGUMENTS**
+</user_instructions>
+
+## Workflow
 
 `cd` to the project root before git commands instead of using `git -C`, which obscures working directory state. Execute git commands directly without explanatory preamble. Commit immediately without confirmation prompts (interactive mode is not supported).
 
@@ -60,10 +68,6 @@ Creating clean, atomic commits that follow best practices for version control hy
    - Keep first line under 72 characters (aim for 50)
    - Include context in body when necessary
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
-
-## Extra Instructions
-
-**$ARGUMENTS**
 
 ## Attribution
 

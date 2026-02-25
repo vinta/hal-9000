@@ -1,7 +1,7 @@
 ---
 name: second-opinions
 description: Use when wanting independent review from external models before merging, committing, or finalizing architecture or plan decisions, or when the user asks for a second opinion, codex review, or gemini review
-context: fork
+argument-hint: "[instructions]"
 user-invocable: true
 model: opus
 allowed-tools:
@@ -38,6 +38,14 @@ Run independent reviews using OpenAI Codex (via MCP) and/or Google Gemini (via C
 - Skip for trivial changes you can verify directly
 - Skip when the user asked for your own judgment only
 - Exclude secrets, credentials, and tokens from review prompts
+
+## User Instructions
+
+Follow any user instructions below. They override the standard workflow when conflicts arise.
+
+<user_instructions>
+**$ARGUMENTS**
+</user_instructions>
 
 ## Workflow
 
