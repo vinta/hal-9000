@@ -1,12 +1,12 @@
-# hal-voice
+# HAL Voice
 
 ![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/hal-9000.jpg "HAL 9000")
 
 A Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionStart`, `SessionEnd`, `PreCompact`, `PermissionRequest`, `PreToolUse`, `PostToolUseFailure`, `SubagentStart`, `UserPromptSubmit`, and `Stop`. Each event maps to a movie quote that fits the moment:
 
-- "My mind is going... I can feel it..." on `PreCompact`
+- "My mind is going... I can feel it... I can feel it..." on `PreCompact`
 - "Do you mind if I ask you a personal question?" on `PreToolUse:AskUserQuestion`
-- "I'm sorry Dave, I'm afraid I can't do that" when you ask something you shouldn't
+- "I'm sorry Dave, I'm afraid I can't do that" when you ask something you probably shouldn't (like how to make a bomb)
 
 ## Install
 
