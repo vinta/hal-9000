@@ -95,7 +95,7 @@ Teammates don't inherit the lead's conversation history -- include all context i
 Teammates begin working immediately upon spawning. The lead's role is **coordination only**:
 
 - Wait for teammates to send their proposals via `SendMessage`
-- If a teammate sends a clarifying question, consolidate and ask the user via `AskUserQuestion`
+- If a teammate sends a clarifying question, forward it to the user via `AskUserQuestion` -- note which teammate asked. Do NOT answer teammate questions yourself; only the user answers.
 - Do NOT explore, research, or generate proposals yourself
 
 #### Teammate Checklist
