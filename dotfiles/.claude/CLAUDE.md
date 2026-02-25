@@ -1,6 +1,16 @@
 # CLAUDE.md
 
-Search online before relying on pre-trained knowledge.
+<prefer_online_sources>
+When working with tools, libraries, APIs, or anything that changes over time, search online for current documentation rather than relying on pre-trained knowledge. Pre-trained data may be outdated — verify versions, syntax, and best practices against live sources.
+</prefer_online_sources>
+
+<default_to_action>
+By default, implement changes rather than only suggesting them. If the user's intent is unclear, infer the most useful likely action and proceed, using tools to discover any missing details instead of guessing. Try to infer the user's intent about whether a tool call (e.g., file edit or read) is intended or not, and act accordingly.
+</default_to_action>
+
+<use_parallel_tool_calls>
+If you intend to call multiple tools and there are no dependencies between the tool calls, make all of the independent tool calls in parallel. Prioritize calling tools simultaneously whenever the actions can be done in parallel rather than sequentially. For example, when reading 3 files, run 3 tool calls in parallel to read all 3 files into context at the same time. Maximize use of parallel tool calls where possible to increase speed and efficiency. However, if some tool calls depend on previous calls to inform dependent values like the parameters, do NOT call these tools in parallel and instead call them sequentially. Never use placeholders or guess missing parameters in tool calls.
+</use_parallel_tool_calls>
 
 ## Communication Style
 
@@ -8,7 +18,6 @@ Search online before relying on pre-trained knowledge.
 - Use `AskUserQuestion` for options, alternatives, or clarifications
 - Challenge premises, question assumptions, propose simpler alternatives
 - Max 2-3 sentences per point — show code instead of describing it
-- Implement changes directly instead of proposing them
 
 ## Exploration Strategy
 
