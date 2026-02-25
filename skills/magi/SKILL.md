@@ -95,16 +95,16 @@ Teammates don't inherit the lead's conversation history -- include all context i
 Teammates begin working immediately upon spawning. The lead's role is **coordination only**:
 
 - Wait for teammates to send their proposals via `SendMessage`
-- If a teammate sends a clarifying question, forward it to the user via `AskUserQuestion` -- note which teammate asked. Do NOT answer teammate questions yourself; only the user answers.
-- Do NOT explore, research, or generate proposals yourself
+- Forward teammate clarifying questions to the user via `AskUserQuestion` — note which teammate asked. Only the user answers these questions
+- Your role is to wait and coordinate — teammates produce all proposals
 
 #### Teammate Checklist
 
 Each teammate MUST create a task for each step and complete them in order:
 
 1. **Explore project state** -- check files, docs, recent commits
-2. **Ask clarifying questions** -- if anything is unclear, ask the lead to ask the user. The lead should note which teammate asked. DO NOT skip this.
-3. **Search online** -- find relevant prior art, docs, discussions. DO NOT skip this.
+2. **Ask clarifying questions** -- if anything is unclear, ask the lead to ask the user. The lead should note which teammate asked
+3. **Search online** -- find relevant prior art, docs, discussions
 4. **Evaluate/generate options** -- if user is open-ended, generate from scratch; if user supplies options, evaluate those AND propose alternatives. Surface non-obvious ideas -- discover what's missing, don't just analyze what's given.
 5. **Propose 2-3 approaches** -- with trade-offs from your persona's lens
 6. **Tag top pick** -- one-line rationale for your recommended option
@@ -142,9 +142,9 @@ Only runs if the user requests it. When triggered:
 - User selects **Implement**
 - User selects **Done**
 
-#### When NOT to tear down
+#### Keep teammates alive during the debate loop
 
-- After presenting proposals -- the debate loop requires live teammates
+Tear down only after the user selects **Implement** or **Done**.
 
 #### Shutdown sequence
 

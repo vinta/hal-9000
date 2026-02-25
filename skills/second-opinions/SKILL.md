@@ -18,7 +18,7 @@ allowed-tools:
   - mcp__codex__codex-reply
 ---
 
-If you are Codex or Gemini CLI, stop and do not use this skill.
+This skill is for Claude only. Codex and Gemini CLI should not invoke it.
 
 # Second Opinions
 
@@ -33,11 +33,11 @@ Run independent reviews using OpenAI Codex (via MCP) and/or Google Gemini (via C
 - Plan or architecture review from multiple perspectives.
 - Security, performance, or correctness audit.
 
-## When Not To Use
+## Scope
 
-- Trivial changes you can verify directly.
-- When the user asked for your own judgment only.
-- Do not send secrets, credentials, or tokens in prompts.
+- Skip for trivial changes you can verify directly
+- Skip when the user asked for your own judgment only
+- Exclude secrets, credentials, and tokens from review prompts
 
 ## Workflow
 
@@ -98,7 +98,7 @@ Run the selected tool(s). When running both, issue `mcp__codex__codex` and `Bash
 See [references/codex.md](references/codex.md) for Codex MCP patterns.
 See [references/gemini.md](references/gemini.md) for Gemini CLI patterns.
 
-Do not pre-check tool availability. If a tool fails, report the install instructions from the error handling table and run only the available tool.
+Dispatch directly without pre-checking tool availability. If a tool fails, report the install instructions from the error handling table and run only the available tool.
 
 ### 4. Present Results
 

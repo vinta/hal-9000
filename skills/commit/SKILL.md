@@ -30,7 +30,7 @@ Creating clean, atomic commits that follow best practices for version control hy
 
 ## Instructions
 
-**ALWAYS `cd` to project root before git commands. NEVER use `git -C`.** Execute git commands directly without explanatory preamble. Commit immediately without confirmation prompts (never use interactive mode).
+`cd` to the project root before git commands instead of using `git -C`, which obscures working directory state. Execute git commands directly without explanatory preamble. Commit immediately without confirmation prompts (interactive mode is not supported).
 
 1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory. Categorize changes by:
    - STRUCTURAL: Code reorganization, renaming, refactoring without behavior changes
@@ -46,7 +46,7 @@ Creating clean, atomic commits that follow best practices for version control hy
 3. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`
    - Hunk-by-hunk: `git diff <file> > /tmp/patch.diff`, edit the patch to keep only specific hunks, then `git apply --cached /tmp/patch.diff`
-   - NEVER use `git reset --hard`. To unstage, use `git restore --staged`
+   - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work)
    - Fallback: If `git apply --cached` fails (malformed patch), stage the whole file with `git add <file>` instead
 
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes:
@@ -59,7 +59,7 @@ Creating clean, atomic commits that follow best practices for version control hy
    - Write clear, descriptive commit messages following conventional format
    - Keep first line under 72 characters (aim for 50)
    - Include context in body when necessary
-   - IMPORTANT: DO NOT run any linter/formatter before committing. Commit the working tree state as-is
+   - Commit the working tree state as-is — the user may have made manual edits outside this conversation
 
 ## Extra Instructions
 
