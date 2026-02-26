@@ -9,16 +9,16 @@ Download the script:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/vinta/hal-9000/master/dotfiles/.claude/statusline/run.py \
   -o ~/.claude/statusline/run.py \
-  --create-dirs && \
-  chmod +x ~/.claude/statusline/run.py
+  --create-dirs
 ```
 
 Add to `~/.claude/settings.json`:
 
 ```json
 {
-  "statusline": {
-    "script": "~/.claude/statusline/run.py"
+  "statusLine": {
+    "type": "command",
+    "command": "python3 ~/.claude/statusline/run.py"
   }
 }
 ```
