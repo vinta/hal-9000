@@ -1,6 +1,6 @@
 ---
 name: sync-skills
-description: (hal-9000) Syncs README.md, CLAUDE.md, settings.json, and hal_dotfiles.json with skills/ directory
+description: (hal-9000) Use when a skill in skills/ has its name or description changed, or is added or removed — syncs README.md, CLAUDE.md, settings.json, and hal_dotfiles.json
 context: fork
 user-invocable: true
 model: haiku
