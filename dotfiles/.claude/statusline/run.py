@@ -130,6 +130,7 @@ Output format:
 - Multiple issues: Grammar 1: ... Grammar 2: ...
 - Use full-width commas (，) in Chinese explanations
 - No errors: output exactly "Grammar: no issues"
+- Output ONLY the "Grammar: ..." line(s). No extra commentary, no preamble, no explanations beyond the correction format above.
 </instructions>
 
 <examples>
