@@ -25,6 +25,4 @@ Add to `~/.claude/settings.json`:
 
 ## Screenshots
 
-![Grammar check example 1](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/claude-code-statusline-grammar-check-1.jpeg)
-
-![Grammar check example 2](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/claude-code-statusline-grammar-check-2.jpeg)
+![Claude Code Statusline with English Grammar Check example](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/claude-code-statusline-grammar-check.png)
