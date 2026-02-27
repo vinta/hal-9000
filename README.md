@@ -43,6 +43,7 @@ hal open-the-pod-bay-doors      # Open the pod bay doors, please, HAL
 ### Agent Skills
 
 - [magi](skills/magi): Three-agent deliberation system for competing perspectives
+- [magi-ex](skills/magi-ex): Multi-model (Claude/Codex/Gemini) deliberation system for competing perspectives
 - [second-opinions](skills/second-opinions): Parallel review from multiple external models
 - [commit](skills/commit): Creates clean, atomic git commits
 - [explore-codebase](skills/explore-codebase): Searches codebase with ast-grep, ripgrep, and fd
