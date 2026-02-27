@@ -6,13 +6,15 @@ Use `mcp__codex__codex` for first request. Use `mcp__codex__codex-reply` with th
 
 ## Key Parameters
 
-- `prompt`: The review task (required)
-- `sandbox`: `read-only` (default) or `workspace-write` (when Codex needs to run tests)
+- `prompt`: The task description (required)
+- `sandbox`: `read-only` (default) or `workspace-write` (when Codex needs to run tests/commands)
 - `cwd`: Working directory (defaults to current project root)
 
-## Review Prompt
+## Prompt Templates
 
-For code reviews, use this prompt base. It is from OpenAI's published code review cookbook, and Codex models received specific training on it:
+### Code Review
+
+From OpenAI's code review cookbook (Codex models received specific training on this):
 
 ```
 You are acting as a reviewer for a proposed code change made by another engineer.
@@ -24,72 +26,92 @@ After listing findings, produce an overall correctness verdict ("patch is correc
 Ensure that file citations and line numbers are exactly correct using the tools available; if they are incorrect your comments will be rejected.
 ```
 
+### General Task
+
+For plan reviews, architecture evaluation, codebase analysis, doc review, or arbitrary tasks:
+
+```xml
+<role>[Role appropriate to the task — e.g., architecture evaluator, technical editor]</role>
+
+<task>[What Codex should do — evaluate, analyze, review, rewrite]</task>
+
+<context>[Project conventions, constraints, requirements]</context>
+
+<material>[Content to evaluate — files, plans, docs, code excerpts]</material>
+
+<focus>[Specific focus area if any]</focus>
+
+<output_format>
+1. Critical issues
+2. Important concerns
+3. Minor suggestions
+4. What's done well
+For each issue: severity, why it matters, file:line (if applicable), concrete fix.
+End with verdict and confidence score (0-1).
+</output_format>
+```
+
 ## Prompt Assembly
 
-Assemble the prompt in this order:
+**Put long content first, instructions after** (per Anthropic long-context best practices — queries at the end improve quality by up to 30%):
 
-```
-<review prompt from above>
+```xml
+<material>
+[Diff, plan, document, or other content — long data goes first]
+</material>
 
-<if project context requested>
+<context>
 Project conventions:
----
-<contents of CLAUDE.md>
----
+[Contents of CLAUDE.md if available]
+</context>
 
-<if focus area specified>
-Focus: <security | performance | error handling | custom text>
+[Review prompt or general task template from above]
 
-Diff to review:
----
-<git diff output>
----
+<focus>[Focus area if specified]</focus>
 ```
 
-### Generating the Diff
+### Generating Diffs
 
-| Scope | Command |
-|-------|---------|
-| Uncommitted (tracked) | `git diff HEAD` |
+| Scope                   | Command                                                                                          |
+| ----------------------- | ------------------------------------------------------------------------------------------------ |
+| Uncommitted (tracked)   | `git diff HEAD`                                                                                  |
 | Uncommitted (untracked) | `git ls-files --others --exclude-standard`, then `git diff --no-index /dev/null <file>` per file |
-| Branch diff | `git diff <branch>...HEAD` |
-| Specific commit | `git diff <sha>~1..<sha>` |
+| Branch diff             | `git diff <branch>...HEAD`                                                                       |
+| Specific commit         | `git diff <sha>~1..<sha>`                                                                        |
 
-**Uncommitted scope must include untracked files.** `git diff HEAD` alone only shows tracked files. New unstaged files are silently excluded.
+**Uncommitted scope must include untracked files.** `git diff HEAD` alone misses new unstaged files.
 
-## Non-Review Tasks
+## Iterative Review
 
-For plan reviews, architecture evaluations, and other non-diff tasks:
+For tasks requiring back-and-forth (plan refinement, iterative improvement):
 
-```
-Goal: <what Codex should evaluate>
-Scope: <files, directories, commit range, or artifact>
-Constraints: <performance, compatibility, security, style>
-Checks:
-- correctness
-- regressions
-- edge cases
-- missing tests
-- requirement gaps
-Output format:
-1) Critical issues
-2) Medium risks
-3) Low-priority improvements
-For each issue include: severity, why it matters, file:line, and concrete fix.
-```
+1. Send initial prompt via `mcp__codex__codex` — capture `threadId` from response
+2. Process Codex's feedback, revise the material
+3. Re-submit via `mcp__codex__codex-reply` with the same `threadId`:
+   ```
+   mcp__codex__codex-reply(
+     threadId: "<threadId from step 1>",
+     prompt: "I've revised based on your feedback. Here's what changed: [summary]. Please re-review."
+   )
+   ```
+4. Max 3 rounds to prevent loops
 
-## Example
+## Examples
+
+**Code review:**
 
 ```
 mcp__codex__codex(
-  prompt: "You are acting as a reviewer for a proposed code change...
-[full review prompt]
+  prompt: "<material>\n[diff output]\n</material>\n\nYou are acting as a reviewer for a proposed code change...\n\nFocus: security",
+  sandbox: "read-only"
+)
+```
 
-Focus: security
+**General task:**
 
-Run `git diff main...HEAD` and review for bugs, regressions, security issues, and missing tests.
-Return numbered findings with severity, confidence score, and file:line references.
-End with an overall correctness verdict.",
+```
+mcp__codex__codex(
+  prompt: "<role>You are a senior architect reviewing a migration plan.</role>\n\n<task>Evaluate this plan for correctness, risks, and missing steps.</task>\n\n<material>\n[plan content]\n</material>\n\n<output_format>Critical issues, concerns, suggestions. End with verdict.</output_format>",
   sandbox: "read-only"
 )
 ```
