@@ -16,8 +16,8 @@ Named after the Biblical Magi -- the three wise men who followed the star to Bet
 
 ## From Anime to Agentic Skill
 
-The [magi](SKILL.md) skill translates this into a three-agent workflow built on Claude Code's **Agent Team** and each teammates are different models:
+The [magi-ex](SKILL.md) skill translates this into a three-agent workflow built on Claude Code's **Agent Team**, with each teammate backed by a different model:
 
-- Codex
-- Gemini
-- Grok (with OpenCode)
+- **MELCHIOR-1 / Scientist** -- Claude Opus
+- **BALTHASAR-2 / Mother** -- OpenAI Codex
+- **CASPER-3 / Woman** -- Google Gemini
