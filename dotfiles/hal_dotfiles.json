@@ -55,6 +55,10 @@
       "src": "{{REPO_ROOT}}/skills/magi/"
     },
     {
+      "dest": "{{HOME}}/.claude/skills/magi-ex/",
+      "src": "{{REPO_ROOT}}/skills/magi-ex/"
+    },
+    {
       "dest": "{{HOME}}/.claude/skills/second-opinions/",
       "src": "{{REPO_ROOT}}/skills/second-opinions/"
     },

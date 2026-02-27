@@ -2,7 +2,6 @@
 name: magi-ex
 description: Use when brainstorming, evaluating architecture choices, or comparing trade-offs where independent perspectives from different model families (Claude/Codex/Gemini) would surface blind spots
 argument-hint: "[question-or-topic]"
-disable-model-invocation: true
 compatibility: Designed for Claude Code
 user-invocable: true
 model: opus
@@ -45,7 +44,7 @@ digraph magi_ex {
     node [shape=box, style=rounded];
 
     clarify [label="Lead clarifies question\n(AskUserQuestion if underspecified)"];
-    setup [label="Setup 3-agent team\n(Opus, Codex, Gemini)"];
+    setup [label="Setup 3-agent team\n(Claude, Codex, Gemini)"];
     explore [label="Teammates explore in parallel\n(each delegates to its model)"];
     consolidate [label="Lead consolidates proposals\n+ attributes model source"];
     present [label="Present options to user\n(AskUserQuestion: Write a plan / Debate / Done)"];

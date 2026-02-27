@@ -69,6 +69,7 @@ If you intend to call multiple tools and there are no dependencies between the t
 ## Skills
 
 - `magi`: Three-agent deliberation system for competing perspectives
+- `magi-ex`: Multi-model (Claude/Codex/Gemini) deliberation system for competing perspectives
 - `second-opinions`: Parallel review from multiple external models
 - `commit`: Creates clean, atomic git commits
 - `explore-codebase`: Searches codebase with ast-grep, ripgrep, and fd
