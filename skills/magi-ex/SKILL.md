@@ -23,7 +23,7 @@ allowed-tools:
 
 # MAGI EX
 
-Multi-model deliberation system. Spawns Scientist, Mother, and Woman teammates backed by Claude Opus, OpenAI Codex, and Google Gemini to explore a question in parallel, then consolidates their proposals for the user.
+Multi-model brainstorming panel. Spawns Scientist, Mother, and Woman teammates backed by Claude Opus, OpenAI Codex, and Google Gemini to explore a question or topic in parallel, then consolidates their proposals for the user.
 
 ## Checklist
 

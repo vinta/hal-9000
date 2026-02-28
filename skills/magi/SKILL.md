@@ -18,7 +18,7 @@ allowed-tools:
 
 # MAGI
 
-Three-agent deliberation system. Spawns Scientist, Mother, and Woman teammates with competing value lenses to explore a question in parallel, then consolidates their proposals for the user.
+Three-agent brainstorming panel. Spawns Scientist, Mother, and Woman teammates with competing value lenses to explore a question in parallel, then consolidates their proposals for the user.
 
 ## Checklist
 
