@@ -43,7 +43,9 @@
       "Skill(commit)",
       "Skill(explore-codebase)",
       "Skill(update-allowed-tools)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "mcp__codex__codex",
+      "mcp__codex__codex-reply"
     ],
     "deny": [
       "Read(~/.aws/**)",
