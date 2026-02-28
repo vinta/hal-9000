@@ -120,9 +120,7 @@
     "command": "python3 ~/.claude/statusline/run.py"
   },
   "enabledPlugins": {
-    "ask-questions-if-underspecified@trailofbits": true,
     "claude-md-management@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "gh-cli@trailofbits": true,
     "hal-voice@hal-9000": true,
