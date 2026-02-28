@@ -65,9 +65,10 @@ Follow any user instructions below. They override the standard workflow when con
 
 5. **Create Atomic Commits**: For each logical group:
    - Write clear, descriptive commit messages following conventional format
-   - Keep first line under 72 characters (aim for 50)
+   - Keep first line under 72 characters
    - Include context in body when necessary
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
+   - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
 ## Attribution
 
