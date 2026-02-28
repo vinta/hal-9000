@@ -21,6 +21,7 @@ If you intend to call multiple tools and there are no dependencies between the t
 
 ## Exploration Strategy
 
+- Brainstorming or comparing approaches: use `magi-ex`
 - Large-volume scanning or analysis: use agent teams with `codex` or `gemini`
 - Library/API docs, code generation, setup, config: use `context7`
 
@@ -65,12 +66,3 @@ If you intend to call multiple tools and there are no dependencies between the t
 - **Mock boundaries, not logic.** Only mock what's slow, non-deterministic, or external
 - **Verify tests catch failures.** Break code, confirm test fails, fix
   - Use mutation testing (`mutmut`, `stryker`) and property-based testing (`hypothesis`, `fast-check`) for parsers and algorithms
-
-## Skills
-
-- `magi`: Three-agent deliberation system for competing perspectives
-- `magi-ex`: Multi-model (Claude/Codex/Gemini) deliberation system for competing perspectives
-- `second-opinions`: Parallel review from multiple external models
-- `commit`: Creates clean, atomic git commits
-- `explore-codebase`: Searches codebase with ast-grep, ripgrep, and fd
-- `update-allowed-tools`: Updates skill allowed-tools frontmatter
