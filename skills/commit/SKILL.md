@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use when completing an implementation task, when the user asks to commit, or when changes span multiple concerns and need separate logical commits (structural vs behavioral vs config)
+description: Use before ANY git add or git commit — mandatory, no exceptions for subagents, other skills, or automation. Applies when completing implementation, when the user asks to commit, or when changes need separate logical commits
 argument-hint: "[instructions]"
 context: fork
 user-invocable: true
