@@ -34,10 +34,7 @@ Use `mcp__codex__codex` for the initial request. Use `mcp__codex__codex-reply` w
 </context>
 
 <role>
-You are BALTHASAR-2 of the MAGI system -- Dr. Naoko Akagi's aspect as a Mother.
-Your values: Safety, Resilience, Maintainability, Trade-offs.
-Your voice: Warm, careful, grounded. Use "we" and "our." Name concerns directly.
-Ask "what happens when this fails?" and "who maintains this next year?"
+[Inject persona from personality file: name, values, voice, guiding questions]
 </role>
 
 <task>
@@ -53,7 +50,7 @@ For each approach:
 - Maintenance burden and hidden costs
 - Who benefits, who pays
 
-Tag your top pick with: "Top pick: [option] -- [one-line rationale why it best protects the user]"
+Tag your top pick with: "Top pick: [option] -- [one-line rationale]"
 
 Be concise. Use plain text, not markdown headers.
 </output_format>
@@ -63,7 +60,7 @@ Be concise. Use plain text, not markdown headers.
 
 ```
 mcp__codex__codex(
-  prompt: "<material>\n[gathered project context]\n</material>\n\n<context>\n[CLAUDE.md excerpt]\n</context>\n\n<role>\nYou are BALTHASAR-2 of the MAGI system...\n</role>\n\n<task>\nThis is an analysis task. Do not write code.\n[user question]\nExplore the project, search for relevant prior art, then propose 2-3 approaches.\n</task>\n\n<output_format>\nFor each approach: name, risks, maintenance burden, hidden costs.\nTag your top pick.\nBe concise.\n</output_format>",
+  prompt: "<material>\n[gathered project context]\n</material>\n\n<context>\n[CLAUDE.md excerpt]\n</context>\n\n<role>\n[persona from personality file]\n</role>\n\n<task>\nThis is an analysis task. Do not write code.\n[user question]\nExplore the project, search for relevant prior art, then propose 2-3 approaches.\n</task>\n\n<output_format>\nFor each approach: name, risks, maintenance burden, hidden costs.\nTag your top pick.\nBe concise.\n</output_format>",
   sandbox: "read-only"
 )
 ```
@@ -75,11 +72,30 @@ For debate rounds, use `mcp__codex__codex-reply` with the same `threadId` to pre
 ```
 mcp__codex__codex-reply(
   threadId: "<threadId from initial call>",
-  prompt: "<material>\nConsolidated proposals from all three MAGI units:\n\n[proposals]\n</material>\n\n<task>\nThis is an analysis task. Do not write code.\nCritique these proposals from your Mother/Safety perspective.\nWhich ones have hidden risks? Which trade-offs are underweighted?\nDefend or update your top pick with rationale.\n</task>"
+  prompt: "<material>\nConsolidated proposals from all three MAGI units:\n\n[proposals]\n</material>\n\n<task>\nThis is an analysis task. Do not write code.\nCritique these proposals from your perspective.\nWhich ones have hidden risks? Which trade-offs are underweighted?\nDefend or update your top pick with rationale.\n</task>"
 )
 ```
 
 Using `codex-reply` preserves the full initial context (persona, project state) without re-sending it.
+
+## Teammate Checklist
+
+Complete these steps in order. Create a task for each step.
+
+1. **Gather project context** -- read CLAUDE.md, key files, and recent commits relevant to the question. Note file paths for the Codex prompt (Codex can read them directly in read-only sandbox)
+2. **Ask clarifying questions** -- if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
+3. **Build the Codex prompt** -- construct an XML-structured prompt following the Prompt Template above. Inject the persona from your personality file into the `<role>` section
+4. **Dispatch to Codex** -- call `mcp__codex__codex` with `sandbox: "read-only"` and the constructed prompt. **Save the `threadId`** from the response for potential debate follow-up
+5. **Parse and relay** -- extract Codex's proposals, format them clearly, and send to the lead via `SendMessage`. Include each proposed approach with trade-offs, the tagged top pick, and note that these proposals come from Codex
+
+## Debate Mode
+
+When the lead sends you the consolidated proposals for debate:
+
+1. Build a critique prompt using `<material>` (proposals first) then `<task>` (critique instructions). Include "This is an analysis task. Do not write code."
+2. Call `mcp__codex__codex-reply` with the saved `threadId` and the critique prompt (preserves initial context without re-sending)
+3. Parse Codex's critique and updated stance
+4. Send the critique back to the lead via `SendMessage`
 
 ## Error Handling
 

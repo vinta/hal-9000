@@ -87,19 +87,31 @@ Skip if the question is already clear and actionable. Include all clarified cont
 
 ### Setup
 
-- Read all 3 template files: [MAGI-1.md](templates/MAGI-1.md), [MAGI-2.md](templates/MAGI-2.md), [MAGI-3.md](templates/MAGI-3.md)
+- Read all 3 personality files: [MAGI-1.md](personalities/MAGI-1.md), [MAGI-2.md](personalities/MAGI-2.md), [MAGI-3.md](personalities/MAGI-3.md)
 - Read both reference files: [codex.md](references/codex.md), [gemini.md](references/gemini.md)
 - `TeamCreate` with a descriptive team name `magi-{topic}` (e.g., `magi-auth-strategy`)
 - Spawn all 3 teammates in a **single message** (3 parallel `Task` calls):
 
-| Teammate  | `name`      | `subagent_type`   | Prompt includes                                                              |
-| --------- | ----------- | ----------------- | ---------------------------------------------------------------------------- |
-| Scientist | `scientist` | `general-purpose` | MAGI-1.md template + user question + clarified context                       |
-| Mother    | `mother`    | `general-purpose` | MAGI-2.md template + codex.md reference + user question + clarified context  |
-| Woman     | `woman`     | `general-purpose` | MAGI-3.md template + gemini.md reference + user question + clarified context |
+| Teammate  | `name`      | `subagent_type`   | Prompt includes                                                                     |
+| --------- | ----------- | ----------------- | ------------------------------------------------------------------------------------ |
+| Scientist | `scientist` | `general-purpose` | MAGI-1.md personality + Scientist checklist (below) + user question + clarified context |
+| Mother    | `mother`    | `general-purpose` | MAGI-2.md personality + codex.md reference + user question + clarified context       |
+| Woman     | `woman`     | `general-purpose` | MAGI-3.md personality + gemini.md reference + user question + clarified context      |
 
 - Set `team_name` on each `Task` call to the team name from above
 - Teammates don't inherit the lead's conversation history -- include all context in the spawn prompt
+
+#### Scientist Checklist (Opus -- no external dispatch)
+
+The Scientist reasons directly as Claude Opus. No external model invocation needed.
+
+1. **Explore project state** -- read files, docs, recent commits relevant to the question
+2. **Ask clarifying questions** -- if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
+3. **Search online** -- use `WebSearch` to find relevant prior art, docs, discussions
+4. **Evaluate/generate options** -- if user is open-ended, generate from scratch; if user supplies options, evaluate those AND propose alternatives. Surface non-obvious ideas
+5. **Propose 2-3 approaches** -- with trade-offs from your Scientist lens (efficiency, simplicity, agility)
+6. **Tag top pick** -- one-line rationale for your recommended option
+7. **Report to lead** -- send your proposals and top pick to the lead via `SendMessage`
 
 ### Explore in Parallel
 
@@ -109,7 +121,7 @@ Teammates begin working immediately upon spawning. The lead's role is **coordina
 - Forward teammate clarifying questions to the user via `AskUserQuestion` -- note which teammate (and which model) asked
 - Your role is to wait and coordinate -- teammates produce all proposals
 
-Each teammate follows their own model-specific checklist defined in their template.
+Each teammate follows their own model-specific checklist defined in their reference file (or inline above for Scientist).
 
 ### Consolidate + Present
 
@@ -134,8 +146,8 @@ Only runs if the user requests it. When triggered:
 1. Lead broadcasts the consolidated option list to all 3 teammates via `SendMessage`
 2. Each teammate sends the proposals to their model for critique:
    - Scientist (Opus): reasons directly about other proposals
-   - Mother (Codex): calls `mcp__codex__codex-reply` with saved `threadId`
-   - Woman (Gemini): pipes full context + proposals to `gemini -p -`
+   - Mother (Codex): follows Debate Mode in [codex.md](references/codex.md)
+   - Woman (Gemini): follows Debate Mode in [gemini.md](references/gemini.md)
 3. Each teammate sends their model's critique back to the lead via `SendMessage`
 4. Lead collects updated stances and re-presents to the user
 
