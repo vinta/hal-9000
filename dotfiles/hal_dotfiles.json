@@ -67,10 +67,6 @@
       "src": "{{REPO_ROOT}}/skills/commit/"
     },
     {
-      "dest": "{{HOME}}/.claude/skills/explore-codebase/",
-      "src": "{{REPO_ROOT}}/skills/explore-codebase/"
-    },
-    {
       "dest": "{{HOME}}/.claude/skills/update-allowed-tools/",
       "src": "{{REPO_ROOT}}/skills/update-allowed-tools/"
     },

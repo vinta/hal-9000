@@ -46,7 +46,6 @@ hal open-the-pod-bay-doors      # Open the pod bay doors, please, HAL
 - [magi-ex](skills/magi-ex): Multi-model (Claude/Codex/Gemini) brainstorming panel for competing perspectives
 - [second-opinions](skills/second-opinions): Parallel review from multiple external models
 - [commit](skills/commit): Creates clean, atomic git commits
-- [explore-codebase](skills/explore-codebase): Searches codebase with ast-grep, ripgrep, and fd
 - [update-allowed-tools](skills/update-allowed-tools): Updates skill allowed-tools frontmatter
 
 ```bash
