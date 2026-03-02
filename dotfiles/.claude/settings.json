@@ -108,6 +108,7 @@
     "ask": [
       "Bash(git checkout:*)",
       "Bash(git reset:*)",
+      "Bash(npx supabase db:*)",
       "Bash(curl:*)",
       "Bash(wget:*)"
     ],
