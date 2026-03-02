@@ -34,6 +34,7 @@ tests/                                  # pytest tests
 ## Workflow
 
 - **Load `writing-skills` skill before creating or editing any skill file.**
+  - All skill descriptions must start with `Use when` (may have a `(project-name)` prefix, e.g. `(hal-9000) Use when …`)
 - Use `make` targets — don't run underlying commands directly.
 - Run `make lint`, `make format`, `make typecheck` after editing Python or Ansible files.
 - After adding or modifying a skill, run `hal sync` to update symlinks.
