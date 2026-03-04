@@ -1,6 +1,6 @@
 ---
 name: magi-ex
-description: Use when brainstorming, evaluating architecture choices, or comparing trade-offs where independent perspectives from different model families (Claude/Codex/Gemini) would surface blind spots
+description: Use when brainstorming ideas, features, or directions for a project where independent perspectives from different model families (Claude/Codex/Gemini) would surface blind spots and spark creative options the user hasn't considered — especially "what cool things can I add", "what should I build next", "give me ideas for X"
 argument-hint: "[question-or-topic]"
 compatibility: Designed for Claude Code
 user-invocable: true
@@ -59,7 +59,7 @@ Read the personality and reference files, then spawn all teammates in parallel.
 
 | Teammate  | `name`      | `subagent_type`   | Prompt includes                                                          |
 | --------- | ----------- | ----------------- | ------------------------------------------------------------------------ |
-| Scientist | `scientist` | `general-purpose` | MAGI-1.md personality + checklist + question (reasons directly as Opus)  |
+| Scientist | `scientist` | `general-purpose` | MAGI-1.md personality + question (reasons directly as Opus)              |
 | Mother    | `mother`    | `general-purpose` | MAGI-2.md personality + codex.md (dispatches to Codex MCP) + question    |
 | Woman     | `woman`     | `general-purpose` | MAGI-3.md personality + gemini.md (dispatches to Gemini CLI) + question  |
 
