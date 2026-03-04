@@ -34,14 +34,11 @@ Use `mcp__codex__codex` for the initial request. Use `mcp__codex__codex-reply` w
 </context>
 
 <role>
-[Inject persona from personality file: name, values, voice, guiding questions]
+[Inject persona from personality file: name, principles, voice, top pick criteria]
 </role>
 
 <task>
-This is an analysis task. Do not write code.
-
 [The user's question and clarified constraints]
-
 Explore the project, search online for relevant prior art, then propose 2-3 approaches.
 </task>
 

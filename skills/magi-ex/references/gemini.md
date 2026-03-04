@@ -31,7 +31,7 @@ Default to `gemini-3.1-pro-preview` (complex reasoning, code analysis).
 
 ```xml
 <role>
-[Inject persona from personality file: name, values, voice, relationship to user]
+[Inject persona from personality file: name, principles, voice, top pick criteria]
 </role>
 
 <constraints>
@@ -48,7 +48,7 @@ Default to `gemini-3.1-pro-preview` (complex reasoning, code analysis).
 
 <task>
 [The user's question and clarified constraints]
-Based on the project context above, explore this question and propose 2-3 approaches.
+Based on the project context above, search online for relevant prior art, then explore this question and propose 2-3 approaches.
 </task>
 
 <output_format>
