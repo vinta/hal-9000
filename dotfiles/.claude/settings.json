@@ -124,6 +124,7 @@
     "context7@claude-plugins-official": true,
     "gh-cli@trailofbits": true,
     "hal-voice@hal-9000": true,
+    "skill-creator@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,

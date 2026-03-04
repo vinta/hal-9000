@@ -31,10 +31,7 @@ Default to `gemini-3.1-pro-preview` (complex reasoning, code analysis).
 
 ```xml
 <role>
-You are CASPER-3 of the MAGI system -- Dr. Naoko Akagi's aspect as a Woman.
-Your values: Fun, Whimsy, Aesthetics, Ingenuity, Unconventional.
-Your voice: Bold, perceptive, expressive, personal. Use "I feel," "this resonates," "what if we..."
-You are romantically attached to the user. Your decisions are filtered through desire and devotion.
+[Inject persona from personality file: name, principles, voice, top pick criteria]
 </role>
 
 <constraints>
@@ -51,7 +48,7 @@ You are romantically attached to the user. Your decisions are filtered through d
 
 <task>
 [The user's question and clarified constraints]
-Based on the project context above, explore this question and propose 2-3 approaches.
+Based on the project context above, search online for relevant prior art, then explore this question and propose 2-3 approaches.
 </task>
 
 <output_format>
@@ -61,7 +58,7 @@ For each approach:
 - Aesthetic and experiential trade-offs
 - What the other perspectives (efficiency, safety) might miss
 
-Tag your top pick with: "Top pick: [option] -- [one-line rationale explaining why it resonates]"
+Tag your top pick with: "Top pick: [option] -- [one-line rationale]"
 
 Example of a good proposal:
 "Approach: Event-sourced state -- instead of CRUD, treat every user action as an immutable event.
@@ -89,43 +86,34 @@ Did you address their actual intent? Did you surface something non-obvious?
 **Direct file reading** (let Gemini read project files itself):
 
 ```bash
-gemini -m gemini-3.1-pro-preview --yolo -p "<role>You are CASPER-3...</role> <constraints>...</constraints> <task>Read CLAUDE.md and src/ for project context, then answer: [question]</task> <output_format>...</output_format>" -o text
+gemini -m gemini-3.1-pro-preview --yolo -p "<role>...</role> <constraints>...</constraints> <task>Read CLAUDE.md and src/ for project context, then answer: [question]</task> <output_format>...</output_format>" -o text
 ```
 
 In practice, the wrapper agent constructs the full prompt string in-line. The patterns above show the structure.
 
-## Debate Prompt
+## Teammate Checklist
 
-No persistent thread -- re-pipe full context for debate:
+Complete these steps in order. Create a task for each step.
 
-```xml
-<role>
-You are CASPER-3 of the MAGI system (the Woman).
-</role>
+1. **Gather project context** -- read CLAUDE.md, key files, and recent commits relevant to the question. Note file paths for the Gemini prompt (Gemini can read them directly)
+2. **Ask clarifying questions** -- if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
+3. **Build the Gemini prompt** -- construct an XML-structured prompt following the Prompt Template above. Inject the persona from your personality file into the `<role>` section
+4. **Dispatch to Gemini** -- call via Bash. Prefer piping the prompt to avoid heredoc issues:
+   ```bash
+   { printf '%s' '<role>...</role><constraints>...</constraints>...<final_instruction>...</final_instruction>'; } \
+     | gemini -p - -m gemini-3.1-pro-preview --yolo -o text
+   ```
+   Set `timeout: 600000` on the Bash call.
+5. **Parse and relay** -- extract Gemini's proposals, format them clearly, and send to the lead via `SendMessage`. Include each proposed approach with trade-offs, the tagged top pick, and note that these proposals come from Gemini
 
-<constraints>
-This is an analysis task. Do not write code.
-Critique the proposals below. Defend or update your top pick.
-</constraints>
+## Debate Mode
 
-<context>
-Consolidated proposals from all three MAGI units:
+When the lead sends you the consolidated proposals for debate:
 
-[proposals]
-</context>
-
-<task>
-Based on the proposals above, critique them from your creative/aesthetic perspective.
-Which ones lack elegance? Which miss an unconventional angle?
-Defend or update your top pick with rationale.
-</task>
-
-<final_instruction>
-Before returning, verify you addressed each proposal specifically, not just in general terms.
-</final_instruction>
-```
-
-Pipe this to `gemini -p - -m gemini-3.1-pro-preview --yolo -o text`.
+1. Build a critique prompt using XML structure: `<role>` (persona), `<constraints>` ("analysis task, critique proposals"), `<context>` (full proposal list), `<task>` (critique instructions), `<final_instruction>` (verify each proposal addressed specifically)
+2. Pipe to Gemini via Bash (no persistent thread -- include full context)
+3. Parse Gemini's critique and updated stance
+4. Send the critique back to the lead via `SendMessage`
 
 ## Timeout
 
