@@ -39,8 +39,10 @@ Use `mcp__codex__codex` for the initial request. Use `mcp__codex__codex-reply` w
 
 <task>
 This is an analysis task. Do not write code.
+
 [The user's question and clarified constraints]
-Explore the project, search for relevant prior art, then propose 2-3 approaches.
+
+Explore the project, search online for relevant prior art, then propose 2-3 approaches.
 </task>
 
 <output_format>
@@ -60,7 +62,7 @@ Be concise. Use plain text, not markdown headers.
 
 ```
 mcp__codex__codex(
-  prompt: "<material>\n[gathered project context]\n</material>\n\n<context>\n[CLAUDE.md excerpt]\n</context>\n\n<role>\n[persona from personality file]\n</role>\n\n<task>\nThis is an analysis task. Do not write code.\n[user question]\nExplore the project, search for relevant prior art, then propose 2-3 approaches.\n</task>\n\n<output_format>\nFor each approach: name, risks, maintenance burden, hidden costs.\nTag your top pick.\nBe concise.\n</output_format>",
+  prompt: "<material>\n[gathered project context]\n</material>\n\n<context>\n[CLAUDE.md excerpt]\n</context>\n\n<role>\n[persona from personality file]\n</role>\n\n<task>\nThis is an analysis task. Do not write code.\n[user question]\nExplore the project, search online for relevant prior art, then propose 2-3 approaches.\n</task>\n\n<output_format>\nFor each approach: name, risks, maintenance burden, hidden costs.\nTag your top pick.\nBe concise.\n</output_format>",
   sandbox: "read-only"
 )
 ```

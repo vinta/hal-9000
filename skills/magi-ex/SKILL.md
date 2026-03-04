@@ -41,6 +41,10 @@ Multi-model brainstorming panel. Three teammates explore a question in parallel,
 
 If the question is underspecified, use `AskUserQuestion` to nail down purpose, constraints, and success criteria. Skip if already clear and actionable.
 
+- Ask questions one at a time to refine the idea
+- Prefer multiple choice questions when possible, but open-ended is fine too
+- Only one question per message
+
 ### 2. Setup
 
 Read the personality and reference files, then spawn all teammates in parallel.
@@ -66,7 +70,7 @@ Include all clarified context in each spawn prompt -- teammates have no conversa
 The lead's role is coordination only:
 
 - Wait for teammates to send proposals via `SendMessage`
-- Forward any teammate clarifying questions to the user via `AskUserQuestion`, noting which teammate (and model) asked
+- Forward any teammate clarifying questions to the user via `AskUserQuestion`, noting which teammate (and model) asked. Never answer on the user's behalf -- only the user answers.
 
 ### 4. Consolidate + Present
 
