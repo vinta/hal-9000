@@ -9,7 +9,7 @@ allowed-tools:
   - AskUserQuestion
   - TeamCreate
   - TeamDelete
-  - Task
+  - Agent
   - SendMessage
   - WebSearch
   - Read
@@ -23,153 +23,83 @@ allowed-tools:
 
 # MAGI EX
 
-Multi-model brainstorming panel. Spawns Scientist, Mother, and Woman teammates backed by Claude Opus, OpenAI Codex, and Google Gemini to explore a question or topic in parallel, then consolidates their proposals for the user.
+Multi-model brainstorming panel. Three teammates explore a question in parallel, each backed by a different model family, then the lead consolidates their proposals for the user.
 
-## Checklist
+- **Scientist** -- reasons directly as Claude Opus (no external dispatch)
+- **Mother** -- delegates to OpenAI Codex via `mcp__codex__codex` MCP tool
+- **Woman** -- delegates to Google Gemini via `gemini` CLI
 
-Follow these steps in order.
-
-1. Clarify the question
-2. Set up agent team
-3. Parallel exploration
-4. Consolidate and present options
-5. Wait for user decision (write a plan, debate, or done)
-6. Tear down agent team
-
-## Workflow
-
-```dot
-digraph magi_ex {
-    rankdir=TB;
-    node [shape=box, style=rounded];
-
-    clarify [label="Lead clarifies question\n(AskUserQuestion if underspecified)"];
-    setup [label="Setup 3-agent team\n(Claude, Codex, Gemini)"];
-    explore [label="Teammates explore in parallel\n(each delegates to its model)"];
-    consolidate [label="Lead consolidates proposals\n+ attributes model source"];
-    present [label="Present options to user\n(AskUserQuestion: Write a plan / Debate / Done)"];
-    decide [label="User decision" shape=diamond];
-    debate [label="Debate round\n(lead broadcasts, each critiques via its model)"];
-    teardown [label="Shut down agent team"];
-    handoff [label="Handoff to writing-plans"];
-
-    clarify -> setup;
-    setup -> explore;
-    explore -> consolidate;
-    consolidate -> present;
-    present -> decide;
-    decide -> debate [label="debate"];
-    decide -> teardown [label="done"];
-    decide -> teardown [label="write a plan"];
-    teardown -> handoff [label="write a plan"];
-    debate -> present;
-}
-```
-
-## The Process
-
-### User Question
+## User Question
 
 <user_question>
 **$ARGUMENTS**
 </user_question>
 
-### Clarify
+## Process
 
-Before spawning teammates, the lead asks via `AskUserQuestion` to understand the idea or topic:
+### 1. Clarify
 
-- Ask questions one at a time to refine the idea
-- Prefer multiple choice questions when possible, but open-ended is fine too
-- Only one question per message
-- Focus on understanding: purpose, constraints, success criteria
+If the question is underspecified, use `AskUserQuestion` to nail down purpose, constraints, and success criteria. Skip if already clear and actionable.
 
-Skip if the question is already clear and actionable. Include all clarified context in teammate spawn prompts.
+### 2. Setup
 
-### Setup
+Read the personality and reference files, then spawn all teammates in parallel.
 
-- Read all 3 personality files: [MAGI-1.md](personalities/MAGI-1.md), [MAGI-2.md](personalities/MAGI-2.md), [MAGI-3.md](personalities/MAGI-3.md)
-- Read both reference files: [codex.md](references/codex.md), [gemini.md](references/gemini.md)
-- `TeamCreate` with a descriptive team name `magi-{topic}` (e.g., `magi-auth-strategy`)
-- Spawn all 3 teammates in a **single message** (3 parallel `Task` calls):
+**Files to read:**
+- Personalities: [MAGI-1.md](personalities/MAGI-1.md), [MAGI-2.md](personalities/MAGI-2.md), [MAGI-3.md](personalities/MAGI-3.md)
+- References: [codex.md](references/codex.md), [gemini.md](references/gemini.md)
 
-| Teammate  | `name`      | `subagent_type`   | Prompt includes                                                                     |
-| --------- | ----------- | ----------------- | ------------------------------------------------------------------------------------ |
-| Scientist | `scientist` | `general-purpose` | MAGI-1.md personality + Scientist checklist (below) + user question + clarified context |
-| Mother    | `mother`    | `general-purpose` | MAGI-2.md personality + codex.md reference + user question + clarified context       |
-| Woman     | `woman`     | `general-purpose` | MAGI-3.md personality + gemini.md reference + user question + clarified context      |
+**Create team** with `TeamCreate` using name `magi-{topic}` (e.g., `magi-auth-strategy`).
 
-- Set `team_name` on each `Task` call to the team name from above
-- Teammates don't inherit the lead's conversation history -- include all context in the spawn prompt
+**Spawn all 3 teammates in a single message** (3 parallel `Agent` calls with `team_name` set):
 
-#### Scientist Checklist (Opus -- no external dispatch)
+| Teammate  | `name`      | `subagent_type`   | Prompt includes                                                          |
+| --------- | ----------- | ----------------- | ------------------------------------------------------------------------ |
+| Scientist | `scientist` | `general-purpose` | MAGI-1.md personality + checklist + question (reasons directly as Opus)  |
+| Mother    | `mother`    | `general-purpose` | MAGI-2.md personality + codex.md (dispatches to Codex MCP) + question    |
+| Woman     | `woman`     | `general-purpose` | MAGI-3.md personality + gemini.md (dispatches to Gemini CLI) + question  |
 
-The Scientist reasons directly as Claude Opus. No external model invocation needed.
+Include all clarified context in each spawn prompt -- teammates have no conversation history.
 
-1. **Explore project state** -- read files, docs, recent commits relevant to the question
-2. **Ask clarifying questions** -- if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
-3. **Search online** -- use `WebSearch` to find relevant prior art, docs, discussions
-4. **Evaluate/generate options** -- if user is open-ended, generate from scratch; if user supplies options, evaluate those AND propose alternatives. Surface non-obvious ideas
-5. **Propose 2-3 approaches** -- with trade-offs from your Scientist lens (efficiency, simplicity, agility)
-6. **Tag top pick** -- one-line rationale for your recommended option
-7. **Report to lead** -- send your proposals and top pick to the lead via `SendMessage`
+### 3. Parallel Exploration
 
-### Explore in Parallel
+The lead's role is coordination only:
 
-Teammates begin working immediately upon spawning. The lead's role is **coordination only**:
+- Wait for teammates to send proposals via `SendMessage`
+- Forward any teammate clarifying questions to the user via `AskUserQuestion`, noting which teammate (and model) asked
 
-- Wait for teammates to send their proposals via `SendMessage`
-- Forward teammate clarifying questions to the user via `AskUserQuestion` -- note which teammate (and which model) asked
-- Your role is to wait and coordinate -- teammates produce all proposals
+### 4. Consolidate + Present
 
-Each teammate follows their own model-specific checklist defined in their reference file (or inline above for Scientist).
+Collect all proposals, then:
 
-### Consolidate + Present
-
-Lead collects all proposals from the 3 teammates, then:
-
-1. Deduplicates similar proposals (attributing to all teammates/models that proposed it)
-2. Groups by theme if there are many proposals
-3. Presents each option with:
+1. Deduplicate similar proposals (attribute to all teammates/models that proposed it)
+2. Group by theme if many proposals
+3. Present each option with:
    - Which teammate(s) and model(s) proposed it (e.g., "Scientist [Opus]", "Mother [Codex]")
    - Trade-off analysis from each perspective
    - Who tagged it as their top pick and why
-4. Asks the user via `AskUserQuestion` to **select an option** (one option per choice)
-5. Asks the user via `AskUserQuestion` what to do next:
-   - **Write a plan** -- triggers teardown + handoff to `writing-plans` with the selected option
-   - **Debate** -- teammates critique each other's proposals (triggers debate round below)
-   - **Done** -- shut down the agent team, no further action
+4. Ask the user to **select an option** via `AskUserQuestion`
+5. Ask via `AskUserQuestion` what to do next:
+   - **Write a plan** -- teardown, then handoff to `writing-plans`
+   - **Debate** -- another round of critique (see below)
+   - **Done** -- teardown, no further action
 
-### Optional Debate (user-triggered)
+### 5. Debate (optional, user-triggered)
 
-Only runs if the user requests it. When triggered:
+Only runs if the user requests it. Can be repeated.
 
-1. Lead broadcasts the consolidated option list to all 3 teammates via `SendMessage`
-2. Each teammate sends the proposals to their model for critique:
-   - Scientist (Opus): reasons directly about other proposals
-   - Mother (Codex): follows Debate Mode in [codex.md](references/codex.md)
-   - Woman (Gemini): follows Debate Mode in [gemini.md](references/gemini.md)
-3. Each teammate sends their model's critique back to the lead via `SendMessage`
-4. Lead collects updated stances and re-presents to the user
+1. Broadcast the consolidated option list to all 3 teammates via `SendMessage`
+2. Each teammate critiques the proposals through their model (Scientist reasons directly; Mother and Woman follow Debate Mode in their reference files)
+3. Collect updated stances and re-present to the user (back to step 4)
 
-One round per debate request. The user can trigger multiple sequential debates.
+### 6. Teardown
 
-### Teardown
+Tear down only when the user selects **Write a plan** or **Done**.
 
-#### When to tear down
-
-- User selects **Write a plan**
-- User selects **Done**
-
-#### Keep teammates alive during the debate loop
-
-Tear down only after the user selects **Write a plan** or **Done**.
-
-#### Shutdown sequence
-
-1. `shutdown_request` to each teammate (Scientist, Mother, Woman)
+1. `shutdown_request` to each teammate
 2. Wait for all shutdown approvals
-3. `TeamDelete` (fails if teammates are still active)
+3. `TeamDelete`
 
-### Handoff (write a plan path only)
+### 7. Handoff (write a plan path only)
 
 After teardown, invoke `writing-plans` skill with the chosen option(s) as context.
