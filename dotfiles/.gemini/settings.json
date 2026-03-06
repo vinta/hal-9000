@@ -4,16 +4,29 @@
     "enableAutoUpdate": false,
     "enablePromptCompletion": true,
     "previewFeatures": true,
-    "defaultApprovalMode": "auto_edit"
+    "defaultApprovalMode": "auto_edit",
+    "sessionRetention": {
+      "enabled": true,
+      "maxAge": "365d",
+      "warningAcknowledged": true
+    }
   },
   "privacy": {
     "usageStatisticsEnabled": false
+  },
+  "telemetry": {
+    "enabled": false,
+    "logPrompts": false
   },
   "security": {
     "auth": {
       "selectedType": "oauth-personal"
     },
-    "enablePermanentToolApproval": true
+    "enablePermanentToolApproval": true,
+    "environmentVariableRedaction": {
+      "enabled": true
+    },
+    "blockGitExtensions": true
   },
   "tools": {
     "shell": {
@@ -23,7 +36,8 @@
   },
   "ui": {
     "showCitations": true,
-    "useAlternateBuffer": true
+    "useAlternateBuffer": true,
+    "inlineThinkingMode": "full"
   },
   "experimental": {
     "plan": true
