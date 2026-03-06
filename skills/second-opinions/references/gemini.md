@@ -2,31 +2,21 @@
 
 ## Key Flags
 
-| Flag            | Purpose                     | Example                     |
-| :-------------- | :-------------------------- | :-------------------------- |
-| `-p`            | Headless mode               | `-p "your prompt"`          |
-| `--yolo` / `-y` | Auto-approve all tool calls | `--yolo`                    |
-| `-m`            | Model                       | `-m gemini-3.1-pro-preview` |
-| `-e`            | Load extension              | `-e code-review`            |
-| `-o`            | Output format               | `-o text`                   |
+| Flag            | Purpose                     | Example            |
+| :-------------- | :-------------------------- | :----------------- |
+| `-p`            | Headless mode               | `-p "your prompt"` |
+| `--yolo` / `-y` | Auto-approve all tool calls | `--yolo`           |
+| `-e`            | Load extension              | `-e code-review`   |
+| `-o`            | Output format               | `-o text`          |
 
 **Always use `-p` and `--yolo` when calling from another agent.** Without `-p`, Gemini launches interactive mode. Without `--yolo`, it hangs waiting for approval.
-
-## Models
-
-| Model                    | Use for                                    |
-| :----------------------- | :----------------------------------------- |
-| `gemini-3.1-pro-preview` | Complex reasoning, code analysis (default) |
-| `gemini-3-flash`         | Speed-critical, sub-second latency         |
-
-Default to `gemini-3.1-pro-preview`.
 
 ## Code Review Extension
 
 For uncommitted changes, the `/code-review` extension automatically picks up the working tree diff:
 
 ```bash
-gemini -p "/code-review" --yolo -e code-review -m gemini-3.1-pro-preview
+gemini -p "/code-review" --yolo -e code-review
 ```
 
 For branch diffs or specific commits, pipe the diff with `printf` + `cat` (not heredocs -- diffs contain `$` and backticks that break shell expansion):
@@ -34,7 +24,7 @@ For branch diffs or specific commits, pipe the diff with `printf` + `cat` (not h
 ```bash
 git diff main...HEAD > /tmp/review-diff.txt
 { printf '%s\n\n' 'Review this diff for code quality issues.'; cat /tmp/review-diff.txt; } \
-  | gemini -p - -m gemini-3.1-pro-preview --yolo
+  | gemini -p - --yolo
 ```
 
 ### Adding Project Context
@@ -44,7 +34,7 @@ git diff HEAD > /tmp/review-diff.txt
 { printf 'Project conventions:\n---\n'; cat CLAUDE.md; \
   printf '\n---\n\n%s\n\n' 'Review this diff for issues.'; \
   cat /tmp/review-diff.txt; } \
-  | gemini -p - -m gemini-3.1-pro-preview --yolo
+  | gemini -p - --yolo
 ```
 
 ## Security Review
@@ -55,7 +45,7 @@ The `/security:analyze` extension is **interactive-only**. For headless security
 git diff HEAD > /tmp/review-diff.txt
 { printf '%s\n\n' 'Analyze this diff for security vulnerabilities, including injection, auth bypass, data exposure, and input validation issues. Report each finding with severity, location, and remediation.'; \
   cat /tmp/review-diff.txt; } \
-  | gemini -p - -e gemini-cli-security -m gemini-3.1-pro-preview --yolo
+  | gemini -p - -e gemini-cli-security --yolo
 ```
 
 **Note:** The security extension installs as `gemini-cli-security` (not `security`). Always use `-e gemini-cli-security`.
@@ -77,7 +67,7 @@ Gemini can handle any task, not just code review. Use direct file reading for co
 **Codebase analysis:**
 
 ```bash
-gemini -m gemini-3.1-pro-preview --yolo -p "Read src/auth/ and identify race conditions, thread safety issues, and missing error handling. Report findings with severity and file:line references." -o text
+gemini --yolo -p "Read src/auth/ and identify race conditions, thread safety issues, and missing error handling. Report findings with severity and file:line references." -o text
 ```
 
 **Plan or document review:**
@@ -86,13 +76,13 @@ gemini -m gemini-3.1-pro-preview --yolo -p "Read src/auth/ and identify race con
 { printf '<role>You are an independent technical reviewer.</role>\n\n<task>Review this migration plan for correctness, risks, and missing steps.</task>\n\n<material>\n'; \
   cat docs/migration-plan.md; \
   printf '\n</material>\n\n<output_format>Critical issues, concerns, suggestions. End with verdict.</output_format>'; } \
-  | gemini -p - -m gemini-3.1-pro-preview --yolo
+  | gemini -p - --yolo
 ```
 
 **Arbitrary task with file context:**
 
 ```bash
-gemini -m gemini-3.1-pro-preview --yolo -p "Analyze the test coverage in tests/ and suggest which modules need more testing. Focus on edge cases and error paths." -o text
+gemini --yolo -p "Analyze the test coverage in tests/ and suggest which modules need more testing. Focus on edge cases and error paths." -o text
 ```
 
 ## Direct File Reading
@@ -100,7 +90,7 @@ gemini -m gemini-3.1-pro-preview --yolo -p "Analyze the test coverage in tests/ 
 Gemini reads project files directly (faster than piping, avoids 8MB stdin limit):
 
 ```bash
-gemini -m gemini-3.1-pro-preview --yolo -p "Read src/services/ and identify race conditions" -o text
+gemini --yolo -p "Read src/services/ and identify race conditions" -o text
 ```
 
 ## External Files
@@ -116,7 +106,7 @@ gemini --yolo -p "Compare auth patterns" --include-directories /path/to/other-re
 Set `timeout: 600000` on the Bash call (10 minutes):
 
 ```bash
-timeout 600 gemini -m gemini-3.1-pro-preview --yolo -p "Review codebase" -o text
+timeout 600 gemini --yolo -p "Review codebase" -o text
 ```
 
 ## Error Handling
