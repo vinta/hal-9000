@@ -1,7 +1,7 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
 # https://developers.openai.com/codex/config-reference
-model = "gpt-5.3-codex"
+model = "gpt-5.4"
 model_reasoning_effort = "xhigh"
 model_reasoning_summary = "detailed"
 model_supports_reasoning_summaries = true
@@ -27,3 +27,6 @@ writable_roots = [
 shell_snapshot = true
 unified_exec = true
 multi_agent = true
+
+[tui.model_availability_nux]
+"gpt-5.3-codex-spark" = 1
