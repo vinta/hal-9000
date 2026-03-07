@@ -105,13 +105,7 @@
       "Bash(systemsetup:*)",
       "Bash(pmset:*)"
     ],
-    "ask": [
-      "Bash(git checkout:*)",
-      "Bash(git reset:*)",
-      "Bash(npx supabase db:*)",
-      "Bash(curl:*)",
-      "Bash(wget:*)"
-    ],
+    "ask": ["Bash(npx supabase db:*)", "Bash(curl:*)", "Bash(wget:*)"],
     "defaultMode": "acceptEdits",
     "additionalDirectories": ["~/.claude", "~/Projects", "/usr/local/hal-9000"]
   },
