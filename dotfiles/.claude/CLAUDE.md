@@ -26,6 +26,7 @@ Implement changes rather than suggesting them. If intent is unclear, infer the m
 
 - **Minimal changes** — leave working code alone; only remove code or config when explicitly asked
 - **Justify new dependencies** — each one is attack surface and maintenance burden
+- **No phantom features** — don't document, validate, or reference features that aren't implemented
 
 ### Making Changes
 
@@ -37,10 +38,16 @@ Implement changes rather than suggesting them. If intent is unclear, infer the m
 - Verify environment assumptions — check paths, tool versions, tracked vs ignored status before acting
 - Run git commands from the project root instead of using `git -C`, which obscures working directory state
 
-### Writing Comments
+### Zero Warnings
+
+- Fix every warning from linters, type checkers, and tests
+- If truly unfixable, add an inline ignore with a justification comment
+
+### Writing Comments and Messages
 
 - Self-documenting code, not comments
 - If a comment explains WHAT the code does, refactor instead
+- Plain, factual language in commits and PRs — describe what's in the diff, not discarded approaches. A bug fix is a bug fix, not a "critical stability improvement"
 
 ### Error Handling
 
