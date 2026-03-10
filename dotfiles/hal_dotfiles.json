@@ -5,6 +5,10 @@
       "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md"
     },
     {
+      "dest": "{{HOME}}/.codex/AGENTS.md",
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md"
+    },
+    {
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
       "src": "{{HOME}}/.claude/projects"
     },
