@@ -112,6 +112,19 @@
     "defaultMode": "acceptEdits",
     "additionalDirectories": ["~/.claude", "~/Projects", "/usr/local/hal-9000"]
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/hooks/guard-bash-paths.py"
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/run.py"

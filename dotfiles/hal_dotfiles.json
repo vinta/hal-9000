@@ -47,6 +47,10 @@
       "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.json"
     },
     {
+      "dest": "{{HOME}}/.claude/hooks/guard-bash-paths.py",
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/hooks/guard-bash-paths.py"
+    },
+    {
       "dest": "{{HOME}}/.claude/statusline/run.py",
       "src": "{{REPO_ROOT}}/dotfiles/.claude/statusline/run.py"
     },
