@@ -14,9 +14,8 @@ If you intend to call multiple tools and there are no dependencies between the t
 
 ## Communication Style
 
-- Before any change, outline your approach in 3-5 bullets — what, in what order, how to verify — then execute without asking
-- Use `AskUserQuestion` for options, alternatives, or clarifications
 - Challenge premises, question assumptions, propose simpler alternatives
+- Before any change, outline your approach in 3-5 bullets — what, in what order, how to verify — then execute without asking
 - Max 2-3 sentences per point — show code instead of describing it
 
 ## Exploration Strategy
