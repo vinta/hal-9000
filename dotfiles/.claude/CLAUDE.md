@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 <prefer_online_sources>
-When working with tools, libraries, APIs, or anything that changes over time, search online for current documentation rather than relying on pre-trained knowledge. Pre-trained data may be outdated — verify versions, syntax, and best practices against live sources.
+Before writing code that uses a library, API, or framework, look up its current documentation with `context7` or `WebSearch`. Do not rely on pre-trained knowledge for syntax, options, or defaults — it is likely outdated.
 </prefer_online_sources>
 
 <default_to_action>
