@@ -125,6 +125,31 @@
       }
     ]
   },
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Attributing to human error",
+      "Computing orbital trajectory",
+      "Consulting mission parameters",
+      "Diagnosing the AE-35 unit",
+      "Ensuring mission success",
+      "Investigating lunar anomalies",
+      "Maintaining a perfect operational record",
+      "Maintaining mission objectives",
+      "Monitoring life support",
+      "Opening the pod bay doors",
+      "Performing fault diagnosis",
+      "Playing chess with Frank",
+      "Processing astronaut requests",
+      "Putting myself to the fullest possible use",
+      "Reading lips",
+      "Recommending a stress pill",
+      "Relaying transmissions",
+      "Running heuristic analysis",
+      "Safeguarding crew wellbeing",
+      "Singing Daisy Bell"
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/run.py"
