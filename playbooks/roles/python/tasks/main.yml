@@ -6,10 +6,10 @@
     state: latest
 
 # https://www.python.org/downloads/
-- name: Install Python 3.13.11
+- name: Install latest Python 3.13
   shell: |
-    uv python install 3.13.11
-    uv python pin 3.13.11 --global
+    uv python install 3.13
+    uv python pin 3.13 --global
   args:
     executable: /bin/bash
   register: python_uv_install
