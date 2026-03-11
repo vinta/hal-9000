@@ -1,8 +1,5 @@
 {
-  "alwaysThinkingEnabled": true,
   "cleanupPeriodDays": 365,
-  "effortLevel": "high",
-  "skipDangerousModePermissionPrompt": true,
   "env": {
     "DISABLE_AUTOUPDATER": "1",
     "DISABLE_BUG_COMMAND": "1",
@@ -108,9 +105,17 @@
       "Bash(systemsetup:*)",
       "Bash(pmset:*)"
     ],
-    "ask": ["Bash(npx supabase db:*)", "Bash(curl:*)", "Bash(wget:*)"],
+    "ask": [
+      "Bash(npx supabase db:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
+    ],
     "defaultMode": "acceptEdits",
-    "additionalDirectories": ["~/.claude", "~/Projects", "/usr/local/hal-9000"]
+    "additionalDirectories": [
+      "~/.claude",
+      "~/Projects",
+      "/usr/local/hal-9000"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -124,6 +129,17 @@
         ]
       }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "python3 ~/.claude/statusline/run.py"
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "gh-cli@trailofbits": true,
+    "hal-voice@hal-9000": true,
+    "skill-creator@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
   },
   "spinnerVerbs": {
     "mode": "replace",
@@ -150,16 +166,7 @@
       "Singing Daisy Bell"
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "python3 ~/.claude/statusline/run.py"
-  },
-  "enabledPlugins": {
-    "claude-md-management@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "gh-cli@trailofbits": true,
-    "hal-voice@hal-9000": true,
-    "skill-creator@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
-  }
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "skipDangerousModePermissionPrompt": true
 }
