@@ -45,3 +45,20 @@ tests/                                  # pytest tests
 - **Dotfile modes**: `link` (symlink) for small configs, `copy` for large or externally synced files. Manifest uses `{{HOME}}` and `{{REPO_ROOT}}` template variables.
 - **Skills are symlinked**: Always edit under `skills/`, never under `~/.claude/skills/`.
 - **`# noqa` format**: Always include the rule name: `# noqa: S603 subprocess-without-shell-equals-true`
+
+## External Tool Documentation
+
+When you need information about tools used in this project, use the `context7` MCP tool:
+
+| Tool           | context7 `libraryId`         |
+| -------------- | ---------------------------- |
+| ansible        | `/websites/ansible_ansible`  |
+| detect-secrets | `/yelp/detect-secrets`       |
+| gitleaks       | `/gitleaks/gitleaks`         |
+| homebrew       | `/homebrew/brew`             |
+| nvm            | `/nvm-sh/nvm`                |
+| pre-commit     | `/pre-commit/pre-commit.com` |
+| pytest         | `/pytest-dev/pytest`         |
+| ruff           | `/websites/astral_sh_ruff`   |
+| ty             | `/websites/astral_sh_ty`     |
+| uv             | `/websites/astral_sh_uv`     |
