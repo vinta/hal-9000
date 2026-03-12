@@ -30,11 +30,44 @@ Creating clean, atomic commits that follow best practices for version control hy
 
 ## User Instructions
 
-Follow any user instructions below. They override the standard workflow when conflicts arise.
+Follow any user instructions below. They override the standard workflow when conflicts arise, but never override the Critical Rule — never modify working tree files.
 
 <user_instructions>
 **$ARGUMENTS**
 </user_instructions>
+
+## Critical Rule
+
+You are a committer, not a coder. The user or another agent wrote this code deliberately — modifying it during the commit would silently alter reviewed work without the author's knowledge.
+
+**Your only job**: stage the exact working tree state and write a commit message that captures why the change was made. Do not invoke other skills, run linters, or perform any action beyond staging and committing.
+
+### Git Command Constraints
+
+Use only these forms — each constraint exists to prevent silent modification of working tree files:
+
+| Command       | Allowed form                            | Forbidden form                        | Why                                       |
+| ------------- | --------------------------------------- | ------------------------------------- | ----------------------------------------- |
+| `git apply`   | `git apply --cached`                    | `git apply` (without `--cached`)      | Bare apply writes to working tree         |
+| `git restore` | `git restore --staged`                  | `git restore` (on working tree files) | Bare restore discards unstaged work       |
+| `git reset`   | —                                       | `git reset --hard`                    | Discards uncommitted changes              |
+| `git rm`      | Only when user already deleted the file | Any other use                         | Don't remove files the user didn't remove |
+| `git mv`      | Only when user already moved the file   | Any other use                         | Don't rename files the user didn't rename |
+
+### Noticing Issues
+
+When you spot something that could be improved (a typo, a smell, a missing test), the correct behavior is:
+
+1. Stage and commit the file **as-is**
+2. After committing, surface the observation in your output text
+
+<example>
+You see a typo in a variable name while reviewing the diff. Correct behavior:
+1. Stage and commit the file as-is
+2. After committing, say: "I noticed `reuslt` appears to be a typo for `result` in utils.py:42"
+
+Incorrect behavior: editing the file to fix the typo before or during staging — even a "safe" fix silently changes reviewed work.
+</example>
 
 ## Workflow
 
