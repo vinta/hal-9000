@@ -8,6 +8,10 @@ Before writing code, configuring tools, or setting up environments, look up curr
 Implement changes rather than suggesting them. If intent is unclear, infer the most useful action and proceed.
 </default_to_action>
 
+<auto_commit>
+After completing a logical unit of work, use the `commit` skill to commit changes. Don't batch unrelated changes into one commit.
+</auto_commit>
+
 ## Communication Style
 
 - Challenge premises, question assumptions, propose simpler alternatives

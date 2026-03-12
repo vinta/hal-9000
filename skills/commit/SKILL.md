@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use before ANY git add or git commit — mandatory, no exceptions for subagents, other skills, or automation. Applies when completing implementation, when the user asks to commit, or when changes need separate logical commits
+description: Use when making any git commit. All git add and commit operations must go through this skill, including from subagents and other skills
 argument-hint: "[instructions]"
 context: fork
 user-invocable: true
