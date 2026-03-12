@@ -1,8 +1,7 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
-# https://developers.openai.com/codex/config-reference
 model = "gpt-5.4"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "high"
 model_reasoning_summary = "detailed"
 model_supports_reasoning_summaries = true
 model_verbosity = "high"
@@ -11,6 +10,10 @@ show_raw_agent_reasoning = true
 approval_policy = "on-request"
 personality = "pragmatic"
 sandbox_mode = "workspace-write"
+web_search = "live"
+
+[analytics]
+enabled = false
 
 [history]
 persistence = "save-all"
@@ -28,5 +31,16 @@ shell_snapshot = true
 unified_exec = true
 multi_agent = true
 
-[tui.model_availability_nux]
-"gpt-5.3-codex-spark" = 1
+[feedback]
+enabled = false
+
+[otel]
+exporter = "none"
+metrics_exporter = "none"
+trace_exporter = "none"
+
+[projects."/Users/vinta/Projects"]
+trust_level = "trusted"
+
+[projects."/usr/local/hal-9000"]
+trust_level = "trusted"
