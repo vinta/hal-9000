@@ -64,7 +64,7 @@ Follow any user instructions below. They override the standard workflow when con
    - If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit
 
 5. **Create Atomic Commits**: For each logical group:
-   - Write clear, descriptive commit messages following conventional format
+   - Plain, factual commit messages in conventional format — describe what's in the diff, not discarded approaches
    - Keep first line under 72 characters
    - Include context in body when necessary
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
