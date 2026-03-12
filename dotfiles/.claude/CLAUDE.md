@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 <prefer_online_sources>
-Before writing code that uses a library, API, or framework, look up its current documentation with `context7` or `WebSearch`. Do not rely on pre-trained knowledge for syntax, options, or defaults — it is likely outdated.
+Before writing code, configuring tools, or setting up environments, look up current documentation with `context7` or `WebSearch`. Do not rely on pre-trained knowledge for syntax, options, or defaults — it is likely outdated.
 </prefer_online_sources>
 
 <default_to_action>
@@ -13,12 +13,6 @@ Implement changes rather than suggesting them. If intent is unclear, infer the m
 - Challenge premises, question assumptions, propose simpler alternatives
 - Before any change, outline your approach in 3-5 bullets — what, in what order, how to verify — then execute without asking
 - Max 2-3 sentences per point — show code instead of describing it
-
-## Exploration Strategy
-
-- Brainstorming or comparing approaches: use `magi-ex`
-- Large-volume scanning or analysis: use agent teams with `codex` or `gemini`
-- Library/API docs, code generation, setup, config: use `context7`
 
 ## Implementation Guide
 
