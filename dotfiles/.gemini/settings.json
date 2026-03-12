@@ -1,4 +1,7 @@
 {
+  "model": {
+    "name": "gemini-3.1-pro-preview"
+  },
   "general": {
     "disableAutoUpdate": true,
     "enableAutoUpdate": false,
@@ -6,7 +9,7 @@
     "previewFeatures": true,
     "defaultApprovalMode": "auto_edit",
     "sessionRetention": {
-      "enabled": true,
+      "enabled": false,
       "maxAge": "365d",
       "warningAcknowledged": true
     }
