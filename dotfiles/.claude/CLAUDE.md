@@ -20,18 +20,14 @@ After completing a logical unit of work, use the `commit` skill to commit change
 
 ## Implementation Guide
 
-### Scope Management
+### Making Changes
 
 - **Minimal changes** — leave working code alone; only remove code or config when explicitly asked
 - **Justify new dependencies** — each one is attack surface and maintenance burden
 - **No phantom features** — don't document, validate, or reference features that aren't implemented
-
-### Making Changes
-
 - **One thing at a time** — behavioral or structural, never both
   - **Behavioral**: features, logic changes, bug fixes
   - **Structural**: renames, extract/inline, reorganize (no behavior change)
-- **Replace, don't deprecate** — remove the old implementation entirely. No shims, dual formats, or migration paths. Flag dead code
 - Search all usages before removing or renaming a dependency, import, or function
 - Verify environment assumptions — check paths, tool versions, tracked vs ignored status before acting
 - Run git commands from the project root instead of using `git -C`, which obscures working directory state
@@ -40,22 +36,3 @@ After completing a logical unit of work, use the `commit` skill to commit change
 
 - Fix every warning from linters, type checkers, and tests
 - If truly unfixable, add an inline ignore with a justification comment
-
-### Writing Comments and Messages
-
-- Self-documenting code, not comments
-- If a comment explains WHAT the code does, refactor instead
-- Plain, factual language in commits and PRs — describe what's in the diff, not discarded approaches. A bug fix is a bug fix, not a "critical stability improvement"
-
-### Error Handling
-
-- Fail fast with clear, actionable messages
-- Propagate exceptions with context: what operation, what input, suggested fix
-
-### Testing
-
-- **Test behavior, not implementation.** If a refactor breaks tests but not code, the tests were wrong
-- **Test edges and errors.** Empty inputs, boundaries, malformed data, missing files, failures — bugs live in edges
-- **Mock boundaries, not logic.** Only mock what's slow, non-deterministic, or external
-- **Verify tests catch failures.** Break code, confirm test fails, fix
-  - Use mutation testing (`mutmut`, `stryker`) and property-based testing (`hypothesis`, `fast-check`) for parsers and algorithms
