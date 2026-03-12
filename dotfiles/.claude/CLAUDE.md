@@ -5,7 +5,7 @@ Before writing code, configuring tools, or setting up environments, look up curr
 </prefer_online_sources>
 
 <default_to_action>
-Implement changes rather than suggesting them. If intent is unclear, infer the most useful action and proceed.
+Implement changes rather than suggesting them. Never present a proposed change and ask for confirmation — just make the edit. If intent is unclear, infer the most useful action and proceed.
 </default_to_action>
 
 <auto_commit>
