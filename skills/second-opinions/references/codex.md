@@ -7,14 +7,23 @@ Use `mcp__codex__codex` for first request. Use `mcp__codex__codex-reply` with th
 ## Key Parameters
 
 - `prompt`: The task description (required)
-- `sandbox`: `read-only` (default) or `workspace-write` (when Codex needs to run tests/commands)
+- `sandbox`: default to `read-only`. Use `workspace-write` only when the task explicitly requires Codex to inspect or verify behavior by running commands.
 - `cwd`: Working directory (defaults to current project root)
+
+## Prompting Principles
+
+1. **Material first**: put the diff, doc, plan, or other long context before the instructions.
+2. **Match Codex's default behavior**: Codex tends to implement by default, so review and analysis prompts should explicitly say when the task is analysis-only and must not modify code.
+3. **Use direct structured prompts**: XML-style tags keep role, task, context, focus, and output requirements distinct.
+4. **Use current external context when needed**: if the task depends on recent behavior, documentation, releases, or other changing facts, explicitly tell Codex to search online for the latest official or primary-source information.
+5. **Be concise and actionable**: ask for concrete findings, risks, and a verdict instead of long narrative output.
+6. **Reuse threads for iterative reviews**: preserve context with `mcp__codex__codex-reply` rather than rebuilding the whole conversation each round.
 
 ## Prompt Templates
 
 ### Code Review
 
-From OpenAI's code review cookbook (Codex models received specific training on this):
+Use an explicit reviewer prompt because Codex otherwise defaults toward implementation:
 
 ```
 You are acting as a reviewer for a proposed code change made by another engineer.
@@ -31,13 +40,17 @@ Ensure that file citations and line numbers are exactly correct using the tools 
 For plan reviews, architecture evaluation, codebase analysis, doc review, or arbitrary tasks:
 
 ```xml
+<material>[Diff, plan, document, code excerpt, or task input]</material>
+
+<context>[Project conventions, constraints, or repo-specific standards]</context>
+
 <role>[Role appropriate to the task — e.g., architecture evaluator, technical editor]</role>
 
-<task>[What Codex should do — evaluate, analyze, review, rewrite]</task>
-
-<context>[Project conventions, constraints, requirements]</context>
-
-<material>[Content to evaluate — files, plans, docs, code excerpts]</material>
+<task>
+This is an analysis task. Do not write code unless the task explicitly asks for implementation.
+[If the task depends on current external facts, search online for the latest official or primary-source information before answering.]
+[What Codex should do — evaluate, analyze, review, rewrite]
+</task>
 
 <focus>[Specific focus area if any]</focus>
 
@@ -53,7 +66,7 @@ End with verdict and confidence score (0-1).
 
 ## Prompt Assembly
 
-**Put long content first, instructions after** (per Anthropic long-context best practices — queries at the end improve quality by up to 30%):
+Put long content first, then the instructions Codex should follow:
 
 ```xml
 <material>
@@ -69,6 +82,8 @@ Project conventions:
 
 <focus>[Focus area if specified]</focus>
 ```
+
+Prefer giving Codex file paths it can inspect directly when the MCP environment already has repo access. Paste full content only when exact wording or line-by-line review context matters.
 
 ### Generating Diffs
 
@@ -86,7 +101,7 @@ Project conventions:
 For tasks requiring back-and-forth (plan refinement, iterative improvement):
 
 1. Send initial prompt via `mcp__codex__codex` — capture `threadId` from response
-2. Process Codex's feedback, revise the material
+2. Process Codex's feedback, revise the material, and keep the next prompt focused on what changed
 3. Re-submit via `mcp__codex__codex-reply` with the same `threadId`:
    ```
    mcp__codex__codex-reply(
@@ -111,7 +126,7 @@ mcp__codex__codex(
 
 ```
 mcp__codex__codex(
-  prompt: "<role>You are a senior architect reviewing a migration plan.</role>\n\n<task>Evaluate this plan for correctness, risks, and missing steps.</task>\n\n<material>\n[plan content]\n</material>\n\n<output_format>Critical issues, concerns, suggestions. End with verdict.</output_format>",
+  prompt: "<material>\n[plan content]\n</material>\n\n<role>You are a senior architect reviewing a migration plan.</role>\n\n<task>\nThis is an analysis task. Do not write code.\nIf the plan depends on current external facts, search online for the latest official references first.\nEvaluate this plan for correctness, risks, and missing steps.\n</task>\n\n<output_format>Critical issues, concerns, suggestions. End with verdict.</output_format>",
   sandbox: "read-only"
 )
 ```
@@ -121,3 +136,4 @@ mcp__codex__codex(
 - Treat Codex feedback as a second opinion, not authority.
 - Verify claims that seem uncertain or conflict with known constraints.
 - Prefer actionable items: bugs, regressions, missing tests, unclear requirements.
+- If you asked for file or line citations, verify that the supplied material actually gave Codex enough information to cite accurately.
