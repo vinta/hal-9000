@@ -116,6 +116,24 @@ class HAL9000:
         self._validate_path(expanded)
         return expanded
 
+    def _prepare_dotfile_entry(self, filename: str) -> tuple[str, str, str, str]:
+        filepath = str((Path.cwd() / filename).resolve())
+        self._validate_path(filepath)
+
+        home = str(Path.home())
+        relative_path = str(Path(filepath).relative_to(home)) if filepath.startswith(home) else Path(filepath).name
+
+        dest_path = str(Path(Setting.DOTFILES_ROOT) / relative_path)
+        dest_dir = str(Path(dest_path).parent)
+
+        if dest_dir != Setting.DOTFILES_ROOT:
+            Path(dest_dir).mkdir(parents=True, exist_ok=True)
+
+        template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
+        template_dest = filepath.replace(home, "{{HOME}}")
+
+        return filepath, dest_path, template_src, template_dest
+
     def _run(self, command: str, *, shell: bool = True, verbose: bool = True) -> int:
         if verbose:
             self._hal_says(command)
@@ -156,28 +174,16 @@ class HAL9000:
             self._hal_says("Now open a new shell to active your dev environment")
 
     def link(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
-        filepath = str((Path.cwd() / namespace.filename).resolve())
-        self._validate_path(filepath)
-
-        # Get relative path from home directory
-        home = str(Path.home())
-        relative_path = str(Path(filepath).relative_to(home)) if filepath.startswith(home) else Path(filepath).name
-
-        # Create destination path preserving directory structure
-        dest_path = str(Path(Setting.DOTFILES_ROOT) / relative_path)
-        dest_dir = str(Path(dest_path).parent)
-
-        if dest_dir != Setting.DOTFILES_ROOT:
-            Path(dest_dir).mkdir(parents=True, exist_ok=True)
+        filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)
 
         shutil.move(filepath, dest_path)
         self._hal_says(f"mv {filepath} -> {dest_path}")
-        ln_src = dest_path
-        ln_dest = filepath
-        self._run(f"ln -sf {shlex.quote(ln_src)} {shlex.quote(ln_dest)}")
 
-        template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
-        template_dest = filepath.replace(home, "{{HOME}}")
+        ln_dest = Path(filepath)
+        if ln_dest.is_symlink() or ln_dest.exists():
+            ln_dest.unlink()
+        ln_dest.symlink_to(dest_path)
+        self._hal_says(f"ln {dest_path} -> {filepath}")
 
         ln_dict = self.dotfiles.find_by_key("src", template_src, "links")
         if ln_dict:
@@ -217,25 +223,10 @@ class HAL9000:
         self.dotfiles.show()
 
     def copy(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
-        filepath = str((Path.cwd() / namespace.filename).resolve())
-        self._validate_path(filepath)
-
-        # Get relative path from home directory
-        home = str(Path.home())
-        relative_path = str(Path(filepath).relative_to(home)) if filepath.startswith(home) else Path(filepath).name
-
-        # Create destination path preserving directory structure
-        dest_path = str(Path(Setting.DOTFILES_ROOT) / relative_path)
-        dest_dir = str(Path(dest_path).parent)
-
-        if dest_dir != Setting.DOTFILES_ROOT:
-            Path(dest_dir).mkdir(parents=True, exist_ok=True)
+        filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)
 
         shutil.copy2(filepath, dest_path)
         self._hal_says(f"cp {filepath} -> {dest_path}")
-
-        template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
-        template_dest = filepath.replace(home, "{{HOME}}")
 
         cp_dict = self.dotfiles.find_by_key("src", template_src, "copies")
         if cp_dict:
@@ -255,11 +246,14 @@ class HAL9000:
         dest = self._expand_template(link["dest"]).rstrip("/")
         Path(dest).parent.mkdir(parents=True, exist_ok=True)
 
-        # If dest already exists as a real directory, `ln` will create the symlink "inside" it
+        # If dest already exists as a real directory, remove it so the symlink replaces it
         if Path(dest).is_dir() and not Path(dest).is_symlink():
             shutil.rmtree(dest)
 
-        self._run(f"ln -sfn {shlex.quote(src)} {shlex.quote(dest)}", verbose=False)
+        dest_path = Path(dest)
+        if dest_path.is_symlink() or dest_path.exists():
+            dest_path.unlink()
+        dest_path.symlink_to(src)
         self._hal_says(f"link {src} -> {dest}")
 
     def _sync_copies(self, copy: dict[str, str]) -> None:

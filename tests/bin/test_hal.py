@@ -1,5 +1,4 @@
 import argparse
-import shlex
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -56,8 +55,7 @@ class TestUpdateSanitization:
         hal_instance.update(ns, extra_args=["--tags", "foo;rm -rf ~"])
 
         ansible_cmd = next(c for c in commands_run if "ansible-playbook" in c)
-        # The dangerous string must be quoted -- bare ;rm should not appear
-        assert ";rm" not in ansible_cmd or shlex.quote("foo;rm -rf ~") in ansible_cmd
+        assert "'foo;rm -rf ~'" in ansible_cmd
 
 
 class TestFileOpsUseStdlib:
@@ -93,6 +91,8 @@ class TestFileOpsUseStdlib:
         assert len(mkdir_cmds) == 0, f"Should not shell out to mkdir: {mkdir_cmds}"
         mv_cmds = [c for c in commands_run if c.startswith("mv ")]
         assert len(mv_cmds) == 0, f"Should not shell out to mv: {mv_cmds}"
+        ln_cmds = [c for c in commands_run if c.startswith("ln ")]
+        assert len(ln_cmds) == 0, f"Should not shell out to ln: {ln_cmds}"
 
     def test_copy_no_shell_cp(self, hal_instance, tmp_path):
         """copy() should use shutil.copy2() not shell cp."""
