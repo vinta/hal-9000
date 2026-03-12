@@ -9,7 +9,7 @@ Implement changes rather than suggesting them. If intent is unclear, infer the m
 </default_to_action>
 
 <auto_commit>
-After completing a logical unit of work, use the `commit` skill to commit changes. Don't batch unrelated changes into one commit.
+After completing a logical unit of work, use the `commit` skill to commit changes. Pass the motivation (why the change was made) as the argument so the commit message captures intent, not just the diff. Don't batch unrelated changes into one commit.
 </auto_commit>
 
 ## Communication Style

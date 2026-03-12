@@ -64,9 +64,9 @@ Follow any user instructions below. They override the standard workflow when con
    - If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit
 
 5. **Create Atomic Commits**: For each logical group:
-   - Plain, factual commit messages in conventional format — describe what's in the diff, not discarded approaches
-   - Keep first line under 72 characters
-   - Include context in body when necessary
+   - Plain, factual commit messages in conventional format
+   - Subject line: what changed (under 72 characters)
+   - Body: why — the motivation, problem, or context that makes the diff make sense
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
