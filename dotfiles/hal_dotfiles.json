@@ -59,6 +59,10 @@
       "src": "{{REPO_ROOT}}/dotfiles/.claude/statusline/run.py"
     },
     {
+      "dest": "{{HOME}}/.claude/rules/",
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/rules/"
+    },
+    {
       "dest": "{{HOME}}/.claude/skills/magi/",
       "src": "{{REPO_ROOT}}/skills/magi/"
     },
