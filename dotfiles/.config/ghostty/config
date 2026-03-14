@@ -14,6 +14,22 @@ cursor-style-blink = false
 # https://ghostty.org/docs/config/reference#shell-integration-features
 shell-integration-features = no-cursor,title,ssh-env,ssh-terminfo
 
-copy-on-select = clipboard
+# https://ghostty.org/docs/config/reference#scrollback-limit
 scrollback-limit = 50000000
 
+# https://ghostty.org/docs/config/reference#clipboard-paste-protection
+clipboard-paste-protection = true
+clipboard-paste-bracketed-safe = true
+
+# https://ghostty.org/docs/config/reference#quick-terminal-position
+quick-terminal-position = top
+quick-terminal-screen = mouse
+quick-terminal-autohide = true
+quick-terminal-animation-duration = 0.15
+
+# https://ghostty.org/docs/config/keybind/reference#new_split
+# https://ghostty.org/docs/config/keybind/reference#toggle_split_zoom
+keybind = cmd+alt+h=new_split:right
+keybind = cmd+alt+v=new_split:down
+keybind = cmd+alt+enter=toggle_split_zoom
+keybind = global:cmd+backquote=toggle_quick_terminal
