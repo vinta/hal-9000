@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # ruff: noqa: RUF001 ambiguous-unicode-character-string
+from __future__ import annotations
+
 import json
 import logging
 import os
