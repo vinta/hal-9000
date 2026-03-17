@@ -37,9 +37,3 @@ enabled = false
 exporter = "none"
 metrics_exporter = "none"
 trace_exporter = "none"
-
-[projects."/Users/vinta/Projects"]
-trust_level = "trusted"
-
-[projects."/usr/local/hal-9000"]
-trust_level = "trusted"
