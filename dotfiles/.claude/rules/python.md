@@ -11,6 +11,7 @@ paths:
 - Use modern syntax: `X | Y` unions, `match`/`case`, `tomllib`
 - Scripts run by system `python3` must work on Python 3.9 — add `from __future__ import annotations` and avoid 3.10+ stdlib APIs
 - Use `uv` for project and environment management
+  - `uv run` instead of `python3` — picks up the project venv and dependencies automatically
 - Use `ruff` for linting and formatting
 - Use `pytest` for testing
   - `assert` is fine in tests but use `# noqa: S101 assert` elsewhere
