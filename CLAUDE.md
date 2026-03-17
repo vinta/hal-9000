@@ -41,7 +41,7 @@ tests/                                  # pytest tests
 
 ## Gotchas
 
-- **Python >=3.11** required. Package management via `uv`.
+- **Python >=3.13** required. Package management via `uv`.
 - **Dotfiles are the source of truth**: `dotfiles/.claude/` syncs to `~/.claude/` and `skills/` syncs to `~/.claude/skills/` via `hal_dotfiles.json`. Always edit under `dotfiles/` or `skills/`, never under `~/.claude/` directly. Update `hal_dotfiles.json` when adding new files, then run `hal sync`.
 - **Dotfile modes**: `link` (symlink) for small configs, `copy` for large or externally synced files. Manifest uses `{{HOME}}` and `{{REPO_ROOT}}` template variables.
 

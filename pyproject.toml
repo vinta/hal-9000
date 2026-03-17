@@ -5,7 +5,7 @@ description = "Opinionated macOS development environment automation"
 authors = [{ name = "Vinta Chen", email = "vinta.chen@gmail.com" }]
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = []
 
 [project.urls]
@@ -28,7 +28,7 @@ default-groups = ["dev"]
 
 [tool.ruff]
 line-length = 200
-target-version = "py311"
+target-version = "py313"
 extend-include = ["bin/hal"]
 
 [tool.ruff.lint]
@@ -68,4 +68,4 @@ possibly-unresolved-reference = "error"
 unused-ignore-comment = "error"
 
 [tool.ty.environment]
-python-version = "3.11"
+python-version = "3.13"
