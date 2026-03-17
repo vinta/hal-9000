@@ -9,7 +9,7 @@ paths:
 - Pin exact dependency versions in `pyproject.toml` — no `>=`, `~=`, or `^` specifiers
 - Target Python >=3.13 by default — if a project sets an explicit version (e.g. `requires-python` in `pyproject.toml`), follow that instead
 - Use modern syntax: `X | Y` unions, `match`/`case`, `tomllib`
-- Scripts run by system `python3` (hooks, statusline) must work on Python 3.9 — add `from __future__ import annotations` and avoid 3.10+ stdlib APIs
+- Scripts run by system `python3` must work on Python 3.9 — add `from __future__ import annotations` and avoid 3.10+ stdlib APIs
 - Use `uv` for project and environment management
 - Use `ruff` for linting and formatting
 - Use `pytest` for testing
