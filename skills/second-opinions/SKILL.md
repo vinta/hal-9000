@@ -54,53 +54,16 @@ Follow any user instructions below. They override the standard workflow when con
 
 ### 1. Gather Context
 
-Use `AskUserQuestion` to collect parameters. Skip questions whose answers are obvious from user arguments. Combine into one call (max 4 questions).
+Infer as many parameters as possible from `$ARGUMENTS` and conversation context. Only ask about what can't be inferred. Combine remaining questions into a single `AskUserQuestion` call (max 3 questions).
 
-**Tool** (always ask unless specified):
+**Parameters to resolve:**
 
-```
-header: "Tool"
-question: "Which model should run this?"
-options:
-  - "Both Codex and Gemini (Recommended)" -> parallel dispatch
-  - "Codex only"
-  - "Gemini only"
-```
-
-**Task type** (always ask unless clear from arguments):
-
-```
-header: "Task type"
-question: "What kind of task?"
-options:
-  - "Code review (diff-based)"
-  - "Plan or architecture review"
-  - "Documentation or content review"
-  - "Custom task"
-```
-
-**Focus** (skip for custom tasks where the user already specified intent):
-
-```
-header: "Focus"
-question: "Any specific focus?"
-options:
-  - "General review"
-  - "Security & auth"
-  - "Performance"
-  - "Correctness & edge cases"
-```
-
-**Diff scope** (only for code review):
-
-```
-header: "Diff scope"
-question: "What should be reviewed?"
-options:
-  - "Uncommitted changes"  -> git diff HEAD + untracked
-  - "Branch diff vs main"  -> git diff <branch>...HEAD
-  - "Specific commit"      -> follow up for SHA
-```
+| Parameter  | Inference rules                                                                                    | Ask if…                                    |
+| ---------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Tool       | "codex" or "gemini" in arguments → single tool. Default: both.                                     | Ambiguous reference to one tool            |
+| Task type  | "review" / "diff" → code review. "plan" / "architecture" → plan review. "doc" → doc review.        | No clear signal in arguments               |
+| Focus      | "security" / "perf" / "correctness" in arguments → that focus. Default: general.                   | Never — default to general                 |
+| Diff scope | Uncommitted changes if no other signal. "branch" → branch diff. SHA-like string → specific commit. | Task is code review and scope is ambiguous |
 
 ### 2. Build Material
 
@@ -176,20 +139,7 @@ See [references/gemini.md](references/gemini.md) for Gemini CLI invocation patte
 
 ### 4. Present Results
 
-**Both tools:**
-
-```
-## Codex Findings
-<findings>
-
-## Gemini Findings
-<findings>
-
-## Synthesis
-- **Agreements**: Where both models align
-- **Divergences**: Where they disagree and your assessment of who's right
-- **Action items**: Prioritized changes to consider
-```
+**Both tools:** Present each model's findings, then a **Synthesis** section highlighting agreements, divergences (with your assessment of who's right), and prioritized action items.
 
 **Single tool:** Present findings with your assessment of which items are valid vs uncertain.
 
@@ -236,3 +186,12 @@ User: /second-opinions have gemini analyze src/auth/ for race conditions
 Agent: [dispatches Gemini with direct file reading]
 Agent: [presents findings with assessment]
 ```
+
+## Gotchas
+
+- **Gemini hangs without `--yolo`.** It enters interactive approval mode when called from another agent. Always pass `--yolo` (or `-y`).
+- **Codex defaults to implementing.** Without an explicit "this is an analysis task, do not write code" instruction, Codex will produce patches instead of findings. Always include analysis-only framing.
+- **Heredocs break with diffs.** Diffs contain `$`, backticks, and special characters that break shell heredoc expansion. Always pipe with `printf` + `cat` instead.
+- **Bare `git diff` misses staged changes.** Use `git diff HEAD` to capture both staged and unstaged modifications.
+- **Large diffs degrade review quality.** Beyond ~2000 lines, both models start missing issues. Warn the user and suggest narrowing scope.
+- **`-e security` is silently ignored.** The Gemini security extension installs as `gemini-cli-security`, not `security`.
