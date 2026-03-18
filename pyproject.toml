@@ -13,22 +13,21 @@ Homepage = "https://vinta.ws/code/"
 Repository = "https://github.com/vinta/hal-9000"
 
 [dependency-groups]
+test = ["pytest>=9.0.2"]
+lint = ["ansible-lint>=26.1.1", "ruff>=0.15.2", "ty>=0.0.18"]
+audit = ["detect-secrets>=1.5.0", "pip-audit>=2.10.0", "pre-commit>=4.5.1"]
 dev = [
     { include-group = "test" },
     { include-group = "lint" },
     { include-group = "audit" },
     "argcomplete>=3.6.3",
 ]
-test = ["pytest>=9.0.2"]
-lint = ["ansible-lint>=26.1.1", "ruff>=0.15.2", "ty>=0.0.18"]
-audit = ["detect-secrets>=1.5.0", "pip-audit>=2.10.0", "pre-commit>=4.5.1"]
 
 [tool.uv]
 default-groups = ["dev"]
 
 [tool.ruff]
 line-length = 200
-target-version = "py313"
 extend-include = ["bin/hal"]
 
 [tool.ruff.lint]
@@ -43,9 +42,9 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = [
-    "ANN",    # type annotations not needed in tests
-    "S101",   # assert is the standard for pytest
-    "SLF001", # testing private methods is intentional
+    "ANN",     # type annotations not needed in tests
+    "S101",    # assert is the standard for pytest
+    "SLF001",  # testing private methods is intentional
     "PLR2004", # magic values are clear in test assertions
 ]
 
@@ -66,6 +65,3 @@ error-on-warning = true
 [tool.ty.rules]
 possibly-unresolved-reference = "error"
 unused-ignore-comment = "error"
-
-[tool.ty.environment]
-python-version = "3.13"
