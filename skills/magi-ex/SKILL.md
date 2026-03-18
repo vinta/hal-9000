@@ -50,6 +50,7 @@ If the question is underspecified, use `AskUserQuestion` to nail down purpose, c
 Read the personality and reference files, then spawn all teammates in parallel.
 
 **Files to read:**
+
 - Personalities: [MAGI-1.md](personalities/MAGI-1.md), [MAGI-2.md](personalities/MAGI-2.md), [MAGI-3.md](personalities/MAGI-3.md)
 - References: [codex.md](references/codex.md), [gemini.md](references/gemini.md)
 
@@ -57,11 +58,11 @@ Read the personality and reference files, then spawn all teammates in parallel.
 
 **Spawn all 3 teammates in a single message** (3 parallel `Agent` calls with `team_name` set):
 
-| Teammate  | `name`      | `subagent_type`   | Prompt includes                                                          |
-| --------- | ----------- | ----------------- | ------------------------------------------------------------------------ |
-| Scientist | `scientist` | `general-purpose` | MAGI-1.md personality + question (reasons directly as Opus)              |
-| Mother    | `mother`    | `general-purpose` | MAGI-2.md personality + codex.md (dispatches to Codex MCP) + question    |
-| Woman     | `woman`     | `general-purpose` | MAGI-3.md personality + gemini.md (dispatches to Gemini CLI) + question  |
+| Teammate  | `name`      | `subagent_type`   | Prompt includes                                                         |
+| --------- | ----------- | ----------------- | ----------------------------------------------------------------------- |
+| Scientist | `scientist` | `general-purpose` | MAGI-1.md personality + question (reasons directly as Opus)             |
+| Mother    | `mother`    | `general-purpose` | MAGI-2.md personality + codex.md (dispatches to Codex MCP) + question   |
+| Woman     | `woman`     | `general-purpose` | MAGI-3.md personality + gemini.md (dispatches to Gemini CLI) + question |
 
 Include all clarified context in each spawn prompt -- teammates have no conversation history.
 
@@ -107,3 +108,11 @@ Tear down only when the user selects **Write a plan** or **Done**.
 ### 7. Handoff (write a plan path only)
 
 After teardown, invoke `writing-plans` skill with the chosen option(s) as context.
+
+## Gotchas
+
+- **Teammates have no conversation history.** Everything they need must be in the spawn prompt — the user's question, clarified context, CLAUDE.md, and their personality/reference files. If you forget context from the Clarify step, the teammate works blind.
+- **`TeamDelete` fails if teammates are still active.** Always send `shutdown_request` to all three and wait for approvals before calling `TeamDelete`.
+- **Save the Codex `threadId`.** Mother's first `mcp__codex__codex` call returns a `threadId` needed for debate follow-ups via `mcp__codex__codex-reply`. If lost, the debate round must re-send full context.
+- **Gemini has no persistent thread.** Unlike Codex, each Gemini call is stateless. For debate rounds, the full proposal list and persona must be re-sent every time.
+- **Teammates may not report back.** If a teammate goes silent, send a `SendMessage` nudge. After 2 minutes of silence, collect what you have and present partial results.
