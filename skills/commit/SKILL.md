@@ -78,9 +78,7 @@ Incorrect behavior: editing the file to fix the typo before or during staging �
    - If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit
 
 5. **Create Atomic Commits**: For each logical group:
-   - Plain, factual commit messages in conventional format
-   - Subject line: what changed (under 72 characters)
-   - Body: why — the motivation, problem, or context that makes the diff make sense
+   - Conventional commit format. Subject: what changed (≤72 chars). Body: why.
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
@@ -101,3 +99,13 @@ Co-Authored-By: Gemini <gemini-code-assistant@google.com>
 ```
 
 Skip if you're not one of the above models.
+
+## Gotchas
+
+- **Never modify working tree files — even from a subagent.** This skill runs in a forked context. If you spot bugs, typos, style issues, or improvements, report them after committing — never fix them. Your only job is staging and writing the commit message.
+- **Don't commit plan or spec docs unless the user explicitly asked you to.** Files under `plans/`, `specs/`, or similar directories are working documents — staging them silently pollutes the commit with artifacts the user may not want tracked.
+- **`git apply --cached` fails on malformed patches.** Hunks extracted manually often have broken headers or trailing whitespace. Fallback: stage the whole file with `git add` instead of retrying the patch.
+- **No `$()` or heredoc subshells in `git commit -m`.** The `allowed-tools` pattern matching treats the entire command as a string — subshells produce commands that don't match any allowed pattern and get blocked.
+- **Pre-commit hooks that auto-format staged files cause loops.** The hook modifies the file, which un-stages the formatted version. Fix: re-add the modified files and retry the commit once. Don't retry indefinitely.
+- **Never `git reset --hard` to unstage.** It destroys working tree changes. Use `git restore --staged` to unstage without losing anything.
+- **Stash before commit if hooks complain about unstaged changes.** Use `git stash push --keep-index` to isolate unstaged work, commit, then `git stash pop`. Forgetting the pop leaves work stranded in the stash.
