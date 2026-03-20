@@ -10,7 +10,7 @@
   shell: |
     export NVM_DIR="${HOME}/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    npm install -g @openai/codex
+    npm install -g @openai/codex@latest
   args:
     executable: /bin/bash
 
@@ -19,6 +19,15 @@
   shell: |
     export NVM_DIR="${HOME}/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    npm install -g @google/gemini-cli
+    npm install -g @google/gemini-cli@latest
+  args:
+    executable: /bin/bash
+
+# https://github.com/upstash/context7
+- name: Install Context7 CLI
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install -g ctx7@latest
   args:
     executable: /bin/bash
