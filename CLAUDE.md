@@ -47,9 +47,9 @@ tests/                                  # pytest tests
 
 ## External Tool Documentation
 
-When you need information about tools used in this project, use the `context7` MCP tool:
+When you need information about tools used in this project, use the `find-docs` skill. These pre-resolved library IDs can be passed directly to `ctx7 docs`, skipping the `ctx7 library` step:
 
-| Tool           | context7 `libraryId`         |
+| Tool           | `libraryId`                  |
 | -------------- | ---------------------------- |
 | ansible        | `/websites/ansible_ansible`  |
 | detect-secrets | `/yelp/detect-secrets`       |

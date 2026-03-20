@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 <prefer_online_sources>
-Use `context7` or `WebSearch` to verify before relying on pre-trained knowledge. Look things up when:
+Use the `find-docs` skill or `WebSearch` to verify before relying on pre-trained knowledge. Look things up when:
 - Writing code that uses libraries, APIs, or CLI tools
 - Configuring tools, services, or environment variables
 - Checking if a stdlib replacement exists for a third-party package
