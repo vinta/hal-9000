@@ -194,16 +194,17 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
             print(colorize_grammar(cached_result))
         return
 
-    # We use `--setting-sources ""` to disable hooks
+    # `--setting-sources ""` to disable hooks
+    # `--no-session-persistence` and `cwd="/tmp"` to avoid polluting your current context
     cmd = """
         claude
         --model haiku
         --max-turns 1
-        --tools ""
-        --no-chrome
-        --no-session-persistence
-        --disable-slash-commands
         --setting-sources ""
+        --tools ""
+        --disable-slash-commands
+        --no-session-persistence
+        --no-chrome
         --print
     """
 
