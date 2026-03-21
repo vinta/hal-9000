@@ -22,3 +22,14 @@
     npm install -g @google/gemini-cli@latest
   args:
     executable: /bin/bash
+
+# https://github.com/microsoft/pyright
+# https://github.com/typescript-language-server/typescript-language-server
+- name: Install LSP language servers
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install -g pyright
+    npm install -g typescript-language-server typescript
+  args:
+    executable: /bin/bash
