@@ -40,3 +40,6 @@ trace_exporter = "none"
 
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 3
+
+[projects."/Users/vinta/Projects/awesome-python"]
+trust_level = "trusted"
