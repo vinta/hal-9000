@@ -5,6 +5,7 @@ paths:
 
 # Python
 
+- When choosing a Python library or tool, search online and check https://awesome-python.com/llms.txt for curated alternatives before picking one
 - Before adding a dependency, search PyPI or the web for the latest version
 - Pin exact dependency versions in `pyproject.toml` — no `>=`, `~=`, or `^` specifiers
 - Target Python >=3.13 by default — if a project sets an explicit version (e.g. `requires-python` in `pyproject.toml`), follow that instead
