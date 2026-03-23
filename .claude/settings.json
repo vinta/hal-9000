@@ -1,5 +1,20 @@
 {
   "enabledPlugins": {
     "plugin-dev@claude-plugins-official": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/sync-dotfiles.sh 2>/dev/null || true",
+            "timeout": 30,
+            "statusMessage": "Syncing dotfiles..."
+          }
+        ]
+      }
+    ]
   }
 }
