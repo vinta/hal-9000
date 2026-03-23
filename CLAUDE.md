@@ -39,6 +39,13 @@ tests/                                  # pytest tests
 - Run `make lint`, `make format`, `make typecheck` after editing Python or Ansible files.
 - After adding or modifying a skill, run `hal sync` to update symlinks.
 
+## CI
+
+GitHub Actions run on push/PR:
+
+- `scan-secrets.yml`: gitleaks + detect-secrets
+- `validate-ansible-playbooks.yml`: ansible-lint + syntax-check
+
 ## Gotchas
 
 - **Python >=3.13** required. Package management via `uv`.
