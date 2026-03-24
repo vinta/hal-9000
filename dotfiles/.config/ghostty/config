@@ -34,7 +34,7 @@ quick-terminal-animation-duration = 0.15
 
 # https://ghostty.org/docs/config/keybind/reference#new_split
 # https://ghostty.org/docs/config/keybind/reference#toggle_split_zoom
-keybind = cmd+alt+h=new_split:right
-keybind = cmd+alt+v=new_split:down
+keybind = cmd+alt+h=new_split:down
+keybind = cmd+alt+v=new_split:right
 keybind = cmd+alt+enter=toggle_split_zoom
 keybind = cmd+backquote=toggle_quick_terminal
