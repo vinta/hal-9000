@@ -9,7 +9,7 @@ Opinionated macOS development environment automation that dominates your dev set
 ## Tech Stack
 
 - [Agent Skills](skills)
-- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Statusline](dotfiles/.claude/statusline)
+- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](dotfiles/.claude/statusline)
 - [Codex](dotfiles/.codex)
 - [Gemini](dotfiles/.gemini)
 - [Python](playbooks/roles/python/tasks/main.yml)
