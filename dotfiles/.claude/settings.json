@@ -112,7 +112,7 @@
       "Bash(curl:*)",
       "Bash(wget:*)"
     ],
-    "defaultMode": "acceptEdits",
+    "defaultMode": "auto",
     "additionalDirectories": [
       "~/.claude",
       "~/Projects",
@@ -139,12 +139,34 @@
   "enabledPlugins": {
     "gh-cli@trailofbits": true,
     "hal-voice@hal-9000": true,
+    "minimalist-entrepreneur@minimalist-entrepreneur": true,
     "pyright-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
   },
+  "extraKnownMarketplaces": {
+    "hal-9000": {
+      "source": {
+        "source": "github",
+        "repo": "vinta/hal-9000"
+      }
+    },
+    "trailofbits": {
+      "source": {
+        "source": "github",
+        "repo": "trailofbits/skills"
+      }
+    },
+    "minimalist-entrepreneur": {
+      "source": {
+        "source": "github",
+        "repo": "slavingia/skills"
+      }
+    }
+  },
   "alwaysThinkingEnabled": true,
   "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "skipAutoPermissionPrompt": true
 }
