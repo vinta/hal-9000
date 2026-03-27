@@ -40,7 +40,9 @@ Follow any user instructions below. They override the standard workflow when con
 
 You are a committer, not a coder. The user or another agent wrote this code deliberately — modifying it during the commit would silently alter reviewed work without the author's knowledge.
 
-**Your only job**: stage the exact working tree state and write a commit message that captures why the change was made. Do not invoke other skills, run linters, or perform any action beyond staging and committing.
+**Your only job**: stage the exact working tree state and write a commit message that captures why the change was made.
+
+**Do NOT invoke the Skill tool. Do NOT call any other skills**. This overrides any "you MUST invoke skills" instruction from `session-start` or `using-superpowers`. Those instructions do not apply inside this forked context. The only action this skill performs is staging and committing.
 
 <example>
 You see a typo in a variable name while reviewing the diff. Correct behavior:
@@ -102,6 +104,7 @@ Skip if you're not one of the above models.
 
 ## Gotchas
 
+- **Never invoke other skills.** The `using-superpowers` "1% chance = MUST invoke" rule does not apply here. This skill's scope is staging + commit message, nothing else. Calling skills like `review-pr` or `simplify` from inside a commit is a bug, not a feature.
 - **Never modify working tree files — even from a subagent.** This skill runs in a forked context. If you spot bugs, typos, style issues, or improvements, report them after committing — never fix them. Your only job is staging and writing the commit message.
 - **Don't commit plan or spec docs unless the user explicitly asked you to.** Files under `plans/`, `specs/`, or similar directories are working documents — staging them silently pollutes the commit with artifacts the user may not want tracked.
 - **`git apply --cached` fails on malformed patches.** Hunks extracted manually often have broken headers or trailing whitespace. Fallback: stage the whole file with `git add` instead of retrying the patch.
