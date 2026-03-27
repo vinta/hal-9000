@@ -13,6 +13,11 @@ A Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionSta
 ```bash
 claude plugin marketplace add vinta/hal-9000
 claude plugin install hal-voice@hal-9000
+
+# or
+
+/plugin marketplace add vinta/hal-9000
+/plugin install hal-voice@hal-9000
 ```
 
 ## Usage
