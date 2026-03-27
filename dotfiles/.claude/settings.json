@@ -167,6 +167,7 @@
   },
   "alwaysThinkingEnabled": true,
   "voiceEnabled": true,
+  "showClearContextOnPlanAccept": true,
   "skipDangerousModePermissionPrompt": true,
   "skipAutoPermissionPrompt": true
 }
