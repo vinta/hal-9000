@@ -4,6 +4,7 @@ paths:
   - "**/*.tsx"
   - "**/*.js"
   - "**/*.jsx"
+  - "docs/**/*.md"
 ---
 
 # TypeScript / JavaScript

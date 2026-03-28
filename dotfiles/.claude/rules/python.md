@@ -1,6 +1,7 @@
 ---
 paths:
   - "**/*.py"
+  - "docs/**/*.md"
 ---
 
 # Python
