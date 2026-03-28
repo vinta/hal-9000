@@ -1,11 +1,12 @@
 ---
 name: commit
-description: Use when making any git commit. All git add and commit operations must go through this skill, including from subagents and other skills
-argument-hint: "[instructions]"
+description: Use when making any git commit. All git add and commit operations must go through this skill, including from subagents and other skills. Always pass a brief description of what changed as the argument
+argument-hint: "[what changed]"
 context: fork
 agent: committer
 user-invocable: true
 model: sonnet
+effort: high
 allowed-tools:
   - Grep
   - Glob
@@ -25,17 +26,7 @@ allowed-tools:
   - Edit(//tmp/**)
 ---
 
-# Overview
-
-Creating clean, atomic commits that follow best practices for version control hygiene. The core principle is **one logical change per commit** - each commit should represent a single, coherent, easily revertable modification that can stand alone.
-
-## User Instructions
-
-Follow any user instructions below. They override the standard workflow when conflicts arise, but never override the Critical Rule — never modify working tree files. If no user instructions are provided, commit all changes in the working tree.
-
-<user_instructions>
-**$ARGUMENTS**
-</user_instructions>
+Commit all changes in the working tree. Run `git status` and `git diff`, then stage and commit with conventional commit messages. One logical change per commit.
 
 ## Critical Rule
 
@@ -83,23 +74,6 @@ Incorrect behavior: editing the file to fix the typo before or during staging �
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
-## Attribution
-
-Include a `Co-Authored-By` footer in every commit message:
-
-If you're an Anthropic Claude model:
-
-```
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
-
-If you're a Google Gemini model:
-
-```
-Co-Authored-By: Gemini <gemini-code-assistant@google.com>
-```
-
-Skip if you're not one of the above models.
 
 ## Gotchas
 

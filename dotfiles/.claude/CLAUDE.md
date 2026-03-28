@@ -28,7 +28,7 @@ Write the script to `/tmp/` and run it. Never use inline one-liners like `python
 </no_inline_scripts>
 
 <auto_commit if="you have completed the user's requested change">
-Use the `commit` skill to commit. Don't batch unrelated changes into one commit.
+Use the `commit` skill to commit, always passing a brief description of what changed (e.g. `/commit add login endpoint`). Don't batch unrelated changes into one commit.
 </auto_commit>
 
 ## Making Changes
