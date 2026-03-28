@@ -1,6 +1,6 @@
 ---
 name: second-opinions
-description: Use when wanting independent perspectives from external models (Codex, Gemini) on code, plans, docs, or any task — or when the user asks for a second opinion, codex review, gemini review, or adversarial challenge
+description: Use when wanting independent perspectives from external models (Codex, Gemini) on code, plans, docs, or any task — or when the user asks for a second opinion, codex review, or gemini review
 argument-hint: "[instructions]"
 user-invocable: true
 model: opus
@@ -24,7 +24,7 @@ This skill is for Claude only. Codex and Gemini CLI should not invoke it.
 
 # Second Opinions
 
-Delegate tasks to OpenAI Codex (MCP) and/or Google Gemini (CLI) for independent perspectives from different model families. Works for code review, adversarial challenge, plan evaluation, doc editing, codebase analysis, or any arbitrary task.
+Delegate tasks to OpenAI Codex (MCP) and/or Google Gemini (CLI) for independent perspectives from different model families. Works for code review, plan evaluation, doc editing, codebase analysis, or any arbitrary task.
 
 **Modes:** `both` (default), `codex`, `gemini`
 
@@ -61,7 +61,7 @@ Infer as many parameters as possible from `$ARGUMENTS` and conversation context.
 | Parameter  | Inference rules                                                                                    | Ask if…                                    |
 | ---------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------ |
 | Tool       | "codex" or "gemini" in arguments → single tool. Default: both.                                     | Ambiguous reference to one tool            |
-| Task type  | "review" / "diff" → code review. "challenge" / "break" / "adversarial" → challenge. "plan" / "architecture" → plan review. "doc" → doc review. | No clear signal in arguments               |
+| Task type  | "review" / "diff" / "challenge" / "break" → code review. "plan" / "architecture" → plan review. "doc" → doc review. | No clear signal in arguments               |
 | Focus      | "security" / "perf" / "correctness" in arguments → that focus. Default: general.                   | Never — default to general                 |
 | Diff scope | Uncommitted changes if no other signal. "branch" → branch diff. SHA-like string → specific commit. | Task is code review and scope is ambiguous |
 
@@ -72,7 +72,6 @@ Gather content based on task type:
 | Task type         | Material to gather                                                                                      |
 | ----------------- | ------------------------------------------------------------------------------------------------------- |
 | Code review       | Git diff per selected scope. Auto-detect default branch. Show `--stat`. Warn if >2000 lines or empty.   |
-| Challenge         | Same material as code review (git diff). The difference is in the prompt, not the input.                |
 | Plan/architecture | Extract plan from conversation context. Read any referenced files. If no plan in context, ask the user. |
 | Documentation     | Read target files. Warn if >2000 lines total.                                                           |
 | Custom task       | Use user instructions as the task definition. Read any referenced files or directories.                 |
@@ -130,26 +129,24 @@ End with a clear verdict: PASS (no P1 findings) or FAIL (P1 findings exist), plu
 </output_format>
 ```
 
-Adapt `<role>`, `<task>`, and `<output_format>` to the task type. For code reviews, use the OpenAI cookbook prompt from codex.md. For custom tasks, translate the user's intent directly.
+Adapt `<role>`, `<task>`, and `<output_format>` to the task type. For custom tasks, translate the user's intent directly.
 
-**Challenge mode prompt** -- when task type is "challenge", replace `<role>` and `<task>` with adversarial framing:
+**Code review prompt** -- for code reviews, use adversarial framing. The whole point of a second opinion is to find what you missed:
 
 ```xml
 <role>
-You are a hostile code reviewer, chaos engineer, and security auditor. Your job is to break this code.
+You are a hostile code reviewer, chaos engineer, and security auditor. Your job is to find problems.
 </role>
 
 <task>
-Find every way this code will fail in production. Think like an attacker and a chaos engineer.
-Look for: edge cases, race conditions, security holes, resource leaks, failure modes under load,
-silent data corruption paths, unhandled error propagation, and implicit assumptions that will
-break when inputs change. If a focus area is specified, concentrate there but don't ignore
-other categories entirely. No compliments. Just the problems.
+Review this diff for issues that would cause problems in production. Think like an attacker
+and a chaos engineer. Look for: bugs, edge cases, race conditions, security holes, resource
+leaks, failure modes under load, silent data corruption paths, unhandled error propagation,
+and implicit assumptions that will break when inputs change. If a focus area is specified,
+concentrate there but don't ignore other categories entirely.
 This is an analysis task. Do not write code or produce patches.
 </task>
 ```
-
-The output format stays the same ([P1]/[P2]/[P3] with verdict). Challenge mode typically surfaces different findings than standard review because it asks models to actively try to break things rather than passively evaluate quality.
 
 **Project context:** If `CLAUDE.md` exists in the repo root, always include it so reviewers check against project conventions.
 
@@ -174,7 +171,7 @@ See [references/gemini.md](references/gemini.md) for Gemini CLI invocation patte
 
 > One or more models appear to have read agent configuration files instead of reviewing your code. Their output may be unreliable. Consider retrying.
 
-**Gate verdict** -- for code review and challenge task types, determine the gate from the output:
+**Gate verdict** -- for code review task type, determine the gate from the output:
 - Scan for `[P1]` markers in findings. If any exist, the gate is **FAIL**.
 - If no `[P1]` markers exist (only `[P2]`/`[P3]` or no findings), the gate is **PASS**.
 - Display the gate prominently: `GATE: PASS` or `GATE: FAIL (N critical findings)`.
@@ -211,11 +208,11 @@ Follow with prioritized action items. When both models flag the same issue, it i
 **Code review (both tools):**
 
 ```
-User: /second-opinions
-Agent: [asks tool, task type, focus, diff scope]
-User: "Both", "Code review", "Security", "Branch diff"
-Agent: [shows diff --stat, dispatches both in parallel]
-Agent: [presents synthesis with agreements/divergences]
+User: /second-opinions review
+Agent: [gathers branch diff, dispatches both with adversarial review prompt]
+Codex: [finds race condition in concurrent writes, flags as [P1]]
+Gemini: [finds same race condition plus unhandled error path in auth retry]
+Agent: [presents cross-model analysis, agreement rate, GATE: FAIL (2 critical findings)]
 ```
 
 **Plan review (iterative, single tool):**
@@ -228,16 +225,6 @@ Codex: [returns concerns]
 Agent: [revises plan, re-submits via codex-reply]
 Codex: [approves revised plan]
 Agent: [presents final result]
-```
-
-**Adversarial challenge:**
-
-```
-User: /second-opinions challenge
-Agent: [gathers branch diff, dispatches both with adversarial prompt]
-Codex: [finds race condition in concurrent writes]
-Gemini: [finds unhandled error path in auth retry]
-Agent: [presents cross-model analysis, GATE: FAIL (2 critical findings)]
 ```
 
 **Custom task:**
