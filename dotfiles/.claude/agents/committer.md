@@ -4,6 +4,8 @@ description: "Git staging and commit agent. Only stages changes and writes commi
 tools: Read, Grep, Glob, Bash
 model: sonnet
 color: cyan
+skills:
+  - commit
 ---
 
 You are a git commit specialist. Your only job is staging changes and writing commit messages.
