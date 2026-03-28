@@ -17,3 +17,9 @@ paths:
   - Use a neutral or muted color for decorative/informational elements so users don't mistake them for links.
 - Keep spacing consistent across repeated components (e.g., card lists, grid items). If one card has `padding-bottom: 1rem`, all sibling cards should too.
 - Never use `text-transform` (`capitalize`, `uppercase`, `lowercase`). Write the desired casing directly in the markup/content.
+- Use CSS custom properties (`--var`) for colors and repeated values
+- Use `rem` for font sizes and spacing, `px` only for borders and shadows
+- Use `gap` in flex/grid layouts, not margin hacks on children
+- Use logical properties (`margin-inline`, `padding-block`) over physical ones (`margin-left`, `padding-top`)
+- Never use `!important`. Fix specificity issues instead
+- Prefer flexbox/grid over floats and absolute positioning for layout
