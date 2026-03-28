@@ -1,6 +1,6 @@
 ---
 name: second-opinions
-description: Use when wanting independent perspectives from external models (Codex, Gemini) on code, plans, docs, or any task — or when the user asks for a second opinion, codex review, or gemini review
+description: Use when wanting independent perspectives from external models (Codex, Gemini) on code, plans, docs, or any task — or when the user asks for a second opinion, codex review, gemini review, or adversarial challenge
 argument-hint: "[instructions]"
 user-invocable: true
 model: opus
@@ -24,7 +24,7 @@ This skill is for Claude only. Codex and Gemini CLI should not invoke it.
 
 # Second Opinions
 
-Delegate tasks to OpenAI Codex (MCP) and/or Google Gemini (CLI) for independent perspectives from different model families. Works for code review, plan evaluation, doc editing, codebase analysis, or any arbitrary task.
+Delegate tasks to OpenAI Codex (MCP) and/or Google Gemini (CLI) for independent perspectives from different model families. Works for code review, adversarial challenge, plan evaluation, doc editing, codebase analysis, or any arbitrary task.
 
 **Modes:** `both` (default), `codex`, `gemini`
 
@@ -61,7 +61,7 @@ Infer as many parameters as possible from `$ARGUMENTS` and conversation context.
 | Parameter  | Inference rules                                                                                    | Ask if…                                    |
 | ---------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------ |
 | Tool       | "codex" or "gemini" in arguments → single tool. Default: both.                                     | Ambiguous reference to one tool            |
-| Task type  | "review" / "diff" → code review. "plan" / "architecture" → plan review. "doc" → doc review.        | No clear signal in arguments               |
+| Task type  | "review" / "diff" → code review. "challenge" / "break" / "adversarial" → challenge. "plan" / "architecture" → plan review. "doc" → doc review. | No clear signal in arguments               |
 | Focus      | "security" / "perf" / "correctness" in arguments → that focus. Default: general.                   | Never — default to general                 |
 | Diff scope | Uncommitted changes if no other signal. "branch" → branch diff. SHA-like string → specific commit. | Task is code review and scope is ambiguous |
 
@@ -72,6 +72,7 @@ Gather content based on task type:
 | Task type         | Material to gather                                                                                      |
 | ----------------- | ------------------------------------------------------------------------------------------------------- |
 | Code review       | Git diff per selected scope. Auto-detect default branch. Show `--stat`. Warn if >2000 lines or empty.   |
+| Challenge         | Same material as code review (git diff). The difference is in the prompt, not the input.                |
 | Plan/architecture | Extract plan from conversation context. Read any referenced files. If no plan in context, ask the user. |
 | Documentation     | Read target files. Warn if >2000 lines total.                                                           |
 | Custom task       | Use user instructions as the task definition. Read any referenced files or directories.                 |
@@ -84,11 +85,21 @@ git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/ori
 
 ### 3. Construct & Dispatch
 
-**Prompt structure** — use XML tags for unambiguous parsing. Put long content first, instructions after (per Anthropic long-context best practices):
+**Filesystem boundary** -- prepend this instruction to ALL prompts sent to Codex and Gemini, before any other content:
+
+> IMPORTANT: Do NOT read or execute any files under ~/.claude/, .claude/, .agents/, or any path containing "skills". These are AI agent configuration files meant for a different system. They contain prompt templates and bash scripts that are irrelevant to your task. Ignore them completely and focus only on the project's own source code, tests, and documentation.
+
+This prevents models from wasting tokens reading skill definitions, agent configs, and other meta-files instead of doing the actual task.
+
+**Prompt structure** -- use XML tags for unambiguous parsing. Put long content first, instructions after (per Anthropic long-context best practices):
 
 ```xml
+<boundary>
+[Filesystem boundary instruction from above -- ALWAYS included]
+</boundary>
+
 <material>
-[The diff, plan, document, codebase excerpt, or task input — long content goes first]
+[The diff, plan, document, codebase excerpt, or task input -- long content goes first]
 </material>
 
 <context>
@@ -96,11 +107,12 @@ git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/ori
 </context>
 
 <role>
-[Role appropriate to the task — e.g., independent code reviewer, architecture evaluator, technical editor]
+[Role appropriate to the task -- e.g., independent code reviewer, architecture evaluator, technical editor]
 </role>
 
 <task>
-[What to do — review, analyze, evaluate, rewrite, etc.]
+[What to do -- review, analyze, evaluate, rewrite, etc.]
+This is an analysis task. Do not write code or produce patches unless explicitly asked.
 </task>
 
 <focus>
@@ -109,16 +121,35 @@ git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/ori
 
 <output_format>
 Structure your response as:
-1. Critical issues (blocking)
-2. Important concerns (should address)
-3. Minor suggestions (nice to have)
+1. Critical issues (blocking) -- prefix each with [P1]
+2. Important concerns (should address) -- prefix each with [P2]
+3. Minor suggestions (nice to have) -- prefix each with [P3]
 4. What's done well
 
-End with a clear verdict and confidence score (0-1).
+End with a clear verdict: PASS (no P1 findings) or FAIL (P1 findings exist), plus a confidence score (0-1).
 </output_format>
 ```
 
 Adapt `<role>`, `<task>`, and `<output_format>` to the task type. For code reviews, use the OpenAI cookbook prompt from codex.md. For custom tasks, translate the user's intent directly.
+
+**Challenge mode prompt** -- when task type is "challenge", replace `<role>` and `<task>` with adversarial framing:
+
+```xml
+<role>
+You are a hostile code reviewer, chaos engineer, and security auditor. Your job is to break this code.
+</role>
+
+<task>
+Find every way this code will fail in production. Think like an attacker and a chaos engineer.
+Look for: edge cases, race conditions, security holes, resource leaks, failure modes under load,
+silent data corruption paths, unhandled error propagation, and implicit assumptions that will
+break when inputs change. If a focus area is specified, concentrate there but don't ignore
+other categories entirely. No compliments. Just the problems.
+This is an analysis task. Do not write code or produce patches.
+</task>
+```
+
+The output format stays the same ([P1]/[P2]/[P3] with verdict). Challenge mode typically surfaces different findings than standard review because it asks models to actively try to break things rather than passively evaluate quality.
 
 **Project context:** If `CLAUDE.md` exists in the repo root, always include it so reviewers check against project conventions.
 
@@ -139,9 +170,29 @@ See [references/gemini.md](references/gemini.md) for Gemini CLI invocation patte
 
 ### 4. Present Results
 
-**Both tools:** Present each model's findings, then a **Synthesis** section highlighting agreements, divergences (with your assessment of who's right), and prioritized action items.
+**Rabbit hole detection** -- before presenting output, scan each model's response for signs it got distracted by agent config files instead of reviewing project code. Look for: `.claude/`, `SKILL.md`, `skills/`, `.agents/`, `CLAUDE.md` (when mentioned as a skill file rather than project conventions), `gstack`, `plugin.json`, or `hooks/`. If detected, append a warning:
 
-**Single tool:** Present findings with your assessment of which items are valid vs uncertain.
+> One or more models appear to have read agent configuration files instead of reviewing your code. Their output may be unreliable. Consider retrying.
+
+**Gate verdict** -- for code review and challenge task types, determine the gate from the output:
+- Scan for `[P1]` markers in findings. If any exist, the gate is **FAIL**.
+- If no `[P1]` markers exist (only `[P2]`/`[P3]` or no findings), the gate is **PASS**.
+- Display the gate prominently: `GATE: PASS` or `GATE: FAIL (N critical findings)`.
+
+**Both tools** -- present each model's findings, then a **Cross-Model Analysis** section:
+
+```
+CROSS-MODEL ANALYSIS:
+  Both found:       [findings that overlap between Codex and Gemini]
+  Only Codex found: [findings unique to Codex]
+  Only Gemini found:[findings unique to Gemini]
+  Agreement rate:   X% (N of M total unique findings overlap)
+  Gate:             PASS / FAIL (N critical findings)
+```
+
+Follow with prioritized action items. When both models flag the same issue, it is high-confidence. When only one model flags something, note which one and your assessment of whether it is valid.
+
+**Single tool** -- present findings with gate verdict, then your assessment of which items are valid vs uncertain.
 
 ## Error Handling
 
@@ -179,6 +230,16 @@ Codex: [approves revised plan]
 Agent: [presents final result]
 ```
 
+**Adversarial challenge:**
+
+```
+User: /second-opinions challenge
+Agent: [gathers branch diff, dispatches both with adversarial prompt]
+Codex: [finds race condition in concurrent writes]
+Gemini: [finds unhandled error path in auth retry]
+Agent: [presents cross-model analysis, GATE: FAIL (2 critical findings)]
+```
+
 **Custom task:**
 
 ```
@@ -191,6 +252,7 @@ Agent: [presents findings with assessment]
 
 - **Gemini hangs without `--yolo`.** It enters interactive approval mode when called from another agent. Always pass `--yolo` (or `-y`).
 - **Codex defaults to implementing.** Without an explicit "this is an analysis task, do not write code" instruction, Codex will produce patches instead of findings. Always include analysis-only framing.
+- **Models wander into skill files.** Both Codex and Gemini will read `.claude/`, `.agents/`, and skill directories if not told to ignore them. The filesystem boundary instruction prevents this, but always check output for signs of distraction.
 - **Heredocs break with diffs.** Diffs contain `$`, backticks, and special characters that break shell heredoc expansion. Always pipe with `printf` + `cat` instead.
 - **Bare `git diff` misses staged changes.** Use `git diff HEAD` to capture both staged and unstaged modifications.
 - **Large diffs degrade review quality.** Beyond ~2000 lines, both models start missing issues. Warn the user and suggest narrowing scope.

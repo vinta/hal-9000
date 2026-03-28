@@ -12,12 +12,13 @@ Use `mcp__codex__codex` for first request. Use `mcp__codex__codex-reply` with th
 
 ## Prompting Principles
 
-1. **Material first**: put the diff, doc, plan, or other long context before the instructions.
-2. **Match Codex's default behavior**: Codex tends to implement by default, so review and analysis prompts should explicitly say when the task is analysis-only and must not modify code.
-3. **Use direct structured prompts**: XML-style tags keep role, task, context, focus, and output requirements distinct.
-4. **Use current external context when needed**: if the task depends on recent behavior, documentation, releases, or other changing facts, explicitly tell Codex to search online for the latest official or primary-source information.
-5. **Be concise and actionable**: ask for concrete findings, risks, and a verdict instead of long narrative output.
-6. **Reuse threads for iterative reviews**: preserve context with `mcp__codex__codex-reply` rather than rebuilding the whole conversation each round.
+1. **Filesystem boundary first**: always prepend a boundary instruction telling Codex to ignore `.claude/`, `.agents/`, and skill directories. Without this, Codex will waste tokens reading agent config files.
+2. **Material first**: put the diff, doc, plan, or other long context before the instructions.
+3. **Match Codex's default behavior**: Codex tends to implement by default, so review and analysis prompts should explicitly say when the task is analysis-only and must not modify code.
+4. **Use direct structured prompts**: XML-style tags keep role, task, context, focus, and output requirements distinct.
+5. **Use current external context when needed**: if the task depends on recent behavior, documentation, releases, or other changing facts, explicitly tell Codex to search online for the latest official or primary-source information.
+6. **Be concise and actionable**: ask for concrete findings with severity markers ([P1] critical, [P2] important, [P3] minor), risks, and a PASS/FAIL verdict.
+7. **Reuse threads for iterative reviews**: preserve context with `mcp__codex__codex-reply` rather than rebuilding the whole conversation each round.
 
 ## Prompt Templates
 
