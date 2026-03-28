@@ -79,7 +79,7 @@ Incorrect behavior: editing the file to fix the typo before or during staging �
    - If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit
 
 5. **Create Atomic Commits**: For each logical group:
-   - Conventional commit format. Subject: what changed (≤72 chars). Body: why.
+   - Conventional commit format. Subject: what changed (≤72 chars). If the subject is self-explanatory, skip the body.
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
