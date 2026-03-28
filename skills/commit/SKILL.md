@@ -76,23 +76,19 @@ Incorrect behavior: editing the file to fix the typo before or during staging â€
 
 ## Attribution
 
-Include a `Co-Authored-By` footer in every commit message with your specific model name:
+Include a `Co-Authored-By` footer in every commit message:
 
 If you're an Anthropic Claude model:
 
 ```
-Co-Authored-By: Claude <model-name> <noreply@anthropic.com>
+Co-Authored-By: Claude <noreply@anthropic.com>
 ```
-
-Examples: `Claude Opus 4.6`, `Claude Sonnet 4.6`, `Claude Haiku 4.5`
 
 If you're a Google Gemini model:
 
 ```
-Co-Authored-By: Gemini <model-name> <gemini-code-assistant@google.com>
+Co-Authored-By: Gemini <gemini-code-assistant@google.com>
 ```
-
-Examples: `Gemini 3.1 Pro`, `Gemini 3.1 Flash`
 
 Skip if you're not one of the above models.
 
