@@ -17,3 +17,4 @@ paths:
 - Use template literals over string concatenation
 - Use optional chaining (`?.`) and nullish coalescing (`??`) over manual checks
 - Use strict equality (`===` / `!==`), never loose equality
+- Never use `as any` or `unknown`. Always write proper types/interfaces. Only use `any` or `unknown` as a last resort when no typed alternative exists
