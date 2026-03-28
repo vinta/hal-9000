@@ -74,6 +74,27 @@ Incorrect behavior: editing the file to fix the typo before or during staging �
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
+## Attribution
+
+Include a `Co-Authored-By` footer in every commit message with your specific model name:
+
+If you're an Anthropic Claude model:
+
+```
+Co-Authored-By: Claude <model-name> <noreply@anthropic.com>
+```
+
+Examples: `Claude Opus 4.6`, `Claude Sonnet 4.6`, `Claude Haiku 4.5`
+
+If you're a Google Gemini model:
+
+```
+Co-Authored-By: Gemini <model-name> <gemini-code-assistant@google.com>
+```
+
+Examples: `Gemini 3.1 Pro`, `Gemini 3.1 Flash`
+
+Skip if you're not one of the above models.
 
 ## Gotchas
 
