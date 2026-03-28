@@ -31,7 +31,7 @@ Creating clean, atomic commits that follow best practices for version control hy
 
 ## User Instructions
 
-Follow any user instructions below. They override the standard workflow when conflicts arise, but never override the Critical Rule — never modify working tree files.
+Follow any user instructions below. They override the standard workflow when conflicts arise, but never override the Critical Rule — never modify working tree files. If no user instructions are provided, commit all changes in the working tree.
 
 <user_instructions>
 **$ARGUMENTS**
