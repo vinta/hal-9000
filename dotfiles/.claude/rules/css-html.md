@@ -23,3 +23,7 @@ paths:
 - Use logical properties (`margin-inline`, `padding-block`) over physical ones (`margin-left`, `padding-top`)
 - Never use `!important`. Fix specificity issues instead
 - Prefer flexbox/grid over floats and absolute positioning for layout
+
+<verify_with_browser if="you completed a frontend change (layout, styling, component, page)" only_if="agent-browser skill is installed in project or user scope">
+After implementing frontend changes, use the `agent-browser` skill to visually verify the result in a real browser. Check layout, responsiveness, and interactive behavior rather than assuming correctness from code alone.
+</verify_with_browser>
