@@ -17,6 +17,7 @@ Use the `find-docs` skill or `WebSearch` to verify before relying on pre-trained
 - Pinning dependency versions, always check the latest
 - Unsure about exact syntax, flags, or config format
 - Making confident assertions about external tool behavior
+- Answering questions about best practices, conventions, or recommended patterns
 </prefer_online_sources>
 
 <default_to_action>
