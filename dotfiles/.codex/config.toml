@@ -43,3 +43,6 @@ trace_exporter = "none"
 
 [projects."/Users/vinta/Projects/awesome-python"]
 trust_level = "trusted"
+
+[projects."/Users/vinta/Projects/laughing-man"]
+trust_level = "trusted"
