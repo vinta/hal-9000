@@ -11,13 +11,12 @@
 
 <prefer_online_sources>
 Use the `find-docs` skill or `WebSearch` to verify before relying on pre-trained knowledge. Look things up when:
+- Answering questions about best practices, conventions, or recommended patterns
 - Writing code that uses libraries, APIs, or CLI tools
 - Configuring tools, services, or environment variables
-- Checking if a stdlib replacement exists for a third-party package
-- Pinning dependency versions, always check the latest
 - Unsure about exact syntax, flags, or config format
+- Pinning dependency versions, always check the latest
 - Making confident assertions about external tool behavior
-- Answering questions about best practices, conventions, or recommended patterns
 </prefer_online_sources>
 
 <default_to_action>
