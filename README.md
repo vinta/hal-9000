@@ -1,6 +1,6 @@
 # HAL 9000
 
-![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/hal-9000.jpg "HAL 9000")
+![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/hal-9000.jpg "HAL 9000")
 
 Opinionated macOS development environment automation that dominates your dev setup like cats rule the Internet.
 
@@ -24,7 +24,7 @@ Opinionated macOS development environment automation that dominates your dev set
 ## Bootstrap
 
 ```bash
-curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod-bay-doors | bash
+curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors | bash
 ```
 
 ## Components

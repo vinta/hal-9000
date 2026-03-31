@@ -1,6 +1,6 @@
 # The MAGI System EX
 
-![The MAGI System](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/magi.webp "The MAGI System")
+![The MAGI System](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/magi.webp "The MAGI System")
 
 ## Background
 
