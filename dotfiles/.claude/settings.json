@@ -137,6 +137,7 @@
     "command": "python3 ~/.claude/statusline/run.py"
   },
   "enabledPlugins": {
+    "codex@openai-codex": true,
     "gh-cli@trailofbits": true,
     "hal-voice@hal-9000": true,
     "minimalist-entrepreneur@minimalist-entrepreneur": true,
@@ -152,22 +153,28 @@
         "repo": "vinta/hal-9000"
       }
     },
-    "trailofbits": {
-      "source": {
-        "source": "github",
-        "repo": "trailofbits/skills"
-      }
-    },
     "minimalist-entrepreneur": {
       "source": {
         "source": "github",
         "repo": "slavingia/skills"
       }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    },
+    "trailofbits": {
+      "source": {
+        "source": "github",
+        "repo": "trailofbits/skills"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
-  "voiceEnabled": true,
   "showClearContextOnPlanAccept": true,
+  "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "skipAutoPermissionPrompt": true
 }
