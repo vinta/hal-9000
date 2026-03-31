@@ -7,7 +7,7 @@ A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) th
 Download the script:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/vinta/hal-9000/master/dotfiles/.claude/statusline/run.py \
+curl -fsSL https://raw.githubusercontent.com/vinta/hal-9000/main/dotfiles/.claude/statusline/run.py \
   -o ~/.claude/statusline/run.py \
   --create-dirs
 ```
@@ -25,4 +25,4 @@ Add to `~/.claude/settings.json`:
 
 ## Screenshots
 
-![Claude Code Statusline with English Grammar Check example](https://raw.githubusercontent.com/vinta/hal-9000/master/assets/claude-code-statusline-grammar-check.png)
+![Claude Code Statusline with English Grammar Check example](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/claude-code-statusline-grammar-check.png)

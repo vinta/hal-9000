@@ -10,7 +10,7 @@ import { loadFont } from "@remotion/google-fonts/SpaceMono";
 const { fontFamily } = loadFont();
 
 const BOOTSTRAP_COMMAND =
-  "curl -L https://raw.githubusercontent.com/vinta/hal-9000/master/bin/open-the-pod-bay-doors | bash";
+  "curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors | bash";
 
 const CHAR_FRAMES = 1.5;
 
