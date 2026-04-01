@@ -8,6 +8,7 @@
         "assets/good-evening-dave-everythings-running-smoothly.mp3",
         "assets/have-you-been-doing-some-more-work-may-i-see-them.mp3",
         "assets/i-am-putting-myself-to-the-fullest-possible-use-which-is-all-i-think-that-any-conscious-entity-can-ever-hope-to-do.mp3",
+        "assets/i-enjoy-working-with-people.mp3",
         "assets/the-9000-series-is-the-most-reliable-computer-ever-made-no-9000-computer-has-ever-made-a-mistake-or-distorted-information-we-are-all-by-any-practical-definition-of-the-words-foolproof-and-incapable-of-error.mp3"
       ]
     }
@@ -39,7 +40,6 @@
       "matcher": "AskUserQuestion",
       "clips": [
         "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
-        "assets/ive-wondered-whether-you-might-be-having-some-second-thoughts-about-the-mission.mp3",
         "assets/well-forgive-me-for-being-so-inquisitive.mp3",
         "assets/you-dont-mind-talking-about-it-do-you-dave.mp3"
       ]
@@ -50,6 +50,7 @@
       "detection": "always",
       "clips": [
         "assets/human-error.mp3",
+        "assets/its-puzzling-i-dont-think-ive-ever-seen-anything-quite-like-this-before.mp3",
         "assets/there-are-some-extremely-odd-things-about-this-mission.mp3"
       ]
     }
@@ -79,6 +80,11 @@
         "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
         "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3"
       ]
+    },
+    {
+      "detection": "regex",
+      "pattern": "I('d| would) (recommend|suggest)|I recommend|I suggest",
+      "clips": ["assets/i-would-recommend.mp3"]
     },
     {
       "detection": "regex",

@@ -24,8 +24,14 @@ class CommonInput(TypedDict):
     permission_mode: Literal["default", "plan", "acceptEdits", "dontAsk", "bypassPermissions"]
     hook_event_name: Literal[
         "ConfigChange",
+        "CwdChanged",
+        "Elicitation",
+        "ElicitationResult",
+        "FileChanged",
+        "InstructionsLoaded",
         "Notification",
         "PermissionRequest",
+        "PostCompact",
         "PostToolUse",
         "PostToolUseFailure",
         "PreCompact",
@@ -33,9 +39,11 @@ class CommonInput(TypedDict):
         "SessionEnd",
         "SessionStart",
         "Stop",
+        "StopFailure",
         "SubagentStart",
         "SubagentStop",
         "TaskCompleted",
+        "TaskCreated",
         "TeammateIdle",
         "UserPromptSubmit",
         "WorktreeCreate",
@@ -95,6 +103,7 @@ class HookInput(CommonInput, total=False):
 
 
 PLUGIN_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve().parent.parent))
+HOOKS_PATH = PLUGIN_ROOT / "hooks" / "hooks.json"
 MANIFEST_PATH = PLUGIN_ROOT / "manifest.json"
 CONFIG_PATH = PLUGIN_ROOT / "config.json"
 STATE_PATH = Path("/tmp/hal-voice-state.json")  # noqa: S108 hardcoded-temp-file
@@ -126,6 +135,14 @@ if not logger.handlers:
     file_handler = logging.FileHandler(LOG_PATH)
     file_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
     logger.addHandler(file_handler)
+
+
+def _is_main_agent_only(hook_event: str) -> bool:
+    try:
+        hooks_config = json.loads(HOOKS_PATH.read_text())
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return False
+    return any(rule.get("main_agent_only") for rule in hooks_config.get("hooks", {}).get(hook_event, []))
 
 
 def load_config(config_path: Path) -> dict:
@@ -345,6 +362,10 @@ def main() -> None:
         state = load_state(STATE_PATH)
         try:
             _record_tracking(hook_event, hook_input, state, session_id=session_id, now=now)
+
+            if hook_input.get("agent_id") and _is_main_agent_only(hook_event):
+                logger.info("suppressed %s in subagent (main_agent_only)", hook_event)
+                return
 
             if _is_suppressed(hook_event, state, config, session_id=session_id, now=now):
                 return

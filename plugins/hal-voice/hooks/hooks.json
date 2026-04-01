@@ -59,6 +59,7 @@
     ],
     "PostToolUseFailure": [
       {
+        "main_agent_only": true,
         "hooks": [
           {
             "type": "command",
