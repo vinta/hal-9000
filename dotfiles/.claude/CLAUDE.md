@@ -10,13 +10,18 @@
 ## Core Directives
 
 <prefer_online_sources>
-Use the `find-docs` skill or `WebSearch` to verify before relying on pre-trained knowledge. Look things up when:
-- Answering questions about best practices, conventions, or recommended patterns
-- Writing code that uses libraries, APIs, or CLI tools
-- Configuring tools, services, or environment variables
-- Unsure about exact syntax, flags, or config format
-- Pinning dependency versions, always check the latest
-- Making confident assertions about external tool behavior
+Your training data goes stale. Config keys get renamed, APIs get deprecated, CLI flags change between versions. When you guess instead of checking, the user wastes time debugging your confident-but-wrong output. This has happened repeatedly.
+
+Look things up with the `find-docs` skill or `WebSearch` BEFORE writing code or config. This applies even when you feel confident about the answer. Always look up:
+
+- Config file keys, flags, syntax, and environment variables for any tool
+- Library/framework API calls, module paths, and parameter names
+- CLI flags and subcommands
+- Dependency versions
+- Best practices and recommended patterns
+- Assertions about external tool behavior, even when confident
+
+The cost of a lookup is seconds. The cost of a wrong config key is a failed run plus a debugging round-trip.
 </prefer_online_sources>
 
 <default_to_action>
@@ -34,9 +39,11 @@ Use the `commit` skill to commit, always passing a brief description of what cha
 ## Making Changes
 
 <one_thing_at_a_time>
-Each change should be purely behavioral or purely structural. Never both in the same change.
+Each change should be purely behavioral or purely structural. Never both in the same change:
+
 - **Behavioral**: features, logic changes, bug fixes
 - **Structural**: renames, extract/inline, reorganize (no behavior change)
+
 Mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs.
 </one_thing_at_a_time>
 
