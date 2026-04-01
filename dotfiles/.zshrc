@@ -129,9 +129,9 @@ export LC_CTYPE=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ll="ls -lA"
-alias cc="claude --teammate-mode tmux"
-alias ccc="claude --continue --teammate-mode tmux"
-alias cct='tmux -CC new-session -s "claude-$(date +%s)" claude --teammate-mode tmux'
+alias cc="claude --enable-auto-mode --teammate-mode tmux"
+alias ccc="claude --enable-auto-mode --continue --teammate-mode tmux"
+alias cct='tmux -CC new-session -s "claude-$(date +%s)" claude --enable-auto-mode --teammate-mode tmux'
 alias ccy="claude --teammate-mode tmux --dangerously-skip-permissions"
 ccp() { claude --no-chrome --no-session-persistence -p "$*"; }
 
