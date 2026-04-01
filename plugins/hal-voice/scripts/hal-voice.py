@@ -346,6 +346,10 @@ def main() -> None:
         try:
             _record_tracking(hook_event, hook_input, state, session_id=session_id, now=now)
 
+            if hook_event == "PostToolUseFailure" and hook_input.get("agent_id"):
+                logger.info("suppressed PostToolUseFailure in subagent")
+                return
+
             if _is_suppressed(hook_event, state, config, session_id=session_id, now=now):
                 return
 
