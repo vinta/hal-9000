@@ -61,28 +61,3 @@
   shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh/"
-
-- name: Create directories
-  file:
-    path: "{{ item }}"
-    state: directory
-    mode: "0755"
-  with_items:
-    - "{{ ansible_facts['env']['HOME'] }}/Downloads"
-    - "{{ ansible_facts['env']['HOME'] }}/Projects"
-
-- name: Link hal-9000
-  file:
-    src: "{{ REPO_ROOT }}"
-    dest: "{{ ansible_facts['env']['HOME'] }}/Projects/hal-9000"
-    state: link
-
-- name: Run hal sync
-  command: "{{ REPO_ROOT }}/bin/hal sync"
-
-- name: Ensure hal environment is sourced in .zshrc
-  lineinfile:
-    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
-    line: "source {{ REPO_ROOT }}/playbooks/roles/basic/files/hal_profile.sh"
-    state: present
-  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"

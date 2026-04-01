@@ -2,6 +2,7 @@
 - name: Configure development environment
   hosts: discovery_one
   roles:
+    - { role: hal, tags: ["hal"] }
     - { role: basic, tags: ["basic"] }
     - { role: python, tags: ["python"] }
     - { role: node, tags: ["node"] }

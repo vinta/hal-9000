@@ -1,0 +1,7 @@
+---
+- name: Ensure hal environment is sourced in .zshrc
+  lineinfile:
+    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/hal/files/hal_profile.sh"
+    state: present
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
