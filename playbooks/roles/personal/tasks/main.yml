@@ -1,0 +1,21 @@
+---
+- name: Run hal sync
+  command: "{{ REPO_ROOT }}/bin/hal sync"
+  when: ansible_facts["user_id"] == "vinta"
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  with_items:
+    - "{{ ansible_facts['env']['HOME'] }}/Downloads"
+    - "{{ ansible_facts['env']['HOME'] }}/Projects"
+  when: ansible_facts["user_id"] == "vinta"
+
+- name: Link hal-9000
+  file:
+    src: "{{ REPO_ROOT }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/Projects/hal-9000"
+    state: link
+  when: ansible_facts["user_id"] == "vinta"

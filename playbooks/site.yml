@@ -13,3 +13,4 @@
     - { role: aws, tags: ["aws"] }
     - { role: gcp, tags: ["gcp"] }
     - { role: ai, tags: ["ai"] }
+    - { role: personal, tags: ["personal"] }
