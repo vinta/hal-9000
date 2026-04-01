@@ -106,12 +106,15 @@
       "Bash(networksetup:*)",
       "Bash(scutil:*)",
       "Bash(systemsetup:*)",
-      "Bash(pmset:*)"
+      "Bash(pmset:*)",
+      "Bash(crontab:*)"
     ],
     "ask": [
-      "Bash(npx supabase db:*)",
       "Bash(curl:*)",
-      "Bash(wget:*)"
+      "Bash(wget:*)",
+      "Bash(open:*)",
+      "Bash(git push:*)",
+      "Bash(npx supabase db:*)"
     ],
     "defaultMode": "auto",
     "additionalDirectories": [
