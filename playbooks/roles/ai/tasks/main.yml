@@ -23,6 +23,15 @@
   args:
     executable: /bin/bash
 
+# https://github.com/upstash/context7
+- name: Install ctx7 CLI
+  shell: |
+    export NVM_DIR="${HOME}/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    npm install -g ctx7
+  args:
+    executable: /bin/bash
+
 # https://github.com/microsoft/pyright
 # https://github.com/typescript-language-server/typescript-language-server
 - name: Install LSP language servers
