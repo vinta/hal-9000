@@ -13,8 +13,9 @@ When you need input from the user and there are discrete options to choose from,
 - Multiple-choice questions (e.g., "which approach: A, B, or C?")
 - Yes/no confirmations that gate next steps
 - Selecting from a list of items (files, configs, approaches)
+- **Presenting multiple approaches or solutions** for the user to pick from. Put the summary in each option's label and the pros/cons in its description. Do NOT dump approach paragraphs as prose then ask a follow-up question.
 
-Plain text questions are fine when the answer is open-ended or conversational. The test: if you're about to number a list of options in prose, use AskUserQuestion instead.
+Plain text questions are fine when the answer is open-ended or conversational. The test: if you're about to label options (A/B/C, 1/2/3, bullet points) in prose, use AskUserQuestion instead.
 </use_ask_user_question>
 
 ## Core Directives
