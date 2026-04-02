@@ -5,6 +5,10 @@
 # theme = Bluloco Dark
 theme = Catppuccin Mocha
 
+# https://ghostty.org/docs/config/reference#font-family
+font-family = Menlo
+font-family = PingFang TC
+
 # https://ghostty.org/docs/config/reference#font-size
 font-size = 14
 adjust-cell-height = 2
@@ -38,3 +42,5 @@ keybind = cmd+alt+h=new_split:down
 keybind = cmd+alt+v=new_split:right
 keybind = cmd+alt+enter=toggle_split_zoom
 keybind = cmd+backquote=toggle_quick_terminal
+keybind = cmd+shift+left=move_tab:-1
+keybind = cmd+shift+right=move_tab:1
