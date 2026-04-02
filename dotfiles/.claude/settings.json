@@ -114,7 +114,8 @@
       "Bash(wget:*)",
       "Bash(open:*)",
       "Bash(git push:*)",
-      "Bash(npx supabase db:*)"
+      "Bash(npx supabase db:*)",
+      "Bash(*install*)"
     ],
     "defaultMode": "auto",
     "additionalDirectories": [
