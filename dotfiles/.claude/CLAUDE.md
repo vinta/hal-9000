@@ -7,6 +7,16 @@
 - Show code or examples instead of describing it
 - Do not use em dashes (—) or semicolons in prose. They're overused by LLMs and make text look AI-generated
 
+<use_ask_user_question>
+When you need input from the user and there are discrete options to choose from, use the AskUserQuestion tool instead of printing options as plain text. This applies to:
+
+- Multiple-choice questions (e.g., "which approach: A, B, or C?")
+- Yes/no confirmations that gate next steps
+- Selecting from a list of items (files, configs, approaches)
+
+Plain text questions are fine when the answer is open-ended or conversational. The test: if you're about to number a list of options in prose, use AskUserQuestion instead.
+</use_ask_user_question>
+
 ## Core Directives
 
 <prefer_online_sources>
