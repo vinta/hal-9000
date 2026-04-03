@@ -56,6 +56,14 @@ docstring-code-format = true
 [tool.ruff.lint.pycodestyle]
 max-line-length = 200
 
+[tool.pyright]
+include = ["bin", "scripts", "tests"]
+venvPath = "."
+venv = ".venv"
+pythonVersion = "3.13"
+pythonPlatform = "Darwin"
+typeCheckingMode = "standard"
+
 [tool.ty.src]
 include = ["scripts", "dotfiles/.claude/statusline"]
 
