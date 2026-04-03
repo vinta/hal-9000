@@ -10,6 +10,8 @@ def hal():
         "hal_voice",
         Path(__file__).resolve().parent.parent.parent / "plugins" / "hal-voice" / "scripts" / "hal-voice.py",
     )
+    assert spec is not None
+    assert spec.loader is not None
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
