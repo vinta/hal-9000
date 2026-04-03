@@ -19,8 +19,25 @@
       "strict": true
     },
     {
-      "name": "skills",
-      "description": "Skills",
+      "name": "hal-commit",
+      "description": "Creates clean, atomic git commits",
+      "author": {
+        "name": "Vinta Chen",
+        "email": "vinta.chen@gmail.com"
+      },
+      "repository": "https://github.com/vinta/hal-9000",
+      "license": "MIT",
+      "source": "./",
+      "skills": ["./skills/commit"],
+      "agents": ["./dotfiles/.claude/agents/committer.md"],
+      "category": "productivity",
+      "keywords": ["git", "commit", "stash", "hunk"],
+      "tags": ["git", "commit", "stash", "hunk"],
+      "strict": false
+    },
+    {
+      "name": "hal-magi",
+      "description": "Multi-model (Claude/Codex/Gemini) brainstorming panel for competing perspectives",
       "author": {
         "name": "Vinta Chen",
         "email": "vinta.chen@gmail.com"
@@ -29,34 +46,29 @@
       "license": "MIT",
       "source": "./",
       "skills": [
-        "./skills/commit",
         "./skills/magi",
         "./skills/magi-ex",
-        "./skills/second-opinions",
-        "./skills/update-allowed-tools"
+        "./skills/second-opinions"
       ],
-      "agents": ["./dotfiles/.claude/agents/committer.md"],
       "category": "productivity",
-      "keywords": [
-        "git",
-        "commit",
-        "stash",
-        "hunk",
-        "brainstorm",
-        "brainstorming",
-        "personality",
-        "agent-team"
-      ],
-      "tags": [
-        "git",
-        "commit",
-        "stash",
-        "hunk",
-        "brainstorm",
-        "brainstorming",
-        "personality",
-        "agent-team"
-      ],
+      "keywords": ["brainstorm", "brainstorming", "personality", "agent-team"],
+      "tags": ["brainstorm", "brainstorming", "personality", "agent-team"],
+      "strict": false
+    },
+    {
+      "name": "hal-meta",
+      "description": "Skills for skills",
+      "author": {
+        "name": "Vinta Chen",
+        "email": "vinta.chen@gmail.com"
+      },
+      "repository": "https://github.com/vinta/hal-9000",
+      "license": "MIT",
+      "source": "./",
+      "skills": ["./skills/update-allowed-tools"],
+      "category": "productivity",
+      "keywords": ["meta", "allowed-tools"],
+      "tags": ["meta", "allowed-tools"],
       "strict": false
     }
   ]
