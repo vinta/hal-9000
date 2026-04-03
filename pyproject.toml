@@ -62,7 +62,10 @@ venvPath = "."
 venv = ".venv"
 pythonVersion = "3.13"
 pythonPlatform = "Darwin"
-typeCheckingMode = "standard"
+typeCheckingMode = "strict"
+executionEnvironments = [
+    { root = "tests", reportUnknownMemberType = false, reportMissingParameterType = false, reportUnknownParameterType = false, reportUnknownVariableType = false, reportUnknownLambdaType = false, reportUnknownArgumentType = false },
+]
 
 [tool.ty.src]
 include = ["scripts", "dotfiles/.claude/statusline"]

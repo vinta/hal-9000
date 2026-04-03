@@ -18,20 +18,20 @@ spec.loader.exec_module(module)
 HAL9000 = module.HAL9000  # type: ignore[attr-defined]
 hal = HAL9000()
 
-commands = []
-file_commands = []
+commands: list[str] = []
+file_commands: list[str] = []
 
 subparsers_actions = [a for a in hal.parser._subparsers._actions if hasattr(a, "choices") and a.choices]  # noqa: SLF001 private-member-access
 if subparsers_actions:
     subparsers = subparsers_actions[0]
 
-    help_map = {}
+    help_map: dict[str, str] = {}
     if hasattr(subparsers, "_choices_actions"):
         for choice_action in subparsers._choices_actions:  # noqa: SLF001 private-member-access
             help_map[choice_action.dest] = choice_action.help or ""
 
     for cmd, parser in subparsers.choices.items():
-        help_text = help_map.get(cmd, "")
+        help_text: str = help_map.get(cmd, "")
         help_text = help_text.replace("'", "'\"'\"'")
         commands.append(f"        '{cmd}:{help_text}'")
 
