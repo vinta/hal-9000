@@ -10,6 +10,13 @@ paths:
 - Before adding a dependency, search PyPI or the web for the latest version
 - Pin exact dependency versions in `pyproject.toml` — no `>=`, `~=`, or `^` specifiers
 - Target Python >=3.13 by default — if a project sets an explicit version (e.g. `requires-python` in `pyproject.toml`), follow that instead
+- Use the pyright LSP tool for code navigation when grep's text matching would be ambiguous. LSP resolves symbol relationships through the type system, so `findReferences` on a function returns its actual call sites, not every file containing the same string. Reach for LSP when:
+  - Tracing all usages before removing or renaming a symbol (`findReferences`)
+  - Understanding a function's callers or callees (`incomingCalls` / `outgoingCalls`)
+  - Navigating to a symbol's definition (`goToDefinition`)
+  - Checking type information at a position (`hover`)
+  - Surveying a file's or workspace's structure (`documentSymbol` / `workspaceSymbol`)
+  Use grep for text pattern matching, dynamic access patterns (dict keys, pytest fixtures, string-based lookups), or when the symbol name is unique enough that text matching suffices.
 - Use modern syntax: `X | Y` unions, `match`/`case`, `tomllib`
 - Scripts run by system `python3` must work on Python 3.9 — add `from __future__ import annotations` and avoid 3.10+ stdlib APIs
 - Use `uv` for project and environment management
