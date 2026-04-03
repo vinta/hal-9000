@@ -66,6 +66,10 @@ Each dependency is attack surface and maintenance burden
 Search all usages before removing or renaming
 </search_before_removing>
 
+<agent_browser_headed if="you are using agent-browser">
+Always pass `--headed` when opening a browser (e.g., `agent-browser open <url> --headed`). By default agent-browser runs headless, which means the user can't see what you're navigating or clicking. Headed mode lets them observe your actions and course-correct in real time.
+</agent_browser_headed>
+
 <git_from_project_root if="you are running git commands">
 Run git commands from the project root instead of using `git -C`, which obscures working directory state
 </git_from_project_root>
