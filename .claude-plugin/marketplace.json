@@ -11,6 +11,7 @@
   "plugins": [
     {
       "name": "hal-voice",
+      "description": "Play HAL 9000 voice clips on Claude Code hook events",
       "version": "0.2.6",
       "source": "./plugins/hal-voice",
       "category": "entertainment",
@@ -19,7 +20,7 @@
       "strict": true
     },
     {
-      "name": "skills",
+      "name": "hal-skills",
       "description": "Skills",
       "author": {
         "name": "Vinta Chen",
@@ -43,20 +44,9 @@
         "stash",
         "hunk",
         "brainstorm",
-        "brainstorming",
-        "personality",
-        "agent-team"
+        "brainstorming"
       ],
-      "tags": [
-        "git",
-        "commit",
-        "stash",
-        "hunk",
-        "brainstorm",
-        "brainstorming",
-        "personality",
-        "agent-team"
-      ],
+      "tags": ["git", "commit", "stash", "hunk", "brainstorm", "brainstorming"],
       "strict": false
     }
   ]
