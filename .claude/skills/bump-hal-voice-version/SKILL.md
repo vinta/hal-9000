@@ -1,6 +1,6 @@
 ---
 name: bump-hal-voice-version
-description: (hal-9000) Use when editing any file under plugins/hal-voice/ to bump the plugin version before committing
+description: (project) Use when editing any file under plugins/hal-voice/ to bump the plugin version before committing
 user-invocable: true
 model: haiku
 allowed-tools:
