@@ -125,7 +125,11 @@
       "Bash(npx supabase db *)"
     ],
     "defaultMode": "auto",
-    "additionalDirectories": ["~/.claude", "~/Projects", "/usr/local/hal-9000"]
+    "additionalDirectories": [
+      "~/.claude",
+      "~/Projects",
+      "/usr/local/hal-9000"
+    ]
   },
   "hooks": {
     "PreToolUse": [
