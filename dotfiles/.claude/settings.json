@@ -50,8 +50,7 @@
       "Skill(magi-ex)",
       "Skill(second-opinions)",
       "Skill(commit)",
-      "Skill(update-allowed-tools)",
-      "mcp__ide__getDiagnostics"
+      "Skill(update-allowed-tools)"
     ],
     "deny": [
       "Read(~/.aws/**)",
