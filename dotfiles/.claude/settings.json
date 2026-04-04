@@ -15,6 +15,7 @@
     "DISABLE_BUG_COMMAND": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_DOCTOR_COMMAND": "1",
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
     "USE_BUILTIN_RIPGREP": "0"
   },
   "permissions": {
