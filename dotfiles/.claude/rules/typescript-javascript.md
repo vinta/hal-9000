@@ -31,6 +31,6 @@ paths:
 - Mark properties and parameters `readonly` when they should not be mutated
 - Do not add explicit return types. Let TypeScript infer them
 
-<verify_with_browser if="you completed a frontend change (UI component, page, client-side behavior)" only_if="agent-browser skill is installed in project or user scope">
-After implementing frontend changes, use the `agent-browser` skill to visually verify the result in a real browser. Check layout, responsiveness, and interactive behavior rather than assuming correctness from code alone.
+<verify_with_browser if="you completed a frontend change (UI component, page, client-side behavior)" only_if="playwright-cli skill is installed in project or user scope">
+After implementing frontend changes, use the `playwright-cli` skill to visually verify the result in a real browser. Check layout, responsiveness, and interactive behavior rather than assuming correctness from code alone.
 </verify_with_browser>
