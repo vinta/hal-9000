@@ -93,6 +93,10 @@
     {
       "dest": "{{HOME}}/.gemini/settings.json",
       "src": "{{REPO_ROOT}}/dotfiles/.gemini/settings.json"
+    },
+    {
+      "dest": "{{HOME}}/.playwright/cli.config.json",
+      "src": "{{REPO_ROOT}}/dotfiles/.playwright/cli.config.json"
     }
   ]
 }
