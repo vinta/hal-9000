@@ -13,7 +13,7 @@ import time
 from pathlib import Path
 from typing import TypedDict
 
-LOG_PATH = Path("/tmp/statusline.log")  # noqa: S108 hardcoded-temp-file
+LOG_PATH = Path("/tmp/hal-statusline.log")  # noqa: S108 hardcoded-temp-file
 
 logger = logging.getLogger("statusline")
 logger.setLevel(logging.DEBUG)
@@ -177,7 +177,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     session_id: str | None = data.get("session_id")
     if not session_id:
         return
-    cache_file = f"/tmp/statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
+    cache_file = f"/tmp/hal-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
 
     cached_uuid = ""
     cached_result = ""
@@ -235,7 +235,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     if grammar_check_result:
         print(colorize_grammar(grammar_check_result))
 
-    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="statusline-")
+    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="hal-statusline-")
     try:
         with os.fdopen(fd, "w") as f:
             json.dump(
