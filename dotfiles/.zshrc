@@ -142,6 +142,9 @@ export HOMEBREW_NO_INSECURE_REDIRECT=1
 # https://github.com/vercel-labs/agent-browser
 export AGENT_BROWSER_HEADED=1
 
+# Claude Code statusline grammar check: 1 = local ollama, 0 = claude --print
+export STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1
+
 source /usr/local/hal-9000/playbooks/roles/hal/files/hal_profile.sh
 source /usr/local/hal-9000/playbooks/roles/python/files/py_profile.sh
 source /usr/local/hal-9000/playbooks/roles/node/files/node_profile.sh
