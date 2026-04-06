@@ -115,7 +115,7 @@ def grammar_check(data: StatusLineData) -> None:  # noqa: C901 PLR0912 PLR0915 c
                 latest_user_uuid = entry.get("uuid", "")
                 break
 
-    logger.debug("session=%s latest_user_input=%s", data.get("session_id", "?"), latest_user_input)
+    logger.debug("session=%s latest_user_input=%r", data.get("session_id", "?"), latest_user_input)
 
     if not latest_user_input or not latest_user_uuid:
         return
