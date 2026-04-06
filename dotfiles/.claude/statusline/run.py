@@ -13,7 +13,7 @@ import time
 from pathlib import Path
 from typing import TypedDict
 
-LOG_PATH = Path("/tmp/claude-code-statusline.log")  # noqa: S108 hardcoded-temp-file
+LOG_PATH = Path("/tmp/statusline.log")  # noqa: S108 hardcoded-temp-file
 
 logger = logging.getLogger("statusline")
 logger.setLevel(logging.DEBUG)
@@ -177,7 +177,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     session_id: str | None = data.get("session_id")
     if not session_id:
         return
-    cache_file = f"/tmp/claude-code-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
+    cache_file = f"/tmp/statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
 
     cached_uuid = ""
     cached_result = ""
@@ -194,19 +194,29 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
             print(colorize_grammar(cached_result))
         return
 
-    # `--setting-sources ""` to disable hooks
-    # `--no-session-persistence` and `cwd="/tmp"` to avoid polluting your current context
-    cmd = """
-        claude
-        --model haiku
-        --max-turns 1
-        --setting-sources ""
-        --tools ""
-        --disable-slash-commands
-        --no-session-persistence
-        --no-chrome
-        --print
-    """
+    use_ollama = os.environ.get("STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA") == "1"
+
+    if use_ollama:
+        cmd = """
+            ollama run gemma4:31b
+            --nowordwrap
+            --think=false
+            --keepalive 30m
+        """
+    else:
+        # `--setting-sources ""` to disable hooks
+        # `--no-session-persistence` and `cwd="/tmp"` to avoid polluting your current context
+        cmd = """
+            claude
+            --model haiku
+            --max-turns 1
+            --setting-sources ""
+            --tools ""
+            --disable-slash-commands
+            --no-session-persistence
+            --no-chrome
+            --print
+        """
 
     start_time = time.time()
     try:
@@ -214,8 +224,8 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
             [*shlex.split(cmd), grammar_check_prompt],
             capture_output=True,
             text=True,
-            timeout=15,
-            cwd="/tmp",  # noqa: S108 hardcoded-temp-file
+            timeout=30,
+            cwd="/tmp" if not use_ollama else None,  # noqa: S108 hardcoded-temp-file
         )
     except subprocess.TimeoutExpired:
         return
@@ -225,7 +235,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
     if grammar_check_result:
         print(colorize_grammar(grammar_check_result))
 
-    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="claude-code-statusline-")
+    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="statusline-")
     try:
         with os.fdopen(fd, "w") as f:
             json.dump(
@@ -234,6 +244,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
                     "input": latest_user_input,
                     "result": grammar_check_result,
                     "elapsed": elapsed,
+                    "backend": "ollama" if use_ollama else "claude",
                     "cwd": str(Path.cwd()),
                 },
                 f,
