@@ -259,6 +259,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
 
 def main() -> None:
     data: StatusLineData = json.load(sys.stdin)
+    logger.debug("data=%s", json.dumps(data))
 
     basic_info(data)
     grammar_check(data)
