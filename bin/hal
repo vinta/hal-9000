@@ -40,14 +40,11 @@ class Dotfiles:
         return self._data
 
     def find_by_key(self, key: str, value: str, field_name: str) -> dict[str, str] | None:
-        some_list = self.data[field_name]
-
+        entries = self.data[field_name]
         try:
-            some_dict = next(some_dict for some_dict in some_list if some_dict[key] == value)
+            return next(entry for entry in entries if entry[key] == value)
         except StopIteration:
-            some_dict = None
-
-        return some_dict
+            return None
 
     def show(self) -> None:
         print(json.dumps(self.data, sort_keys=True, indent=2, separators=(",", ": ")))
