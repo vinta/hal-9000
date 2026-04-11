@@ -1,6 +1,6 @@
 # Claude Code Statusline with English Grammar Check
 
-Show the current model, directory, and git branch in [statusline](<(https://code.claude.com/docs/en/statusline)>). Plus **a grammar check on every prompt you type**, with explanations in Traditional Chinese.
+Show the current model, directory, and git branch in [statusline](https://code.claude.com/docs/en/statusline). Plus **a grammar check on every prompt you type**, with explanations in Traditional Chinese.
 
 ## Installation
 
