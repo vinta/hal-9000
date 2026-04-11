@@ -162,6 +162,12 @@
         "repo": "vinta/hal-9000"
       }
     },
+    "hal-9000-local": {
+      "source": {
+        "source": "directory",
+        "path": "/usr/local/hal-9000"
+      }
+    },
     "minimalist-entrepreneur": {
       "source": {
         "source": "github",
@@ -178,12 +184,6 @@
       "source": {
         "source": "github",
         "repo": "trailofbits/skills"
-      }
-    },
-    "hal-9000-local": {
-      "source": {
-        "source": "directory",
-        "path": "/usr/local/hal-9000"
       }
     }
   },
