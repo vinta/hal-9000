@@ -4,6 +4,7 @@
     "CLAUDE_CODE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "CLAUDE_CODE_EFFORT_LEVEL": "max",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_NEW_INIT": "1",
@@ -46,12 +47,7 @@
       "Bash(pwd *)",
       "Bash(which *)",
       "Bash(mkdir *)",
-      "WebSearch",
-      "Skill(magi)",
-      "Skill(magi-ex)",
-      "Skill(second-opinions)",
-      "Skill(commit)",
-      "Skill(update-allowed-tools)"
+      "WebSearch"
     ],
     "deny": [
       "Read(~/.aws/**)",
@@ -147,12 +143,13 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "python3 ~/.claude/statusline/run.py"
+    "command": "python3 ~/.claude/statusline/hal-statusline.py"
   },
   "enabledPlugins": {
     "codex@openai-codex": true,
     "gh-cli@trailofbits": true,
-    "hal-voice@hal-9000": true,
+    "hal-skills@hal-9000-local": true,
+    "hal-voice@hal-9000-local": true,
     "pyright-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
@@ -182,9 +179,14 @@
         "source": "github",
         "repo": "trailofbits/skills"
       }
+    },
+    "hal-9000-local": {
+      "source": {
+        "source": "directory",
+        "path": "/usr/local/hal-9000"
+      }
     }
   },
-  "alwaysThinkingEnabled": true,
   "showClearContextOnPlanAccept": true,
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,

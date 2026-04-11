@@ -25,9 +25,9 @@ bin/open-the-pod-bay-doors              # Bootstrap script (Bash)
 dotfiles/                               # Tracked in hal_dotfiles.json, symlinked or copied to ~
 playbooks/site.yml                      # Main playbook importing all roles
 playbooks/roles/                        # Independent, tagged Ansible roles (Homebrew-based)
-plugins/hal-voice/                      # Claude Code plugin — HAL 9000 voice clips
+plugins/hal-skills/                     # Claude Code plugin - Agent skills
+plugins/hal-voice/                      # Claude Code plugin - HAL 9000 voice clips
 scripts/generate-completion.py          # Generates zsh completion for bin/hal
-skills/                                 # Agent skills — symlinked into ~/.claude/skills/
 tests/                                  # pytest tests
 ```
 
@@ -49,7 +49,7 @@ GitHub Actions run on push/PR:
 ## Gotchas
 
 - **Python >=3.13** required. Package management via `uv`.
-- **Dotfiles are the source of truth**: `dotfiles/.claude/` syncs to `~/.claude/` and `skills/` syncs to `~/.claude/skills/` via `hal_dotfiles.json`. Always edit under `dotfiles/` or `skills/`, never under `~/.claude/` directly. Update `hal_dotfiles.json` when adding new files, then run `hal sync`.
+- **Dotfiles are the source of truth**: `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/.claude/` directly.
 - **Dotfile modes**: `link` (symlink) for small configs, `copy` for large or externally synced files. Manifest uses `{{HOME}}` and `{{REPO_ROOT}}` template variables.
 
 ## External Tool Documentation

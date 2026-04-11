@@ -8,7 +8,7 @@ Opinionated macOS development environment automation that dominates your dev set
 
 ## Tech Stack
 
-- [Agent Skills](skills)
+- [Agent Skills](plugins/hal-skills)
 - [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](dotfiles/.claude/statusline)
 - [Codex](dotfiles/.codex)
 - [Gemini](dotfiles/.gemini)
@@ -29,6 +29,40 @@ curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-b
 
 ## Components
 
+### Claude Code Plugin: `hal-skills`
+
+- [magi](plugins/hal-skills/skills/magi): Three-agent brainstorming panel for competing perspectives
+- [magi-ex](plugins/hal-skills/skills/magi-ex): Multi-model (Claude/Codex/Gemini) brainstorming panel for competing perspectives
+- [second-opinions](plugins/hal-skills/skills/second-opinions): Parallel review from multiple external models
+- [commit](plugins/hal-skills/skills/commit): Creates clean, atomic git commits
+- [update-allowed-tools](plugins/hal-skills/skills/update-allowed-tools): Updates skill allowed-tools frontmatter
+
+```bash
+claude plugin marketplace add vinta/hal-9000
+claude plugin install hal-skills@hal-9000
+```
+
+If you want to use them in Codex or Gemini CLI:
+
+```bash
+npx skills add vinta/hal-9000
+```
+
+### Claude Code Plugin: `hal-voice`
+
+- [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
+
+```bash
+claude plugin marketplace add vinta/hal-9000
+claude plugin install hal-voice@hal-9000
+```
+
+### Claude Code Statusline
+
+```bash
+curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-statusline.sh | bash
+```
+
 ### CLI: `hal`
 
 ```bash
@@ -40,31 +74,11 @@ hal sync                        # Sync all links and copies
 hal open-the-pod-bay-doors      # Open the pod bay doors, please, HAL
 ```
 
-### Agent Skills
-
-- [magi](skills/magi): Three-agent brainstorming panel for competing perspectives
-- [magi-ex](skills/magi-ex): Multi-model (Claude/Codex/Gemini) brainstorming panel for competing perspectives
-- [second-opinions](skills/second-opinions): Parallel review from multiple external models
-- [commit](skills/commit): Creates clean, atomic git commits
-- [update-allowed-tools](skills/update-allowed-tools): Updates skill allowed-tools frontmatter
-
-```bash
-npx skills add vinta/hal-9000
-```
-
-### Claude Code Plugins
-
-- [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
-
-```bash
-claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-voice@hal-9000
-```
-
 ## Development
 
 ```bash
 make install          # Install dev dependencies and pre-commit hooks
+make test             # Run tests
 make hal-completion   # Regenerate zsh completion after modifying bin/hal
 hal sync              # Update local completion
 ```

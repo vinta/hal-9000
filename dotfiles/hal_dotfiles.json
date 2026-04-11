@@ -47,6 +47,10 @@
       "src": "{{REPO_ROOT}}/dotfiles/.config/ghostty/config"
     },
     {
+      "dest": "{{HOME}}/.playwright/cli.config.json",
+      "src": "{{REPO_ROOT}}/dotfiles/.playwright/cli.config.json"
+    },
+    {
       "dest": "{{HOME}}/.claude/settings.json",
       "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.json"
     },
@@ -55,36 +59,12 @@
       "src": "{{REPO_ROOT}}/dotfiles/.claude/hooks/guard-bash-paths.py"
     },
     {
-      "dest": "{{HOME}}/.claude/statusline/run.py",
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/statusline/run.py"
-    },
-    {
-      "dest": "{{HOME}}/.claude/agents/",
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/agents/"
+      "dest": "{{HOME}}/.claude/statusline/hal-statusline.py",
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/statusline/hal-statusline.py"
     },
     {
       "dest": "{{HOME}}/.claude/rules/",
       "src": "{{REPO_ROOT}}/dotfiles/.claude/rules/"
-    },
-    {
-      "dest": "{{HOME}}/.claude/skills/magi/",
-      "src": "{{REPO_ROOT}}/skills/magi/"
-    },
-    {
-      "dest": "{{HOME}}/.claude/skills/magi-ex/",
-      "src": "{{REPO_ROOT}}/skills/magi-ex/"
-    },
-    {
-      "dest": "{{HOME}}/.claude/skills/second-opinions/",
-      "src": "{{REPO_ROOT}}/skills/second-opinions/"
-    },
-    {
-      "dest": "{{HOME}}/.claude/skills/commit/",
-      "src": "{{REPO_ROOT}}/skills/commit/"
-    },
-    {
-      "dest": "{{HOME}}/.claude/skills/update-allowed-tools/",
-      "src": "{{REPO_ROOT}}/skills/update-allowed-tools/"
     },
     {
       "dest": "{{HOME}}/.codex/config.toml",
@@ -93,10 +73,6 @@
     {
       "dest": "{{HOME}}/.gemini/settings.json",
       "src": "{{REPO_ROOT}}/dotfiles/.gemini/settings.json"
-    },
-    {
-      "dest": "{{HOME}}/.playwright/cli.config.json",
-      "src": "{{REPO_ROOT}}/dotfiles/.playwright/cli.config.json"
     }
   ]
 }
