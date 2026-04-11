@@ -28,7 +28,7 @@ playbooks/roles/                        # Independent, tagged Ansible roles (Hom
 plugins/hal-skills/                     # Claude Code plugin - Agent skills
 plugins/hal-voice/                      # Claude Code plugin - HAL 9000 voice clips
 scripts/generate-completion.py          # Generates zsh completion for bin/hal
-scripts/install-statusline.sh           # One-liner statusline installer
+scripts/install-hal-statusline.sh           # One-liner statusline installer
 tests/                                  # pytest tests
 ```
 

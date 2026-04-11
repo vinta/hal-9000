@@ -6,10 +6,12 @@ Opinionated macOS development environment automation that dominates your dev set
 
 > This project is named after Arthur C. Clarke's 2001: A Space Odyssey, a heuristic algorithmic computer designed for sentient processing and total mission control.
 
-## Tech Stack
+## Bootstrap
+
+All-in-one command to set up:
 
 - [Agent Skills](plugins/hal-skills)
-- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](dotfiles/.claude/statusline)
+- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
 - [Codex](dotfiles/.codex)
 - [Gemini](dotfiles/.gemini)
 - [Python](playbooks/roles/python/tasks/main.yml)
@@ -21,13 +23,13 @@ Opinionated macOS development environment automation that dominates your dev set
 - [Amazon Web Services](playbooks/roles/aws/tasks/main.yml)
 - [Google Cloud](playbooks/roles/gcp/tasks/main.yml)
 
-## Bootstrap
-
 ```bash
 curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors | bash
 ```
 
 ## Components
+
+If you prefer only using some of them:
 
 ### Claude Code Plugin: `hal-skills`
 
@@ -59,14 +61,16 @@ claude plugin install hal-voice@hal-9000
 
 ### Claude Code Statusline
 
+- [hal-statusline](plugins/hal-statusline): Show the current model, directory, and git branch in [statusline](https://code.claude.com/docs/en/statusline). Plus **a grammar check on every prompt you type**, with explanations in Traditional Chinese
+
 ```bash
-curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-statusline.sh | bash
+curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-hal-statusline.sh | bash
 ```
 
 ### CLI: `hal`
 
 ```bash
-hal update                      # Run Ansible playbook to set up the dev environment
+hal update                      # Run all Ansible roles to set up the dev environment
 hal update --tags python,node   # Run specific Ansible roles
 hal link ~/.zshrc               # Move file into dotfiles/ and symlink it back
 hal copy ~/.config/ghostty/     # Copy file into dotfiles/ (no symlink)
@@ -77,10 +81,10 @@ hal open-the-pod-bay-doors      # Open the pod bay doors, please, HAL
 ## Development
 
 ```bash
-make install          # Install dev dependencies and pre-commit hooks
-make test             # Run tests
-make hal-completion   # Regenerate zsh completion after modifying bin/hal
-hal sync              # Update local completion
+make install                    # Install dev dependencies and pre-commit hooks
+make test                       # Run tests
+make hal-completion             # Regenerate zsh completion after modifying bin/hal
+hal sync                        # Update local completion
 ```
 
 ## Demo
