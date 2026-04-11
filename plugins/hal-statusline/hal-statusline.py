@@ -146,7 +146,7 @@ Grammar 2: has "Wi-Fi" or not => wife 是「妻子」，你是要說 Wi-Fi「無
 Grammar 3: I will use "cellular" => cellar 是「地窖」，這裡應該是 cellular「行動網路」
 </example>
 <example>
-Text: @dotfiles/.claude/statusline/hal-statusline.py#L141 use `claude -p` and `grammar_check_prompt` to grammar check `latest_user_input` and print result
+Text: @plugins/hal-statusline/hal-statusline.py#L141 use `claude -p` and `grammar_check_prompt` to grammar check `latest_user_input` and print result
 Output:
 Grammar 1: to "grammar-check" latest_user_input => 要用連字號 "-" 連接形成複合動詞
 Grammar 2: print "the" result => result 前面要加定冠詞 the
@@ -196,7 +196,7 @@ Grammar 3: check "the" codebase => 特指這個 codebase，要加定冠詞 the
             print(colorize_grammar(cached_result))
         return
 
-    use_ollama = os.environ.get("STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA") == "1"
+    use_ollama = os.environ.get("HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA") == "1"
 
     if use_ollama:
         cmd = """

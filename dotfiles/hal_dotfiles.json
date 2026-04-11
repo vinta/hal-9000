@@ -60,7 +60,7 @@
     },
     {
       "dest": "{{HOME}}/.claude/statusline/hal-statusline.py",
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/statusline/hal-statusline.py"
+      "src": "{{REPO_ROOT}}/plugins/hal-statusline/hal-statusline.py"
     },
     {
       "dest": "{{HOME}}/.claude/rules/",
