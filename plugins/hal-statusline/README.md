@@ -5,7 +5,7 @@ A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) th
 ## Installation
 
 ```bash
-curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-hal-statusline.sh | bash
+curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-hal-statusline.sh | bash
 ```
 
 Set `HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1` in your environment to use a local Ollama model instead of `claude -p`.

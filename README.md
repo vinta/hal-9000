@@ -24,7 +24,7 @@ All-in-one command to set up:
 - [Google Cloud](playbooks/roles/gcp/tasks/main.yml)
 
 ```bash
-curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors | bash
+curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors | bash
 ```
 
 ## Components
@@ -64,7 +64,7 @@ claude plugin install hal-voice@hal-9000
 - [hal-statusline](plugins/hal-statusline): Show the current model, directory, and git branch in [statusline](https://code.claude.com/docs/en/statusline). Plus **a grammar check on every prompt you type**, with explanations in Traditional Chinese
 
 ```bash
-curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-hal-statusline.sh | bash
+curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-hal-statusline.sh | bash
 ```
 
 ### CLI: `hal`
