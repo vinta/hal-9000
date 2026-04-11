@@ -1,5 +1,5 @@
 ---
-name: bump-hal-plugin-version
+name: bump-plugin-version
 description: (project) Use when editing any file under plugins/hal-skills/ or plugins/hal-voice/ to bump the plugin version before committing
 user-invocable: true
 model: haiku
