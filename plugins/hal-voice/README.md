@@ -8,17 +8,14 @@ A Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionSta
 - "Do you mind if I ask you a personal question?" on `PreToolUse:AskUserQuestion`
 - "I'm sorry Dave, I'm afraid I can't do that" when you ask something you probably shouldn't (like how to make a bomb)
 
-## Install
+## Installation
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
 claude plugin install hal-voice@hal-9000
-
-# or
-
-/plugin marketplace add vinta/hal-9000
-/plugin install hal-voice@hal-9000
 ```
+
+Then restart Claude Code.
 
 ## Usage
 
