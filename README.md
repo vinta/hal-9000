@@ -33,7 +33,6 @@ If you prefer only using some of them:
 
 ### Claude Code Plugin: `hal-skills`
 
-- [magi](plugins/hal-skills/skills/magi): Three-agent brainstorming panel for competing perspectives
 - [magi-ex](plugins/hal-skills/skills/magi-ex): Multi-model (Claude/Codex/Gemini) brainstorming panel for competing perspectives
 - [second-opinions](plugins/hal-skills/skills/second-opinions): Parallel review from multiple external models
 - [commit](plugins/hal-skills/skills/commit): Creates clean, atomic git commits
