@@ -16,7 +16,6 @@ paths:
   - Navigating to a symbol's definition (`goToDefinition`)
   - Checking type information at a position (`hover`)
   - Surveying a file's or workspace's structure (`documentSymbol` / `workspaceSymbol`)
-  Use grep for text pattern matching, dynamic access patterns (dict keys, pytest fixtures, string-based lookups), or when the symbol name is unique enough that text matching suffices.
 - Use modern syntax: `X | Y` unions, `match`/`case`, `tomllib`
 - Scripts run by system `python3` must work on Python 3.9 — add `from __future__ import annotations` and avoid 3.10+ stdlib APIs
 - Use `uv` for project and environment management
@@ -30,4 +29,4 @@ paths:
 - All `# noqa` comments must include the rule name: `# noqa: S603 subprocess-without-shell-equals-true` or `# noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check` if multiple rules
 - Use f-strings over `.format()` or `%` formatting
 - Use `enumerate()` over `range(len())`
-- Prefer comprehensions over `map()`/`filter()` with lambdas
+- Prefer comprehensions over `map()` / `filter()` with lambdas
