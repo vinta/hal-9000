@@ -148,8 +148,8 @@
   "enabledPlugins": {
     "codex@openai-codex": true,
     "gh-cli@trailofbits": true,
-    "hal-skills@hal-9000-local": true,
-    "hal-voice@hal-9000-local": true,
+    "hal-skills@hal-9000": true,
+    "hal-voice@hal-9000": true,
     "pyright-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
