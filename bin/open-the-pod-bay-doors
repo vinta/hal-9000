@@ -46,4 +46,4 @@ printf "Run ansible-playbook (will require your sudo password)...\n"
 cd "$REPO_ROOT/playbooks"
 ansible-playbook site.yml -v "$@"
 
-source "$REPO_ROOT/playbooks/roles/basic/files/hal_profile.sh"
+source "$REPO_ROOT/playbooks/roles/hal/files/hal_profile.sh"

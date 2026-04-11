@@ -1,6 +1,6 @@
 {
   "name": "hal-skills",
-  "description": "Skills, sub-agents, and MCP servers",
+  "description": "Skills, subagents, and MCP servers",
   "version": "0.3.1",
   "author": {
     "name": "Vinta Chen",

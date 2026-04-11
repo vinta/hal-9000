@@ -13,6 +13,9 @@ make test                               # pytest tests/ -v
 make run-hooks                          # Run all pre-commit hooks on all files
 make hal-completion                     # Regenerate zsh completion (after modifying bin/hal)
 hal sync                                # Reconcile dotfile manifest to disk
+hal link ~/.config/file                 # Move file into dotfiles and symlink it back
+hal unlink ~/.config/file               # Restore file from dotfiles and remove symlink
+hal copy ~/.config/file                 # Copy file into dotfiles (no symlink)
 hal update                              # Run all Ansible roles
 hal update --tags python,node           # Run specific roles
 ```
@@ -26,9 +29,10 @@ dotfiles/                               # Tracked in hal_dotfiles.json, symlinke
 playbooks/site.yml                      # Main playbook importing all roles
 playbooks/roles/                        # Independent, tagged Ansible roles (Homebrew-based)
 plugins/hal-skills/                     # Claude Code plugin - Agent skills
+plugins/hal-statusline/                 # Claude Code plugin - Statusline
 plugins/hal-voice/                      # Claude Code plugin - HAL 9000 voice clips
 scripts/generate-completion.py          # Generates zsh completion for bin/hal
-scripts/install-hal-statusline.sh           # One-liner statusline installer
+scripts/install-hal-statusline.sh       # One-liner statusline installer
 tests/                                  # pytest tests
 ```
 
