@@ -2,7 +2,7 @@
 # Install HAL 9000 statusline into Claude Code
 set -e
 
-REMOTE_URL="https://raw.githubusercontent.com/vinta/hal-9000/main/dotfiles/.claude/statusline/hal-statusline.py"
+REMOTE_URL="https://raw.githubusercontent.com/vinta/hal-9000/main/plugins/hal-statusline/hal-statusline.py"
 DEST="$HOME/.claude/statusline/hal-statusline.py"
 SETTINGS="$HOME/.claude/settings.json"
 
@@ -22,7 +22,7 @@ curl -fsSL "$REMOTE_URL" -o "$DEST"
 echo "Downloaded statusline to $DEST"
 
 # Write statusLine into settings.json
-STATUSLINE_CMD="python3 $DEST"
+STATUSLINE_CMD="python3 ~/.claude/statusline/hal-statusline.py"
 python3 - "$SETTINGS" "$STATUSLINE_CMD" <<'PYEOF'
 import json, sys
 from pathlib import Path
