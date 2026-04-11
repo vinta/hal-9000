@@ -18,6 +18,7 @@ fi
 
 # Download statusline script from GitHub
 mkdir -p "$(dirname "$DEST")"
+rm -f "$DEST"
 curl -fsSL "$REMOTE_URL" -o "$DEST"
 echo "Downloaded statusline to $DEST"
 
