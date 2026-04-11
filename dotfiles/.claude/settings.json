@@ -187,6 +187,7 @@
       }
     }
   },
+  "showThinkingSummaries": true,
   "showClearContextOnPlanAccept": true,
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
