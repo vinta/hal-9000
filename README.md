@@ -36,7 +36,6 @@ If you prefer only using some of them:
 - [magi](plugins/hal-skills/skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
 - [second-opinions](plugins/hal-skills/skills/second-opinions): Gets independent code review from Codex and Gemini
 - [commit](plugins/hal-skills/skills/commit): Creates clean, atomic git commits with conventional messages
-- [update-allowed-tools](plugins/hal-skills/skills/update-allowed-tools): Analyzes skill content and finds missing tool declarations
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
