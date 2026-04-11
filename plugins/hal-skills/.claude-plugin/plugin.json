@@ -8,12 +8,12 @@
   },
   "repository": "https://github.com/vinta/hal-9000",
   "license": "MIT",
-  "agents": ["agents/committer.md"],
+  "agents": ["./agents/committer.md"],
   "skills": [
-    "skills/commit",
-    "skills/magi",
-    "skills/magi-ex",
-    "skills/second-opinions",
-    "skills/update-allowed-tools"
+    "./skills/commit",
+    "./skills/magi",
+    "./skills/magi-ex",
+    "./skills/second-opinions",
+    "./skills/update-allowed-tools"
   ]
 }

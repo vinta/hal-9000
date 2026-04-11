@@ -70,21 +70,21 @@ curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-ha
 ### CLI: `hal`
 
 ```bash
-hal update                      # Run all Ansible roles to set up the dev environment
-hal update --tags python,node   # Run specific Ansible roles
-hal link ~/.zshrc               # Move file into dotfiles/ and symlink it back
+hal update                            # Run all Ansible roles to set up the dev environment
+hal update --tags python,node         # Run specific Ansible roles
+hal link ~/.zshrc                     # Move file into dotfiles/ and symlink it back
 hal copy ~/.config/ghostty/config     # Copy file into dotfiles/ (no symlink)
-hal sync                        # Sync all links and copies
-hal open-the-pod-bay-doors      # Open the pod bay doors, please, HAL
+hal sync                              # Sync all links and copies
+hal open-the-pod-bay-doors            # Open the pod bay doors, please, HAL
 ```
 
 ## Development
 
 ```bash
-make install                    # Install dev dependencies and pre-commit hooks
-make test                       # Run tests
-make hal-completion             # Regenerate zsh completion after modifying bin/hal
-hal sync                        # Update local completion
+make install                          # Install dev dependencies and pre-commit hooks
+make test                             # Run tests
+make hal-completion                   # Regenerate zsh completion after modifying bin/hal
+hal sync                              # Update local completion
 ```
 
 ## Demo
