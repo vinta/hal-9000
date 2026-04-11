@@ -11,6 +11,9 @@
       "enabled": false,
       "maxAge": "365d",
       "warningAcknowledged": true
+    },
+    "plan": {
+      "enabled": true
     }
   },
   "privacy": {
@@ -40,7 +43,8 @@
     "useAlternateBuffer": true,
     "inlineThinkingMode": "full"
   },
-  "experimental": {
-    "plan": true
+  "experimental": {},
+  "agents": {
+    "overrides": {}
   }
 }
