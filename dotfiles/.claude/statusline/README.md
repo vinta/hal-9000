@@ -4,26 +4,11 @@ A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) th
 
 ## Setup
 
-Download the script:
-
 ```bash
-curl -fsSL https://raw.githubusercontent.com/vinta/hal-9000/main/dotfiles/.claude/statusline/run.py \
-  -o ~/.claude/statusline/run.py \
-  --create-dirs
+curl -L https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-statusline.sh | bash
 ```
 
-Add to `~/.claude/settings.json`:
-
-```json
-{
-  "statusLine": {
-    "type": "command",
-    "command": "python3 ~/.claude/statusline/run.py"
-  }
-}
-```
-
-Add `STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1` to your environment variables if you want to use `ollama run` for a local model instead.
+Set `STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1` in your environment to use a local Ollama model instead of `claude -p`.
 
 ## Screenshots
 
