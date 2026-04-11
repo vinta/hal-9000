@@ -11,7 +11,7 @@
   "agents": ["./agents/committer.md"],
   "skills": [
     "./skills/commit",
-    "./skills/magi-ex",
+    "./skills/magi",
     "./skills/second-opinions",
     "./skills/update-allowed-tools"
   ]

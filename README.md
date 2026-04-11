@@ -33,10 +33,10 @@ If you prefer only using some of them:
 
 ### Claude Code Plugin: `hal-skills`
 
-- [magi-ex](plugins/hal-skills/skills/magi-ex): Multi-model (Claude/Codex/Gemini) brainstorming panel for competing perspectives
-- [second-opinions](plugins/hal-skills/skills/second-opinions): Parallel review from multiple external models
-- [commit](plugins/hal-skills/skills/commit): Creates clean, atomic git commits
-- [update-allowed-tools](plugins/hal-skills/skills/update-allowed-tools): Updates skill allowed-tools frontmatter
+- [commit](plugins/hal-skills/skills/commit): Creates clean, atomic git commits with conventional messages
+- [magi](plugins/hal-skills/skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
+- [second-opinions](plugins/hal-skills/skills/second-opinions): Gets independent code review from Codex and Gemini
+- [update-allowed-tools](plugins/hal-skills/skills/update-allowed-tools): Analyzes skill content and finds missing tool declarations
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
