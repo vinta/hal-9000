@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "codex": {
+    "codex-mcp-server": {
       "command": "codex",
       "args": ["mcp-server"]
     }
