@@ -105,10 +105,13 @@ def grammar_check(data: StatusLineData) -> None:  # noqa: C901 PLR0912 PLR0915 c
             content = entry["message"]["content"]
             if (
                 isinstance(content, str)
+                and not content.startswith("<bash-input>")
                 and not content.startswith("<bash-stdout>")
                 and not content.startswith("<command-message>")
+                and not content.startswith("<command-name>")
                 and not content.startswith("<local-command-caveat>")
                 and not content.startswith("<local-command-stdout>")
+                and not content.startswith("<task-notification>")
                 and not content.startswith("<teammate-message")
             ):
                 latest_user_input = content[:500]
