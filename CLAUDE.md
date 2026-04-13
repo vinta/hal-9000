@@ -29,37 +29,28 @@ dotfiles/                               # Tracked in hal_dotfiles.json, symlinke
 playbooks/site.yml                      # Main playbook importing all roles
 playbooks/roles/                        # Independent, tagged Ansible roles (Homebrew-based)
 plugins/hal-skills/                     # Claude Code plugin - Agent skills
-plugins/hal-statusline/                 # Claude Code plugin - Statusline
 plugins/hal-voice/                      # Claude Code plugin - HAL 9000 voice clips
+plugins/hal-statusline/                 # Claude Code statusline
 scripts/generate-completion.py          # Generates zsh completion for bin/hal
 scripts/install-hal-statusline.sh       # One-liner statusline installer
 tests/                                  # pytest tests
 ```
 
-## Workflow
-
-- **Load `writing-skills` skill before creating or editing any skill file.**
-  - All skill descriptions must start with `Use when` (may have a `(project-name)` prefix, e.g. `(hal-9000) Use when …`)
-- Use `make` targets — don't run underlying commands directly.
-- Run `make lint`, `make format`, `make typecheck` after editing Python or Ansible files.
-- After adding or modifying a skill, run `hal sync` to update symlinks.
-
-## CI
-
-GitHub Actions run on push/PR:
-
-- `scan-secrets.yml`: gitleaks + detect-secrets
-- `validate-ansible-playbooks.yml`: ansible-lint + syntax-check
-
 ## Gotchas
 
-- **Python >=3.13** required. Package management via `uv`.
-- **Dotfiles are the source of truth**: `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/.claude/` directly.
-- **Dotfile modes**: `link` (symlink) for small configs, `copy` for large or externally synced files. Manifest uses `{{HOME}}` and `{{REPO_ROOT}}` template variables.
+- **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
+- **Skills are the source of truth in `plugins/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json`. The `hal-9000` marketplace loads the published version from GitHub. Use `hal-9000-local` (points to `/usr/local/hal-9000`) to test local changes before pushing.
+- **Load `writing-skills` skill before creating or editing any skill file.**
+- All skill descriptions must start with `Use when` (may have a `(project)` prefix if it's a project-level skill)
+- Use `make` targets — don't run underlying commands directly.
 
 ## External Tool Documentation
 
-When you need information about tools used in this project, use the `find-docs` skill. These pre-resolved library IDs can be passed directly to `ctx7 docs`, skipping the `ctx7 library` step:
+When you need information about tools used in this project, use the `find-docs` skill or `WebFetch`.
+
+### Context7 Library IDs
+
+Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skipping the `ctx7 library` step:
 
 | Tool           | `libraryId`                  |
 | -------------- | ---------------------------- |
@@ -73,3 +64,13 @@ When you need information about tools used in this project, use the `find-docs` 
 | ruff           | `/websites/astral_sh_ruff`   |
 | ty             | `/websites/astral_sh_ty`     |
 | uv             | `/websites/astral_sh_uv`     |
+
+### Documentation Links
+
+For topics not well covered by Context7, use `WebFetch` on these URLs:
+
+- Claude Code settings
+  - https://code.claude.com/docs/en/settings
+- Claude Code plugins / marketplaces
+  - https://code.claude.com/docs/en/plugins-reference
+  - https://code.claude.com/docs/en/plugin-marketplaces
