@@ -22,4 +22,14 @@ After editing files under `plugins/hal-skills/` or `plugins/hal-voice/`, bump th
 - **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands
 - **Major** (0.2.0 -> 1.0.0): breaking changes to hook behavior or config format
 
-Bump once per commit session per plugin, not per file edit. If both plugins changed, bump both.
+## Before bumping
+
+Compare the working-tree version against the version on `origin/main`:
+
+```bash
+git show origin/main:<path-to-plugin.json>
+```
+
+If the version already differs from `origin/main`, it was already bumped for unreleased work. **Do not bump again.** Only bump when the working-tree version matches `origin/main`.
+
+If both plugins changed, check each independently.
