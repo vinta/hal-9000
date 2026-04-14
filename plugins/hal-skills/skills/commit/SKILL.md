@@ -1,7 +1,6 @@
 ---
 name: commit
 description: Use when making any git commit. All git add and commit operations must go through this skill, including from subagents and other skills. Always pass a brief description of what changed as the argument
-argument-hint: "[what changed]"
 context: fork
 agent: committer
 user-invocable: true

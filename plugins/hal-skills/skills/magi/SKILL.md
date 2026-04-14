@@ -1,7 +1,6 @@
 ---
 name: magi
 description: Use when brainstorming ideas, features, or directions for a project where independent perspectives from different model families (Claude/Codex/Gemini) would surface blind spots and spark creative options the user hasn't considered — especially "what cool things can I add", "what should I build next", "give me ideas for X"
-argument-hint: "[question-or-topic]"
 compatibility: Designed for Claude Code
 user-invocable: true
 model: opus
@@ -28,12 +27,6 @@ Multi-model brainstorming panel. Three teammates explore a question in parallel,
 - **Scientist** -- reasons directly as Claude Opus (no external dispatch)
 - **Mother** -- delegates to OpenAI Codex via `mcp__codex__codex` MCP tool
 - **Woman** -- delegates to Google Gemini via `gemini` CLI
-
-## User Question
-
-<user_question>
-**$ARGUMENTS**
-</user_question>
 
 ## Process
 

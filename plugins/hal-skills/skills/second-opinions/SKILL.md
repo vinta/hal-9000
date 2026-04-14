@@ -1,7 +1,6 @@
 ---
 name: second-opinions
 description: Use when wanting independent perspectives from external models (Codex, Gemini) on code, plans, docs, or any task — or when the user asks for a second opinion, codex review, or gemini review
-argument-hint: "[instructions]"
 user-invocable: true
 model: opus
 allowed-tools:
@@ -42,28 +41,20 @@ Delegate tasks to OpenAI Codex (MCP) and/or Google Gemini (CLI) for independent 
 - Skip when the user asked for your own judgment only
 - Exclude secrets, credentials, and tokens from prompts
 
-## User Instructions
-
-Follow any user instructions below. They override the standard workflow when conflicts arise.
-
-<user_instructions>
-**$ARGUMENTS**
-</user_instructions>
-
 ## Workflow
 
 ### 1. Gather Context
 
-Infer as many parameters as possible from `$ARGUMENTS` and conversation context. Only ask about what can't be inferred. Combine remaining questions into a single `AskUserQuestion` call (max 3 questions).
+Infer as many parameters as possible from user's questions and conversation context. Only ask about what can't be inferred. Combine remaining questions into a single `AskUserQuestion` call (max 3 questions).
 
 **Parameters to resolve:**
 
-| Parameter  | Inference rules                                                                                    | Ask if…                                    |
-| ---------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| Tool       | "codex" or "gemini" in arguments → single tool. Default: both.                                     | Ambiguous reference to one tool            |
+| Parameter  | Inference rules                                                                                                     | Ask if…                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Tool       | "codex" or "gemini" in arguments → single tool. Default: both.                                                      | Ambiguous reference to one tool            |
 | Task type  | "review" / "diff" / "challenge" / "break" → code review. "plan" / "architecture" → plan review. "doc" → doc review. | No clear signal in arguments               |
-| Focus      | "security" / "perf" / "correctness" in arguments → that focus. Default: general.                   | Never — default to general                 |
-| Diff scope | Uncommitted changes if no other signal. "branch" → branch diff. SHA-like string → specific commit. | Task is code review and scope is ambiguous |
+| Focus      | "security" / "perf" / "correctness" in arguments → that focus. Default: general.                                    | Never — default to general                 |
+| Diff scope | Uncommitted changes if no other signal. "branch" → branch diff. SHA-like string → specific commit.                  | Task is code review and scope is ambiguous |
 
 ### 2. Build Material
 
@@ -172,6 +163,7 @@ See [references/gemini.md](references/gemini.md) for Gemini CLI invocation patte
 > One or more models appear to have read agent configuration files instead of reviewing your code. Their output may be unreliable. Consider retrying.
 
 **Gate verdict** -- for code review task type, determine the gate from the output:
+
 - Scan for `[P1]` markers in findings. If any exist, the gate is **FAIL**.
 - If no `[P1]` markers exist (only `[P2]`/`[P3]` or no findings), the gate is **PASS**.
 - Display the gate prominently: `GATE: PASS` or `GATE: FAIL (N critical findings)`.
