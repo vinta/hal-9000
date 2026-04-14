@@ -35,18 +35,11 @@ Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Ph
 
 ### 1. Identify Research Targets
 
-Extract the research topic and break it into 2-4 specific research queries targeting distinct aspects:
-
-- **Libraries/frameworks** (e.g., "React Router v7 authentication patterns")
-- **Techniques/patterns** (e.g., "database connection pooling best practices")
-- **Configuration/setup** (e.g., "ESLint flat config recommended rules 2025")
-- **Common pitfalls** (e.g., "Next.js middleware common mistakes")
-
-For single-library lookups, skip subagents and call `find-docs` or `WebSearch` directly.
+Break the topic into 2-4 specific queries targeting distinct aspects (libraries, patterns, configuration, pitfalls). For single-library lookups, call `find-docs` or `WebSearch` directly without subagents.
 
 ### 2. Parallel Research
 
-Dispatch one subagent per query, all in a single message. Each subagent uses both `find-docs` (library docs via Context7) and `WebSearch` (recent guides and community recommendations).
+Dispatch one subagent per query in a single message. Each uses `find-docs` (Context7) and `WebSearch`. Be concrete: pass library names, version constraints, and user context. Vague prompts produce vague results.
 
 Be concrete in each subagent prompt: pass library names, version constraints, and the user's specific context. Vague prompts produce vague results.
 
@@ -80,10 +73,9 @@ If you cannot find authoritative guidance on a point, say so explicitly rather t
 After all subagents return, merge using these criteria:
 
 1. **Deduplicate** overlapping recommendations
-2. **Prioritize** by authority: official docs > well-known guides > blog posts > training data
-3. **Flag conflicts** where sources disagree, noting which source said what
-4. **Discard stale results** -- a 2022 guide for a fast-moving framework is noise, not signal
-5. **Present** as a concise, actionable guide using the output format below
+2. **Rank by authority:** official docs > well-known guides > blog posts > training data
+3. **Flag conflicts** with attribution (which source said what)
+4. **Discard stale results** -- a 2022 guide for a fast-moving framework is noise
 
 If a subagent failed or returned empty, note the gap and proceed with the results you have. Do not block synthesis waiting for a straggler.
 
