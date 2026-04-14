@@ -11,12 +11,12 @@ allowed-tools:
 
 # Bump Plugin Version
 
-After editing files under `plugins/hal-skills/` or `plugins/hal-voice/`, bump the `version` field in the changed plugin's `.claude-plugin/plugin.json` using semver.
+After editing files under `plugins/hal-skills/` or `plugins/hal-voice/`, bump the `version` field in **both** the plugin's `plugin.json` and the marketplace manifest. Both files must stay in sync.
 
-| Plugin     | Version file                                    |
-| ---------- | ----------------------------------------------- |
-| hal-skills | `plugins/hal-skills/.claude-plugin/plugin.json` |
-| hal-voice  | `plugins/hal-voice/.claude-plugin/plugin.json`  |
+| Plugin     | Files to update                                                                           |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| hal-skills | `plugins/hal-skills/.claude-plugin/plugin.json` **and** `.claude-plugin/marketplace.json` |
+| hal-voice  | `plugins/hal-voice/.claude-plugin/plugin.json` **and** `.claude-plugin/marketplace.json`  |
 
 - **Patch** (0.2.0 -> 0.2.1): bug fixes, config changes, style cleanup
 - **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands
