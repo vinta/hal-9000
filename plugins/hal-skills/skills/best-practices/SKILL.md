@@ -1,6 +1,6 @@
 ---
 name: best-practices
-description: Use when choosing between approaches, asking "how should I", "what's the recommended way to", or "search online to find". Especially config formats, library APIs, and architectural patterns
+description: Use when asking "how should I", "what's the recommended way to", "which library for", or needing current best practices on config formats, API patterns, library selection, or tool setup where outdated guidance causes debugging pain
 user-invocable: true
 model: opus
 allowed-tools:
@@ -14,7 +14,7 @@ allowed-tools:
 
 # Best Practices
 
-Research current best practices for a code-related task by searching documentation and the web in parallel, then synthesize into actionable guidance.
+Research the latest best practices for any task by searching documentation and the web in parallel, then synthesize into actionable guidance.
 
 <HARD-GATE>
 Do NOT synthesize, present recommendations, or edit any file until at least one research query (find-docs or WebSearch) has returned results. Training data is not a substitute for live research. This applies to EVERY invocation regardless of how confident you feel about the topic.
