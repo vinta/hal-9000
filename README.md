@@ -35,6 +35,7 @@ If you prefer only using some of them:
 
 - [magi](plugins/hal-skills/skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
 - [second-opinions](plugins/hal-skills/skills/second-opinions): Gets independent code review from Codex and Gemini
+- [best-practices](plugins/hal-skills/skills/best-practices): Researches current best practices from docs and the web before you code
 - [commit](plugins/hal-skills/skills/commit): Creates clean, atomic git commits with conventional messages
 
 ```bash
