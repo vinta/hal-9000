@@ -13,7 +13,7 @@ Homepage = "https://vinta.ws/code/"
 Repository = "https://github.com/vinta/hal-9000"
 
 [dependency-groups]
-test = ["pytest>=9.0.2"]
+test = ["pytest>=9.0.3"]
 lint = ["ansible-lint>=26.1.1", "ruff>=0.15.2", "ty>=0.0.18"]
 audit = ["detect-secrets>=1.5.0", "pip-audit>=2.10.0", "pre-commit>=4.5.1"]
 dev = [
