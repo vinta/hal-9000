@@ -34,9 +34,9 @@ If you prefer only using some of them:
 ### Claude Code Plugin: `hal-skills`
 
 - [magi](plugins/hal-skills/skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
-- [second-opinions](plugins/hal-skills/skills/second-opinions): Gets independent code review from Codex and Gemini
-- [best-practices](plugins/hal-skills/skills/best-practices): Researches current best practices from docs and the web before you code
-- [commit](plugins/hal-skills/skills/commit): Creates clean, atomic git commits with conventional messages
+- [second-opinions](plugins/hal-skills/skills/second-opinions/SKILL.md): Gets independent code review from Codex and Gemini
+- [best-practices](plugins/hal-skills/skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
+- [commit](plugins/hal-skills/skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
