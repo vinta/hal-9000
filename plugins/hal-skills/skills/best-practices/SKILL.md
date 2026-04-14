@@ -18,8 +18,8 @@ Every invocation of this skill starts with live research, then synthesizes findi
 
 ## Two-Phase Rule
 
-**Phase 1: Research.** Dispatch find-docs and/or WebSearch queries.
-**Phase 2: Synthesize and act.** Only after Phase 1 results arrive.
+- **Phase 1: Research.** Dispatch find-docs and/or WebSearch queries.
+- **Phase 2: Synthesize and act.** Only after Phase 1 results arrive.
 
 Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Phase 1 happens. Phase 1 always runs.
 
@@ -66,7 +66,7 @@ If you cannot find authoritative guidance on a point, say so explicitly rather t
 </output_format>
 </subagent_prompt_template>
 
-### 3. Synthesize (Phase 2)
+### 3. Synthesize
 
 **Phase check:** If no research results have arrived yet, STOP. You are still in Phase 1. Go back to step 2.
 
