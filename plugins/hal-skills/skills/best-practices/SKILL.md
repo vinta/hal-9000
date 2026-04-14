@@ -1,6 +1,6 @@
 ---
 name: best-practices
-description: Use when asking "how should I", "what's the recommended way to", "which library for", or needing current best practices on config formats, API patterns, library selection, or tool setup where outdated guidance causes debugging pain
+description: Use when setting up, configuring, choosing, refining, or asking about best practices for tools, libraries, config formats, API patterns, or project setup where outdated guidance causes debugging pain. Also use when the user says "search online", "how should I", or "what's the best way to"
 user-invocable: true
 model: opus
 allowed-tools:
@@ -14,17 +14,27 @@ allowed-tools:
 
 # Best Practices
 
-Research the latest best practices for any task by searching documentation and the web in parallel, then synthesize into actionable guidance.
+Before acting on any task, verify you have current guidance. Every invocation of this skill starts with live research, then synthesizes findings into actionable recommendations. The user's argument may be a question or an imperative command. The workflow is identical either way.
 
-<HARD-GATE>
-Do NOT synthesize, present recommendations, or edit any file until at least one research query (find-docs or WebSearch) has returned results. Training data is not a substitute for live research. This applies to EVERY invocation regardless of how confident you feel about the topic.
-</HARD-GATE>
+## Phases
 
-## Anti-Pattern: "I Already Know This"
+This skill runs in two phases. Phase 2 cannot start until Phase 1 returns results. Acting on stale training data produces wrong output that costs the user a debugging round-trip.
 
-The most common failure mode is skipping research because you feel confident. You have broad training data, so the topic feels familiar, and you jump straight to presenting recommendations. This defeats the entire purpose of the skill. Training data goes stale. Config keys get renamed, APIs get deprecated, conventions shift between releases. A 30-second lookup costs nothing. A confident-but-wrong recommendation costs the user a debugging round-trip.
+**Phase 1: Research.** Dispatch find-docs and/or WebSearch queries.
+**Phase 2: Synthesize and act.** Only after Phase 1 results arrive.
 
-Even if another skill (like writing-skills) provided relevant context in this conversation, that context is not a replacement for searching current sources on the specific topic.
+If the user's argument is an imperative ("refine X", "set up Y"), Phase 1 still runs. The imperative determines what Phase 2 does, not whether Phase 1 happens.
+
+## Anti-Pattern: Skipping Research
+
+The most common failure mode is skipping research because you feel confident or because the user gave an imperative command. Training data goes stale. Config keys get renamed, APIs get deprecated, conventions shift between releases. A 30-second lookup costs nothing. A confident-but-wrong recommendation costs the user a debugging round-trip.
+
+This applies equally to:
+
+- **"I already know this"** -- the topic feels familiar, so you jump straight to recommendations
+- **"The user said to act"** -- the argument is imperative ("refine X"), so you enter an execution frame and treat research as overhead
+
+Both lead to the same outcome: acting on potentially stale information. Neither is a valid reason to skip Phase 1.
 
 ## Workflow
 
@@ -61,7 +71,9 @@ Report in under 300 words with concrete code/config examples. Include:
 - Sources consulted with dates
   </subagent_prompt_template>
 
-### 3. Synthesize
+### 3. Synthesize (Phase 2)
+
+**Phase check:** If no research results have arrived yet, STOP. You are still in Phase 1. Go back to step 2.
 
 After all subagents return:
 
