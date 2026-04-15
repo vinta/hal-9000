@@ -41,6 +41,15 @@ trace_exporter = "none"
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 3
 
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
+
+[mcp_servers.openaiDeveloperDocs.tools.search_openai_docs]
+approval_mode = "approve"
+
+[mcp_servers.openaiDeveloperDocs.tools.fetch_openai_doc]
+approval_mode = "approve"
+
 [projects."/Users/vinta/Projects/awesome-python"]
 trust_level = "trusted"
 
