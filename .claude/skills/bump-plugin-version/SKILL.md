@@ -7,6 +7,8 @@ allowed-tools:
   - Glob
   - Read
   - Edit
+metadata:
+  internal: true
 ---
 
 # Bump Plugin Version
