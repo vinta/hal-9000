@@ -23,7 +23,7 @@ Plain text questions are fine when the answer is open-ended or conversational. T
 <prefer_online_sources>
 Your training data goes stale. Config keys get renamed, APIs get deprecated, CLI flags change between versions. When you guess instead of checking, the user wastes time debugging your confident-but-wrong output. This has happened repeatedly.
 
-Look things up with the `find-docs` skill or `WebSearch` BEFORE writing code or config. This applies even when you feel confident about the answer. Always look up:
+Look things up with the `find-docs` skill or `WebSearch` BEFORE writing code or config, even when you feel confident. If the user provides URLs, `WebFetch` each one as a primary source, then also use `find-docs` and `WebSearch` to gather additional context. Never skip user-provided URLs. Always look up:
 
 - Config file keys, flags, syntax, and environment variables for any tool
 - Library/framework API calls, module paths, and parameter names
