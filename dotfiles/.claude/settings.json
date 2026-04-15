@@ -189,6 +189,7 @@
   },
   "showThinkingSummaries": true,
   "showClearContextOnPlanAccept": true,
+  "viewMode": "verbose",
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "skipAutoPermissionPrompt": true
