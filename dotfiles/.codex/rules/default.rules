@@ -1,0 +1,24 @@
+# Narrow command policy for Codex escalations outside the sandbox.
+# https://developers.openai.com/codex/rules
+
+prefix_rule(pattern=["npx", ["ctx7", "ctx7@latest"]], decision="allow")
+prefix_rule(pattern=["playwright-cli", ["open", "goto", "console"]], decision="allow")
+prefix_rule(pattern=["uv", "sync"], decision="allow")
+prefix_rule(pattern=["uv", "build"], decision="allow")
+prefix_rule(pattern=["uv", "lock"], decision="allow")
+prefix_rule(pattern=["uv", "tree"], decision="allow")
+prefix_rule(pattern=["uv", "run", "pytest"], decision="allow")
+prefix_rule(pattern=["uv", "run", "ruff"], decision="allow")
+
+prefix_rule(pattern=["curl"], decision="prompt")
+prefix_rule(pattern=["wget"], decision="prompt")
+prefix_rule(pattern=["open"], decision="prompt")
+prefix_rule(pattern=["npm", ["install", "i"]], decision="prompt")
+prefix_rule(pattern=["bun", "add"], decision="prompt")
+prefix_rule(pattern=["yarn", "add"], decision="prompt")
+prefix_rule(pattern=["pnpm", "add"], decision="prompt")
+prefix_rule(pattern=["uv", "add"], decision="prompt")
+prefix_rule(pattern=["git", "push"], decision="prompt")
+prefix_rule(pattern=["npx", "supabase", "db"], decision="prompt")
+prefix_rule(pattern=["git", "add"], decision="allow")
+prefix_rule(pattern=["git", "commit"], decision="allow")

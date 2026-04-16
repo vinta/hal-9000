@@ -114,10 +114,10 @@
       "Bash(wget *)",
       "Bash(open *)",
       "Bash(*install*)",
-      "Bash(uv add *)",
       "Bash(bun add *)",
       "Bash(yarn add *)",
       "Bash(pnpm add *)",
+      "Bash(uv add *)",
       "Bash(git push *)",
       "Bash(npx supabase db *)"
     ],

@@ -1,7 +1,7 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
 model = "gpt-5.4"
-model_reasoning_effort = "high"
+model_reasoning_effort = "xhigh"
 model_reasoning_summary = "detailed"
 model_verbosity = "high"
 hide_agent_reasoning = false
@@ -30,6 +30,9 @@ shell_snapshot = true
 unified_exec = true
 multi_agent = true
 
+[tools]
+view_image = true
+
 [feedback]
 enabled = false
 
@@ -50,13 +53,19 @@ approval_mode = "approve"
 [mcp_servers.openaiDeveloperDocs.tools.fetch_openai_doc]
 approval_mode = "approve"
 
+[projects."/usr/local/hal-9000"]
+trust_level = "trusted"
+
 [projects."/Users/vinta/Projects/awesome-python"]
 trust_level = "trusted"
 
-[projects."/Users/vinta/Projects/laughing-man"]
+[projects."/Users/vinta/Projects/catianway"]
 trust_level = "trusted"
 
 [projects."/Users/vinta/Projects/dear-ai"]
+trust_level = "trusted"
+
+[projects."/Users/vinta/Projects/laughing-man"]
 trust_level = "trusted"
 
 [projects."/Users/vinta/Projects/of-course-i-still-love-you"]

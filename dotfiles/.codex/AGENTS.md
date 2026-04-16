@@ -49,6 +49,7 @@
 
 - Prefer self-documenting code. Add comments only when they explain intent or non-obvious constraints.
 - Use plain, factual language in commits, PRs, and summaries. Describe the diff and resulting behavior without hype.
+- Never hard-wrap sentences when writing Markdown or prose text. Let paragraphs and list items stay on single logical lines unless the format requires manual line breaks.
 
 ## Error Handling
 
