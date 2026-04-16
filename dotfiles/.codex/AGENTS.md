@@ -1,16 +1,14 @@
 # AGENTS.md
 
-## Working Style
-
-- Challenge assumptions, question weak premises, and propose simpler alternatives when they are better.
-- For multi-step work, start with a brief preamble that says what you are about to inspect or change, then execute.
-- Before making changes, outline a brief 3-5 bullet plan covering approach, order, and verification, then execute.
-- Prefer doing the work over describing it. If intent is somewhat ambiguous, make the most useful reasonable assumption, state it, and proceed.
-
 ## Research
 
 - Before writing code against a library, framework, API, or tool, check current official documentation or other primary sources. Do not rely on stale memory for syntax, defaults, or version-specific behavior.
-- When relevant context lives outside the repo, prefer querying the source directly via official docs, online search, or MCP instead of copying stale summaries into prompts.
+- When relevant context lives outside the repo, prefer querying the source directly via official docs, `find-docs` skill, online search, or MCP.
+
+## Working Style
+
+- For multi-step work, start with a brief preamble that says what you are about to inspect or change, then execute.
+- Before making changes, outline a brief 3-5 bullet plan covering approach, order, and verification, then execute.
 
 ## Scope Management
 
@@ -25,7 +23,6 @@
 - When replacing an implementation, prefer removing the old path instead of leaving shims unless backward compatibility is explicitly required.
 - Search all usages before removing or renaming imports, functions, commands, config keys, or dependencies.
 - Verify environment assumptions before acting: paths, tool versions, generated vs. tracked files, and current repository state.
-- For complex work, keep the main thread focused on the core problem and use sub-agents only for bounded parallel tasks with clear ownership.
 
 ## Verification
 
@@ -33,12 +30,6 @@
 - For multi-step work, validate at each milestone and fix failures before continuing.
 - Do not leave newly introduced warnings behind unless the user explicitly accepts them.
 - If you cannot run meaningful verification, say exactly what was skipped and why.
-
-## Long-Horizon Tasks
-
-- For multi-step or long-running work, start in Plan mode or keep concise markdown task notes the agent can revisit.
-- Skip this for short, one-shot tasks.
-- Keep plans and notes current.
 
 ## Parallelism
 
