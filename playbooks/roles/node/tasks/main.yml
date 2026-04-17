@@ -1,18 +1,18 @@
 ---
 # https://github.com/nvm-sh/nvm
 - name: Install nvm
-  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.nvm/nvm.sh"
 
 # https://nodejs.org/en/about/previous-releases
-- name: Install Node.js 24.11.1
+- name: Install Node.js 24.15.0
   shell: |
     export NVM_DIR="${HOME}/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install 24.11.1
-    nvm use 24.11.1
-    nvm alias default 24.11.1
+    nvm install 24.15.0
+    nvm use 24.15.0
+    nvm alias default 24.15.0
   args:
     executable: /bin/bash
   register: node_install
@@ -34,12 +34,16 @@
   args:
     executable: /bin/bash
 
+# https://github.com/vinta/pangu.js
+# https://github.com/raineorshine/npm-check-updates
+# https://github.com/typescript-language-server/typescript-language-server
 - name: Install global Node.js packages
   shell: |
     export NVM_DIR="${HOME}/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     npm install -g pangu
     npm install -g npm-check-updates
+    npm install -g typescript typescript-language-server
   args:
     executable: /bin/bash
 

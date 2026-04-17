@@ -6,10 +6,10 @@
     state: latest
 
 # https://www.python.org/downloads/
-- name: Install latest Python 3.13
+- name: Install latest Python 3.13.11
   shell: |
-    uv python install 3.13
-    uv python pin 3.13 --global
+    uv python install 3.13.11
+    uv python pin 3.13.11 --global
   args:
     executable: /bin/bash
   register: python_uv_install
@@ -23,8 +23,16 @@
   args:
     executable: /bin/bash
 
-- name: Install global Python tools
-  shell: xargs -L1 uv tool install < {{ role_path }}/files/requirements.txt
+# https://github.com/mkusaka/it2
+# https://github.com/pypa/pip-audit
+# https://github.com/astral-sh/ruff
+# https://github.com/astral-sh/ty
+- name: Install global Python packages
+  shell: |
+    uv tool install it2
+    uv tool install pip-audit
+    uv tool install ruff
+    uv tool install ty
   args:
     executable: /bin/bash
   register: python_tool_install
