@@ -25,7 +25,7 @@ format: ## Auto-format and fix lint issues
 	uv run ruff check --fix .
 
 typecheck: ## Run ty type checker
-	uv run ty check bin/hal
+	uv run ty check
 
 test: ## Run tests
 	uv run pytest tests/ -v

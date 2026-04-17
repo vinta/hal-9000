@@ -68,7 +68,13 @@ executionEnvironments = [
 ]
 
 [tool.ty.src]
-include = ["scripts", "plugins/hal-statusline"]
+include = [
+    "bin/hal",
+    "scripts",
+    "plugins/hal-statusline",
+    "plugins/hal-voice/scripts",
+    "tests",
+]
 
 [tool.ty.terminal]
 error-on-warning = true
