@@ -1,0 +1,11 @@
+{
+  "ty": {
+    "command": "ty",
+    "args": ["server"],
+    "extensionToLanguage": {
+      ".py": "python",
+      ".pyi": "python"
+    },
+    "restartOnCrash": true
+  }
+}

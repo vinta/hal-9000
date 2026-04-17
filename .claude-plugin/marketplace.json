@@ -12,7 +12,7 @@
     {
       "name": "hal-voice",
       "description": "Play HAL 9000 voice clips on Claude Code hook events",
-      "version": "0.2.6",
+      "version": "1.2.6",
       "source": "./plugins/hal-voice",
       "category": "entertainment",
       "keywords": ["hal-9000", "hooks", "voice", "audio"],
@@ -22,7 +22,7 @@
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "0.5.0",
+      "version": "1.5.0",
       "source": "./plugins/hal-skills",
       "category": "productivity",
       "keywords": [
@@ -31,9 +31,44 @@
         "stash",
         "hunk",
         "brainstorm",
-        "brainstorming"
+        "brainstorming",
+        "research",
+        "best-practices"
       ],
-      "tags": ["git", "commit", "stash", "hunk", "brainstorm", "brainstorming"],
+      "tags": [
+        "git",
+        "commit",
+        "stash",
+        "hunk",
+        "brainstorm",
+        "brainstorming",
+        "research",
+        "best-practices"
+      ],
+      "strict": true
+    },
+    {
+      "name": "python-lsp-ty",
+      "description": "Python language server (ty) for type checking and code intelligence",
+      "version": "1.0.0",
+      "source": "./plugins/python-lsp-ty",
+      "category": "development",
+      "keywords": [
+        "python",
+        "lsp",
+        "language-server",
+        "type-checking",
+        "ty",
+        "astral"
+      ],
+      "tags": [
+        "python",
+        "lsp",
+        "language-server",
+        "type-checking",
+        "ty",
+        "astral"
+      ],
       "strict": true
     }
   ]
