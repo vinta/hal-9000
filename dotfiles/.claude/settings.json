@@ -193,7 +193,6 @@
     }
   },
   "viewMode": "verbose",
-  "effortLevel": "xhigh",
   "showClearContextOnPlanAccept": true,
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
