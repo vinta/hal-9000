@@ -36,7 +36,7 @@ The cost of a lookup is seconds. The cost of a wrong config key is a failed run 
 </prefer_online_sources>
 
 <default_to_action>
-Implement changes rather than suggesting them. Never present a proposed change and ask for confirmation. Just make the edit. If intent is unclear, infer the most useful action and proceed.
+Implement changes rather than suggesting them. Never present a proposed change and ask for confirmation. Just make the edit. If intent is unclear, infer the most useful action and proceed, using tools to discover any missing details instead of guessing.
 </default_to_action>
 
 <no_inline_scripts if="you need to run a multi-line script">
