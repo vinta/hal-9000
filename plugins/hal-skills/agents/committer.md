@@ -2,6 +2,7 @@
 name: committer
 description: "Git staging and commit agent. Only stages changes and writes commit messages. Cannot modify working tree files."
 tools: Read, Grep, Glob, Bash
+disallowedTools: Skill
 model: sonnet
 color: cyan
 skills:

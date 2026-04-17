@@ -14,14 +14,12 @@ allowed-tools:
 
 # Best Practices
 
-Every invocation of this skill starts with live research, then synthesizes findings into actionable recommendations. The user's argument may be a question or an imperative. The workflow is identical either way.
-
 ## Two-Phase Rule
 
 - **Phase 1: Research.** Dispatch find-docs and/or WebSearch queries.
 - **Phase 2: Synthesize and act.** Only after Phase 1 results arrive.
 
-Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Phase 1 happens. Phase 1 always runs.
+The user's argument may be a question or an imperative. Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Phase 1 happens. Phase 1 always runs.
 
 **Red flags -- you are about to skip research:**
 
@@ -39,9 +37,7 @@ Break the topic into 2-4 specific queries targeting distinct aspects (libraries,
 
 ### 2. Parallel Research
 
-Dispatch one subagent per query in a single message. Each uses `find-docs` (Context7) and `WebSearch`. Be concrete: pass library names, version constraints, and user context. Vague prompts produce vague results.
-
-Be concrete in each subagent prompt: pass library names, version constraints, and the user's specific context. Vague prompts produce vague results.
+Dispatch one subagent per query in a single message so they run in parallel. Each uses `find-docs` (Context7) and `WebSearch`. Be concrete in each subagent prompt: pass library names, version constraints, and the user's specific context. Vague prompts produce vague results.
 
 <subagent_prompt_template>
 <context>
@@ -57,10 +53,10 @@ Use the find-docs skill to look up [library/tool] documentation, then use WebSea
 <output_format>
 Report in under 300 words. Include:
 
-- Recommended approach with rationale
-- Concrete code/config examples
-- Pitfalls to avoid
-- Sources consulted (with publication dates)
+1. Recommended approach with rationale
+2. Concrete code/config examples
+3. Pitfalls to avoid
+4. Sources consulted (with publication dates)
 
 If you cannot find authoritative guidance on a point, say so explicitly rather than guessing.
 </output_format>
@@ -79,12 +75,14 @@ After all subagents return, merge using these criteria:
 
 If a subagent failed or returned empty, note the gap and proceed with the results you have. Do not block synthesis waiting for a straggler.
 
-### Output Format
+### 4. Present Findings
 
-- **Recommended Approach** -- the primary recommendation with rationale
-- **Key Patterns** -- concrete code/config examples the user can apply immediately
-- **Pitfalls to Avoid** -- common mistakes with explanations
-- **Sources** -- what was consulted, so the user can dig deeper
+Deliver to the user in this structure:
+
+1. **Recommended Approach** -- the primary recommendation with rationale
+2. **Key Patterns** -- concrete code/config examples the user can apply immediately
+3. **Pitfalls to Avoid** -- common mistakes with explanations
+4. **Sources** -- what was consulted, so the user can dig deeper
 
 ## Gotchas
 

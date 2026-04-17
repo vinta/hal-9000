@@ -22,7 +22,7 @@
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "1.5.0",
+      "version": "1.5.1",
       "source": "./plugins/hal-skills",
       "category": "productivity",
       "keywords": [
