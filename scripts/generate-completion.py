@@ -15,7 +15,7 @@ module = importlib.util.module_from_spec(spec)
 sys.modules["hal"] = module
 spec.loader.exec_module(module)
 
-HAL9000 = module.HAL9000  # type: ignore[attr-defined]
+HAL9000 = module.HAL9000
 hal = HAL9000()
 
 commands: list[str] = []
