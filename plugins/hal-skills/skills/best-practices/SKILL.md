@@ -21,7 +21,7 @@ allowed-tools:
 
 The user's argument may be a question or an imperative. Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Phase 1 happens. Phase 1 always runs.
 
-**Red flags -- you are about to skip research:**
+**Red flags indicating you are about to skip research:**
 
 | Thought                   | Reality                                                                                |
 | ------------------------- | -------------------------------------------------------------------------------------- |
@@ -71,7 +71,7 @@ After all subagents return, merge using these criteria:
 1. **Deduplicate** overlapping recommendations
 2. **Rank by authority:** official docs > well-known guides > blog posts > training data
 3. **Flag conflicts** with attribution (which source said what)
-4. **Discard stale results** -- a 2022 guide for a fast-moving framework is noise
+4. **Discard stale results**: a 2022 guide for a fast-moving framework is noise
 
 If a subagent failed or returned empty, note the gap and proceed with the results you have. Do not block synthesis waiting for a straggler.
 
@@ -79,10 +79,10 @@ If a subagent failed or returned empty, note the gap and proceed with the result
 
 Deliver to the user in this structure:
 
-1. **Recommended Approach** -- the primary recommendation with rationale
-2. **Key Patterns** -- concrete code/config examples the user can apply immediately
-3. **Pitfalls to Avoid** -- common mistakes with explanations
-4. **Sources** -- what was consulted, so the user can dig deeper
+1. **Recommended Approach**: the primary recommendation with rationale
+2. **Key Patterns**: concrete code/config examples the user can apply immediately
+3. **Pitfalls to Avoid**: common mistakes with explanations
+4. **Sources**: what was consulted, so the user can dig deeper
 
 ## Gotchas
 

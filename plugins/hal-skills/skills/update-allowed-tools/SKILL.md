@@ -14,7 +14,7 @@ allowed-tools:
 
 # Overview
 
-Analyzes a skill's full content -- SKILL.md and any sibling files in the same directory -- to find tools it references or requires, then compares against the skill's `allowed-tools` frontmatter to find missing entries.
+Analyzes a skill's full content, SKILL.md and any sibling files in the same directory, to find tools it references or requires, then compares against the skill's `allowed-tools` frontmatter to find missing entries.
 
 ## Usage
 

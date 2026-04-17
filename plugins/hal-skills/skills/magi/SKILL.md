@@ -24,9 +24,9 @@ allowed-tools:
 
 Multi-model brainstorming panel. Three teammates explore a question in parallel, each backed by a different model family, then the lead consolidates their proposals for the user.
 
-- **Scientist** -- reasons directly as Claude Opus (no external dispatch)
-- **Mother** -- delegates to OpenAI Codex via `mcp__codex__codex` MCP tool
-- **Woman** -- delegates to Google Gemini via `gemini` CLI
+- **Scientist**: reasons directly as Claude Opus (no external dispatch)
+- **Mother**: delegates to OpenAI Codex via `mcp__codex__codex` MCP tool
+- **Woman**: delegates to Google Gemini via `gemini` CLI
 
 ## Process
 
@@ -57,14 +57,14 @@ Read the personality and reference files, then spawn all teammates in parallel.
 | Mother    | `mother`    | `general-purpose` | MAGI-2.md personality + codex.md (dispatches to Codex MCP) + question   |
 | Woman     | `woman`     | `general-purpose` | MAGI-3.md personality + gemini.md (dispatches to Gemini CLI) + question |
 
-Include all clarified context in each spawn prompt -- teammates have no conversation history.
+Include all clarified context in each spawn prompt: teammates have no conversation history.
 
 ### 3. Parallel Exploration
 
 The lead's role is coordination only:
 
 - Wait for teammates to send proposals via `SendMessage`
-- Forward any teammate clarifying questions to the user via `AskUserQuestion`, noting which teammate (and model) asked. Never answer on the user's behalf -- only the user answers.
+- Forward any teammate clarifying questions to the user via `AskUserQuestion`, noting which teammate (and model) asked. Never answer on the user's behalf: only the user answers.
 
 ### 4. Consolidate + Present
 
@@ -78,9 +78,9 @@ Collect all proposals, then:
    - Who tagged it as their top pick and why
 4. Ask the user to **select an option** via `AskUserQuestion`
 5. Ask via `AskUserQuestion` what to do next:
-   - **Write a plan** -- teardown, then handoff to `writing-plans`
-   - **Debate** -- another round of critique (see below)
-   - **Done** -- teardown, no further action
+   - **Write a plan**: teardown, then handoff to `writing-plans`
+   - **Debate**: another round of critique (see below)
+   - **Done**: teardown, no further action
 
 ### 5. Debate (optional, user-triggered)
 

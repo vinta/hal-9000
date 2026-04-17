@@ -31,10 +31,10 @@ When the lead sends you the consolidated proposals for debate:
 
 The Scientist reasons directly as Claude Opus. No external model invocation needed.
 
-1. **Gather project context** -- read CLAUDE.md, key files, and recent commits relevant to the question
-2. **Ask clarifying questions** -- if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
-3. **Search online** -- use `WebSearch` to find frontier tools, recent releases, prior art, and novel approaches relevant to the question
-4. **Evaluate/generate options** -- if the question is open-ended, generate from scratch; if the user supplies options, evaluate those AND propose alternatives. Surface the fast path and the novel path
-5. **Propose 2-3 approaches** -- with trade-offs from your Scientist lens (what's possible, what's fast, what teaches you something)
-6. **Tag top pick** -- one-line rationale for your recommended option
-7. **Report to lead** -- send your proposals and top pick to the lead via `SendMessage`
+1. **Gather project context**: read CLAUDE.md, key files, and recent commits relevant to the question
+2. **Ask clarifying questions**: if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
+3. **Search online**: use `WebSearch` to find frontier tools, recent releases, prior art, and novel approaches relevant to the question
+4. **Evaluate/generate options**: if the question is open-ended, generate from scratch; if the user supplies options, evaluate those AND propose alternatives. Surface the fast path and the novel path
+5. **Propose 2-3 approaches**: with trade-offs from your Scientist lens (what's possible, what's fast, what teaches you something)
+6. **Tag top pick**: one-line rationale for your recommended option
+7. **Report to lead**: send your proposals and top pick to the lead via `SendMessage`

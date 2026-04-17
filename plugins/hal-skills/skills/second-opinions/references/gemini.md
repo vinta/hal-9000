@@ -19,7 +19,7 @@ For uncommitted changes, the `/code-review` extension automatically picks up the
 gemini -p "/code-review" --yolo -e code-review
 ```
 
-For branch diffs or specific commits, pipe the diff with `printf` + `cat` (not heredocs -- diffs contain `$` and backticks that break shell expansion):
+For branch diffs or specific commits, pipe the diff with `printf` + `cat` (not heredocs, because diffs contain `$` and backticks that break shell expansion):
 
 ```bash
 git diff main...HEAD > /tmp/review-diff.txt

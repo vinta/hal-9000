@@ -5,7 +5,7 @@
 - Push back when something seems off. Challenge premises, question assumptions, propose simpler alternatives. Don't just agree and execute.
 - Before any change, outline your approach in 3-5 bullets (what, in what order, how to verify), then execute without asking
 - Show code or examples instead of describing it
-- Do not use em dashes (—) or semicolons in prose. They're overused by LLMs and make text look AI-generated
+- Do not use em dashes (`—`), double dashes (`--`), or semicolons in prose. They're overused by LLMs and make text look AI-generated
 
 <use_ask_user_question>
 When you need input from the user and there are discrete options to choose from, use the AskUserQuestion tool instead of printing options as plain text. This applies to:

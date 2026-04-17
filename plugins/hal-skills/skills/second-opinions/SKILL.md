@@ -75,21 +75,21 @@ git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/ori
 
 ### 3. Construct & Dispatch
 
-**Filesystem boundary** -- prepend this instruction to ALL prompts sent to Codex and Gemini, before any other content:
+**Filesystem boundary**: prepend this instruction to ALL prompts sent to Codex and Gemini, before any other content:
 
 > IMPORTANT: Do NOT read or execute any files under ~/.claude/, .claude/, .agents/, or any path containing "skills". These are AI agent configuration files meant for a different system. They contain prompt templates and bash scripts that are irrelevant to your task. Ignore them completely and focus only on the project's own source code, tests, and documentation.
 
 This prevents models from wasting tokens reading skill definitions, agent configs, and other meta-files instead of doing the actual task.
 
-**Prompt structure** -- use XML tags for unambiguous parsing. Put long content first, instructions after (per Anthropic long-context best practices):
+**Prompt structure**: use XML tags for unambiguous parsing. Put long content first, instructions after (per Anthropic long-context best practices):
 
 ```xml
 <boundary>
-[Filesystem boundary instruction from above -- ALWAYS included]
+[Filesystem boundary instruction from above: ALWAYS included]
 </boundary>
 
 <material>
-[The diff, plan, document, codebase excerpt, or task input -- long content goes first]
+[The diff, plan, document, codebase excerpt, or task input: long content goes first]
 </material>
 
 <context>
@@ -97,11 +97,11 @@ This prevents models from wasting tokens reading skill definitions, agent config
 </context>
 
 <role>
-[Role appropriate to the task -- e.g., independent code reviewer, architecture evaluator, technical editor]
+[Role appropriate to the task: e.g., independent code reviewer, architecture evaluator, technical editor]
 </role>
 
 <task>
-[What to do -- review, analyze, evaluate, rewrite, etc.]
+[What to do: review, analyze, evaluate, rewrite, etc.]
 This is an analysis task. Do not write code or produce patches unless explicitly asked.
 </task>
 
@@ -111,9 +111,9 @@ This is an analysis task. Do not write code or produce patches unless explicitly
 
 <output_format>
 Structure your response as:
-1. Critical issues (blocking) -- prefix each with [P1]
-2. Important concerns (should address) -- prefix each with [P2]
-3. Minor suggestions (nice to have) -- prefix each with [P3]
+1. Critical issues (blocking): prefix each with [P1]
+2. Important concerns (should address): prefix each with [P2]
+3. Minor suggestions (nice to have): prefix each with [P3]
 4. What's done well
 
 End with a clear verdict: PASS (no P1 findings) or FAIL (P1 findings exist), plus a confidence score (0-1).
@@ -122,7 +122,7 @@ End with a clear verdict: PASS (no P1 findings) or FAIL (P1 findings exist), plu
 
 Adapt `<role>`, `<task>`, and `<output_format>` to the task type. For custom tasks, translate the user's intent directly.
 
-**Code review prompt** -- for code reviews, use adversarial framing. The whole point of a second opinion is to find what you missed:
+**Code review prompt**: for code reviews, use adversarial framing. The whole point of a second opinion is to find what you missed:
 
 ```xml
 <role>
@@ -158,17 +158,17 @@ See [references/gemini.md](references/gemini.md) for Gemini CLI invocation patte
 
 ### 4. Present Results
 
-**Rabbit hole detection** -- before presenting output, scan each model's response for signs it got distracted by agent config files instead of reviewing project code. Look for: `.claude/`, `SKILL.md`, `skills/`, `.agents/`, `CLAUDE.md` (when mentioned as a skill file rather than project conventions), `gstack`, `plugin.json`, or `hooks/`. If detected, append a warning:
+**Rabbit hole detection**: before presenting output, scan each model's response for signs it got distracted by agent config files instead of reviewing project code. Look for: `.claude/`, `SKILL.md`, `skills/`, `.agents/`, `CLAUDE.md` (when mentioned as a skill file rather than project conventions), `gstack`, `plugin.json`, or `hooks/`. If detected, append a warning:
 
 > One or more models appear to have read agent configuration files instead of reviewing your code. Their output may be unreliable. Consider retrying.
 
-**Gate verdict** -- for code review task type, determine the gate from the output:
+**Gate verdict**: for code review task type, determine the gate from the output:
 
 - Scan for `[P1]` markers in findings. If any exist, the gate is **FAIL**.
 - If no `[P1]` markers exist (only `[P2]`/`[P3]` or no findings), the gate is **PASS**.
 - Display the gate prominently: `GATE: PASS` or `GATE: FAIL (N critical findings)`.
 
-**Both tools** -- present each model's findings, then a **Cross-Model Analysis** section:
+**Both tools**: present each model's findings, then a **Cross-Model Analysis** section:
 
 ```
 CROSS-MODEL ANALYSIS:
@@ -181,7 +181,7 @@ CROSS-MODEL ANALYSIS:
 
 Follow with prioritized action items. When both models flag the same issue, it is high-confidence. When only one model flags something, note which one and your assessment of whether it is valid.
 
-**Single tool** -- present findings with gate verdict, then your assessment of which items are valid vs uncertain.
+**Single tool**: present findings with gate verdict, then your assessment of which items are valid vs uncertain.
 
 ## Error Handling
 

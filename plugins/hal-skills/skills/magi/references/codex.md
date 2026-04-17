@@ -44,7 +44,7 @@ For each approach:
 - Maintenance burden and hidden costs
 - Who benefits, who pays
 
-Tag your top pick with: "Top pick: [option] -- [one-line rationale]"
+Tag your top pick with: "Top pick: [option], [one-line rationale]"
 
 Be concise. Use plain text, not markdown headers.
 </output_format>
@@ -76,11 +76,11 @@ Using `codex-reply` preserves the full initial context (persona, project state) 
 
 Complete these steps in order. Create a task for each step.
 
-1. **Gather project context** -- read the relevant personality file, any repository conventions, and the key files or docs tied to the question. Prefer passing file paths over pasting long contents
-2. **Ask clarifying questions** -- if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
-3. **Build the Codex prompt** -- construct a material-first XML prompt following the template above. Inject the persona from your personality file into the `<role>` section and explicitly mark the task as analysis-only
-4. **Dispatch to Codex** -- call `mcp__codex__codex` with `sandbox: "read-only"` and the constructed prompt. **Save the `threadId`** from the response for potential debate follow-up
-5. **Parse and relay** -- extract Codex's proposals, format them clearly, and send to the lead via `SendMessage`. Include each proposed approach with trade-offs, the tagged top pick, and note that these proposals come from Codex
+1. **Gather project context**: read the relevant personality file, any repository conventions, and the key files or docs tied to the question. Prefer passing file paths over pasting long contents
+2. **Ask clarifying questions**: if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
+3. **Build the Codex prompt**: construct a material-first XML prompt following the template above. Inject the persona from your personality file into the `<role>` section and explicitly mark the task as analysis-only
+4. **Dispatch to Codex**: call `mcp__codex__codex` with `sandbox: "read-only"` and the constructed prompt. **Save the `threadId`** from the response for potential debate follow-up
+5. **Parse and relay**: extract Codex's proposals, format them clearly, and send to the lead via `SendMessage`. Include each proposed approach with trade-offs, the tagged top pick, and note that these proposals come from Codex
 
 ## Debate Mode
 
