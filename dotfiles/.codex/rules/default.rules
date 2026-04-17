@@ -22,6 +22,7 @@ prefix_rule(pattern=["uv", "lock"], decision="allow")
 prefix_rule(pattern=["uv", "tree"], decision="allow")
 prefix_rule(pattern=["uv", "run", "pytest"], decision="allow")
 prefix_rule(pattern=["uv", "run", "ruff"], decision="allow")
+prefix_rule(pattern=["uv", "run", "ty"], decision="allow")
 
 prefix_rule(pattern=["curl"], decision="prompt")
 prefix_rule(pattern=["wget"], decision="prompt")
