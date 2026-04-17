@@ -146,11 +146,11 @@
     "command": "python3 ~/.claude/statusline/hal-statusline.py"
   },
   "enabledPlugins": {
+    "astral@astral-sh": true,
     "codex@openai-codex": true,
     "gh-cli@trailofbits": true,
     "hal-skills@hal-9000": true,
     "hal-voice@hal-9000": true,
-    "pyright-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
@@ -166,6 +166,12 @@
       "source": {
         "source": "directory",
         "path": "/usr/local/hal-9000"
+      }
+    },
+    "astral-sh": {
+      "source": {
+        "source": "github",
+        "repo": "astral-sh/claude-code-plugins"
       }
     },
     "minimalist-entrepreneur": {
@@ -187,10 +193,10 @@
       }
     }
   },
-  "showThinkingSummaries": true,
-  "showClearContextOnPlanAccept": true,
   "viewMode": "verbose",
-  "voiceEnabled": true,
+  "showClearContextOnPlanAccept": true,
+  "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
 }

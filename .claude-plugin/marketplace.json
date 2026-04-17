@@ -46,30 +46,6 @@
         "best-practices"
       ],
       "strict": true
-    },
-    {
-      "name": "python-lsp-ty",
-      "description": "Python language server (ty) for type checking and code intelligence",
-      "version": "1.0.0",
-      "source": "./plugins/python-lsp-ty",
-      "category": "development",
-      "keywords": [
-        "python",
-        "lsp",
-        "language-server",
-        "type-checking",
-        "ty",
-        "astral"
-      ],
-      "tags": [
-        "python",
-        "lsp",
-        "language-server",
-        "type-checking",
-        "ty",
-        "astral"
-      ],
-      "strict": true
     }
   ]
 }
