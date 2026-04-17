@@ -4,7 +4,6 @@
     "CLAUDE_CODE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
-    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
     "CLAUDE_CODE_EFFORT_LEVEL": "max",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_NEW_INIT": "1",
@@ -194,6 +193,7 @@
     }
   },
   "viewMode": "verbose",
+  "effortLevel": "xhigh",
   "showClearContextOnPlanAccept": true,
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
