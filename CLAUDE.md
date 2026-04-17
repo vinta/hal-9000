@@ -40,7 +40,6 @@ tests/                                  # pytest tests
 
 - **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
 - **Skills are the source of truth in `plugins/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json`. The `hal-9000` marketplace loads the published version from GitHub. Use `hal-9000-local` (points to `/usr/local/hal-9000`) to test local changes before pushing.
-- **Load `writing-skills` skill before creating or editing any skill file.**
 - All skill descriptions must start with `Use when` (may have a `(project)` prefix if it's a project-level skill)
 - Use `make` targets — don't run underlying commands directly.
 
@@ -69,8 +68,10 @@ Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skippi
 
 For topics not well covered by Context7, use `WebFetch` on these URLs:
 
-- Claude Code settings
+- Claude Prompting Best Practices
+  - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
+- Claude Code Settings
   - https://code.claude.com/docs/en/settings
-- Claude Code plugins / marketplaces
+- Claude Code Plugins / Marketplaces
   - https://code.claude.com/docs/en/plugins-reference
   - https://code.claude.com/docs/en/plugin-marketplaces
