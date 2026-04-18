@@ -68,5 +68,11 @@ trust_level = "trusted"
 [projects."/Users/vinta/Projects/laughing-man"]
 trust_level = "trusted"
 
+[projects."/Users/vinta/Projects/mensab"]
+trust_level = "trusted"
+
 [projects."/Users/vinta/Projects/of-course-i-still-love-you"]
+trust_level = "trusted"
+
+[projects."/Users/vinta/Projects/finance"]
 trust_level = "trusted"
