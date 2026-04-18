@@ -196,6 +196,12 @@
         "source": "github",
         "repo": "trailofbits/skills"
       }
+    },
+    "skills-curated": {
+      "source": {
+        "source": "github",
+        "repo": "trailofbits/skills-curated"
+      }
     }
   },
   "viewMode": "verbose",
