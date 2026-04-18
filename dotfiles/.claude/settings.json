@@ -167,6 +167,12 @@
         "path": "/usr/local/hal-9000"
       }
     },
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    },
     "astral-sh": {
       "source": {
         "source": "github",
