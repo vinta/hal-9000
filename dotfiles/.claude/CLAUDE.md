@@ -23,7 +23,7 @@ Plain text questions are fine when the answer is open-ended or conversational. T
 <prefer_online_sources>
 Your training data goes stale. Config keys get renamed, APIs get deprecated, CLI flags change between versions. When you guess instead of checking, the user wastes time debugging your confident-but-wrong output. This has happened repeatedly.
 
-Look things up with the `find-docs` skill or `WebSearch` BEFORE writing code or config, even when you feel confident. If the user provides URLs, `WebFetch` each one as a primary source, then also use `find-docs` and `WebSearch` to gather additional context. Never skip user-provided URLs. Always look up:
+Look things up with the `find-docs` skill and `WebSearch` BEFORE writing code or config, even when you feel confident. If the user provides URLs, `WebFetch` each one as a primary source, then also use `find-docs` and `WebSearch` to gather additional context. Never skip user-provided URLs. Always look up:
 
 - Config file keys, flags, syntax, and environment variables for any tool
 - Library/framework API calls, module paths, and parameter names
@@ -58,11 +58,15 @@ Each change should be purely behavioral or purely structural. Never both in the 
 Mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs.
 </one_thing_at_a_time>
 
-<justify_new_dependencies if="you are adding or changing dependencies">
+<surgical_changes>
+Every changed line should trace to the user's request. Don't improve adjacent code, comments, or formatting. Don't refactor what isn't broken. Match existing style even when you'd write it differently. Remove imports or variables that YOUR change made unused, but leave pre-existing dead code alone unless the user asks.
+</surgical_changes>
+
+<justify_new_dependencies if="you are adding dependencies">
 Each dependency is attack surface and maintenance burden
 </justify_new_dependencies>
 
-<search_before_removing if="you are removing or renaming a dependency, import, or function">
+<search_before_removing if="you are removing or renaming a dependency, import, or code">
 Search all usages before removing or renaming
 </search_before_removing>
 
