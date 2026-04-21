@@ -7,8 +7,8 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-04-14T17:45:22.70199Z"
-exclude-newer-span = "P7D"
+exclude-newer = "2026-04-18T18:07:06.704951Z"
+exclude-newer-span = "P3D"
 
 [[package]]
 name = "ansible-compat"

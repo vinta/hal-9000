@@ -25,7 +25,7 @@ dev = [
 
 [tool.uv]
 default-groups = ["dev"]
-exclude-newer = "7 days"
+exclude-newer = "3 days"
 no-build = true
 
 [tool.uv.pip]
