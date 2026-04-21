@@ -145,14 +145,12 @@
     "command": "python3 ~/.claude/statusline/hal-statusline.py"
   },
   "enabledPlugins": {
-    "astral@astral-sh": true,
     "codex@openai-codex": true,
     "gh-cli@trailofbits": true,
     "hal-skills@hal-9000": true,
     "hal-voice@hal-9000": true,
     "skill-creator@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "hal-9000": {

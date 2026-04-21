@@ -1,7 +1,4 @@
 {
-  "enabledPlugins": {
-    "plugin-dev@claude-plugins-official": true
-  },
   "hooks": {
     "PostToolUse": [
       {
@@ -16,5 +13,9 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "astral@astral-sh": true,
+    "plugin-dev@claude-plugins-official": true
   }
 }
