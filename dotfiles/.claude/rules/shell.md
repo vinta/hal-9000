@@ -3,7 +3,6 @@ paths:
   - "**/*.sh"
   - "**/*.bash"
   - "**/*.zsh"
-  - "docs/**/*.md"
 ---
 
 # Shell (bash/zsh)
