@@ -25,6 +25,7 @@ dev = [
 
 [tool.uv]
 default-groups = ["dev"]
+exclude-newer = "7 days"
 
 [tool.ruff]
 line-length = 200
