@@ -26,6 +26,10 @@ dev = [
 [tool.uv]
 default-groups = ["dev"]
 exclude-newer = "7 days"
+no-build = true
+
+[tool.uv.pip]
+only-binary = [":all:"]
 
 [tool.ruff]
 line-length = 200
