@@ -7,7 +7,7 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 install: ## Install dependencies and setup pre-commit hooks
-	uv sync
+	uv sync --locked
 	uv run pip-audit
 	uv run ansible-galaxy collection install community.general
 	uv run pre-commit install
