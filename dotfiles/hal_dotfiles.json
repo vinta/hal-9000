@@ -47,6 +47,10 @@
       "src": "{{REPO_ROOT}}/dotfiles/.config/ghostty/config"
     },
     {
+      "dest": "{{HOME}}/.npmrc",
+      "src": "{{REPO_ROOT}}/dotfiles/.npmrc"
+    },
+    {
       "dest": "{{HOME}}/.playwright/cli.config.json",
       "src": "{{REPO_ROOT}}/dotfiles/.playwright/cli.config.json"
     },
