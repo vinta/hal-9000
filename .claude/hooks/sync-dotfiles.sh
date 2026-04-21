@@ -11,12 +11,12 @@ file_path=$(jq -r '.tool_input.file_path // .tool_response.filePath' <&0)
 
 # Fast path: manifest itself changed
 if [[ "$file_path" == */hal_dotfiles.json ]]; then
-    cd "$REPO_ROOT" && bin/hal sync
-    exit 0
+  cd "$REPO_ROOT" && bin/hal sync
+  exit 0
 fi
 
 # Check if the file is a copy-mode source (these don't auto-propagate like symlinks)
 copy_sources=$(jq -r '.copies[].src' "$MANIFEST" | sed "s|{{REPO_ROOT}}|$REPO_ROOT|g")
 if echo "$copy_sources" | grep -qxF "$file_path"; then
-    cd "$REPO_ROOT" && bin/hal sync
+  cd "$REPO_ROOT" && bin/hal sync
 fi
