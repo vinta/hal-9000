@@ -4,6 +4,7 @@ paths:
   - "**/*.tsx"
   - "**/*.js"
   - "**/*.jsx"
+  - "**/package.json"
   - "docs/**/*.md"
 ---
 
