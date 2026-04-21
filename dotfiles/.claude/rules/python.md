@@ -21,7 +21,8 @@ paths:
 - Scripts run by system `python3` must work on Python 3.9 — add `from __future__ import annotations` and avoid 3.10+ stdlib APIs
 - Use `uv` for project and environment management
   - `uv run` instead of `python3` — picks up the project venv and dependencies automatically
-  - New projects: set `exclude-newer = "3 days"` and `no-build = true` in `[tool.uv]`, use `uv sync --locked` in CI and install scripts to mitigate supply-chain attacks
+  - New projects: set `exclude-newer = "3 days"` in `[tool.uv]`, use `uv sync --locked` in CI and install scripts to mitigate supply-chain attacks
+  - Add `no-build = true` to `[tool.uv]` only when the project has no `[build-system]` — otherwise it blocks the project's own editable install
 - Use `ruff` for linting and formatting
 - Use `pytest` for testing
   - `assert` is fine in tests but use `# noqa: S101 assert` elsewhere
