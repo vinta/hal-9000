@@ -1,9 +1,7 @@
 ---
 paths:
-  - "**/*.ts"
-  - "**/*.tsx"
-  - "**/*.js"
-  - "**/*.jsx"
+  - "**/*.{ts,tsx}"
+  - "**/*.{js,jsx}"
   - "**/package.json"
   - "docs/**/*.md"
 ---
@@ -12,13 +10,12 @@ paths:
 
 - Before adding a dependency, search npm or the web for the latest version
 - Pin exact dependency versions in `package.json` — no `^` or `~` prefixes
-- Use the TypeScript LSP tool for type-aware code navigation when grep's text matching would be ambiguous. LSP resolves symbol relationships through the type system, so `findReferences` on a function returns its actual call sites, not every file containing the same string. Reach for LSP when:
+- Use the `typescript` LSP tool for type-aware code navigation when grep's text matching would be ambiguous. LSP resolves symbol relationships through the type system, so `findReferences` on a function returns its actual call sites, not every file containing the same string. Reach for LSP when:
   - Tracing all usages before removing or renaming a symbol (`findReferences`)
   - Understanding a function's callers or callees (`incomingCalls` / `outgoingCalls`)
   - Navigating to a symbol's definition (`goToDefinition`)
   - Checking type information at a position (`hover`)
   - Surveying a file's or workspace's structure (`documentSymbol` / `workspaceSymbol`)
-  Use grep for text pattern matching, non-TypeScript files, or when the symbol name is unique enough that text matching suffices.
 - Use `node:` prefix for Node.js built-in modules (e.g., `node:fs`, `node:path`)
 - Use `const` by default, `let` when reassignment is needed, never `var`
 - Prefer `async`/`await` over `.then()` chains

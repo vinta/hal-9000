@@ -12,7 +12,7 @@ paths:
 - Before adding a dependency, search PyPI or the web for the latest version
 - Pin exact dependency versions in `pyproject.toml` — no `>=`, `~=`, or `^` specifiers
 - Target Python >=3.13 by default — if a project sets an explicit version (e.g. `requires-python` in `pyproject.toml`), follow that instead
-- Use the pyright LSP tool for code navigation when grep's text matching would be ambiguous. LSP resolves symbol relationships through the type system, so `findReferences` on a function returns its actual call sites, not every file containing the same string. Reach for LSP when:
+- Use the `ty` LSP tool for code navigation when grep's text matching would be ambiguous. LSP resolves symbol relationships through the type system, so `findReferences` on a function returns its actual call sites, not every file containing the same string. Reach for LSP when:
   - Tracing all usages before removing or renaming a symbol (`findReferences`)
   - Understanding a function's callers or callees (`incomingCalls` / `outgoingCalls`)
   - Navigating to a symbol's definition (`goToDefinition`)
