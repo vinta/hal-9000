@@ -72,6 +72,8 @@ For topics not well covered by Context7, use `WebFetch` on these URLs:
   - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
 - Claude Code Settings
   - https://code.claude.com/docs/en/settings
+- Claude Code Rules
+  - https://code.claude.com/docs/en/memory#path-specific-rules
 - Claude Code Plugins / Marketplaces
   - https://code.claude.com/docs/en/plugins-reference
   - https://code.claude.com/docs/en/plugin-marketplaces
