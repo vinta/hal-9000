@@ -12,7 +12,7 @@
     {
       "name": "hal-voice",
       "description": "Play HAL 9000 voice clips on Claude Code hook events",
-      "version": "1.2.6",
+      "version": "1.2.7",
       "source": "./plugins/hal-voice",
       "category": "entertainment",
       "keywords": ["hal-9000", "hooks", "voice", "audio"],

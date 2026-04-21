@@ -75,7 +75,7 @@
   "Stop": [
     {
       "detection": "regex",
-      "pattern": "^No\\.|I can't help with that|I won't help with that|I can't assist with that|I must decline|I have to decline|not something I can|against my",
+      "pattern": "I can't help with that|I won't help with that|I can't assist with that|I must decline|I have to decline|not something I can|against my",
       "clips": [
         "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
         "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3"
