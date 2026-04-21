@@ -26,6 +26,8 @@ hal update --tags python,node           # Run specific roles
 bin/hal                                 # Main CLI — extensionless Python script
 bin/open-the-pod-bay-doors              # Bootstrap script (Bash)
 dotfiles/                               # Tracked in hal_dotfiles.json, symlinked or copied to ~
+dotfiles/.claude/CLAUDE.md              # The user-level CLAUDE.md file
+dotfiles/.claude/rules/                 # Path-scoped rule files, auto-loaded via `paths:` frontmatter
 playbooks/site.yml                      # Main playbook importing all roles
 playbooks/roles/                        # Independent, tagged Ansible roles (Homebrew-based)
 plugins/hal-skills/                     # Claude Code plugin - Agent skills
