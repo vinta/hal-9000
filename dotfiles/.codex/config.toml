@@ -29,9 +29,11 @@ writable_roots = [
 shell_snapshot = true
 unified_exec = true
 multi_agent = true
+memories = true
 
 [tools]
 view_image = true
+web_search = { context_size = "high" }
 
 [feedback]
 enabled = false
@@ -40,6 +42,10 @@ enabled = false
 exporter = "none"
 metrics_exporter = "none"
 trace_exporter = "none"
+
+[tui]
+notifications = ["agent-turn-complete", "approval-requested"]
+notification_condition = "unfocused"
 
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 3
