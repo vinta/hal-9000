@@ -1,17 +1,13 @@
 {
   "cleanupPeriodDays": 365,
   "env": {
-    "CLAUDE_CODE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
-    "CLAUDE_CODE_EFFORT_LEVEL": "max",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_NEW_INIT": "1",
     "CLAUDE_CODE_NO_FLICKER": "1",
     "DISABLE_AUTOUPDATER": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
     "DISABLE_ERROR_REPORTING": "1",
-    "DISABLE_TELEMETRY": "1",
     "DISABLE_BUG_COMMAND": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_DOCTOR_COMMAND": "1",
@@ -120,12 +116,7 @@
       "Bash(git push *)",
       "Bash(npx supabase db *)"
     ],
-    "defaultMode": "auto",
-    "additionalDirectories": [
-      "~/.claude",
-      "~/Projects",
-      "/usr/local/hal-9000"
-    ]
+    "defaultMode": "auto"
   },
   "hooks": {
     "PreToolUse": [
@@ -205,7 +196,6 @@
   "viewMode": "verbose",
   "showClearContextOnPlanAccept": true,
   "showThinkingSummaries": true,
-  "skipDangerousModePermissionPrompt": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
