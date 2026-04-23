@@ -1,8 +1,6 @@
 ---
 paths:
   - "**/*.sh"
-  - "**/*.bash"
-  - "**/*.zsh"
 ---
 
 # Shell (bash/zsh)
