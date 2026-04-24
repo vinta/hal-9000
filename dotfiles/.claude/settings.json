@@ -196,6 +196,8 @@
   "viewMode": "verbose",
   "showClearContextOnPlanAccept": true,
   "showThinkingSummaries": true,
+  "verbose": true,
+  "teammateMode": "tmux",
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
