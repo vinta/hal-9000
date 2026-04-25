@@ -56,7 +56,7 @@
       "Read(~/.orbstack/**)",
       "Read(~/.pypirc)",
       "Read(~/.ssh/**)",
-      "Read(~/*history*)",
+      "Read(~/*_history)",
       "Read(~/**/*credential*)",
       "Read(~/Library/**)",
       "Write(~/Library/**)",

@@ -25,7 +25,7 @@ DENIED_PREFIXES = [
     ]
 ] + ["/etc/"]
 
-DENIED_SUBSTRINGS = ["history", "credential"]
+DENIED_SUBSTRINGS = ["credential"]
 
 
 def check(command: str) -> str | None:
