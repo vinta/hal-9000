@@ -23,6 +23,10 @@
     {
       "dest": "{{HOME}}/Dropbox/Apps/Codex/history.jsonl",
       "src": "{{HOME}}/.codex/history.jsonl"
+    },
+    {
+      "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md",
+      "src": "{{HOME}}/Projects/laughing-man/CLAUDE.local.md"
     }
   ],
   "links": [
