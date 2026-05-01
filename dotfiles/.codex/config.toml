@@ -30,6 +30,7 @@ shell_snapshot = true
 unified_exec = true
 multi_agent = true
 memories = true
+goals = true
 
 [tools]
 view_image = true
