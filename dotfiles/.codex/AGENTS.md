@@ -14,7 +14,7 @@
 
 ## Research Budget
 
-- Before writing code against a library, framework, API, or tool, use MCP, `find-docs`, online search, or the source repo before relying on assumptions.
+- Before writing code against a library, framework, API, or tool, use `find-docs` skill, MCP, online search, or the source repo before relying on assumptions.
 - Start with one targeted lookup. Continue researching only when a required fact, syntax, version, owner, date, source, or artifact is missing, or when the user asked for exhaustive coverage.
 - Stop researching once the available sources answer the task well enough to make the change. Do not add extra searches just to polish wording or collect nonessential examples.
 
