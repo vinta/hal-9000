@@ -47,7 +47,15 @@ trace_exporter = "none"
 [tui]
 notifications = ["agent-turn-complete", "approval-requested"]
 notification_condition = "unfocused"
-status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-remaining", "codex-version"]
+status_line = [
+    "model-with-reasoning",
+    "current-dir",
+    "git-branch",
+    "codex-version",
+    "context-remaining",
+    "five-hour-limit",
+    "weekly-limit",
+]
 
 [tui.model_availability_nux]
 "gpt-5.3-codex-spark" = 3
