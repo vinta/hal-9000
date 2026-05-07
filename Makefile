@@ -11,7 +11,7 @@ install: ## Install dependencies and setup pre-commit hooks
 	uv run pip-audit
 	uv run ansible-galaxy collection install community.general
 	uv run pre-commit install
-	HOMEBREW_NO_AUTO_UPDATE=1 brew install gitleaks
+	HOMEBREW_NO_AUTO_UPDATE=1 brew install --quiet gitleaks
 	$(MAKE) update-hooks
 
 lint: ## Run ruff linter, formatter check, and ansible-lint
