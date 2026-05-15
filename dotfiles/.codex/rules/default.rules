@@ -27,6 +27,7 @@ prefix_rule(pattern=["make", "lint"], decision="allow")
 prefix_rule(pattern=["make", "format"], decision="allow")
 prefix_rule(pattern=["make", "build"], decision="allow")
 prefix_rule(pattern=["make", "test"], decision="allow")
+prefix_rule(pattern=["gh", "run", "view"], decision="allow")
 
 prefix_rule(pattern=["curl"], decision="prompt")
 prefix_rule(pattern=["wget"], decision="prompt")
