@@ -1,0 +1,7 @@
+{
+  "colorScheme": "tokyo night",
+  "model": "Gemini 3.1 Pro (High)",
+  "permissions": {
+    "allow": ["command(ls)"]
+  }
+}

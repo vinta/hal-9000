@@ -89,6 +89,10 @@
     {
       "dest": "{{HOME}}/.gemini/settings.json",
       "src": "{{REPO_ROOT}}/dotfiles/.gemini/settings.json"
+    },
+    {
+      "dest": "{{HOME}}/.gemini/antigravity-cli/settings.json",
+      "src": "{{REPO_ROOT}}/dotfiles/.gemini/antigravity-cli/settings.json"
     }
   ]
 }
