@@ -29,6 +29,10 @@
       "src": "{{HOME}}/.codex/sessions/"
     },
     {
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/archived_sessions/",
+      "src": "{{HOME}}/.codex/archived_sessions/"
+    },
+    {
       "dest": "{{HOME}}/Dropbox/Apps/Codex/memories/",
       "src": "{{HOME}}/.codex/memories/"
     }
