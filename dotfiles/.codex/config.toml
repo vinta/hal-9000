@@ -76,7 +76,7 @@ trust_level = "trusted"
 [projects."/Users/vinta/Projects/awesome-python"]
 trust_level = "trusted"
 
-[projects."/Users/vinta/Projects/catianway"]
+[projects."/Users/vinta/Projects/pangu.js"]
 trust_level = "trusted"
 
 [projects."/Users/vinta/Projects/dear-ai"]
@@ -93,3 +93,12 @@ trust_level = "trusted"
 
 [projects."/Users/vinta/Projects/finance"]
 trust_level = "trusted"
+
+[projects."/Users/vinta/Projects/resume"]
+trust_level = "trusted"
+
+[projects."/Users/vinta/Projects/vinta.ws"]
+trust_level = "trusted"
+
+[memories]
+disable_on_external_context = true
