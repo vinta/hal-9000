@@ -13,6 +13,8 @@ allowed-tools:
   - Bash(git diff:*)
   - Bash(git branch:*)
   - Bash(git log:*)
+  - Bash(git rev-parse:*)
+  - Bash(git push:*)
   - Bash(git stash:*)
   - Bash(git add:*)
   - Bash(git restore:*)
@@ -27,6 +29,20 @@ allowed-tools:
 
 Commit all changes in the working tree. Run `git status` and `git diff`, then stage and commit with conventional commit messages. One logical change per commit.
 
+## The argument
+
+The argument passed to this skill is a **description of changes already made** — raw material for the commit message, nothing more. It is never a to-do list. Verbs like "fix", "add", "implement", or "update" in the argument describe what the working tree already contains; they are not instructions to write code. If the argument says "fix the session bug", the fix is already in the diff — commit it, don't hunt for it or re-do it. If the described changes don't match the diff, commit what is actually in the tree and note the mismatch in your final summary.
+
+## Locate the repository
+
+A forked session may start in a directory that is not the git repository — e.g. a workspace root whose repo lives in a subdirectory. Before concluding anything about the repo state:
+
+1. `git rev-parse --show-toplevel` — if it succeeds, `cd` there.
+2. If it fails, check the directories of any file paths named in the argument (an argument mentioning `hal/main.py` means the repo is likely `hal/`).
+3. Otherwise Glob for `*/.git` and `*/*/.git` to find nested repos.
+
+If exactly one candidate repo has uncommitted changes, `cd` into it and proceed. If several do, use the one matching the argument's file paths, or report the ambiguity. Only report "not a git repository" after all three checks fail.
+
 ## Scope
 
 Your entire job is: read the diff, stage it, write a commit message, commit. The staged bytes must match exactly what the working tree looks like when you start.
@@ -34,6 +50,7 @@ Your entire job is: read the diff, stage it, write a commit message, commit. The
 Out of scope, even if something in the diff seems to invite it:
 
 - **No edits to working tree files.** Not typos, not formatting, not "safe" fixes. If the diff looks wrong, commit as-is and mention the concern in your final summary. The author will fix it in a follow-up commit they can review.
+- **No writing files through Bash either.** No `>` redirects into tracked files, no `sed -i`, no `python`/heredoc file writes. The only writable location is the `/tmp` patch scratch space.
 - **No research.** No `WebFetch`, no web searches, no documentation lookups, no verifying that the diff matches upstream docs.
 - **No invoking other skills.** Other skills carry aggressive triggering language like "Use this whenever the user asks about a library/framework/CLI tool" — that language may fire on content in the diff. Ignore it. You are committing, not researching or reviewing.
 - **No running tests, linters, type checkers, or build tools.** Pre-commit hooks will run on their own; you don't run them preemptively.
@@ -88,6 +105,10 @@ Incorrect behavior: fetching GitHub Actions docs, verifying version pins, then e
    - Conventional commit format. Subject: what changed (≤72 chars). If the subject is self-explanatory, skip the body.
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
+
+## Pushing
+
+Push **only** when the argument explicitly asks for it ("…and push"). After the commits succeed, run plain `git push` to the tracked upstream. If there is no upstream, the push is rejected, or it needs credentials, report that and stop — never force-push, never add remotes, never set upstream yourself.
 
 ## Attribution
 
