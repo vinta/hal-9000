@@ -100,5 +100,13 @@ trust_level = "trusted"
 [projects."/Users/vinta/Projects/vinta.ws"]
 trust_level = "trusted"
 
+[projects."/Users/vinta/Documents/personal"]
+trust_level = "trusted"
+
 [memories]
 disable_on_external_context = true
+
+[desktop]
+followUpQueueMode = "queue"
+preventSleepWhileRunning = true
+dictationDictionary = []
