@@ -30,7 +30,7 @@ dotfiles/.claude/CLAUDE.md              # The user-level CLAUDE.md file
 dotfiles/.claude/rules/                 # Path-scoped rule files, auto-loaded via `paths:` frontmatter
 playbooks/site.yml                      # Main playbook importing all roles
 playbooks/roles/                        # Independent, tagged Ansible roles (Homebrew-based)
-plugins/hal-skills/                     # Claude Code plugin - Agent skills
+skills/hal-skills/                      # Claude Code plugin - Agent skills
 plugins/hal-voice/                      # Claude Code plugin - HAL 9000 voice clips
 plugins/hal-statusline/                 # Claude Code statusline
 scripts/generate-completion.py          # Generates zsh completion for bin/hal
@@ -41,7 +41,7 @@ tests/                                  # pytest tests
 ## Gotchas
 
 - **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
-- **Skills are the source of truth in `plugins/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json`. The `hal-9000` marketplace loads the published version from GitHub. Use `hal-9000-local` (points to `/usr/local/hal-9000`) to test local changes before pushing.
+- **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json`. The `hal-9000` marketplace loads the published version from GitHub. Use `hal-9000-local` (points to `/usr/local/hal-9000`) to test local changes before pushing.
 - All skill descriptions must start with `Use when` (may have a `(project)` prefix if it's a project-level skill)
 - Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint` runs ruff format --check, ruff check, ansible-lint, and a playbook syntax check).
 

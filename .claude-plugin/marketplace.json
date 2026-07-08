@@ -22,8 +22,8 @@
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "1.6.0",
-      "source": "./plugins/hal-skills",
+      "version": "1.7.0",
+      "source": "./skills/hal-skills",
       "category": "productivity",
       "keywords": [
         "git",

@@ -35,7 +35,7 @@ dotfiles/.claude/                       # Claude Code config, rules, and user-le
 dotfiles/.gemini/                       # Gemini CLI config managed by this repo
 playbooks/site.yml                      # Main Ansible playbook importing all roles
 playbooks/roles/                        # Independent tagged Ansible roles, mostly Homebrew-based
-plugins/hal-skills/                     # Claude Code plugin that distributes shared agent skills
+skills/hal-skills/                      # Claude Code plugin that distributes shared agent skills
 plugins/hal-voice/                      # Claude Code plugin for HAL voice hooks
 plugins/hal-statusline/                 # Claude Code statusline implementation
 scripts/generate-completion.py          # zsh completion generator for bin/hal
@@ -50,7 +50,7 @@ tests/                                  # pytest coverage for CLI and plugin beh
 - Keep root `AGENTS.md` project-specific; keep cross-project Codex preferences in `dotfiles/.codex/AGENTS.md`.
 - Use make targets instead of running underlying tools directly unless you are diagnosing a target failure.
 - After changing `bin/hal`, run `make hal-completion` so `dotfiles/.hal_completion.zsh` stays in sync.
-- Skills in `plugins/hal-skills/` must have descriptions that start with `Use when`; project-scoped skill descriptions may start with `(project) Use when`.
+- Skills in `skills/hal-skills/` must have descriptions that start with `Use when`; project-scoped skill descriptions may start with `(project) Use when`.
 - When testing unpublished Claude plugin changes, use the local marketplace entry that points at `/usr/local/hal-9000` before assuming the published GitHub marketplace reflects the edit.
 
 ## Research

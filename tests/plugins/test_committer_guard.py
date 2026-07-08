@@ -10,7 +10,7 @@ import pytest
 def guard():
     spec = importlib.util.spec_from_file_location(
         "guard_committer_bash",
-        Path(__file__).resolve().parent.parent.parent / "plugins" / "hal-skills" / "hooks" / "guard-committer-bash.py",
+        Path(__file__).resolve().parent.parent.parent / "skills" / "hal-skills" / "hooks" / "guard-committer-bash.py",
     )
     assert spec is not None
     assert spec.loader is not None

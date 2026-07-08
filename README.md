@@ -10,7 +10,7 @@ Opinionated macOS development environment automation that dominates your dev set
 
 All-in-one command to set up:
 
-- [Agent Skills](plugins/hal-skills)
+- [Agent Skills](skills/hal-skills)
 - [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
 - [Codex](dotfiles/.codex)
 - [Gemini](dotfiles/.gemini)
@@ -33,10 +33,10 @@ If you prefer only using some of them:
 
 ### Claude Code Plugin: `hal-skills`
 
-- [magi](plugins/hal-skills/skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
-- [second-opinions](plugins/hal-skills/skills/second-opinions/SKILL.md): Gets independent code review from Codex and Gemini
-- [best-practices](plugins/hal-skills/skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
-- [commit](plugins/hal-skills/skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
+- [magi](skills/hal-skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
+- [second-opinions](skills/hal-skills/second-opinions/SKILL.md): Gets independent code review from Codex and Gemini
+- [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
+- [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
