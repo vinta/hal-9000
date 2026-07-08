@@ -76,7 +76,7 @@ def basic_info(data: StatusLineData) -> None:
     if current_dir.startswith(home):
         current_dir = "~" + current_dir[len(home) :]
 
-    status_parts = [data["model"]["id"], data["effort"]["level"], current_dir]
+    status_parts = [f"{data['model']['id']} {data['effort']['level']}", current_dir]
     if git_branch:
         status_parts.append(git_branch)
 
