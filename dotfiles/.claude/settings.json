@@ -144,7 +144,8 @@
       "source": {
         "source": "github",
         "repo": "vinta/hal-9000"
-      }
+      },
+      "autoUpdate": true
     },
     "hal-9000-local": {
       "source": {
@@ -156,13 +157,15 @@
       "source": {
         "source": "github",
         "repo": "astral-sh/claude-code-plugins"
-      }
+      },
+      "autoUpdate": true
     },
     "openai-codex": {
       "source": {
         "source": "github",
         "repo": "openai/codex-plugin-cc"
-      }
+      },
+      "autoUpdate": true
     }
   },
   "viewMode": "verbose",
