@@ -17,12 +17,7 @@ paths:
   - Checking type information at a position (`hover`)
   - Surveying a file's or workspace's structure (`documentSymbol` / `workspaceSymbol`)
 - Use `node:` prefix for Node.js built-in modules (e.g., `node:fs`, `node:path`)
-- Use `const` by default, `let` when reassignment is needed, never `var`
-- Prefer `async`/`await` over `.then()` chains
-- Use template literals over string concatenation
-- Use optional chaining (`?.`) and nullish coalescing (`??`) over manual checks
-- Use strict equality (`===` / `!==`), never loose equality
-- Never use `as any` or `unknown`. Always write proper types/interfaces. Only use `any` or `unknown` as a last resort when no typed alternative exists
+- Write proper types/interfaces instead of `any` or casts like `as any` / `as unknown`. When a value is genuinely untypable, use `unknown` and narrow it explicitly. `any` is the last resort when no typed alternative exists
 - Prefer `interface` over `type` for object shapes (extendable, better error messages)
 - Avoid enums. Use union types (`type Status = 'active' | 'inactive'`) or `as const` objects
 - Don't prefix interfaces with `I` or type aliases with `T` (e.g., `User` not `IUser`)
