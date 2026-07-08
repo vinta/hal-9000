@@ -41,6 +41,7 @@
       "WebSearch"
     ],
     "deny": [
+      "NotebookEdit",
       "Read(~/.aws/**)",
       "Read(~/.config/**)",
       "Read(~/.docker/**)",
@@ -157,22 +158,16 @@
         "repo": "anthropics/skills"
       }
     },
-    "astral-sh": {
-      "source": {
-        "source": "github",
-        "repo": "astral-sh/claude-code-plugins"
-      }
-    },
     "openai-codex": {
       "source": {
         "source": "github",
         "repo": "openai/codex-plugin-cc"
       }
     },
-    "skills-curated": {
+    "astral-sh": {
       "source": {
         "source": "github",
-        "repo": "trailofbits/skills-curated"
+        "repo": "astral-sh/claude-code-plugins"
       }
     }
   },
