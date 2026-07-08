@@ -147,12 +147,6 @@
       },
       "autoUpdate": true
     },
-    "hal-9000-local": {
-      "source": {
-        "source": "directory",
-        "path": "/usr/local/hal-9000"
-      }
-    },
     "astral-sh": {
       "source": {
         "source": "github",
