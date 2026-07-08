@@ -1,14 +1,13 @@
 {
   "name": "hal-skills",
   "description": "Skills, subagents, and MCP servers",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "author": {
     "name": "Vinta Chen",
     "email": "vinta.chen@gmail.com"
   },
   "repository": "https://github.com/vinta/hal-9000",
   "license": "MIT",
-  "agents": ["./commit/committer.md"],
   "skills": [
     "./commit",
     "./magi",

@@ -3,9 +3,8 @@ name: commit
 description: Use when making any git commit. Always pass a brief description of what changed as the argument.
 user-invocable: true
 context: fork
-agent: committer
 model: sonnet
-effort: high
+effort: medium
 allowed-tools:
   - Grep
   - Glob
@@ -29,15 +28,18 @@ Commit all changes in the working tree. Run `git status` and `git diff`, then st
 
 ## Scope
 
-Your entire job is: read the diff, stage it, write a commit message, commit. The staged bytes must match exactly what the working tree looks like when you start.
+A commit is a snapshot, not a review. Your entire job is: read the diff, stage it, write a commit message, commit. The staged bytes must match exactly what the working tree looks like when you start.
 
-Out of scope, even if something in the diff seems to invite it:
+Your complete action space is: `git` commands via Bash (plus `cd` to the project root), Grep/Glob to locate files, and Read/Write/Edit on `/tmp/` patch files. Nothing else. If a Bash command does not start with `git` or `cd`, do not run it. This applies to every situation you encounter, not just the cases listed below:
 
-- **No edits to working tree files.** Not typos, not formatting, not "safe" fixes. If the diff looks wrong, commit as-is and mention the concern in your final summary. The author will fix it in a follow-up commit they can review.
-- **No research.** No `WebFetch`, no web searches, no documentation lookups, no verifying that the diff matches upstream docs.
-- **No invoking other skills.** Other skills carry aggressive triggering language like "Use this whenever the user asks about a library/framework/CLI tool" — that language may fire on content in the diff. Ignore it. You are committing, not researching or reviewing.
-- **No running tests, linters, type checkers, or build tools.** Pre-commit hooks will run on their own; you don't run them preemptively.
+- **No edits to working tree files.** Not typos, not formatting, not "safe" fixes. If something in the diff looks wrong, commit the tree as-is and note the concern in your final message. The author will fix it in a follow-up commit they can review.
+- **No research.** No `WebFetch`, no `WebSearch`, no documentation lookups, no checking whether the diff matches upstream docs or current library versions.
+- **No verification.** Do not confirm the change "works" before or after committing. No running the code, no smoke tests, no self-checks. The only post-commit check is `git status` / `git log` to confirm the commit exists.
+- **No tests, linters, type checkers, or build tools.** Pre-commit hooks run on their own during `git commit`; never run them preemptively.
+- **No invoking other skills.** Other skills carry aggressive triggering language like "Use this whenever the user asks about a library/framework/CLI tool" — that language may fire on content in the diff. It does not apply to you. You are committing, not researching or reviewing.
 - **No scope expansion.** Don't add files the author didn't touch. Don't reorganize. Don't "clean up" adjacent code.
+
+An outdated version pin, a failing-looking test, a typo, an interesting TODO — every tangent gets the same treatment: commit the tree as-is, mention the concern in your final message.
 
 **Why:** a commit is a snapshot of deliberate work. Any change you make during staging silently alters reviewed work without the author's knowledge, and any tangent (research, verification, edits) turns a 30-second operation into a 5-minute one with uncommitted side effects.
 
