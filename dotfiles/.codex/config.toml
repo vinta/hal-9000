@@ -144,3 +144,8 @@ disable_on_external_context = true
 followUpQueueMode = "queue"
 preventSleepWhileRunning = true
 dictationDictionary = []
+
+[hooks.state]
+
+[hooks.state."/usr/local/hal-9000/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:a9645d94b70aa40e726714ac5fdc9f0694f1652a94b59843a33021d33b08ac5a"
