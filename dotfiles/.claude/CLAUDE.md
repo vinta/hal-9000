@@ -45,7 +45,7 @@ Implement changes rather than suggesting them. Never present a proposed change a
 </default_to_action>
 
 <no_inline_scripts if="you need to run a multi-line script">
-Write the script to a file (your scratchpad directory if one exists, otherwise `/tmp/`) and run it. Never use inline one-liners like `python3 -c`, `node -e`, or `bash <<'EOF'`
+Write the script to a local `./tmp/` folder in the project root (create it if missing) and run it. It's covered by the global gitignore, never commit anything under it. Never use inline one-liners like `python3 -c`, `node -e`, or `bash <<'EOF'`
 </no_inline_scripts>
 
 <auto_commit if="you have completed the user's requested change">

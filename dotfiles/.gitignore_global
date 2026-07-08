@@ -17,5 +17,8 @@
 .superpowers/
 .gstack/
 
+# scratch scripts, anchored to the repo root
+/tmp/
+
 # playwright
 .playwright-cli/
