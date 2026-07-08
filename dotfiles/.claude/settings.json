@@ -152,22 +152,16 @@
         "path": "/usr/local/hal-9000"
       }
     },
-    "anthropic-agent-skills": {
+    "astral-sh": {
       "source": {
         "source": "github",
-        "repo": "anthropics/skills"
+        "repo": "astral-sh/claude-code-plugins"
       }
     },
     "openai-codex": {
       "source": {
         "source": "github",
         "repo": "openai/codex-plugin-cc"
-      }
-    },
-    "astral-sh": {
-      "source": {
-        "source": "github",
-        "repo": "astral-sh/claude-code-plugins"
       }
     }
   },
