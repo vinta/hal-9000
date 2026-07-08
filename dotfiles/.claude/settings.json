@@ -1,17 +1,13 @@
 {
   "cleanupPeriodDays": 365,
   "env": {
-    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_NO_FLICKER": "1",
-    "DISABLE_AUTOUPDATER": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
     "DISABLE_ERROR_REPORTING": "1",
-    "DISABLE_BUG_COMMAND": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_DOCTOR_COMMAND": "1",
-    "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
     "USE_BUILTIN_RIPGREP": "0"
   },
   "permissions": {
@@ -118,6 +114,8 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "claude-fable-5[1m]",
+  "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
       {
@@ -137,11 +135,8 @@
   },
   "enabledPlugins": {
     "codex@openai-codex": true,
-    "gh-cli@trailofbits": true,
     "hal-skills@hal-9000": true,
-    "hal-voice@hal-9000": true,
-    "skill-creator@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "hal-voice@hal-9000": true
   },
   "extraKnownMarketplaces": {
     "hal-9000": {
@@ -168,22 +163,10 @@
         "repo": "astral-sh/claude-code-plugins"
       }
     },
-    "minimalist-entrepreneur": {
-      "source": {
-        "source": "github",
-        "repo": "slavingia/skills"
-      }
-    },
     "openai-codex": {
       "source": {
         "source": "github",
         "repo": "openai/codex-plugin-cc"
-      }
-    },
-    "trailofbits": {
-      "source": {
-        "source": "github",
-        "repo": "trailofbits/skills"
       }
     },
     "skills-curated": {
@@ -196,8 +179,10 @@
   "viewMode": "verbose",
   "showClearContextOnPlanAccept": true,
   "showThinkingSummaries": true,
+  "theme": "dark",
   "verbose": true,
   "teammateMode": "tmux",
+  "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
