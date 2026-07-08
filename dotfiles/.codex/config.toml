@@ -70,6 +70,40 @@ approval_mode = "approve"
 [mcp_servers.openaiDeveloperDocs.tools.fetch_openai_doc]
 approval_mode = "approve"
 
+[marketplaces.openai-bundled]
+last_updated = "2026-07-08T11:30:22Z"
+source_type = "local"
+source = "/Users/vinta/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-07-01T07:12:45Z"
+source_type = "local"
+source = "/Users/vinta/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
 [projects."/usr/local/hal-9000"]
 trust_level = "trusted"
 
