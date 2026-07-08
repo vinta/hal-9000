@@ -102,7 +102,7 @@ Incorrect behavior: fetching GitHub Actions docs, verifying version pins, then e
    - If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit
 
 5. **Create Atomic Commits**: For each logical group:
-   - Conventional commit format. Subject: what changed (≤72 chars). If the subject is self-explanatory, skip the body.
+   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars). If the subject is self-explanatory, skip the body.
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
