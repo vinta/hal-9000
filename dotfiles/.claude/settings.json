@@ -113,7 +113,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5[1m]",
   "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
@@ -161,6 +160,7 @@
     }
   },
   "viewMode": "verbose",
+  "advisorModel": "fable",
   "showClearContextOnPlanAccept": true,
   "showThinkingSummaries": true,
   "theme": "dark",
