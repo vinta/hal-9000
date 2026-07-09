@@ -13,7 +13,6 @@ All-in-one command to set up:
 - [Agent Skills](skills/hal-skills)
 - [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
 - [Codex](dotfiles/.codex)
-- [Gemini](dotfiles/.gemini)
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
 - [Bun](playbooks/roles/bun/tasks/main.yml)
@@ -33,16 +32,16 @@ If you prefer only using some of them:
 
 ### Claude Code Plugin: `hal-skills`
 
-- [magi](skills/hal-skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
-- [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
 - [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
+- [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
+- [magi](skills/hal-skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
 
 ```bash
-claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-skills@hal-9000
+/plugin marketplace add vinta/hal-9000
+/plugin install hal-skills@hal-9000
 ```
 
-If you want to use them in Codex or Gemini CLI:
+If you want to use them in Codex:
 
 ```bash
 npx skills add vinta/hal-9000
@@ -53,8 +52,8 @@ npx skills add vinta/hal-9000
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
-claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-voice@hal-9000
+/plugin marketplace add vinta/hal-9000
+/plugin install hal-voice@hal-9000
 ```
 
 ### Claude Code Statusline

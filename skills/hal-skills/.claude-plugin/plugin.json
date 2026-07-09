@@ -8,5 +8,5 @@
   },
   "repository": "https://github.com/vinta/hal-9000",
   "license": "MIT",
-  "skills": ["./commit", "./magi", "./best-practices", "./update-allowed-tools"]
+  "skills": ["./commit", "./best-practices", "./magi", "./update-allowed-tools"]
 }
