@@ -2,6 +2,7 @@
 name: bump-plugin-version
 description: (project) Use when editing any file under skills/hal-skills/ or plugins/hal-voice/ to bump the plugin version before committing
 user-invocable: true
+context: fork
 model: haiku
 allowed-tools:
   - Glob
@@ -15,10 +16,10 @@ metadata:
 
 After editing files under `skills/hal-skills/` or `plugins/hal-voice/`, bump the `version` field in **both** the plugin's `plugin.json` and the marketplace manifest. Both files must stay in sync.
 
-| Plugin     | Files to update                                                                           |
-| ---------- | ----------------------------------------------------------------------------------------- |
+| Plugin     | Files to update                                                                          |
+| ---------- | ---------------------------------------------------------------------------------------- |
 | hal-skills | `skills/hal-skills/.claude-plugin/plugin.json` **and** `.claude-plugin/marketplace.json` |
-| hal-voice  | `plugins/hal-voice/.claude-plugin/plugin.json` **and** `.claude-plugin/marketplace.json`  |
+| hal-voice  | `plugins/hal-voice/.claude-plugin/plugin.json` **and** `.claude-plugin/marketplace.json` |
 
 - **Patch** (0.2.0 -> 0.2.1): bug fixes, config changes, style cleanup
 - **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands
