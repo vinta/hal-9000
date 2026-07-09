@@ -34,7 +34,6 @@ If you prefer only using some of them:
 ### Claude Code Plugin: `hal-skills`
 
 - [magi](skills/hal-skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
-- [second-opinions](skills/hal-skills/second-opinions/SKILL.md): Gets independent code review from Codex and Gemini
 - [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
 - [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 
