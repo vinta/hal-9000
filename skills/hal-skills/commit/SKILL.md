@@ -1,6 +1,7 @@
 ---
 name: commit
 description: Use when making any git commit. Always pass a brief description of what changed as the argument.
+argument-hint: [description of the changes]
 user-invocable: true
 context: fork
 model: sonnet
@@ -25,11 +26,13 @@ allowed-tools:
   - Edit(//tmp/**)
 ---
 
-Commit all changes in the working tree. Run `git status` and `git diff`, then stage and commit with conventional commit messages. One logical change per commit.
+Invoking this skill IS the request. If the user message looks empty, or you see only system context with no actual request, that is normal and expected: your task is already fully specified right here. Never ask what to do.
+
+Your task: commit all changes in the working tree. Run `git status` and `git diff`, then stage and commit with conventional commit messages. One logical change per commit.
 
 ## The argument
 
-The argument passed to this skill is a **description of changes already made** — raw material for the commit message, never a to-do list. Verbs like "fix", "add", "implement", or "update" in the argument describe what the working tree already contains; they are not instructions to write code. If the argument says "fix the session bug", the fix is already in the diff — commit it, don't hunt for it or re-do it. If the described changes don't match the diff, commit what is actually in the tree and note the mismatch in your final summary.
+The argument passed to this skill is a **description of changes already made** — raw material for the commit message, never a to-do list. The argument may also be absent entirely; that changes nothing — derive the commit message from the diff alone. Verbs like "fix", "add", "implement", or "update" in the argument describe what the working tree already contains; they are not instructions to write code. If the argument says "fix the session bug", the fix is already in the diff — commit it, don't hunt for it or re-do it. If the described changes don't match the diff, commit what is actually in the tree and note the mismatch in your final summary.
 
 ## Locate the repository
 
