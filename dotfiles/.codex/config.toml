@@ -31,6 +31,7 @@ unified_exec = true
 multi_agent = true
 memories = true
 goals = true
+js_repl = false
 
 [tools]
 view_image = true
@@ -71,12 +72,12 @@ approval_mode = "approve"
 approval_mode = "approve"
 
 [marketplaces.openai-bundled]
-last_updated = "2026-07-08T11:30:22Z"
+last_updated = "2026-07-10T11:50:49Z"
 source_type = "local"
 source = "/Users/vinta/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-07-01T07:12:45Z"
+last_updated = "2026-07-10T02:12:45Z"
 source_type = "local"
 source = "/Users/vinta/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -92,16 +93,22 @@ enabled = true
 [plugins."presentations@openai-primary-runtime"]
 enabled = true
 
-[plugins."browser@openai-bundled"]
-enabled = true
-
-[plugins."chrome@openai-bundled"]
-enabled = true
-
 [plugins."pdf@openai-primary-runtime"]
 enabled = true
 
 [plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+[plugins."sites@openai-bundled"]
+enabled = true
+
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."chrome@openai-bundled"]
 enabled = true
 
 [projects."/usr/local/hal-9000"]
@@ -113,25 +120,19 @@ trust_level = "trusted"
 [projects."/Users/vinta/Projects/pangu.js"]
 trust_level = "trusted"
 
-[projects."/Users/vinta/Projects/dear-ai"]
-trust_level = "trusted"
-
 [projects."/Users/vinta/Projects/laughing-man"]
 trust_level = "trusted"
 
-[projects."/Users/vinta/Projects/mensab"]
+[projects."/Users/vinta/Projects/vinta.ws"]
 trust_level = "trusted"
 
-[projects."/Users/vinta/Projects/of-course-i-still-love-you"]
+[projects."/Users/vinta/Projects/mensab"]
 trust_level = "trusted"
 
 [projects."/Users/vinta/Projects/finance"]
 trust_level = "trusted"
 
 [projects."/Users/vinta/Projects/resume"]
-trust_level = "trusted"
-
-[projects."/Users/vinta/Projects/vinta.ws"]
 trust_level = "trusted"
 
 [projects."/Users/vinta/Documents/personal"]
@@ -144,6 +145,10 @@ disable_on_external_context = true
 followUpQueueMode = "queue"
 preventSleepWhileRunning = true
 dictationDictionary = []
+dock-icon-preference = "app-default"
+show-context-window-usage = true
+usePointerCursors = true
+enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
 
 [hooks.state]
 
