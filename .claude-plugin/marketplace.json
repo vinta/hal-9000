@@ -28,13 +28,13 @@
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "1.8.0",
+      "version": "1.8.1",
       "source": "./skills/hal-skills",
       "skills": [
-        "./skills/hal-skills/commit",
-        "./skills/hal-skills/best-practices",
-        "./skills/hal-skills/magi",
-        "./skills/hal-skills/update-allowed-tools"
+        "./commit",
+        "./best-practices",
+        "./magi",
+        "./update-allowed-tools"
       ],
       "author": {
         "name": "Vinta Chen",
