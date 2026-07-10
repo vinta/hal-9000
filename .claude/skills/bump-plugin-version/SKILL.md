@@ -8,18 +8,14 @@ allowed-tools:
   - Glob
   - Read
   - Edit
+  - Bash(git:*)
 metadata:
   internal: true
 ---
 
 # Bump Plugin Version
 
-After editing files under `skills/hal-skills/` or `plugins/hal-voice/`, bump the `version` field in **both** the plugin's `plugin.json` and the marketplace manifest. Both files must stay in sync.
-
-| Plugin     | Files to update                                                                          |
-| ---------- | ---------------------------------------------------------------------------------------- |
-| hal-skills | `skills/hal-skills/.claude-plugin/plugin.json` **and** `.claude-plugin/marketplace.json` |
-| hal-voice  | `plugins/hal-voice/.claude-plugin/plugin.json` **and** `.claude-plugin/marketplace.json` |
+After editing files under `skills/hal-skills/` or `plugins/hal-voice/`, bump the plugin's `version` field in `.claude-plugin/marketplace.json` (the repo-root marketplace manifest). It is the single source of versions: each plugin is an entry in its `plugins` array, and there are no per-plugin `plugin.json` files.
 
 - **Patch** (0.2.0 -> 0.2.1): bug fixes, config changes, style cleanup
 - **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands
@@ -30,9 +26,9 @@ After editing files under `skills/hal-skills/` or `plugins/hal-voice/`, bump the
 Compare the working-tree version against the version on `origin/main`:
 
 ```bash
-git show origin/main:<path-to-plugin.json>
+git show origin/main:.claude-plugin/marketplace.json
 ```
 
-If the version already differs from `origin/main`, it was already bumped for unreleased work. **Do not bump again.** Only bump when the working-tree version matches `origin/main`.
+If the plugin's version already differs from `origin/main`, it was already bumped for unreleased work. **Do not bump again.** Only bump when the working-tree version matches `origin/main`.
 
 If both plugins changed, check each independently.
