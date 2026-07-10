@@ -12,18 +12,36 @@
     {
       "name": "hal-voice",
       "description": "Play HAL 9000 voice clips on Claude Code hook events",
-      "version": "1.2.7",
+      "version": "1.3.0",
       "source": "./plugins/hal-voice",
+      "author": {
+        "name": "Vinta Chen",
+        "email": "vinta.chen@gmail.com"
+      },
+      "repository": "https://github.com/vinta/hal-9000",
+      "license": "MIT",
       "category": "entertainment",
       "keywords": ["hal-9000", "hooks", "voice", "audio"],
       "tags": ["hal-9000", "hooks", "voice", "audio"],
-      "strict": true
+      "strict": false
     },
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "1.7.5",
+      "version": "1.8.0",
       "source": "./skills/hal-skills",
+      "skills": [
+        "./skills/hal-skills/commit",
+        "./skills/hal-skills/best-practices",
+        "./skills/hal-skills/magi",
+        "./skills/hal-skills/update-allowed-tools"
+      ],
+      "author": {
+        "name": "Vinta Chen",
+        "email": "vinta.chen@gmail.com"
+      },
+      "repository": "https://github.com/vinta/hal-9000",
+      "license": "MIT",
       "category": "productivity",
       "keywords": [
         "git",
@@ -43,7 +61,7 @@
         "research",
         "best-practices"
       ],
-      "strict": true
+      "strict": false
     }
   ]
 }
