@@ -162,12 +162,12 @@
   "viewMode": "verbose",
   "advisorModel": "fable",
   "showClearContextOnPlanAccept": true,
+  "tui": "fullscreen",
   "showThinkingSummaries": true,
   "theme": "dark",
   "verbose": true,
   "teammateMode": "tmux",
   "remoteControlAtStartup": false,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true,
-  "tui": "fullscreen"
+  "voiceEnabled": true
 }
