@@ -159,8 +159,8 @@
       "autoUpdate": true
     }
   },
+  "model": "claude-fable-5[1m]",
   "viewMode": "verbose",
-  "advisorModel": "fable",
   "showClearContextOnPlanAccept": true,
   "tui": "fullscreen",
   "showThinkingSummaries": true,
