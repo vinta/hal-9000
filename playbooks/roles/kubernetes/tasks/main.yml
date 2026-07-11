@@ -11,7 +11,7 @@
 # https://kubernetes.io/releases/
 # https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
 - name: Download kubectl
-  shell: sh -c 'curl -LO "https://dl.k8s.io/release/v1.32.10/bin/darwin/$(arch)/kubectl"'
+  shell: sh -c 'curl -LO "https://dl.k8s.io/release/v1.35.6/bin/darwin/$(arch)/kubectl"'
   args:
     chdir: /tmp
     creates: /usr/local/bin/kubectl
