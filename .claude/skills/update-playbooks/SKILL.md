@@ -12,6 +12,8 @@ allowed-tools:
   - Bash(gh api:*)
   - Bash(make lint:*)
   - Skill(commit)
+metadata:
+  internal: true
 ---
 
 # Update Playbooks
