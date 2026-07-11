@@ -14,12 +14,6 @@
   args:
     executable: /bin/bash
 
-# https://antigravity.google/download
-- name: Install Gemini CLI
-  shell: curl -fsSL https://antigravity.google/cli/install.sh | bash
-  args:
-    executable: /bin/bash
-
 # https://github.com/upstash/context7
 - name: Install ctx7 CLI
   shell: |

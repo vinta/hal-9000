@@ -47,15 +47,6 @@
       - pinentry-mac
     state: latest
 
-- name: Install linter packages
-  homebrew:
-    name:
-      - actionlint
-      - shellcheck
-      - shfmt
-      - zizmor
-    state: latest
-
 # https://github.com/ohmyzsh/ohmyzsh
 - name: Install oh-my-zsh
   shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
