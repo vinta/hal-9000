@@ -105,10 +105,10 @@ enabled = true
 [plugins."visualize@openai-bundled"]
 enabled = true
 
-[plugins."browser@openai-bundled"]
+[plugins."chrome@openai-bundled"]
 enabled = true
 
-[plugins."chrome@openai-bundled"]
+[plugins."browser@openai-bundled"]
 enabled = true
 
 [projects."/usr/local/hal-9000"]
