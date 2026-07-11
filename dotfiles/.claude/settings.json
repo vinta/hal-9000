@@ -113,6 +113,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "sonnet",
   "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
@@ -159,7 +160,6 @@
       "autoUpdate": true
     }
   },
-  "model": "claude-fable-5[1m]",
   "viewMode": "verbose",
   "showClearContextOnPlanAccept": true,
   "tui": "fullscreen",
