@@ -2,7 +2,6 @@
 name: bump-plugin-version
 description: (project) Use when editing any file under skills/hal-skills/ or plugins/hal-voice/ to bump the plugin version before committing
 user-invocable: true
-context: fork
 model: haiku
 allowed-tools:
   - Glob

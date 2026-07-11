@@ -2,7 +2,6 @@
 name: update-playbooks
 description: (project) Use when bumping hardcoded tool versions in playbooks/roles/ to their latest releases
 user-invocable: true
-context: fork
 model: sonnet
 allowed-tools:
   - Grep

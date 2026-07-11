@@ -2,7 +2,6 @@
 name: update-allowed-tools
 description: Use when creating or editing a skill that uses Bash commands, external tools, or skill invocations and the allowed-tools frontmatter may be incomplete
 user-invocable: true
-context: fork
 model: haiku
 allowed-tools:
   - Grep
