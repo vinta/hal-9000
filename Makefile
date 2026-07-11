@@ -8,7 +8,7 @@ help: ## Show this help message
 
 install: ## Install dependencies and setup pre-commit hooks
 	uv sync --locked
-	uv run pip-audit
+	uv audit
 	uv run ansible-galaxy collection install community.general
 	uv run pre-commit install
 	@if command -v gitleaks >/dev/null 2>&1; then \

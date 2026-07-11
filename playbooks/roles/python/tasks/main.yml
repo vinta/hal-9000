@@ -24,13 +24,11 @@
     executable: /bin/bash
 
 # https://github.com/mkusaka/it2
-# https://github.com/pypa/pip-audit
 # https://github.com/astral-sh/ruff
 # https://github.com/astral-sh/ty
 - name: Install global Python packages
   shell: |
     uv tool install it2
-    uv tool install pip-audit
     uv tool install ruff
     uv tool install ty
   args:
