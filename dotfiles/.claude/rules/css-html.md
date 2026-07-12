@@ -4,7 +4,6 @@ paths:
   - "**/*.{html,htm}"
   - "**/*.jsx"
   - "**/*.tsx"
-  - "docs/**/*.md"
 ---
 
 # CSS/HTML

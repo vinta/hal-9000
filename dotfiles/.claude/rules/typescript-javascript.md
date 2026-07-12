@@ -3,7 +3,6 @@ paths:
   - "**/*.{ts,tsx}"
   - "**/*.{js,jsx}"
   - "**/package.json"
-  - "docs/**/*.md"
 ---
 
 # TypeScript / JavaScript
