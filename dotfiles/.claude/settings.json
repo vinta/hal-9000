@@ -39,7 +39,6 @@
       "WebSearch"
     ],
     "deny": [
-      "NotebookEdit",
       "Read(~/.aws/**)",
       "Read(~/.config/**)",
       "Read(~/.docker/**)",
@@ -128,6 +127,7 @@
       }
     ]
   },
+  "enableWorkflows": true,
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/hal-statusline.py"
@@ -166,8 +166,11 @@
   "showThinkingSummaries": true,
   "theme": "dark",
   "verbose": true,
+  "autoCompactEnabled": false,
+  "switchModelsOnFlag": false,
   "teammateMode": "tmux",
   "remoteControlAtStartup": false,
+  "inputNeededNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
