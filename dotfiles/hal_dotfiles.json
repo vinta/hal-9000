@@ -1,102 +1,102 @@
 {
   "copies": [
     {
-      "dest": "{{HOME}}/.claude/CLAUDE.md",
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md"
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md",
+      "dest": "{{HOME}}/.claude/CLAUDE.md"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects",
-      "src": "{{HOME}}/.claude/projects"
+      "src": "{{HOME}}/.claude/projects",
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/history.jsonl",
-      "src": "{{HOME}}/.claude/history.jsonl"
+      "src": "{{HOME}}/.claude/history.jsonl",
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/history.jsonl"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md",
-      "src": "{{HOME}}/Projects/laughing-man/CLAUDE.local.md"
+      "src": "{{HOME}}/Projects/laughing-man/CLAUDE.local.md",
+      "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md"
     },
     {
-      "dest": "{{HOME}}/.codex/AGENTS.md",
-      "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md"
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md",
+      "dest": "{{HOME}}/.codex/AGENTS.md"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Apps/Codex/history.jsonl",
-      "src": "{{HOME}}/.codex/history.jsonl"
+      "src": "{{HOME}}/.codex/history.jsonl",
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/history.jsonl"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Apps/Codex/sessions/",
-      "src": "{{HOME}}/.codex/sessions/"
+      "src": "{{HOME}}/.codex/sessions/",
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/sessions/"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Apps/Codex/archived_sessions/",
-      "src": "{{HOME}}/.codex/archived_sessions/"
+      "src": "{{HOME}}/.codex/archived_sessions/",
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/archived_sessions/"
     },
     {
-      "dest": "{{HOME}}/Dropbox/Apps/Codex/memories/",
-      "src": "{{HOME}}/.codex/memories/"
+      "src": "{{HOME}}/.codex/memories/",
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/memories/"
     }
   ],
   "links": [
     {
-      "dest": "{{HOME}}/.hal_completion.zsh",
-      "src": "{{REPO_ROOT}}/dotfiles/.hal_completion.zsh"
+      "src": "{{REPO_ROOT}}/dotfiles/.hal_completion.zsh",
+      "dest": "{{HOME}}/.hal_completion.zsh"
     },
     {
-      "dest": "{{HOME}}/.zshrc",
-      "src": "{{REPO_ROOT}}/dotfiles/.zshrc"
+      "src": "{{REPO_ROOT}}/dotfiles/.zshrc",
+      "dest": "{{HOME}}/.zshrc"
     },
     {
-      "dest": "{{HOME}}/.gitconfig",
-      "src": "{{REPO_ROOT}}/dotfiles/.gitconfig"
+      "src": "{{REPO_ROOT}}/dotfiles/.gitconfig",
+      "dest": "{{HOME}}/.gitconfig"
     },
     {
-      "dest": "{{HOME}}/.gitignore_global",
-      "src": "{{REPO_ROOT}}/dotfiles/.gitignore_global"
+      "src": "{{REPO_ROOT}}/dotfiles/.gitignore_global",
+      "dest": "{{HOME}}/.gitignore_global"
     },
     {
-      "dest": "{{HOME}}/.config/ghostty/config",
-      "src": "{{REPO_ROOT}}/dotfiles/.config/ghostty/config"
+      "src": "{{REPO_ROOT}}/dotfiles/.config/ghostty/config",
+      "dest": "{{HOME}}/.config/ghostty/config"
     },
     {
-      "dest": "{{HOME}}/.npmrc",
-      "src": "{{REPO_ROOT}}/dotfiles/.npmrc"
+      "src": "{{REPO_ROOT}}/dotfiles/.npmrc",
+      "dest": "{{HOME}}/.npmrc"
     },
     {
-      "dest": "{{HOME}}/.playwright/cli.config.json",
-      "src": "{{REPO_ROOT}}/dotfiles/.playwright/cli.config.json"
+      "src": "{{REPO_ROOT}}/dotfiles/.playwright/cli.config.json",
+      "dest": "{{HOME}}/.playwright/cli.config.json"
     },
     {
-      "dest": "{{HOME}}/.claude/settings.json",
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.json"
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.json",
+      "dest": "{{HOME}}/.claude/settings.json"
     },
     {
-      "dest": "{{HOME}}/.claude/hooks/guard-bash-paths.py",
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/hooks/guard-bash-paths.py"
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/hooks/guard-bash-paths.py",
+      "dest": "{{HOME}}/.claude/hooks/guard-bash-paths.py"
     },
     {
-      "dest": "{{HOME}}/.claude/statusline/hal-statusline.py",
-      "src": "{{REPO_ROOT}}/plugins/hal-statusline/hal-statusline.py"
+      "src": "{{REPO_ROOT}}/plugins/hal-statusline/hal-statusline.py",
+      "dest": "{{HOME}}/.claude/statusline/hal-statusline.py"
     },
     {
-      "dest": "{{HOME}}/.claude/rules/",
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/rules/"
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/rules/",
+      "dest": "{{HOME}}/.claude/rules/"
     },
     {
-      "dest": "{{HOME}}/.codex/config.toml",
-      "src": "{{REPO_ROOT}}/dotfiles/.codex/config.toml"
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/config.toml",
+      "dest": "{{HOME}}/.codex/config.toml"
     },
     {
-      "dest": "{{HOME}}/.codex/rules/",
-      "src": "{{REPO_ROOT}}/dotfiles/.codex/rules/"
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/rules/",
+      "dest": "{{HOME}}/.codex/rules/"
     },
     {
-      "dest": "{{HOME}}/.gemini/settings.json",
-      "src": "{{REPO_ROOT}}/dotfiles/.gemini/settings.json"
+      "src": "{{REPO_ROOT}}/dotfiles/.gemini/settings.json",
+      "dest": "{{HOME}}/.gemini/settings.json"
     },
     {
-      "dest": "{{HOME}}/.gemini/antigravity-cli/settings.json",
-      "src": "{{REPO_ROOT}}/dotfiles/.gemini/antigravity-cli/settings.json"
+      "src": "{{REPO_ROOT}}/dotfiles/.gemini/antigravity-cli/settings.json",
+      "dest": "{{HOME}}/.gemini/antigravity-cli/settings.json"
     }
   ]
 }
