@@ -41,17 +41,18 @@ def check(command: str) -> str | None:
     return None
 
 
-data = json.load(sys.stdin)
-command = data.get("tool_input", {}).get("command", "")
-blocked = check(command)
-if blocked:
-    json.dump(
-        {
-            "hookSpecificOutput": {
-                "hookEventName": "PreToolUse",
-                "permissionDecision": "deny",
-                "permissionDecisionReason": f"Blocked: Bash access to denied path ({blocked})",
-            }
-        },
-        sys.stdout,
-    )
+if __name__ == "__main__":
+    data = json.load(sys.stdin)
+    command = data.get("tool_input", {}).get("command", "")
+    blocked = check(command)
+    if blocked:
+        json.dump(
+            {
+                "hookSpecificOutput": {
+                    "hookEventName": "PreToolUse",
+                    "permissionDecision": "deny",
+                    "permissionDecisionReason": f"Blocked: Bash access to denied path ({blocked})",
+                }
+            },
+            sys.stdout,
+        )
