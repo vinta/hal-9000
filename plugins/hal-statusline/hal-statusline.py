@@ -33,6 +33,7 @@ class StatusLineData(TypedDict):
     session_id: str
     transcript_path: str
     rate_limits: NotRequired[dict[str, dict[str, float]]]
+    context_window: NotRequired[dict[str, float]]
 
 
 BLUE = "\033[34m"
@@ -59,6 +60,10 @@ def colorize_grammar(text: str) -> str:
     return "\n".join(result)
 
 
+def usage_color(pct: float) -> str:
+    return RED if pct >= 90 else YELLOW if pct >= 70 else GREEN  # noqa: PLR2004 magic-value-comparison
+
+
 def basic_info(data: StatusLineData) -> None:
     git_branch = ""
     try:
@@ -82,11 +87,18 @@ def basic_info(data: StatusLineData) -> None:
     if git_branch:
         status_parts.append(git_branch)
 
-    five_hour_used = data.get("rate_limits", {}).get("five_hour", {}).get("used_percentage")
+    rate_limits = data.get("rate_limits", {})
+    five_hour_used = rate_limits.get("five_hour", {}).get("used_percentage")
     if five_hour_used is not None:
-        pct = int(five_hour_used)
-        color = RED if pct >= 90 else YELLOW if pct >= 70 else GREEN  # noqa: PLR2004 magic-value-comparison
-        status_parts.append(f"{color}5h {pct}%{RESET}{BLUE}")
+        status_parts.append(f"{usage_color(five_hour_used)}5h {int(five_hour_used)}%{RESET}{BLUE}")
+
+    seven_day_used = rate_limits.get("seven_day", {}).get("used_percentage")
+    if seven_day_used is not None:
+        status_parts.append(f"{usage_color(seven_day_used)}7d {int(seven_day_used)}%{RESET}{BLUE}")
+
+    context_used = data.get("context_window", {}).get("used_percentage")
+    if context_used is not None:
+        status_parts.append(f"{usage_color(context_used)}Context {int(context_used)}%{RESET}{BLUE}")
 
     separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
