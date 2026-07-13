@@ -249,6 +249,138 @@ class TestCopyEntryMerge:
         assert not (dest / ".git").exists()
 
 
+class TestBackupRestore:
+    """backup copies src->dest, restore copies dest->src after confirmation."""
+
+    def test_backup_copies_entries(self, hal_instance, tmp_path):
+        src = tmp_path / "live.txt"
+        src.write_text("live data")
+        dest = tmp_path / "dropbox" / "live.txt"
+
+        entry = {"src": str(src), "dest": str(dest)}
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [entry]}
+            hal_instance.backup(argparse.Namespace())
+
+        assert dest.read_text() == "live data"
+
+    def test_backup_preserves_dest_only_files(self, hal_instance, tmp_path):
+        """Backup is additive: files already in the backup destination survive."""
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "deleted_long_ago.txt").write_text("keep me")
+
+        entry = {"src": str(src), "dest": str(dest)}
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [entry]}
+            hal_instance.backup(argparse.Namespace())
+
+        assert (dest / "current.txt").read_text() == "current"
+        assert (dest / "deleted_long_ago.txt").read_text() == "keep me"
+
+    def test_restore_reverses_direction(self, hal_instance, tmp_path, monkeypatch):
+        """Restore copies dest->src, creating missing parent directories."""
+        backup_file = tmp_path / "dropbox" / "live.txt"
+        backup_file.parent.mkdir()
+        backup_file.write_text("backup data")
+        local = tmp_path / "fresh" / "live.txt"
+
+        entry = {"src": str(local), "dest": str(backup_file)}
+        monkeypatch.setattr("builtins.input", lambda _: "y")
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [entry]}
+            hal_instance.restore(argparse.Namespace())
+
+        assert local.read_text() == "backup data"
+
+    def test_restore_overwrites_existing_local(self, hal_instance, tmp_path, monkeypatch):
+        backup_file = tmp_path / "dropbox" / "live.txt"
+        backup_file.parent.mkdir()
+        backup_file.write_text("backup data")
+        local = tmp_path / "live.txt"
+        local.write_text("corrupted")
+
+        entry = {"src": str(local), "dest": str(backup_file)}
+        monkeypatch.setattr("builtins.input", lambda _: "y")
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [entry]}
+            hal_instance.restore(argparse.Namespace())
+
+        assert local.read_text() == "backup data"
+
+    def test_restore_aborts_without_confirmation(self, hal_instance, tmp_path, monkeypatch):
+        backup_file = tmp_path / "dropbox" / "live.txt"
+        backup_file.parent.mkdir()
+        backup_file.write_text("backup data")
+        local = tmp_path / "live.txt"
+        local.write_text("untouched")
+
+        entry = {"src": str(local), "dest": str(backup_file)}
+        monkeypatch.setattr("builtins.input", lambda _: "")
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [entry]}
+            hal_instance.restore(argparse.Namespace())
+
+        assert local.read_text() == "untouched"
+
+    def test_restore_aborts_on_eof(self, hal_instance, tmp_path, monkeypatch):
+        """Non-interactive restore (no tty) defaults to abort."""
+        backup_file = tmp_path / "dropbox" / "live.txt"
+        backup_file.parent.mkdir()
+        backup_file.write_text("backup data")
+        local = tmp_path / "live.txt"
+        local.write_text("untouched")
+
+        def raise_eof(_prompt):
+            raise EOFError
+
+        entry = {"src": str(local), "dest": str(backup_file)}
+        monkeypatch.setattr("builtins.input", raise_eof)
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [entry]}
+            hal_instance.restore(argparse.Namespace())
+
+        assert local.read_text() == "untouched"
+
+    def test_sync_ignores_backups(self, hal_instance, tmp_path):
+        """sync only processes links and copies, never backup entries."""
+        src = tmp_path / "live.txt"
+        src.write_text("live data")
+        dest = tmp_path / "dropbox" / "live.txt"
+
+        entry = {"src": str(src), "dest": str(dest)}
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"links": [], "copies": [], "backups": [entry]}
+            hal_instance.sync(argparse.Namespace())
+
+        assert not dest.exists()
+
+
 class TestArgParsing:
     def test_unknown_args_rejected_for_link(self, hal_module):
         """Non-update commands should reject unknown arguments."""

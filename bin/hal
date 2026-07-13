@@ -35,7 +35,7 @@ class Dotfiles:
                 with Path(self.path).open() as f:
                     self._data = json.load(f)
             except FileNotFoundError:
-                self._data = {"links": [], "copies": []}
+                self._data = {"backups": [], "copies": [], "links": []}
 
         assert self._data is not None  # noqa: S101 assert
         return self._data
@@ -85,7 +85,7 @@ class HAL9000:
         link_parser.set_defaults(func=self.link)
         link_parser.add_argument("filename", type=str)
 
-        unlink_parser = subparsers.add_parser("unlink", help="restore file from dotfiles and remove symlink")
+        unlink_parser = subparsers.add_parser("unlink", help="move file back from dotfiles and remove symlink")
         unlink_parser.set_defaults(func=self.unlink)
         unlink_parser.add_argument("filename", type=str)
 
@@ -95,6 +95,12 @@ class HAL9000:
 
         sync_parser = subparsers.add_parser("sync", help="sync all links and copies")
         sync_parser.set_defaults(func=self.sync)
+
+        backup_parser = subparsers.add_parser("backup", help="back up all backup entries to their destinations")
+        backup_parser.set_defaults(func=self.backup)
+
+        restore_parser = subparsers.add_parser("restore", help="restore all backup entries, overwriting local files")
+        restore_parser.set_defaults(func=self.restore)
 
         pod_bay_doors_parser = subparsers.add_parser("open-the-pod-bay-doors", help="open the pod bay doors, please, HAL")
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
@@ -277,6 +283,34 @@ class HAL9000:
             futures: list[concurrent.futures.Future[None]] = []
             futures.extend(executor.submit(self._sync_links, link) for link in self.dotfiles.data["links"])
             futures.extend(executor.submit(self._copy_entry, copy) for copy in self.dotfiles.data["copies"])
+            for f in concurrent.futures.as_completed(futures):
+                f.result()
+
+    def backup(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = [executor.submit(self._copy_entry, entry) for entry in self.dotfiles.data["backups"]]
+            for f in concurrent.futures.as_completed(futures):
+                f.result()
+
+    def restore(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+        entries = self.dotfiles.data["backups"]
+        if not entries:
+            self._hal_says("nothing to restore")
+            return
+
+        for entry in entries:
+            self._hal_says(f"{self._expand_template(entry['dest'])} -> {self._expand_template(entry['src'])}")
+
+        try:
+            answer = input("Overwrite local files with backups? [y/N] ")
+        except EOFError:
+            answer = ""
+        if answer.strip().lower() != "y":
+            self._hal_says("aborted")
+            return
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = [executor.submit(self._copy_entry, {"src": entry["dest"], "dest": entry["src"]}) for entry in entries]
             for f in concurrent.futures.as_completed(futures):
                 f.result()
 
