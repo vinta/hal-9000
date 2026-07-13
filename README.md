@@ -72,6 +72,8 @@ hal update --tags python,node         # Run specific Ansible roles
 hal link ~/.zshrc                     # Move file into dotfiles/ and symlink it back
 hal copy ~/.config/ghostty/config     # Copy file into dotfiles/ (no symlink)
 hal sync                              # Sync all links and copies
+hal backup                            # Back up live data to Dropbox
+hal restore                           # Restore live data from Dropbox (overwrites local)
 hal open-the-pod-bay-doors            # Open the pod bay doors, please, HAL
 ```
 

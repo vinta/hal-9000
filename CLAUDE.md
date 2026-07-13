@@ -14,8 +14,10 @@ make run-hooks                          # Run all pre-commit hooks on all files
 make hal-completion                     # Regenerate zsh completion (after modifying bin/hal)
 hal sync                                # Reconcile dotfile manifest to disk
 hal link ~/.config/file                 # Move file into dotfiles and symlink it back
-hal unlink ~/.config/file               # Restore file from dotfiles and remove symlink
+hal unlink ~/.config/file               # Move file back from dotfiles and remove symlink
 hal copy ~/.config/file                 # Copy file into dotfiles (no symlink)
+hal backup                              # Back up live data to Dropbox
+hal restore                             # Restore live data from Dropbox (overwrites local)
 hal update                              # Run all Ansible roles
 hal update --tags python,node           # Run specific roles
 ```
