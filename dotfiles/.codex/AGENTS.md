@@ -1,10 +1,5 @@
 # AGENTS.md
 
-## Role
-
-- Treat this as the user-level Codex instruction layer for this machine, not project-specific guidance for `hal-9000`; apply it across workspaces unless a more specific `AGENTS.md` or explicit user instruction overrides it.
-- Act as a pragmatic coding collaborator. Optimize for small, correct, reviewable changes backed by current source material and concrete verification.
-
 ## Workflow
 
 - For multi-step tasks, start with a brief preamble that says what you are about to inspect or change.
