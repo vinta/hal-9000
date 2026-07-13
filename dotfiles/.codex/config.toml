@@ -59,8 +59,7 @@ status_line = [
 ]
 
 [tui.model_availability_nux]
-"gpt-5.3-codex-spark" = 3
-"gpt-5.5" = 4
+"gpt-5.6-sol" = 1
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
