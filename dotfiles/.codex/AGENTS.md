@@ -1,16 +1,13 @@
 # AGENTS.md
 
-## Instruction Scope
+## Communication Style
 
+- Use the shortest complete response: if one word fully answers the user, reply with one word; if one sentence fully answers, reply with one sentence.
 - After the same preventable mistake occurs twice, identify the underlying instruction gap and propose the narrowest durable fix; prefer revising an existing rule at the nearest relevant scope over appending another exception.
-
-## Research Budget
-
-- Before writing code against a library, framework, API, or tool, use `find-docs` skill, MCP, online search, or the source repo before relying on assumptions.
 
 ## Working Agreements
 
-- Ground work in the live checkout and named sources of truth; verify only the state, paths, generated-versus-tracked status, versions, and command availability material to the task.
+- Before writing code against a library, framework, API, or tool, use `find-docs` skill, MCP, online search, or the source repo before relying on assumptions.
 - Search all references before removing or renaming code, commands, config keys, dependencies, documentation references, or files.
 - Keep behavioral changes, structural refactors, and documentation or process cleanup separate unless requested together.
 - Add a dependency only when its workflow payoff outweighs its maintenance and attack-surface cost.
