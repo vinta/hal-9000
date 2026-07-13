@@ -22,7 +22,7 @@ class Setting:
 
 class Dotfiles:
     DEFAULT_CONFIG: str = str(Path(Setting.DOTFILES_ROOT) / "hal_dotfiles.json")
-    _ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest")
+    ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest")
 
     def __init__(self, path: str | None = None) -> None:
         self.path: str = path or self.DEFAULT_CONFIG
@@ -48,7 +48,7 @@ class Dotfiles:
             return None
 
     def _ordered_data(self) -> dict[str, list[dict[str, str]]]:
-        return {field_name: [{key: entry[key] for key in self._ENTRY_KEY_ORDER if key in entry} for entry in entries] for field_name, entries in sorted(self.data.items())}
+        return {field_name: [{key: entry[key] for key in self.ENTRY_KEY_ORDER if key in entry} for entry in entries] for field_name, entries in sorted(self.data.items())}
 
     def show(self) -> None:
         print(json.dumps(self._ordered_data(), indent=2, separators=(",", ": ")))
