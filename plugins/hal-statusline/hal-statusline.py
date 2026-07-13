@@ -11,7 +11,7 @@ import sys
 import tempfile
 import time
 from pathlib import Path
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 LOG_PATH = Path("/tmp/hal-statusline.log")  # noqa: S108 hardcoded-temp-file
 
@@ -32,10 +32,12 @@ class StatusLineData(TypedDict):
     workspace: dict[str, str]
     session_id: str
     transcript_path: str
+    rate_limits: NotRequired[dict[str, dict[str, float]]]
 
 
 BLUE = "\033[34m"
 GREEN = "\033[32m"
+YELLOW = "\033[33m"
 RED = "\033[31m"
 WHITE = "\033[37m"
 RESET = "\033[0m"
@@ -79,6 +81,12 @@ def basic_info(data: StatusLineData) -> None:
     status_parts = [f"{data['model']['id']} {data['effort']['level']}", current_dir]
     if git_branch:
         status_parts.append(git_branch)
+
+    five_hour_used = data.get("rate_limits", {}).get("five_hour", {}).get("used_percentage")
+    if five_hour_used is not None:
+        pct = int(five_hour_used)
+        color = RED if pct >= 90 else YELLOW if pct >= 70 else GREEN  # noqa: PLR2004 magic-value-comparison
+        status_parts.append(f"{color}5h {pct}%{RESET}{BLUE}")
 
     separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
