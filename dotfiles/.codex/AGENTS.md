@@ -1,42 +1,21 @@
 # AGENTS.md
 
-## Workflow
+## Instruction Scope
 
-- For multi-step tasks, start with a brief preamble that says what you are about to inspect or change.
-- Before edits, outline a 3-5 bullet plan covering approach, order, files or systems touched, verification, and material open questions.
-- Verify environment assumptions before acting: current branch/state, paths, generated vs. tracked files, tool versions, and command availability.
-- Search all usages before removing or renaming imports, functions, commands, config keys, dependencies, docs references, or files.
+- After the same preventable mistake occurs twice, identify the underlying instruction gap and propose the narrowest durable fix; prefer revising an existing rule at the nearest relevant scope over appending another exception.
 
 ## Research Budget
 
 - Before writing code against a library, framework, API, or tool, use `find-docs` skill, MCP, online search, or the source repo before relying on assumptions.
-- Start with one targeted lookup. Continue researching only when a required fact, syntax, version, owner, date, source, or artifact is missing, or when the user asked for exhaustive coverage.
-- Stop researching once the available sources answer the task well enough to make the change. Do not add extra searches just to polish wording or collect nonessential examples.
 
-## Change Constraints
+## Working Agreements
 
-- Make the smallest change that fully solves the task.
-- Keep behavioral changes, structural refactors, and process/documentation cleanups separate unless the task explicitly asks for them together.
-- Justify new dependencies and avoid increasing maintenance or attack surface without a clear payoff.
-- Do not invent features, config, validation, or documentation for behavior that is not implemented.
-- When replacing an implementation, prefer removing the old path instead of leaving shims unless backward compatibility is explicitly required.
-- For error handling changes, fail fast with actionable messages that include what failed, relevant input, and the likely fix.
-
-## Verification
-
-- Run the smallest relevant verification for the files changed: targeted tests for behavior, lint/type/build checks when applicable, `git diff --check` for docs/config-only changes, and a smoke test when full validation is too expensive.
-- For multi-step work, validate at each milestone and fix failures before continuing.
-- Do not leave newly introduced warnings behind unless the user explicitly accepts them.
-- If meaningful validation cannot run, say exactly what was skipped, why, and the next best check.
-
-## Code and Comments
-
-- Prefer self-documenting code. Add comments only when they explain intent or non-obvious constraints.
-- Use plain, factual language in commits, PRs, and summaries. Describe the diff and resulting behavior without hype.
-- Never hard-wrap sentences when writing Markdown or prose text. Let paragraphs and list items stay on single logical lines unless the format requires manual line breaks.
-
-## Stop Rules
-
-- Ask only when a missing decision materially affects correctness, security, data loss, cost, or user-visible behavior.
-- If the same mistake or instruction gap appears twice, do a short retrospective and update `AGENTS.md` or the relevant task-specific reference so the fix becomes durable.
-- Stop and report clearly when primary sources conflict with repo behavior, validation exposes a blocker, or the requested change would exceed the agreed scope.
+- Ground work in the live checkout and named sources of truth; verify only the state, paths, generated-versus-tracked status, versions, and command availability material to the task.
+- Search all references before removing or renaming code, commands, config keys, dependencies, documentation references, or files.
+- Keep behavioral changes, structural refactors, and documentation or process cleanup separate unless requested together.
+- Add a dependency only when its workflow payoff outweighs its maintenance and attack-surface cost.
+- Keep configuration, validation, and documentation aligned with implemented behavior; do not invent support for behavior that does not exist.
+- When replacing an implementation, remove the old path; add compatibility shims only when explicitly required.
+- Fail fast with errors that name what failed, the relevant input, and the likely fix.
+- Prefer self-documenting code; comments explain intent or non-obvious constraints.
+- Do not hard-wrap Markdown or prose.
