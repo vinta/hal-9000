@@ -7,9 +7,11 @@ _hal() {
     commands=(
         'update:pull repo and run ansible-playbook'
         'link:move file into dotfiles and symlink it back'
-        'unlink:restore file from dotfiles and remove symlink'
+        'unlink:move file back from dotfiles and remove symlink'
         'copy:copy file into dotfiles (no symlink)'
         'sync:sync all links and copies'
+        'backup:back up all backup entries to their destinations'
+        'restore:restore all backup entries, overwriting local files'
         'open-the-pod-bay-doors:open the pod bay doors, please, HAL'
     )
 
