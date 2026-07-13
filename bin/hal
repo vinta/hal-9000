@@ -257,13 +257,13 @@ class HAL9000:
         dest_path.symlink_to(src)
         self._hal_says(f"link {src} -> {dest}")
 
-    def _sync_copies(self, copy: dict[str, str]) -> None:
-        src = self._expand_template(copy["src"])
+    def _copy_entry(self, entry: dict[str, str]) -> None:
+        src = self._expand_template(entry["src"])
         if not Path(src).exists():
             self._hal_says(f"not found {src}")
             return
 
-        dest = self._expand_template(copy["dest"])
+        dest = self._expand_template(entry["dest"])
 
         if Path(src).is_dir():
             shutil.copytree(src, dest, ignore=shutil.ignore_patterns(".DS_Store", ".git"), dirs_exist_ok=True)
@@ -276,7 +276,7 @@ class HAL9000:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures: list[concurrent.futures.Future[None]] = []
             futures.extend(executor.submit(self._sync_links, link) for link in self.dotfiles.data["links"])
-            futures.extend(executor.submit(self._sync_copies, copy) for copy in self.dotfiles.data["copies"])
+            futures.extend(executor.submit(self._copy_entry, copy) for copy in self.dotfiles.data["copies"])
             for f in concurrent.futures.as_completed(futures):
                 f.result()
 

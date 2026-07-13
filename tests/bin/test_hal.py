@@ -135,8 +135,8 @@ class TestUserFilenameValidation:
             hal_instance.copy(ns)
 
 
-class TestSyncCopiesMerge:
-    """_sync_copies merges directories instead of replacing them."""
+class TestCopyEntryMerge:
+    """_copy_entry merges directories instead of replacing them."""
 
     def test_preserves_dest_only_files(self, hal_instance, tmp_path):
         """Files in dest that don't exist in src survive the sync."""
@@ -150,7 +150,7 @@ class TestSyncCopiesMerge:
 
         copy_entry = {"src": str(src), "dest": str(dest)}
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
-            hal_instance._sync_copies(copy_entry)
+            hal_instance._copy_entry(copy_entry)
 
         assert (dest / "from_src.txt").read_text() == "source content"
         assert (dest / "dest_only.txt").read_text() == "preserve me"
@@ -167,7 +167,7 @@ class TestSyncCopiesMerge:
 
         copy_entry = {"src": str(src), "dest": str(dest)}
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
-            hal_instance._sync_copies(copy_entry)
+            hal_instance._copy_entry(copy_entry)
 
         assert (dest / "shared.txt").read_text() == "updated"
 
@@ -183,7 +183,7 @@ class TestSyncCopiesMerge:
 
         copy_entry = {"src": str(tmp_path / "src"), "dest": str(tmp_path / "dest")}
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
-            hal_instance._sync_copies(copy_entry)
+            hal_instance._copy_entry(copy_entry)
 
         assert (tmp_path / "dest" / "sub" / "new.txt").read_text() == "new"
         assert (tmp_path / "dest" / "sub" / "existing.txt").read_text() == "keep"
@@ -198,7 +198,7 @@ class TestSyncCopiesMerge:
 
         copy_entry = {"src": str(src), "dest": str(dest)}
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
-            hal_instance._sync_copies(copy_entry)
+            hal_instance._copy_entry(copy_entry)
 
         assert (dest / "file.txt").read_text() == "content"
 
@@ -212,7 +212,7 @@ class TestSyncCopiesMerge:
 
         copy_entry = {"src": str(src), "dest": str(dest)}
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
-            hal_instance._sync_copies(copy_entry)
+            hal_instance._copy_entry(copy_entry)
 
         assert dest.read_text() == "new content"
 
@@ -227,7 +227,7 @@ class TestSyncCopiesMerge:
 
         copy_entry = {"src": str(src), "dest": str(dest)}
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
-            hal_instance._sync_copies(copy_entry)
+            hal_instance._copy_entry(copy_entry)
 
         assert (dest / "real.txt").exists()
         assert not (dest / ".DS_Store").exists()
@@ -243,7 +243,7 @@ class TestSyncCopiesMerge:
 
         copy_entry = {"src": str(src), "dest": str(dest)}
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
-            hal_instance._sync_copies(copy_entry)
+            hal_instance._copy_entry(copy_entry)
 
         assert (dest / "real.txt").exists()
         assert not (dest / ".git").exists()
