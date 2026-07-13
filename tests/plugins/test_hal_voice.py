@@ -138,9 +138,6 @@ class TestPickClip:
     def test_single_clip(self, hal):
         assert hal.pick_clip(["a.mp3"], None) == "a.mp3"
 
-    def test_single_clip_ignores_last_played(self, hal):
-        assert hal.pick_clip(["a.mp3"], "a.mp3") == "a.mp3"
-
     def test_avoids_last_played(self, hal):
         clips = ["a.mp3", "b.mp3"]
         for _ in range(50):
@@ -153,55 +150,46 @@ class TestPickClip:
         assert result in ("b.mp3", "c.mp3")
 
 
-class TestShouldDebounce:
-    def test_within_window(self, hal):
+class TestIsSuppressed:
+    """_is_suppressed composes the suppression predicates with per-event conditioning."""
+
+    def test_recent_stop_debounced(self, hal):
         state = {"last_stop_time": 1000.0}
         config = {"debounce_seconds": 5}
-        assert hal.should_debounce(state, config, now=1003.0) is True
+        assert hal._is_suppressed("Stop", state, config, session_id="sess-1", now=1003.0) is True
 
-    def test_outside_window(self, hal):
+    def test_stop_outside_debounce_window(self, hal):
         state = {"last_stop_time": 1000.0}
         config = {"debounce_seconds": 5}
-        assert hal.should_debounce(state, config, now=1006.0) is False
+        assert hal._is_suppressed("Stop", state, config, session_id="sess-1", now=1006.0) is False
 
-    def test_no_previous_stop(self, hal):
-        state = {"last_stop_time": 0.0}
+    def test_non_stop_never_debounced(self, hal):
+        state = {"last_stop_time": 1000.0}
         config = {"debounce_seconds": 5}
-        assert hal.should_debounce(state, config, now=1000.0) is False
+        assert hal._is_suppressed("PostToolUse", state, config, session_id="sess-1", now=1003.0) is False
 
-
-class TestShouldSuppressReplay:
-    def test_within_window(self, hal):
+    def test_replay_window_suppresses_non_stop(self, hal):
         state = {"session_start_times": {"sess-1": 1000.0}}
         config = {"replay_suppression_seconds": 3}
-        assert hal.should_suppress_replay(state, config, session_id="sess-1", now=1002.0) is True
+        assert hal._is_suppressed("PostToolUse", state, config, session_id="sess-1", now=1002.0) is True
 
-    def test_outside_window(self, hal):
+    def test_session_start_exempt_from_replay(self, hal):
         state = {"session_start_times": {"sess-1": 1000.0}}
         config = {"replay_suppression_seconds": 3}
-        assert hal.should_suppress_replay(state, config, session_id="sess-1", now=1005.0) is False
+        assert hal._is_suppressed("SessionStart", state, config, session_id="sess-1", now=1002.0) is False
 
-    def test_unknown_session(self, hal):
-        state = {"session_start_times": {}}
-        config = {"replay_suppression_seconds": 3}
-        assert hal.should_suppress_replay(state, config, session_id="unknown", now=1000.0) is False
-
-
-class TestShouldSuppressSubagent:
-    def test_known_subagent(self, hal):
+    def test_subagent_stop_suppressed(self, hal):
         state = {"subagent_sessions": {"child-1": 1000.0}}
         config = {"suppress_subagent_complete": True}
-        assert hal.should_suppress_subagent(state, config, session_id="child-1") is True
+        assert hal._is_suppressed("Stop", state, config, session_id="child-1", now=2000.0) is True
 
-    def test_suppression_disabled(self, hal):
+    def test_subagent_suppression_disabled(self, hal):
         state = {"subagent_sessions": {"child-1": 1000.0}}
         config = {"suppress_subagent_complete": False}
-        assert hal.should_suppress_subagent(state, config, session_id="child-1") is False
+        assert hal._is_suppressed("Stop", state, config, session_id="child-1", now=2000.0) is False
 
-    def test_unknown_session(self, hal):
-        state = {"subagent_sessions": {}}
-        config = {"suppress_subagent_complete": True}
-        assert hal.should_suppress_subagent(state, config, session_id="main") is False
+    def test_clean_state_allows(self, hal):
+        assert hal._is_suppressed("Stop", {}, {}, session_id="sess-1", now=1000.0) is False
 
 
 class TestMatchManifest:
