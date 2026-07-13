@@ -89,14 +89,6 @@
     {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/rules/",
       "dest": "{{HOME}}/.codex/rules/"
-    },
-    {
-      "src": "{{REPO_ROOT}}/dotfiles/.gemini/settings.json",
-      "dest": "{{HOME}}/.gemini/settings.json"
-    },
-    {
-      "src": "{{REPO_ROOT}}/dotfiles/.gemini/antigravity-cli/settings.json",
-      "dest": "{{HOME}}/.gemini/antigravity-cli/settings.json"
     }
   ]
 }
