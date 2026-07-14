@@ -275,18 +275,18 @@ def run_grammar_model(prompt: str) -> GrammarRun | None:
 def grammar_check(data: StatusLineData) -> None:
     transcript_path: str | None = data.get("transcript_path")
     if not transcript_path:
-        print_grammar_status("no transcript")
+        print_grammar_status("transcript_path not found")
         return
 
     latest_user_input, latest_user_uuid = read_latest_user_input(transcript_path)
     logger.debug("session=%s latest_user_input=%r", data.get("session_id", "?"), latest_user_input)
     if not latest_user_input or not latest_user_uuid:
-        print_grammar_status("no input")
+        print_grammar_status("skipped")
         return
 
     session_id: str | None = data.get("session_id")
     if not session_id:
-        print_grammar_status("no session")
+        print_grammar_status("session_id not found")
         return
     cache_file = f"/tmp/hal-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
 
@@ -295,7 +295,7 @@ def grammar_check(data: StatusLineData) -> None:
         if cached_result:
             print(colorize_grammar(cached_result))
         else:
-            print_grammar_status("empty result")
+            print_grammar_status("result not found")
         return
 
     model_run = run_grammar_model(GRAMMAR_PROMPT.format(latest_user_input=latest_user_input))
@@ -305,7 +305,7 @@ def grammar_check(data: StatusLineData) -> None:
     if model_run["result"]:
         print(colorize_grammar(model_run["result"]))
     else:
-        print_grammar_status("empty result")
+        print_grammar_status("result not found")
 
     write_cache(
         cache_file,
