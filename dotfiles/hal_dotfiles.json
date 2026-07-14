@@ -27,6 +27,18 @@
     {
       "src": "{{HOME}}/.codex/memories/",
       "dest": "{{HOME}}/Dropbox/Apps/Codex/memories/"
+    },
+    {
+      "src": "{{HOME}}/Projects/finance/",
+      "dest": "{{HOME}}/Dropbox/Projects/finance/"
+    },
+    {
+      "src": "{{HOME}}/Projects/resume/",
+      "dest": "{{HOME}}/Dropbox/Projects/resume/"
+    },
+    {
+      "src": "{{HOME}}/Projects/personal/",
+      "dest": "{{HOME}}/Dropbox/Projects/personal/"
     }
   ],
   "copies": [
