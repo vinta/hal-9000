@@ -33,17 +33,10 @@ if [ ! -d "$REPO_ROOT/.git/" ]; then
   printf "Checkout the GitHub repo...\n"
   sudo git clone "$REPO_REMOTE" "$REPO_ROOT"
   sudo chown -R "$USER":wheel "$REPO_ROOT"
-else
-  printf "\n"
-  printf "Pull the GitHub repo...\n"
-  cd "$REPO_ROOT"
-  git fetch
-  git pull
 fi
 
 printf "\n"
-printf "Run ansible-playbook (will require your sudo password)...\n"
-cd "$REPO_ROOT/playbooks"
-ansible-playbook site.yml -v "$@"
+printf "Run hal update (will require your sudo password)...\n"
+"$REPO_ROOT/bin/hal" update "$@"
 
 source "$REPO_ROOT/playbooks/roles/hal/files/hal_profile.sh"
