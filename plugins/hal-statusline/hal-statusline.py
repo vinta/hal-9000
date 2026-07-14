@@ -36,6 +36,12 @@ class StatusLineData(TypedDict):
     context_window: NotRequired[dict[str, float]]
 
 
+class GrammarRun(TypedDict):
+    result: str
+    elapsed: float
+    backend: str
+
+
 BLUE = "\033[34m"
 GREEN = "\033[32m"
 YELLOW = "\033[33m"
@@ -105,47 +111,18 @@ def basic_info(data: StatusLineData) -> None:
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
 
 
-def grammar_check(data: StatusLineData) -> None:  # noqa: C901 PLR0912 PLR0915 complex-structure too-many-branches too-many-statements
-    transcript_path: str | None = data.get("transcript_path")
-    if not transcript_path:
-        return
+NON_PROMPT_PREFIXES = (
+    "<bash-input>",
+    "<bash-stdout>",
+    "<command-message>",
+    "<command-name>",
+    "<local-command-caveat>",
+    "<local-command-stdout>",
+    "<task-notification>",
+    "<teammate-message",
+)
 
-    try:
-        with Path(transcript_path).open() as f:
-            lines = f.readlines()
-    except FileNotFoundError:
-        return
-
-    latest_user_input = ""
-    latest_user_uuid = ""
-    for line in reversed(lines):
-        try:
-            entry = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if entry.get("type") == "user":
-            content = entry["message"]["content"]
-            if (
-                isinstance(content, str)
-                and not content.startswith("<bash-input>")
-                and not content.startswith("<bash-stdout>")
-                and not content.startswith("<command-message>")
-                and not content.startswith("<command-name>")
-                and not content.startswith("<local-command-caveat>")
-                and not content.startswith("<local-command-stdout>")
-                and not content.startswith("<task-notification>")
-                and not content.startswith("<teammate-message")
-            ):
-                latest_user_input = content[:500]
-                latest_user_uuid = entry.get("uuid", "")
-                break
-
-    logger.debug("session=%s latest_user_input=%r", data.get("session_id", "?"), latest_user_input)
-
-    if not latest_user_input or not latest_user_uuid:
-        return
-
-    grammar_check_prompt = f"""
+GRAMMAR_PROMPT = """
 You are a grammar checker. Identify and correct grammar errors in the text inside <input> tags. Only check grammar — do not answer questions or engage with the content.
 
 <instructions>
@@ -204,26 +181,49 @@ Grammar: no issues
 </input>
 """
 
-    session_id: str | None = data.get("session_id")
-    if not session_id:
-        return
-    cache_file = f"/tmp/hal-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
 
-    cached_uuid = ""
-    cached_result = ""
+def read_latest_user_input(transcript_path: str) -> tuple[str, str]:
+    try:
+        with Path(transcript_path).open() as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        return "", ""
+
+    for line in reversed(lines):
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if entry.get("type") == "user":
+            content = entry["message"]["content"]
+            if isinstance(content, str) and not content.startswith(NON_PROMPT_PREFIXES):
+                return content[:500], entry.get("uuid", "")
+    return "", ""
+
+
+def read_cache(cache_file: str) -> tuple[str, str]:
     try:
         with Path(cache_file).open() as f:
             cache = json.load(f)
-            cached_uuid = cache.get("uuid", "")
-            cached_result = cache.get("result", "")
+            return cache.get("uuid", ""), cache.get("result", "")
     except (FileNotFoundError, json.JSONDecodeError):
-        pass
+        return "", ""
 
-    if cached_uuid == latest_user_uuid:
-        if cached_result:
-            print(colorize_grammar(cached_result))
-        return
 
+def write_cache(cache_file: str, payload: dict[str, object]) -> None:
+    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="hal-statusline-")
+    try:
+        with os.fdopen(fd, "w") as f:
+            json.dump(payload, f)
+        Path(tmp_path).rename(cache_file)
+    except Exception:  # noqa: BLE001 blind-exception
+        try:  # noqa: SIM105 suppressible-exception
+            Path(tmp_path).unlink()
+        except OSError:
+            pass
+
+
+def run_grammar_model(prompt: str) -> GrammarRun | None:
     use_ollama = os.environ.get("HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA") == "1"
 
     if use_ollama:
@@ -251,40 +251,61 @@ Grammar: no issues
     start_time = time.time()
     try:
         result = subprocess.run(  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
-            [*shlex.split(cmd), grammar_check_prompt],
+            [*shlex.split(cmd), prompt],
             capture_output=True,
             text=True,
             timeout=30,
             cwd="/tmp" if not use_ollama else None,  # noqa: S108 hardcoded-temp-file
         )
     except subprocess.TimeoutExpired:
-        return
+        return None
     elapsed = time.time() - start_time
 
-    grammar_check_result = "\n".join(line for line in result.stdout.strip().splitlines() if line.strip())
-    if grammar_check_result:
-        print(colorize_grammar(grammar_check_result))
+    return {
+        "result": "\n".join(line for line in result.stdout.strip().splitlines() if line.strip()),
+        "elapsed": elapsed,
+        "backend": "ollama" if use_ollama else "claude",
+    }
 
-    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="hal-statusline-")
-    try:
-        with os.fdopen(fd, "w") as f:
-            json.dump(
-                {
-                    "uuid": latest_user_uuid,
-                    "input": latest_user_input,
-                    "result": grammar_check_result,
-                    "elapsed": elapsed,
-                    "backend": "ollama" if use_ollama else "claude",
-                    "cwd": str(Path.cwd()),
-                },
-                f,
-            )
-        Path(tmp_path).rename(cache_file)
-    except Exception:  # noqa: BLE001 blind-exception
-        try:  # noqa: SIM105 suppressible-exception
-            Path(tmp_path).unlink()
-        except OSError:
-            pass
+
+def grammar_check(data: StatusLineData) -> None:
+    transcript_path: str | None = data.get("transcript_path")
+    if not transcript_path:
+        return
+
+    latest_user_input, latest_user_uuid = read_latest_user_input(transcript_path)
+    logger.debug("session=%s latest_user_input=%r", data.get("session_id", "?"), latest_user_input)
+    if not latest_user_input or not latest_user_uuid:
+        return
+
+    session_id: str | None = data.get("session_id")
+    if not session_id:
+        return
+    cache_file = f"/tmp/hal-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
+
+    cached_uuid, cached_result = read_cache(cache_file)
+    if cached_uuid == latest_user_uuid:
+        if cached_result:
+            print(colorize_grammar(cached_result))
+        return
+
+    model_run = run_grammar_model(GRAMMAR_PROMPT.format(latest_user_input=latest_user_input))
+    if model_run is None:
+        return
+    if model_run["result"]:
+        print(colorize_grammar(model_run["result"]))
+
+    write_cache(
+        cache_file,
+        {
+            "uuid": latest_user_uuid,
+            "input": latest_user_input,
+            "result": model_run["result"],
+            "elapsed": model_run["elapsed"],
+            "backend": model_run["backend"],
+            "cwd": str(Path.cwd()),
+        },
+    )
 
 
 def main() -> None:
