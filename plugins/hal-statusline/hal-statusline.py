@@ -66,6 +66,10 @@ def colorize_grammar(text: str) -> str:
     return "\n".join(result)
 
 
+def print_grammar_status(message: str) -> None:
+    print(f"{WHITE}Grammar: {message}{RESET}")
+
+
 def usage_color(pct: float) -> str:
     return RED if pct >= 90 else YELLOW if pct >= 70 else GREEN  # noqa: PLR2004 magic-value-comparison
 
@@ -271,15 +275,18 @@ def run_grammar_model(prompt: str) -> GrammarRun | None:
 def grammar_check(data: StatusLineData) -> None:
     transcript_path: str | None = data.get("transcript_path")
     if not transcript_path:
+        print_grammar_status("no transcript")
         return
 
     latest_user_input, latest_user_uuid = read_latest_user_input(transcript_path)
     logger.debug("session=%s latest_user_input=%r", data.get("session_id", "?"), latest_user_input)
     if not latest_user_input or not latest_user_uuid:
+        print_grammar_status("no input")
         return
 
     session_id: str | None = data.get("session_id")
     if not session_id:
+        print_grammar_status("no session")
         return
     cache_file = f"/tmp/hal-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
 
@@ -287,13 +294,18 @@ def grammar_check(data: StatusLineData) -> None:
     if cached_uuid == latest_user_uuid:
         if cached_result:
             print(colorize_grammar(cached_result))
+        else:
+            print_grammar_status("empty result")
         return
 
     model_run = run_grammar_model(GRAMMAR_PROMPT.format(latest_user_input=latest_user_input))
     if model_run is None:
+        print_grammar_status("timed out")
         return
     if model_run["result"]:
         print(colorize_grammar(model_run["result"]))
+    else:
+        print_grammar_status("empty result")
 
     write_cache(
         cache_file,
