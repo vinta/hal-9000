@@ -138,6 +138,9 @@ class TestPickClip:
     def test_single_clip(self, hal):
         assert hal.pick_clip(["a.mp3"], None) == "a.mp3"
 
+    def test_single_clip_ignores_last_played(self, hal):
+        assert hal.pick_clip(["a.mp3"], "a.mp3") == "a.mp3"
+
     def test_avoids_last_played(self, hal):
         clips = ["a.mp3", "b.mp3"]
         for _ in range(50):
