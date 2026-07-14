@@ -11,6 +11,8 @@
     bun upgrade
   args:
     executable: /bin/bash
+  register: bun_upgrade
+  changed_when: "'already on the latest version' not in bun_upgrade.stderr"
 
 - name: Ensure Bun environment is sourced in .zshrc
   lineinfile:
