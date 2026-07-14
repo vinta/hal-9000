@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ex
+set -e
 
 printf "Hello, HAL. Do you read me, HAL?\n"
 printf "Affirmative, Dave. I read you.\n"
@@ -14,6 +14,13 @@ else
   printf "Update Homebrew...\n"
   brew update
 fi
+
+printf "\n"
+printf "Trust known taps...\n"
+for tap in aws/tap derailed/k9s; do
+  brew tap "$tap" >/dev/null 2>&1 || true
+  brew trust "$tap" || true
+done
 
 if ! which ansible >/dev/null 2>&1; then
   printf "\n"
