@@ -3,7 +3,7 @@
   command: xcode-select --install
   register: basic_clt_install
   failed_when: false
-  changed_when: '"Command line tools are already installed" in basic_clt_install.stdout'
+  changed_when: '"already installed" not in basic_clt_install.stderr'
 
 - name: Install Rosetta 2
   command: softwareupdate --install-rosetta --agree-to-license
