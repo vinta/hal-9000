@@ -31,7 +31,7 @@ class TestCheck:
 
 
 class TestHookProcessContract:
-    """One end-to-end case pinning the stdin/stdout hook protocol."""
+    """End-to-end cases pinning the stdin/stdout hook protocol."""
 
     def test_denied_command_emits_deny_json(self):
         hook_input = json.dumps({"tool_input": {"command": "cat ~/.ssh/id_rsa"}})

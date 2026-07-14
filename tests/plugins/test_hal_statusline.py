@@ -24,9 +24,9 @@ class TestGrammarCheckPlaceholders:
     def test_no_transcript_path(self, statusline, capsys):
         statusline.grammar_check({"session_id": "test-session"})
 
-        assert "Grammar: no transcript" in capsys.readouterr().out
+        assert "Grammar: transcript_path not found" in capsys.readouterr().out
 
-    def test_no_checkable_input_shows_no_input(self, statusline, capsys, tmp_path):
+    def test_no_checkable_input_shows_skipped(self, statusline, capsys, tmp_path):
         transcript = write_transcript(
             tmp_path,
             [
@@ -37,7 +37,7 @@ class TestGrammarCheckPlaceholders:
 
         statusline.grammar_check(make_data(transcript))
 
-        assert "Grammar: no input" in capsys.readouterr().out
+        assert "Grammar: skipped" in capsys.readouterr().out
 
     def test_no_session_id(self, statusline, capsys, tmp_path):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase")])
@@ -46,7 +46,7 @@ class TestGrammarCheckPlaceholders:
 
         statusline.grammar_check(data)
 
-        assert "Grammar: no session" in capsys.readouterr().out
+        assert "Grammar: session_id not found" in capsys.readouterr().out
 
     def test_model_timeout_shows_timed_out(self, statusline, capsys, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase")])
@@ -57,7 +57,7 @@ class TestGrammarCheckPlaceholders:
 
         assert "Grammar: timed out" in capsys.readouterr().out
 
-    def test_empty_model_result_shows_empty_result(self, statusline, capsys, tmp_path, monkeypatch):
+    def test_empty_model_result_shows_not_found(self, statusline, capsys, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase")])
         monkeypatch.setattr(statusline, "run_grammar_model", lambda _prompt: {"result": "", "elapsed": 0.1, "backend": "claude"})
         monkeypatch.setattr(statusline, "read_cache", lambda _cache_file: ("", ""))
@@ -65,15 +65,15 @@ class TestGrammarCheckPlaceholders:
 
         statusline.grammar_check(make_data(transcript))
 
-        assert "Grammar: empty result" in capsys.readouterr().out
+        assert "Grammar: result not found" in capsys.readouterr().out
 
-    def test_cached_empty_result_shows_empty_result(self, statusline, capsys, tmp_path, monkeypatch):
+    def test_cached_empty_result_shows_not_found(self, statusline, capsys, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase", uuid="uuid-9")])
         monkeypatch.setattr(statusline, "read_cache", lambda _cache_file: ("uuid-9", ""))
 
         statusline.grammar_check(make_data(transcript))
 
-        assert "Grammar: empty result" in capsys.readouterr().out
+        assert "Grammar: result not found" in capsys.readouterr().out
 
     def test_cached_result_still_prints_grammar(self, statusline, capsys, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase", uuid="uuid-9")])
