@@ -7,6 +7,8 @@
 
 - name: Install Rosetta 2
   command: softwareupdate --install-rosetta --agree-to-license
+  args:
+    creates: /Library/Apple/usr/share/rosetta/rosetta
   when:
     - ansible_facts["machine"] == "arm64"
     - not ansible_check_mode
