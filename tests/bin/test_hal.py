@@ -200,6 +200,24 @@ class TestCopyEntryMerge:
         assert (dest / "real.txt").exists()
         assert not (dest / ".DS_Store").exists()
 
+    def test_overwrites_readonly_dest_file(self, hal_instance, tmp_path):
+        """Re-running a copy overwrites read-only dest files (e.g. git objects)."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "object").write_text("new content")
+
+        dest = tmp_path / "dest"
+        dest.mkdir()
+        dest_file = dest / "object"
+        dest_file.write_text("old content")
+        dest_file.chmod(0o444)
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert dest_file.read_text() == "new content"
+
     def test_skips_pycache_directory(self, hal_instance, tmp_path):
         """__pycache__ directories in src are not copied to dest."""
         src = tmp_path / "src"

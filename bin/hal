@@ -6,6 +6,7 @@ import concurrent.futures
 import json
 import shlex
 import shutil
+import stat
 import subprocess
 import sys
 from pathlib import Path
@@ -268,6 +269,13 @@ class HAL9000:
         dest_path.symlink_to(src)
         self._hal_says(f"link {src} -> {dest}")
 
+    @staticmethod
+    def _copy_file_allow_overwrite(src: str, dest: str) -> None:
+        dest_path = Path(dest)
+        if dest_path.exists() and not dest_path.stat().st_mode & stat.S_IWUSR:
+            dest_path.chmod(dest_path.stat().st_mode | stat.S_IWUSR)
+        shutil.copy2(src, dest)
+
     def _copy_entry(self, entry: dict[str, str]) -> None:
         src = self._expand_template(entry["src"])
         if not Path(src).exists():
@@ -281,6 +289,7 @@ class HAL9000:
                 src,
                 dest,
                 ignore=shutil.ignore_patterns(".DS_Store", "__pycache__", "node_modules"),
+                copy_function=self._copy_file_allow_overwrite,
                 dirs_exist_ok=True,
             )
         else:
