@@ -170,15 +170,18 @@ class HAL9000:
 
         os.chdir(Setting.REPO_ROOT)
         self._run("git fetch")
-        self._run("git pull")
+        returncode = self._run("git pull")
+        if returncode != 0:
+            sys.exit(returncode)
 
         os.chdir(str(Path(Setting.REPO_ROOT) / "playbooks"))
         command = "ansible-playbook site.yml -v"
         if extra_args:
             command = " ".join([command, *(shlex.quote(arg) for arg in extra_args)])
         returncode = self._run(command)
-        if returncode == 0:
-            self._hal_says("Now open a new shell to active your dev environment")
+        if returncode != 0:
+            sys.exit(returncode)
+        self._hal_says("Now open a new shell to active your dev environment")
 
     def link(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)

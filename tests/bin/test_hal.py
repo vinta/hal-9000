@@ -58,6 +58,39 @@ class TestUpdateSanitization:
         assert "'foo;rm -rf ~'" in ansible_cmd
 
 
+class TestUpdateFailurePropagation:
+    """update exits non-zero when git pull or the playbook run fails."""
+
+    @staticmethod
+    def _install_mocks(hal_instance, failing_command):
+        def mock_run(command, *, shell=True, verbose=True):  # noqa: ARG001 unused-function-argument
+            return 1 if failing_command in command else 0
+
+        def mock_run_with_output(command, *, shell=True, verbose=True, print_output=True):  # noqa: ARG001 unused-function-argument
+            return 0, b"/opt/homebrew/bin/ansible\n"
+
+        hal_instance._run = mock_run
+        hal_instance._run_with_output = mock_run_with_output
+
+    def test_git_pull_failure_exits(self, hal_instance):
+        self._install_mocks(hal_instance, "git pull")
+
+        ns = argparse.Namespace(func=hal_instance.update)
+        with pytest.raises(SystemExit) as excinfo:
+            hal_instance.update(ns)
+
+        assert excinfo.value.code == 1
+
+    def test_playbook_failure_exits(self, hal_instance):
+        self._install_mocks(hal_instance, "ansible-playbook")
+
+        ns = argparse.Namespace(func=hal_instance.update)
+        with pytest.raises(SystemExit) as excinfo:
+            hal_instance.update(ns)
+
+        assert excinfo.value.code == 1
+
+
 class TestUserFilenameValidation:
     def test_link_validates_filename(self, hal_instance, tmp_path):
         ns = argparse.Namespace(filename="../../../etc/passwd")
