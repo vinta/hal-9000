@@ -42,6 +42,15 @@ class GrammarRun(TypedDict):
     backend: str
 
 
+class GrammarCache(TypedDict):
+    uuid: str
+    input: str
+    result: str
+    elapsed: float
+    backend: str
+    cwd: str
+
+
 BLUE = "\033[34m"
 GREEN = "\033[32m"
 YELLOW = "\033[33m"
@@ -214,7 +223,7 @@ def read_cache(cache_file: str) -> tuple[str, str]:
         return "", ""
 
 
-def write_cache(cache_file: str, payload: dict[str, object]) -> None:
+def write_cache(cache_file: str, payload: GrammarCache) -> None:
     fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="hal-statusline-")
     try:
         with os.fdopen(fd, "w") as f:
