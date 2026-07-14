@@ -18,6 +18,5 @@ Scripts target macOS. Shebang `#!/usr/bin/env bash` picks up Homebrew's bash 5.x
 - Temp files: `tmp=$(mktemp)` (or `mktemp -d`) + `trap 'rm -rf "$tmp"' EXIT` + `chmod 600 "$tmp"`. Never build temp paths from `$$` or `$RANDOM` (symlink race). Set `umask 077` at script start when creating user data — macOS default of 022 leaves new files world-readable
 - Don't pass secrets via argv; `ps` exposes them to any user on the machine. Use stdin or a chmod-600 mktemp file
 - Validate input with a whitelist regex before splicing into shell, SSH commands, or awk programs. Use `printf '%q'` when you must splice untrusted strings. Never `eval` user input
-- Run `shellcheck` and `shfmt -d` before committing. All `# shellcheck disable=` directives must include the rule name: `# shellcheck disable=SC2086 double-quote-to-prevent-globbing`. Multiple rules: `# shellcheck disable=SC2086,SC2046 ...`
 - Don't suppress SC2155 — `local x=$(cmd)` masks the exit code under `-e`. Split into `local x; x=$(cmd)`
 - When a script grows past ~50 lines or needs arrays of structured data, JSON parsing, or real error types, rewrite it in Python with `uv run` (inline PEP 723 `# /// script` block for deps) instead of fighting bash
