@@ -277,7 +277,12 @@ class HAL9000:
         dest = self._expand_template(entry["dest"])
 
         if Path(src).is_dir():
-            shutil.copytree(src, dest, ignore=shutil.ignore_patterns(".DS_Store", ".git"), dirs_exist_ok=True)
+            shutil.copytree(
+                src,
+                dest,
+                ignore=shutil.ignore_patterns(".DS_Store", "__pycache__", "node_modules"),
+                dirs_exist_ok=True,
+            )
         else:
             Path(dest).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dest)

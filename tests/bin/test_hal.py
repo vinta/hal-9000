@@ -200,11 +200,11 @@ class TestCopyEntryMerge:
         assert (dest / "real.txt").exists()
         assert not (dest / ".DS_Store").exists()
 
-    def test_skips_git_directory(self, hal_instance, tmp_path):
-        """.git directories in src are not copied to dest."""
+    def test_skips_pycache_directory(self, hal_instance, tmp_path):
+        """__pycache__ directories in src are not copied to dest."""
         src = tmp_path / "src"
-        (src / ".git").mkdir(parents=True)
-        (src / ".git" / "HEAD").write_text("ref: refs/heads/main")
+        (src / "__pycache__").mkdir(parents=True)
+        (src / "__pycache__" / "mod.pyc").write_text("junk")
         (src / "real.txt").write_text("content")
 
         dest = tmp_path / "dest"
@@ -214,7 +214,23 @@ class TestCopyEntryMerge:
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "real.txt").exists()
-        assert not (dest / ".git").exists()
+        assert not (dest / "__pycache__").exists()
+
+    def test_skips_node_modules_directory(self, hal_instance, tmp_path):
+        """node_modules directories in src are not copied to dest."""
+        src = tmp_path / "src"
+        (src / "node_modules").mkdir(parents=True)
+        (src / "node_modules" / "pkg.js").write_text("junk")
+        (src / "real.txt").write_text("content")
+
+        dest = tmp_path / "dest"
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert (dest / "real.txt").exists()
+        assert not (dest / "node_modules").exists()
 
 
 class TestBackupRestore:
