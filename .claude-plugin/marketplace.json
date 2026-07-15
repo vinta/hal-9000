@@ -28,7 +28,7 @@
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "1.9.0",
+      "version": "1.9.1",
       "source": "./skills/hal-skills",
       "skills": [
         "./commit",
