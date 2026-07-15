@@ -1,0 +1,7 @@
+interface:
+  display_name: "Refactor AGENTS.md"
+  short_description: "Refactor AGENTS.md for lean Codex guidance"
+  default_prompt: "Use $refactor-agents-md to refactor an AGENTS.md for progressive disclosure."
+
+policy:
+  allow_implicit_invocation: false

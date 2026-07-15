@@ -35,6 +35,7 @@
         "./best-practices",
         "./magi",
         "./refactor-claude-md",
+        "./refactor-agents-md",
         "./update-allowed-tools"
       ],
       "author": {
@@ -49,18 +50,24 @@
         "commit",
         "stash",
         "hunk",
-        "brainstorming",
         "research",
-        "best-practices"
+        "best-practices",
+        "brainstorming",
+        "refactor",
+        "claude-md",
+        "agents-md"
       ],
       "tags": [
         "git",
         "commit",
         "stash",
         "hunk",
-        "brainstorming",
         "research",
-        "best-practices"
+        "best-practices",
+        "brainstorming",
+        "refactor",
+        "claude-md",
+        "agents-md"
       ],
       "strict": false
     }
