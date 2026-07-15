@@ -44,7 +44,9 @@ tests/                                  # pytest tests
 ## Gotchas
 
 - **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
-- **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json`. The `hal-9000` marketplace loads the published version from GitHub. Use `hal-9000-local` (points to `/usr/local/hal-9000`) to test local changes before pushing.
+- **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json`. The `hal-9000` marketplace loads the published version from GitHub.
+- **Testing local marketplace changes**: To test local changes, swap which source `hal-9000` resolves to instead: `claude plugin marketplace add /usr/local/hal-9000` before testing, `claude plugin marketplace add vinta/hal-9000` to switch back to the published version.
+  - adding a `hal-9000-local` entry with `"source": "directory"` to `extraKnownMarketplaces` DOES NOT work. A marketplace's identity comes from the `name` field inside `.claude-plugin/marketplace.json` (here, `"hal-9000"`), not the settings.json key, and Claude Code only ever registers one marketplace per name.
 - All skill descriptions must start with `Use when` (may have a `(project)` prefix if it's a project-level skill)
 - Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint` runs ruff format --check, ruff check, ansible-lint, and a playbook syntax check).
 - For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand.
