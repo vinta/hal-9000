@@ -1,54 +1,16 @@
 # AGENTS.md
 
-macOS dev environment automation: dotfiles, AI agent configs, skills, and dev stacks.
+macOS dev environment automation: dotfiles, AI agent configs, skills, and dev stacks. Domain vocabulary (manifest, link, copy, backup, sync, restore) is defined in `CONTEXT.md`.
 
 ## Commands
 
-```bash
-make install                            # Full setup: uv sync, ansible-galaxy, pre-commit, gitleaks
-make lint                               # ruff format --check + ruff check + ansible-lint
-make format                             # ruff auto-format and fix
-make typecheck                          # ty type checker
-make test                               # pytest tests/ -v
-make run-hooks                          # Run all pre-commit hooks on all files
-make hal-completion                     # Regenerate zsh completion (after modifying bin/hal)
-hal sync                                # Reconcile dotfile manifest to disk
-hal link ~/.config/file                 # Move file into dotfiles and symlink it back
-hal unlink ~/.config/file               # Move file back from dotfiles and remove symlink
-hal copy ~/.config/file                 # Copy file into dotfiles (no symlink)
-hal backup                              # Back up live data to Dropbox
-hal restore                             # Restore live data from Dropbox (overwrites local)
-hal update                              # Run all Ansible roles
-hal update --tags python,node           # Run specific roles
-```
-
-## Project Layout
-
-```text
-bin/hal                                 # Main CLI, extensionless Python script
-bin/open-the-pod-bay-doors              # Bootstrap script
-dotfiles/                               # Source of truth for managed files synced into $HOME
-dotfiles/hal_dotfiles.json              # Dotfile manifest used by hal commands
-dotfiles/.codex/                        # User-level Codex config, rules, and AGENTS.md managed by this repo
-dotfiles/.claude/                       # Claude Code config, rules, and user-level CLAUDE.md managed by this repo
-dotfiles/.gemini/                       # Gemini CLI config managed by this repo
-playbooks/site.yml                      # Main Ansible playbook importing all roles
-playbooks/roles/                        # Independent tagged Ansible roles, mostly Homebrew-based
-skills/hal-skills/                      # Claude Code plugin that distributes shared agent skills
-plugins/hal-voice/                      # Claude Code plugin for HAL voice hooks
-plugins/hal-statusline/                 # Claude Code statusline implementation
-scripts/generate-completion.py          # zsh completion generator for bin/hal
-scripts/install-hal-statusline.sh       # Statusline installer
-tests/                                  # pytest coverage for CLI and plugin behavior
-```
+Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint` runs ruff format --check, ruff check, ansible-lint, and a playbook syntax check).
 
 ## Gotchas
 
-- Edit managed home-directory files under `dotfiles/`, never under `~/` directly.
-- After changing `bin/hal`, run `make hal-completion` so `dotfiles/.hal_completion.zsh` stays in sync.
-- Skills in `skills/hal-skills/` must have descriptions that start with `Use when`; project-scoped skill descriptions may start with `(project) Use when`.
-- Use `make` targets instead of running underlying tools directly unless you are diagnosing a target failure.
-- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand.
+- **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
+- **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json` (the `hal-9000` marketplace loads the published version from GitHub), and via `npx skills add vinta/hal-9000`.
+- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal`).
 
 ## External Tool Documentation
 
@@ -70,3 +32,13 @@ Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skippi
 | ruff           | `/websites/astral_sh_ruff`   |
 | ty             | `/websites/astral_sh_ty`     |
 | uv             | `/websites/astral_sh_uv`     |
+
+### Documentation Links
+
+For topics not well covered by Context7, use `WebFetch` on these URLs:
+
+- Codex Prompting Best Practices
+  - https://developers.openai.com/api/docs/guides/latest-model
+  - https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6
+- Codex Configs
+  - https://learn.chatgpt.com/docs/config-file/config-reference

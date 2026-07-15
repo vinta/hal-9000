@@ -1,55 +1,16 @@
 # CLAUDE.md
 
-macOS dev environment automation: dotfiles, AI agent configs, skills, and dev stacks.
+macOS dev environment automation: dotfiles, AI agent configs, skills, and dev stacks. Domain vocabulary (manifest, link, copy, backup, sync, restore) is defined in `CONTEXT.md`.
 
 ## Commands
 
-```bash
-make install                            # Full setup: uv sync, ansible-galaxy, pre-commit, gitleaks
-make lint                               # ruff format --check + ruff check + ansible-lint
-make format                             # ruff auto-format and fix
-make typecheck                          # ty type checker
-make test                               # pytest tests/ -v
-make run-hooks                          # Run all pre-commit hooks on all files
-make hal-completion                     # Regenerate zsh completion (after modifying bin/hal)
-hal sync                                # Reconcile dotfile manifest to disk
-hal link ~/.config/file                 # Move file into dotfiles and symlink it back
-hal unlink ~/.config/file               # Move file back from dotfiles and remove symlink
-hal copy ~/.config/file                 # Copy file into dotfiles (no symlink)
-hal backup                              # Back up live data to Dropbox
-hal restore                             # Restore live data from Dropbox (overwrites local)
-hal update                              # Run all Ansible roles
-hal update --tags python,node           # Run specific roles
-```
-
-## Project Structure
-
-```
-bin/hal                                 # Main CLI — extensionless Python script
-bin/open-the-pod-bay-doors              # Bootstrap script (Bash)
-dotfiles/                               # Tracked in hal_dotfiles.json, symlinked or copied to ~
-dotfiles/hal_dotfiles.json              # Dotfile manifest used by hal commands
-dotfiles/.claude/CLAUDE.md              # The user-level CLAUDE.md file
-dotfiles/.claude/rules/                 # Path-scoped rule files, auto-loaded via `paths:` frontmatter
-playbooks/site.yml                      # Main playbook importing all roles
-playbooks/roles/                        # Independent, tagged Ansible roles (Homebrew-based)
-skills/hal-skills/                      # Claude Code plugin - Agent skills
-plugins/hal-voice/                      # Claude Code plugin - HAL 9000 voice clips
-plugins/hal-statusline/                 # Claude Code statusline
-scripts/generate-completion.py          # Generates zsh completion for bin/hal
-scripts/install-hal-statusline.sh       # One-liner statusline installer
-tests/                                  # pytest tests
-```
+Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint` runs ruff format --check, ruff check, ansible-lint, and a playbook syntax check).
 
 ## Gotchas
 
 - **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
-- **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json`. The `hal-9000` marketplace loads the published version from GitHub.
-- **Testing local marketplace changes**: To test local changes, swap which source `hal-9000` resolves to instead: `claude plugin marketplace add /usr/local/hal-9000` before testing, `claude plugin marketplace add vinta/hal-9000` to switch back to the published version.
-  - adding a `hal-9000-local` entry with `"source": "directory"` to `extraKnownMarketplaces` DOES NOT work. A marketplace's identity comes from the `name` field inside `.claude-plugin/marketplace.json` (here, `"hal-9000"`), not the settings.json key, and Claude Code only ever registers one marketplace per name.
-- All skill descriptions must start with `Use when` (may have a `(project)` prefix if it's a project-level skill)
-- Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint` runs ruff format --check, ruff check, ansible-lint, and a playbook syntax check).
-- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand.
+- **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json` (the `hal-9000` marketplace loads the published version from GitHub), and via `npx skills add vinta/hal-9000`.
+- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal`).
 
 ## External Tool Documentation
 
