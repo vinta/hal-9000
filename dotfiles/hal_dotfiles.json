@@ -41,16 +41,7 @@
       "dest": "{{HOME}}/Dropbox/Projects/personal/"
     }
   ],
-  "copies": [
-    {
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md",
-      "dest": "{{HOME}}/.claude/CLAUDE.md"
-    },
-    {
-      "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md",
-      "dest": "{{HOME}}/.codex/AGENTS.md"
-    }
-  ],
+  "copies": [],
   "links": [
     {
       "src": "{{REPO_ROOT}}/dotfiles/.hal_completion.zsh",
@@ -81,6 +72,10 @@
       "dest": "{{HOME}}/.playwright/cli.config.json"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md",
+      "dest": "{{HOME}}/.claude/CLAUDE.md"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.json",
       "dest": "{{HOME}}/.claude/settings.json"
     },
@@ -95,6 +90,10 @@
     {
       "src": "{{REPO_ROOT}}/dotfiles/.claude/rules/",
       "dest": "{{HOME}}/.claude/rules/"
+    },
+    {
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md",
+      "dest": "{{HOME}}/.codex/AGENTS.md"
     },
     {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/config.toml",
