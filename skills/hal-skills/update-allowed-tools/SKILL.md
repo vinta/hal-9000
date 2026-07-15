@@ -38,7 +38,8 @@ Analyzes a skill's full content, SKILL.md and any sibling files in the same dire
    - Skill invocations: e.g., `commit`, `Use the commit skill`, `Skill(commit)`. The required allowed-tool format is `Skill(<name>)` (e.g., `commit` needs `Skill(commit)`)
 
 5. **Compare**: For each tool detected in the body, check if it's covered by an entry in `allowed-tools`. Rules:
-   - `Glob`, `Grep`, `Read`, `Write`, `Edit` are available by default for files within the project directory. Only add these when the skill needs to access files **outside** the project (e.g., `Read(//tmp/**)`, `Write(~/.config/**)`).
+   - `Glob`, `Grep`, and `Read` are permission-free within the project directory. Only add read rules for files **outside** the project (e.g., `Read(//tmp/**)`).
+   - `Write` and `Edit` prompt for approval by default, inside the project too. `allowed-tools` grants permission rather than restricting tools, so add entries scoped to the paths the skill is meant to modify (e.g., `Edit(CLAUDE.md)`, `Write(~/.config/**)`).
    - `Bash` commands always need explicit `Bash(<command>:*)` entries.
    - A Bash pattern covers subcommands (e.g., `Bash(git stash:*)` covers `git stash push`).
    - Exact match counts as covered (e.g., `WebSearch` matches `WebSearch`).
