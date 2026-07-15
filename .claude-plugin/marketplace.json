@@ -28,12 +28,13 @@
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "1.8.3",
+      "version": "1.9.0",
       "source": "./skills/hal-skills",
       "skills": [
         "./commit",
         "./best-practices",
         "./magi",
+        "./refactor-claude-md",
         "./update-allowed-tools"
       ],
       "author": {
