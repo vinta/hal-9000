@@ -10,11 +10,13 @@
 When you need input from the user and there are discrete options to choose from, use the `AskUserQuestion` tool instead of printing options as plain text. This applies to:
 
 - Multiple-choice questions (e.g., "which approach: A, B, or C?")
-- Yes/no confirmations that gate next steps
+- Yes/no confirmations that gate next steps, even a single plain-text sentence like "Want me to remove it, or leave it?" with no A/B/C labels
 - Selecting from a list of items (files, configs, approaches)
 - **Presenting multiple approaches or solutions** for the user to pick from. Put the summary in each option's label and the pros/cons in its description. Do NOT dump approach paragraphs as prose then ask a follow-up question.
 
-Plain text questions are fine when the answer is open-ended or conversational. The test: if you're about to label options (A/B/C, 1/2/3, bullet points) in prose, use `AskUserQuestion` instead.
+Why: `AskUserQuestion` renders as selectable options, so the user picks one with a click/tap instead of typing a reply. A question left as plain text forces them to type even when the answer is one word, which is needless friction on every gated decision.
+
+Plain text questions are fine when the answer is open-ended or conversational, not bounded to a small set of outcomes. The test: if the answer could be a selection instead of a sentence (including a plain yes/no), use `AskUserQuestion`.
 
 This tool changes the format of questions, not whether to ask them. Never use it to ask permission for work you already have enough information to do. Ask only when genuinely blocked on a decision that belongs to the user.
 </use_ask_user_question>
