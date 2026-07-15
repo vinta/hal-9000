@@ -155,6 +155,7 @@
     }
   },
   "viewMode": "verbose",
+  "effortLevel": "high",
   "showClearContextOnPlanAccept": true,
   "tui": "fullscreen",
   "showThinkingSummaries": true,
