@@ -27,6 +27,7 @@ Refactor a CLAUDE.md toward progressive disclosure. Every line it keeps is loade
 2. **Fetch the yardsticks.** Fetch these pages. They calibrate the delete and rewrite verdicts below:
    - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
    - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5
+   - https://www.aihero.dev/a-complete-guide-to-agents-md
 
 3. **Audit.** Read the file and give every instruction exactly one verdict, judged against the target's bar below. Done when no instruction lacks one.
    - **contradiction**: conflicts with another instruction. Record both sides.
