@@ -106,8 +106,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
-  "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
       {
@@ -121,7 +119,6 @@
       }
     ]
   },
-  "enableWorkflows": true,
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/hal-statusline.py"
@@ -154,18 +151,20 @@
       "autoUpdate": true
     }
   },
-  "viewMode": "verbose",
+  "model": "sonnet",
+  "advisorModel": "fable",
   "effortLevel": "high",
+  "disableClaudeAiConnectors": true,
+  "enableWorkflows": true,
+  "inputNeededNotifEnabled": true,
+  "remoteControlAtStartup": false,
   "showClearContextOnPlanAccept": true,
-  "tui": "fullscreen",
   "showThinkingSummaries": true,
-  "theme": "dark",
-  "verbose": true,
-  "autoCompactEnabled": false,
+  "skipAutoPermissionPrompt": true,
   "switchModelsOnFlag": false,
   "teammateMode": "tmux",
-  "remoteControlAtStartup": false,
-  "inputNeededNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
+  "tui": "fullscreen",
+  "verbose": true,
+  "viewMode": "verbose",
   "voiceEnabled": true
 }
