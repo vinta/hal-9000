@@ -3,7 +3,8 @@ name: magi
 description: Use when brainstorming ideas, features, or directions for a project where independent perspectives from different model families (Claude/Codex/Gemini) would surface blind spots and spark creative options the user hasn't considered — especially "what cool things can I add", "what should I build next", "give me ideas for X"
 compatibility: Designed for Claude Code
 user-invocable: true
-model: opus
+disable-model-invocation: true
+model: fable
 allowed-tools:
   - AskUserQuestion
   - TeamCreate
@@ -17,7 +18,6 @@ allowed-tools:
   - Bash(gemini:*)
   - mcp__codex__codex
   - mcp__codex__codex-reply
-  - Skill(writing-plans)
 ---
 
 # MAGI

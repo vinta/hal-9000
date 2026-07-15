@@ -18,6 +18,6 @@ Named after the Biblical Magi: the three wise men who followed the star to Bethl
 
 The [magi](SKILL.md) skill translates this into a three-agent workflow built on Claude Code's **Agent Team**, with each teammate backed by a different model with a unique personality:
 
-- **MELCHIOR-1 / Scientist**: Claude Opus
+- **MELCHIOR-1 / Scientist**: Anthropics Claude
 - **BALTHASAR-2 / Mother**: OpenAI Codex
 - **CASPER-3 / Woman**: Google Gemini
