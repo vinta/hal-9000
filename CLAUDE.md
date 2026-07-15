@@ -28,6 +28,7 @@ hal update --tags python,node           # Run specific roles
 bin/hal                                 # Main CLI — extensionless Python script
 bin/open-the-pod-bay-doors              # Bootstrap script (Bash)
 dotfiles/                               # Tracked in hal_dotfiles.json, symlinked or copied to ~
+dotfiles/hal_dotfiles.json              # Dotfile manifest used by hal commands
 dotfiles/.claude/CLAUDE.md              # The user-level CLAUDE.md file
 dotfiles/.claude/rules/                 # Path-scoped rule files, auto-loaded via `paths:` frontmatter
 playbooks/site.yml                      # Main playbook importing all roles
@@ -46,6 +47,7 @@ tests/                                  # pytest tests
 - **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json`. The `hal-9000` marketplace loads the published version from GitHub. Use `hal-9000-local` (points to `/usr/local/hal-9000`) to test local changes before pushing.
 - All skill descriptions must start with `Use when` (may have a `(project)` prefix if it's a project-level skill)
 - Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint` runs ruff format --check, ruff check, ansible-lint, and a playbook syntax check).
+- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand.
 
 ## External Tool Documentation
 
