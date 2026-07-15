@@ -35,6 +35,8 @@ If you prefer only using some of them:
 - [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 - [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
 - [magi](skills/hal-skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
+- [refactor-claude-md](skills/hal-skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
+- [refactor-agents-md](skills/hal-skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure
 
 ```bash
 /plugin marketplace add vinta/hal-9000
