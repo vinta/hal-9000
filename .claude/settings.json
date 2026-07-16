@@ -6,9 +6,24 @@
         "hooks": [
           {
             "type": "command",
+            "if": "Edit(/dotfiles/**)",
             "command": "bash .claude/hooks/sync-dotfiles.sh 2>/dev/null || true",
             "timeout": 30,
             "statusMessage": "Syncing dotfiles..."
+          },
+          {
+            "type": "command",
+            "if": "Edit(**/*.py)",
+            "command": "bash .claude/hooks/lint-on-edit.sh lint-python",
+            "timeout": 30,
+            "statusMessage": "Linting Python..."
+          },
+          {
+            "type": "command",
+            "if": "Edit(/playbooks/**)",
+            "command": "bash .claude/hooks/lint-on-edit.sh lint-ansible",
+            "timeout": 30,
+            "statusMessage": "Linting Ansible..."
           }
         ]
       }

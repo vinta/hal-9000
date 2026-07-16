@@ -4,7 +4,7 @@ macOS dev environment automation: dotfiles, AI agent configs, skills, and dev st
 
 ## Commands
 
-Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint` runs ruff format --check, ruff check, ansible-lint, and a playbook syntax check).
+Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint-python` runs ruff format --check and ruff check; `make lint-ansible` runs ansible-lint and a playbook syntax check; `make lint` runs both).
 
 ## Gotchas
 

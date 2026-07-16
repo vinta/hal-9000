@@ -1,4 +1,4 @@
-.PHONY: help install lint format typecheck test update-hooks run-hooks scan-secrets run-gitleaks run-detect-secrets audit-detect-secrets-report hal-completion
+.PHONY: help install lint lint-python lint-ansible format typecheck test update-hooks run-hooks scan-secrets run-gitleaks run-detect-secrets audit-detect-secrets-report hal-completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -18,9 +18,13 @@ install: ## Install dependencies and setup pre-commit hooks
 	fi
 	$(MAKE) update-hooks
 
-lint: ## Run ruff linter, formatter check, and ansible-lint
+lint: lint-python lint-ansible ## Run all linters
+
+lint-python: ## Run ruff formatter check and linter
 	uv run ruff format --check .
 	uv run ruff check .
+
+lint-ansible: ## Run ansible-lint and a playbook syntax check
 	uv run ansible-lint playbooks/
 	cd playbooks && ansible-playbook site.yml --syntax-check
 
