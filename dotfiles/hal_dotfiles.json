@@ -9,6 +9,14 @@
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/history.jsonl"
     },
     {
+      "src": "{{HOME}}/.claude/file-history",
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/file-history"
+    },
+    {
+      "src": "{{HOME}}/.claude/paste-cache",
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/paste-cache"
+    },
+    {
       "src": "{{HOME}}/Projects/laughing-man/CLAUDE.local.md",
       "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md"
     },
