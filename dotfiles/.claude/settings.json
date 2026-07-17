@@ -122,7 +122,7 @@
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/hal-statusline.py",
-    "refreshInterval": 2
+    "refreshInterval": 1
   },
   "enabledPlugins": {
     "codex@openai-codex": true,
