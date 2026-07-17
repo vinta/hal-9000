@@ -10,6 +10,8 @@ import subprocess
 import sys
 import tempfile
 import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import NotRequired, TypedDict
 
@@ -236,46 +238,65 @@ def write_cache(cache_file: str, payload: GrammarCache) -> None:
             pass
 
 
-def run_grammar_model(prompt: str) -> GrammarRun | None:
-    use_ollama = os.environ.get("HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA") == "1"
+def run_ollama_grammar_model(prompt: str) -> str | None:
+    # `think: false` disables reasoning tokens; `temperature: 0` and a `num_predict` cap keep
+    # output short and deterministic and prevent runaway generation from stalling the statusline.
+    body = json.dumps(
+        {
+            "model": "gemma4:31b-mlx",
+            "prompt": prompt,
+            "stream": False,
+            "think": False,
+            "keep_alive": "30m",
+            "options": {"temperature": 0, "num_predict": 250},
+        }
+    ).encode()
+    req = urllib.request.Request("http://localhost:11434/api/generate", data=body, headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:  # noqa: S310 urlopen-with-scheme -- fixed localhost scheme
+            return json.loads(resp.read())["response"]
+    except (TimeoutError, urllib.error.URLError):
+        return None
 
-    if use_ollama:
-        cmd = """
-            ollama run gemma4:31b-mlx
-            --nowordwrap
-            --think=false
-            --keepalive 30m
-        """
-    else:
-        # `--setting-sources ""` to disable hooks
-        # `--no-session-persistence` and `cwd="/tmp"` to avoid polluting your current context
-        cmd = """
-            claude
-            --model haiku
-            --max-turns 1
-            --setting-sources ""
-            --tools ""
-            --disable-slash-commands
-            --no-session-persistence
-            --no-chrome
-            --print
-        """
 
-    start_time = time.time()
+def run_claude_grammar_model(prompt: str) -> str | None:
+    # `--setting-sources ""` to disable hooks
+    # `--no-session-persistence` and `cwd="/tmp"` to avoid polluting your current context
+    cmd = """
+        claude
+        --model haiku
+        --max-turns 1
+        --setting-sources ""
+        --tools ""
+        --disable-slash-commands
+        --no-session-persistence
+        --no-chrome
+        --print
+    """
     try:
         result = subprocess.run(  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
             [*shlex.split(cmd), prompt],
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/tmp" if not use_ollama else None,  # noqa: S108 hardcoded-temp-file
+            cwd="/tmp",  # noqa: S108 hardcoded-temp-file
         )
     except subprocess.TimeoutExpired:
+        return None
+    return result.stdout
+
+
+def run_grammar_model(prompt: str) -> GrammarRun | None:
+    use_ollama = os.environ.get("HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA") == "1"
+
+    start_time = time.time()
+    result_text = run_ollama_grammar_model(prompt) if use_ollama else run_claude_grammar_model(prompt)
+    if result_text is None:
         return None
     elapsed = time.time() - start_time
 
     return {
-        "result": "\n".join(line for line in result.stdout.strip().splitlines() if line.strip()),
+        "result": "\n".join(line for line in result_text.strip().splitlines() if line.strip()),
         "elapsed": elapsed,
         "backend": "ollama" if use_ollama else "claude",
     }
