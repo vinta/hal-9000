@@ -241,7 +241,7 @@ def run_grammar_model(prompt: str) -> GrammarRun | None:
 
     if use_ollama:
         cmd = """
-            ollama run gemma4:31b
+            ollama run gemma4:31b-mlx
             --nowordwrap
             --think=false
             --keepalive 30m
