@@ -117,7 +117,13 @@ def usage_color(pct: float) -> str:
 
 
 def basic_info(data: StatusLineData) -> None:
-    git_branch = ""
+    current_dir = data["workspace"]["current_dir"]
+    home = str(Path.home())
+    if current_dir.startswith(home):
+        current_dir = "~" + current_dir[len(home) :]
+
+    status_parts = [f"{data['model']['id']} {data['effort']['level']}", current_dir]
+
     try:
         result = subprocess.run(  # noqa: PLW1510 subprocess-run-without-check
             ["git", "rev-parse", "--abbrev-ref", "HEAD"],  # noqa: S607 start-process-with-partial-path
@@ -127,18 +133,9 @@ def basic_info(data: StatusLineData) -> None:
         )
         if result.returncode == 0:
             git_branch = result.stdout.strip()
+            status_parts.append(git_branch)
     except Exception:  # noqa: BLE001 S110 blind-exception try-except-pass
         pass
-
-    current_dir = data["workspace"]["current_dir"]
-    home = str(Path.home())
-    if current_dir.startswith(home):
-        current_dir = "~" + current_dir[len(home) :]
-
-    status_parts = [f"{data['model']['id']} {data['effort']['level']}", current_dir]
-
-    if git_branch:
-        status_parts.append(git_branch)
 
     context_used = data.get("context_window", {}).get("used_percentage")
     if context_used:
@@ -398,7 +395,7 @@ def grammar_check(data: StatusLineData) -> None:
     latest_user_input, latest_user_uuid = read_latest_user_input(transcript_path)
     logger.debug("session=%s latest_user_input=%r", data.get("session_id", "?"), latest_user_input)
     if not latest_user_input or not latest_user_uuid:
-        print_grammar_status("skipped")
+        print_grammar_status("nothing to check")
         return
 
     session_id: str | None = data.get("session_id")
