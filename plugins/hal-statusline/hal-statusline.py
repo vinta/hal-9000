@@ -28,14 +28,43 @@ if not logger.handlers:
 
 
 # https://code.claude.com/docs/en/statusline#available-data
+class Model(TypedDict):
+    id: str
+
+
+class Effort(TypedDict):
+    level: str
+
+
+class Workspace(TypedDict):
+    current_dir: str
+
+
+class ContextWindow(TypedDict):
+    used_percentage: NotRequired[float | None]
+
+
+class RateLimitWindow(TypedDict):
+    used_percentage: NotRequired[float]
+
+
+class RateLimits(TypedDict):
+    five_hour: NotRequired[RateLimitWindow]
+    seven_day: NotRequired[RateLimitWindow]
+
+
 class StatusLineData(TypedDict):
-    model: dict[str, str]
-    effort: dict[str, str]
-    workspace: dict[str, str]
+    model: Model
+    effort: NotRequired[Effort]  # absent when the current model doesn't support reasoning effort
+    workspace: Workspace
     session_id: str
     transcript_path: str
-    rate_limits: NotRequired[dict[str, dict[str, float]]]
-    context_window: NotRequired[dict[str, float]]
+    rate_limits: NotRequired[RateLimits]
+    context_window: NotRequired[ContextWindow]
+
+
+class OllamaGenerateResponse(TypedDict):
+    response: str
 
 
 class GrammarRun(TypedDict):
@@ -107,6 +136,7 @@ def basic_info(data: StatusLineData) -> None:
         current_dir = "~" + current_dir[len(home) :]
 
     status_parts = [f"{data['model']['id']} {data['effort']['level']}", current_dir]
+
     if git_branch:
         status_parts.append(git_branch)
 
@@ -255,7 +285,8 @@ def run_ollama_grammar_model(prompt: str) -> str | None:
     req = urllib.request.Request("http://localhost:11434/api/generate", data=body, headers={"Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:  # noqa: S310 urlopen-with-scheme -- fixed localhost scheme
-            return json.loads(resp.read())["response"]
+            body_data: OllamaGenerateResponse = json.loads(resp.read())
+            return body_data["response"]
     except (TimeoutError, urllib.error.URLError):
         return None
 
