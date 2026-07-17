@@ -39,7 +39,7 @@ if path.exists():
         except Exception:
             d = {}
 
-d["statusLine"] = {"type": "command", "command": cmd}
+d["statusLine"] = {"type": "command", "command": cmd, "refreshInterval": 2}
 
 with path.open("w") as f:
     json.dump(d, f, indent=2)

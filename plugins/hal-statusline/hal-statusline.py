@@ -13,7 +13,7 @@ import time
 import urllib.error
 import urllib.request
 from pathlib import Path
-from typing import NotRequired, TypedDict
+from typing import Literal, NotRequired, TypedDict
 
 LOG_PATH = Path("/tmp/hal-statusline.log")  # noqa: S108 hardcoded-temp-file
 
@@ -47,10 +47,12 @@ class GrammarRun(TypedDict):
 class GrammarCache(TypedDict):
     uuid: str
     input: str
+    status: Literal["pending", "done"]
     result: str
     elapsed: float
     backend: str
     cwd: str
+    timed_out: bool
 
 
 BLUE = "\033[34m"
@@ -216,13 +218,12 @@ def read_latest_user_input(transcript_path: str) -> tuple[str, str]:
     return "", ""
 
 
-def read_cache(cache_file: str) -> tuple[str, str]:
+def read_cache(cache_file: str) -> GrammarCache | None:
     try:
         with Path(cache_file).open() as f:
-            cache = json.load(f)
-            return cache.get("uuid", ""), cache.get("result", "")
+            return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return "", ""
+        return None
 
 
 def write_cache(cache_file: str, payload: GrammarCache) -> None:
@@ -302,6 +303,61 @@ def run_grammar_model(prompt: str) -> GrammarRun | None:
     }
 
 
+def spawn_grammar_worker(cache_file: str) -> None:
+    subprocess.Popen(  # noqa: S603 subprocess-without-shell-equals-true
+        [sys.executable, str(Path(__file__).resolve()), "--grammar-worker", cache_file],
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True,
+    )
+
+
+def run_grammar_worker(cache_file: str) -> None:
+    cached = read_cache(cache_file)
+    if cached is None or cached["status"] != "pending":
+        return
+
+    working_uuid = cached["uuid"]
+    latest_user_input = cached["input"]
+    cwd = cached["cwd"]
+    model_run = run_grammar_model(GRAMMAR_PROMPT.format(latest_user_input=latest_user_input))
+
+    # A newer prompt may have overwritten the cache while the model call was in flight.
+    current = read_cache(cache_file)
+    if current is None or current["uuid"] != working_uuid:
+        return
+
+    if model_run is None:
+        write_cache(
+            cache_file,
+            {
+                "uuid": working_uuid,
+                "input": latest_user_input,
+                "status": "done",
+                "result": "",
+                "elapsed": 0.0,
+                "backend": "",
+                "cwd": cwd,
+                "timed_out": True,
+            },
+        )
+        return
+    write_cache(
+        cache_file,
+        {
+            "uuid": working_uuid,
+            "input": latest_user_input,
+            "status": "done",
+            "result": model_run["result"],
+            "elapsed": model_run["elapsed"],
+            "backend": model_run["backend"],
+            "cwd": cwd,
+            "timed_out": False,
+        },
+    )
+
+
 def grammar_check(data: StatusLineData) -> None:
     transcript_path: str | None = data.get("transcript_path")
     if not transcript_path:
@@ -320,37 +376,40 @@ def grammar_check(data: StatusLineData) -> None:
         return
     cache_file = f"/tmp/hal-statusline-grammar-check-{session_id}.json"  # noqa: S108 hardcoded-temp-file
 
-    cached_uuid, cached_result = read_cache(cache_file)
-    if cached_uuid == latest_user_uuid:
-        if cached_result:
-            print(colorize_grammar(cached_result))
+    cached = read_cache(cache_file)
+    if cached is not None and cached["uuid"] == latest_user_uuid:
+        if cached["status"] == "pending":
+            print_grammar_status("checking…")
+        elif cached["timed_out"]:
+            print_grammar_status("timed out")
+        elif cached["result"]:
+            print(colorize_grammar(cached["result"]))
         else:
             print_grammar_status("result not found")
         return
-
-    model_run = run_grammar_model(GRAMMAR_PROMPT.format(latest_user_input=latest_user_input))
-    if model_run is None:
-        print_grammar_status("timed out")
-        return
-    if model_run["result"]:
-        print(colorize_grammar(model_run["result"]))
-    else:
-        print_grammar_status("result not found")
 
     write_cache(
         cache_file,
         {
             "uuid": latest_user_uuid,
             "input": latest_user_input,
-            "result": model_run["result"],
-            "elapsed": model_run["elapsed"],
-            "backend": model_run["backend"],
+            "status": "pending",
+            "result": "",
+            "elapsed": 0.0,
+            "backend": "",
             "cwd": str(Path.cwd()),
+            "timed_out": False,
         },
     )
+    spawn_grammar_worker(cache_file)
+    print_grammar_status("checking…")
 
 
 def main() -> None:
+    if len(sys.argv) >= 3 and sys.argv[1] == "--grammar-worker":  # noqa: PLR2004 magic-value-comparison
+        run_grammar_worker(sys.argv[2])
+        return
+
     data: StatusLineData = json.load(sys.stdin)
     logger.debug("data=%s", json.dumps(data))
 
