@@ -1,4 +1,4 @@
-# HAL 9000 Dotfile Management
+# HAL 9000
 
 Manages files under `~` from a single manifest (`dotfiles/hal_dotfiles.json`). Three concepts differ only in direction and in which side holds the truth.
 
@@ -27,3 +27,7 @@ _Avoid_: Update (that's the Ansible command)
 **Restore**:
 The reverse of backup: destination → home, overwriting local files after confirmation. The only operation that runs against an entry's declared direction.
 _Avoid_: Rollback, recover
+
+## Agent Skill Overrides
+
+**improve-codebase-architecture**: write the Architecture Review HTML report to `./tmp/architecture-review-<timestamp>.html` (repo root) instead of the OS temp directory, so it survives a reboot. `/tmp/` is already gitignored via `~/.gitignore_global`; no further ignore rule needed.
