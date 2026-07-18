@@ -226,12 +226,12 @@ Grammar: no issues
 """
 
 
-def read_latest_user_input(transcript_path: str) -> tuple[str, str]:
+def read_latest_user_input(transcript_path: str) -> tuple[str, str, bool]:
     try:
         with Path(transcript_path).open() as f:
             lines = f.readlines()
     except FileNotFoundError:
-        return "", ""
+        return "", "", False
 
     for line in reversed(lines):
         try:
@@ -240,9 +240,11 @@ def read_latest_user_input(transcript_path: str) -> tuple[str, str]:
             continue
         if entry.get("type") == "user":
             content = entry["message"]["content"]
-            if isinstance(content, str) and not content.startswith(NON_PROMPT_PREFIXES):
-                return content[:500], entry.get("uuid", "")
-    return "", ""
+            if isinstance(content, str):
+                if content.startswith(NON_PROMPT_PREFIXES):
+                    return "", "", True
+                return content[:500], entry.get("uuid", ""), False
+    return "", "", False
 
 
 def read_cache(cache_file: str) -> GrammarCache | None:
@@ -392,10 +394,10 @@ def grammar_check(data: StatusLineData) -> None:
         print_grammar_status("transcript_path not found")
         return
 
-    latest_user_input, latest_user_uuid = read_latest_user_input(transcript_path)
+    latest_user_input, latest_user_uuid, is_non_prompt = read_latest_user_input(transcript_path)
     logger.debug("session=%s latest_user_input=%r", data.get("session_id", "?"), latest_user_input)
     if not latest_user_input or not latest_user_uuid:
-        print_grammar_status("nothing to check")
+        print_grammar_status("skipped" if is_non_prompt else "nothing to check")
         return
 
     session_id: str | None = data.get("session_id")
