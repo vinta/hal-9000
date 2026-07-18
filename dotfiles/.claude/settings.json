@@ -152,7 +152,7 @@
       "autoUpdate": true
     }
   },
-  "model": "sonnet",
+  "model": "fable",
   "advisorModel": "fable",
   "effortLevel": "high",
   "disableClaudeAiConnectors": true,
