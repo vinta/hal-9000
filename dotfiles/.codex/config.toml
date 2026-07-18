@@ -26,11 +26,7 @@ writable_roots = [
 ]
 
 [features]
-shell_snapshot = true
-unified_exec = true
-multi_agent = true
 memories = true
-goals = true
 js_repl = false
 
 [tools]
