@@ -164,7 +164,6 @@
   "skipAutoPermissionPrompt": true,
   "switchModelsOnFlag": false,
   "teammateMode": "tmux",
-  "tui": "fullscreen",
   "verbose": true,
   "viewMode": "verbose",
   "voiceEnabled": true
