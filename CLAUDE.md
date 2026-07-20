@@ -14,7 +14,7 @@ Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets
 
 ## External Tool Documentation
 
-When you need information about tools used in this project, use the `find-docs` skill or `WebFetch`.
+Invoke the `find-docs` skill BEFORE writing code or config that touches the tools below, not only when asked about them. Do not answer from training data, even for familiar tools. Use `WebFetch` for user-provided URLs and the documentation links below.
 
 ### Context7 Library IDs
 

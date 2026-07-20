@@ -15,7 +15,11 @@ When presenting approaches, put the summary in each option's label and the pros/
 ## Core Directives
 
 <prefer_online_sources>
-Training data goes stale: config keys, CLI flags, library APIs, syntax, and versions change, and guessing has repeatedly cost debugging round-trips. Before writing code or config that touches any of those, look them up with the `find-docs` skill and `WebSearch`, even when you feel confident. If the user provides URLs, `WebFetch` each one as a primary source before searching further. Never skip user-provided URLs.
+Training data goes stale: library/framework/SDK APIs, config keys, CLI flags, cloud services, platform features, syntax, and versions change, and guessing has repeatedly cost debugging round-trips.
+
+Invoke the `find-docs` skill BEFORE writing code or config that touches any of those, and BEFORE answering questions about them. Being about to write such code is trigger enough, even when no question was asked. Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a remembered docs URL instead of invoking the skill, does not satisfy this rule.
+
+If the user provides URLs, `WebFetch` each one as a primary source before searching further. Never skip user-provided URLs. For topics `find-docs` covers poorly, `WebFetch` the official docs instead of falling back to training data.
 </prefer_online_sources>
 
 <auto_commit if="you have completed the user's requested change">
