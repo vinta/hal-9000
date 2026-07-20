@@ -149,3 +149,6 @@ enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
 
 [hooks.state."/usr/local/hal-9000/.codex/hooks.json:post_tool_use:0:0"]
 trusted_hash = "sha256:a9645d94b70aa40e726714ac5fdc9f0694f1652a94b59843a33021d33b08ac5a"
+
+[hooks.state."/Users/vinta/Projects/laughing-man/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:4fdb4c4123148449893318a62c8e1ca0e3fd4d07458fca260a59934a1a47659e"
