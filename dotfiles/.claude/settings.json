@@ -2,6 +2,7 @@
   "cleanupPeriodDays": 365,
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_EFFORT_LEVEL": "max",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_DOCTOR_COMMAND": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
@@ -154,7 +155,6 @@
   },
   "model": "fable",
   "advisorModel": "fable",
-  "effortLevel": "high",
   "disableClaudeAiConnectors": true,
   "enableWorkflows": true,
   "inputNeededNotifEnabled": true,
