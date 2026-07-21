@@ -1,5 +1,5 @@
 ---
-# https://cloud.google.com/sdk/docs/quickstart-macos
+# https://docs.cloud.google.com/sdk/docs/install-sdk
 - name: Download Google Cloud SDK
   unarchive:
     src: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-darwin-arm.tar.gz
