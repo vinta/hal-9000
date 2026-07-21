@@ -4,6 +4,12 @@ A synthesis of the global-audience guidance that mainstream tech documentation t
 
 These are guidelines, not a controlled language. Kohl's cardinal rule governs every edit: make no change that sounds unnatural to a native speaker. When a rule fights naturalness or accuracy in a specific sentence, the sentence wins.
 
+## Paragraphs
+
+- One topic per paragraph. When the topic shifts, start a new paragraph.
+- State the point in the first sentence, then support it. A reader who scans only the first sentence of each paragraph must still get the outline of the document.
+- Keep paragraphs short. A paragraph that runs past more than a few sentences is a split candidate.
+
 ## Sentence structure
 
 - Standard word order: subject, verb, object. Keep the subject and verb early in the sentence.
@@ -13,7 +19,7 @@ These are guidelines, not a controlled language. Kohl's cardinal rule governs ev
 - Avoid future tense where present works: "The command prints a summary", not "The command will print a summary".
 - Link at most two, and never more than three, clauses with "and", "or", "but".
 - Front-load the real subject instead of "there is" / "there are": "The config file has three sections", not "There are three sections in the config file".
-- Replace complex sentences and dense paragraphs with lists and tables. Keep list items parallel in structure.
+- Replace complex sentences and dense paragraphs with lists and tables. Give parallel ideas parallel structure, in running prose as well as in list items.
 - Limit sentence fragments. In short headings and UI labels, include a verb when clarity needs it: "Access is denied", not "Access denied".
 
 ## Word choice
@@ -21,6 +27,7 @@ These are guidelines, not a controlled language. Kohl's cardinal rule governs ev
 - Prefer the simple word: use (not utilize), start (not commence), so (not consequently), some (not "a number of"). Substitution table below.
 - One word per concept, used consistently, with identical capitalization. Never synonyms for variety, and never one word for two concepts.
 - Avoid phrasal verbs when a single verb exists: "This guide uses the following terms", not "makes use of". Established exceptions stay: set up, log in, sign in.
+- Uncover hidden verbs: keep the action in the verb, not in an abstract noun. "Install the package", not "perform an installation of the package". "Decide", not "make a decision".
 - "Because" for cause. Keep "since" and "as" for time.
 - No idioms, colloquialisms, humor, or culture-specific references (holidays, sports, seasons, geography). They confuse readers and break translation.
 - No Latin abbreviations: write "for example" (not e.g.), "that is" (not i.e.), "and so on" (not etc.), or restructure.
@@ -45,7 +52,7 @@ Translation and comprehension fail on omitted function words. Keep them:
 
 - Address the reader as "you". Reserve "we" for the authoring organization.
 - Common contractions are fine (it's, you're, don't). Avoid uncommon ones (mightn't, it'd).
-- Prefer positive constructions: say what to do, not only what to avoid.
+- Prefer positive constructions: say what to do, not only what to avoid. Rewrite a negative as its positive equivalent when one exists ("The build fails only when the cache is missing", not "The build does not fail unless the cache is missing"), and never stack negatives.
 - Gender-neutral language. Singular "they" is correct.
 - Keep the author's voice. Clarity edits that flatten prose into staccato fragments trade one reading problem for another.
 
@@ -79,6 +86,8 @@ The strict sibling (ASD-STE100) exists for safety-critical, compliance-checked d
 | facilitate, enable (people) | help, let                |
 | regarding, concerning       | about                    |
 | sufficient                  | enough                   |
+| robust, seamless, powerful  | (the checkable claim)    |
+| cutting-edge, blazing-fast  | (the version or number)  |
 | it is recommended that you  | we recommend that you    |
 | there is/are ... that       | (front-load the subject) |
 

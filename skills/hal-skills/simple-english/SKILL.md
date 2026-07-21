@@ -1,6 +1,6 @@
 ---
 name: simple-english
-description: Use when the user wants technical or developer writing (docs, issues, READMEs, comments, UI text) made clear and simple for a global audience
+description: Use when the user wants technical or developer writing (docs, issues, READMEs, comments, UI text) drafted or rewritten to be clear and simple for a global audience
 argument-hint: [text, file, or pointer to rewrite]
 user-invocable: true
 model: sonnet
@@ -8,7 +8,7 @@ model: sonnet
 
 # Simple English
 
-Rewrite the given text in Global English: the global-audience tier that Google, Microsoft, MDN, Red Hat, and GitLab documentation follows. Clear structure, unambiguous words, translation-friendly grammar, no controlled dictionary, no hard word caps. The rewrite must give the same technical facts as the source and still sound like a native speaker wrote it.
+Write or rewrite the given text in Global English: the global-audience tier that Google, Microsoft, MDN, Red Hat, and GitLab documentation follows. Clear structure, unambiguous words, translation-friendly grammar, no controlled dictionary, no hard word caps. The rewrite must give the same technical facts as the source and still sound like a native speaker wrote it.
 
 ## Ground rules
 
@@ -21,19 +21,20 @@ Rewrite the given text in Global English: the global-audience tier that Google, 
 
 1. **Load the rules.** Read [references/writing-rules.md](references/writing-rules.md) in full: sentence structure, word choice, the clarity helpers, tone, and the substitution table.
 
-2. **Collect the source.** Take the text from the conversation, or Read the files or sections the user pointed at. Done when you hold every passage to rewrite.
+2. **Collect the source.** Take the text from the conversation, or Read the files or sections the user pointed at. When the user wants new text drafted instead of existing text rewritten, collect the facts to convey (from the conversation, code, or files) and treat them as the source for every later step. Done when you hold every passage to rewrite or every fact to state.
 
 3. **Sort each passage** into procedure (imperative work steps), description (declarative prose), or micro-text (headings, UI labels, error messages). Procedures get imperative mood and condition-first ordering. Micro-text gets a verb when clarity needs one.
 
 4. **Map the terminology.** List each concept that appears under more than one name, pick one term per concept (prefer the project's established names), and use it everywhere. Done when no concept has two names and no word carries two meanings.
 
-5. **Rewrite sentence by sentence.** Subject-verb-object with the subject early, one idea per sentence, active voice and present tense, conditions first, small words kept ("that", "who", articles), pronouns with more than one possible referent replaced by their nouns, noun stacks broken at two modifiers, idioms and phrasal-verb bloat swapped per the substitution table. Kohl's cardinal rule arbitrates every edit: no change that sounds unnatural to a native speaker.
+5. **Rewrite sentence by sentence.** Subject-verb-object with the subject early, one idea per sentence, active voice and present tense, conditions first, small words kept ("that", "who", articles), pronouns with more than one possible referent replaced by their nouns, noun stacks broken at two modifiers, hidden verbs uncovered ("install", not "perform an installation"), idioms and phrasal-verb bloat swapped per the substitution table. Kohl's cardinal rule arbitrates every edit: no change that sounds unnatural to a native speaker.
 
-6. **Verify every sentence** against the checklist:
+6. **Verify every paragraph and sentence** against the checklist:
+   - One topic per paragraph, the point stated in its first sentence
    - Subject and verb early, at most three linked clauses, no "there is/are" openers
    - Procedures imperative with conditions first
    - Every pronoun's referent unambiguous, every abbreviation defined at first use
-   - Terminology consistent with the map from step 4, list items parallel
+   - Terminology consistent with the map from step 4, parallel ideas in parallel form
    - No idioms, culture-specific references, Latin abbreviations, or directional cross-references ("above", "below")
    - The sentence still reads naturally aloud
      Done when every sentence passes, or its deviation is deliberate and appears in the report.
