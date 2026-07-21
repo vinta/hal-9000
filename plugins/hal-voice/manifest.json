@@ -31,7 +31,7 @@
   "PermissionRequest": [
     {
       "detection": "always",
-      "clips": ["assets/i-hope-the-two-of-you-are-not-concerned-about-this.mp3"]
+      "clips": ["assets/well-forgive-me-for-being-so-inquisitive.mp3"]
     }
   ],
   "PreToolUse": [
