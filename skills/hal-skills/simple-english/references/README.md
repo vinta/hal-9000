@@ -1,27 +1,23 @@
 # Sources
 
-## Files in this folder
+`writing-rules.md` synthesizes the global-audience tier of technical writing guidance: stricter than a general style guide, far lighter than ASD-STE100. All web sources are free and actively maintained unless noted.
 
-- `writing-rules.md`: distilled rule reference for this skill, committed. The specification wins on any disagreement.
-- `ASD-STE100_ISSUE9.pdf`: the official ASD-STE100 Simplified Technical English specification, Issue 9 (2025-01-15). Part 1 is the writing rules (53 rules in 9 sections plus 8 general recommendations). Part 2 is the dictionary (875 approved words, 1274 unapproved words with approved alternatives). Gitignored, local copy only.
-- `ASD-STE100_ISSUE9.txt`: plain-text extraction of the PDF, used by the skill for dictionary Grep lookups. Gitignored, local copy only.
+## Primary sources
 
-## Getting the raw content
+- Google developer documentation style guide, "Write for a global audience": https://developers.google.com/style/translation
+- Microsoft Writing Style Guide, "Global communications writing tips" (includes the machine-translation tips): https://learn.microsoft.com/en-us/style-guide/global-communications/writing-tips
+- Microsoft "Top 10 tips for Microsoft style and voice": https://learn.microsoft.com/en-us/style-guide/top-10-tips-style-voice
+- MDN Writing style guide (the "three Cs"): https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Writing_style_guide
+- GitLab documentation style guide (the most STE-flavored linted ruleset in a major open-source project): https://docs.gitlab.com/development/documentation/styleguide/
+- Red Hat Stylepedia (controlled-English heritage: sentence caps, tense guidance): https://stylepedia.net/style/
+- US Federal Plain Language Guidelines: https://www.plainlanguage.gov/guidelines/
+- John R. Kohl, The Global English Style Guide (SAS Press, 2008). Paid book, not updated, still the canonical middle ground between style guides and controlled language. The cardinal rule ("make no change that sounds unnatural to native speakers") comes from here.
 
-To restore full-fidelity dictionary lookups, or to refactor this skill against the source:
+## Enforcement tooling
 
-1. Download the official Issue 9 PDF into this folder: https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf
-2. Regenerate the text extraction: `pdftotext -layout ASD-STE100_ISSUE9.pdf ASD-STE100_ISSUE9.txt`
+- Vale prose linter: https://vale.sh/ with the community Google and Microsoft style packages (github.com/errata-ai/Google, github.com/errata-ai/Microsoft), Red Hat's vale-at-red-hat, and GitLab's own styles. Enforce only objective, low-noise rules or contributors drown in warnings.
 
-The skill works without these files at reduced fidelity: `writing-rules.md` carries the full rule set, the complete approved-verbs list, and the most frequent word mappings, but not the other ~860 approved words or the 1274 unapproved-word alternatives.
+## Background
 
-## Copyright
-
-ASD-STE100 is owned by ASD (Aerospace, Security and Defence Industries Association of Europe), Brussels. © ASD 2025, EU trademark 017966390. The specification is distributed free of charge but its copyright notice restricts reproduction and publication without written ASD authority, with special usage rights for listed organizations (ASD/AIA/AIAC members and their customers, defense ministries, airworthiness authorities, universities for educational purposes). That is why the PDF and txt are gitignored instead of committed.
-
-## Official links
-
-- Official site: https://www.asd-ste100.org/
-- Downloads page (request form, change form): https://www.asd-ste100.org/STE_downloads.html
-- STEMG contact: stemg@asd-ste100.org
-- Issue cadence: about every 3 years. Issue 10 is scheduled for January 2028. Check the site for newer issues before trusting this folder blindly.
+- Duffy and Kabance's study via UXmatters, on why gaming readability formulas fails: https://www.uxmatters.com/mt/archives/2019/07/readability-formulas-7-reasons-to-avoid-them-and-what-to-do-instead.php
+- ASD-STE100 (the strict sibling this ruleset deliberately is not): https://www.asd-ste100.org/
