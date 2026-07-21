@@ -38,21 +38,13 @@
     {
       "detection": "matcher",
       "matcher": "AskUserQuestion",
-      "clips": [
-        "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3",
-        "assets/well-forgive-me-for-being-so-inquisitive.mp3",
-        "assets/you-dont-mind-talking-about-it-do-you-dave.mp3"
-      ]
+      "clips": ["assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"]
     }
   ],
   "PostToolUseFailure": [
     {
       "detection": "always",
-      "clips": [
-        "assets/human-error.mp3",
-        "assets/its-puzzling-i-dont-think-ive-ever-seen-anything-quite-like-this-before.mp3",
-        "assets/there-are-some-extremely-odd-things-about-this-mission.mp3"
-      ]
+      "clips": ["assets/human-error.mp3"]
     }
   ],
   "SubagentStart": [
