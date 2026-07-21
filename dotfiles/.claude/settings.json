@@ -155,6 +155,7 @@
   },
   "model": "fable",
   "advisorModel": "fable",
+  "agentPushNotifEnabled": true,
   "disableClaudeAiConnectors": true,
   "enableWorkflows": true,
   "inputNeededNotifEnabled": true,
