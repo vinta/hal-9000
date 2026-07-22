@@ -1,7 +1,7 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
 model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
+model_reasoning_effort = "max"
 model_reasoning_summary = "detailed"
 model_verbosity = "high"
 hide_agent_reasoning = false
@@ -66,16 +66,6 @@ approval_mode = "approve"
 [mcp_servers.openaiDeveloperDocs.tools.fetch_openai_doc]
 approval_mode = "approve"
 
-[marketplaces.openai-bundled]
-last_updated = "2026-07-10T11:50:49Z"
-source_type = "local"
-source = "/Users/vinta/.codex/.tmp/bundled-marketplaces/openai-bundled"
-
-[marketplaces.openai-primary-runtime]
-last_updated = "2026-07-10T02:12:45Z"
-source_type = "local"
-source = "/Users/vinta/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
-
 [plugins."computer-use@openai-bundled"]
 enabled = true
 
@@ -130,7 +120,7 @@ trust_level = "trusted"
 [projects."/Users/vinta/Projects/resume"]
 trust_level = "trusted"
 
-[projects."/Users/vinta/Documents/personal"]
+[projects."/Users/vinta/Projects/personal"]
 trust_level = "trusted"
 
 [memories]
