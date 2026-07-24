@@ -276,14 +276,7 @@ class HAL9000:
             dest_path.chmod(dest_path.stat().st_mode | stat.S_IWUSR)
         shutil.copy2(src, dest)
 
-    def _copy_entry(self, entry: dict[str, str]) -> None:
-        src = self._expand_template(entry["src"])
-        if not Path(src).exists():
-            self._hal_says(f"not found {src}")
-            return
-
-        dest = self._expand_template(entry["dest"])
-
+    def _copy_one(self, src: str, dest: str) -> None:
         if Path(src).is_dir():
             shutil.copytree(
                 src,
@@ -296,6 +289,15 @@ class HAL9000:
             Path(dest).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dest)
         self._hal_says(f"copy {src} -> {dest}")
+
+    def _copy_entry(self, entry: dict[str, str]) -> None:
+        src = self._expand_template(entry["src"])
+        if not Path(src).exists():
+            self._hal_says(f"not found {src}")
+            return
+
+        dest = self._expand_template(entry["dest"])
+        self._copy_one(src, dest)
 
     def sync(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         with concurrent.futures.ThreadPoolExecutor() as executor:
