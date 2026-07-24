@@ -292,6 +292,20 @@ class HAL9000:
 
     def _copy_entry(self, entry: dict[str, str]) -> None:
         src = self._expand_template(entry["src"])
+
+        if "*" in src:
+            dest = self._expand_template(entry["dest"])
+            prefix, _, suffix = src.partition("*")
+            dprefix, _, dsuffix = dest.partition("*")
+            matches = sorted(str(match) for match in Path(src).parent.glob(Path(src).name))
+            if not matches:
+                self._hal_says(f"no matches {src}")
+                return
+            for match in matches:
+                star = match[len(prefix) : len(match) - len(suffix)]
+                self._copy_one(match, f"{dprefix}{star}{dsuffix}")
+            return
+
         if not Path(src).exists():
             self._hal_says(f"not found {src}")
             return

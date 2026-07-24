@@ -47,6 +47,10 @@
     {
       "src": "{{HOME}}/Projects/personal/",
       "dest": "{{HOME}}/Dropbox/Projects/personal/"
+    },
+    {
+      "src": "{{HOME}}/Projects/*.code-workspace",
+      "dest": "{{HOME}}/Dropbox/Projects/*.code-workspace"
     }
   ],
   "copies": [],

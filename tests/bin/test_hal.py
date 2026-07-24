@@ -251,6 +251,54 @@ class TestCopyEntryMerge:
         assert not (dest / "node_modules").exists()
 
 
+class TestCopyEntryGlob:
+    """_copy_entry expands a single `*`, copying each match with the star spliced into dest."""
+
+    def test_pattern_copies_each_match(self, hal_instance, tmp_path):
+        """Each file matching the src pattern is copied; non-matching files are left alone."""
+        src_dir = tmp_path / "projects"
+        src_dir.mkdir()
+        (src_dir / "acme.code-workspace").write_text("acme")
+        (src_dir / "beta.code-workspace").write_text("beta")
+        (src_dir / "notes.txt").write_text("ignore me")
+
+        dest_dir = tmp_path / "dropbox"
+
+        entry = {"src": str(src_dir / "*.code-workspace"), "dest": str(dest_dir / "*.code-workspace")}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(entry)
+
+        assert (dest_dir / "acme.code-workspace").read_text() == "acme"
+        assert (dest_dir / "beta.code-workspace").read_text() == "beta"
+        assert not (dest_dir / "notes.txt").exists()
+
+    def test_pattern_no_matches_is_noop(self, hal_instance, tmp_path):
+        """A pattern that matches nothing copies nothing and does not create the dest."""
+        src_dir = tmp_path / "projects"
+        src_dir.mkdir()
+        dest_dir = tmp_path / "dropbox"
+
+        entry = {"src": str(src_dir / "*.code-workspace"), "dest": str(dest_dir / "*.code-workspace")}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(entry)
+
+        assert not dest_dir.exists()
+
+    def test_pattern_restore_reverses(self, hal_instance, tmp_path):
+        """Swapping src/dest (as restore does) globs the dest side and writes back symmetrically."""
+        backup_dir = tmp_path / "dropbox"
+        backup_dir.mkdir()
+        (backup_dir / "acme.code-workspace").write_text("backed up")
+
+        local_dir = tmp_path / "projects"
+
+        swapped = {"src": str(backup_dir / "*.code-workspace"), "dest": str(local_dir / "*.code-workspace")}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(swapped)
+
+        assert (local_dir / "acme.code-workspace").read_text() == "backed up"
+
+
 class TestBackupRestore:
     """backup copies src->dest, restore copies dest->src after confirmation."""
 
