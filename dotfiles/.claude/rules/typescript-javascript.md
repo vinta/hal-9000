@@ -9,19 +9,13 @@ paths:
 
 - Before adding a dependency, search npm or the web for the latest version
 - Pin exact dependency versions in `package.json` — no `^` or `~` prefixes
-- Use the `typescript` LSP tool for type-aware code navigation when grep's text matching would be ambiguous. LSP resolves symbol relationships through the type system, so `findReferences` on a function returns its actual call sites, not every file containing the same string. Reach for LSP when:
-  - Tracing all usages before removing or renaming a symbol (`findReferences`)
-  - Understanding a function's callers or callees (`incomingCalls` / `outgoingCalls`)
-  - Navigating to a symbol's definition (`goToDefinition`)
-  - Checking type information at a position (`hover`)
-  - Surveying a file's or workspace's structure (`documentSymbol` / `workspaceSymbol`)
 - Use `node:` prefix for Node.js built-in modules (e.g., `node:fs`, `node:path`)
 - Write proper types/interfaces instead of `any` or casts like `as any` / `as unknown`. When a value is genuinely untypable, use `unknown` and narrow it explicitly. `any` is the last resort when no typed alternative exists
 - Prefer `interface` over `type` for object shapes (extendable, better error messages)
 - Avoid enums. Use union types (`type Status = 'active' | 'inactive'`) or `as const` objects
-- Don't prefix interfaces with `I` or type aliases with `T` (e.g., `User` not `IUser`)
 - Mark properties and parameters `readonly` when they should not be mutated
 - Do not add explicit return types. Let TypeScript infer them
+- Use the `typescript` LSP tool for type-aware code navigation when grep's text matching would be ambiguous
 
 <verify_with_browser if="you completed a frontend change (UI component, page, client-side behavior)" only_if="playwright-cli skill is installed in project or user scope">
 After implementing frontend changes, use the `playwright-cli` skill to visually verify the result in a real browser. Check layout, responsiveness, and interactive behavior rather than assuming correctness from code alone.
