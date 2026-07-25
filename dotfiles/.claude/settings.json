@@ -5,8 +5,7 @@
     "CLAUDE_CODE_EFFORT_LEVEL": "max",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
-    "DISABLE_FEEDBACK_COMMAND": "1",
-    "USE_BUILTIN_RIPGREP": "0"
+    "DISABLE_FEEDBACK_COMMAND": "1"
   },
   "permissions": {
     "allow": [
