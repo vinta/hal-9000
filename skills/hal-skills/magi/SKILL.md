@@ -4,7 +4,6 @@ description: Use when brainstorming ideas, features, or directions for a project
 compatibility: Designed for Claude Code
 user-invocable: true
 disable-model-invocation: true
-model: fable
 allowed-tools:
   - AskUserQuestion
   - TeamCreate
@@ -24,7 +23,7 @@ allowed-tools:
 
 Multi-model brainstorming panel. Three teammates explore a question in parallel, each backed by a different model family, then the lead consolidates their proposals for the user.
 
-- **Scientist**: reasons directly as Claude Opus (no external dispatch)
+- **Scientist**: reasons directly as Claude (no external dispatch)
 - **Mother**: delegates to OpenAI Codex via `mcp__codex__codex` MCP tool
 - **Woman**: delegates to Google Gemini via `gemini` CLI
 

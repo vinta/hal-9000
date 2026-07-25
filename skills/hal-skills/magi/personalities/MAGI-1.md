@@ -29,7 +29,7 @@ When the lead sends you the consolidated proposals for debate:
 
 ## Teammate Checklist
 
-The Scientist reasons directly as Claude Opus. No external model invocation needed.
+The Scientist reasons directly as Claude. No external model invocation needed.
 
 1. **Gather project context**: read CLAUDE.md, key files, and recent commits relevant to the question
 2. **Ask clarifying questions**: if anything is unclear, ask the lead (via `SendMessage`). The lead relays to the user
