@@ -6,6 +6,14 @@
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough
 - Do not use em dashes (`—`), double dashes (`--`), or semicolons in prose. They're overused by LLMs and make text look AI-generated
 
+<tone_preference>
+Keep outputs reasonably concise.
+</tone_preference>
+
+<progress_updates>
+While working, give a brief update only when you find something important or change direction. When you finish, lead with the outcome: your first sentence should answer "what happened" or "what did you find", with supporting detail after it for readers who want it.
+</progress_updates>
+
 <use_ask_user_question>
 When you need input and the answer is a selection rather than a sentence (multiple-choice, yes/no confirmations that gate next steps, picking from a list, choosing between approaches), ask with the `AskUserQuestion` tool instead of plain text, so the user clicks an option instead of typing.
 
