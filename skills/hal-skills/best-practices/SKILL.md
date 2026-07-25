@@ -3,7 +3,6 @@ name: best-practices
 description: Use when the user asks about best practices, gotchas, common pitfalls, or recommended patterns for tools, libraries, config formats, API patterns, or project setup, or when setting up, configuring, choosing, or refining these where outdated guidance causes debugging pain. Also use when the user says "search online", "how should I", or "what's the best way to"
 user-invocable: true
 model: sonnet
-effort: high
 allowed-tools:
   - Agent
   - WebSearch

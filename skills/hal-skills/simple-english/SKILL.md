@@ -4,7 +4,6 @@ description: Use when the user wants technical or developer writing (docs, issue
 argument-hint: [text, file, or pointer to rewrite]
 user-invocable: true
 model: sonnet
-effort: high
 ---
 
 # Simple English

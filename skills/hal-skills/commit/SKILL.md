@@ -5,7 +5,6 @@ argument-hint: [description of the changes]
 user-invocable: true
 context: fork
 model: sonnet
-effort: high
 allowed-tools:
   - Grep
   - Glob
