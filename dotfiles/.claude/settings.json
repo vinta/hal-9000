@@ -138,13 +138,6 @@
       },
       "autoUpdate": true
     },
-    "astral-sh": {
-      "source": {
-        "source": "github",
-        "repo": "astral-sh/claude-code-plugins"
-      },
-      "autoUpdate": true
-    },
     "openai-codex": {
       "source": {
         "source": "github",
