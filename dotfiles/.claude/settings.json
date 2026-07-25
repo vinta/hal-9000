@@ -153,19 +153,19 @@
       "autoUpdate": true
     }
   },
-  "model": "fable",
+  "model": "opus[1m]",
   "advisorModel": "fable",
-  "agentPushNotifEnabled": true,
-  "disableClaudeAiConnectors": true,
   "enableWorkflows": true,
-  "inputNeededNotifEnabled": true,
-  "remoteControlAtStartup": false,
+  "disableClaudeAiConnectors": true,
+  "viewMode": "verbose",
   "showClearContextOnPlanAccept": true,
   "showThinkingSummaries": true,
-  "skipAutoPermissionPrompt": true,
+  "verbose": true,
   "switchModelsOnFlag": false,
   "teammateMode": "tmux",
-  "verbose": true,
-  "viewMode": "verbose",
+  "remoteControlAtStartup": false,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
