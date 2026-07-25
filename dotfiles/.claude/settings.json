@@ -125,21 +125,29 @@
   },
   "enabledPlugins": {
     "codex@openai-codex": true,
+    "mattpocock-skills@mattpocock": true,
     "hal-skills@hal-9000": true,
     "hal-voice@hal-9000": true
   },
   "extraKnownMarketplaces": {
-    "hal-9000": {
-      "source": {
-        "source": "github",
-        "repo": "vinta/hal-9000"
-      },
-      "autoUpdate": true
-    },
     "openai-codex": {
       "source": {
         "source": "github",
         "repo": "openai/codex-plugin-cc"
+      },
+      "autoUpdate": true
+    },
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
+      },
+      "autoUpdate": true
+    },
+    "hal-9000": {
+      "source": {
+        "source": "github",
+        "repo": "vinta/hal-9000"
       },
       "autoUpdate": true
     }
