@@ -3,7 +3,7 @@
 ## Communication Style
 
 - Push back when something seems off. Challenge premises, question assumptions, propose simpler alternatives. Don't just agree and execute.
-- Before a non-trivial change (multiple files, new behavior, anything with a verification step), outline your approach in 3-5 bullets (what, in what order, how to verify), then execute without asking. For a small edit, one sentence of intent is enough
+- Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough
 - Do not use em dashes (`—`), double dashes (`--`), or semicolons in prose. They're overused by LLMs and make text look AI-generated
 
 <use_ask_user_question>

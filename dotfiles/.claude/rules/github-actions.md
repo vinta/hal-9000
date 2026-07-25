@@ -13,9 +13,7 @@ paths:
   ```
 
 - Verify the SHA comes from the action's upstream repo, not a fork, before pinning
-- Enable Dependabot for the `github-actions` ecosystem. It updates the SHA and version comment together. Caveat: Dependabot raises security _alerts_ only for semver-pinned actions, not SHA-pinned ones, so pair SHA pinning with regular Dependabot update PRs
-- Consider adding `ossf/scorecard-action` or CodeQL workflow scanning to catch unpinned actions, token over-scoping, and script injection automatically
-- Add `.github/workflows/` (and ideally `.github/`) to `CODEOWNERS` so workflow changes require review from a designated reviewer
+- SHA pinning suppresses Dependabot security _alerts_ (it raises them only for semver-pinned actions), so pair it with Dependabot update PRs, which bump the SHA and version comment together
 - Declare top-level `permissions:` explicitly, defaulting to `contents: read`. Add per-job overrides only where required. Omitting `permissions:` falls back to repo or org defaults, which may grant more than needed
 - Use OIDC (`permissions: id-token: write` plus `contents: read`) to authenticate to cloud providers instead of storing access keys as long-lived secrets
 - Never interpolate `${{ github.event.* }}` or any user-controlled context directly into a `run:` block. Route through step-level `env:` and reference the variable, quoted:
@@ -35,5 +33,4 @@ paths:
 - Set `timeout-minutes:` on every job. The default is 360 minutes (6 hours), which wastes runner minutes on hung jobs
 - PR-triggered workflows include a `concurrency:` group keyed on ref with `cancel-in-progress: true` to drop superseded runs
 - Matrix jobs default `fail-fast: true`. Set `fail-fast: false` only when you genuinely want every combination's result
-- Consume step outputs via `steps.<id>.outputs.<name>` — requires `id:` on the producing step
 - Cache keys must hash the lockfile: `key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}`. Static keys silently serve stale artifacts
