@@ -166,5 +166,6 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
   "voiceEnabled": true
 }
