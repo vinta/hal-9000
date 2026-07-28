@@ -36,7 +36,6 @@ If you prefer only using some of them:
 - [blindspot](skills/hal-skills/blindspot/SKILL.md): Surveys unfamiliar territory and turns your unknown unknowns into known unknowns
 - [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
 - [simple-english](skills/hal-skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
-- [magi](skills/hal-skills/magi): Multi-model brainstorming with Claude, Codex, and Gemini
 - [refactor-claude-md](skills/hal-skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
 - [refactor-agents-md](skills/hal-skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure
 

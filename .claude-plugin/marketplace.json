@@ -35,7 +35,6 @@
         "./blindspot",
         "./best-practices",
         "./simple-english",
-        "./magi",
         "./refactor-claude-md",
         "./refactor-agents-md",
         "./update-allowed-tools"
