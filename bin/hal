@@ -270,7 +270,24 @@ class HAL9000:
         self._hal_says(f"link {src} -> {dest}")
 
     @staticmethod
+    def _is_unchanged(src: str, dest: str) -> bool:
+        """Same quick check as rsync: matching size and mtime means no rewrite needed.
+
+        Rewriting an identical file makes Dropbox and Time Machine re-examine it, so skip it.
+        """
+        dest_path = Path(dest)
+        if not dest_path.exists():
+            return False
+
+        src_stat = Path(src).stat()
+        dest_stat = dest_path.stat()
+        return src_stat.st_size == dest_stat.st_size and src_stat.st_mtime_ns == dest_stat.st_mtime_ns
+
+    @staticmethod
     def _copy_file_allow_overwrite(src: str, dest: str) -> None:
+        if HAL9000._is_unchanged(src, dest):
+            return
+
         dest_path = Path(dest)
         if dest_path.exists() and not dest_path.stat().st_mode & stat.S_IWUSR:
             dest_path.chmod(dest_path.stat().st_mode | stat.S_IWUSR)
@@ -286,6 +303,9 @@ class HAL9000:
                 dirs_exist_ok=True,
             )
         else:
+            if self._is_unchanged(src, dest):
+                self._hal_says(f"unchanged {src}")
+                return
             Path(dest).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dest)
         self._hal_says(f"copy {src} -> {dest}")

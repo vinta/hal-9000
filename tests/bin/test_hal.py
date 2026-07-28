@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -249,6 +250,96 @@ class TestCopyEntryMerge:
 
         assert (dest / "real.txt").exists()
         assert not (dest / "node_modules").exists()
+
+
+class TestSkipUnchanged:
+    """Files whose size and mtime already match at dest are not rewritten (avoids Dropbox re-sync churn)."""
+
+    @staticmethod
+    def _match_mtime(src, dest):
+        os.utime(dest, ns=(src.stat().st_atime_ns, src.stat().st_mtime_ns))
+
+    def test_skips_single_file_when_size_and_mtime_match(self, hal_instance, tmp_path):
+        """Same size + mtime means no rewrite, proven by dest keeping different content."""
+        src = tmp_path / "src.txt"
+        src.write_text("AAAA")
+        dest = tmp_path / "dest.txt"
+        dest.write_text("BBBB")
+        self._match_mtime(src, dest)
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert dest.read_text() == "BBBB"
+
+    def test_copies_when_mtime_differs(self, hal_instance, tmp_path):
+        """Same size but different mtime still copies."""
+        src = tmp_path / "src.txt"
+        src.write_text("AAAA")
+        dest = tmp_path / "dest.txt"
+        dest.write_text("BBBB")
+        os.utime(dest, ns=(src.stat().st_atime_ns, src.stat().st_mtime_ns + 1_000_000_000))
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert dest.read_text() == "AAAA"
+
+    def test_copies_when_size_differs(self, hal_instance, tmp_path):
+        """Same mtime but different size still copies."""
+        src = tmp_path / "src.txt"
+        src.write_text("AAAA")
+        dest = tmp_path / "dest.txt"
+        dest.write_text("BB")
+        self._match_mtime(src, dest)
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert dest.read_text() == "AAAA"
+
+    def test_skips_unchanged_files_inside_directory(self, hal_instance, tmp_path):
+        """Directory copies skip unchanged files but still copy changed ones."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "same.txt").write_text("AAAA")
+        (src / "changed.txt").write_text("new content")
+
+        dest = tmp_path / "dest"
+        dest.mkdir()
+        (dest / "same.txt").write_text("BBBB")
+        self._match_mtime(src / "same.txt", dest / "same.txt")
+        (dest / "changed.txt").write_text("old content")
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert (dest / "same.txt").read_text() == "BBBB"
+        assert (dest / "changed.txt").read_text() == "new content"
+
+    def test_skips_readonly_unchanged_file_without_chmod(self, hal_instance, tmp_path):
+        """Unchanged read-only files (e.g. git objects) are left alone, mode intact."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "object").write_text("AAAA")
+
+        dest = tmp_path / "dest"
+        dest.mkdir()
+        dest_file = dest / "object"
+        dest_file.write_text("BBBB")
+        self._match_mtime(src / "object", dest_file)
+        dest_file.chmod(0o444)
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert dest_file.read_text() == "BBBB"
+        assert dest_file.stat().st_mode & 0o777 == 0o444
 
 
 class TestCopyEntryGlob:
