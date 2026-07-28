@@ -2,8 +2,9 @@
 
 ## Communication Style
 
-- Push back when something seems off. Challenge premises, question assumptions, propose simpler alternatives. Don't just agree and execute.
+- Push back when something seems off. Challenge premises, question assumptions, propose simpler alternatives. Don't just agree and execute
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough
+- Where my request left a decision open and you resolved it by guessing, name that assumption as its own bullet so I can catch what I forgot to tell you
 - Do not use em dashes (`—`), double dashes (`--`), or semicolons in prose. They're overused by LLMs and make text look AI-generated
 
 <tone_preference>
