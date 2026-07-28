@@ -104,6 +104,73 @@ class TestUserFilenameValidation:
             hal_instance.copy(ns)
 
 
+class TestSyncLinks:
+    """_sync_links never destroys a real directory unless forced."""
+
+    def test_refuses_to_replace_real_directory(self, hal_instance, tmp_path):
+        """A real directory at dest is left alone, so unmanaged files survive."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "managed.md").write_text("from repo")
+
+        dest = tmp_path / "dest"
+        dest.mkdir()
+        (dest / "unmanaged.md").write_text("preserve me")
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_links({"src": str(src), "dest": str(dest)})
+
+        assert not dest.is_symlink()
+        assert (dest / "unmanaged.md").read_text() == "preserve me"
+
+    def test_force_replaces_real_directory(self, hal_instance, tmp_path):
+        """--force is the explicit opt-in to discard the directory and link."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "managed.md").write_text("from repo")
+
+        dest = tmp_path / "dest"
+        dest.mkdir()
+        (dest / "unmanaged.md").write_text("discard me")
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_links({"src": str(src), "dest": str(dest)}, force=True)
+
+        assert dest.is_symlink()
+        assert dest.resolve() == src.resolve()
+
+    def test_replaces_real_file_without_force(self, hal_instance, tmp_path):
+        """A single file at dest is still adopted, which is how a fresh machine links up."""
+        src = tmp_path / "src.txt"
+        src.write_text("from repo")
+
+        dest = tmp_path / "dest.txt"
+        dest.write_text("pre-existing")
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_links({"src": str(src), "dest": str(dest)})
+
+        assert dest.is_symlink()
+        assert dest.read_text() == "from repo"
+
+    def test_relinks_existing_symlink_without_force(self, hal_instance, tmp_path):
+        """A stale symlink at dest is repointed, since nothing is destroyed."""
+        src = tmp_path / "src"
+        src.mkdir()
+
+        stale = tmp_path / "stale"
+        stale.mkdir()
+
+        dest = tmp_path / "dest"
+        dest.symlink_to(stale)
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._sync_links({"src": str(src), "dest": str(dest)})
+
+        assert dest.is_symlink()
+        assert dest.resolve() == src.resolve()
+
+
 class TestCopyEntryMerge:
     """_copy_entry merges directories instead of replacing them."""
 

@@ -98,6 +98,7 @@ class HAL9000:
 
         sync_parser = subparsers.add_parser("sync", help="sync all links and copies")
         sync_parser.set_defaults(func=self.sync)
+        sync_parser.add_argument("--force", action="store_true", help="replace real directories at link destinations")
 
         backup_parser = subparsers.add_parser("backup", help="back up all backup entries to their destinations")
         backup_parser.set_defaults(func=self.backup)
@@ -250,7 +251,7 @@ class HAL9000:
         self.dotfiles.save()
         self.dotfiles.show()
 
-    def _sync_links(self, link: dict[str, str]) -> None:
+    def _sync_links(self, link: dict[str, str], *, force: bool = False) -> None:
         src = self._expand_template(link["src"])
         if not Path(src).exists():
             self._hal_says(f"not found {src}")
@@ -259,8 +260,12 @@ class HAL9000:
         dest = self._expand_template(link["dest"]).rstrip("/")
         Path(dest).parent.mkdir(parents=True, exist_ok=True)
 
-        # If dest already exists as a real directory, remove it so the symlink replaces it
+        # If dest already exists as a real directory, remove it so the symlink replaces it.
+        # It may hold files no manifest entry covers, so make destroying them explicit.
         if Path(dest).is_dir() and not Path(dest).is_symlink():
+            if not force:
+                self._hal_says(f"refusing to replace directory {dest}, re-run with --force")
+                return
             shutil.rmtree(dest)
 
         dest_path = Path(dest)
@@ -336,7 +341,7 @@ class HAL9000:
     def sync(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures: list[concurrent.futures.Future[None]] = []
-            futures.extend(executor.submit(self._sync_links, link) for link in self.dotfiles.data["links"])
+            futures.extend(executor.submit(self._sync_links, link, force=namespace.force) for link in self.dotfiles.data["links"])
             futures.extend(executor.submit(self._copy_entry, copy) for copy in self.dotfiles.data["copies"])
             for f in concurrent.futures.as_completed(futures):
                 f.result()
