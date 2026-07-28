@@ -11,7 +11,6 @@ import stat
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any
 
 # Only needed for generating shell completion during local development
 try:
@@ -23,26 +22,25 @@ except ImportError:
 class Setting:
     REPO_ROOT: str = str(Path(__file__).resolve().parent.parent)
     DOTFILES_ROOT: str = str(Path(REPO_ROOT) / "dotfiles")
+    IGNORE_PATTERNS: tuple[str, ...] = (".DS_Store", "__pycache__", "node_modules")
 
 
 class Dotfiles:
     DEFAULT_CONFIG: str = str(Path(Setting.DOTFILES_ROOT) / "hal_dotfiles.json")
     ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest")
-    # Holds bare glob patterns rather than src/dest pairs, unlike every other field
-    IGNORE_KEY: str = "ignore"
 
     def __init__(self, path: str | None = None) -> None:
         self.path: str = path or self.DEFAULT_CONFIG
-        self._data: dict[str, list[Any]] | None = None
+        self._data: dict[str, list[dict[str, str]]] | None = None
 
     @property
-    def data(self) -> dict[str, list[Any]]:
+    def data(self) -> dict[str, list[dict[str, str]]]:
         if self._data is None:
             try:
                 with Path(self.path).open() as f:
                     self._data = json.load(f)
             except FileNotFoundError:
-                self._data = {"backups": [], "copies": [], self.IGNORE_KEY: [], "links": []}
+                self._data = {"backups": [], "copies": [], "links": []}
 
         assert self._data is not None  # noqa: S101 assert
         return self._data
@@ -54,11 +52,8 @@ class Dotfiles:
         except StopIteration:
             return None
 
-    def _ordered_data(self) -> dict[str, list[Any]]:
-        return {
-            field_name: entries if field_name == self.IGNORE_KEY else [{key: entry[key] for key in self.ENTRY_KEY_ORDER if key in entry} for entry in entries]
-            for field_name, entries in sorted(self.data.items())
-        }
+    def _ordered_data(self) -> dict[str, list[dict[str, str]]]:
+        return {field_name: [{key: entry[key] for key in self.ENTRY_KEY_ORDER if key in entry} for entry in entries] for field_name, entries in sorted(self.data.items())}
 
     def show(self) -> None:
         print(json.dumps(self._ordered_data(), indent=2, separators=(",", ": ")))
@@ -305,13 +300,10 @@ class HAL9000:
             dest_path.chmod(dest_path.stat().st_mode | stat.S_IWUSR)
         shutil.copy2(src, dest)
 
-    def _ignore_patterns(self) -> list[str]:
-        # A hand-edited manifest may predate the ignore field, so treat it as optional
-        return self.dotfiles.data.get(Dotfiles.IGNORE_KEY, [])
-
-    def _is_ignored(self, path: str) -> bool:
+    @staticmethod
+    def _is_ignored(path: str) -> bool:
         name = Path(path).name
-        return any(fnmatch.fnmatch(name, pattern) for pattern in self._ignore_patterns())
+        return any(fnmatch.fnmatch(name, pattern) for pattern in Setting.IGNORE_PATTERNS)
 
     def _copy_one(self, src: str, dest: str) -> None:
         if self._is_ignored(src):
@@ -322,7 +314,7 @@ class HAL9000:
             shutil.copytree(
                 src,
                 dest,
-                ignore=shutil.ignore_patterns(*self._ignore_patterns()),
+                ignore=shutil.ignore_patterns(*Setting.IGNORE_PATTERNS),
                 copy_function=self._copy_file_allow_overwrite,
                 dirs_exist_ok=True,
             )
