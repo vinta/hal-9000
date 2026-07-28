@@ -13,7 +13,13 @@ import time
 import urllib.error
 import urllib.request
 from pathlib import Path
-from typing import Literal, NotRequired, TypedDict
+from typing import TYPE_CHECKING, Literal, TypedDict
+
+if TYPE_CHECKING:
+    # NotRequired is 3.11+, but this runs under whatever `python3` resolves to,
+    # which on a stock macOS is 3.9. The `annotations` future keeps every
+    # annotation below a string, so it is never evaluated at runtime.
+    from typing import NotRequired
 
 LOG_PATH = Path("/tmp/hal-statusline.log")  # noqa: S108 hardcoded-temp-file
 
