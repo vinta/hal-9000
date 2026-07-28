@@ -35,6 +35,20 @@ class TestValidatePath:
         result = hal_instance._expand_template("{{HOME}}/.zshrc")
         assert result == f"{Path.home()}/.zshrc"
 
+    def test_sibling_directory_sharing_home_prefix(self, hal_instance):
+        """A sibling whose name merely starts with the home directory's name is not under it."""
+        home = Path.home()
+        with pytest.raises(SystemExit):
+            hal_instance._validate_path(f"{home.parent}/{home.name}-elsewhere/stuff")
+
+    def test_sibling_directory_sharing_repo_root_prefix(self, hal_instance, hal_module):
+        repo_root = Path(hal_module.Setting.REPO_ROOT)
+        with pytest.raises(SystemExit):
+            hal_instance._validate_path(f"{repo_root.parent}/{repo_root.name}-elsewhere/stuff")
+
+    def test_home_itself_is_valid(self, hal_instance):
+        hal_instance._validate_path(str(Path.home()))
+
 
 class TestUpdateSanitization:
     def test_extra_args_are_quoted(self, hal_instance):
