@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-macOS dev environment automation: dotfiles, AI agent configs, skills, and dev stacks. Domain vocabulary (manifest, link, copy, backup, sync, restore) is defined in `CONTEXT.md`.
+macOS dev environment automation: dotfiles, AI agent configs, skills, and dev stacks.
 
 ## Commands
 
