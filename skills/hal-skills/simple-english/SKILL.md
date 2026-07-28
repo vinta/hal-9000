@@ -3,7 +3,6 @@ name: simple-english
 description: Use when the user wants technical or developer writing (docs, issues, READMEs, comments, UI text) drafted or rewritten to be clear and simple for a global audience
 argument-hint: [text, file, or pointer to rewrite]
 user-invocable: true
-model: sonnet
 ---
 
 # Simple English

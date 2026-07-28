@@ -2,7 +2,6 @@
 name: best-practices
 description: Use when the user asks about best practices, gotchas, common pitfalls, or recommended patterns for tools, libraries, config formats, API patterns, or project setup, or when setting up, configuring, choosing, or refining these where outdated guidance causes debugging pain. Also use when the user says "search online", "how should I", or "what's the best way to"
 user-invocable: true
-model: sonnet
 allowed-tools:
   - Agent
   - WebSearch
@@ -39,7 +38,7 @@ Break the topic into 2-4 specific queries. Dedicate at least one query to pitfal
 
 ### 2. Parallel Research
 
-Dispatch one subagent per query in a single message so they run in parallel. Each uses `find-docs` (Context7) and `WebSearch`. Be concrete in each subagent prompt: pass library names, version constraints, and the user's specific context. Vague prompts produce vague results.
+Dispatch one subagent per query in a single message so they run in parallel, passing `model: sonnet` on each Agent call so the bulk research stays cheap while orchestration and synthesis keep the session model. Each uses `find-docs` (Context7) and `WebSearch`. Be concrete in each subagent prompt: pass library names, version constraints, and the user's specific context. Vague prompts produce vague results.
 
 <subagent_prompt_template>
 <context>
