@@ -59,8 +59,11 @@ class Dotfiles:
         print(json.dumps(self._ordered_data(), indent=2, separators=(",", ": ")))
 
     def save(self) -> None:
+        # Read before opening for write: opening truncates, and data loads lazily,
+        # so building the payload inside the with block would read back an empty file
+        ordered_data = self._ordered_data()
         with Path(self.path).open("w") as f:
-            json.dump(self._ordered_data(), f, indent=2, separators=(",", ": "))
+            json.dump(ordered_data, f, indent=2, separators=(",", ": "))
 
 
 class Formatter(argparse.HelpFormatter):

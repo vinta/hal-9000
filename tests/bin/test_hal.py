@@ -1,10 +1,36 @@
 import argparse
+import json
 import os
 import sys
 from pathlib import Path
 from unittest.mock import patch
 
 import pytest
+
+
+class TestDotfilesSave:
+    """save() truncates the manifest, so it must build its payload first."""
+
+    def test_save_before_any_read_preserves_manifest(self, hal_module, tmp_path):
+        """Manifest data loads lazily, so saving an untouched Dotfiles must not lose it."""
+        manifest = tmp_path / "hal_dotfiles.json"
+        entries = {"backups": [], "copies": [], "links": [{"src": "a", "dest": "b"}]}
+        manifest.write_text(json.dumps(entries))
+
+        hal_module.Dotfiles(str(manifest)).save()
+
+        assert json.loads(manifest.read_text()) == entries
+
+    def test_save_after_read_preserves_manifest(self, hal_module, tmp_path):
+        manifest = tmp_path / "hal_dotfiles.json"
+        entries = {"backups": [], "copies": [], "links": [{"src": "a", "dest": "b"}]}
+        manifest.write_text(json.dumps(entries))
+
+        dotfiles = hal_module.Dotfiles(str(manifest))
+        assert dotfiles.data == entries
+        dotfiles.save()
+
+        assert json.loads(manifest.read_text()) == entries
 
 
 class TestValidatePath:
