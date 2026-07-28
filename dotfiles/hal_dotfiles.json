@@ -104,6 +104,10 @@
       "dest": "{{HOME}}/.claude/rules/"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/output-styles/",
+      "dest": "{{HOME}}/.claude/output-styles/"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md",
       "dest": "{{HOME}}/.codex/AGENTS.md"
     },

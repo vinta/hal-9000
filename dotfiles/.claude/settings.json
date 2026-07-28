@@ -154,6 +154,7 @@
   },
   "model": "opus[1m]",
   "advisorModel": "fable",
+  "outputStyle": "Concise",
   "enableWorkflows": true,
   "disableClaudeAiConnectors": true,
   "viewMode": "verbose",
