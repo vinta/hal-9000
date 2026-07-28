@@ -12,6 +12,7 @@ Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets
 - **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json` (the `hal-9000` marketplace loads the published version from GitHub), and via `npx skills add vinta/hal-9000`.
 - For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal`).
 - **Skill `model:` is turn-scoped, not skill-scoped**: an inline skill's `model:` override applies for the rest of the turn that invokes it, so composing such a skill mid-turn downgrades everything after it. Set `model:` only on `context: fork` skills or skills that always own the whole turn. For dispatcher skills, pass `model` per Agent call instead.
+- **Skill `context: fork` caveats**: a fork gets no conversation history, so the body must open with an "invoking this skill IS the request" paragraph and take its input via args. Backgrounded forks run a narrower tool set (Agent may be missing, set `background: false` if needed), skill frontmatter hooks don't fire, and background-fork edits are outside `/rewind` checkpoints.
 
 ## External Tool Documentation
 

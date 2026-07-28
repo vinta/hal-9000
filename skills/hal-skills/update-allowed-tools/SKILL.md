@@ -10,7 +10,10 @@ allowed-tools:
   - Read
   - Edit
   - Bash(find:*)
+  - Bash(git status:*)
 ---
+
+Invoking this skill IS the request. If the user message looks empty, that is normal and expected, the task is fully specified here. Never ask what to do.
 
 # Overview
 
@@ -25,7 +28,7 @@ Analyzes a skill's full content, SKILL.md and any sibling files in the same dire
 
 ## Instructions
 
-1. **Parse argument**: The argument is either a file path to a SKILL.md file, or a skill name/description. If no file path is provided, search for the skill using Glob — first in the current working directory (e.g., `**/skills/**/<name>/SKILL.md`), then in `~/.claude/skills/**/<name>/SKILL.md`.
+1. **Parse argument**: The argument is either a file path to a SKILL.md file, or a skill name/description. If no file path is provided, search for the skill using Glob in the current working directory (e.g., `**/skills/**/<name>/SKILL.md`). If there is no argument at all, run `git status` and target the most recently modified skill file in the working tree.
 
 2. **Read the skill file** and separate the YAML frontmatter from the body content. Also read any other files in the same directory (sibling files referenced by or bundled with the skill).
 
