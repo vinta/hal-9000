@@ -31,6 +31,10 @@ Invoke the `find-docs` skill BEFORE writing code or config that touches any of t
 If the user provides URLs, `WebFetch` each one as a primary source before searching further. Never skip user-provided URLs. For topics `find-docs` covers poorly, `WebFetch` the official docs instead of falling back to training data.
 </prefer_online_sources>
 
+<experiment_before_implementing>
+When a planned change is justified by how an external black-box behaves (a sync client, CI, platform quirks, undocumented semantics) and docs can't settle it, don't implement on theory. First run the smallest local experiment that could falsify the assumption, preferring the system's observable ground truth over proxy metrics. If the decisive signal is only visible to me (a GUI, a path you're blocked from), hand me stepwise commands to run and interpret what I report.
+</experiment_before_implementing>
+
 <auto_commit if="you have completed the user's requested change">
 Use the `commit` skill to commit, always passing a brief description of what changed (e.g. `/commit add login endpoint`). Don't batch unrelated changes into one commit.
 </auto_commit>
