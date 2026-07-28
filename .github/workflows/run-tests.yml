@@ -59,3 +59,36 @@ jobs:
             dotfiles/.claude/hooks/guard-bash-paths.py \
             plugins/hal-statusline/hal-statusline.py \
             plugins/hal-voice/scripts/hal-voice.py
+
+      # Parsing is not enough: a 3.11+ name in a top-level `from typing import`
+      # compiles fine on 3.9 and only fails when the script is actually run.
+      - name: Check scripts still import under system python3
+        run: |
+          python - <<'PY'
+          import importlib.machinery
+          import importlib.util
+          import sys
+
+          SCRIPTS = [
+              "bin/hal",
+              "dotfiles/.claude/hooks/guard-bash-paths.py",
+              "plugins/hal-statusline/hal-statusline.py",
+              "plugins/hal-voice/scripts/hal-voice.py",
+          ]
+
+          failed = []
+          for path in SCRIPTS:
+              name = path.rsplit("/", 1)[-1].replace("-", "_").replace(".py", "")
+              loader = importlib.machinery.SourceFileLoader(name, path)
+              spec = importlib.util.spec_from_loader(name, loader)
+              module = importlib.util.module_from_spec(spec)
+              try:
+                  spec.loader.exec_module(module)
+              except Exception as exc:
+                  failed.append(path)
+                  print("FAIL {}: {}: {}".format(path, type(exc).__name__, exc))
+              else:
+                  print("ok   {}".format(path))
+
+          sys.exit(1 if failed else 0)
+          PY
