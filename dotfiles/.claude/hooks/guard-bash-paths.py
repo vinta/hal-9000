@@ -67,7 +67,9 @@ def check(command: str) -> str | None:
     lower = stripped.lower()
     for prefix in DENIED_PREFIXES:
         # Anchor at a path boundary so `.config` does not match `.configuration`.
-        if re.search(re.escape(prefix.lower()) + r"(?![\w.\-])", lower):
+        # The boundary is either the separator itself or the end of the segment,
+        # so a prefix written with a trailing slash still matches files beneath it.
+        if re.search(re.escape(prefix.lower().rstrip("/")) + r"(?:/|(?![\w.\-]))", lower):
             return prefix
     if HOME.lower() in lower:
         for substr in DENIED_SUBSTRINGS:

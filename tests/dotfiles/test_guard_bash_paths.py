@@ -19,6 +19,16 @@ class TestCheck:
     def test_etc_prefix(self, guard):
         assert guard.check("cat /etc/passwd") == "/etc/"
 
+    def test_etc_without_trailing_slash(self, guard):
+        assert guard.check("ls /etc") == "/etc/"
+
+    def test_etc_lookalike_allowed(self, guard):
+        assert guard.check("cat /etcetera/notes.txt") is None
+
+    def test_prefix_boundary_is_respected(self, guard):
+        """A longer name that merely starts with a denied one is not blocked."""
+        assert guard.check(f"ls {guard.HOME}/.configuration/app") is None
+
     def test_credential_substring_under_home(self, guard):
         assert guard.check(f"cat {guard.HOME}/myapp/credentials.json") == "~/*credential*"
 
