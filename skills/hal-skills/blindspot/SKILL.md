@@ -8,6 +8,7 @@ allowed-tools:
   - Agent
   - WebSearch
   - Skill(find-docs)
+  - Skill(best-practices)
 ---
 
 # Blindspot
@@ -27,7 +28,7 @@ If the invocation doesn't already say, ask one `AskUserQuestion` round covering:
 Ground everything in current sources, not training data:
 
 - **Repo prior art**: search the codebase for existing patterns, conventions, and adjacent solutions. Use an Explore agent for broad sweeps.
-- **Tools and libraries**: invoke `find-docs` for current APIs and config. Add a `WebSearch` for pitfalls ("X gotchas", "X common mistakes"): pitfalls live in issue threads and post-mortems, not getting-started docs.
+- **Tools and libraries**: invoke `find-docs` for current APIs and config. Add a `WebSearch` for pitfalls ("X gotchas", "X common mistakes"): pitfalls live in issue threads and post-mortems, not getting-started docs. For terrain dominated by one tool's setup choices, delegate the sweep to the `best-practices` skill instead. It covers both halves with parallel subagents.
 - **Non-code domains** (design, audio, infra concepts): `WebSearch` for how practitioners judge quality in this domain.
 
 ### 3. Terrain briefing
