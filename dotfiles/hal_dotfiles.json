@@ -54,6 +54,11 @@
     }
   ],
   "copies": [],
+  "ignore": [
+    ".DS_Store",
+    "__pycache__",
+    "node_modules"
+  ],
   "links": [
     {
       "src": "{{REPO_ROOT}}/dotfiles/.hal_completion.zsh",

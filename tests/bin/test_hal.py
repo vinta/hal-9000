@@ -266,6 +266,70 @@ class TestCopyEntryMerge:
 
         assert dest.read_text() == "new content"
 
+    def test_skips_ignored_single_file(self, hal_instance, tmp_path):
+        """Ignore patterns apply to single-file copies, not just directory trees."""
+        src = tmp_path / ".DS_Store"
+        src.write_text("junk")
+        dest = tmp_path / "dest" / ".DS_Store"
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert not dest.exists()
+
+    def test_skips_ignored_glob_match(self, hal_instance, tmp_path):
+        """Ignore patterns apply to files matched by a glob entry."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "keep.log").write_text("keep")
+        (src / ".DS_Store").write_text("junk")
+
+        dest = tmp_path / "dest"
+        dest.mkdir()
+
+        copy_entry = {"src": str(src / "*"), "dest": str(dest / "*")}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(copy_entry)
+
+        assert (dest / "keep.log").read_text() == "keep"
+        assert not (dest / ".DS_Store").exists()
+
+    def test_patterns_come_from_manifest(self, hal_instance, tmp_path):
+        """Ignore patterns are manifest data, so a custom pattern is honored."""
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "notes.tmp").write_text("scratch")
+        (src / "real.txt").write_text("content")
+
+        dest = tmp_path / "dest"
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_ignore_patterns", return_value=["*.tmp"]),
+        ):
+            hal_instance._copy_entry(copy_entry)
+
+        assert (dest / "real.txt").read_text() == "content"
+        assert not (dest / "notes.tmp").exists()
+
+    def test_missing_ignore_field_is_tolerated(self, hal_instance, tmp_path):
+        """A manifest predating the ignore field still copies rather than crashing."""
+        src = tmp_path / "src.txt"
+        src.write_text("content")
+        dest = tmp_path / "dest.txt"
+
+        copy_entry = {"src": str(src), "dest": str(dest)}
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"copies": [copy_entry]}
+            hal_instance._copy_entry(copy_entry)
+
+        assert dest.read_text() == "content"
+
     def test_skips_ds_store(self, hal_instance, tmp_path):
         """.DS_Store files in src are not copied to dest."""
         src = tmp_path / "src"
