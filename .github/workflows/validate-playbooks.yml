@@ -1,4 +1,4 @@
-name: Validate Ansible Playbooks
+name: Validate Playbooks
 
 on:
   push:
