@@ -1,5 +1,5 @@
 ---
-- name: Ensure hal environment is sourced in .zshrc
+- name: Ensure hal is sourced in .zshrc
   lineinfile:
     dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/hal/files/hal_profile.sh"
