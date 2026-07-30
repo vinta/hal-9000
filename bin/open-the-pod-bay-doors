@@ -9,6 +9,8 @@ if [ ! -f /opt/homebrew/bin/brew ]; then
   printf "\n"
   printf "Install Homebrew...\n"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # The installer only prints the shellenv commands, so brew is not on PATH yet
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 else
   printf "\n"
   printf "Update Homebrew...\n"
