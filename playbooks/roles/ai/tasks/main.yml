@@ -14,6 +14,12 @@
   args:
     executable: /bin/bash
 
+# https://ollama.com/download
+- name: Install Ollama
+  shell: curl -fsSL https://ollama.com/install.sh | sh
+  args:
+    creates: /usr/local/bin/ollama
+
 # https://github.com/upstash/context7
 - name: Install ctx7 CLI
   shell: |
