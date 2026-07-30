@@ -28,6 +28,17 @@ curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-
 
 ## Components
 
+### Dotfiles
+
+Tool configs hardened against supply chain attacks and tuned for better DX:
+
+- [`.claude/settings.json`](dotfiles/.claude/settings.json)
+- [`.codex/config.toml`](dotfiles/.codex/config.toml)
+- [`.config/ghostty/config`](dotfiles/.config/ghostty/config)
+- [`.config/uv/uv.toml`](dotfiles/.config/uv/uv.toml)
+- [`.npmrc`](dotfiles/.npmrc)
+- [`.zshrc`](dotfiles/.zshrc)
+
 ### Claude Code Plugin: `hal-skills`
 
 - [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
@@ -59,7 +70,8 @@ npx skills add vinta/hal-9000
 
 ### Claude Code Statusline
 
-- [hal-statusline](plugins/hal-statusline): Show the current model, directory, and git branch in [statusline](https://code.claude.com/docs/en/statusline). Plus **a grammar check on every prompt you type**, with explanations in Traditional Chinese
+- [hal-statusline](plugins/hal-statusline): Show the current model, directory, git branch, and model usage status in [statusline](https://code.claude.com/docs/en/statusline)
+  - Plus **a grammar check on every prompt you type**, with explanations in Traditional Chinese
 
 ```bash
 curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-hal-statusline.sh | bash
@@ -77,17 +89,6 @@ hal backup                            # Back up live data to Dropbox
 hal restore                           # Restore live data from Dropbox (overwrites local)
 hal open-the-pod-bay-doors            # Open the pod bay doors, please, HAL
 ```
-
-### Dotfiles
-
-Tool configs hardened against supply chain attacks and tuned for better DX:
-
-- [.claude/settings.json](dotfiles/.claude/settings.json)
-- [.codex/config.toml](dotfiles/.codex/config.toml)
-- [.config/ghostty/config](dotfiles/.config/ghostty/config)
-- [.config/uv/uv.toml](dotfiles/.config/uv/uv.toml)
-- [.npmrc](dotfiles/.npmrc)
-- [.zshrc](dotfiles/.zshrc)
 
 ## Development
 
