@@ -28,8 +28,6 @@ curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-
 
 ## Components
 
-If you prefer only using some of them:
-
 ### Claude Code Plugin: `hal-skills`
 
 - [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
@@ -79,6 +77,17 @@ hal backup                            # Back up live data to Dropbox
 hal restore                           # Restore live data from Dropbox (overwrites local)
 hal open-the-pod-bay-doors            # Open the pod bay doors, please, HAL
 ```
+
+### Dotfiles
+
+Tool configs hardened against supply chain attacks and tuned for better DX:
+
+- [.claude/settings.json](dotfiles/.claude/settings.json)
+- [.codex/config.toml](dotfiles/.codex/config.toml)
+- [.config/ghostty/config](dotfiles/.config/ghostty/config)
+- [.config/uv/uv.toml](dotfiles/.config/uv/uv.toml)
+- [.npmrc](dotfiles/.npmrc)
+- [.zshrc](dotfiles/.zshrc)
 
 ## Development
 
