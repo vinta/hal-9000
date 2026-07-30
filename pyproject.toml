@@ -24,7 +24,6 @@ dev = [
 ]
 
 [tool.uv]
-default-groups = ["dev"]
 exclude-newer = "3 days"
 no-build = true
 
