@@ -1,0 +1,11 @@
+# https://docs.astral.sh/uv/concepts/configuration-files/
+# https://docs.astral.sh/uv/reference/settings/
+
+exclude-newer = "3 days"
+no-build = true
+
+[audit]
+malware-check = true
+
+[pip]
+only-binary = [":all:"]

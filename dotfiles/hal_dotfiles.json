@@ -76,6 +76,14 @@
       "dest": "{{HOME}}/.config/ghostty/config"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.config/pip/pip.conf",
+      "dest": "{{HOME}}/.config/pip/pip.conf"
+    },
+    {
+      "src": "{{REPO_ROOT}}/dotfiles/.config/uv/uv.toml",
+      "dest": "{{HOME}}/.config/uv/uv.toml"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.npmrc",
       "dest": "{{HOME}}/.npmrc"
     },
