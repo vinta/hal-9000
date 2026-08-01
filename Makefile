@@ -36,7 +36,7 @@ typecheck: ## Run ty type checker
 	uv run ty check
 
 test: ## Run tests
-	uv run pytest tests/ -v
+	uv run pytest -v
 
 update-hooks: ## Update pre-commit hooks to latest versions
 	uv run pre-commit autoupdate
