@@ -1,13 +1,4 @@
 ---
-- name: Install prerequisite packages
-  homebrew:
-    name:
-      - coreutils
-      - fzf
-      - gnu-tar
-      - jq
-    state: latest
-
 # https://kubernetes.io/releases/
 # https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
 - name: Install kubectl
