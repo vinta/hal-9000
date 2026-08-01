@@ -4,14 +4,15 @@ macOS dev environment automation: dotfiles, AI agent configs, skills, and dev st
 
 ## Commands
 
-Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint-python` runs ruff format --check and ruff check; `make lint-ansible` runs ansible-lint and a playbook syntax check; `make lint` runs both).
+Run `make help` to list targets and `hal --help` for the CLI.
+
+Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags.
 
 ## Gotchas
 
 - **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
-- **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json` (the `hal-9000` marketplace loads the published version from GitHub), and via `npx skills add vinta/hal-9000`.
-- **Skill `model:` is turn-scoped, not skill-scoped**: an inline skill's `model:` override applies for the rest of the turn that invokes it, so composing such a skill mid-turn downgrades everything after it. Set `model:` only on `context: fork` skills or skills that always own the whole turn. For dispatcher skills, pass `model` per Agent call instead.
-- **Skill `context: fork` caveats**: a fork gets no conversation history, so the body must open with an "invoking this skill IS the request" paragraph and take its input via args. Backgrounded forks run a narrower tool set (Agent may be missing, set `background: false` if needed), skill frontmatter hooks don't fire, and background-fork edits are outside `/rewind` checkpoints.
+- **Skills are the source of truth in `skills/hal-skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json` (the `hal-9000` marketplace loads the published version from GitHub), and via `npx skills add vinta/hal-9000` for other coding agents.
+- All skill descriptions must start with `Use when` (may have a `(project)` prefix if it's a project-level skill).
 - For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal`).
 
 ## External Tool Documentation
