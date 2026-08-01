@@ -4,4 +4,4 @@
   homebrew:
     name:
       - orbstack
-    state: present
+    state: latest
