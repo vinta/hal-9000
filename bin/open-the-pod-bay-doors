@@ -45,7 +45,7 @@ if [ ! -d "$REPO_ROOT/.git/" ]; then
 fi
 
 printf "\n"
-printf "Run hal update (will require your sudo password)...\n"
+printf "Run hal update (may require your sudo password)...\n"
 "$REPO_ROOT/bin/hal" update "$@"
 
 source "$REPO_ROOT/playbooks/roles/hal/files/hal_profile.sh"
