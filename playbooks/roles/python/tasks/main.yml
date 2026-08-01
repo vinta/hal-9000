@@ -5,9 +5,20 @@
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/uv"
 
+- name: Upgrade uv
+  shell: |
+    export PATH="$HOME/.local/bin:$PATH"
+    export UV_NO_MODIFY_PATH=1
+    uv self update
+  args:
+    executable: /bin/bash
+  register: python_uv_self_update
+  changed_when: "'already on version' not in python_uv_self_update.stderr"
+
 # https://www.python.org/downloads/
 - name: Install latest Python 3.14.6
   shell: |
+    export PATH="$HOME/.local/bin:$PATH"
     uv python install 3.14.6
     uv python pin 3.14.6 --global
   args:
@@ -17,16 +28,20 @@
 
 - name: Create global python symlinks
   shell: |
+    export PATH="$HOME/.local/bin:$PATH"
     mkdir -p {{ ansible_facts['env']['HOME'] }}/.local/bin
     ln -sf $(uv python find --system) {{ ansible_facts['env']['HOME'] }}/.local/bin/python
     ln -sf $(uv python find --system) {{ ansible_facts['env']['HOME'] }}/.local/bin/python3
   args:
     executable: /bin/bash
+  # ln -sf always succeeds, so there is nothing to detect a real change from
+  changed_when: false
 
 # https://github.com/astral-sh/ruff
 # https://github.com/astral-sh/ty
 - name: Install global Python packages
   shell: |
+    export PATH="$HOME/.local/bin:$PATH"
     uv tool install ruff
     uv tool install ty
   args:
