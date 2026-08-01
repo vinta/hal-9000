@@ -6,7 +6,6 @@
     creates: "{{ ansible_facts['env']['HOME'] }}/.bun/bin/bun"
   register: bun_install
 
-# The install script already fetches the latest release, so upgrading right after it is a wasted network round trip.
 - name: Upgrade Bun
   shell: |
     export PATH="${HOME}/.bun/bin:$PATH"
