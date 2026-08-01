@@ -114,6 +114,20 @@ class TestGrammarCheckPlaceholders:
         assert "Grammar: no issues" in strip_ansi(capsys.readouterr().out)
 
 
+class TestBasicInfo:
+    def test_agent_view_payload_without_effort(self, statusline, capsys, tmp_path):
+        statusline.basic_info({"model": {"id": "claude-haiku-4-5-20251001"}, "workspace": {"current_dir": str(tmp_path)}})
+
+        out = strip_ansi(capsys.readouterr().out)
+        assert out.startswith("Current: claude-haiku-4-5-20251001 · ")
+
+    def test_effort_rendered_when_present(self, statusline, capsys, tmp_path):
+        statusline.basic_info({"model": {"id": "claude-fable-5"}, "effort": {"level": "max"}, "workspace": {"current_dir": str(tmp_path)}})
+
+        out = strip_ansi(capsys.readouterr().out)
+        assert out.startswith("Current: claude-fable-5 max · ")
+
+
 def make_task(**overrides):
     task = {
         "id": "task-1",
