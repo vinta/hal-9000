@@ -6,15 +6,6 @@
     creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/claude"
 
 # https://github.com/openai/codex
-- name: Uninstall npm-managed Codex
-  shell: |
-    export NVM_DIR="${HOME}/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    npm uninstall -g @openai/codex
-  args:
-    executable: /bin/bash
-    removes: "{{ ansible_facts['env']['HOME'] }}/.nvm/versions/node/*/bin/codex"
-
 - name: Install Codex
   shell: curl -fsSL https://chatgpt.com/codex/install.sh | sh
   args:
