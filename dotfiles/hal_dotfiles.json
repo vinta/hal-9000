@@ -60,6 +60,10 @@
       "dest": "{{HOME}}/.hal_completion.zsh"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.zprofile",
+      "dest": "{{HOME}}/.zprofile"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.zshrc",
       "dest": "{{HOME}}/.zshrc"
     },
