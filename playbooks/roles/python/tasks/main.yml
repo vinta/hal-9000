@@ -8,7 +8,6 @@
 - name: Upgrade uv
   shell: |
     export PATH="$HOME/.local/bin:$PATH"
-    export UV_NO_MODIFY_PATH=1
     uv self update
   args:
     executable: /bin/bash
@@ -34,7 +33,6 @@
     ln -sf $(uv python find --system) {{ ansible_facts['env']['HOME'] }}/.local/bin/python3
   args:
     executable: /bin/bash
-  # ln -sf always succeeds, so there is nothing to detect a real change from
   changed_when: false
 
 # https://github.com/astral-sh/ruff
