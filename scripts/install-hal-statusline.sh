@@ -40,6 +40,7 @@ if path.exists():
             d = {}
 
 d["statusLine"] = {"type": "command", "command": cmd, "refreshInterval": 1}
+d["subagentStatusLine"] = {"type": "command", "command": cmd + " --subagents"}
 
 with path.open("w") as f:
     json.dump(d, f, indent=2)
