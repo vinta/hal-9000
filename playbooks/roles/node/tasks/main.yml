@@ -25,6 +25,7 @@
     npm install -g npm@latest
   args:
     executable: /bin/bash
+  changed_when: false
 
 # https://github.com/vinta/pangu.js
 # https://github.com/raineorshine/npm-check-updates
@@ -38,6 +39,7 @@
     npm install -g typescript typescript-language-server
   args:
     executable: /bin/bash
+  changed_when: false
 
 - name: Ensure Node.js environment is sourced in .zshrc
   lineinfile:
