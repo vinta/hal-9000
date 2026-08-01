@@ -1,6 +1,6 @@
 ---
 name: update-playbooks
-description: (project) Use when bumping hardcoded tool versions in playbooks/roles/ to their latest releases
+description: (project) Use when refreshing install tasks in playbooks/roles/ against upstream docs — bumping a pinned version, adopting a newly recommended install method, or repointing a doc link that moved
 user-invocable: true
 model: sonnet
 allowed-tools:
@@ -10,6 +10,7 @@ allowed-tools:
   - WebFetch
   - Bash(grep:*)
   - Bash(gh api:*)
+  - Bash(curl:*)
   - Bash(make lint:*)
   - Skill(commit)
 metadata:
@@ -18,31 +19,46 @@ metadata:
 
 # Update Playbooks
 
-Bump every version pinned in `playbooks/roles/*/tasks/main.yml` to the newest release of its current **release line**, then commit per role.
+Close the **drift** between each install task in `playbooks/roles/*/tasks/main.yml` and the upstream docs it cites, then commit per tool.
+
+Drift takes three forms, and all three are read off the same page — the `#` comment URL above the task:
+
+- **Version drift** — the pin trails the newest release of its **release line**.
+- **Method drift** — upstream now recommends a different way to install.
+- **Link drift** — the doc URL itself moved.
 
 A **release line** is the version prefix a project treats as a stable series: Node `24.x`, Python `3.14.x`, kubectl `1.35.x`, nvm `0.40.x`. Every bump stays inside the line (`24.15.0` -> `24.18.0` is in-line for Node because Node's line is the major). When a newer line exists (Node 26, Python 3.15, kubectl 1.36), keep the pin on its current line and report the newer line in the final summary so the user can decide.
 
 ## 1. Scan
 
 ```bash
-grep -rn -E '[0-9]+\.[0-9]+\.[0-9]+' playbooks/roles/*/tasks/main.yml
+grep -rn -E '^# https?://|^- name:' playbooks/roles/*/tasks/main.yml
 ```
 
-Versions hide in task names, command bodies, and download URLs. Done when every pinned version is listed with its role, current release line, and the doc URL from the `#` comment above its task.
+Adjacent line numbers pair each URL with the task it documents. Done when every install task is listed with its role, its doc URL, and any version pinned in its name, command body, or download URL.
 
-## 2. Look up the latest release
+## 2. Read the upstream docs
 
-For each pin, get the release listing from that comment URL:
+Fetch each doc URL once and take all three answers off that one page:
 
-- `github.com/OWNER/REPO` link: `gh api repos/OWNER/REPO/releases --jq '.[].tag_name'`, then take the newest tag inside the line
-- any other link: WebFetch the URL and read the newest in-line version off the page
+- **newest tag inside the release line** — `gh api repos/OWNER/REPO/releases --jq '.[].tag_name'` for a `github.com/OWNER/REPO` link, WebFetch otherwise
+- **the install commands the page currently recommends for macOS** — quote them verbatim, including which method the page calls recommended when it ranks them
+- **where the URL lands** — `curl -sIL -o /dev/null -w '%{http_code} %{url_effective}\n' URL`
 
-Done when every pin has a latest in-line version confirmed from its listing today. A version recalled from training data is stale by definition.
+Done when every task has today's version, install commands, and final URL confirmed from its page. Anything recalled from training data is stale by definition.
 
 ## 3. Edit
 
-For each pin whose line has a newer release, replace the old version at every occurrence in the role: the task `name:`, each command line, and any URL. Done when grepping the file for the old version returns nothing.
+Apply the drift found, matching the surrounding task style:
+
+- **Version** — replace the old version at every occurrence in the role: the task `name:`, each command line, and any URL. Done when grepping the file for the old version returns nothing.
+- **Method** — adopt the upstream commands and point the `creates:` guard at the binary those commands actually produce.
+- **Link** — repoint the `#` comment at the URL that resolved.
+
+**Shadowing** governs every method change: moving the install prefix leaves the old binary in place, and `$PATH` order alone decides which one runs. Either keep the original prefix — pass the flag that restores it, as awscli's `--system` does — or add a task that removes the old binary first, as Codex's `npm uninstall -g @openai/codex` does. A method the page presents as one option among equals is worth raising with the user rather than adopting, since the switch costs a migration.
+
+Upstream install snippets also carry portability the old task may lack: prefer the documented `uname -m` architecture mapping over `arch` (which reports `i386` on Intel Macs), and keep whatever executable bit or ownership the docs set.
 
 ## 4. Verify and commit
 
-Run `make lint`. Then create one commit per changed role with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7`. Close with a summary: each pin's old -> new version, pins already current, and any newer release lines waiting on the user.
+Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7` or `install foundryup from getfoundry.sh`. Close with a summary: what changed per tool, which tools were already current, and any newer release lines waiting on the user.
