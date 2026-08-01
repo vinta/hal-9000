@@ -14,6 +14,7 @@
     CODEX_NON_INTERACTIVE: "1"
 
 # https://ollama.com/download
+# Requires sudo to symlink into /usr/local/bin
 - name: Install Ollama
   shell: curl -fsSL https://ollama.com/install.sh | sh
   args:
