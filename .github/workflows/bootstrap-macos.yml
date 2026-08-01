@@ -3,6 +3,15 @@ name: Bootstrap macOS
 on:
   push:
     branches: [main]
+    paths:
+      - ".github/workflows/bootstrap-macos.yml"
+      - "bin/open-the-pod-bay-doors"
+      - "playbooks/**"
+  pull_request:
+    paths:
+      - ".github/workflows/bootstrap-macos.yml"
+      - "bin/open-the-pod-bay-doors"
+      - "playbooks/**"
   workflow_dispatch:
 
 permissions:
@@ -28,9 +37,12 @@ jobs:
           persist-credentials: false
           # hal update runs `git pull`, which is unhappy against a shallow clone.
           fetch-depth: 0
+          # Empty on push events. On pull_request it attaches HEAD to the PR branch instead of the detached merge ref, so `git pull` has a branch to pull into.
+          ref: ${{ github.head_ref }}
 
       - name: Stage the checkout at the hardcoded REPO_ROOT
-        # playbooks/hosts pins REPO_ROOT=/usr/local/hal-9000, and the profile scripts bake in the same path, so the working copy has to live there rather than in $GITHUB_WORKSPACE. This stands in for the bootstrap's `sudo git clone` step, which is skipped because .git/ already exists.
+        # playbooks/hosts pins REPO_ROOT=/usr/local/hal-9000, and the profile scripts bake in the same path, so the working copy has to live there rather than in $GITHUB_WORKSPACE.
+        # This stands in for the bootstrap's `sudo git clone` step, which is skipped because .git/ already exists.
         run: |
           sudo rm -rf "$REPO_ROOT"
           sudo cp -R "$GITHUB_WORKSPACE" "$REPO_ROOT"
@@ -38,8 +50,10 @@ jobs:
 
       - name: Give the checkout an upstream so `git pull` succeeds
         # actions/checkout leaves the branch without tracking information, which makes `git pull` inside hal update exit non-zero before ansible ever runs.
+        # GITHUB_REF_NAME is no use here: on pull_request events it is the merge ref (`33/merge`), which is not a local branch.
         run: |
-          git -C "$REPO_ROOT" branch --set-upstream-to="origin/${GITHUB_REF_NAME}" "${GITHUB_REF_NAME}"
+          branch=$(git -C "$REPO_ROOT" rev-parse --abbrev-ref HEAD)
+          git -C "$REPO_ROOT" branch --set-upstream-to="origin/${branch}" "${branch}"
 
       - name: Run the bootstrap
         run: bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
