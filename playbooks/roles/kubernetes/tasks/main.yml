@@ -5,9 +5,10 @@
   shell: |
     ARCH=$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
     curl -sLo /tmp/kubectl "https://dl.k8s.io/release/v1.35.6/bin/darwin/${ARCH}/kubectl"
-    sudo install -m 0755 -o root -g wheel /tmp/kubectl /usr/local/bin && rm /tmp/kubectl
+    mkdir -p "$HOME/.local/bin"
+    install -m 0755 /tmp/kubectl "$HOME/.local/bin" && rm /tmp/kubectl
   args:
-    creates: /usr/local/bin/kubectl
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/kubectl"
 
 # https://github.com/derailed/k9s
 - name: Install k9s

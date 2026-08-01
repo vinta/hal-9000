@@ -23,6 +23,9 @@ jobs:
 
       - name: Run ansible-lint
         uses: ansible/ansible-lint@v26.4.0
+        with:
+          # Without a path the action lints every YAML file in the repo, including .github/workflows/. Matches `make lint-ansible`.
+          args: playbooks/
 
   ansible-syntax:
     runs-on: ubuntu-latest

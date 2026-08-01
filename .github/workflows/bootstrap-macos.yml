@@ -1,0 +1,97 @@
+name: Bootstrap macOS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/bootstrap-macos.yml"
+      - "bin/open-the-pod-bay-doors"
+      - "playbooks/**"
+  pull_request:
+    paths:
+      - ".github/workflows/bootstrap-macos.yml"
+      - "bin/open-the-pod-bay-doors"
+      - "playbooks/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bootstrap:
+    runs-on: macos-26
+    timeout-minutes: 10
+    env:
+      # Six roles append their profile scripts to ~/.zshrc behind a `when: ansible_env.SHELL == "/bin/zsh"` gate. Actions runs steps in a non-interactive bash shell, so without this those tasks silently skip.
+      SHELL: /bin/zsh
+      REPO_ROOT: /usr/local/hal-9000
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          # hal update runs `git pull`, which is unhappy against a shallow clone.
+          fetch-depth: 0
+          # Empty on push events. On pull_request it attaches HEAD to the PR branch instead of the detached merge ref, so `git pull` has a branch to pull into.
+          ref: ${{ github.head_ref }}
+
+      - name: Stage the checkout at the hardcoded REPO_ROOT
+        # playbooks/hosts pins REPO_ROOT=/usr/local/hal-9000, and the profile scripts bake in the same path, so the working copy has to live there rather than in $GITHUB_WORKSPACE.
+        # This stands in for the bootstrap's `sudo git clone` step, which is skipped because .git/ already exists.
+        run: |
+          sudo rm -rf "$REPO_ROOT"
+          sudo cp -R "$GITHUB_WORKSPACE" "$REPO_ROOT"
+          sudo chown -R "$USER":wheel "$REPO_ROOT"
+
+      - name: Give the checkout an upstream so `git pull` succeeds
+        # actions/checkout leaves the branch without tracking information, which makes `git pull` inside hal update exit non-zero before ansible ever runs.
+        # GITHUB_REF_NAME is no use here: on pull_request events it is the merge ref (`33/merge`), which is not a local branch.
+        run: |
+          branch=$(git -C "$REPO_ROOT" rev-parse --abbrev-ref HEAD)
+          git -C "$REPO_ROOT" branch --set-upstream-to="origin/${branch}" "${branch}"
+
+      - name: Run the bootstrap
+        run: bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
+
+      - name: Check idempotency
+        # Anything reported as changed is a task missing a `creates:` guard or an honest `changed_when:`.
+        run: |
+          cd "$REPO_ROOT/playbooks"
+          ansible-playbook site.yml | tee /tmp/second-pass.log
+          changed=$(grep -oE 'changed=[0-9]+' /tmp/second-pass.log | tail -n1 | cut -d= -f2)
+          echo "Second pass reported changed=${changed}"
+          [ "$changed" = "0" ]
+
+      - name: Smoke-test the installed environment
+        # -i because zsh only reads ~/.zshrc for interactive shells.
+        run: |
+          zsh -i -c '
+            set -x
+            hal --version
+            rg --version
+            jq --version
+            fd --version
+            gh --version
+            uv --version
+            python --version
+            node --version
+            npm --version
+            bun --version
+            kubectl version --client
+            k9s version
+            aws --version
+            eksctl version
+            gcloud --version
+            claude --version
+            codex --version
+            ctx7 --version
+          '
+
+      - name: Dump ~/.zshrc
+        if: always()
+        run: cat "$HOME/.zshrc" || true
