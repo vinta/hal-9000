@@ -14,18 +14,10 @@ concurrency:
 
 jobs:
   bootstrap:
-    # Pinned rather than macos-latest so a future GA rollover cannot silently move the
-    # target off the macOS version actually being developed on. Never use -large/-intel:
-    # the bootstrap hard-checks /opt/homebrew/bin/brew and hal update refuses
-    # non-Homebrew ansible.
     runs-on: macos-26
-    # Every role, twice: Homebrew plus ~10 vendor installers, the OrbStack cask, and
-    # the Google Cloud SDK with components. 60 was sized for a four-role subset.
-    timeout-minutes: 90
+    timeout-minutes: 10
     env:
-      # Six roles append their profile scripts to ~/.zshrc behind a
-      # `when: ansible_env.SHELL == "/bin/zsh"` gate. Actions runs steps in a
-      # non-interactive bash shell, so without this those tasks silently skip.
+      # Six roles append their profile scripts to ~/.zshrc behind a `when: ansible_env.SHELL == "/bin/zsh"` gate. Actions runs steps in a non-interactive bash shell, so without this those tasks silently skip.
       SHELL: /bin/zsh
       REPO_ROOT: /usr/local/hal-9000
 
@@ -38,31 +30,22 @@ jobs:
           fetch-depth: 0
 
       - name: Stage the checkout at the hardcoded REPO_ROOT
-        # playbooks/hosts pins REPO_ROOT=/usr/local/hal-9000, and the profile scripts
-        # bake in the same path, so the working copy has to live there rather than in
-        # $GITHUB_WORKSPACE. This stands in for the bootstrap's `sudo git clone` step,
-        # which is skipped because .git/ already exists.
+        # playbooks/hosts pins REPO_ROOT=/usr/local/hal-9000, and the profile scripts bake in the same path, so the working copy has to live there rather than in $GITHUB_WORKSPACE. This stands in for the bootstrap's `sudo git clone` step, which is skipped because .git/ already exists.
         run: |
           sudo rm -rf "$REPO_ROOT"
           sudo cp -R "$GITHUB_WORKSPACE" "$REPO_ROOT"
           sudo chown -R "$USER":wheel "$REPO_ROOT"
 
       - name: Give the checkout an upstream so `git pull` succeeds
-        # actions/checkout leaves the branch without tracking information, which makes
-        # `git pull` inside hal update exit non-zero before ansible ever runs.
+        # actions/checkout leaves the branch without tracking information, which makes `git pull` inside hal update exit non-zero before ansible ever runs.
         run: |
           git -C "$REPO_ROOT" branch --set-upstream-to="origin/${GITHUB_REF_NAME}" "${GITHUB_REF_NAME}"
-
-      - name: Seed ~/.zshrc
-        # The lineinfile tasks have no `create: true`, and a fresh runner has no ~/.zshrc.
-        run: touch "$HOME/.zshrc"
 
       - name: Run the bootstrap
         run: bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
 
       - name: Check idempotency
-        # The second pass should be a no-op. Anything reported as changed is a task
-        # missing a `creates:` guard or an honest `changed_when:`.
+        # Anything reported as changed is a task missing a `creates:` guard or an honest `changed_when:`.
         run: |
           cd "$REPO_ROOT/playbooks"
           ansible-playbook site.yml | tee /tmp/second-pass.log
@@ -71,8 +54,6 @@ jobs:
           [ "$changed" = "0" ]
 
       - name: Smoke-test the installed environment
-        # Exercises what the playbook actually promises: the profile scripts are wired
-        # into ~/.zshrc and the tools they put on PATH resolve in a real zsh session.
         # -i because zsh only reads ~/.zshrc for interactive shells.
         run: |
           zsh -i -c '
