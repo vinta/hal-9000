@@ -4,6 +4,7 @@
   shell: curl -LsSf https://astral.sh/uv/install.sh | sh
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/uv"
+  register: python_uv_install_script
 
 - name: Upgrade uv
   shell: |
@@ -13,6 +14,7 @@
     executable: /bin/bash
   register: python_uv_self_update
   changed_when: "'already on version' not in python_uv_self_update.stderr"
+  when: not python_uv_install_script.changed
 
 # https://www.python.org/downloads/
 - name: Install Python 3.14.6
