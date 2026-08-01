@@ -1,5 +1,5 @@
 ---
-# https://getfoundry.sh/introduction/installation/
+# https://www.getfoundry.sh/introduction/installation
 - name: Download foundryup
   shell: sh -c "curl -L https://getfoundry.sh/install | bash"
   args:
