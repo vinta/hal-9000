@@ -4,7 +4,9 @@
   shell: curl -fsSL https://bun.com/install | bash
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.bun/bin/bun"
+  register: bun_install
 
+# The install script already fetches the latest release, so upgrading right after it is a wasted network round trip.
 - name: Upgrade Bun
   shell: |
     export PATH="${HOME}/.bun/bin:$PATH"
@@ -13,6 +15,7 @@
     executable: /bin/bash
   register: bun_upgrade
   changed_when: "'already on the latest version' not in bun_upgrade.stderr"
+  when: not bun_install.changed
 
 - name: Ensure Bun environment is sourced in .zshrc
   lineinfile:
