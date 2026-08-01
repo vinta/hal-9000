@@ -1,4 +1,4 @@
-name: E2E Bootstrap (macOS)
+name: Bootstrap macOS
 
 # Runs the real bootstrap flow (bin/open-the-pod-bay-doors -> hal update -> ansible-playbook)
 # against a clean macOS runner.
@@ -9,7 +9,7 @@ on:
   push:
     branches: [feature/e2e-test-on-macos-in-ci]
     paths:
-      - ".github/workflows/e2e-bootstrap-macos.yml"
+      - ".github/workflows/bootstrap-macos.yml"
       - "bin/**"
       - "playbooks/**"
       - "dotfiles/**"
