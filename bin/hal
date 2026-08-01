@@ -16,7 +16,7 @@ from pathlib import Path
 try:
     import argcomplete
 except ImportError:
-    argcomplete = None  # type: ignore[assignment]
+    argcomplete = None  # ty: ignore[invalid-assignment]
 
 
 class Setting:

@@ -13,14 +13,14 @@ Homepage = "https://vinta.ws/code/"
 Repository = "https://github.com/vinta/hal-9000"
 
 [dependency-groups]
-test = ["pytest>=9.0.3"]
-lint = ["ansible-lint>=26.1.1", "ruff>=0.15.2", "ty>=0.0.18"]
-audit = ["detect-secrets>=1.5.0", "pre-commit>=4.5.1"]
+test = ["pytest>=9.1.1"]
+lint = ["ansible-lint>=26.6.0", "ruff>=0.16.0", "ty>=0.0.64"]
+audit = ["detect-secrets>=1.5.0", "pre-commit>=4.6.1"]
 dev = [
     { include-group = "test" },
     { include-group = "lint" },
     { include-group = "audit" },
-    "argcomplete>=3.6.3",
+    "argcomplete>=3.7.0",
 ]
 
 [tool.uv]
@@ -40,6 +40,7 @@ ignore = [
     "D",      # pydocstyle
     "COM812", # trailing comma (formatter conflict)
     "ISC001", # string concat (formatter conflict)
+    "CPY001", # copyright notice (license lives in LICENSE, not file headers)
     "INP001", # implicit namespace package (no packages, all scripts)
     "T20",    # print statements (CLI tools)
 ]
