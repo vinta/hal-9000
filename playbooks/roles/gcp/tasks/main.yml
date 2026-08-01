@@ -21,3 +21,10 @@
   shell: yes 'y' | {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk/bin/gcloud components update
   register: gcp_command_result
   changed_when: "'All components are up to date' not in gcp_command_result.stderr"
+
+- name: Ensure GCP environment is sourced in .zshrc
+  lineinfile:
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/gcp/files/gcp_profile.sh"
+    state: present
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
