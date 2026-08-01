@@ -60,6 +60,7 @@ include = ["bin/hal", "dotfiles/", "plugins/", "scripts/", "tests/"]
 [tool.ty.rules]
 blanket-ignore-comment = "error"
 division-by-zero = "error"
+missing-type-argument = "error"
 possibly-missing-attribute = "error"
 possibly-missing-import = "error"
 possibly-unresolved-reference = "error"

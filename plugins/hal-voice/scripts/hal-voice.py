@@ -15,14 +15,14 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Literal, TypedDict
+from typing import Any, Literal, TypedDict
 
 
 class CommonInput(TypedDict):
     session_id: str
     transcript_path: str
     cwd: str
-    permission_mode: Literal["default", "plan", "acceptEdits", "dontAsk", "bypassPermissions"]
+    permission_mode: Literal["default", "plan", "acceptEdits", "auto", "dontAsk", "bypassPermissions"]
     hook_event_name: Literal[
         "ConfigChange",
         "CwdChanged",
@@ -64,15 +64,15 @@ class HookInput(CommonInput, total=False):
     prompt: str
     # PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest
     tool_name: str
-    tool_input: dict
+    tool_input: dict[str, Any]
     tool_use_id: str
     # PostToolUse
-    tool_response: dict
+    tool_response: dict[str, Any]
     # PostToolUseFailure
     error: str
     is_interrupt: bool
     # PermissionRequest
-    permission_suggestions: list[dict]
+    permission_suggestions: list[dict[str, Any]]
     # Notification
     message: str
     title: str
@@ -103,6 +103,41 @@ class HookInput(CommonInput, total=False):
     custom_instructions: str
 
 
+class Config(TypedDict):
+    enabled: bool
+    volume: float
+    debounce_seconds: float
+    replay_suppression_seconds: float
+    suppress_subagent_complete: bool
+
+
+class State(TypedDict):
+    last_played: dict[str, str]
+    last_stop_time: float
+    last_prompt_time: float
+    session_start_times: dict[str, float]
+    subagent_sessions: dict[str, float]
+    sound_pid: int | None
+
+
+class CommonRule(TypedDict):
+    detection: str
+    clips: list[str]
+
+
+class Rule(CommonRule, total=False):
+    # Required when detection is "matcher"
+    matcher: str
+    # Required when detection is "regex"
+    pattern: str
+    # Required when detection is "elapsed"
+    min_seconds: float
+
+
+# Keyed by hook event, optionally suffixed with ":<tool_name>"
+Manifest = dict[str, list[Rule]]
+
+
 PLUGIN_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve().parent.parent))
 HOOKS_PATH = PLUGIN_ROOT / "hooks" / "hooks.json"
 MANIFEST_PATH = PLUGIN_ROOT / "manifest.json"
@@ -111,7 +146,7 @@ STATE_PATH = Path("/tmp/hal-voice-state.json")  # noqa: S108 hardcoded-temp-file
 LOCK_PATH = Path("/tmp/hal-voice.lock")  # noqa: S108 hardcoded-temp-file
 LOG_PATH = Path("/tmp/hal-voice.log")  # noqa: S108 hardcoded-temp-file
 
-DEFAULT_CONFIG = {
+DEFAULT_CONFIG: Config = {
     "enabled": True,
     "volume": 0.5,
     "debounce_seconds": 5,
@@ -119,7 +154,7 @@ DEFAULT_CONFIG = {
     "suppress_subagent_complete": True,
 }
 
-DEFAULT_STATE = {
+DEFAULT_STATE: State = {
     "last_played": {},
     "last_stop_time": 0.0,
     "last_prompt_time": 0.0,
@@ -146,22 +181,29 @@ def _is_main_agent_only(hook_event: str) -> bool:
     return any(rule.get("main_agent_only") for rule in hooks_config.get("hooks", {}).get(hook_event, []))
 
 
-def load_config(config_path: Path) -> dict:
-    config = dict(DEFAULT_CONFIG)
+def load_config(config_path: Path) -> Config:
+    config = DEFAULT_CONFIG.copy()
     with contextlib.suppress(FileNotFoundError, json.JSONDecodeError, OSError):
         config.update(json.loads(config_path.read_text()))
     return config
 
 
-def load_state(state_path: Path) -> dict:
+def load_state(state_path: Path) -> State:
     try:
         data = json.loads(state_path.read_text())
     except (FileNotFoundError, json.JSONDecodeError, OSError):
         data = {}
-    return {k: data.get(k, v) for k, v in DEFAULT_STATE.items()}
+    return {
+        "last_played": data.get("last_played", DEFAULT_STATE["last_played"]),
+        "last_stop_time": data.get("last_stop_time", DEFAULT_STATE["last_stop_time"]),
+        "last_prompt_time": data.get("last_prompt_time", DEFAULT_STATE["last_prompt_time"]),
+        "session_start_times": data.get("session_start_times", DEFAULT_STATE["session_start_times"]),
+        "subagent_sessions": data.get("subagent_sessions", DEFAULT_STATE["subagent_sessions"]),
+        "sound_pid": data.get("sound_pid", DEFAULT_STATE["sound_pid"]),
+    }
 
 
-def save_state(state_path: Path, state: dict) -> None:
+def save_state(state_path: Path, state: State) -> None:
     try:
         state_path.write_text(json.dumps(state))
     except OSError:
@@ -183,7 +225,7 @@ _MATCHER_FIELD: dict[str, str] = {
 }
 
 
-def _detect_regex(rule: dict, hook_input: HookInput) -> bool:
+def _detect_regex(rule: Rule, hook_input: HookInput) -> bool:
     event = hook_input.get("hook_event_name", "")
     text = hook_input.get("prompt", "") if event == "UserPromptSubmit" else hook_input.get("last_assistant_message", "")
     if not text:
@@ -191,7 +233,7 @@ def _detect_regex(rule: dict, hook_input: HookInput) -> bool:
     return bool(re.search(rule["pattern"], text, re.IGNORECASE))
 
 
-def _detect_matcher(rule: dict, hook_input: HookInput) -> bool:
+def _detect_matcher(rule: Rule, hook_input: HookInput) -> bool:
     field = _MATCHER_FIELD.get(hook_input.get("hook_event_name", ""))
     if not field:
         return False
@@ -199,14 +241,14 @@ def _detect_matcher(rule: dict, hook_input: HookInput) -> bool:
     return bool(re.search(rule.get("matcher", ""), text, re.IGNORECASE))
 
 
-def _detect_elapsed(rule: dict, state: dict) -> bool:
+def _detect_elapsed(rule: Rule, state: State) -> bool:
     last_prompt = state.get("last_prompt_time", 0.0)
     if last_prompt == 0.0:
         return False
     return (time.time() - last_prompt) >= rule["min_seconds"]
 
 
-def evaluate_detection(rule: dict, hook_input: HookInput, state: dict) -> bool:
+def evaluate_detection(rule: Rule, hook_input: HookInput, state: State) -> bool:
     detection = rule["detection"]
 
     if detection == "always":
@@ -229,27 +271,27 @@ def pick_clip(clips: list[str], last_played: str | None) -> str:
     return random.choice(candidates)  # noqa: S311 standard-pseudo-random
 
 
-def should_debounce(state: dict, config: dict, *, now: float) -> bool:
+def should_debounce(state: State, config: Config, *, now: float) -> bool:
     last = state.get("last_stop_time", 0.0)
     if last == 0.0:
         return False
     return (now - last) < config["debounce_seconds"]
 
 
-def should_suppress_replay(state: dict, config: dict, *, session_id: str, now: float) -> bool:
+def should_suppress_replay(state: State, config: Config, *, session_id: str, now: float) -> bool:
     start_time = state.get("session_start_times", {}).get(session_id)
     if start_time is None:
         return False
     return (now - start_time) < config["replay_suppression_seconds"]
 
 
-def should_suppress_subagent(state: dict, config: dict, *, session_id: str) -> bool:
+def should_suppress_subagent(state: State, config: Config, *, session_id: str) -> bool:
     if not config.get("suppress_subagent_complete", True):
         return False
     return session_id in state.get("subagent_sessions", {})
 
 
-def match_manifest(manifest: dict, hook_event: str, tool_name: str, hook_input: HookInput, state: dict) -> tuple[str, str] | None:
+def match_manifest(manifest: Manifest, hook_event: str, tool_name: str, hook_input: HookInput, state: State) -> tuple[str, str] | None:
     for key, rules in manifest.items():
         parts = key.split(":", 1)
         key_event = parts[0]
@@ -270,9 +312,9 @@ def match_manifest(manifest: dict, hook_event: str, tool_name: str, hook_input: 
     return None
 
 
-def cleanup_old_sessions(state: dict, *, now: float, max_age: float = 86400) -> None:
-    for bucket in ("session_start_times", "subagent_sessions"):
-        state[bucket] = {k: v for k, v in state[bucket].items() if (now - v) < max_age}
+def cleanup_old_sessions(state: State, *, now: float, max_age: float = 86400) -> None:
+    state["session_start_times"] = {k: v for k, v in state["session_start_times"].items() if (now - v) < max_age}
+    state["subagent_sessions"] = {k: v for k, v in state["subagent_sessions"].items() if (now - v) < max_age}
 
 
 def _find_audio_player() -> list[str]:
@@ -290,7 +332,7 @@ def _find_audio_player() -> list[str]:
     return []
 
 
-def kill_previous_sound(state: dict) -> None:
+def kill_previous_sound(state: State) -> None:
     pid = state.get("sound_pid")
     if pid is None:
         return
@@ -317,7 +359,7 @@ def play_sound(clip_path: Path, volume: float) -> int | None:
     return proc.pid
 
 
-def _record_tracking(hook_event: str, hook_input: HookInput, state: dict, *, session_id: str, now: float) -> None:
+def _record_tracking(hook_event: str, hook_input: HookInput, state: State, *, session_id: str, now: float) -> None:
     if hook_event == "SessionStart" and session_id:
         state["session_start_times"][session_id] = now
     if hook_event == "UserPromptSubmit":
@@ -328,7 +370,7 @@ def _record_tracking(hook_event: str, hook_input: HookInput, state: dict, *, ses
             state["subagent_sessions"][child_id] = now
 
 
-def _is_suppressed(hook_event: str, state: dict, config: dict, *, session_id: str, now: float) -> bool:
+def _is_suppressed(hook_event: str, state: State, config: Config, *, session_id: str, now: float) -> bool:
     if hook_event == "Stop" and should_debounce(state, config, now=now):
         logger.info("debounced Stop event")
         return True
