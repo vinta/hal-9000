@@ -1,15 +1,23 @@
 ---
 # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 - name: Install awscli
-  shell: curl -fsSL https://awscli.amazonaws.com/v2/install.sh | sudo bash -s -- --system
+  shell: curl -fsSL https://awscli.amazonaws.com/v2/install.sh | bash
   args:
-    creates: /usr/local/bin/aws
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/aws"
 
 # https://github.com/eksctl-io/eksctl
 - name: Install eksctl
   shell: |
     PLATFORM=$(uname -s)_$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
     curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_${PLATFORM}.tar.gz" | tar xz -C /tmp
-    sudo install -m 0755 /tmp/eksctl /usr/local/bin && rm /tmp/eksctl
+    mkdir -p "$HOME/.local/bin"
+    install -m 0755 /tmp/eksctl "$HOME/.local/bin" && rm /tmp/eksctl
   args:
-    creates: /usr/local/bin/eksctl
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/eksctl"
+
+- name: Ensure AWS environment is sourced in .zshrc
+  lineinfile:
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/aws/files/aws_profile.sh"
+    state: present
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
