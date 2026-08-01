@@ -1,8 +1,18 @@
 name: E2E Bootstrap (macOS)
 
 # Runs the real bootstrap flow (bin/open-the-pod-bay-doors -> hal update -> ansible-playbook)
-# against a clean macOS runner. Manual dispatch only until it is reliably green.
+# against a clean macOS runner.
 on:
+  # Temporary scaffolding: workflow_dispatch only shows up in the Actions UI once the
+  # file is on the default branch, so a push trigger is the only way to exercise this
+  # while iterating on the branch. Drop this block before merging to main.
+  push:
+    branches: [feature/e2e-test-on-macos-in-ci]
+    paths:
+      - ".github/workflows/e2e-bootstrap-macos.yml"
+      - "bin/**"
+      - "playbooks/**"
+      - "dotfiles/**"
   workflow_dispatch:
     inputs:
       tags:
@@ -35,6 +45,9 @@ jobs:
       # non-interactive bash shell, so without this those tasks silently skip.
       SHELL: /bin/zsh
       REPO_ROOT: /usr/local/hal-9000
+      # inputs.* is empty on a push event, so the dispatch defaults have to be
+      # restated here or a push would silently run every role.
+      E2E_TAGS: ${{ inputs.tags || 'hal,basic,python,node' }}
 
     steps:
       - name: Checkout repository
@@ -66,20 +79,20 @@ jobs:
 
       - name: Run the bootstrap
         run: |
-          if [ -n "${{ inputs.tags }}" ]; then
-            bash "$REPO_ROOT/bin/open-the-pod-bay-doors" --tags "${{ inputs.tags }}"
+          if [ -n "$E2E_TAGS" ]; then
+            bash "$REPO_ROOT/bin/open-the-pod-bay-doors" --tags "$E2E_TAGS"
           else
             bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
           fi
 
       - name: Check idempotency
-        if: ${{ inputs.idempotency }}
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.idempotency }}
         # The second pass should be a no-op. Anything reported as changed is a task
         # missing a `creates:` guard or an honest `changed_when:`.
         run: |
           cd "$REPO_ROOT/playbooks"
-          if [ -n "${{ inputs.tags }}" ]; then
-            ansible-playbook site.yml --tags "${{ inputs.tags }}" | tee /tmp/second-pass.log
+          if [ -n "$E2E_TAGS" ]; then
+            ansible-playbook site.yml --tags "$E2E_TAGS" | tee /tmp/second-pass.log
           else
             ansible-playbook site.yml | tee /tmp/second-pass.log
           fi
