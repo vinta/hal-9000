@@ -154,3 +154,4 @@ source /usr/local/hal-9000/playbooks/roles/node/files/node_profile.sh
 source /usr/local/hal-9000/playbooks/roles/bun/files/bun_profile.sh
 # source /usr/local/hal-9000/playbooks/roles/solidity/files/sol_profile.sh
 source /usr/local/hal-9000/playbooks/roles/kubernetes/files/k8s_profile.sh
+source /usr/local/hal-9000/playbooks/roles/ai/files/ai_profile.sh

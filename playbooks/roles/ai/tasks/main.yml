@@ -10,6 +10,8 @@
   shell: curl -fsSL https://chatgpt.com/codex/install.sh | sh
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/codex"
+  environment:
+    CODEX_NON_INTERACTIVE: "1"
 
 # https://ollama.com/download
 - name: Install Ollama
@@ -25,3 +27,10 @@
     npm install -g ctx7
   args:
     executable: /bin/bash
+
+- name: Ensure AI environment is sourced in .zshrc
+  lineinfile:
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/ai/files/ai_profile.sh"
+    state: present
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
