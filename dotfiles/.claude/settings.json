@@ -171,6 +171,10 @@
     "command": "python3 ~/.claude/statusline/hal-statusline.py",
     "refreshInterval": 1
   },
+  "subagentStatusLine": {
+    "type": "command",
+    "command": "python3 ~/.claude/statusline/hal-statusline.py --subagents"
+  },
   "enabledPlugins": {
     "hal-skills@hal-9000": true,
     "hal-output-styles@hal-9000": true,
