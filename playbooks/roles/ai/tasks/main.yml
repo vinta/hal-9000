@@ -27,6 +27,7 @@
     npm install -g ctx7
   args:
     executable: /bin/bash
+  changed_when: false
 
 - name: Ensure AI environment is sourced in .zshrc
   lineinfile:
