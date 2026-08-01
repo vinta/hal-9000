@@ -15,10 +15,6 @@ on:
       - "dotfiles/**"
   workflow_dispatch:
     inputs:
-      tags:
-        description: "Ansible tags to run (empty runs every role)"
-        type: string
-        default: "hal,basic,python,node"
       idempotency:
         description: "Run the playbook a second time and fail if anything changed"
         type: boolean
@@ -38,16 +34,15 @@ jobs:
     # the bootstrap hard-checks /opt/homebrew/bin/brew and hal update refuses
     # non-Homebrew ansible.
     runs-on: macos-26
-    timeout-minutes: 60
+    # Every role, twice: Homebrew plus ~10 vendor installers, the OrbStack cask, and
+    # the Google Cloud SDK with components. 60 was sized for a four-role subset.
+    timeout-minutes: 90
     env:
       # Six roles append their profile scripts to ~/.zshrc behind a
       # `when: ansible_env.SHELL == "/bin/zsh"` gate. Actions runs steps in a
       # non-interactive bash shell, so without this those tasks silently skip.
       SHELL: /bin/zsh
       REPO_ROOT: /usr/local/hal-9000
-      # inputs.* is empty on a push event, so the dispatch defaults have to be
-      # restated here or a push would silently run every role.
-      E2E_TAGS: ${{ inputs.tags || 'hal,basic,python,node' }}
 
     steps:
       - name: Checkout repository
@@ -78,12 +73,7 @@ jobs:
         run: touch "$HOME/.zshrc"
 
       - name: Run the bootstrap
-        run: |
-          if [ -n "$E2E_TAGS" ]; then
-            bash "$REPO_ROOT/bin/open-the-pod-bay-doors" --tags "$E2E_TAGS"
-          else
-            bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
-          fi
+        run: bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
 
       - name: Check idempotency
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.idempotency }}
@@ -91,11 +81,7 @@ jobs:
         # missing a `creates:` guard or an honest `changed_when:`.
         run: |
           cd "$REPO_ROOT/playbooks"
-          if [ -n "$E2E_TAGS" ]; then
-            ansible-playbook site.yml --tags "$E2E_TAGS" | tee /tmp/second-pass.log
-          else
-            ansible-playbook site.yml | tee /tmp/second-pass.log
-          fi
+          ansible-playbook site.yml | tee /tmp/second-pass.log
           changed=$(grep -oE 'changed=[0-9]+' /tmp/second-pass.log | tail -n1 | cut -d= -f2)
           echo "Second pass reported changed=${changed}"
           [ "$changed" = "0" ]
@@ -111,10 +97,20 @@ jobs:
             rg --version
             jq --version
             fd --version
+            gh --version
             uv --version
             python --version
             node --version
             npm --version
+            bun --version
+            kubectl version --client
+            k9s version
+            aws --version
+            eksctl version
+            gcloud --version
+            claude --version
+            codex --version
+            ctx7 --version
           '
 
       - name: Dump ~/.zshrc
