@@ -10,16 +10,12 @@
 
 # https://kubernetes.io/releases/
 # https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
-- name: Download kubectl
-  shell: sh -c 'curl -LO "https://dl.k8s.io/release/v1.35.6/bin/darwin/$(arch)/kubectl"'
-  args:
-    chdir: /tmp
-    creates: /usr/local/bin/kubectl
-
 - name: Install kubectl
-  command: sudo mv /tmp/kubectl /usr/local/bin
+  shell: |
+    ARCH=$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
+    curl -sLo /tmp/kubectl "https://dl.k8s.io/release/v1.35.6/bin/darwin/${ARCH}/kubectl"
+    sudo install -m 0755 -o root -g wheel /tmp/kubectl /usr/local/bin && rm /tmp/kubectl
   args:
-    chdir: /tmp
     creates: /usr/local/bin/kubectl
 
 # https://github.com/derailed/k9s
