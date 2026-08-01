@@ -23,9 +23,11 @@ concurrency:
 
 jobs:
   bootstrap:
-    # macos-15 and macos-latest are both arm64. Never use -large/-intel: the bootstrap
-    # hard-checks /opt/homebrew/bin/brew and hal update refuses non-Homebrew ansible.
-    runs-on: macos-15
+    # Pinned rather than macos-latest so a future GA rollover cannot silently move the
+    # target off the macOS version actually being developed on. Never use -large/-intel:
+    # the bootstrap hard-checks /opt/homebrew/bin/brew and hal update refuses
+    # non-Homebrew ansible.
+    runs-on: macos-26
     timeout-minutes: 60
     env:
       # Six roles append their profile scripts to ~/.zshrc behind a
