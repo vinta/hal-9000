@@ -16,7 +16,7 @@
 
 - name: Ensure Bun environment is sourced in .zshrc
   lineinfile:
-    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/bun/files/bun_profile.sh"
     state: present
   when: ansible_facts["env"]["SHELL"] == "/bin/zsh"

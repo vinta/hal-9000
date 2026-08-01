@@ -27,7 +27,7 @@
 
 - name: Ensure Kubernetes environment is sourced in .zshrc
   lineinfile:
-    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/kubernetes/files/k8s_profile.sh"
     state: present
   when: ansible_facts["env"]["SHELL"] == "/bin/zsh"

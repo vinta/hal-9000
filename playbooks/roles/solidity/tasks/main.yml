@@ -12,7 +12,7 @@
 
 - name: Ensure Solidity environment is sourced in .zshrc
   lineinfile:
-    dest: "{{ REPO_ROOT }}/dotfiles/.zshrc"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/solidity/files/sol_profile.sh"
     state: present
   when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
