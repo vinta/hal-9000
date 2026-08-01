@@ -55,13 +55,7 @@ ignore = [
 docstring-code-format = true
 
 [tool.ty.src]
-include = [
-    "bin/hal",
-    "scripts",
-    "plugins/hal-statusline",
-    "plugins/hal-voice/scripts",
-    "tests",
-]
+include = ["bin/hal", "plugins/", "scripts/", "tests/"]
 
 [tool.ty.terminal]
 error-on-warning = true
