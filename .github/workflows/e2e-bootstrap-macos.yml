@@ -1,0 +1,107 @@
+name: E2E Bootstrap (macOS)
+
+# Runs the real bootstrap flow (bin/open-the-pod-bay-doors -> hal update -> ansible-playbook)
+# against a clean macOS runner. Manual dispatch only until it is reliably green.
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Ansible tags to run (empty runs every role)"
+        type: string
+        default: "hal,basic,python,node"
+      idempotency:
+        description: "Run the playbook a second time and fail if anything changed"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bootstrap:
+    # macos-15 and macos-latest are both arm64. Never use -large/-intel: the bootstrap
+    # hard-checks /opt/homebrew/bin/brew and hal update refuses non-Homebrew ansible.
+    runs-on: macos-15
+    timeout-minutes: 60
+    env:
+      # Six roles append their profile scripts to ~/.zshrc behind a
+      # `when: ansible_env.SHELL == "/bin/zsh"` gate. Actions runs steps in a
+      # non-interactive bash shell, so without this those tasks silently skip.
+      SHELL: /bin/zsh
+      REPO_ROOT: /usr/local/hal-9000
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          # hal update runs `git pull`, which is unhappy against a shallow clone.
+          fetch-depth: 0
+
+      - name: Stage the checkout at the hardcoded REPO_ROOT
+        # playbooks/hosts pins REPO_ROOT=/usr/local/hal-9000, and the profile scripts
+        # bake in the same path, so the working copy has to live there rather than in
+        # $GITHUB_WORKSPACE. This stands in for the bootstrap's `sudo git clone` step,
+        # which is skipped because .git/ already exists.
+        run: |
+          sudo rm -rf "$REPO_ROOT"
+          sudo cp -R "$GITHUB_WORKSPACE" "$REPO_ROOT"
+          sudo chown -R "$USER":wheel "$REPO_ROOT"
+
+      - name: Give the checkout an upstream so `git pull` succeeds
+        # actions/checkout leaves the branch without tracking information, which makes
+        # `git pull` inside hal update exit non-zero before ansible ever runs.
+        run: |
+          git -C "$REPO_ROOT" branch --set-upstream-to="origin/${GITHUB_REF_NAME}" "${GITHUB_REF_NAME}"
+
+      - name: Seed ~/.zshrc
+        # The lineinfile tasks have no `create: true`, and a fresh runner has no ~/.zshrc.
+        run: touch "$HOME/.zshrc"
+
+      - name: Run the bootstrap
+        run: |
+          if [ -n "${{ inputs.tags }}" ]; then
+            bash "$REPO_ROOT/bin/open-the-pod-bay-doors" --tags "${{ inputs.tags }}"
+          else
+            bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
+          fi
+
+      - name: Check idempotency
+        if: ${{ inputs.idempotency }}
+        # The second pass should be a no-op. Anything reported as changed is a task
+        # missing a `creates:` guard or an honest `changed_when:`.
+        run: |
+          cd "$REPO_ROOT/playbooks"
+          if [ -n "${{ inputs.tags }}" ]; then
+            ansible-playbook site.yml --tags "${{ inputs.tags }}" | tee /tmp/second-pass.log
+          else
+            ansible-playbook site.yml | tee /tmp/second-pass.log
+          fi
+          changed=$(grep -oE 'changed=[0-9]+' /tmp/second-pass.log | tail -n1 | cut -d= -f2)
+          echo "Second pass reported changed=${changed}"
+          [ "$changed" = "0" ]
+
+      - name: Smoke-test the installed environment
+        # Exercises what the playbook actually promises: the profile scripts are wired
+        # into ~/.zshrc and the tools they put on PATH resolve in a real zsh session.
+        # -i because zsh only reads ~/.zshrc for interactive shells.
+        run: |
+          zsh -i -c '
+            set -x
+            hal --version
+            rg --version
+            jq --version
+            fd --version
+            uv --version
+            python --version
+            node --version
+            npm --version
+          '
+
+      - name: Dump ~/.zshrc
+        if: always()
+        run: cat "$HOME/.zshrc" || true
