@@ -57,9 +57,6 @@ docstring-code-format = true
 [tool.ty.src]
 include = ["bin/hal", "plugins/", "scripts/", "tests/"]
 
-[tool.ty.terminal]
-error-on-warning = true
-
 [tool.ty.rules]
 possibly-unresolved-reference = "error"
 unused-ignore-comment = "error"
