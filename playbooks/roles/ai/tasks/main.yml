@@ -18,6 +18,8 @@
   shell: curl -fsSL https://ollama.com/install.sh | sh
   args:
     creates: /usr/local/bin/ollama
+  environment:
+    OLLAMA_NO_START: "1"
 
 # https://github.com/upstash/context7
 - name: Install ctx7
