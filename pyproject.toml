@@ -55,7 +55,7 @@ ignore = [
 docstring-code-format = true
 
 [tool.ty.src]
-include = ["bin/hal", "plugins/", "scripts/", "tests/"]
+include = ["bin/hal", "dotfiles/", "plugins/", "scripts/", "tests/"]
 
 [tool.ty.rules]
 possibly-unresolved-reference = "error"
