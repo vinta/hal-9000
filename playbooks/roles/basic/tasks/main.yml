@@ -25,13 +25,10 @@
       - fzf
       - htop
       - jq
-      - macos-trash
       - pstree
       - ripgrep
       - tmux
       - tree
-      - wget
-      - yq
     state: latest
 
 - name: Install git packages
