@@ -15,7 +15,7 @@
   changed_when: "'already on version' not in python_uv_self_update.stderr"
 
 # https://www.python.org/downloads/
-- name: Install latest Python 3.14.6
+- name: Install Python 3.14.6
   shell: |
     export PATH="$HOME/.local/bin:$PATH"
     uv python install 3.14.6
@@ -34,18 +34,6 @@
   args:
     executable: /bin/bash
   changed_when: false
-
-# https://github.com/astral-sh/ruff
-# https://github.com/astral-sh/ty
-- name: Install global Python packages
-  shell: |
-    export PATH="$HOME/.local/bin:$PATH"
-    uv tool install ruff
-    uv tool install ty
-  args:
-    executable: /bin/bash
-  register: python_tool_install
-  changed_when: "'Installed' in python_tool_install.stderr"
 
 - name: Ensure Python environment is sourced in .zshrc
   lineinfile:
