@@ -1,9 +1,9 @@
 ---
 # https://github.com/astral-sh/uv
 - name: Install uv
-  homebrew:
-    name: uv
-    state: latest
+  shell: curl -LsSf https://astral.sh/uv/install.sh | sh
+  args:
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/uv"
 
 # https://www.python.org/downloads/
 - name: Install latest Python 3.14.6
