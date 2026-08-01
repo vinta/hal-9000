@@ -1,15 +1,8 @@
 ---
 # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-- name: Download awscli
-  command: curl https://awscli.amazonaws.com/AWSCLIV2.pkg -o AWSCLIV2.pkg
-  args:
-    chdir: /tmp
-    creates: /usr/local/bin/aws
-
 - name: Install awscli
-  command: sudo installer -pkg AWSCLIV2.pkg -target /
+  shell: curl -fsSL https://awscli.amazonaws.com/v2/install.sh | sudo bash -s -- --system
   args:
-    chdir: /tmp
     creates: /usr/local/bin/aws
 
 # https://github.com/weaveworks/eksctl/blob/main/README.md#installation
