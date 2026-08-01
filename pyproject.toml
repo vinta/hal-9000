@@ -39,9 +39,7 @@ select = ["ALL"]
 ignore = [
     "D",      # pydocstyle
     "COM812", # trailing comma (formatter conflict)
-    "ISC001", # string concat (formatter conflict)
     "CPY001", # copyright notice (license lives in LICENSE, not file headers)
-    "INP001", # implicit namespace package (no packages, all scripts)
     "T20",    # print statements (CLI tools)
 ]
 

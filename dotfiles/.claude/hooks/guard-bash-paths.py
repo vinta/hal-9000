@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 PreToolUse guard blocking Bash access to sensitive paths.
 
