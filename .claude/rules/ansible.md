@@ -11,7 +11,6 @@ paths:
 - **Deliberate deviations from upstream Ansible guidance — do not "fix" them**: short module names (no FQCN), `state: latest` for homebrew packages, and `curl | sh` vendor install scripts are codified choices; `.ansible-lint` `skip_list` is the authority.
 - Every install task carries a comment with its upstream doc/repo URL directly above it; keep them current (the `update-playbooks` skill repoints them).
 - **Profile-script pattern**: a role that sets up shell environment owns `files/<x>_profile.sh` and appends a `source` line to `~/.zshrc` via `lineinfile`, gated on `when: ansible_facts["env"]["SHELL"] == "/bin/zsh"`. Non-interactive shells make that gate silently skip — CI exports `SHELL: /bin/zsh` for exactly this reason.
-- `register:` variables start with the role name (`bun_install`, `python_uv_self_update`) to avoid cross-role collisions.
 - **Adding a tool means updating CI too**: add the binary's `--version` call to the smoke-test step in `.github/workflows/bootstrap-macos.yml`.
 - **Verify with `make lint-ansible`** (ansible-lint + syntax check). A dry-run via `ansible-playbook site.yml --check --tags <role>` is fine.
 - Never run the playbook for real — it installs software on this machine; CI runs the full bootstrap.

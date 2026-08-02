@@ -1,9 +1,8 @@
 ---
 # --client never contacts the API server, so this works with no kubeconfig and no cluster auth.
-# rc is 2 when the binary is absent, but stdout is still defined and empty, so the install below fires.
 - name: Check installed kubectl version
   command: "{{ ansible_facts['env']['HOME'] }}/.local/bin/kubectl version --client -o json"
-  register: kubernetes_kubectl_version
+  register: kubectl_version
   failed_when: false
   changed_when: false
   check_mode: false
@@ -16,7 +15,7 @@
     curl -sLo /tmp/kubectl "https://dl.k8s.io/release/v1.35.6/bin/darwin/${ARCH}/kubectl"
     mkdir -p "$HOME/.local/bin"
     install -m 0755 /tmp/kubectl "$HOME/.local/bin" && rm /tmp/kubectl
-  when: "'v1.35.6' not in kubernetes_kubectl_version.stdout"
+  when: "'v1.35.6' not in kubectl_version.stdout"
 
 - name: Tap derailed/k9s
   homebrew_tap:
