@@ -26,7 +26,8 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 10
     env:
-      # Five roles append their profile scripts to ~/.zshrc behind a `when: ansible_env.SHELL == "/bin/zsh"` gate. Actions runs steps in a non-interactive bash shell, so without this those tasks silently skip.
+      # Some roles append their profile scripts to ~/.zshrc behind a `when: ansible_env.SHELL == "/bin/zsh"` gate.
+      # Actions runs steps in a non-interactive bash shell, so without this those tasks silently skip.
       SHELL: /bin/zsh
       REPO_ROOT: /usr/local/hal-9000
 
