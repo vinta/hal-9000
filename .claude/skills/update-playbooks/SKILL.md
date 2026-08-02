@@ -28,7 +28,7 @@ Drift takes three forms, and all three are read off the same page — the `#` co
 - **Method drift** — upstream now recommends a different way to install.
 - **Link drift** — the doc URL itself moved.
 
-A **release line** is the version prefix a project treats as a stable series: Node `24.x`, Python `3.14.x`, kubectl `1.35.x`, nvm `0.40.x`. Every bump stays inside the line (`24.15.0` -> `24.18.0` is in-line for Node because Node's line is the major). When a newer line exists (Node 26, Python 3.15, kubectl 1.36), keep the pin on its current line and report the newer line in the final summary so the user can decide.
+A **release line** is the version prefix a project treats as a stable series: Node `24.x`, Python `3.14.x`, kubectl `1.35.x`, fnm `1.x`. Every bump stays inside the line (`24.15.0` -> `24.18.0` is in-line for Node because Node's line is the major). When a newer line exists (Node 26, Python 3.15, kubectl 1.36), keep the pin on its current line and report the newer line in the final summary so the user can decide.
 
 One pin lives outside the roles and answers to a different source of truth — `playbooks/collections/requirements.yml`, covered in §4.
 
