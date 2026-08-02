@@ -13,8 +13,8 @@
     uv python pin 3.14.6 --global
   args:
     executable: /bin/bash
-  register: uv_install
-  changed_when: "'Installed' in uv_install.stderr"
+  register: python_uv_install
+  changed_when: "'Installed' in python_uv_install.stderr"
 
 - name: Create global python symlinks
   shell: |
