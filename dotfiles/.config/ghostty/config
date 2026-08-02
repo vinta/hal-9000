@@ -43,3 +43,7 @@ keybind = cmd+alt+enter=toggle_split_zoom
 keybind = cmd+backquote=toggle_quick_terminal
 keybind = cmd+shift+left=move_tab:-1
 keybind = cmd+shift+right=move_tab:1
+
+# Remove after https://github.com/ghostty-org/ghostty/issues/10749 is fixed
+keybind = super+v=paste_from_clipboard
+keybind = super+c=copy_to_clipboard
