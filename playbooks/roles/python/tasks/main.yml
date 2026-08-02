@@ -1,25 +1,22 @@
 ---
 # https://github.com/astral-sh/uv
 - name: Install uv
-  shell: curl -LsSf https://astral.sh/uv/install.sh | sh
-  args:
-    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/uv"
-  register: python_uv_install_script
+  homebrew:
+    name:
+      - uv
+    state: latest
 
-- name: Upgrade uv
-  shell: |
-    export PATH="$HOME/.local/bin:$PATH"
-    uv self update
-  args:
-    executable: /bin/bash
-  register: python_uv_self_update
-  changed_when: "'already on version' not in python_uv_self_update.stderr"
-  when: not python_uv_install_script.changed
+- name: Remove script-installed uv binaries
+  file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.local/bin/{{ item }}"
+    state: absent
+  loop:
+    - uv
+    - uvx
 
 # https://www.python.org/downloads/
 - name: Install Python 3.14.6
   shell: |
-    export PATH="$HOME/.local/bin:$PATH"
     uv python install 3.14.6
     uv python pin 3.14.6 --global
   args:
@@ -29,7 +26,6 @@
 
 - name: Create global python symlinks
   shell: |
-    export PATH="$HOME/.local/bin:$PATH"
     mkdir -p {{ ansible_facts['env']['HOME'] }}/.local/bin
     ln -sf $(uv python find --system) {{ ansible_facts['env']['HOME'] }}/.local/bin/python
     ln -sf $(uv python find --system) {{ ansible_facts['env']['HOME'] }}/.local/bin/python3
