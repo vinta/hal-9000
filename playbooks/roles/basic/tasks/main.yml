@@ -17,6 +17,7 @@
 - name: Update Homebrew
   homebrew:
     update_homebrew: true
+  changed_when: false
 
 - name: Install utility packages
   homebrew:
