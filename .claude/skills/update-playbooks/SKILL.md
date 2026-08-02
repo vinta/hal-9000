@@ -13,7 +13,6 @@ allowed-tools:
   - Bash(curl:*)
   - Bash(make lint:*)
   - Bash(ansible-galaxy collection list:*)
-  - Bash(ansible-galaxy install:*)
   - Skill(commit)
 metadata:
   internal: true
@@ -80,11 +79,7 @@ ansible-galaxy collection list community.general
 
 Run it bare so it resolves to brew's `ansible-galaxy`. Under `uv run` the venv holds only `ansible-core`, which prints just `~/.ansible/collections` and hides the very version you are comparing against. Two sections mean it worked: the one under `/opt/homebrew/Cellar/ansible/` is what brew bundles, the one under `~/.ansible/collections` is what the pin installed.
 
-When they differ, set the pin to brew's version. Never the reverse, and never to the newest release on Galaxy — a pin ahead of brew shadows the bundled collection just as badly as one behind it. Then install it, so §5 verifies against what you just pinned rather than the copy already on disk:
-
-```bash
-ansible-galaxy install -r playbooks/collections/requirements.yml --force
-```
+When they differ, set the pin to brew's version. Never the reverse, and never to the newest release on Galaxy — a pin ahead of brew shadows the bundled collection just as badly as one behind it. Editing the pin is where this skill stops: installing it is `make install`'s job, so note in the final summary that the bump takes effect on the next `make install`.
 
 ## 5. Verify and commit
 
