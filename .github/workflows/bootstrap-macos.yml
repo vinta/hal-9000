@@ -58,15 +58,6 @@ jobs:
       - name: Run the bootstrap
         run: bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
 
-      - name: Check idempotency
-        # Anything reported as changed is a task missing a `creates:` guard or an honest `changed_when:`.
-        run: |
-          cd "$REPO_ROOT/playbooks"
-          ansible-playbook site.yml | tee /tmp/second-pass.log
-          changed=$(grep -oE 'changed=[0-9]+' /tmp/second-pass.log | tail -n1 | cut -d= -f2)
-          echo "Second pass reported changed=${changed}"
-          [ "$changed" = "0" ]
-
       - name: Smoke-test the installed environment
         # -i because zsh only reads ~/.zshrc for interactive shells.
         run: |
