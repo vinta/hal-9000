@@ -65,10 +65,6 @@ Apply the drift found, matching the surrounding task style:
 
 Homebrew always installs the newest release, so it cannot hold a pin. Where a task deliberately pins a version, keep the pinned download and leave the method alone — trading the pin for brew is a decision for the user, not drift to close.
 
-**Shadowing** governs every method change: moving the install prefix leaves the old binary in place, and `$PATH` order alone decides which one runs. Either keep the original prefix — pass the flag that restores it, as awscli's `--system` does — or add a task that removes the old binary first, as Codex's `npm uninstall -g @openai/codex` does. A method the page presents as one option among equals is worth raising with the user rather than adopting, since the switch costs a migration.
-
-Upstream install snippets also carry portability the old task may lack: prefer the documented `uname -m` architecture mapping over `arch` (which reports `i386` on Intel Macs), and keep whatever executable bit or ownership the docs set.
-
 ## 4. Match the collection pin to brew's ansible
 
 `playbooks/collections/requirements.yml` pins `community.general`, the collection supplying the `homebrew`, `homebrew_tap`, and `homebrew_cask` modules the roles install through. Upstream releases do not drive this pin — the brew-installed ansible does. Brew bundles its own copy of the collection, `~/.ansible/collections` takes precedence over it, and the pin is what fills `~/.ansible/collections`. So a pin that disagrees with brew means `ansible-lint` validates different module code than `ansible-playbook` executes, silently.
@@ -76,8 +72,6 @@ Upstream install snippets also carry portability the old task may lack: prefer t
 ```bash
 ansible-galaxy collection list community.general
 ```
-
-Run it bare so it resolves to brew's `ansible-galaxy`. Under `uv run` the venv holds only `ansible-core`, which prints just `~/.ansible/collections` and hides the very version you are comparing against. Two sections mean it worked: the one under `/opt/homebrew/Cellar/ansible/` is what brew bundles, the one under `~/.ansible/collections` is what the pin installed.
 
 When they differ, set the pin to brew's version. Never the reverse, and never to the newest release on Galaxy — a pin ahead of brew shadows the bundled collection just as badly as one behind it. Editing the pin is where this skill stops: installing it is `make install`'s job, so note in the final summary that the bump takes effect on the next `make install`.
 
