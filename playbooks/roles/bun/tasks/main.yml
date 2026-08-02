@@ -1,24 +1,13 @@
 ---
 # https://github.com/oven-sh/bun
 - name: Install Bun
-  shell: curl -fsSL https://bun.com/install | bash
-  args:
-    creates: "{{ ansible_facts['env']['HOME'] }}/.bun/bin/bun"
-  register: bun_install
+  homebrew:
+    name:
+      - oven-sh/bun/bun
+    state: latest
 
-- name: Upgrade Bun
-  shell: |
-    export PATH="${HOME}/.bun/bin:$PATH"
-    bun upgrade
-  args:
-    executable: /bin/bash
-  register: bun_upgrade
-  changed_when: "'already on the latest version' not in bun_upgrade.stderr"
-  when: not bun_install.changed
-
-- name: Ensure Bun environment is sourced in .zshrc
+- name: Remove Bun environment from .zshrc
   lineinfile:
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/bun/files/bun_profile.sh"
-    state: present
-  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
+    state: absent
