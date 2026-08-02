@@ -9,7 +9,7 @@ help: ## Show this help message
 install: ## Install dependencies and setup pre-commit hooks
 	uv sync --locked
 	uv audit
-	uv run ansible-galaxy collection install community.general
+	uv run ansible-galaxy install -r playbooks/collections/requirements.yml
 	uv run pre-commit install
 	@if command -v gitleaks >/dev/null 2>&1; then \
 		echo "gitleaks already installed"; \

@@ -26,6 +26,8 @@ jobs:
         with:
           # Without a path the action lints every YAML file in the repo, including .github/workflows/. Matches `make lint-ansible`.
           args: playbooks/
+          # Installs community.general so the homebrew* modules resolve for real. Without it ansible-lint cannot validate their options.
+          requirements_file: playbooks/collections/requirements.yml
 
   ansible-syntax:
     runs-on: ubuntu-latest

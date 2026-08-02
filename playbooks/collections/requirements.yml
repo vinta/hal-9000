@@ -1,0 +1,4 @@
+---
+# Provides the homebrew, homebrew_tap, and homebrew_cask modules used across the roles.
+collections:
+  - name: community.general

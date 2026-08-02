@@ -1,17 +1,8 @@
 ---
-mock_modules:
-  - homebrew
-  - homebrew_tap
-  - homebrew_cask
-
 skip_list:
   - command-instead-of-module # Some macOS-specific operations require shell
   - no-changed-when # Will be addressed in future updates
   - risky-shell-pipe # Some operations require pipes
-  - fqcn[action] # Allow short names for collection modules (the homebrew* modules mocked above)
+  - fqcn[action] # Allow short names for collection modules (the community.general homebrew* modules)
   - fqcn[action-core] # Allow short names for ansible.builtin modules (shell, file, copy, git)
   - package-latest # Development environment can use latest versions
-
-warn_list:
-  - experimental # Warn on experimental features
-  - no-handler # Warn when handlers could be used
