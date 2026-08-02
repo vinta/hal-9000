@@ -55,6 +55,13 @@ Apply the drift found, matching the surrounding task style:
 - **Method** — adopt the upstream commands and point the `creates:` guard at the binary those commands actually produce.
 - **Link** — repoint the `#` comment at the URL that resolved.
 
+**Prefer Homebrew.** When the page lists Homebrew among the macOS installs it supports, install with the `homebrew` module at `state: latest` rather than the vendor script — `state: latest` also absorbs whatever separate upgrade task the script needed, as fnm and bun already show. Two things disqualify it, and both send you back to the method the page recommends:
+
+- The page steers away from brew — listing it only as community-contributed, or warning that it lags.
+- The formula lives in neither homebrew-core nor a tap the project itself publishes. A vendor-owned tap counts as official and takes a `homebrew_tap` task above the install; an unaffiliated third party's tap does not.
+
+Homebrew always installs the newest release, so it cannot hold a pin. Where a task deliberately pins a version, keep the pinned download and leave the method alone — trading the pin for brew is a decision for the user, not drift to close.
+
 **Shadowing** governs every method change: moving the install prefix leaves the old binary in place, and `$PATH` order alone decides which one runs. Either keep the original prefix — pass the flag that restores it, as awscli's `--system` does — or add a task that removes the old binary first, as Codex's `npm uninstall -g @openai/codex` does. A method the page presents as one option among equals is worth raising with the user rather than adopting, since the switch costs a migration.
 
 Upstream install snippets also carry portability the old task may lack: prefer the documented `uname -m` architecture mapping over `arch` (which reports `i386` on Intel Macs), and keep whatever executable bit or ownership the docs set.
