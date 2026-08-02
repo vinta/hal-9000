@@ -1,2 +1,2 @@
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# https://github.com/Schniz/fnm
+command -v fnm > /dev/null && eval "$(fnm env --use-on-cd --shell zsh)"

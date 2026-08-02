@@ -70,6 +70,7 @@ jobs:
             gh --version
             uv --version
             python --version
+            fnm --version
             node --version
             npm --version
             bun --version

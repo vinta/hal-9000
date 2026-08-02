@@ -1,27 +1,27 @@
 ---
-# https://github.com/nvm-sh/nvm
-- name: Install nvm
-  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.6/install.sh | bash
-  args:
-    creates: "{{ ansible_facts['env']['HOME'] }}/.nvm/nvm.sh"
+# https://github.com/Schniz/fnm
+- name: Install fnm
+  homebrew:
+    name:
+      - fnm
+    state: latest
 
 # https://nodejs.org/en/about/previous-releases
 - name: Install Node.js 24.18.0
   shell: |
-    export NVM_DIR="${HOME}/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install 24.18.0
-    nvm use 24.18.0
-    nvm alias default 24.18.0
+    export PATH="/opt/homebrew/bin:$PATH"
+    eval "$(fnm env --shell bash)"
+    fnm install 24.18.0
+    fnm default 24.18.0
   args:
     executable: /bin/bash
   register: node_install
-  changed_when: "'is already installed' not in node_install.stderr"
+  changed_when: "'already installed' not in node_install.stderr"
 
 - name: Upgrade npm
   shell: |
-    export NVM_DIR="${HOME}/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    export PATH="/opt/homebrew/bin:$PATH"
+    eval "$(fnm env --shell bash)"
     npm install -g npm@latest
   args:
     executable: /bin/bash
@@ -32,8 +32,8 @@
 # https://github.com/typescript-language-server/typescript-language-server
 - name: Install global Node.js packages
   shell: |
-    export NVM_DIR="${HOME}/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    export PATH="/opt/homebrew/bin:$PATH"
+    eval "$(fnm env --shell bash)"
     npm install -g pangu
     npm install -g npm-check-updates
     npm install -g typescript typescript-language-server
