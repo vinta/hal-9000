@@ -21,8 +21,8 @@ hal = HAL9000()
 # `hal update` forwards unrecognized args to ansible-playbook via parse_known_args, so these flags are invisible to argparse introspection
 PASSTHROUGH_SPECS: dict[str, tuple[str, ...]] = {
     "update": (
-        "'--tags[only run plays and tasks tagged with these values]:tags: '",
-        "'--skip-tags[skip plays and tasks whose tags match these values]:tags: '",
+        "'--tags[only run plays and tasks tagged with these values]:tags:_hal_tags'",
+        "'--skip-tags[skip plays and tasks whose tags match these values]:tags:_hal_tags'",
     ),
 }
 
@@ -68,6 +68,12 @@ for group_specs, cmds in spec_groups.items():
                 ;;""")
 
 completion_content = f"""#compdef hal
+
+_hal_tags() {{
+    local -a tags
+    tags=(${{(f)"$(sed -n 's/^[[:space:]]*- {{ role: .*tags: \\["\\([^"]*\\)"\\].*/\\1/p' {REPO_ROOT}/playbooks/site.yml 2>/dev/null)"}})
+    (( $#tags )) && _values -s , 'ansible tags' $tags
+}}
 
 _hal() {{
     local -a commands

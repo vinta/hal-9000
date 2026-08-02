@@ -1,5 +1,11 @@
 #compdef hal
 
+_hal_tags() {
+    local -a tags
+    tags=(${(f)"$(sed -n 's/^[[:space:]]*- { role: .*tags: \["\([^"]*\)"\].*/\1/p' /usr/local/hal-9000/playbooks/site.yml 2>/dev/null)"})
+    (( $#tags )) && _values -s , 'ansible tags' $tags
+}
+
 _hal() {
     local -a commands
 
@@ -26,8 +32,8 @@ _hal() {
             update)
                 _arguments \
                     '(-h --help)'{-h,--help}'[show this help message and exit]' \
-                    '--tags[only run plays and tasks tagged with these values]:tags: ' \
-                    '--skip-tags[skip plays and tasks whose tags match these values]:tags: '
+                    '--tags[only run plays and tasks tagged with these values]:tags:_hal_tags' \
+                    '--skip-tags[skip plays and tasks whose tags match these values]:tags:_hal_tags'
                 ;;
             link|unlink|copy)
                 _arguments \
