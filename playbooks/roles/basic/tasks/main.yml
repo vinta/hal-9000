@@ -13,7 +13,6 @@
     creates: /Library/Apple/usr/share/rosetta/rosetta
   when:
     - ansible_facts["machine"] == "arm64"
-    - not ansible_check_mode
 
 - name: Update Homebrew
   homebrew:
