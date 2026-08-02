@@ -1,4 +1,6 @@
 ---
 # Provides the homebrew, homebrew_tap, and homebrew_cask modules used across the roles.
 collections:
+  # Pinned to the version bundled with the brew-installed ansible, so `ansible-playbook` and `ansible-lint` resolve the same modules.
   - name: community.general
+    version: 13.1.0
