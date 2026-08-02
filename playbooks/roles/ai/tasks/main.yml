@@ -25,7 +25,6 @@
 # https://github.com/upstash/context7
 - name: Install ctx7
   shell: |
-    export PATH="/opt/homebrew/bin:$PATH"
     eval "$(fnm env --shell bash)"
     npm install -g ctx7
   args:

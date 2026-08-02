@@ -9,7 +9,6 @@
 # https://nodejs.org/en/about/previous-releases
 - name: Install Node.js 24.18.0
   shell: |
-    export PATH="/opt/homebrew/bin:$PATH"
     eval "$(fnm env --shell bash)"
     fnm install 24.18.0
     fnm default 24.18.0
@@ -20,7 +19,6 @@
 
 - name: Upgrade npm
   shell: |
-    export PATH="/opt/homebrew/bin:$PATH"
     eval "$(fnm env --shell bash)"
     npm install -g npm@latest
   args:
@@ -32,7 +30,6 @@
 # https://github.com/typescript-language-server/typescript-language-server
 - name: Install global Node.js packages
   shell: |
-    export PATH="/opt/homebrew/bin:$PATH"
     eval "$(fnm env --shell bash)"
     npm install -g pangu
     npm install -g npm-check-updates
