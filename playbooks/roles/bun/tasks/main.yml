@@ -5,9 +5,3 @@
     name:
       - oven-sh/bun/bun
     state: latest
-
-- name: Remove Bun environment from .zshrc
-  lineinfile:
-    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
-    line: "source {{ REPO_ROOT }}/playbooks/roles/bun/files/bun_profile.sh"
-    state: absent

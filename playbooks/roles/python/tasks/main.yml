@@ -6,14 +6,6 @@
       - uv
     state: latest
 
-- name: Remove script-installed uv binaries
-  file:
-    path: "{{ ansible_facts['env']['HOME'] }}/.local/bin/{{ item }}"
-    state: absent
-  loop:
-    - uv
-    - uvx
-
 # https://www.python.org/downloads/
 - name: Install Python 3.14.6
   shell: |
