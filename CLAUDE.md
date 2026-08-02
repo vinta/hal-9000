@@ -23,23 +23,24 @@ Invoke the `find-docs` skill BEFORE writing code or config that touches the tool
 
 Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skipping the `ctx7 library` step:
 
-| Tool           | `libraryId`                          |
-| -------------- | ------------------------------------ |
-| ansible        | `/websites/ansible_projects_ansible` |
-| ansible-lint   | `/ansible/ansible-lint`              |
-| argcomplete    | `/kislyuk/argcomplete`               |
-| detect-secrets | `/yelp/detect-secrets`               |
-| fnm            | `/schniz/fnm`                        |
-| github-actions | `/websites/github_en_actions`        |
-| gitleaks       | `/gitleaks/gitleaks`                 |
-| homebrew       | `/homebrew/brew`                     |
-| oh-my-zsh      | `/ohmyzsh/ohmyzsh`                   |
-| ollama         | `/ollama/ollama`                     |
-| pre-commit     | `/pre-commit/pre-commit.com`         |
-| pytest         | `/pytest-dev/pytest`                 |
-| ruff           | `/websites/astral_sh_ruff`           |
-| ty             | `/websites/astral_sh_ty`             |
-| uv             | `/websites/astral_sh_uv`             |
+| Tool           | `libraryId`                                |
+| -------------- | ------------------------------------------ |
+| ansible        | `/websites/ansible_projects_ansible`       |
+| ansible-lint   | `/ansible/ansible-lint`                    |
+| argcomplete    | `/kislyuk/argcomplete`                     |
+| detect-secrets | `/yelp/detect-secrets`                     |
+| fnm            | `/schniz/fnm`                              |
+| github-actions | `/websites/github_en_actions`              |
+| gitleaks       | `/gitleaks/gitleaks`                       |
+| homebrew       | `/homebrew/brew`                           |
+| oh-my-zsh      | `/ohmyzsh/ohmyzsh`                         |
+| ollama         | `/ollama/ollama`                           |
+| pre-commit     | `/pre-commit/pre-commit.com`               |
+| pytest         | `/pytest-dev/pytest`                       |
+| ruff           | `/websites/astral_sh_ruff`                 |
+| ty             | `/websites/astral_sh_ty`                   |
+| uv             | `/websites/astral_sh_uv`                   |
+| zsh            | `/websites/zsh_sourceforge_io_doc_release` |
 
 ### Documentation Links
 
