@@ -70,9 +70,12 @@ for group_specs, cmds in spec_groups.items():
 completion_content = f"""#compdef hal
 
 _hal_tags() {{
-    local -a tags
+    local -a tags used
     tags=(${{(f)"$(sed -n 's/^[[:space:]]*- {{ role: .*tags: \\["\\([^"]*\\)"\\].*/\\1/p' {REPO_ROOT}/playbooks/site.yml 2>/dev/null)"}})
-    (( $#tags )) && _values -s , 'ansible tags' $tags
+    compset -P '*,'
+    used=(${{(s:,:)IPREFIX}})
+    tags=(${{tags:|used}})
+    (( $#tags )) && compadd -S '' - $tags
 }}
 
 _hal() {{
