@@ -4,7 +4,7 @@ _hal() {
     local -a commands
 
     commands=(
-        'update:pull repo and run ansible-playbook'
+        'update:pull repo and run ansible-playbook (extra args pass through, e.g. --tags python,node)'
         'link:move file into dotfiles and symlink it back'
         'unlink:move file back from dotfiles and remove symlink'
         'copy:copy file into dotfiles (no symlink)'

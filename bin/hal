@@ -84,7 +84,12 @@ class HAL9000:
 
         subparsers = parser.add_subparsers(title="sub commands")
 
-        update_parser = subparsers.add_parser("update", help="pull repo and run ansible-playbook")
+        update_parser = subparsers.add_parser(
+            "update",
+            help="pull repo and run ansible-playbook (extra args pass through, e.g. --tags python,node)",
+            usage="hal update [-h] [ansible-playbook args ...]",
+            description="pull repo and run ansible-playbook; extra args pass through to ansible-playbook, e.g. hal update --tags python,node",
+        )
         update_parser.set_defaults(func=self.update)
 
         self.dotfiles = Dotfiles()
