@@ -3,7 +3,6 @@
 _hal() {
     local -a commands
 
-    # Commands extracted from hal script
     commands=(
         'update:pull repo and run ansible-playbook'
         'link:move file into dotfiles and symlink it back'
@@ -16,19 +15,16 @@ _hal() {
     )
 
     if (( CURRENT == 2 )); then
-        # First argument - show commands and options
         _describe -t commands 'hal commands' commands
         _arguments \
             '(-h --help)'{-h,--help}'[show help message]' \
             '(-v --version)'{-v,--version}'[show version]'
     else
-        # Additional arguments based on command
         case "$words[2]" in
             link|unlink|copy)
                 _files
                 ;;
             *)
-                # No special completion for other commands
                 ;;
         esac
     fi

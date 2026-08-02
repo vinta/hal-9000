@@ -16,13 +16,11 @@ if ! command -v curl &>/dev/null; then
   exit 1
 fi
 
-# Download statusline script from GitHub
 mkdir -p "$(dirname "$DEST")"
 rm -f "$DEST"
 curl -fsSL "$REMOTE_URL" -o "$DEST"
 echo "Downloaded statusline to $DEST"
 
-# Write statusLine into settings.json
 STATUSLINE_CMD="python3 ~/.claude/statusline/hal-statusline.py"
 python3 - "$SETTINGS" "$STATUSLINE_CMD" <<'PYEOF'
 import json, sys

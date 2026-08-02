@@ -16,9 +16,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal, TypedDict
 
 if TYPE_CHECKING:
-    # NotRequired is 3.11+, but this runs under whatever `python3` resolves to,
-    # which on a stock macOS is 3.9. The `annotations` future keeps every
-    # annotation below a string, so it is never evaluated at runtime.
+    # NotRequired is 3.11+, but this runs under whatever `python3` resolves to, which on a stock macOS is 3.9
+    # The `annotations` future keeps every annotation below a string, so it is never evaluated at runtime
     from typing import NotRequired
 
 LOG_PATH = Path("/tmp/hal-statusline.log")  # noqa: S108 hardcoded-temp-file
@@ -61,7 +60,7 @@ class RateLimits(TypedDict):
 
 class StatusLineData(TypedDict):
     model: Model
-    effort: NotRequired[Effort]  # absent when the current model doesn't support reasoning effort
+    effort: NotRequired[Effort]  # Absent when the current model doesn't support reasoning effort
     workspace: Workspace
     session_id: str
     transcript_path: str
@@ -275,8 +274,8 @@ def write_cache(cache_file: str, payload: GrammarCache) -> None:
 
 
 def run_ollama_grammar_model(prompt: str) -> str | None:
-    # `think: false` disables reasoning tokens; `temperature: 0` and a `num_predict` cap keep
-    # output short and deterministic and prevent runaway generation from stalling the statusline.
+    # `think: false` disables reasoning tokens
+    # `temperature: 0` and a `num_predict` cap keep output short and deterministic and prevent runaway generation from stalling the statusline
     body = json.dumps(
         {
             "model": "gemma4:31b-mlx",
@@ -359,7 +358,7 @@ def run_grammar_worker(cache_file: str) -> None:
     cwd = cached["cwd"]
     model_run = run_grammar_model(GRAMMAR_PROMPT.format(latest_user_input=latest_user_input))
 
-    # A newer prompt may have overwritten the cache while the model call was in flight.
+    # A newer prompt may have overwritten the cache while the model call was in flight
     current = read_cache(cache_file)
     if current is None or current["uuid"] != working_uuid:
         return

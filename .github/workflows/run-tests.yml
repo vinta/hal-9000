@@ -60,8 +60,6 @@ jobs:
             plugins/hal-statusline/hal-statusline.py \
             plugins/hal-voice/scripts/hal-voice.py
 
-      # Parsing is not enough: a 3.11+ name in a top-level `from typing import`
-      # compiles fine on 3.9 and only fails when the script is actually run.
       - name: Check scripts still import under system python3
         run: |
           python - <<'PY'

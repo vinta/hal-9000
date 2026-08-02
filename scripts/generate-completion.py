@@ -45,19 +45,16 @@ completion_content = f"""#compdef hal
 _hal() {{
     local -a commands
 
-    # Commands extracted from hal script
     commands=(
 {chr(10).join(commands)}
     )
 
     if (( CURRENT == 2 )); then
-        # First argument - show commands and options
         _describe -t commands 'hal commands' commands
         _arguments \\
             '(-h --help)'{{-h,--help}}'[show help message]' \\
             '(-v --version)'{{-v,--version}}'[show version]'
     else
-        # Additional arguments based on command
         case "$words[2]" in"""
 
 if file_commands:
@@ -68,7 +65,6 @@ if file_commands:
 
 completion_content += """
             *)
-                # No special completion for other commands
                 ;;
         esac
     fi

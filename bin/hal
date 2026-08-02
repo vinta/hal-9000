@@ -229,13 +229,11 @@ class HAL9000:
             self._hal_says(f"not found in dotfiles: {src_path}")
             return
 
-        # Remove symlink and move file back
         if Path(dest_path).is_symlink():
             Path(dest_path).unlink()
         shutil.copy2(src_path, dest_path)
         Path(src_path).unlink()
 
-        # Remove from manifest
         self.dotfiles.data["links"].remove(ln_dict)
 
         self.dotfiles.save()
