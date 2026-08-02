@@ -1,6 +1,6 @@
 ---
 name: update-playbooks
-description: (project) Use when refreshing install tasks in playbooks/roles/ against upstream docs — bumping a pinned version, adopting a newly recommended install method, or repointing a doc link that moved
+description: (project) Use when refreshing install tasks in playbooks/roles/ against upstream docs — bumping a pinned version, adopting a newly recommended install method, repointing a doc link that moved, or realigning the community.general pin with the brew-installed ansible
 user-invocable: true
 model: sonnet
 allowed-tools:
@@ -12,6 +12,8 @@ allowed-tools:
   - Bash(gh api:*)
   - Bash(curl:*)
   - Bash(make lint:*)
+  - Bash(ansible-galaxy collection list:*)
+  - Bash(uv run ansible-galaxy install:*)
   - Skill(commit)
 metadata:
   internal: true
@@ -28,6 +30,8 @@ Drift takes three forms, and all three are read off the same page — the `#` co
 - **Link drift** — the doc URL itself moved.
 
 A **release line** is the version prefix a project treats as a stable series: Node `24.x`, Python `3.14.x`, kubectl `1.35.x`, nvm `0.40.x`. Every bump stays inside the line (`24.15.0` -> `24.18.0` is in-line for Node because Node's line is the major). When a newer line exists (Node 26, Python 3.15, kubectl 1.36), keep the pin on its current line and report the newer line in the final summary so the user can decide.
+
+One pin lives outside the roles and answers to a different source of truth — `playbooks/collections/requirements.yml`, covered in §4.
 
 ## 1. Scan
 
@@ -66,6 +70,22 @@ Homebrew always installs the newest release, so it cannot hold a pin. Where a ta
 
 Upstream install snippets also carry portability the old task may lack: prefer the documented `uname -m` architecture mapping over `arch` (which reports `i386` on Intel Macs), and keep whatever executable bit or ownership the docs set.
 
-## 4. Verify and commit
+## 4. Match the collection pin to brew's ansible
 
-Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7` or `install foundryup from getfoundry.sh`. Close with a summary: what changed per tool, which tools were already current, and any newer release lines waiting on the user.
+`playbooks/collections/requirements.yml` pins `community.general`, the collection supplying the `homebrew`, `homebrew_tap`, and `homebrew_cask` modules the roles install through. Upstream releases do not drive this pin — the brew-installed ansible does. Brew bundles its own copy of the collection, `~/.ansible/collections` takes precedence over it, and the pin is what fills `~/.ansible/collections`. So a pin that disagrees with brew means `ansible-lint` validates different module code than `ansible-playbook` executes, silently.
+
+```bash
+ansible-galaxy collection list community.general
+```
+
+Run it bare so it resolves to brew's `ansible-galaxy`. Under `uv run` the venv holds only `ansible-core`, which prints just `~/.ansible/collections` and hides the very version you are comparing against. Two sections mean it worked: the one under `/opt/homebrew/Cellar/ansible/` is what brew bundles, the one under `~/.ansible/collections` is what the pin installed.
+
+When they differ, set the pin to brew's version. Never the reverse, and never to the newest release on Galaxy — a pin ahead of brew shadows the bundled collection just as badly as one behind it. Then install it, so §5 verifies against what you just pinned rather than the copy already on disk:
+
+```bash
+uv run ansible-galaxy install -r playbooks/collections/requirements.yml --force
+```
+
+## 5. Verify and commit
+
+Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7` or `install foundryup from getfoundry.sh`. A collection pin bump is its own commit, separate from any role. Close with a summary: what changed per tool, which tools were already current, and any newer release lines waiting on the user.
