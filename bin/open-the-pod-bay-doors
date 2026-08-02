@@ -17,13 +17,6 @@ else
   brew update
 fi
 
-printf "\n"
-printf "Trust known taps...\n"
-for tap in aws/tap derailed/k9s oven-sh/bun; do
-  brew tap "$tap" >/dev/null 2>&1 || true
-  brew trust "$tap" || true
-done
-
 if ! which ansible >/dev/null 2>&1; then
   printf "\n"
   printf "Install Ansible...\n"

@@ -10,6 +10,11 @@
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/kubectl"
 
+- name: Tap derailed/k9s
+  homebrew_tap:
+    name:
+      - derailed/k9s
+
 # https://github.com/derailed/k9s
 - name: Install k9s
   homebrew:
