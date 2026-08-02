@@ -18,8 +18,16 @@ spec.loader.exec_module(module)
 HAL9000 = module.HAL9000
 hal = HAL9000()
 
+# `hal update` forwards unrecognized args to ansible-playbook via parse_known_args, so these flags are invisible to argparse introspection
+PASSTHROUGH_SPECS: dict[str, tuple[str, ...]] = {
+    "update": (
+        "'--tags[only run plays and tasks tagged with these values]:tags: '",
+        "'--skip-tags[skip plays and tasks whose tags match these values]:tags: '",
+    ),
+}
+
 commands: list[str] = []
-file_commands: list[str] = []
+spec_groups: dict[tuple[str, ...], list[str]] = {}
 
 subparsers_actions = [a for a in hal.parser._subparsers._actions if hasattr(a, "choices") and a.choices]  # noqa: SLF001 private-member-access
 if subparsers_actions:
@@ -35,10 +43,29 @@ if subparsers_actions:
         help_text = help_text.replace("'", "'\"'\"'")
         commands.append(f"        '{cmd}:{help_text}'")
 
+        specs: list[str] = []
         for act in parser._actions:  # noqa: SLF001 private-member-access
-            if hasattr(act, "dest") and act.dest == "filename":
-                file_commands.append(cmd)
-                break
+            act_help = (act.help or "").replace("'", "'\"'\"'")
+            if act.option_strings:
+                value_part = "" if act.nargs == 0 else f":{act.dest}: "
+                if len(act.option_strings) > 1:
+                    exclusion = " ".join(act.option_strings)
+                    brace = ",".join(act.option_strings)
+                    specs.append(f"'({exclusion})'{{{brace}}}'[{act_help}]{value_part}'")
+                else:
+                    specs.append(f"'{act.option_strings[0]}[{act_help}]{value_part}'")
+            elif act.dest == "filename":
+                specs.append("':filename:_files'")
+        specs.extend(PASSTHROUGH_SPECS.get(cmd, ()))
+        spec_groups.setdefault(tuple(specs), []).append(cmd)
+
+branch_blocks: list[str] = []
+for group_specs, cmds in spec_groups.items():
+    joined_specs = " \\\n                    ".join(group_specs)
+    branch_blocks.append(f"""            {"|".join(cmds)})
+                _arguments \\
+                    {joined_specs}
+                ;;""")
 
 completion_content = f"""#compdef hal
 
@@ -55,20 +82,15 @@ _hal() {{
             '(-h --help)'{{-h,--help}}'[show help message]' \\
             '(-v --version)'{{-v,--version}}'[show version]'
     else
-        case "$words[2]" in"""
-
-if file_commands:
-    completion_content += f"\n            {'|'.join(file_commands)})"
-    completion_content += """
-                _files
-                ;;"""
-
-completion_content += """
+        shift words
+        (( CURRENT-- ))
+        case "$words[1]" in
+{chr(10).join(branch_blocks)}
             *)
                 ;;
         esac
     fi
-}
+}}
 
 compdef _hal hal"""
 

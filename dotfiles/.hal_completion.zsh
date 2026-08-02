@@ -20,9 +20,28 @@ _hal() {
             '(-h --help)'{-h,--help}'[show help message]' \
             '(-v --version)'{-v,--version}'[show version]'
     else
-        case "$words[2]" in
+        shift words
+        (( CURRENT-- ))
+        case "$words[1]" in
+            update)
+                _arguments \
+                    '(-h --help)'{-h,--help}'[show this help message and exit]' \
+                    '--tags[only run plays and tasks tagged with these values]:tags: ' \
+                    '--skip-tags[skip plays and tasks whose tags match these values]:tags: '
+                ;;
             link|unlink|copy)
-                _files
+                _arguments \
+                    '(-h --help)'{-h,--help}'[show this help message and exit]' \
+                    ':filename:_files'
+                ;;
+            sync)
+                _arguments \
+                    '(-h --help)'{-h,--help}'[show this help message and exit]' \
+                    '--force[replace real directories at link destinations]'
+                ;;
+            backup|restore|open-the-pod-bay-doors)
+                _arguments \
+                    '(-h --help)'{-h,--help}'[show this help message and exit]'
                 ;;
             *)
                 ;;
