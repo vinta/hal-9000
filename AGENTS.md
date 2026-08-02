@@ -20,18 +20,18 @@ When you need information about tools used in this project, use the `find-docs` 
 
 Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skipping the `ctx7 library` step:
 
-| Tool           | `libraryId`                  |
-| -------------- | ---------------------------- |
-| ansible        | `/websites/ansible_ansible`  |
-| detect-secrets | `/yelp/detect-secrets`       |
-| gitleaks       | `/gitleaks/gitleaks`         |
-| homebrew       | `/homebrew/brew`             |
-| nvm            | `/nvm-sh/nvm`                |
-| pre-commit     | `/pre-commit/pre-commit.com` |
-| pytest         | `/pytest-dev/pytest`         |
-| ruff           | `/websites/astral_sh_ruff`   |
-| ty             | `/websites/astral_sh_ty`     |
-| uv             | `/websites/astral_sh_uv`     |
+| Tool           | `libraryId`                            |
+| -------------- | -------------------------------------- |
+| ansible        | `/websites/ansible_projects_ansible`   |
+| detect-secrets | `/yelp/detect-secrets`                 |
+| gitleaks       | `/gitleaks/gitleaks`                   |
+| homebrew       | `/homebrew/brew`                       |
+| nvm            | `/nvm-sh/nvm`                          |
+| pre-commit     | `/pre-commit/pre-commit.com`           |
+| pytest         | `/pytest-dev/pytest`                   |
+| ruff           | `/websites/astral_sh_ruff`             |
+| ty             | `/websites/astral_sh_ty`               |
+| uv             | `/websites/astral_sh_uv`               |
 
 ### Documentation Links
 
