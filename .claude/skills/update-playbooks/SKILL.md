@@ -13,7 +13,7 @@ allowed-tools:
   - Bash(curl:*)
   - Bash(make lint:*)
   - Bash(ansible-galaxy collection list:*)
-  - Bash(uv run ansible-galaxy install:*)
+  - Bash(ansible-galaxy install:*)
   - Skill(commit)
 metadata:
   internal: true
@@ -83,7 +83,7 @@ Run it bare so it resolves to brew's `ansible-galaxy`. Under `uv run` the venv h
 When they differ, set the pin to brew's version. Never the reverse, and never to the newest release on Galaxy — a pin ahead of brew shadows the bundled collection just as badly as one behind it. Then install it, so §5 verifies against what you just pinned rather than the copy already on disk:
 
 ```bash
-uv run ansible-galaxy install -r playbooks/collections/requirements.yml --force
+ansible-galaxy install -r playbooks/collections/requirements.yml --force
 ```
 
 ## 5. Verify and commit
