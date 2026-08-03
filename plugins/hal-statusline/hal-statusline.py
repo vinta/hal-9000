@@ -142,19 +142,20 @@ def basic_info(data: StatusLineData) -> None:
     except Exception:  # noqa: BLE001 S110 blind-exception try-except-pass
         pass
 
+    # All three percentages below can legitimately be 0, so check `is not None` — a falsy check would hide them
     context_used = data.get("context_window", {}).get("used_percentage")
-    if context_used:
+    if context_used is not None:
         status_parts.append(f"{usage_color(context_used)}Context {int(context_used)}%{RESET}{BLUE}")
 
     rate_limits = data.get("rate_limits", {})
 
     five_hour_used = rate_limits.get("five_hour", {}).get("used_percentage")
-    if five_hour_used:
-        status_parts.append(f"{usage_color(five_hour_used)}5h {int(five_hour_used)}%{RESET}{BLUE}")
+    if five_hour_used is not None:
+        status_parts.append(f"{usage_color(five_hour_used)}5h Usage {int(five_hour_used)}%{RESET}{BLUE}")
 
     seven_day_used = rate_limits.get("seven_day", {}).get("used_percentage")
-    if seven_day_used:
-        status_parts.append(f"{usage_color(seven_day_used)}7d {int(seven_day_used)}%{RESET}{BLUE}")
+    if seven_day_used is not None:
+        status_parts.append(f"{usage_color(seven_day_used)}7d Usage {int(seven_day_used)}%{RESET}{BLUE}")
 
     separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
