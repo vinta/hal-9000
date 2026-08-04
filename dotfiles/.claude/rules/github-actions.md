@@ -13,7 +13,6 @@ paths:
   ```
 
 - Verify the SHA comes from the action's upstream repo, not a fork, before pinning
-- SHA pinning suppresses Dependabot security _alerts_ (it raises them only for semver-pinned actions), so pair it with Dependabot update PRs, which bump the SHA and version comment together
 - Declare top-level `permissions:` explicitly, defaulting to `contents: read`. Add per-job overrides only where required. Omitting `permissions:` falls back to repo or org defaults, which may grant more than needed
 - Use OIDC (`permissions: id-token: write` plus `contents: read`) to authenticate to cloud providers instead of storing access keys as long-lived secrets
 - Never interpolate `${{ github.event.* }}` or any user-controlled context directly into a `run:` block. Route through step-level `env:` and reference the variable, quoted:
@@ -30,7 +29,7 @@ paths:
 - Don't store structured data (JSON/XML/YAML blobs) as a single secret. GitHub masks each registered secret individually, so sub-values inside a blob will not be redacted. Create one secret per sensitive value instead
 - `pull_request_target` runs in the context of the base repo's default branch with write access and secrets. `workflow_run` can access secrets and write tokens even when the triggering workflow could not. Do not combine either with `actions/checkout` of `github.event.pull_request.head.sha`, a fork ref, or any other untrusted code. Use `pull_request` for anything that needs to execute fork code
 - Set `persist-credentials: false` on `actions/checkout` unless the job pushes back to the repo. The default is `true`, which stores the token in git config and makes it readable by any subsequent step
-- Set `timeout-minutes:` on every job. The default is 360 minutes (6 hours), which wastes runner minutes on hung jobs
+- Set `timeout-minutes: 10` on every job. The default is 360 minutes (6 hours), which wastes runner minutes on hung jobs
 - PR-triggered workflows include a `concurrency:` group keyed on ref with `cancel-in-progress: true` to drop superseded runs
 - Matrix jobs default `fail-fast: true`. Set `fail-fast: false` only when you genuinely want every combination's result
 - Cache keys must hash the lockfile: `key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}`. Static keys silently serve stale artifacts
