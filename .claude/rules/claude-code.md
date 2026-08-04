@@ -2,9 +2,10 @@
 paths:
   - ".claude/**"
   - ".claude-plugin/**"
-  - "skills/**"
-  - "plugins/**"
+  - "**/CLAUDE.md"
   - "dotfiles/.claude/**"
+  - "plugins/**"
+  - "skills/**"
 ---
 
 # Claude Code
