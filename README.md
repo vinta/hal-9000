@@ -2,7 +2,7 @@
 
 ![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/hal-9000.jpg "HAL 9000")
 
-Opinionated macOS development environment automation that dominates your dev setup like cats rule the Internet.
+Opinionated AI coding agent and dev environment automation for macOS that dominates your dev setup like cats rule the Internet.
 
 > This project is named after Arthur C. Clarke's 2001: A Space Odyssey, a heuristic algorithmic computer designed for sentient processing and total mission control.
 
