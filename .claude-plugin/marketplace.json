@@ -28,7 +28,7 @@
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "1.13.0",
+      "version": "1.14.0",
       "source": "./skills/hal-skills",
       "skills": [
         "./commit",
@@ -37,7 +37,8 @@
         "./simple-english",
         "./refactor-claude-md",
         "./refactor-agents-md",
-        "./update-allowed-tools"
+        "./update-allowed-tools",
+        "./audit-claude-settings"
       ],
       "author": {
         "name": "Vinta Chen",
