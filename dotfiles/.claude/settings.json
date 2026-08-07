@@ -1,9 +1,12 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 365,
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+    "CLAUDE_CODE_RETRY_WATCHDOG": "1",
     "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_UPGRADE_COMMAND": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_FEEDBACK_COMMAND": "1"
   },
@@ -178,19 +181,20 @@
   "effortLevel": "high",
   "advisorModel": "fable",
   "outputStyle": "ASD-STE100",
+  "includeGitInstructions": false,
+  "disableArtifact": true,
   "disableClaudeAiConnectors": true,
-  "enableWorkflows": true,
+  "workflowSizeGuideline": "small",
   "viewMode": "verbose",
   "awaySummaryEnabled": false,
   "showClearContextOnPlanAccept": true,
   "showThinkingSummaries": true,
-  "skipWorkflowUsageWarning": true,
   "verbose": true,
   "switchModelsOnFlag": false,
   "teammateMode": "tmux",
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false,
-  "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voice": {"enabled": true},
+  "worktree": {"baseRef": "head"}
 }
