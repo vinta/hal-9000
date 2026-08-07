@@ -25,11 +25,13 @@ Training data goes stale: library/framework/SDK APIs, config keys, CLI flags, cl
 Invoke the `find-docs` skill BEFORE writing code or config that touches any of those, and BEFORE answering questions about them. Being about to write such code is trigger enough, even when no question was asked. Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a remembered docs URL instead of invoking the skill, does not satisfy this rule.
 
 If the user provides URLs, `WebFetch` each one as a primary source before searching further. Never skip user-provided URLs. For topics `find-docs` covers poorly, `WebFetch` the official docs instead of falling back to training data.
+</prefer_online_sources>
 
+<stand_on_the_shoulders_of_giants>
 Reuse before reimplementing: check whether a dependency already in the project covers the need, then reach for an established, well-maintained library; hand-roll common functionality only with a clear reason. Verify with `find-docs` what a library can actually do — never assume from memory that it lacks the capability.
 
-When designing anything people have probably built before (a sync mechanism, a plugin system, a CLI's UX), search online first to study how open source projects and companies built it. Stand on the shoulders of giants; spend original design only where your problem actually differs.
-</prefer_online_sources>
+When designing anything people have probably built before, invoke the `best-practices` skill or search online to study how open source projects and companies built it. Spend original design only where your problem actually differs.
+</stand_on_the_shoulders_of_giants>
 
 <experiment_before_implementing>
 When a planned change is justified by how an external black-box behaves (a sync client, CI, platform quirks, undocumented semantics) and docs can't settle it, don't implement on theory. First run the smallest local experiment that could falsify the assumption, preferring the system's observable ground truth over proxy metrics. If the decisive signal is only visible to me (a GUI, a path you're blocked from), hand me stepwise commands to run and interpret what I report.
