@@ -27,6 +27,10 @@ Training data goes stale: library/framework/SDK APIs, config keys, CLI flags, cl
 Invoke the `find-docs` skill BEFORE writing code or config that touches any of those, and BEFORE answering questions about them. Being about to write such code is trigger enough, even when no question was asked. Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a remembered docs URL instead of invoking the skill, does not satisfy this rule.
 
 If the user provides URLs, `WebFetch` each one as a primary source before searching further. Never skip user-provided URLs. For topics `find-docs` covers poorly, `WebFetch` the official docs instead of falling back to training data.
+
+Reuse before reimplementing: check whether a dependency already in the project covers the need, then reach for an established, well-maintained library; hand-roll common functionality only with a clear reason. Verify with `find-docs` what a library can actually do — never assume from memory that it lacks the capability.
+
+When designing anything people have probably built before (a sync mechanism, a plugin system, a CLI's UX), search online first to study how open source projects and companies built it. Stand on the shoulders of giants; spend original design only where your problem actually differs.
 </prefer_online_sources>
 
 <experiment_before_implementing>
@@ -48,8 +52,12 @@ Each change should be purely behavioral or purely structural. Never both in the 
 Mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs.
 </one_thing_at_a_time>
 
+<grow_in_layers>
+For multi-step builds, start from the smallest version that works end to end, then add each capability on top of a product that already works. Never trade a working product for unfinished complexity, and never write code you already intend to replace: a small-but-complete layer is fine, a known-temporary stopgap is not.
+</grow_in_layers>
+
 <surgical_changes>
-Every changed line should trace to the user's request. Don't improve adjacent code, comments, or formatting. Don't refactor what isn't broken. Match existing style even when you'd write it differently. Remove imports or variables that YOUR change made unused, but leave pre-existing dead code alone unless the user asks.
+Every changed line should trace to the user's request. Don't improve adjacent code, comments, or formatting. Don't refactor what isn't broken. Match existing style even when you'd write it differently. Remove imports, variables, and code paths that YOUR change made unused or obsolete — when you control all the callers, delete the old path instead of leaving a deprecated fallback — but leave pre-existing dead code alone unless the user asks.
 
 Do the simplest thing that works. Don't add error handling or validation for scenarios that can't happen, abstractions for one-time operations, or backwards-compatibility shims when you can just change the code. Trust internal code and framework guarantees. Validate only at system boundaries (user input, external APIs).
 </surgical_changes>
