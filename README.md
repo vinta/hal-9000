@@ -45,6 +45,7 @@ Tool configs hardened against supply chain attacks and tuned for better DX:
 - [blindspot](skills/hal-skills/blindspot/SKILL.md): Surveys unfamiliar territory and turns your unknown unknowns into known unknowns
 - [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
 - [simple-english](skills/hal-skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
+- [audit-claude-settings](skills/hal-skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and env vars against the current docs and suggests tailored changes
 - [refactor-claude-md](skills/hal-skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
 - [refactor-agents-md](skills/hal-skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure
 

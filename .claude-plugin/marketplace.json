@@ -31,14 +31,14 @@
       "version": "1.14.0",
       "source": "./skills/hal-skills",
       "skills": [
-        "./commit",
-        "./blindspot",
-        "./best-practices",
-        "./simple-english",
-        "./refactor-claude-md",
-        "./refactor-agents-md",
-        "./update-allowed-tools",
-        "./audit-claude-settings"
+        "./commit", 
+        "./blindspot", 
+        "./best-practices", 
+        "./simple-english", 
+        "./audit-claude-settings", 
+        "./refactor-claude-md", 
+        "./refactor-agents-md", 
+        "./update-allowed-tools"
       ],
       "author": {
         "name": "Vinta Chen",
@@ -60,6 +60,9 @@
         "simple-english",
         "global-english",
         "technical-writing",
+        "audit",
+        "settings",
+        "env-vars",
         "refactor",
         "claude-md",
         "agents-md"
@@ -77,6 +80,9 @@
         "simple-english",
         "global-english",
         "technical-writing",
+        "audit",
+        "settings",
+        "env-vars",
         "refactor",
         "claude-md",
         "agents-md"
