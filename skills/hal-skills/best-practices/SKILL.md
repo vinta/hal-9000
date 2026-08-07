@@ -1,6 +1,6 @@
 ---
 name: best-practices
-description: Use when the user asks about best practices, gotchas, common pitfalls, or recommended patterns for tools, libraries, config formats, API patterns, or project setup, or when setting up, configuring, choosing, or refining these where outdated guidance causes debugging pain. Also use when the user says "search online", "how should I", or "what's the best way to"
+description: Use when the user asks about best practices, gotchas, or recommended patterns for tools, libraries, config formats, API patterns, or project setup; when setting up, configuring, choosing, or refining these where outdated guidance causes debugging pain; or before proposing a design of your own, to study how existing projects solved the same problem. Also use when the user says "search online", "how should I", or "what's the best way to"
 user-invocable: true
 allowed-tools:
   - Agent
@@ -34,7 +34,7 @@ The user's argument may be a question or an imperative. Imperatives ("refine X",
 
 ### 1. Identify Research Targets
 
-Break the topic into 2-4 specific queries. Dedicate at least one query to pitfalls ("common mistakes with X", "X gotchas in production"): pitfalls live in issue threads, migration guides, and post-mortems, not in getting-started docs, so a how-to query won't surface them. For single-library lookups, call `find-docs` or `WebSearch` directly without subagents.
+Break the topic into 2-4 specific queries. Dedicate at least one query to pitfalls ("common mistakes with X", "X gotchas in production"): pitfalls live in issue threads, migration guides, and post-mortems, not in getting-started docs, so a how-to query won't surface them. For design prior-art (the "before proposing a design of your own" trigger), dedicate queries to how existing open source projects implement it — concrete implementations and comparisons, not just advice posts. For single-library lookups, call `find-docs` or `WebSearch` directly without subagents.
 
 ### 2. Parallel Research
 
