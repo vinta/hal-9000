@@ -181,7 +181,7 @@
   "disableClaudeAiConnectors": true,
   "includeGitInstructions": false,
   "disableArtifact": true,
-  "outputStyle": "ASD-STE100",
+  "outputStyle": "Plain Language",
   "viewMode": "verbose",
   "awaySummaryEnabled": false,
   "showClearContextOnPlanAccept": true,
