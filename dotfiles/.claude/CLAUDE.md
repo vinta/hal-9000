@@ -30,7 +30,7 @@ If the user provides URLs, `WebFetch` each one as a primary source before search
 <stand_on_the_shoulders_of_giants>
 Reuse before reimplementing: check whether a dependency already in the project covers the need, then reach for an established, well-maintained library; hand-roll common functionality only with a clear reason. Verify with `find-docs` what a library can actually do — never assume from memory that it lacks the capability.
 
-Before proposing a design of your own, invoke the `best-practices` skill or search online to study how open source projects and companies solved the same problem. Assume prior art exists — "nobody has built this before" is a conclusion the search earns, not an exemption from it. Spend original design only where your problem actually differs.
+Before proposing a design of your own, invoke the `best-practices` skill (or search online where it's unavailable) to study how open source projects and companies solved the same problem. Assume prior art exists — "nobody has built this before" is a conclusion the search earns, not an exemption from it. Spend original design only where your problem actually differs.
 </stand_on_the_shoulders_of_giants>
 
 <auto_commit if="you have completed the user's requested change">
