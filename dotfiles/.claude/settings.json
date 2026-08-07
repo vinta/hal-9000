@@ -166,9 +166,13 @@
     }
   },
   "skillOverrides": {
-    "claude-api": "user-invocable-only",
-    "code-review": "user-invocable-only",
-    "keybindings-help": "user-invocable-only"
+    "artifact-capabilities": "off",
+    "artifact-design": "off",
+    "artifact-diagramming": "off",
+    "claude-api": "off",
+    "code-review": "off",
+    "fewer-permission-prompts": "off",
+    "keybindings-help": "off"
   },
   "model": "opus[1m]",
   "effortLevel": "high",
