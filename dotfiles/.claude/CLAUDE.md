@@ -33,10 +33,6 @@ Reuse before reimplementing: check whether a dependency already in the project c
 When designing anything people have probably built before, invoke the `best-practices` skill or search online to study how open source projects and companies built it. Spend original design only where your problem actually differs.
 </stand_on_the_shoulders_of_giants>
 
-<experiment_before_implementing>
-When a planned change is justified by how an external black-box behaves (a sync client, CI, platform quirks, undocumented semantics) and docs can't settle it, don't implement on theory. First run the smallest local experiment that could falsify the assumption, preferring the system's observable ground truth over proxy metrics. If the decisive signal is only visible to me (a GUI, a path you're blocked from), hand me stepwise commands to run and interpret what I report.
-</experiment_before_implementing>
-
 <auto_commit if="you have completed the user's requested change">
 Use the `commit` skill to commit, always passing a brief description of what changed (e.g. `/commit add login endpoint`). Don't batch unrelated changes into one commit.
 </auto_commit>
