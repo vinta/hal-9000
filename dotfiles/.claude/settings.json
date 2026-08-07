@@ -196,6 +196,6 @@
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false,
-  "voice": {"enabled": true},
-  "worktree": {"baseRef": "head"}
+  "voice": { "enabled": true },
+  "worktree": { "baseRef": "head" }
 }
