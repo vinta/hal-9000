@@ -165,6 +165,11 @@
       "autoUpdate": true
     }
   },
+  "skillOverrides": {
+    "claude-api": "user-invocable-only",
+    "code-review": "user-invocable-only",
+    "keybindings-help": "user-invocable-only"
+  },
   "model": "opus[1m]",
   "effortLevel": "high",
   "advisorModel": "fable",
