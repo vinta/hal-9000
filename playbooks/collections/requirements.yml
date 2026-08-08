@@ -2,4 +2,8 @@
 # https://galaxy.ansible.com/ui/repo/published/community/general/
 collections:
   - name: community.general
-    version: 13.2.0 # Pinned to the version bundled with the brew-installed ansible (14.2.0), so `ansible-playbook` and `ansible-lint` resolve the same modules.
+    # Held one release behind the version bundled with the brew-installed ansible
+    # (ansible 14.2.0 bundles 13.2.0). On GitHub runners `ansible-galaxy install`
+    # reports 13.2.0 as "already installed" without installing it, so ansible-lint
+    # cannot resolve the homebrew* modules and Validate Playbooks fails.
+    version: 13.1.0
