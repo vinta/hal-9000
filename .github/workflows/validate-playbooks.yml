@@ -21,13 +21,18 @@ jobs:
         with:
           persist-credentials: false
 
+      # Installs community.general so the homebrew* modules resolve for real. Without it ansible-lint cannot validate their options.
+      # Done here instead of via the action's `requirements_file` input, which runs `ansible-galaxy install` without `--force`. The runner
+      # ships the full ansible package, so any pin matching a bundled collection is reported as already installed and never lands in
+      # ~/.ansible/collections, where ansible-lint looks. See https://github.com/ansible/ansible-lint/issues/5137.
+      - name: Install collection dependencies
+        run: ansible-galaxy collection install -r playbooks/collections/requirements.yml --force
+
       - name: Run ansible-lint
         uses: ansible/ansible-lint@v26.4.0
         with:
           # Without a path the action lints every YAML file in the repo, including .github/workflows/. Matches `make lint-ansible`.
           args: playbooks/
-          # Installs community.general so the homebrew* modules resolve for real. Without it ansible-lint cannot validate their options.
-          requirements_file: playbooks/collections/requirements.yml
 
   ansible-syntax:
     runs-on: ubuntu-latest
