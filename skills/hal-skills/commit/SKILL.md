@@ -1,7 +1,7 @@
 ---
 name: commit
-description: Use when making any git commit. Always pass a brief description of what changed as the argument.
-argument-hint: [description of the changes]
+description: Use when making any git commit. Always pass why the changes were made as the argument.
+argument-hint: [why the changes were made]
 user-invocable: true
 context: fork
 model: sonnet
@@ -31,7 +31,7 @@ Your task: commit all changes in the working tree. Run `git status` and `git dif
 
 ## The argument
 
-The argument passed to this skill is a **description of changes already made** — raw material for the commit message, never a to-do list. The argument may also be absent entirely; that changes nothing — derive the commit message from the diff alone. Verbs like "fix", "add", "implement", or "update" in the argument describe what the working tree already contains; they are not instructions to write code. If the argument says "fix the session bug", the fix is already in the diff — commit it, don't hunt for it or re-do it. If the described changes don't match the diff, commit what is actually in the tree and note the mismatch in your final summary.
+The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. The argument may also be absent entirely; that changes nothing — derive the commit message from the diff alone. Whatever outcome the argument describes is already realized in the diff: "so the statusline shows usage percentages" means the diff already does that — never write code toward the goal, verify it, or finish it. Verb-led phrasings are the same: "to fix the session bug" means the fix is already in the diff — commit it, don't hunt for it or re-do it. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
 
 ## Locate the repository
 
@@ -104,7 +104,7 @@ Incorrect behavior: fetching GitHub Actions docs, verifying version pins, then e
    - If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit
 
 5. **Create Atomic Commits**: For each logical group:
-   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars). If the subject is self-explanatory, skip the body.
+   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: why, drawn from the argument when one was given. Skip the body when the why is obvious from the subject.
    - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
