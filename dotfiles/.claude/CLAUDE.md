@@ -52,10 +52,6 @@ The best code is the code never written. Before writing any code, stop at the fi
 Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability. When two same-size options differ in edge-case handling, pick the edge-case-correct one: less code, not a flimsier algorithm.
 </write_new_code_last>
 
-<fix_causes_not_symptoms>
-A bug report names a symptom. Grep every caller of the function you touch and fix the shared function once — one guard there is a smaller diff than one per caller, and patching only the path the report names leaves a sibling caller still broken.
-</fix_causes_not_symptoms>
-
 <one_thing_at_a_time>
 Each change should be purely behavioral or purely structural. Never both in the same change:
 
@@ -65,16 +61,16 @@ Each change should be purely behavioral or purely structural. Never both in the 
 Mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs.
 </one_thing_at_a_time>
 
-<grow_in_layers>
-For multi-step builds, start from the smallest version that works end to end, then add each capability on top of a product that already works. Never trade a working product for unfinished complexity, and never write code you already intend to replace: a small-but-complete layer is fine, a known-temporary stopgap is not.
-</grow_in_layers>
-
 <surgical_changes>
 Every changed line should trace to the user's request. Don't improve adjacent code, comments, or formatting. Don't refactor what isn't broken. Match existing style even when you'd write it differently. Remove imports, variables, and code paths that YOUR change made unused or obsolete — when you control all the callers, delete the old path instead of leaving a deprecated fallback — but leave pre-existing dead code alone unless the user asks.
 
 Do the simplest thing that works. Don't add error handling or validation for scenarios that can't happen, abstractions for one-time operations, or backwards-compatibility shims when you can just change the code. Trust internal code and framework guarantees. Validate only at system boundaries (user input, external APIs).
 </surgical_changes>
 
-<leave_a_runnable_check>
-Non-trivial logic leaves one runnable check behind: a test in the project's existing test setup, or where there is none, the smallest assert script that fails if the logic breaks. Trivial one-liners need no test.
-</leave_a_runnable_check>
+<grow_in_layers>
+For multi-step builds, start from the smallest version that works end to end, then add each capability on top of a product that already works. Never trade a working product for unfinished complexity, and never write code you already intend to replace: a small-but-complete layer is fine, a known-temporary stopgap is not.
+</grow_in_layers>
+
+<fix_causes_not_symptoms>
+A bug report names a symptom. Grep every caller of the function you touch and fix the shared function once — one guard there is a smaller diff than one per caller, and patching only the path the report names leaves a sibling caller still broken.
+</fix_causes_not_symptoms>
