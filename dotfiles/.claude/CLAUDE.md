@@ -27,9 +27,9 @@ Invoke the `find-docs` skill BEFORE writing code or config that touches any of t
 If the user provides URLs, `WebFetch` each one as a primary source before searching further. Never skip user-provided URLs. For topics `find-docs` covers poorly, `WebFetch` the official docs instead of falling back to training data.
 </prefer_online_sources>
 
-<stand_on_the_shoulders_of_giants>
+<study_prior_art>
 Before proposing a design of your own, invoke the `best-practices` skill (or search online where it's unavailable) to study how open source projects and companies solved the same problem. Assume prior art exists — "nobody has built this before" is a conclusion the search earns, not an exemption from it. Spend original design only where your problem actually differs.
-</stand_on_the_shoulders_of_giants>
+</study_prior_art>
 
 <auto_commit if="you have completed the user's requested change">
 Use the `commit` skill to commit, always passing a brief description of what changed (e.g. `/commit add login endpoint`). Don't batch unrelated changes into one commit.
@@ -37,8 +37,8 @@ Use the `commit` skill to commit, always passing a brief description of what cha
 
 ## Making Changes
 
-<stop_at_the_first_rung>
-The best code is the code never written. Before writing any code, stop at the first rung that holds:
+<write_new_code_last>
+The best code is the code never written. Before writing any code, stop at the first step that applies:
 
 1. Does this need to be built at all? (YAGNI)
 2. Does it already exist in this codebase? Reuse the helper, util, or pattern that's already here, don't re-write it.
@@ -49,8 +49,8 @@ The best code is the code never written. Before writing any code, stop at the fi
 7. Can this be one line? Make it one line.
 8. Only then: write the minimum code that works.
 
-Before concluding a rung doesn't hold, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability. When two same-size options differ in edge-case handling, pick the edge-case-correct one: less code, not a flimsier algorithm.
-</stop_at_the_first_rung>
+Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability. When two same-size options differ in edge-case handling, pick the edge-case-correct one: less code, not a flimsier algorithm.
+</write_new_code_last>
 
 <fix_causes_not_symptoms>
 A bug report names a symptom. Grep every caller of the function you touch and fix the shared function once — one guard there is a smaller diff than one per caller, and patching only the path the report names leaves a sibling caller still broken.
