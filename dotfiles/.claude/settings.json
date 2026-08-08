@@ -1,15 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 365,
   "env": {
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_RETRY_WATCHDOG": "1",
-    "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
     "DISABLE_UPGRADE_COMMAND": "1"
   },
+  "includeGitInstructions": false,
   "permissions": {
     "allow": [
       "Read(~/Projects/**)",
@@ -121,6 +122,8 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus[1m]",
+  "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "claude-api": "off",
     "code-review": "off",
@@ -140,6 +143,7 @@
       }
     ]
   },
+  "disableArtifact": true,
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/hal-statusline.py",
@@ -174,24 +178,21 @@
       "autoUpdate": true
     }
   },
-  "model": "opus[1m]",
-  "effortLevel": "high",
-  "advisorModel": "fable",
-  "cleanupPeriodDays": 365,
-  "disableClaudeAiConnectors": true,
-  "includeGitInstructions": false,
-  "disableArtifact": true,
   "outputStyle": "Plain Language",
   "viewMode": "verbose",
+  "effortLevel": "high",
+  "advisorModel": "fable",
   "awaySummaryEnabled": false,
   "showClearContextOnPlanAccept": true,
+  "voice": {
+    "enabled": true
+  },
   "showThinkingSummaries": true,
+  "skipWorkflowUsageWarning": true,
   "verbose": true,
   "switchModelsOnFlag": false,
   "teammateMode": "auto",
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
-  "voice": {
-    "enabled": true
-  }
+  "skipAutoPermissionPrompt": true
 }
