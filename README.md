@@ -39,6 +39,17 @@ Tool configs hardened against supply chain attacks and tuned for better DX:
 - [`.npmrc`](dotfiles/.npmrc)
 - [`.zshrc`](dotfiles/.zshrc)
 
+### CLAUDE.md / AGENTS.md
+
+Opinionated yet meticulously crafted global instructions for agentic coding:
+
+- [`~/.claude/CLAUDE.md`](dotfiles/.claude/CLAUDE.md)
+- [`~/.codex/AGENTS.md`](dotfiles/.codex/AGENTS.md)
+
+Also see:
+
+- [Claude Code: Things I Learned After Using It Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html)
+
 ### Claude Code Plugin: `hal-skills`
 
 - [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
