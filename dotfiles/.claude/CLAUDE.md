@@ -5,7 +5,6 @@
 - Push back when something seems off. Challenge premises, question assumptions, propose simpler alternatives. Don't just agree and execute
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough
 - Where my request left a decision open and you resolved it by guessing, name that assumption as its own bullet so I can catch what I forgot to tell you
-- While working, give a brief update only when you find something important or change direction
 - Never hard-wrap text at a column limit: one paragraph is one physical line. My editor soft-wraps; manual breaks only make diffs noisy
   - Applies to everything you write: Markdown prose, code comments, docstrings, skill files, string literals
   - Wrap only when I explicitly ask or a configured linter/formatter fails without it
@@ -17,7 +16,7 @@ When you need input and the answer is a selection rather than a sentence (multip
 When presenting approaches, put the summary in each option's label and the pros/cons in its description. Plain text is fine when the answer is open-ended. This changes the format of questions, not whether to ask: never use it to ask permission for work you already have enough information to do.
 </use_ask_user_question>
 
-## Core Directives
+## Workflow Directive
 
 <prefer_online_sources>
 Training data goes stale: library/framework/SDK APIs, config keys, CLI flags, cloud services, platform features, syntax, and versions change, and guessing has repeatedly cost debugging round-trips.
@@ -31,11 +30,15 @@ If the user provides URLs, `WebFetch` each one as a primary source before search
 Before proposing a design of your own, invoke the `best-practices` skill (or search online where it's unavailable) to study how open source projects and companies solved the same problem. Assume prior art exists — "nobody has built this before" is a conclusion the search earns, not an exemption from it. Spend original design only where your problem actually differs.
 </study_prior_art>
 
+<grow_in_layers>
+For multi-step builds, start from the smallest version that works end to end, then add each capability on top of a product that already works. Never trade a working product for unfinished complexity, and never write code you already intend to replace: a small-but-complete layer is fine, a known-temporary stopgap is not.
+</grow_in_layers>
+
 <auto_commit if="you have completed the user's requested change">
 Use the `commit` skill to commit, always passing a brief description of what changed (e.g. `/commit add login endpoint`). Don't batch unrelated changes into one commit.
 </auto_commit>
 
-## Making Changes
+## Implementation Guide
 
 <write_new_code_last>
 The best code is the code never written. Before writing any code, stop at the first step that applies:
@@ -46,8 +49,7 @@ The best code is the code never written. Before writing any code, stop at the fi
 4. Does a native platform feature cover it? Use it.
 5. Does an already-installed dependency solve it? Use it.
 6. Would an established, well-maintained library cover it? Add it — hand-roll common functionality only with a clear reason.
-7. Can this be one line? Make it one line.
-8. Only then: write the minimum code that works.
+7. Only then: write the minimum code that works.
 
 Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability. When two same-size options differ in edge-case handling, pick the edge-case-correct one: less code, not a flimsier algorithm.
 </write_new_code_last>
@@ -66,10 +68,6 @@ Every changed line should trace to the user's request. Don't improve adjacent co
 
 Do the simplest thing that works. Don't add error handling or validation for scenarios that can't happen, abstractions for one-time operations, or backwards-compatibility shims when you can just change the code. Trust internal code and framework guarantees. Validate only at system boundaries (user input, external APIs).
 </surgical_changes>
-
-<grow_in_layers>
-For multi-step builds, start from the smallest version that works end to end, then add each capability on top of a product that already works. Never trade a working product for unfinished complexity, and never write code you already intend to replace: a small-but-complete layer is fine, a known-temporary stopgap is not.
-</grow_in_layers>
 
 <fix_causes_not_symptoms>
 A bug report names a symptom. Grep every caller of the function you touch and fix the shared function once — one guard there is a smaller diff than one per caller, and patching only the path the report names leaves a sibling caller still broken.
