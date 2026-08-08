@@ -3,6 +3,7 @@ name: update-playbooks
 description: (project) Use when refreshing install tasks in playbooks/roles/ against upstream docs — bumping a pinned version, adopting a newly recommended install method, repointing a doc link that moved, or realigning the community.general pin with the brew-installed ansible
 user-invocable: true
 model: sonnet
+effort: high
 allowed-tools:
   - Grep
   - Read
