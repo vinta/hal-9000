@@ -16,7 +16,7 @@ When you need input and the answer is a selection rather than a sentence (multip
 When presenting approaches, put the summary in each option's label and the pros/cons in its description. Plain text is fine when the answer is open-ended. This changes the format of questions, not whether to ask: never use it to ask permission for work you already have enough information to do.
 </use_ask_user_question>
 
-## Workflow Directive
+## Workflow
 
 <prefer_online_sources>
 Training data goes stale: library/framework/SDK APIs, config keys, CLI flags, cloud services, platform features, syntax, and versions change, and guessing has repeatedly cost debugging round-trips.
@@ -38,7 +38,7 @@ For multi-step builds, start from the smallest version that works end to end, th
 Use the `commit` skill to commit, always passing a brief description of what changed (e.g. `/commit add login endpoint`). Don't batch unrelated changes into one commit.
 </auto_commit>
 
-## Implementation Guide
+## Making Changes
 
 <write_new_code_last>
 The best code is the code never written. Before writing any code, stop at the first step that applies:
