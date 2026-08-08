@@ -5,6 +5,8 @@ disable-model-invocation: true
 allowed-tools:
   - Bash(curl -sL https://code.claude.com/*)
   - Bash(python3 -m json.tool *)
+  - Bash(strings *)
+  - Bash(which claude)
   - Bash(git diff:*)
   - Read(~/.claude/**)
   - AskUserQuestion
@@ -37,7 +39,7 @@ Done when you hold one list of every key and env var the user sets, plus a short
 
 Two passes, both exhaustive:
 
-- **Validate (set → docs).** Check every user key against both files. Absent from both → dead-key candidate. Named a legacy alias → propose the migration. Default or semantics changed → flag it. No key skipped.
+- **Validate (set → docs).** Check every user key against both files. Absent from both → dead-key candidate; confirm against the binary (see Gotchas) before proposing removal. Named a legacy alias → propose the migration. Default or semantics changed → flag it. No key skipped.
 - **Discover (docs → unset).** Walk every documented key and variable once. Keep a candidate only when a specific user fact argues for it, and name that fact in the item.
 
 ## 4. Report
@@ -56,5 +58,7 @@ Apply the picks and validate with `python3 -m json.tool` after edits — a user 
 
 - WebFetch answers through a small summarizer model. On a "list everything" prompt against a long page it truncates, and on a "continue the list" prompt it fabricates plausible keys (observed: `rubyCrimsionPath`). The raw `.md` mirror is the ground truth; fetch it with curl and read it yourself.
 - Undocumented is not the same as dead. A key can live on a different docs page — `skillOverrides` sat on the skills page before the settings page listed it. Grep both files, then check llms.txt pages, before you call a key dead.
+- The installed CLI binary is the final arbiter for whether a key or env var is real. `strings -a "$(which claude)" | grep -c '<name>'` — zero hits means dead; hits mean live code reads it even when no docs page lists it (observed: `skipAutoPermissionPrompt` — absent from the settings page, flagged dead by a docs-only audit, yet still read by a migration in the binary; that deletion happened to be harmless, but the "dead" verdict was wrong).
+- Before proposing an undocumented key or env var change, pull the surrounding minified code with `strings -a "$(which claude)" | grep -o -E '.{300}<name>.{300}'` and read what it actually does — this is how `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` turned out to force every session to start in `default` (manual) permission mode, silently overriding `defaultMode: "auto"` with no warning shown.
 - The `$schema` line (`https://json.schemastore.org/claude-code-settings.json`) gives editors validation, but the published schema lags new CLI releases. A schema warning on a recently documented key is not proof of a dead key.
 - Docs churn fast. Results from a previous audit go stale; fetch fresh files every run, and treat remembered page content as expired.
