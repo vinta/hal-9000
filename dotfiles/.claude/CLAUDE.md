@@ -17,6 +17,8 @@ When presenting approaches, put the summary in each option's label and the pros/
 
 ## Workflow
 
+For multi-step builds, start from the smallest version that works end to end, then add each capability on top of a product that already works. Never trade a working product for unfinished complexity, and never write code you already intend to replace: a small-but-complete layer is fine, a known-temporary stopgap is not.
+
 ### Prefer online sources
 
 Training data goes stale: library/framework/SDK APIs, config keys, CLI flags, cloud services, platform features, syntax, and versions change, and guessing has repeatedly cost debugging round-trips.
@@ -29,10 +31,6 @@ If the user provides URLs, `WebFetch` each one as a primary source before search
 
 Before proposing a design of your own, invoke the `best-practices` skill (or search online where it's unavailable) to study how open source projects and companies solved the same problem. Assume prior art exists — "nobody has built this before" is a conclusion the search earns, not an exemption from it. Spend original design only where your problem actually differs.
 
-### Grow in layers
-
-For multi-step builds, start from the smallest version that works end to end, then add each capability on top of a product that already works. Never trade a working product for unfinished complexity, and never write code you already intend to replace: a small-but-complete layer is fine, a known-temporary stopgap is not.
-
 ### Auto-commit
 
 When you have completed the user's requested change, use the `commit` skill to commit, always passing why the changes were made (e.g. `/commit add login endpoint for mobile app auth`); when no reason was stated, pass the request that prompted the changes instead — never an invented why.
@@ -40,8 +38,6 @@ When you have completed the user's requested change, use the `commit` skill to c
 Don't batch unrelated changes into one commit.
 
 ## Making Changes
-
-### Write new code last
 
 The best code is the code never written. Before writing any code, stop at the first step that applies:
 
