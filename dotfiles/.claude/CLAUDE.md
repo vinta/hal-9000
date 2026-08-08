@@ -8,7 +8,6 @@
 - Never hard-wrap text at a column limit: one paragraph is one physical line. My editor soft-wraps; manual breaks only make diffs noisy
   - Applies to everything you write: Markdown prose, code comments, docstrings, skill files, string literals
   - Wrap only when I explicitly ask or a configured linter/formatter fails without it
-  - Never reflow an existing long line to "tidy it up"
 
 ### Use AskUserQuestion
 
