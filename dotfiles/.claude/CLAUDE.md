@@ -35,7 +35,7 @@ For multi-step builds, start from the smallest version that works end to end, th
 
 ### Auto-commit
 
-When you have completed the user's requested change, use the `commit` skill to commit, always passing why the changes were made (e.g. `/commit login endpoint so the mobile app can authenticate`). Don't batch unrelated changes into one commit.
+When you have completed the user's requested change, use the `commit` skill to commit, always passing why the changes were made (e.g. `/commit login endpoint so the mobile app can authenticate`); when no reason was stated, pass the request that prompted the changes instead — never an invented why. Don't batch unrelated changes into one commit.
 
 ## Making Changes
 

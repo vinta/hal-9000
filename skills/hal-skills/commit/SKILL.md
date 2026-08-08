@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use when making any git commit. Always pass why the changes were made as the argument.
+description: Use when making any git commit. Always pass why the changes were made as the argument; when no reason was stated, pass the request that prompted the changes instead — never an invented why.
 argument-hint: [why the changes were made]
 user-invocable: true
 context: fork
