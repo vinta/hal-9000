@@ -135,4 +135,5 @@ What the diff teaches:
 
 - The rejected draft is 2.5x the length of the user's original sentence; the published line matches the original's length. Length preservation is voice.
 - The em-dash chain, the tricolon ("before committing to an approach, when stuck, before declaring done"), and the packed caveats were all deleted wholesale, not trimmed.
+- The caveats died on content, not just register: too detailed for the note, and hanging on volatile third-party state (rollout status, caching behavior). The user doesn't publish what will soon be outdated.
 - The published line keeps the user's two-clause structure ("Use X ..., and let it consult Y when needed") and fixes only grammar. His structure, native fluency, nothing added.

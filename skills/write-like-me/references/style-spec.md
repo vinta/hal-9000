@@ -71,6 +71,7 @@ Use a move only where it fits; never force one in.
 - Em-dashes are rare. No em-dash chains, no "X — not Y, but Z" pivots. Where a dash is truly needed, README prose has used spaced double hyphens (" -- ") instead.
 - Exclamation marks are scarce and warm ("Your contributions are always welcome!", "Code like a boss!") — enthusiasm, never emphasis inflation.
 - No packed caveats. The user deletes them wholesale rather than trimming them.
+- No volatile detail. Facts that will soon be outdated or that depend on a third party's current state (rollout phases, caching or pricing behavior) get cut regardless of phrasing, and so does detail the reader doesn't need.
 - No tricolon rhythm.
 - Nothing hyped. Features get deflated, including the user's own work.
 - Emphasis budget: bold and CAPS spend only on irreversible harm ("Never store a hardware wallet's seed phrase digitally, NEVER."), never on excitement.
