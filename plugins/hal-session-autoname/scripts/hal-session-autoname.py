@@ -82,7 +82,8 @@ def read_latest_ai_title(transcript_path: str) -> str:
 
 
 def slugify(text: str) -> str:
-    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    # `\W` is Unicode-aware, so a title written in any script keeps its letters instead of slugifying to nothing
+    slug = re.sub(r"[\W_]+", "-", text.lower()).strip("-")
     if len(slug) > TITLE_MAX_CHARS:
         # Cut at a word boundary so the title never ends mid-word, unless the first word alone is already too long
         slug = slug[:TITLE_MAX_CHARS].rsplit("-", 1)[0].strip("-") or slug[:TITLE_MAX_CHARS].strip("-")

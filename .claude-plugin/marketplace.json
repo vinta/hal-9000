@@ -28,7 +28,7 @@
     {
       "name": "hal-session-autoname",
       "description": "Name each session from Claude Code's own AI-generated session title",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "source": "./plugins/hal-session-autoname",
       "author": {
         "name": "Vinta Chen",
