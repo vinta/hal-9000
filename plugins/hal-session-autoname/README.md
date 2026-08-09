@@ -12,7 +12,9 @@ Claude Code writes the first `ai-title` after the first assistant turn, so a bra
 2. Claude answers, and Claude Code writes its `ai-title`.
 3. You send the second prompt. The hook reads the newest `ai-title`, converts `Refactor auth middleware` to `refactor-auth-middleware` (lowercase, hyphenated, cut to 30 characters at a word boundary), and the session is renamed.
 
-The hook only reads a file, so it adds no measurable latency to the prompt and never calls a model. Claude Code keeps updating `ai-title` as the conversation drifts, but the session is named only once, tracked by a state file at `/tmp/hal-session-autoname-<session_id>.json`. That way a manual `/rename` afterwards sticks.
+The hook only reads a file, so it adds no measurable latency to the prompt and never calls a model.
+
+Claude Code keeps updating `ai-title` as the conversation drifts, and the session name follows it: when a prompt arrives and the newest `ai-title` differs from the name already applied, the session is renamed again. The name applied so far is tracked in a state file at `/tmp/hal-session-autoname-<session_id>.json`, so an unchanged title costs one file read and nothing else.
 
 ## Installation
 
@@ -27,7 +29,7 @@ Then restart Claude Code.
 
 - The name arrives one turn late, and its wording comes from Claude Code's summary rather than from your own prompt.
 - A session that ends after a single prompt is never named.
-- The plugin does not check for a name you set yourself with `claude --name` or `/rename` before the second prompt, and overwrites it. `UserPromptSubmit` hooks receive no `session_title` field to check against.
+- A name you set yourself with `claude --name` or `/rename` is overwritten the next time `ai-title` changes. `UserPromptSubmit` hooks receive no `session_title` field, so the plugin cannot tell your name apart from one it set earlier.
 
 ## Debugging
 

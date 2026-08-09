@@ -37,7 +37,6 @@ class HookInput(TypedDict):
 
 
 class State(TypedDict):
-    status: Literal["done"]
     title: str
 
 
@@ -94,10 +93,6 @@ def main() -> None:
     data: HookInput = json.load(sys.stdin)
     session_id = data["session_id"]
 
-    # Claude Code keeps updating `ai-title` as the conversation drifts, but the session is named only once so a manual `/rename` afterwards sticks
-    if read_state(session_id) is not None:
-        return
-
     ai_title = read_latest_ai_title(data["transcript_path"])
     if not ai_title:
         # Claude Code writes the first `ai-title` after the first assistant turn, so the first prompt of a session has nothing to read yet
@@ -109,9 +104,14 @@ def main() -> None:
         logger.debug("session=%s ai-title=%r slugified to nothing", session_id, ai_title)
         return
 
+    # Claude Code keeps updating `ai-title` as the conversation drifts, and the session name follows it, but only when it actually changed
+    state = read_state(session_id)
+    if state is not None and state["title"] == slug:
+        return
+
     logger.debug("session=%s ai-title=%r slug=%s", session_id, ai_title, slug)
     print(json.dumps({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "sessionTitle": slug}}))
-    write_state(session_id, {"status": "done", "title": slug})
+    write_state(session_id, {"title": slug})
 
 
 if __name__ == "__main__":
