@@ -15,4 +15,6 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual -- the session name appears when you send your second prompt, then changes as the conversation evolves.
+Just use Claude Code as usual -- the session name appears on your second non-queued prompt, then changes as the conversation evolves.
+
+A prompt typed while Claude is still working is queued, and queued prompts never fire `UserPromptSubmit`, so they do not count.
