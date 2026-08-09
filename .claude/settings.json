@@ -17,14 +17,14 @@
             "command": "bash .claude/hooks/lint-on-edit.sh lint-python",
             "if": "Edit(**/*.py)",
             "timeout": 30,
-            "statusMessage": "Linting Python..."
+            "statusMessage": "Linting Python code..."
           },
           {
             "type": "command",
             "command": "bash .claude/hooks/lint-on-edit.sh lint-ansible",
             "if": "Edit(/playbooks/**)",
             "timeout": 30,
-            "statusMessage": "Linting Ansible..."
+            "statusMessage": "Linting Ansible playbooks..."
           }
         ]
       }
