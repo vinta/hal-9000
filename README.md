@@ -10,7 +10,7 @@ Opinionated AI coding agent and dev environment automation for macOS that domina
 
 All-in-one command to set up:
 
-- [Agent Skills](skills/hal-skills)
+- [Agent Skills](skills)
 - [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
 - [Codex](dotfiles/.codex)
 - [Python](playbooks/roles/python/tasks/main.yml)
@@ -52,12 +52,12 @@ Also see:
 
 ### Claude Code Plugin: `hal-skills`
 
-- [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
-- [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
-- [simple-english](skills/hal-skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
-- [audit-claude-settings](skills/hal-skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
-- [refactor-claude-md](skills/hal-skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
-- [refactor-agents-md](skills/hal-skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure
+- [commit](skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
+- [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
+- [simple-english](skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
+- [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
+- [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
+- [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure
 
 ```bash
 /plugin marketplace add vinta/hal-9000

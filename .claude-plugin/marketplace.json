@@ -44,8 +44,8 @@
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "1.17.0",
-      "source": "./skills/hal-skills",
+      "version": "1.17.1",
+      "source": "./skills",
       "skills": [
         "./commit", 
         "./blindspot", 
