@@ -13,10 +13,15 @@ Every quote in these files comes from published text:
 
 - Blog posts on vinta.ws:
   - [Claude Code: Things I Learned After Using It Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html) — the heaviest-weight source, the actively maintained current voice
-  - [How HTTPS Works in Layman's Terms - TLS 1.2 and 1.3](https://vinta.ws/code/how-https-works-in-laymans-terms-tls-1-2-and-1-3.html)
   - [Surviving the Digital Dark Forest: Tips for Staying Safe Online](https://vinta.ws/code/how-to-stay-safe-online-tips-for-personal-security.html)
+  - [How HTTPS Works in Layman's Terms - TLS 1.2 and 1.3](https://vinta.ws/code/how-https-works-in-laymans-terms-tls-1-2-and-1-3.html)
   - [The Incomplete Guide to Google Kubernetes Engine](https://vinta.ws/code/the-complete-guide-to-google-kubernetes-engine-gke.html)
-- READMEs of public repos: [dear-ai](https://github.com/vinta/dear-ai), [laughing-man](https://github.com/vinta/laughing-man), [hal-9000](https://github.com/vinta/hal-9000), [pangu.js](https://github.com/vinta/pangu.js), [dockerfiles](https://github.com/vinta/dockerfiles)
+- READMEs of public repos:
+  - [hal-9000](https://github.com/vinta/hal-9000)
+  - [pangu.js](https://github.com/vinta/pangu.js)
+  - [laughing-man](https://github.com/vinta/laughing-man)
+  - [dear-ai](https://github.com/vinta/dear-ai)
+  - [dockerfiles](https://github.com/vinta/dockerfiles)
 - Pre-2025 revisions from public git history, blame-verified as human-typed before AI assistance: hal-9000 README (`79e27cc`, 2023-06-27), awesome-python README (`f387123`, 2024-09-18), awesome-python CONTRIBUTING (`aa4e0ee`, 2021-07-25)
 
 ## Corpus rationale

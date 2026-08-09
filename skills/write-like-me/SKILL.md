@@ -21,12 +21,12 @@ Start from the user's sentence structure, smooth grammar and word choice to nati
 - **Caveats the user trimmed stay trimmed.** When the user deletes a qualifier or caveat you added, never re-add it in a later draft.
 - **Swap assistant-register tells for the user's forms:**
 
-| Instead of | Write |
-| --- | --- |
-| an em-dash chain | two short sentences |
-| packed caveats ("Two caveats: ...") | drop them, or one plain sentence |
-| a tricolon rhythm | a list, or the single item that matters |
-| bold or CAPS for emphasis | plain words — bold/CAPS only warn about irreversible harm |
+| Instead of                          | Write                                                     |
+| ----------------------------------- | --------------------------------------------------------- |
+| an em-dash chain                    | two short sentences                                       |
+| packed caveats ("Two caveats: ...") | drop them, or one plain sentence                          |
+| a tricolon rhythm                   | a list, or the single item that matters                   |
+| bold or CAPS for emphasis           | plain words — bold/CAPS only warn about irreversible harm |
 
 ## Workflow
 
