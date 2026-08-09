@@ -6,11 +6,15 @@ import logging
 import os
 import re
 import sys
+import tempfile
 import unicodedata
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Literal, TypedDict
 
-LOG_PATH = Path("/tmp/hal-session-auto-rename.log")  # noqa: S108 hardcoded-temp-file
+# `gettempdir()` honours `$TMPDIR`, which on macOS is a per-user directory, so the log never collides with another user's on a shared machine
+LOG_PATH = Path(tempfile.gettempdir()) / "hal-session-auto-rename.log"
+LOG_MAX_BYTES = 1024 * 1024
 
 # Claude Code appends `ai-title` entries throughout the session, so the newest one is near the end of the transcript
 TRANSCRIPT_TAIL_BYTES = 256 * 1024
@@ -22,7 +26,7 @@ logger.setLevel(logging.DEBUG)
 logger.propagate = False
 
 if not logger.handlers:
-    file_handler = logging.FileHandler(LOG_PATH)
+    file_handler = RotatingFileHandler(LOG_PATH, maxBytes=LOG_MAX_BYTES, backupCount=1)
     file_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
     logger.addHandler(file_handler)
 

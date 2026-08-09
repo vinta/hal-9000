@@ -13,7 +13,9 @@ import shutil
 import signal
 import subprocess
 import sys
+import tempfile
 import time
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any, Literal, TypedDict
 
@@ -144,7 +146,9 @@ MANIFEST_PATH = PLUGIN_ROOT / "manifest.json"
 CONFIG_PATH = PLUGIN_ROOT / "config.json"
 STATE_PATH = Path("/tmp/hal-voice-state.json")  # noqa: S108 hardcoded-temp-file
 LOCK_PATH = Path("/tmp/hal-voice.lock")  # noqa: S108 hardcoded-temp-file
-LOG_PATH = Path("/tmp/hal-voice.log")  # noqa: S108 hardcoded-temp-file
+# `gettempdir()` honours `$TMPDIR`, which on macOS is a per-user directory, so the log never collides with another user's on a shared machine
+LOG_PATH = Path(tempfile.gettempdir()) / "hal-voice.log"
+LOG_MAX_BYTES = 1024 * 1024
 
 DEFAULT_CONFIG: Config = {
     "enabled": True,
@@ -168,7 +172,7 @@ logger.setLevel(logging.DEBUG)
 logger.propagate = False
 
 if not logger.handlers:
-    file_handler = logging.FileHandler(LOG_PATH)
+    file_handler = RotatingFileHandler(LOG_PATH, maxBytes=LOG_MAX_BYTES, backupCount=1)
     file_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
     logger.addHandler(file_handler)
 

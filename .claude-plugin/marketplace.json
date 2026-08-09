@@ -12,7 +12,7 @@
     {
       "name": "hal-voice",
       "description": "Play HAL 9000 voice clips on Claude Code hook events",
-      "version": "1.4.2",
+      "version": "1.4.3",
       "source": "./plugins/hal-voice",
       "author": {
         "name": "Vinta Chen",

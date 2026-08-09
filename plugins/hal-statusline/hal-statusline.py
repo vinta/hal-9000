@@ -12,6 +12,7 @@ import tempfile
 import time
 import urllib.error
 import urllib.request
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, TypedDict
 
@@ -20,14 +21,16 @@ if TYPE_CHECKING:
     # The `annotations` future keeps every annotation below a string, so it is never evaluated at runtime
     from typing import NotRequired
 
-LOG_PATH = Path("/tmp/hal-statusline.log")  # noqa: S108 hardcoded-temp-file
+# `gettempdir()` honours `$TMPDIR`, which on macOS is a per-user directory, so the log never collides with another user's on a shared machine
+LOG_PATH = Path(tempfile.gettempdir()) / "hal-statusline.log"
+LOG_MAX_BYTES = 1024 * 1024
 
 logger = logging.getLogger("statusline")
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
 
 if not logger.handlers:
-    file_handler = logging.FileHandler(LOG_PATH)
+    file_handler = RotatingFileHandler(LOG_PATH, maxBytes=LOG_MAX_BYTES, backupCount=1)
     file_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
     logger.addHandler(file_handler)
 
