@@ -1,6 +1,6 @@
 # Exemplars — the voice by example
 
-Verbatim excerpts from the user's published writing. These carry the voice better than any rule: when a rule and an exemplar disagree, write like the exemplar. Sources in [README.md](README.md).
+Verbatim excerpts from the user's published writing. These carry the voice better than any rule: when a rule about structure, register, or signature moves disagrees with an exemplar, write like the exemplar. Grammar is the exception: some excerpts carry published second-language slips, and the style spec's grammar section always corrects those — never reproduce a slip because an exemplar contains one. Sources in [README.md](README.md).
 
 ## Blog: opinionated teaching
 
