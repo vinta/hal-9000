@@ -80,15 +80,15 @@ Use a move only where it fits; never force one in.
 
 The user ruled every recurring second-language pattern a slip, not voice: grammar always corrects to native English, and the correction never rewrites sentence structure beyond what the fix requires. Published examples with their fixes:
 
-| Published slip | Native fix |
-| --- | --- |
-| "ensuring that server is who it claims to be" | "ensuring that the server is ..." (add the dropped article) |
-| "In most contexts, both terms are exchangeable." | "... interchangeable." |
-| "Since TLS 1.2 supports ..., so we are going to ..." | drop "Since" or "so" — never both |
-| "Restart your device regularly, ex: once a week." | "e.g. once a week" |
+| Published slip                                               | Native fix                                                   |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| "ensuring that server is who it claims to be"                | "ensuring that the server is ..." (add the dropped article)  |
+| "In most contexts, both terms are exchangeable."             | "... interchangeable."                                       |
+| "Since TLS 1.2 supports ..., so we are going to ..."         | drop "Since" or "so" — never both                            |
+| "Restart your device regularly, ex: once a week."            | "e.g. once a week"                                           |
 | "Must change the default username/password of your devices." | "Change the default username/password ..." (bare imperative) |
-| "wait for someone finds it useful and submits it for you" | "wait for someone to find it useful and submit it for you" |
-| "There is a pair of two keys" | "There is a pair of keys" |
-| "setup" as a verb in prose | "set up" (the noun "setup" and headings stay) |
+| "wait for someone finds it useful and submits it for you"    | "wait for someone to find it useful and submit it for you"   |
+| "There is a pair of two keys"                                | "There is a pair of keys"                                    |
+| "setup" as a verb in prose                                   | "set up" (the noun "setup" and headings stay)                |
 
 Further slip classes attested in the user's unpublished writing, fixed the same way: embedded-question order ("why it is X?" becomes "why is it X?"); statement-plus-question-mark (invert it in published text); third-person -s drops and tense drift; "worth to X" (becomes "worth Xing"); a missing "to" after verbs like want/seem; "neither" where native English uses "either"; bare "even" for "even if/though"; "at the end" for "in the end"; "how it looks like" (becomes "what it looks like"); plural agreement ("does these" becomes "do these"); "the another" (becomes "the other"). Obvious keyboard scrambles get normalized silently too. A newly noticed ambiguous pattern is the user's call, not yours: ask before treating it as either slip or voice.
