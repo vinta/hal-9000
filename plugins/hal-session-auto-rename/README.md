@@ -1,4 +1,4 @@
-# hal-session-autoname
+# hal-session-auto-rename
 
 Names every Claude Code session automatically, so the prompt bar shows `refactor-auth-middleware` instead of nothing, and `/resume` and the terminal title show the same short name.
 
@@ -14,13 +14,13 @@ Claude Code writes the first `ai-title` after the first assistant turn, so a bra
 
 The hook only reads a file, so it adds no measurable latency to the prompt and never calls a model.
 
-Claude Code keeps updating `ai-title` as the conversation drifts, and the session name follows it: when a prompt arrives and the newest `ai-title` differs from the name already applied, the session is renamed again. The name applied so far is tracked in a state file at `/tmp/hal-session-autoname-<session_id>.json`, so an unchanged title costs one file read and nothing else.
+Claude Code keeps updating `ai-title` as the conversation drifts, and the session name follows it: when a prompt arrives and the newest `ai-title` differs from the name already applied, the session is renamed again. The name applied so far is tracked in a state file at `/tmp/hal-session-auto-rename-<session_id>.json`, so an unchanged title costs one file read and nothing else.
 
 ## Installation
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-session-autoname@hal-9000
+claude plugin install hal-session-auto-rename@hal-9000
 ```
 
 Then restart Claude Code.
@@ -33,4 +33,4 @@ Then restart Claude Code.
 
 ## Debugging
 
-The hook logs every decision to `/tmp/hal-session-autoname.log`.
+The hook logs every decision to `/tmp/hal-session-auto-rename.log`.

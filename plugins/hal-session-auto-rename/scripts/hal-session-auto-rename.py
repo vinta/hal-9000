@@ -11,14 +11,14 @@ import unicodedata
 from pathlib import Path
 from typing import Literal, TypedDict
 
-LOG_PATH = Path("/tmp/hal-session-autoname.log")  # noqa: S108 hardcoded-temp-file
+LOG_PATH = Path("/tmp/hal-session-auto-rename.log")  # noqa: S108 hardcoded-temp-file
 
 # Claude Code appends `ai-title` entries throughout the session, so the newest one is near the end of the transcript
 TRANSCRIPT_TAIL_BYTES = 256 * 1024
 # Terminal columns rather than characters, so a CJK title takes up the same room in the prompt bar as an English one
 TITLE_MAX_COLUMNS = 30
 
-logger = logging.getLogger("session-autoname")
+logger = logging.getLogger("session-auto-rename")
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
 
@@ -43,7 +43,7 @@ class State(TypedDict):
 
 
 def state_path(session_id: str) -> Path:
-    return Path(f"/tmp/hal-session-autoname-{session_id}.json")  # noqa: S108 hardcoded-temp-file
+    return Path(f"/tmp/hal-session-auto-rename-{session_id}.json")  # noqa: S108 hardcoded-temp-file
 
 
 def read_state(session_id: str) -> State | None:
@@ -55,7 +55,7 @@ def read_state(session_id: str) -> State | None:
 
 
 def write_state(session_id: str, payload: State) -> None:
-    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="hal-session-autoname-")
+    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="hal-session-auto-rename-")
     with os.fdopen(fd, "w") as f:
         json.dump(payload, f)
     Path(tmp_path).rename(state_path(session_id))

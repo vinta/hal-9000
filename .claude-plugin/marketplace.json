@@ -26,10 +26,10 @@
       "strict": false
     },
     {
-      "name": "hal-session-autoname",
-      "description": "Name each session from Claude Code's own AI-generated session title",
+      "name": "hal-session-auto-rename",
+      "description": "Automatically name each session and rename it as the conversation evolves",
       "version": "1.1.2",
-      "source": "./plugins/hal-session-autoname",
+      "source": "./plugins/hal-session-auto-rename",
       "author": {
         "name": "Vinta Chen",
         "email": "vinta.chen@gmail.com"
@@ -37,8 +37,8 @@
       "repository": "https://github.com/vinta/hal-9000",
       "license": "MIT",
       "category": "productivity",
-      "keywords": ["hal-9000", "hooks", "session", "rename", "title"],
-      "tags": ["hal-9000", "hooks", "session", "rename", "title"],
+      "keywords": ["hal-9000", "hooks", "session", "rename", "title", "ai-title"],
+      "tags": ["hal-9000", "hooks", "session", "rename", "title", "ai-title"],
       "strict": false
     },
     {

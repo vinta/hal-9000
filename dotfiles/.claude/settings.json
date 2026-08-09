@@ -153,7 +153,7 @@
     "codex@openai-codex": true,
     "mattpocock-skills@mattpocock": true,
     "hal-skills@hal-9000": true,
-    "hal-session-autoname@hal-9000": true,
+    "hal-session-auto-rename@hal-9000": true,
     "hal-voice@hal-9000": true
   },
   "extraKnownMarketplaces": {
