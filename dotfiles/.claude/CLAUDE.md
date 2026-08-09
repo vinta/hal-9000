@@ -31,6 +31,10 @@ If the user provides URLs, `WebFetch` each one as a primary source before search
 
 Before proposing a design of your own, invoke the `best-practices` skill (or search online where it's unavailable) to study how open source projects and companies solved the same problem. Assume prior art exists — "nobody has built this before" is a conclusion the search earns, not an exemption from it. Spend original design only where your problem actually differs.
 
+### Stop on invalidation
+
+When a finding invalidates the approach you're already executing — contradicts it or makes it unnecessary — stop and lead with it. Say what it kills and what the plan becomes now, before spending more effort on the old path. Reporting it as one fact among others while continuing does not count.
+
 ### Auto-commit
 
 When you have completed the user's requested change, use the `commit` skill to commit, always passing why the changes were made (e.g. `/commit add login endpoint for mobile app auth`); when no reason was stated, pass the request that prompted the changes instead — never an invented why.
