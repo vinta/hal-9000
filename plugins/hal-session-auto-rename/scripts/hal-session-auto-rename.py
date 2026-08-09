@@ -42,6 +42,7 @@ class HookInput(HookInputBase, total=False):
     session_title: str
 
 
+# Claude Code summarizes every session into `ai-title` transcript entries and rewrites them as the conversation drifts, so naming is a pure file read -- no model call, no added latency
 def read_recent_ai_titles(transcript_path: str) -> list[str]:
     try:
         with Path(transcript_path).open("rb") as f:

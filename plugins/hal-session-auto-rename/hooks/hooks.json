@@ -1,5 +1,5 @@
 {
-  "description": "Name each session from Claude Code's own AI-generated session title (ai-title)",
+  "description": "Automatically name each session and rename it as the conversation evolves",
   "hooks": {
     "UserPromptSubmit": [
       {
