@@ -53,7 +53,6 @@ Also see:
 ### Claude Code Plugin: `hal-skills`
 
 - [commit](skills/hal-skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
-- [blindspot](skills/hal-skills/blindspot/SKILL.md): Surveys unfamiliar territory and turns your unknown unknowns into known unknowns
 - [best-practices](skills/hal-skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
 - [simple-english](skills/hal-skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
 - [audit-claude-settings](skills/hal-skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
