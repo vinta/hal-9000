@@ -1,8 +1,8 @@
 # Claude Code Session Auto-rename
 
-Names every Claude Code session automatically.
+Automatically name each session and rename it as the conversation evolves.
 
-Claude Code already summarizes each session with a title through an internale tool named `ai-title`. This plugin turns it into a real session name -- by reading it from the transcript and emitting it as `sessionTitle` from a `UserPromptSubmit` hook.
+Claude Code already summarizes each session with a title, stored in the transcript as an internal `ai-title` entry. This plugin turns it into a real session name -- by reading it from the transcript and emitting it as `sessionTitle` from a `UserPromptSubmit` hook.
 
 ## Installation
 
@@ -15,4 +15,4 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual -- you will see the session name arrives one turn late after your prompts
+Just use Claude Code as usual -- you'll see the session name arrive one turn after your first prompt, then change as the conversation evolves.
