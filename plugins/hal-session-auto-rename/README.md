@@ -15,4 +15,4 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual -- you'll see the session name arrive one turn after your first prompt, then change as the conversation evolves.
+Just use Claude Code as usual -- the session name appears when you send your second prompt, then changes as the conversation evolves.
