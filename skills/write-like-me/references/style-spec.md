@@ -8,6 +8,8 @@ For cases no rule below covers, fall back to the user's stance: compress — pad
 
 Short units everywhere. Blog prose: median ~13 words per sentence, 95th percentile ~30 — treat any sentence past 30 words as drift and split it. README prose runs shorter (median ~9). Issues, PRs, and emails run shortest: verdict or ask first, evidence after. Short is enforced, not accidental: when an AI rewrite came back 2.5x longer, the user rejected it and published a version the same length as their original.
 
+Density is the same rule from the other side: short sentences don't excuse padding. A paragraph of 13 short sentences carrying 8 ideas fails even though every sentence passes the cap — one sentence per idea, and if one word can carry it, one word (the user's own rule: "if you can use one word or one sentence to describe it, just use one").
+
 > Basically, SSL (Secure Sockets Layer) and TLS (Transport Layer Security) are the same thing.
 > Think of it as a namespace.
 > A common MAC algorithm is HMAC.
@@ -22,6 +24,12 @@ A section that answers an implicit question opens with the verdict; reasons foll
 > No, you should never create Pods directly which are so-called naked Pods. Use Deployment instead.
 
 Write plain verdicts, never hedged ones. Questions are formed with native inversion ("why is it X?", "do these make sense?") — a statement with a question mark tacked on is a slip class (section 9), not voice.
+
+In a fresh draft with no heading to answer, the opener is still not a framing thesis: open with the action the reader takes — condition first, imperative, the tool named. From the blind test, the user's fix of a failed AI opener (chat, quoted with approval):
+
+> When you hit a slow query, run `EXPLAIN (ANALYZE, BUFFERS)` first. Usually it's a bad index, or NO INDEX at all.
+
+The AI opener it replaced — "Most slow queries are not a Postgres problem." — is a thesis, ruled too soft.
 
 ## 3. Reader stance
 
@@ -46,11 +54,12 @@ Plain verbs and casual evaluators; technical nouns exact. The casual layer: "fan
 
 ## 6. Structural habits
 
+- Paragraphs are short and single-purpose: a 1-2 sentence lead paragraph carries the action, then one gotcha per paragraph, one by one. Never a prose wall packing 3 gotchas.
 - A colon then a list wherever 2 or more items line up; list items are fragments or gerunds.
 - A line reading exactly "ref:" followed by naked URLs closes blog sections.
 - "Also see:" / "Recommended:" / "The full settings I use:" as one-line lead-ins to link lists.
 - A comment per command in shell blocks, jokes allowed ("# open the pod bay doors, please, HAL").
-- Bold mid-sentence only for the load-bearing phrase; CAPS only in hard warnings (section 8 budget).
+- Bold mid-sentence only for the load-bearing phrase; CAPS per the section 8 budget.
 
 ## 7. Signature moves — the menu
 
@@ -74,7 +83,7 @@ Use a move only where it fits; never force one in.
 - No volatile detail. Facts that will soon be outdated or that depend on a third party's current state (rollout phases, caching or pricing behavior) get cut regardless of phrasing, and so does detail the reader doesn't need.
 - No tricolon rhythm.
 - Nothing hyped. Features get deflated, including the user's own work.
-- Emphasis budget: bold and CAPS spend only on irreversible harm ("Never store a hardware wallet's seed phrase digitally, NEVER."), never on excitement.
+- Emphasis budget: bold and CAPS spend on irreversible harm ("Never store a hardware wallet's seed phrase digitally, NEVER.") or a bare negation carrying weight ("NO INDEX at all") — never on excitement.
 
 ## 9. Grammar: slips to fix silently
 
