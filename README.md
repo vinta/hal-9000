@@ -70,21 +70,14 @@ If you want to use them in Codex:
 npx skills add vinta/hal-9000
 ```
 
-### Claude Code Plugin: `hal-session-auto-rename`
+### Claude Code Plugins
 
 - [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session and rename it as the conversation evolves
-
-```bash
-/plugin marketplace add vinta/hal-9000
-/plugin install hal-session-auto-rename@hal-9000
-```
-
-### Claude Code Plugin: `hal-voice`
-
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
 /plugin marketplace add vinta/hal-9000
+/plugin install hal-session-auto-rename@hal-9000
 /plugin install hal-voice@hal-9000
 ```
 
