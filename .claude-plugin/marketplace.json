@@ -26,6 +26,22 @@
       "strict": false
     },
     {
+      "name": "hal-session-autoname",
+      "description": "Name each session from Claude Code's own AI-generated session title",
+      "version": "1.0.0",
+      "source": "./plugins/hal-session-autoname",
+      "author": {
+        "name": "Vinta Chen",
+        "email": "vinta.chen@gmail.com"
+      },
+      "repository": "https://github.com/vinta/hal-9000",
+      "license": "MIT",
+      "category": "productivity",
+      "keywords": ["hal-9000", "hooks", "session", "rename", "title"],
+      "tags": ["hal-9000", "hooks", "session", "rename", "title"],
+      "strict": false
+    },
+    {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
       "version": "1.17.0",
