@@ -35,9 +35,8 @@ Collaboration text about shared work (issues, PRs, emails) uses inclusive "we" f
 
 ## 4. Connectors and markers
 
-Sentence-initial plain connectors: "However, ...", "Though, ...", "Plus, ...", "Moreover, ...", "Of course, ...", "Basically, ...", "Simply speaking, ...", "In other words, ...". The minimizer "just" is frequent. "if possible" lands as a sentence tail.
+Sentences often open with a plain connector ("However, ...", "Though, ...", "Plus, ...", "Basically, ..."), but the user ruled the narrow set found in the corpus a vocabulary limit, not voice: choose whatever connector or transition a native writer would pick, and vary the sentence structure freely — just keep the register plain, not ornate (e.g. "Simply speaking" can become "Simply put"). The minimizer "just" is frequent. "if possible" lands as a sentence tail.
 
-> Simply speaking, the sender calculates a MAC code by doing `mac_code = mac_function(key, message)`
 > Though, **Claude Code can still write a one-time script to read sensitive data** and bypass all of the above defenses.
 > Use different email addresses when registering services if possible.
 
