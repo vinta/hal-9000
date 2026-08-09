@@ -7,6 +7,7 @@ import os
 import re
 import sys
 import tempfile
+import unicodedata
 from pathlib import Path
 from typing import Literal, TypedDict
 
@@ -14,7 +15,8 @@ LOG_PATH = Path("/tmp/hal-session-autoname.log")  # noqa: S108 hardcoded-temp-fi
 
 # Claude Code appends `ai-title` entries throughout the session, so the newest one is near the end of the transcript
 TRANSCRIPT_TAIL_BYTES = 256 * 1024
-TITLE_MAX_CHARS = 30
+# Terminal columns rather than characters, so a CJK title takes up the same room in the prompt bar as an English one
+TITLE_MAX_COLUMNS = 30
 
 logger = logging.getLogger("session-autoname")
 logger.setLevel(logging.DEBUG)
@@ -81,13 +83,33 @@ def read_latest_ai_title(transcript_path: str) -> str:
     return ""
 
 
+def is_wide(char: str) -> bool:
+    # CJK and other East Asian wide characters take two terminal columns each
+    return unicodedata.east_asian_width(char) in {"W", "F"}
+
+
+def display_width(text: str) -> int:
+    return sum(2 if is_wide(char) else 1 for char in text)
+
+
 def slugify(text: str) -> str:
     # `\W` is Unicode-aware, so a title written in any script keeps its letters instead of slugifying to nothing
     slug = re.sub(r"[\W_]+", "-", text.lower()).strip("-")
-    if len(slug) > TITLE_MAX_CHARS:
-        # Cut at a word boundary so the title never ends mid-word, unless the first word alone is already too long
-        slug = slug[:TITLE_MAX_CHARS].rsplit("-", 1)[0].strip("-") or slug[:TITLE_MAX_CHARS].strip("-")
-    return slug
+    if display_width(slug) <= TITLE_MAX_COLUMNS:
+        return slug
+
+    head = ""
+    width = 0
+    for char in slug:
+        width += display_width(char)
+        if width > TITLE_MAX_COLUMNS:
+            break
+        head += char
+    if is_wide(head[-1]):
+        # Scripts written without spaces have no hyphen to cut back to, and each character stands on its own anyway
+        return head.strip("-")
+    # Cut at a word boundary so the title never ends mid-word, unless the first word alone is already too long
+    return head.rsplit("-", 1)[0].strip("-") or head.strip("-")
 
 
 def main() -> None:

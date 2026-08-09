@@ -10,7 +10,7 @@ Claude Code writes the first `ai-title` after the first assistant turn, so a bra
 
 1. You send the first prompt. The hook finds no `ai-title` and exits silently.
 2. Claude answers, and Claude Code writes its `ai-title`.
-3. You send the second prompt. The hook reads the newest `ai-title`, converts `Refactor auth middleware` to `refactor-auth-middleware` (lowercase, hyphenated, cut to 30 characters at a word boundary), and the session is renamed.
+3. You send the second prompt. The hook reads the newest `ai-title`, converts `Refactor auth middleware` to `refactor-auth-middleware` (lowercase, hyphenated, cut to 30 terminal columns at a word boundary), and the session is renamed.
 
 The hook only reads a file, so it adds no measurable latency to the prompt and never calls a model.
 
