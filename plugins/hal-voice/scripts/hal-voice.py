@@ -24,23 +24,27 @@ class CommonInput(TypedDict):
     session_id: str
     transcript_path: str
     cwd: str
-    permission_mode: Literal["default", "plan", "acceptEdits", "auto", "dontAsk", "bypassPermissions"]
     hook_event_name: Literal[
         "ConfigChange",
         "CwdChanged",
+        "DirectoryAdded",
         "Elicitation",
         "ElicitationResult",
         "FileChanged",
         "InstructionsLoaded",
+        "MessageDisplay",
         "Notification",
+        "PermissionDenied",
         "PermissionRequest",
         "PostCompact",
+        "PostToolBatch",
         "PostToolUse",
         "PostToolUseFailure",
         "PreCompact",
         "PreToolUse",
         "SessionEnd",
         "SessionStart",
+        "Setup",
         "Stop",
         "StopFailure",
         "SubagentStart",
@@ -48,6 +52,7 @@ class CommonInput(TypedDict):
         "TaskCompleted",
         "TaskCreated",
         "TeammateIdle",
+        "UserPromptExpansion",
         "UserPromptSubmit",
         "WorktreeCreate",
         "WorktreeRemove",
@@ -55,54 +60,108 @@ class CommonInput(TypedDict):
 
 
 class HookInput(CommonInput, total=False):
-    # SessionStart, ConfigChange
+    # Common to most events, but not guaranteed on any of them
+    permission_mode: Literal["default", "plan", "acceptEdits", "auto", "dontAsk", "bypassPermissions"]
+    prompt_id: str
+    effort: dict[str, Any]
+    # SessionStart, ConfigChange, DirectoryAdded
     source: str
+    # SessionStart
     model: str
+    session_title: str
     # SessionStart, SubagentStart, SubagentStop
     agent_type: str
-    # SessionEnd
+    # SessionEnd, PermissionDenied
     reason: str
-    # UserPromptSubmit
+    # UserPromptSubmit, UserPromptExpansion
     prompt: str
-    # PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest
+    # UserPromptExpansion
+    expansion_type: str
+    command_name: str
+    command_args: str
+    command_source: str
+    # MessageDisplay
+    turn_id: str
+    message_id: str
+    index: int
+    final: bool
+    delta: str
+    # PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, PermissionDenied
     tool_name: str
     tool_input: dict[str, Any]
     tool_use_id: str
     # PostToolUse
     tool_response: dict[str, Any]
-    # PostToolUseFailure
+    # PostToolUse, PostToolUseFailure
+    duration_ms: int
+    # PostToolUseFailure, StopFailure
     error: str
+    # PostToolUseFailure
     is_interrupt: bool
+    # PostToolBatch
+    tool_calls: list[dict[str, Any]]
     # PermissionRequest
     permission_suggestions: list[dict[str, Any]]
-    # Notification
+    # Notification, Elicitation
     message: str
+    # Notification
     title: str
     notification_type: str
     # SubagentStart, SubagentStop
     agent_id: str
     child_session_id: str
+    # SubagentStop, Stop, StopFailure
+    last_assistant_message: str
     # SubagentStop, Stop
     stop_hook_active: bool
-    last_assistant_message: str
+    background_tasks: list[dict[str, Any]]
+    session_crons: list[dict[str, Any]]
     # SubagentStop
     agent_transcript_path: str
-    # TeammateIdle, TaskCompleted
+    # StopFailure
+    error_details: str
+    # TeammateIdle, TaskCreated, TaskCompleted
     teammate_name: str
     team_name: str
-    # TaskCompleted
+    # TaskCreated, TaskCompleted
     task_id: str
     task_subject: str
     task_description: str
-    # ConfigChange
+    # ConfigChange, InstructionsLoaded, FileChanged
     file_path: str
+    # InstructionsLoaded
+    memory_type: str
+    load_reason: str
+    globs: list[str]
+    trigger_file_path: str
+    parent_file_path: str
+    # CwdChanged
+    old_cwd: str
+    new_cwd: str
+    # DirectoryAdded
+    directory: str
+    # FileChanged
+    event: str
     # WorktreeCreate
     name: str
     # WorktreeRemove
     worktree_path: str
-    # PreCompact
+    # Setup, PreCompact, PostCompact
     trigger: str
+    # PreCompact
     custom_instructions: str
+    # PostCompact
+    compact_summary: str
+    # Elicitation, ElicitationResult
+    mcp_server_name: str
+    mode: str
+    elicitation_id: str
+    # Elicitation
+    url: str
+    requested_schema: dict[str, Any]
+    # ElicitationResult
+    action: str
+    content: dict[str, Any]
 
 
 class Config(TypedDict):
@@ -216,16 +275,27 @@ def save_state(state_path: Path, state: State) -> None:
 
 _MATCHER_FIELD: dict[str, str] = {
     "SessionStart": "source",
+    "Setup": "trigger",
     "SessionEnd": "reason",
     "PreToolUse": "tool_name",
     "PostToolUse": "tool_name",
     "PostToolUseFailure": "tool_name",
     "PermissionRequest": "tool_name",
+    "PermissionDenied": "tool_name",
     "Notification": "notification_type",
     "SubagentStart": "agent_type",
     "SubagentStop": "agent_type",
+    "StopFailure": "error",
     "PreCompact": "trigger",
+    "PostCompact": "trigger",
     "ConfigChange": "source",
+    "DirectoryAdded": "source",
+    "InstructionsLoaded": "load_reason",
+    "UserPromptExpansion": "command_name",
+    "Elicitation": "mcp_server_name",
+    "ElicitationResult": "mcp_server_name",
+    # Claude Code matches FileChanged on a filename watch list, not a field regex; hal-voice matches its own manifest rules against the changed path
+    "FileChanged": "file_path",
 }
 
 
