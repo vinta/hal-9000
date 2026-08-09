@@ -6,7 +6,6 @@ import logging
 import os
 import re
 import sys
-import tempfile
 import unicodedata
 from pathlib import Path
 from typing import Literal, TypedDict
@@ -29,7 +28,7 @@ if not logger.handlers:
 
 
 # https://code.claude.com/docs/en/hooks#userpromptsubmit-input
-class HookInput(TypedDict):
+class HookInputBase(TypedDict):
     session_id: str
     transcript_path: str
     cwd: str
@@ -38,30 +37,12 @@ class HookInput(TypedDict):
     prompt: str
 
 
-class State(TypedDict):
-    title: str
+class HookInput(HookInputBase, total=False):
+    # Absent until the session has a name, then the current name -- whether set by this hook or by the user
+    session_title: str
 
 
-def state_path(session_id: str) -> Path:
-    return Path(f"/tmp/hal-session-auto-rename-{session_id}.json")  # noqa: S108 hardcoded-temp-file
-
-
-def read_state(session_id: str) -> State | None:
-    try:
-        with state_path(session_id).open() as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return None
-
-
-def write_state(session_id: str, payload: State) -> None:
-    fd, tmp_path = tempfile.mkstemp(dir="/tmp", prefix="hal-session-auto-rename-")
-    with os.fdopen(fd, "w") as f:
-        json.dump(payload, f)
-    Path(tmp_path).rename(state_path(session_id))
-
-
-def read_latest_ai_title(transcript_path: str) -> str:
+def read_recent_ai_titles(transcript_path: str) -> list[str]:
     try:
         with Path(transcript_path).open("rb") as f:
             f.seek(0, os.SEEK_END)
@@ -69,18 +50,18 @@ def read_latest_ai_title(transcript_path: str) -> str:
             f.seek(max(0, size - TRANSCRIPT_TAIL_BYTES))
             tail = f.read().decode("utf-8", errors="ignore")
     except FileNotFoundError:
-        return ""
+        return []
 
-    lines = tail.splitlines()
-    for line in reversed(lines):
+    titles = []
+    for line in tail.splitlines():
         try:
             entry = json.loads(line)
         except json.JSONDecodeError:
             # The first line of the tail is usually a partial entry, the rest are always whole
             continue
         if entry.get("type") == "ai-title":
-            return entry.get("aiTitle", "")
-    return ""
+            titles.append(entry.get("aiTitle", ""))
+    return titles
 
 
 def is_wide(char: str) -> bool:
@@ -115,26 +96,30 @@ def slugify(text: str) -> str:
 def main() -> None:
     data: HookInput = json.load(sys.stdin)
     session_id = data["session_id"]
+    session_title = data.get("session_title", "")
 
-    ai_title = read_latest_ai_title(data["transcript_path"])
-    if not ai_title:
+    ai_titles = read_recent_ai_titles(data["transcript_path"])
+    if not ai_titles:
         # Claude Code writes the first `ai-title` after the first assistant turn, so the first prompt of a session has nothing to read yet
         logger.debug("session=%s no ai-title yet", session_id)
         return
 
-    slug = slugify(ai_title)
+    slug = slugify(ai_titles[-1])
     if not slug:
-        logger.debug("session=%s ai-title=%r slugified to nothing", session_id, ai_title)
+        logger.debug("session=%s ai-title=%r slugified to nothing", session_id, ai_titles[-1])
         return
 
     # Claude Code keeps updating `ai-title` as the conversation drifts, and the session name follows it, but only when it actually changed
-    state = read_state(session_id)
-    if state is not None and state["title"] == slug:
+    if session_title == slug:
         return
 
-    logger.debug("session=%s ai-title=%r slug=%s", session_id, ai_title, slug)
+    # A name this hook set is always the slug of some recent `ai-title`, so any other name is the user's own `/rename` or `--name` and must never be overwritten
+    if session_title and session_title not in {slugify(title) for title in ai_titles}:
+        logger.debug("session=%s session_title=%r is user-set, backing off", session_id, session_title)
+        return
+
+    logger.debug("session=%s ai-title=%r slug=%s", session_id, ai_titles[-1], slug)
     print(json.dumps({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "sessionTitle": slug}}))
-    write_state(session_id, {"title": slug})
 
 
 if __name__ == "__main__":

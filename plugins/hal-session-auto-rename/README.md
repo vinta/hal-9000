@@ -14,7 +14,9 @@ Claude Code writes the first `ai-title` after the first assistant turn, so a bra
 
 The hook only reads a file, so it adds no measurable latency to the prompt and never calls a model.
 
-Claude Code keeps updating `ai-title` as the conversation drifts, and the session name follows it: when a prompt arrives and the newest `ai-title` differs from the name already applied, the session is renamed again. The name applied so far is tracked in a state file at `/tmp/hal-session-auto-rename-<session_id>.json`, so an unchanged title costs one file read and nothing else.
+Claude Code keeps updating `ai-title` as the conversation drifts, and the session name follows it: the hook sees the session's current name in the `session_title` field of its input, and when the newest `ai-title` slugs to something different, the session is renamed again.
+
+A name you set yourself with `claude --name` or `/rename` sticks. Every name this hook applies is the slug of some recent `ai-title`, so when the current name matches none of them, the hook knows the name is yours and backs off.
 
 ## Installation
 
@@ -29,7 +31,7 @@ Then restart Claude Code.
 
 - The name arrives one turn late, and its wording comes from Claude Code's summary rather than from your own prompt.
 - A session that ends after a single prompt is never named.
-- A name you set yourself with `claude --name` or `/rename` is overwritten the next time `ai-title` changes. `UserPromptSubmit` hooks receive no `session_title` field, so the plugin cannot tell your name apart from one it set earlier.
+- If you manually name the session the exact slug of a recent `ai-title`, the hook mistakes the name for one of its own and may still rename it later.
 
 ## Debugging
 
