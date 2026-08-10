@@ -1,6 +1,6 @@
 ---
 name: write-like-me
-description: Use when the user wants English prose they will sign — blog posts, READMEs, project docs, issues, PRs, emails — drafted or rewritten in their own voice at native fluency
+description: Use when writing English prose the user will sign — READMEs, blog posts, project docs, code comments, issues, PRs, emails — drafted or rewritten in their own voice at native fluency
 argument-hint: [text, file, or pointer to draft or rewrite]
 user-invocable: true
 model: claude-opus-4-6
@@ -35,7 +35,7 @@ The user's stated reason unifies the length and density rules: English is not th
 
 ## Workflow
 
-1. **Load the voice.** Read [references/style-spec.md](references/style-spec.md) and [references/exemplars.md](references/exemplars.md) in full. Done when you can name the target register (blog, README, or issue/PR/email) and the sentence-length cap that applies to it.
+1. **Load the voice.** Read [references/style-spec.md](references/style-spec.md) and [references/exemplars.md](references/exemplars.md) in full. Done when you can name the target register (blog, README, issue/PR/email, or code comments) and the sentence-length cap that applies to it.
 
 2. **Collect the source.** For a rewrite, gather the user's draft from the conversation or the files they pointed at. For a fresh draft, gather the facts to state, and keep every sentence the user already wrote about the topic — those sentences are the skeleton. Done when everything to say is in hand and nothing will need inventing mid-draft.
 
