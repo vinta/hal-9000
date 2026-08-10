@@ -54,7 +54,6 @@ Also see:
 
 - [commit](skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 - [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
-- [simple-english](skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
 - [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
 - [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
 - [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure

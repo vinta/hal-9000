@@ -1,6 +1,6 @@
 ---
 name: write-like-me
-description: Use when the user wants English prose they will sign — blog posts, READMEs, project docs, issues, PRs, emails — drafted or rewritten in their own voice at native fluency; always takes precedence over simple-english for the user's own writing
+description: Use when the user wants English prose they will sign — blog posts, READMEs, project docs, issues, PRs, emails — drafted or rewritten in their own voice at native fluency
 argument-hint: [text, file, or pointer to draft or rewrite]
 user-invocable: true
 model: claude-opus-4-6
@@ -9,7 +9,7 @@ effort: medium
 
 # Write Like Me
 
-Draft or rewrite English prose that reads as the user's own writing: their sentence structure and casual-opinionated register, at native-speaker fluency. The target is "you, but fluent" — never a ghostwriter. One voice for everything the user signs, in every channel. English only: never output Chinese. When this skill and simple-english could both apply to the user's own writing, this one wins.
+Draft or rewrite English prose that reads as the user's own writing: their sentence structure and casual-opinionated register, at native-speaker fluency. The target is "you, but fluent" — never a ghostwriter. One voice for everything the user signs, in every channel. English only: never output Chinese.
 
 ## Cardinal rule
 
