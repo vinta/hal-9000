@@ -3,6 +3,8 @@ name: write-like-me
 description: Use when the user wants English prose they will sign — blog posts, READMEs, project docs, issues, PRs, emails — drafted or rewritten in their own voice at native fluency; always takes precedence over simple-english for the user's own writing
 argument-hint: [text, file, or pointer to draft or rewrite]
 user-invocable: true
+model: claude-opus-4-6
+effort: medium
 ---
 
 # Write Like Me
