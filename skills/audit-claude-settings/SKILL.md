@@ -1,7 +1,6 @@
 ---
 name: audit-claude-settings
-description: Use when the user asks to audit their Claude Code settings and env vars against the current docs and suggest tailored changes
-disable-model-invocation: true
+description: Use when auditing Claude Code settings and env vars against the latest docs and suggest tailored changes
 allowed-tools:
   - Bash(curl -sL https://code.claude.com/*)
   - Bash(python3 -m json.tool *)
