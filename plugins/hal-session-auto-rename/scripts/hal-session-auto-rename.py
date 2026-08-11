@@ -54,7 +54,8 @@ class HookInput(HookInputBase, total=False):
     session_title: str
 
 
-# Claude Code summarizes every session into `ai-title` transcript entries and rewrites them as the conversation drifts, so naming is a pure file read -- no model call, no added latency
+# Claude Code titles every session once, from its first real prompt, into `ai-title` transcript entries -- re-appended verbatim, never regenerated
+# Reading them is a pure file read: no model call, no added latency
 def read_recent_ai_titles(transcript_path: str) -> list[str]:
     try:
         with Path(transcript_path).open("rb") as f:
@@ -218,7 +219,7 @@ def main() -> None:
         logger.debug("session=%s ai-title=%r slugified to nothing", session_id, ai_titles[-1])
         return
 
-    # Claude Code keeps updating `ai-title` as the conversation drifts, and the session name follows it, but only when it actually changed
+    # The session name follows the latest `ai-title`, but only when it actually changed
     if session_title == slug:
         return
 
