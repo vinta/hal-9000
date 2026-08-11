@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-import importlib.machinery
 import importlib.util
 import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-hal_path = REPO_ROOT / "bin" / "hal"
-loader = importlib.machinery.SourceFileLoader("hal", str(hal_path))
-spec = importlib.util.spec_from_file_location("hal", hal_path, loader=loader)
+hal_path = REPO_ROOT / "bin" / "hal.py"
+spec = importlib.util.spec_from_file_location("hal", hal_path)
 assert spec is not None  # noqa: S101 assert
 assert spec.loader is not None  # noqa: S101 assert
 module = importlib.util.module_from_spec(spec)

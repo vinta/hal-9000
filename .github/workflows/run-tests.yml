@@ -55,7 +55,7 @@ jobs:
       - name: Check scripts still parse under system python3
         run: |
           python -m py_compile \
-            bin/hal \
+            bin/hal.py \
             dotfiles/.claude/hooks/guard-bash-paths.py \
             plugins/hal-statusline/hal-statusline.py \
             plugins/hal-voice/scripts/hal-voice.py
@@ -68,7 +68,7 @@ jobs:
           import sys
 
           SCRIPTS = [
-              "bin/hal",
+              "bin/hal.py",
               "dotfiles/.claude/hooks/guard-bash-paths.py",
               "plugins/hal-statusline/hal-statusline.py",
               "plugins/hal-voice/scripts/hal-voice.py",

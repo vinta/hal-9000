@@ -5,12 +5,12 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/bootstrap-macos.yml"
-      - "bin/open-the-pod-bay-doors"
+      - "bin/open-the-pod-bay-doors.sh"
       - "playbooks/**"
   pull_request:
     paths:
       - ".github/workflows/bootstrap-macos.yml"
-      - "bin/open-the-pod-bay-doors"
+      - "bin/open-the-pod-bay-doors.sh"
       - "playbooks/**"
   workflow_dispatch:
 

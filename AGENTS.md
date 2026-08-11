@@ -11,7 +11,7 @@ Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets
 - **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
 - **Skills are the source of truth in `skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json` (the `hal-9000` marketplace loads the published version from GitHub), and via `npx skills add vinta/hal-9000`.
 - **The hal-skills `skills` array is duplicated on purpose**: `skills/.claude-plugin/plugin.json` is what Claude Code reads for the plugin's author and skill count, and the copy in `.claude-plugin/marketplace.json` is what `npx skills` reads to group the skills under "Hal Skills" (it only looks for a `plugin.json` at the repo root, so it never sees the one under `skills/`). Keep both lists in sync instead of deduplicating them.
-- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal`).
+- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal.py`).
 
 ## External Tool Documentation
 

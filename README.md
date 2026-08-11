@@ -23,7 +23,7 @@ All-in-one command to set up:
 - [Google Cloud](playbooks/roles/gcp/tasks/main.yml)
 
 ```bash
-curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors | bash
+curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors.sh | bash
 ```
 
 ## Components
@@ -114,7 +114,7 @@ hal open-the-pod-bay-doors            # Open the pod bay doors, please, HAL
 ```bash
 make install                          # Install dev dependencies and pre-commit hooks
 make test                             # Run tests
-make hal-completion                   # Regenerate zsh completion after modifying bin/hal
+make hal-completion                   # Regenerate zsh completion after modifying bin/hal.py
 hal sync                              # Update local completion
 ```
 

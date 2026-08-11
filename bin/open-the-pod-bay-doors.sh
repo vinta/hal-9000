@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -e
+
+printf "Hello, HAL. Do you read me, HAL?\n"
+printf "Affirmative, Dave. I read you.\n"
+
+# https://brew.sh/
+if [ ! -f /opt/homebrew/bin/brew ]; then
+  printf "\n"
+  printf "Install Homebrew...\n"
+  # Requires sudo to create and chown /opt/homebrew
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  printf "\n"
+  printf "Update Homebrew...\n"
+  brew update
+fi
+
+if ! which ansible >/dev/null 2>&1; then
+  printf "\n"
+  printf "Install Ansible...\n"
+  brew install ansible
+else
+  printf "\n"
+  printf "Upgrade Ansible...\n"
+  brew upgrade ansible || true
+  brew unlink ansible && brew link ansible || true
+fi
+
+REPO_REMOTE=https://github.com/vinta/hal-9000.git
+REPO_ROOT=/usr/local/hal-9000
+if [ ! -d "$REPO_ROOT/.git/" ]; then
+  printf "\n"
+  printf "Checkout the GitHub repo...\n"
+  # Requires sudo to write into /usr/local (root:wheel)
+  sudo git clone "$REPO_REMOTE" "$REPO_ROOT"
+  sudo chown -R "$USER":wheel "$REPO_ROOT"
+fi
+
+printf "\n"
+printf "Run hal update (may require your sudo password)...\n"
+"$REPO_ROOT/bin/hal" update "$@"
+
+source "$REPO_ROOT/playbooks/roles/hal/files/hal_profile.sh"

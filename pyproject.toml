@@ -32,7 +32,6 @@ only-binary = [":all:"]
 
 [tool.ruff]
 line-length = 200
-extend-include = ["bin/hal"]
 
 [tool.ruff.lint]
 select = ["ALL"]
@@ -55,7 +54,7 @@ ignore = [
 docstring-code-format = true
 
 [tool.ty.src]
-include = ["bin/hal", "dotfiles/", "plugins/", "scripts/", "tests/"]
+include = ["bin/", "dotfiles/", "plugins/", "scripts/", "tests/"]
 
 [tool.ty.rules]
 blanket-ignore-comment = "error"
