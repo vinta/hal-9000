@@ -24,3 +24,8 @@ def hal():
 @pytest.fixture
 def statusline():
     return load_module("hal_statusline", PLUGINS_DIR / "hal-statusline" / "hal-statusline.py")
+
+
+@pytest.fixture
+def autorename():
+    return load_module("hal_session_auto_rename", PLUGINS_DIR / "hal-session-auto-rename" / "scripts" / "hal-session-auto-rename.py")
