@@ -3,6 +3,7 @@ name: publish-plugins
 description: (project) Use when editing any file under skills/ or plugins/ to bump the plugin version and check the manifests before committing
 user-invocable: true
 model: sonnet
+effort: high
 allowed-tools:
   - Glob
   - Read
@@ -56,7 +57,13 @@ If a plugin's version already differs from `origin/main`, it was bumped for unre
 python3 .claude/skills/publish-plugins/scripts/check_manifest_sync.py
 ```
 
-The `hal-skills` skill list is duplicated on purpose across `skills/.claude-plugin/plugin.json` and the `hal-skills` entry in `.claude-plugin/marketplace.json`. The script compares both lists against each other and against the skill directories on disk, and exits non-zero listing whatever is missing. Fix the manifests it names, then run it again.
+Every plugin is described twice on purpose: once in its own `.claude-plugin/plugin.json` and once as an entry in `.claude-plugin/marketplace.json`. For each plugin the script checks that
+
+- both describe the same fields with the same values, apart from `version` (plugin.json only) and `source`, `category`, `tags`, `strict`, `defaultEnabled` (marketplace entry only — Claude Code ignores them in a plugin.json)
+- every component path either manifest declares exists on disk
+- every skill directory in a plugin's root appears in both skill lists
+
+It exits non-zero naming each problem. Fix the manifests it names, then run it again.
 
 ## 5. Validate
 
