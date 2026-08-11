@@ -11,6 +11,7 @@ allowed-tools:
   - Bash(git:*)
   - Bash(python3:*)
   - Bash(claude plugin validate:*)
+  - Bash(npx -y skills@latest add . -l)
 metadata:
   internal: true
 ---
@@ -75,3 +76,11 @@ claude plugin validate ./plugins/hal-session-auto-rename
 ```
 
 The first call validates the marketplace manifest; the rest validate each plugin manifest.
+
+## 6. Check the skills still group for other agents
+
+```bash
+npx -y skills@latest add . -l
+```
+
+This lists what `npx skills add vinta/hal-9000` will offer, reading the working tree instead of the published repo, and installs nothing. Every skill has to appear under the `Hal Skills` heading with a count matching the `skills` list. A skill listed without that heading means the `hal-skills` marketplace entry lost its `name` or its `skills` array — that CLI reads only the two manifests at the repo root, so it never sees `skills/.claude-plugin/plugin.json`.
