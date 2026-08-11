@@ -21,8 +21,8 @@
       "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md"
     },
     {
-      "src": "{{REPO_ROOT}}/.claude/rules/blog-post-sync.local.md",
-      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/.claude/rules/blog-post-sync.local.md"
+      "src": "{{REPO_ROOT}}/CLAUDE.local.md",
+      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/CLAUDE.local.md"
     },
     {
       "src": "{{REPO_ROOT}}/tmp/write-like-me-local/",
