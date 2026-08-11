@@ -41,6 +41,17 @@
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
       "source": "./skills",
+      "skills": [
+        "./commit",
+        "./best-practices",
+        "./blindspot",
+        "./simple-english",
+        "./write-like-me",
+        "./audit-claude-settings",
+        "./refactor-claude-md",
+        "./refactor-agents-md",
+        "./update-allowed-tools"
+      ],
       "author": {
         "name": "Vinta Chen",
         "email": "vinta.chen@gmail.com"
