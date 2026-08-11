@@ -11,7 +11,7 @@ Opinionated AI coding agent and dev environment automation for macOS that domina
 All-in-one command to set up:
 
 - [Agent Skills](skills)
-- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
+- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline) / [Output Styles](dotfiles/.claude/output-styles)
 - [Codex](dotfiles/.codex)
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
@@ -54,7 +54,9 @@ Also see:
 
 - [commit](skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 - [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
+- [blindspot](skills/blindspot/SKILL.md): Surfaces your unknown unknowns before you work in an unfamiliar domain
 - [simple-english](skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
+- [write-like-me](skills/write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
 - [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
 - [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
 - [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure

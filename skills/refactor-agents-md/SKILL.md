@@ -2,7 +2,6 @@
 name: refactor-agents-md
 description: Use when refactoring a user-level or project-level AGENTS.md for progressive disclosure
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # Refactor AGENTS.md

@@ -1,8 +1,9 @@
 ---
 name: simple-english
-description: Use when the user wants technical or developer writing (docs, issues, READMEs, comments, UI text) drafted or rewritten to be clear and simple for a global audience
+description: Use when you want docs, issues, READMEs, comments, or UI text written in Global English — plain words, translation-friendly grammar, still native-sounding
 argument-hint: [text, file, or pointer to rewrite]
 user-invocable: true
+disable-model-invocation: true
 ---
 
 # Simple English

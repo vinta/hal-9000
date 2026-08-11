@@ -3,7 +3,6 @@ name: refactor-claude-md
 description: Use when refactoring a user-level or project-level CLAUDE.md for progressive disclosure
 argument-hint: [user | project]
 user-invocable: true
-disable-model-invocation: true
 allowed-tools:
   - AskUserQuestion
   - WebFetch
