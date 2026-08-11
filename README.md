@@ -56,6 +56,7 @@ Also see:
 - [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
 - [blindspot](skills/blindspot/SKILL.md): Surfaces your unknown unknowns before you work in an unfamiliar domain
 - [write-like-me](skills/write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
+- [simple-english](skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience (invoke it explicitly with `/hal-skills:simple-english`)
 - [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
 - [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
 - [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure
