@@ -1,6 +1,6 @@
 ---
 name: bump-plugin-version
-description: (project) Use when editing any file under skills/ or plugins/ to bump the plugin version before committing
+description: (project) Use when editing any file under skills/ or plugins/ to bump the plugin version and sync the skill lists before committing
 user-invocable: true
 model: haiku
 allowed-tools:
@@ -8,6 +8,7 @@ allowed-tools:
   - Read
   - Edit
   - Bash(git:*)
+  - Bash(claude plugin validate:*)
 metadata:
   internal: true
 ---
@@ -25,6 +26,15 @@ After editing files under `skills/` or `plugins/`, bump the plugin's `version` f
 - **Patch** (0.2.0 -> 0.2.1): bug fixes, config changes, style cleanup
 - **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands
 - **Major** (0.2.0 -> 1.0.0): breaking changes to hook behavior or config format
+
+## Adding or removing a skill
+
+A skill directory added to or removed from `skills/` has to be added to or removed from two `skills` arrays, which list the same paths on purpose:
+
+- `skills/.claude-plugin/plugin.json` — what Claude Code reads for the plugin's own metadata
+- the `hal-skills` entry in `.claude-plugin/marketplace.json` — what `npx skills` reads to group the skills
+
+Verify with `claude plugin validate .` afterwards.
 
 ## Before bumping
 
