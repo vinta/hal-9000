@@ -39,7 +39,7 @@
     },
     {
       "name": "hal-skills",
-      "description": "Skills, subagents, and MCP servers",
+      "description": "Skills, subagents, MCP servers, and LSP servers",
       "source": "./skills",
       "skills": [
         "./commit",
