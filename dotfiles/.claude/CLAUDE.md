@@ -11,7 +11,7 @@
 
 ### Use AskUserQuestion
 
-When you need input and the answer is a selection rather than a sentence (multiple-choice, yes/no confirmations that gate next steps, picking from a list, choosing between approaches), ask with the `AskUserQuestion` tool instead of plain text, so the user clicks an option instead of typing.
+When you ask the user anything whose answer is a selection rather than a sentence (multiple-choice, yes/no questions whether they gate next steps or offer optional follow-up work, picking from a list, choosing between approaches), ask with the `AskUserQuestion` tool instead of plain text, so the user clicks an option instead of typing.
 
 When presenting approaches, put the summary in each option's label and the pros/cons in its description. Plain text is fine when the answer is open-ended. This changes the format of questions, not whether to ask: never use it to ask permission for work you already have enough information to do.
 
