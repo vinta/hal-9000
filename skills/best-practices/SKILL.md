@@ -1,6 +1,6 @@
 ---
 name: best-practices
-description: Use when the user asks about best practices, gotchas, or recommended patterns for tools, libraries, config formats, API patterns, or project setup; when setting up, configuring, choosing, or refining these where outdated guidance causes debugging pain; or before proposing a design of your own, to study how existing projects solved the same problem. Also use when the user says "search online", "how should I", or "what's the best way to"
+description: Use when about to choose, configure, or refine a tool, library, config format, API pattern, or project setup, or before proposing a design of your own — research current guidance, pitfalls, and prior art first; already knowing an approach, or assuming no prior art exists, is not an exemption. Also use when the user asks about best practices, gotchas, or recommended patterns, or says "search online"
 user-invocable: true
 allowed-tools:
   - Agent
