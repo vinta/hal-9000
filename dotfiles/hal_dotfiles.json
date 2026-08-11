@@ -25,6 +25,10 @@
       "dest": "{{HOME}}/Dropbox/Projects/hal-9000/.claude/rules/blog-post-sync.local.md"
     },
     {
+      "src": "{{REPO_ROOT}}/tmp/write-like-me-local/",
+      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/tmp/write-like-me-local/"
+    },
+    {
       "src": "{{HOME}}/.codex/history.jsonl",
       "dest": "{{HOME}}/Dropbox/Apps/Codex/history.jsonl"
     },
