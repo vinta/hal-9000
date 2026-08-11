@@ -11,7 +11,7 @@ Opinionated AI coding agent and dev environment automation for macOS that domina
 All-in-one command to set up:
 
 - [Agent Skills](skills)
-- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline) / [Output Styles](dotfiles/.claude/output-styles)
+- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Output Styles](dotfiles/.claude/output-styles) / [Statusline](plugins/hal-statusline)
 - [Codex](dotfiles/.codex)
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
@@ -50,7 +50,7 @@ Also see:
 
 - [Claude Code: Things I Learned After Using It Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html)
 
-### Claude Code Plugin: `hal-skills`
+### Claude Code Skills: `hal-skills`
 
 - [commit](skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 - [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
@@ -66,7 +66,7 @@ Also see:
 /plugin install hal-skills@hal-9000
 ```
 
-If you want to use them in Codex:
+If you want to use them in Codex or other coding agents:
 
 ```bash
 npx skills add vinta/hal-9000
