@@ -50,7 +50,9 @@ Also see:
 
 - [Claude Code: Things I Learned After Using It Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html)
 
-### Claude Code Skills: `hal-skills`
+### Skills
+
+Agentic skills sharpened by daily use:
 
 - [commit](skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 - [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
