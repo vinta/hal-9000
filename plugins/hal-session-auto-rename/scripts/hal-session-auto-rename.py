@@ -19,7 +19,7 @@ LOG_MAX_BYTES = 1024 * 1024
 # Claude Code appends `ai-title` entries throughout the session, so the newest one is near the end of the transcript
 TRANSCRIPT_TAIL_BYTES = 256 * 1024
 # Terminal columns rather than characters, so a CJK title takes up the same room in the prompt bar as an English one
-TITLE_MAX_COLUMNS = 30
+TITLE_MAX_COLUMNS = 48
 
 logger = logging.getLogger("session-auto-rename")
 logger.setLevel(logging.DEBUG)
