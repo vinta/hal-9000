@@ -1,9 +1,9 @@
 ---
 name: publish-plugins
-description: (project) Use when editing any file under skills/ or plugins/ to bump the plugin version and check the manifests before committing
+description: (project) Use when editing any file under skills/ or plugins/ to bump the plugin version and check the manifests
 user-invocable: true
 model: sonnet
-effort: high
+effort: medium
 allowed-tools:
   - Glob
   - Read
