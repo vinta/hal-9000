@@ -1,0 +1,44 @@
+{
+  "name": "hal-skills",
+  "version": "2.0.1",
+  "description": "Skills, subagents, and MCP servers",
+  "author": {
+    "name": "Vinta Chen",
+    "email": "vinta.chen@gmail.com"
+  },
+  "repository": "https://github.com/vinta/hal-9000",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "commit",
+    "stash",
+    "hunk",
+    "best-practices",
+    "research",
+    "blindspot",
+    "unknowns",
+    "brainstorming",
+    "simple-english",
+    "global-english",
+    "write-like-me",
+    "writing-voice",
+    "technical-writing",
+    "audit",
+    "claude-settings",
+    "env-vars",
+    "refactor",
+    "claude-md",
+    "agents-md"
+  ],
+  "skills": [
+    "./commit",
+    "./best-practices",
+    "./blindspot",
+    "./simple-english",
+    "./write-like-me",
+    "./audit-claude-settings",
+    "./refactor-claude-md",
+    "./refactor-agents-md",
+    "./update-allowed-tools"
+  ]
+}

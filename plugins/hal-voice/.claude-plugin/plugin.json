@@ -1,0 +1,12 @@
+{
+  "name": "hal-voice",
+  "version": "1.5.1",
+  "description": "Play HAL 9000 voice clips on Claude Code hook events",
+  "author": {
+    "name": "Vinta Chen",
+    "email": "vinta.chen@gmail.com"
+  },
+  "repository": "https://github.com/vinta/hal-9000",
+  "license": "MIT",
+  "keywords": ["hal-9000", "hooks", "voice", "audio"]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "hal-session-auto-rename",
+  "version": "1.2.2",
+  "description": "Automatically name each session and rename it as the conversation evolves",
+  "author": {
+    "name": "Vinta Chen",
+    "email": "vinta.chen@gmail.com"
+  },
+  "repository": "https://github.com/vinta/hal-9000",
+  "license": "MIT",
+  "keywords": ["hal-9000", "hooks", "session", "auto-rename", "title", "ai-title"]
+}

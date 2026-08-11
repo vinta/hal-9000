@@ -12,7 +12,6 @@
     {
       "name": "hal-voice",
       "description": "Play HAL 9000 voice clips on Claude Code hook events",
-      "version": "1.5.0",
       "source": "./plugins/hal-voice",
       "author": {
         "name": "Vinta Chen",
@@ -22,13 +21,11 @@
       "license": "MIT",
       "category": "entertainment",
       "keywords": ["hal-9000", "hooks", "voice", "audio"],
-      "tags": ["hal-9000", "hooks", "voice", "audio"],
-      "strict": false
+      "tags": ["hal-9000", "hooks", "voice", "audio"]
     },
     {
       "name": "hal-session-auto-rename",
       "description": "Automatically name each session and rename it as the conversation evolves",
-      "version": "1.2.1",
       "source": "./plugins/hal-session-auto-rename",
       "author": {
         "name": "Vinta Chen",
@@ -38,25 +35,12 @@
       "license": "MIT",
       "category": "productivity",
       "keywords": ["hal-9000", "hooks", "session", "auto-rename", "title", "ai-title"],
-      "tags": ["hal-9000", "hooks", "session", "auto-rename", "title", "ai-title"],
-      "strict": false
+      "tags": ["hal-9000", "hooks", "session", "auto-rename", "title", "ai-title"]
     },
     {
       "name": "hal-skills",
       "description": "Skills, subagents, and MCP servers",
-      "version": "2.0.0",
       "source": "./skills",
-      "skills": [
-        "./commit",
-        "./best-practices",
-        "./blindspot",
-        "./simple-english",
-        "./write-like-me",
-        "./audit-claude-settings", 
-        "./refactor-claude-md", 
-        "./refactor-agents-md", 
-        "./update-allowed-tools"
-      ],
       "author": {
         "name": "Vinta Chen",
         "email": "vinta.chen@gmail.com"
@@ -107,8 +91,7 @@
         "refactor",
         "claude-md",
         "agents-md"
-      ],
-      "strict": false
+      ]
     }
   ]
 }
