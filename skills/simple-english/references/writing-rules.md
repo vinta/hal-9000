@@ -58,8 +58,6 @@ Translation and comprehension fail on omitted function words. Keep them:
 
 ## What this ruleset deliberately does not do
 
-The strict sibling (ASD-STE100) exists for safety-critical, compliance-checked documentation. This ruleset drops, on purpose:
-
 - No approved-word dictionary. Any natural word is available.
 - No hard sentence caps. Shortness is a smell threshold, not a rule: explicitness and cohesion beat brevity, and gaming readability scores (Flesch-Kincaid, Hemingway) measurably fails to improve comprehension.
 - No banned tenses beyond the future-tense preference. Perfect or progressive forms stay when they are the natural phrasing.
