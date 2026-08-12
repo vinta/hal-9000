@@ -149,7 +149,7 @@ export AGENT_BROWSER_HEADED=1
 export HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1
 
 # Claude Code session auto-rename: regenerate the session title every N prompts to track topic drift (unset/0 = off)
-export HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS=10
+export HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS=5
 # Claude Code session auto-rename title model: 1 = local ollama, 0 = claude --print
 export HAL_SESSION_AUTO_RENAME_USE_OLLAMA=1
 
