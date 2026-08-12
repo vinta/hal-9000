@@ -134,7 +134,7 @@ dock-icon-preference = "app-default"
 show-context-window-usage = true
 usePointerCursors = true
 enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
-conversationDetailMode = "STEPS_PROSE"
+conversationDetailMode = "STEPS_COMMANDS"
 
 [hooks.state]
 
