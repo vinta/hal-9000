@@ -87,7 +87,6 @@ class TestAdoption:
             "status": "pending",
             "transcript_path": str(transcript),
             "seed_prompt": "plan a party menu",
-            "attempts": 1,
         }
 
     def test_launch_name_without_source_marks_user_owned(self, autorename, tmp_path, monkeypatch, capsys):
@@ -137,21 +136,8 @@ class TestWorkerApply:
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
         assert autorename.read_state("s1") == {"set_title": "fix-login-bug"}
 
-    def test_failed_first_attempt_retries_once(self, autorename, monkeypatch, capsys):
-        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "failed", "transcript_path": "x", "seed_prompt": "plan a party", "attempts": 1})
-        spawned = []
-        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
-        hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "fix-login-bug"}
-
-        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
-        assert spawned == ["s1"]
-        state = autorename.read_state("s1")
-        assert state["status"] == "pending"
-        assert state["attempts"] == 2
-        assert state["seed_prompt"] == "plan a party"
-
-    def test_failed_final_attempt_stays_silent_forever(self, autorename, monkeypatch, capsys):
-        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "failed", "transcript_path": "x", "attempts": 2})
+    def test_failed_state_stays_silent_forever(self, autorename, monkeypatch, capsys):
+        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "failed", "transcript_path": "x"})
         spawned = []
         monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
         hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "fix-login-bug"}
@@ -192,7 +178,7 @@ class TestWorker:
     def test_empty_transcript_falls_back_to_seed_prompt(self, autorename, tmp_path, monkeypatch):
         # Right after /clear the transcript holds only filtered harness noise, and the adopting prompt may not be flushed yet
         transcript = write_transcript(tmp_path, "s.jsonl", [user_entry("<command-name>/clear</command-name>")])
-        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": str(transcript), "seed_prompt": "plan a birthday party menu", "attempts": 1})
+        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": str(transcript), "seed_prompt": "plan a birthday party menu"})
         prompts = []
 
         def capture(prompt):
@@ -249,7 +235,6 @@ class TestRefreshMode:
             "status": "pending",
             "transcript_path": str(transcript),
             "seed_prompt": "now about css grids",
-            "attempts": autorename.TITLE_MAX_ATTEMPTS,
             "prompt_count": 0,
         }
 
@@ -302,13 +287,12 @@ class TestRefreshMode:
         state = autorename.read_state("s1")
         assert state["status"] == "pending"
         assert state["inherited_title"] == "my-fixed-name"
-        assert state["attempts"] == autorename.TITLE_MAX_ATTEMPTS
         # The counter step still counts the spawning prompt
         assert state["prompt_count"] == 1
 
     def test_failed_refresh_waits_for_next_cycle(self, autorename, monkeypatch, capsys):
         monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
-        write_state(autorename, "s1", {"inherited_title": "hello-world", "status": "failed", "transcript_path": "x", "attempts": 2, "prompt_count": 1})
+        write_state(autorename, "s1", {"inherited_title": "hello-world", "status": "failed", "transcript_path": "x", "prompt_count": 1})
         spawned = []
         monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
         hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "hello-world"}
@@ -350,7 +334,7 @@ class TestSanitizeTitle:
 
     def test_worker_writes_failed_on_refusal(self, autorename, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, "s.jsonl", [user_entry("plan a party")])
-        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": str(transcript), "attempts": 1})
+        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": str(transcript)})
         monkeypatch.setattr(autorename, "run_title_model", lambda _prompt: "This doesn't appear to be a coding session. I can only help with software.")
 
         autorename.run_title_worker("s1")

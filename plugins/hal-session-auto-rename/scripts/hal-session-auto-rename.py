@@ -29,8 +29,6 @@ TITLE_MAX_COLUMNS = 48
 STATE_DIR = Path(tempfile.gettempdir()) / "hal-session-auto-rename"
 # Claude Code's own title generators read about this much conversation text, so matching the scale keeps worker titles looking native next to ai-title ones
 TITLE_WINDOW_CHARS = 2000
-# Model timeouts are transient, so a failed generation gets one more chance on a later prompt before the inherited name becomes final
-TITLE_MAX_ATTEMPTS = 2
 
 # Mirrors the defenses in Claude Code's own title prompt: session content is data, refusals and meta-commentary are explicitly bad outputs
 TITLE_PROMPT = """Generate a concise, sentence-case title (3-7 words) that captures the main topic or goal of this session.
@@ -84,7 +82,6 @@ class SessionState(TypedDict, total=False):
     transcript_path: str
     # The prompt that triggered adoption -- the transcript may not contain it yet when the worker reads, since the hook runs before Claude Code persists the message
     seed_prompt: str
-    attempts: int
     # The user renamed this session, so it is never touched again -- except by refresh mode, which overrides any title by design
     user_owned: bool
     # Prompts seen since the last refresh spawn, tracked only when HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS is set
@@ -244,7 +241,9 @@ def run_ollama_title_model(prompt: str) -> str | None:
         with urllib.request.urlopen(req, timeout=30) as resp:  # noqa: S310 urlopen-with-scheme -- fixed localhost scheme
             body_data: OllamaGenerateResponse = json.loads(resp.read())
             return body_data["response"]
-    except (TimeoutError, urllib.error.URLError):
+    except (TimeoutError, urllib.error.URLError) as exc:
+        # `URLError` wraps the real cause -- its repr distinguishes connection-refused (Ollama down) from a generate timeout (model loading or overloaded)
+        logger.debug("ollama title call failed: %r", exc)
         return None
 
 
@@ -271,7 +270,10 @@ def run_claude_title_model(prompt: str) -> str | None:
             cwd="/tmp",  # noqa: S108 hardcoded-temp-file
         )
     except subprocess.TimeoutExpired:
+        logger.debug("claude title call timed out")
         return None
+    if result.returncode != 0:
+        logger.debug("claude title call exited %d stderr=%r", result.returncode, result.stderr[:200])
     return result.stdout
 
 
@@ -307,6 +309,8 @@ def run_title_worker(session_id: str) -> None:
     inherited_title = state.get("inherited_title", "")
     # The transcript can still be missing the adopting prompt when this reads it, so the recorded prompt is the floor the worker can always title from
     session_text = extract_recent_session_text(state.get("transcript_path", "")) or state.get("seed_prompt", "")
+    if not session_text:
+        logger.debug("session=%s no session text to title from", session_id)
     title = run_title_model(TITLE_PROMPT.format(session_text=session_text)) if session_text else None
 
     # The hook may have re-written the state while the model call was in flight -- a user /rename must win over the worker
@@ -320,7 +324,8 @@ def run_title_worker(session_id: str) -> None:
         current["pending_title"] = clean_title
     else:
         current["status"] = "failed"
-    logger.debug("session=%s worker %s title=%r raw=%r", session_id, current["status"], clean_title, (title or "")[:200])
+    # `raw=None` means the backend never returned (its own log line names the cause), distinct from a model that returned empty or unusable text
+    logger.debug("session=%s worker %s title=%r raw=%r", session_id, current["status"], clean_title, None if title is None else title[:200])
     write_state(session_id, current)
 
 
@@ -383,17 +388,7 @@ def handle_existing_state(session_id: str, session_title: str, state: SessionSta
             mark_user_owned(session_id, f"session_title={session_title!r} renamed while the title worker ran")
         return True
     if status == "failed":
-        if state.get("attempts", TITLE_MAX_ATTEMPTS) < TITLE_MAX_ATTEMPTS:
-            retry: SessionState = {
-                "inherited_title": state.get("inherited_title", ""),
-                "status": "pending",
-                "transcript_path": state.get("transcript_path", ""),
-                "seed_prompt": state.get("seed_prompt", ""),
-                "attempts": state.get("attempts", 1) + 1,
-            }
-            logger.debug("session=%s retrying failed title worker, attempt %d", session_id, retry["attempts"])
-            write_state(session_id, retry)
-            spawn_title_worker(session_id)
+        # Failure is final and the inherited name stays -- the log records the cause, and refresh mode's next cycle is the only retry
         return True
 
     # An empty session_title here would be a dropped emit, not a rename -- fall through and let the ai-title path re-emit
@@ -421,8 +416,6 @@ def spawn_refresh(session_id: str, session_title: str, data: HookInput) -> None:
             "status": "pending",
             "transcript_path": data["transcript_path"],
             "seed_prompt": data.get("prompt", "")[:TITLE_WINDOW_CHARS],
-            # A failed refresh is never retried -- the next cycle is the retry -- so the pending state starts with no attempts left
-            "attempts": TITLE_MAX_ATTEMPTS,
             "prompt_count": 0,
         },
     )
@@ -491,7 +484,6 @@ def run_reactive_flow(data: HookInput, session_id: str, session_title: str, stat
             "status": "pending",
             "transcript_path": data["transcript_path"],
             "seed_prompt": data.get("prompt", "")[:TITLE_WINDOW_CHARS],
-            "attempts": 1,
         },
     )
     spawn_title_worker(session_id)
