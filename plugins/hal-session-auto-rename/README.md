@@ -19,4 +19,6 @@ Just use Claude Code as usual -- the session name appears on your second non-que
 
 A prompt typed while Claude is still working is queued, and queued prompts never fire `UserPromptSubmit`, so they do not count.
 
-`/clear` carries the current name into the new session, and Claude Code never generates titles for a session whose name arrived through `/clear` or `--name` -- so without help, the old and new sessions would sit in `/resume` under the same name forever. When the inherited name is one this plugin set (the slug of some session's internal title) and it exactly duplicates another recent session's name, the new session gets a `-2` suffix (`-3` on the next `/clear`, and so on). Names you set yourself with `--name` or `/rename` are never touched.
+## Sessions this plugin cannot name
+
+A session that already has a name when it starts -- launched with `--name`, or carrying the previous session's name through `/clear` -- never gets an `ai-title` generated for it, for its whole life. There is nothing in its transcript for this plugin to read, so its name stays whatever it started as. After `/clear` that means the old and the new session sit in `/resume` under the same name; use `/rename` to tell them apart.
