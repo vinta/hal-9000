@@ -2,7 +2,7 @@
 
 Automatically name each session, and optionally re-name it as the conversation drifts.
 
-Claude Code already titles each session once, from its first real prompt, and stores that title in the transcript as an internal `ai-title` entry. This plugin turns it into a real session name: a `UserPromptSubmit` hook reads the entry and emits it as `sessionTitle`.
+Claude Code already titles each session once, from its first real prompt, and stores that title in the transcript as an internal `ai-title` entry. This plugin turns it into a real session title: a `UserPromptSubmit` hook reads the entry and emits it as `sessionTitle`.
 
 ## Installation
 
@@ -15,9 +15,7 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual. The session name appears on your second prompt, as long as that prompt is not queued.
-
-A prompt typed while Claude is still working is queued, and queued prompts never fire `UserPromptSubmit`, so they do not count.
+Just use Claude Code as usual. The session title appears on your **second** prompt, as long as that prompt is not queued (queued prompts never fire `UserPromptSubmit`, so no way to set session title).
 
 ## Environment Variables
 
@@ -26,10 +24,10 @@ A prompt typed while Claude is still working is queued, and queued prompts never
 
 ### User-named Session
 
-A session you named yourself keeps that name for life, whether you passed `--name` at launch or ran `/rename` mid-session. Claude Code generates no `ai-title` for it, so this plugin treats the name as yours and WILL NOT auto-rename it. Refresh mode is the only exception.
+A session you named keeps that name for life, whether you passed `--name` at launch or ran `/rename` mid-session. Claude Code generates no `ai-title` for it, so this plugin treats the name as yours and WILL NOT auto-rename it. Refresh mode is the only exception.
 
-### Refresh mode
+### Refresh Mode
 
-By default the name is set once per session. Turn on refresh mode if you want the plugin to rename the session as the conversation drifts. Set `HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS=5` to pick the cycle length, any N > 0; unset or 0 disables it. Every N prompts, a background worker regenerates the name from the recent conversation, applied on your next prompt.
+By default the session name is set once per session. If you want the plugin to rename the session as the conversation drifts, turn on refresh mode by setting `HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS=5` (any N > 0): every N prompts, a background worker regenerates the name from the recent conversation, applied on your next prompt; unset or `0` disables it.
 
-The refresh overrides whatever name the session currently has: one this plugin set, one carried through `/clear`, or one you set yourself with `--name` or `/rename`.
+The refresh overrides whatever name the session currently has: one this plugin set, one carried through `/clear`, or one you set with `--name` or `/rename`.
