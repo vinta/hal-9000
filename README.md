@@ -78,7 +78,7 @@ npx skills add vinta/hal-9000
 
 Plugins that wire their own hooks and run themselves:
 
-- [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session and rename it as the conversation evolves
+- [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session, and optionally re-name it as the conversation drifts
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
