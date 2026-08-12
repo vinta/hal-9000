@@ -92,15 +92,19 @@ class OllamaGenerateResponse(TypedDict):
     response: str
 
 
+def read_transcript_tail(transcript_path: str) -> str:
+    with Path(transcript_path).open("rb") as f:
+        f.seek(0, os.SEEK_END)
+        size = f.tell()
+        f.seek(max(0, size - TRANSCRIPT_TAIL_BYTES))
+        return f.read().decode("utf-8", errors="ignore")
+
+
 # Claude Code titles every session once, from its first real prompt, into `ai-title` transcript entries -- re-appended verbatim, never regenerated
 # Reading them is a pure file read: no model call, no added latency
 def read_recent_ai_titles(transcript_path: str) -> list[str]:
     try:
-        with Path(transcript_path).open("rb") as f:
-            f.seek(0, os.SEEK_END)
-            size = f.tell()
-            f.seek(max(0, size - TRANSCRIPT_TAIL_BYTES))
-            tail = f.read().decode("utf-8", errors="ignore")
+        tail = read_transcript_tail(transcript_path)
     except FileNotFoundError:
         return []
 
@@ -197,11 +201,7 @@ def find_adoption_source(session_title: str, own_session_id: str) -> bool:
 
 def extract_recent_session_text(transcript_path: str) -> str:
     try:
-        with Path(transcript_path).open("rb") as f:
-            f.seek(0, os.SEEK_END)
-            size = f.tell()
-            f.seek(max(0, size - TRANSCRIPT_TAIL_BYTES))
-            tail = f.read().decode("utf-8", errors="ignore")
+        tail = read_transcript_tail(transcript_path)
     except OSError:
         return ""
 
