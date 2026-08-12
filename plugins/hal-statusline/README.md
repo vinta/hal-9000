@@ -1,6 +1,6 @@
 # Claude Code Statusline with English Grammar Check
 
-A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) that shows the current model, directory, and git branch -- plus **a grammar check on every prompt you type**, with corrections explained in Traditional Chinese.
+A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) that shows the current model and effort level, directory, git branch, context usage, and your 5h/7d rate limit usage. Plus **a grammar check on every prompt you type**, with corrections explained in Traditional Chinese.
 
 The grammar check runs in a detached background worker so the statusline never blocks on the model call: it shows "checking…" immediately, then the result appears within a couple of seconds once the worker finishes and the next statusline refresh (driven by `refreshInterval`) picks it up.
 
@@ -12,9 +12,13 @@ curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-h
 
 Then restart Claude Code.
 
-## Configurations
+## Usage
 
-Set `HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1` in your environment to use a local Ollama model instead of `claude -p`.
+Just use Claude Code as usual. The statusline appears below the input box.
+
+## Environment Variables
+
+- `HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1`: run the grammar check with a local Ollama model instead of `claude --model haiku -p`.
 
 ## Screenshots
 

@@ -19,7 +19,9 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual -- you will hear HAL 9000 talking to you when the time is right.
+Just use Claude Code as usual. HAL 9000 talks to you when the time is right.
+
+## Configurations
 
 For silence, toggle with the `/hal-voice-toggle` command.
 

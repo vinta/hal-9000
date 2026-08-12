@@ -78,7 +78,7 @@ npx skills add vinta/hal-9000
 
 Plugins that wire their own hooks and run themselves:
 
-- [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session and rename it as the conversation evolves
+- [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session, and optionally rename it as the conversation evolves
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
@@ -102,6 +102,7 @@ curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-h
 hal update                            # Run all Ansible roles to set up the dev environment
 hal update --tags python,node         # Run specific Ansible roles
 hal link ~/.zshrc                     # Move file into dotfiles/ and symlink it back
+hal unlink ~/.zshrc                   # Move file back from dotfiles/ and remove the symlink
 hal copy ~/.config/ghostty/config     # Copy file into dotfiles/ (no symlink)
 hal sync                              # Sync all links and copies
 hal backup                            # Back up live data to Dropbox
