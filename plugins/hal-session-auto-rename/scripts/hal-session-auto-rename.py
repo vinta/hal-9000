@@ -85,8 +85,10 @@ class SessionState(TypedDict, total=False):
     # The prompt that triggered adoption -- the transcript may not contain it yet when the worker reads, since the hook runs before Claude Code persists the message
     seed_prompt: str
     attempts: int
-    # The user renamed this session, so it is never touched again
+    # The user renamed this session, so it is never touched again -- except by refresh mode, which overrides any title by design
     user_owned: bool
+    # Prompts seen since the last refresh spawn, tracked only when HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS is set
+    prompt_count: int
 
 
 class OllamaGenerateResponse(TypedDict):
@@ -356,6 +358,9 @@ def handle_ai_titles(session_id: str, session_title: str, ai_titles: list[str], 
 
     # A name this hook set is always the slug of some recent `ai-title`, so any other name is the user's own `/rename` or `--name` and must never be overwritten
     if session_title and session_title not in {slugify(title) for title in ai_titles}:
+        if session_title == (state or {}).get("set_title"):
+            # A worker/refresh title is ours even though it is not an ai-title slug -- keep it and its adoptable state instead of misreading it as a user rename
+            return
         mark_user_owned(session_id, f"session_title={session_title!r} is not an ai-title slug")
         return
 
@@ -398,12 +403,60 @@ def handle_existing_state(session_id: str, session_title: str, state: SessionSta
     return False
 
 
+# Opt-in drift tracking: every N prompts the current title is regenerated from the recent conversation, whoever set it -- unset or 0 disables
+def refresh_every_n_prompts() -> int:
+    try:
+        return max(0, int(os.environ.get("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "0")))
+    except ValueError:
+        return 0
+
+
+def spawn_refresh(session_id: str, session_title: str, data: HookInput) -> None:
+    logger.debug("session=%s refresh cycle, regenerating title %r", session_id, session_title)
+    # Recording the current title as inherited_title reuses the whole pending/done flow verbatim: rename detection, the worker race guard, and apply
+    write_state(
+        session_id,
+        {
+            "inherited_title": session_title,
+            "status": "pending",
+            "transcript_path": data["transcript_path"],
+            "seed_prompt": data.get("prompt", "")[:TITLE_WINDOW_CHARS],
+            # A failed refresh is never retried -- the next cycle is the retry -- so the pending state starts with no attempts left
+            "attempts": TITLE_MAX_ATTEMPTS,
+            "prompt_count": 0,
+        },
+    )
+    spawn_title_worker(session_id)
+
+
+def run_refresh_counter(data: HookInput, session_id: str, every: int) -> None:
+    # Re-read instead of reusing main's copy: the reactive flow may have rewritten the state, and its wholesale writes drop this counter
+    state: SessionState = read_state(session_id) or {}
+    count = state.get("prompt_count", 0) + 1
+    # A title emitted this prompt is not in the hook input yet -- firing now would record a stale inherited_title and misread our own emission as a rename on the next prompt
+    emitted_this_prompt = bool(state.get("set_title")) and state.get("set_title") != data.get("session_title", "")
+    if count >= every and state.get("status") != "pending" and not emitted_this_prompt:
+        spawn_refresh(session_id, data.get("session_title", ""), data)
+        return
+    state["prompt_count"] = count
+    write_state(session_id, state)
+
+
 def main() -> None:
     data: HookInput = json.load(sys.stdin)
     session_id = data["session_id"]
     session_title = data.get("session_title", "")
     state = read_state(session_id)
 
+    run_reactive_flow(data, session_id, session_title, state)
+
+    refresh_every = refresh_every_n_prompts()
+    if refresh_every:
+        run_refresh_counter(data, session_id, refresh_every)
+
+
+# The pre-refresh naming flow: adopt ai-titles, apply worker outcomes, and detect user renames -- identical whether refresh mode is on or off
+def run_reactive_flow(data: HookInput, session_id: str, session_title: str, state: SessionState | None) -> None:
     if state is not None and handle_existing_state(session_id, session_title, state):
         return
 
@@ -423,7 +476,11 @@ def main() -> None:
 
     # A named session with no ai-titles was named at launch: --name, CLAUDE_CODE_SESSION_NAME, or a /clear carry-over, and only the last is ours to fix
     if not find_adoption_source(session_title, session_id):
-        mark_user_owned(session_id, f"session_title={session_title!r} has no plugin-set source")
+        if refresh_every_n_prompts():
+            # Refresh mode overrides any title, and an unprovable one is stale more often than deliberate -- regenerate now instead of waiting a full cycle
+            spawn_refresh(session_id, session_title, data)
+        else:
+            mark_user_owned(session_id, f"session_title={session_title!r} has no plugin-set source")
         return
 
     logger.debug("session=%s adopting inherited title %r, spawning worker", session_id, session_title)

@@ -25,7 +25,7 @@
     },
     {
       "name": "hal-session-auto-rename",
-      "description": "Automatically name each session after what its first prompt is about",
+      "description": "Automatically name each session after what its first prompt is about, and optionally re-name it as the conversation drifts",
       "source": "./plugins/hal-session-auto-rename",
       "author": {
         "name": "Vinta Chen",

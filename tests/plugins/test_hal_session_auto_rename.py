@@ -55,6 +55,15 @@ class TestAiTitlePath:
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
         assert autorename.read_state("s1") == {"user_owned": True}
 
+    def test_worker_set_title_not_reclaimed_as_user_owned(self, autorename, tmp_path, monkeypatch, capsys):
+        # A worker/refresh slug never matches an ai-title slug, and must stay ours and adoptable instead of flipping to user_owned
+        write_state(autorename, "s1", {"set_title": "debug-oauth-token-refresh"})
+        transcript = write_transcript(tmp_path, "s.jsonl", [ai_title("Hello world")])
+        hook_input = {"session_id": "s1", "transcript_path": str(transcript), "session_title": "debug-oauth-token-refresh"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert autorename.read_state("s1") == {"set_title": "debug-oauth-token-refresh"}
+
     def test_dropped_emit_reemits_instead_of_marking_user_owned(self, autorename, tmp_path, monkeypatch, capsys):
         write_state(autorename, "s1", {"set_title": "hello-world"})
         transcript = write_transcript(tmp_path, "s.jsonl", [ai_title("Hello world")])
@@ -210,6 +219,122 @@ class TestWorker:
         autorename.run_title_worker("s1")
 
         assert autorename.read_state("s1") == {"user_owned": True}
+
+
+class TestRefreshMode:
+    def test_counter_increments_without_spawn(self, autorename, tmp_path, monkeypatch, capsys):
+        monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
+        write_state(autorename, "s1", {"set_title": "hello-world"})
+        transcript = write_transcript(tmp_path, "s.jsonl", [ai_title("Hello world")])
+        spawned = []
+        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
+        hook_input = {"session_id": "s1", "transcript_path": str(transcript), "session_title": "hello-world"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert spawned == []
+        assert autorename.read_state("s1") == {"set_title": "hello-world", "prompt_count": 1}
+
+    def test_fires_at_n_and_resets_counter(self, autorename, tmp_path, monkeypatch, capsys):
+        monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
+        write_state(autorename, "s1", {"set_title": "hello-world", "prompt_count": 2})
+        transcript = write_transcript(tmp_path, "s.jsonl", [ai_title("Hello world")])
+        spawned = []
+        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
+        hook_input = {"session_id": "s1", "transcript_path": str(transcript), "session_title": "hello-world", "prompt": "now about css grids"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert spawned == ["s1"]
+        assert autorename.read_state("s1") == {
+            "inherited_title": "hello-world",
+            "status": "pending",
+            "transcript_path": str(transcript),
+            "seed_prompt": "now about css grids",
+            "attempts": autorename.TITLE_MAX_ATTEMPTS,
+            "prompt_count": 0,
+        }
+
+    def test_refresh_apply_emits_and_counter_restarts(self, autorename, monkeypatch, capsys):
+        monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
+        write_state(autorename, "s1", {"inherited_title": "hello-world", "status": "done", "pending_title": "Now about CSS grids", "transcript_path": "x", "prompt_count": 0})
+        hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "hello-world"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) == "now-about-css-grids"
+        assert autorename.read_state("s1") == {"set_title": "now-about-css-grids", "prompt_count": 1}
+
+    def test_pending_holds_fire(self, autorename, monkeypatch, capsys):
+        monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
+        write_state(autorename, "s1", {"inherited_title": "hello-world", "status": "pending", "transcript_path": "x", "prompt_count": 5})
+        spawned = []
+        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
+        hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "hello-world"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert spawned == []
+        state = autorename.read_state("s1")
+        assert state["status"] == "pending"
+        assert state["prompt_count"] == 6
+
+    def test_emission_prompt_defers_fire(self, autorename, tmp_path, monkeypatch, capsys):
+        # The hook input's session_title predates this prompt's emission, so firing now would record a stale inherited_title and misread our own emission as a rename
+        monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "1")
+        write_state(autorename, "s1", {"set_title": "hello-world"})
+        transcript = write_transcript(tmp_path, "s.jsonl", [ai_title("Hello world")])
+        spawned = []
+        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
+
+        assert run_main(autorename, monkeypatch, capsys, {"session_id": "s1", "transcript_path": str(transcript), "session_title": ""}) == "hello-world"
+        assert spawned == []
+        assert autorename.read_state("s1") == {"set_title": "hello-world", "prompt_count": 1}
+
+        assert run_main(autorename, monkeypatch, capsys, {"session_id": "s1", "transcript_path": str(transcript), "session_title": "hello-world"}) is None
+        assert spawned == ["s1"]
+        assert autorename.read_state("s1")["status"] == "pending"
+
+    def test_unprovable_start_title_refreshes_immediately(self, autorename, tmp_path, monkeypatch, capsys):
+        monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "10")
+        transcript = write_transcript(tmp_path, "s.jsonl", [user_entry("hello")])
+        spawned = []
+        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
+        hook_input = {"session_id": "s1", "transcript_path": str(transcript), "session_title": "my-fixed-name", "prompt": "hello"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert spawned == ["s1"]
+        state = autorename.read_state("s1")
+        assert state["status"] == "pending"
+        assert state["inherited_title"] == "my-fixed-name"
+        assert state["attempts"] == autorename.TITLE_MAX_ATTEMPTS
+        # The counter step still counts the spawning prompt
+        assert state["prompt_count"] == 1
+
+    def test_failed_refresh_waits_for_next_cycle(self, autorename, monkeypatch, capsys):
+        monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
+        write_state(autorename, "s1", {"inherited_title": "hello-world", "status": "failed", "transcript_path": "x", "attempts": 2, "prompt_count": 1})
+        spawned = []
+        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
+        hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "hello-world"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert spawned == []
+        assert autorename.read_state("s1")["prompt_count"] == 2
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert spawned == ["s1"]
+        assert autorename.read_state("s1")["status"] == "pending"
+
+    def test_user_owned_overridden_at_cycle(self, autorename, tmp_path, monkeypatch, capsys):
+        monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
+        write_state(autorename, "s1", {"user_owned": True, "prompt_count": 2})
+        transcript = write_transcript(tmp_path, "s.jsonl", [ai_title("Hello world")])
+        spawned = []
+        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
+        hook_input = {"session_id": "s1", "transcript_path": str(transcript), "session_title": "renamed-by-user", "prompt": "now about css grids"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert spawned == ["s1"]
+        state = autorename.read_state("s1")
+        assert state["status"] == "pending"
+        assert state["inherited_title"] == "renamed-by-user"
+        assert "user_owned" not in state
 
 
 class TestSanitizeTitle:
