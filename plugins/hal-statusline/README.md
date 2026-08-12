@@ -14,7 +14,7 @@ Then restart Claude Code.
 
 ## Environment Variables
 
-- `HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1`: `1` uses local Ollama model for grammar check; Otherwise, `claude --model haiku -p`.
+- `HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1`: run the grammar check with a local Ollama model instead of `claude --model haiku -p`.
 
 ## Screenshots
 
