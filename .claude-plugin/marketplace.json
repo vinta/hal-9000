@@ -25,7 +25,7 @@
     },
     {
       "name": "hal-session-auto-rename",
-      "description": "Automatically name each session, and optionally re-name it as the conversation drifts",
+      "description": "Automatically name each session, and optionally rename it as the conversation drifts",
       "source": "./plugins/hal-session-auto-rename",
       "author": {
         "name": "Vinta Chen",
