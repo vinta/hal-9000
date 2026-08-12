@@ -1,6 +1,7 @@
 import io
 import json
 import sys
+import time
 
 
 def ai_title(title):
@@ -82,7 +83,9 @@ class TestAdoption:
 
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
         assert spawned == ["successor"]
-        assert autorename.read_state("successor") == {
+        state = autorename.read_state("successor")
+        assert time.time() - state.pop("pending_since") < 5
+        assert state == {
             "inherited_title": "fix-login-bug",
             "status": "pending",
             "transcript_path": str(transcript),
@@ -100,7 +103,7 @@ class TestAdoption:
         assert autorename.read_state("s1") == {"user_owned": True}
 
     def test_pending_state_stays_silent(self, autorename, monkeypatch, capsys):
-        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": "x"})
+        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "pending_since": time.time(), "transcript_path": "x"})
         hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "fix-login-bug"}
 
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
@@ -108,6 +111,31 @@ class TestAdoption:
 
     def test_rename_during_pending_marks_user_owned(self, autorename, monkeypatch, capsys):
         write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": "x"})
+        hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "renamed-by-user"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert autorename.read_state("s1") == {"user_owned": True}
+
+
+class TestPendingLease:
+    def test_stale_pending_reclaims_inherited(self, autorename, monkeypatch, capsys):
+        # The worker died without writing -- crash, kill, or failed spawn -- so nothing will ever consume this pending state
+        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "pending_since": time.time() - 120, "transcript_path": "x"})
+        hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "fix-login-bug"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert autorename.read_state("s1") == {"set_title": "fix-login-bug"}
+
+    def test_missing_pending_since_reclaims_immediately(self, autorename, monkeypatch, capsys):
+        # State files from before the lease existed carry no timestamp -- treating them as stale heals sessions the old code left wedged
+        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": "x"})
+        hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "fix-login-bug"}
+
+        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
+        assert autorename.read_state("s1") == {"set_title": "fix-login-bug"}
+
+    def test_rename_wins_over_stale_pending(self, autorename, monkeypatch, capsys):
+        write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "pending_since": time.time() - 120, "transcript_path": "x"})
         hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "renamed-by-user"}
 
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
@@ -231,7 +259,9 @@ class TestRefreshMode:
 
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
         assert spawned == ["s1"]
-        assert autorename.read_state("s1") == {
+        state = autorename.read_state("s1")
+        assert time.time() - state.pop("pending_since") < 5
+        assert state == {
             "inherited_title": "hello-world",
             "status": "pending",
             "transcript_path": str(transcript),
@@ -247,18 +277,18 @@ class TestRefreshMode:
         assert run_main(autorename, monkeypatch, capsys, hook_input) == "now-about-css-grids"
         assert autorename.read_state("s1") == {"set_title": "now-about-css-grids", "prompt_count": 1}
 
-    def test_pending_holds_fire(self, autorename, monkeypatch, capsys):
+    def test_pending_holds_fire_and_stays_untouched(self, autorename, monkeypatch, capsys):
+        # The counter must not even count while pending: its read-modify-write once buried the worker's `done` under stale pending, wedging the session
         monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
-        write_state(autorename, "s1", {"inherited_title": "hello-world", "status": "pending", "transcript_path": "x", "prompt_count": 5})
+        pending = {"inherited_title": "hello-world", "status": "pending", "pending_since": time.time(), "transcript_path": "x", "prompt_count": 5}
+        write_state(autorename, "s1", pending)
         spawned = []
         monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
         hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "hello-world"}
 
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
         assert spawned == []
-        state = autorename.read_state("s1")
-        assert state["status"] == "pending"
-        assert state["prompt_count"] == 6
+        assert autorename.read_state("s1") == pending
 
     def test_emission_prompt_defers_fire(self, autorename, tmp_path, monkeypatch, capsys):
         # The hook input's session_title predates this prompt's emission, so firing now would record a stale inherited_title and misread our own emission as a rename
@@ -288,8 +318,8 @@ class TestRefreshMode:
         state = autorename.read_state("s1")
         assert state["status"] == "pending"
         assert state["inherited_title"] == "my-fixed-name"
-        # The counter step still counts the spawning prompt
-        assert state["prompt_count"] == 1
+        # The counter skips writes while pending, so the spawning prompt itself is not counted
+        assert state["prompt_count"] == 0
 
     def test_failed_refresh_claim_restarts_counter(self, autorename, monkeypatch, capsys):
         # A failed refresh worker claims the current title, so the next cycle starts counting from scratch -- that recount is the retry
@@ -317,6 +347,60 @@ class TestRefreshMode:
         assert state["status"] == "pending"
         assert state["inherited_title"] == "renamed-by-user"
         assert "user_owned" not in state
+
+    def test_unconsumed_done_defers_spawn(self, autorename, monkeypatch):
+        # A worker `done` landing between main's read and the counter's re-read must not be overwritten by a refresh spawn -- count it and let the next prompt apply the title
+        write_state(autorename, "s1", {"inherited_title": "hello-world", "status": "done", "pending_title": "Now about CSS grids", "transcript_path": "x", "prompt_count": 5})
+        spawned = []
+        monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
+
+        autorename.run_refresh_counter({"session_id": "s1", "transcript_path": "x", "session_title": "hello-world"}, "s1", 3)
+
+        assert spawned == []
+        state = autorename.read_state("s1")
+        assert state["status"] == "done"
+        assert state["pending_title"] == "Now about CSS grids"
+        assert state["prompt_count"] == 6
+
+
+class TestTitleModelFailures:
+    def test_ollama_error_body_returns_none(self, autorename, monkeypatch):
+        class ErrorResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_exc):
+                return False
+
+            def read(self):
+                return b'{"error": "model not found"}'
+
+        monkeypatch.setattr(autorename.urllib.request, "urlopen", lambda *_args, **_kwargs: ErrorResponse())
+
+        assert autorename.run_ollama_title_model("p") is None
+
+    def test_ollama_non_json_body_returns_none(self, autorename, monkeypatch):
+        class BrokenResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_exc):
+                return False
+
+            def read(self):
+                return b"Internal Server Error"
+
+        monkeypatch.setattr(autorename.urllib.request, "urlopen", lambda *_args, **_kwargs: BrokenResponse())
+
+        assert autorename.run_ollama_title_model("p") is None
+
+    def test_claude_missing_binary_returns_none(self, autorename, monkeypatch):
+        def raise_missing(*_args, **_kwargs):
+            raise FileNotFoundError
+
+        monkeypatch.setattr(autorename.subprocess, "run", raise_missing)
+
+        assert autorename.run_claude_title_model("p") is None
 
 
 class TestSanitizeTitle:

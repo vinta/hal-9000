@@ -9,6 +9,7 @@ import shlex
 import subprocess
 import sys
 import tempfile
+import time
 import unicodedata
 import urllib.error
 import urllib.request
@@ -29,6 +30,8 @@ TITLE_MAX_COLUMNS = 48
 STATE_DIR = Path(tempfile.gettempdir()) / "hal-session-auto-rename"
 # Claude Code's own title generators read about this much conversation text, so matching the scale keeps worker titles looking native next to ai-title ones
 TITLE_WINDOW_CHARS = 2000
+# The worker's model calls time out at 30s each, so a pending state older than this has no live writer left -- the worker crashed, was killed, or never spawned
+PENDING_LEASE_SECONDS = 90
 
 # Mirrors the defenses in Claude Code's own title prompt: session content is data, refusals and meta-commentary are explicitly bad outputs
 TITLE_PROMPT = """Generate a concise, sentence-case title (3-7 words) that captures the main topic or goal of this session.
@@ -79,6 +82,8 @@ class SessionState(TypedDict, total=False):
     inherited_title: str
     status: Literal["pending", "done"]
     pending_title: str
+    # Epoch seconds when status went pending, so a later prompt can tell an in-flight worker from one that died without writing
+    pending_since: float
     transcript_path: str
     # The prompt that triggered adoption -- the transcript may not contain it yet when the worker reads, since the hook runs before Claude Code persists the message
     seed_prompt: str
@@ -241,8 +246,9 @@ def run_ollama_title_model(prompt: str) -> str | None:
         with urllib.request.urlopen(req, timeout=30) as resp:  # noqa: S310 urlopen-with-scheme -- fixed localhost scheme
             body_data: OllamaGenerateResponse = json.loads(resp.read())
             return body_data["response"]
-    except (TimeoutError, urllib.error.URLError) as exc:
+    except (TimeoutError, urllib.error.URLError, json.JSONDecodeError, KeyError) as exc:
         # `URLError` wraps the real cause -- its repr distinguishes connection-refused (Ollama down) from a generate timeout (model loading or overloaded)
+        # A decode or key error means Ollama answered with an error body instead of a generation, e.g. the model is not pulled
         logger.debug("ollama title call failed: %r", exc)
         return None
 
@@ -271,6 +277,10 @@ def run_claude_title_model(prompt: str) -> str | None:
         )
     except subprocess.TimeoutExpired:
         logger.debug("claude title call timed out")
+        return None
+    except OSError as exc:
+        # A missing or non-executable `claude` binary must fail the worker cleanly instead of leaving the state pending
+        logger.debug("claude title call failed to launch: %r", exc)
         return None
     if result.returncode != 0:
         logger.debug("claude title call exited %d stderr=%r", result.returncode, result.stderr[:200])
@@ -388,6 +398,11 @@ def handle_existing_state(session_id: str, session_title: str, state: SessionSta
     if status == "pending":
         if session_title and session_title != state.get("inherited_title"):
             mark_user_owned(session_id, f"session_title={session_title!r} renamed while the title worker ran")
+        elif time.time() - state.get("pending_since", 0.0) > PENDING_LEASE_SECONDS:
+            # No writer is coming, so claim the inherited name exactly as the worker failure path does -- refresh mode stays free to regenerate later
+            # A missing pending_since is a state file from before the lease existed: reclaim immediately, healing sessions the old code left wedged
+            logger.debug("session=%s pending lease expired, claiming inherited title %r", session_id, state.get("inherited_title", ""))
+            write_state(session_id, {"set_title": state.get("inherited_title", "")})
         return True
 
     # An empty session_title here would be a dropped emit, not a rename -- fall through and let the ai-title path re-emit
@@ -413,6 +428,7 @@ def spawn_refresh(session_id: str, session_title: str, data: HookInput) -> None:
         {
             "inherited_title": session_title,
             "status": "pending",
+            "pending_since": time.time(),
             "transcript_path": data["transcript_path"],
             "seed_prompt": data.get("prompt", "")[:TITLE_WINDOW_CHARS],
             "prompt_count": 0,
@@ -424,10 +440,14 @@ def spawn_refresh(session_id: str, session_title: str, data: HookInput) -> None:
 def run_refresh_counter(data: HookInput, session_id: str, every: int) -> None:
     # Re-read instead of reusing main's copy: the reactive flow may have rewritten the state, and its wholesale writes drop this counter
     state: SessionState = read_state(session_id) or {}
+    if state.get("status") == "pending":
+        # While pending the worker owns the file: writing our read copy back can bury its `done` under stale pending forever, so skip counting this prompt instead
+        return
     count = state.get("prompt_count", 0) + 1
     # A title emitted this prompt is not in the hook input yet -- firing now would record a stale inherited_title and misread our own emission as a rename on the next prompt
     emitted_this_prompt = bool(state.get("set_title")) and state.get("set_title") != data.get("session_title", "")
-    if count >= every and state.get("status") != "pending" and not emitted_this_prompt:
+    # An unconsumed `done` still holds an unapplied title -- spawning would overwrite it, so only count until the next prompt applies it
+    if count >= every and state.get("status") != "done" and not emitted_this_prompt:
         spawn_refresh(session_id, data.get("session_title", ""), data)
         return
     state["prompt_count"] = count
@@ -481,6 +501,7 @@ def run_reactive_flow(data: HookInput, session_id: str, session_title: str, stat
         {
             "inherited_title": session_title,
             "status": "pending",
+            "pending_since": time.time(),
             "transcript_path": data["transcript_path"],
             "seed_prompt": data.get("prompt", "")[:TITLE_WINDOW_CHARS],
         },
