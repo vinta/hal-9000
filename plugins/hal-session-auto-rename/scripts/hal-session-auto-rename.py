@@ -77,7 +77,7 @@ class SessionState(TypedDict, total=False):
     set_title: str
     # The /clear-carried name observed at adoption time, re-checked at every step so a user /rename always wins over an in-flight worker
     inherited_title: str
-    status: Literal["pending", "done", "failed"]
+    status: Literal["pending", "done"]
     pending_title: str
     transcript_path: str
     # The prompt that triggered adoption -- the transcript may not contain it yet when the worker reads, since the hook runs before Claude Code persists the message
@@ -322,11 +322,13 @@ def run_title_worker(session_id: str) -> None:
     if clean_title:
         current["status"] = "done"
         current["pending_title"] = clean_title
+        logger.debug("session=%s worker done title=%r", session_id, clean_title)
+        write_state(session_id, current)
     else:
-        current["status"] = "failed"
-    # `raw=None` means the backend never returned (its own log line names the cause), distinct from a model that returned empty or unusable text
-    logger.debug("session=%s worker %s title=%r raw=%r", session_id, current["status"], clean_title, None if title is None else title[:200])
-    write_state(session_id, current)
+        # Failure is final: claiming the inherited name keeps later prompts quiet and /clear successors adoptable, and a later user rename still trips the set_title mismatch
+        # `raw=None` means the backend never returned (its own log line names the cause), distinct from a model that returned empty or unusable text
+        logger.debug("session=%s worker failed, claiming inherited title %r raw=%r", session_id, inherited_title, None if title is None else title[:200])
+        write_state(session_id, {"set_title": inherited_title})
 
 
 def emit(title: str) -> None:
@@ -386,9 +388,6 @@ def handle_existing_state(session_id: str, session_title: str, state: SessionSta
     if status == "pending":
         if session_title and session_title != state.get("inherited_title"):
             mark_user_owned(session_id, f"session_title={session_title!r} renamed while the title worker ran")
-        return True
-    if status == "failed":
-        # Failure is final and the inherited name stays -- the log records the cause, and refresh mode's next cycle is the only retry
         return True
 
     # An empty session_title here would be a dropped emit, not a rename -- fall through and let the ai-title path re-emit

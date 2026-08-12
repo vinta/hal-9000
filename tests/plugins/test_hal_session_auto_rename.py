@@ -136,7 +136,8 @@ class TestWorkerApply:
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
         assert autorename.read_state("s1") == {"set_title": "fix-login-bug"}
 
-    def test_failed_state_stays_silent_forever(self, autorename, monkeypatch, capsys):
+    def test_legacy_failed_state_stays_silent(self, autorename, monkeypatch, capsys):
+        # State files written by older versions may still carry status "failed" -- they must fall through without spawning or emitting
         write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "failed", "transcript_path": "x"})
         spawned = []
         monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
@@ -166,14 +167,14 @@ class TestWorker:
         assert state["status"] == "done"
         assert state["pending_title"] == "Debug OAuth token refresh"
 
-    def test_model_failure_writes_failed(self, autorename, tmp_path, monkeypatch):
+    def test_model_failure_claims_inherited_title(self, autorename, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, "s.jsonl", [user_entry("help me debug oauth")])
         write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": str(transcript)})
         monkeypatch.setattr(autorename, "run_title_model", lambda _prompt: None)
 
         autorename.run_title_worker("s1")
 
-        assert autorename.read_state("s1")["status"] == "failed"
+        assert autorename.read_state("s1") == {"set_title": "fix-login-bug"}
 
     def test_empty_transcript_falls_back_to_seed_prompt(self, autorename, tmp_path, monkeypatch):
         # Right after /clear the transcript holds only filtered harness noise, and the adopting prompt may not be flushed yet
@@ -290,20 +291,17 @@ class TestRefreshMode:
         # The counter step still counts the spawning prompt
         assert state["prompt_count"] == 1
 
-    def test_failed_refresh_waits_for_next_cycle(self, autorename, monkeypatch, capsys):
+    def test_failed_refresh_claim_restarts_counter(self, autorename, monkeypatch, capsys):
+        # A failed refresh worker claims the current title, so the next cycle starts counting from scratch -- that recount is the retry
         monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
-        write_state(autorename, "s1", {"inherited_title": "hello-world", "status": "failed", "transcript_path": "x", "prompt_count": 1})
+        write_state(autorename, "s1", {"set_title": "hello-world"})
         spawned = []
         monkeypatch.setattr(autorename, "spawn_title_worker", spawned.append)
         hook_input = {"session_id": "s1", "transcript_path": "x", "session_title": "hello-world"}
 
         assert run_main(autorename, monkeypatch, capsys, hook_input) is None
         assert spawned == []
-        assert autorename.read_state("s1")["prompt_count"] == 2
-
-        assert run_main(autorename, monkeypatch, capsys, hook_input) is None
-        assert spawned == ["s1"]
-        assert autorename.read_state("s1")["status"] == "pending"
+        assert autorename.read_state("s1")["prompt_count"] == 1
 
     def test_user_owned_overridden_at_cycle(self, autorename, tmp_path, monkeypatch, capsys):
         monkeypatch.setenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", "3")
@@ -332,16 +330,14 @@ class TestSanitizeTitle:
     def test_rejects_empty_output(self, autorename):
         assert autorename.sanitize_title("\n\n") == ""
 
-    def test_worker_writes_failed_on_refusal(self, autorename, tmp_path, monkeypatch):
+    def test_worker_claims_inherited_title_on_refusal(self, autorename, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, "s.jsonl", [user_entry("plan a party")])
         write_state(autorename, "s1", {"inherited_title": "fix-login-bug", "status": "pending", "transcript_path": str(transcript)})
         monkeypatch.setattr(autorename, "run_title_model", lambda _prompt: "This doesn't appear to be a coding session. I can only help with software.")
 
         autorename.run_title_worker("s1")
 
-        state = autorename.read_state("s1")
-        assert state["status"] == "failed"
-        assert "pending_title" not in state
+        assert autorename.read_state("s1") == {"set_title": "fix-login-bug"}
 
 
 class TestExtractRecentSessionText:
