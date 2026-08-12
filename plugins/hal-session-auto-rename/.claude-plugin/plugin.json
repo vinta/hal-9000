@@ -1,6 +1,6 @@
 {
   "name": "hal-session-auto-rename",
-  "version": "1.2.3",
+  "version": "1.4.0",
   "description": "Automatically name each session after what its first prompt is about",
   "author": {
     "name": "Vinta Chen",
