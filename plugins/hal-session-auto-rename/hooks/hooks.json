@@ -1,5 +1,5 @@
 {
-  "description": "Automatically name each session, and optionally rename it as the conversation drifts",
+  "description": "Automatically name each session, and optionally rename it as the conversation evolves",
   "hooks": {
     "UserPromptSubmit": [
       {
