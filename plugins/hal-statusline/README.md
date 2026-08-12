@@ -12,9 +12,9 @@ curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-h
 
 Then restart Claude Code.
 
-## Configurations
+## Environment Variables
 
-Set `HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1` in your environment to use a local Ollama model instead of `claude -p`.
+- `HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1`: `1` uses local Ollama model for grammar check; Otherwise, `claude --model haiku -p`.
 
 ## Screenshots
 
