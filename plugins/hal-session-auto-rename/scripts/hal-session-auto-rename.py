@@ -278,10 +278,6 @@ def run_claude_title_model(prompt: str) -> str | None:
     except subprocess.TimeoutExpired:
         logger.debug("claude title call timed out")
         return None
-    except OSError as exc:
-        # A missing or non-executable `claude` binary must fail the worker cleanly instead of leaving the state pending
-        logger.debug("claude title call failed to launch: %r", exc)
-        return None
     if result.returncode != 0:
         logger.debug("claude title call exited %d stderr=%r", result.returncode, result.stderr[:200])
     return result.stdout

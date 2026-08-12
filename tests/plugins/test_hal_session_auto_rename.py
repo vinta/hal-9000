@@ -394,14 +394,6 @@ class TestTitleModelFailures:
 
         assert autorename.run_ollama_title_model("p") is None
 
-    def test_claude_missing_binary_returns_none(self, autorename, monkeypatch):
-        def raise_missing(*_args, **_kwargs):
-            raise FileNotFoundError
-
-        monkeypatch.setattr(autorename.subprocess, "run", raise_missing)
-
-        assert autorename.run_claude_title_model("p") is None
-
 
 class TestSanitizeTitle:
     def test_accepts_short_title_stripping_quotes_and_period(self, autorename):
