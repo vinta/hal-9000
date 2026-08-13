@@ -166,6 +166,7 @@ class HookInput(CommonInput, total=False):
 
 class Config(TypedDict):
     enabled: bool
+    entrypoints: list[str]
     volume: float
     debounce_seconds: float
     replay_suppression_seconds: float
@@ -211,6 +212,7 @@ LOG_MAX_BYTES = 1024 * 1024
 
 DEFAULT_CONFIG: Config = {
     "enabled": True,
+    "entrypoints": ["cli"],
     "volume": 0.5,
     "debounce_seconds": 5,
     "replay_suppression_seconds": 3,
@@ -242,6 +244,11 @@ def _is_main_agent_only(hook_event: str) -> bool:
     except (FileNotFoundError, json.JSONDecodeError, OSError):
         return False
     return any(rule.get("main_agent_only") for rule in hooks_config.get("hooks", {}).get(hook_event, []))
+
+
+def current_entrypoint() -> str:
+    # Every surface but the terminal CLI exports its own value: `claude-desktop`, `claude-vscode`, `remote*`. Claude Code itself treats an unset variable as the CLI
+    return os.environ.get("CLAUDE_CODE_ENTRYPOINT") or "cli"
 
 
 def load_config(config_path: Path) -> Config:
@@ -469,7 +476,11 @@ def main() -> None:
     now = time.time()
 
     config = load_config(CONFIG_PATH)
-    if not config["enabled"]:
+
+    # Check the entrypoint before taking the lock so other surfaces never touch the shared state file, where their events would debounce a later CLI clip
+    entrypoint = current_entrypoint()
+    logger.info("entrypoint=%s", entrypoint)
+    if not config["enabled"] or entrypoint not in config["entrypoints"]:
         return
 
     lock_fd = os.open(str(LOCK_PATH), os.O_CREAT | os.O_RDWR)

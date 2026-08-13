@@ -42,6 +42,25 @@ class TestLoadConfig:
         assert config["enabled"] is True
 
 
+class TestEntrypoint:
+    def test_unset_is_cli(self, hal, monkeypatch):
+        monkeypatch.delenv("CLAUDE_CODE_ENTRYPOINT", raising=False)
+        assert hal.current_entrypoint() == "cli"
+
+    def test_desktop_app(self, hal, monkeypatch):
+        monkeypatch.setenv("CLAUDE_CODE_ENTRYPOINT", "claude-desktop")
+        assert hal.current_entrypoint() == "claude-desktop"
+
+    def test_only_cli_allowed_by_default(self, hal):
+        assert hal.DEFAULT_CONFIG["entrypoints"] == ["cli"]
+
+    def test_config_can_allow_another_surface(self, hal, tmp_path):
+        cfg_path = tmp_path / "config.json"
+        cfg_path.write_text(json.dumps({"entrypoints": ["cli", "claude-desktop"]}))
+        config = hal.load_config(cfg_path)
+        assert config["entrypoints"] == ["cli", "claude-desktop"]
+
+
 class TestLoadState:
     def test_missing_file_returns_empty(self, hal, tmp_path):
         state = hal.load_state(tmp_path / "nonexistent.json")
