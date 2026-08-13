@@ -17,18 +17,6 @@
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/paste-cache"
     },
     {
-      "src": "{{HOME}}/Projects/laughing-man/CLAUDE.local.md",
-      "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md"
-    },
-    {
-      "src": "{{REPO_ROOT}}/CLAUDE.local.md",
-      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/CLAUDE.local.md"
-    },
-    {
-      "src": "{{REPO_ROOT}}/tmp/write-like-me-local/",
-      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/tmp/write-like-me-local/"
-    },
-    {
       "src": "{{HOME}}/.codex/history.jsonl",
       "dest": "{{HOME}}/Dropbox/Apps/Codex/history.jsonl"
     },
@@ -43,6 +31,18 @@
     {
       "src": "{{HOME}}/.codex/memories/",
       "dest": "{{HOME}}/Dropbox/Apps/Codex/memories/"
+    },
+    {
+      "src": "{{REPO_ROOT}}/CLAUDE.local.md",
+      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/CLAUDE.local.md"
+    },
+    {
+      "src": "{{REPO_ROOT}}/tmp/write-like-me-local/",
+      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/tmp/write-like-me-local/"
+    },
+    {
+      "src": "{{HOME}}/Projects/laughing-man/CLAUDE.local.md",
+      "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md"
     },
     {
       "src": "{{HOME}}/Projects/finance/",
@@ -84,6 +84,10 @@
       "dest": "{{HOME}}/.gitignore_global"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.npmrc",
+      "dest": "{{HOME}}/.npmrc"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.config/ghostty/config",
       "dest": "{{HOME}}/.config/ghostty/config"
     },
@@ -94,10 +98,6 @@
     {
       "src": "{{REPO_ROOT}}/dotfiles/.config/uv/uv.toml",
       "dest": "{{HOME}}/.config/uv/uv.toml"
-    },
-    {
-      "src": "{{REPO_ROOT}}/dotfiles/.npmrc",
-      "dest": "{{HOME}}/.npmrc"
     },
     {
       "src": "{{REPO_ROOT}}/dotfiles/.playwright/cli.config.json",
@@ -112,20 +112,20 @@
       "dest": "{{HOME}}/.claude/settings.json"
     },
     {
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/hooks/guard-bash-paths.py",
-      "dest": "{{HOME}}/.claude/hooks/guard-bash-paths.py"
-    },
-    {
-      "src": "{{REPO_ROOT}}/plugins/hal-statusline/hal-statusline.py",
-      "dest": "{{HOME}}/.claude/statusline/hal-statusline.py"
-    },
-    {
       "src": "{{REPO_ROOT}}/dotfiles/.claude/rules/",
       "dest": "{{HOME}}/.claude/rules/"
     },
     {
       "src": "{{REPO_ROOT}}/dotfiles/.claude/output-styles/",
       "dest": "{{HOME}}/.claude/output-styles/"
+    },
+    {
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/hooks/guard-bash-paths.py",
+      "dest": "{{HOME}}/.claude/hooks/guard-bash-paths.py"
+    },
+    {
+      "src": "{{REPO_ROOT}}/plugins/hal-statusline/hal-statusline.py",
+      "dest": "{{HOME}}/.claude/statusline/hal-statusline.py"
     },
     {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md",
