@@ -2,11 +2,11 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Edit|Write",
+        "matcher": "^apply_patch$",
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$(git rev-parse --show-toplevel)/.codex/hooks/sync-dotfiles.sh\" 2>/dev/null || true",
+            "command": "/bin/bash \"$(git rev-parse --show-toplevel)/.codex/hooks/sync-dotfiles.sh\"",
             "timeout": 30,
             "statusMessage": "Syncing dotfiles..."
           }

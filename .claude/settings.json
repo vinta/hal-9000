@@ -8,7 +8,6 @@
             "type": "command",
             "command": "bin/hal sync 2>/dev/null || true",
             "if": "Edit(/dotfiles/hal_dotfiles.json)",
-            "async": true,
             "timeout": 30,
             "statusMessage": "Syncing dotfiles..."
           },
