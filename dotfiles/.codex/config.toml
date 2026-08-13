@@ -1,7 +1,7 @@
 #:schema https://developers.openai.com/codex/config-schema.json
 
 model = "gpt-5.6-sol"
-model_reasoning_effort = "max"
+model_reasoning_effort = "high"
 model_reasoning_summary = "detailed"
 model_verbosity = "high"
 hide_agent_reasoning = false
@@ -127,7 +127,7 @@ trust_level = "trusted"
 disable_on_external_context = true
 
 [desktop]
-followUpQueueMode = "queue"
+followUpQueueMode = "steer"
 preventSleepWhileRunning = true
 dictationDictionary = []
 dock-icon-preference = "app-default"
