@@ -16,3 +16,10 @@
 - When replacing an implementation, remove the old path; add compatibility shims only when explicitly required.
 - Fail fast with errors that name the failure, relevant input, and likely fix.
 - Comment only to explain intent or non-obvious constraints.
+
+## Long-Running Tools
+
+- For empty `write_stdin` polls and `functions.wait`, use the longest yield allowed by higher-priority instructions; prefer `300000` ms when no intermediate output is needed, but shorten it to preserve the active user-update cadence.
+- Keep non-empty `write_stdin` calls that send interactive input responsive instead of applying the long polling wait.
+- When `functions.exec` awaits nested tools, set its outer `@exec yield_time_ms` at least `30000` ms longer than the longest nested wait so the outer cell does not yield first.
+- Polling waits return early when work completes; do not wake merely to report that work is still running.
