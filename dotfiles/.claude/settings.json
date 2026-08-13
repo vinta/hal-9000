@@ -198,6 +198,6 @@
   "teammateMode": "auto",
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
-  "agentPushNotifEnabled": true,
+  "agentPushNotifEnabled": false,
   "skipAutoPermissionPrompt": true
 }
