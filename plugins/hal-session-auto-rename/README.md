@@ -15,7 +15,7 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual. The session title appears on your **second** prompt, as long as that prompt is not queued (queued prompts never fire `UserPromptSubmit`, so they cannot set the title).
+Just use Claude Code as usual. The session title appears on your **second** prompt, as long as that prompt is not queued (queued prompts never fire `UserPromptSubmit`, so they cannot set the title) and your first prompt was not a slash command.
 
 ## Environment Variables
 
