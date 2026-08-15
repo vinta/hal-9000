@@ -8,7 +8,6 @@ allowed-tools:
   - Bash(which claude)
   - Bash(git diff:*)
   - Read(~/.claude/**)
-  - AskUserQuestion
 ---
 
 # Audit Claude Code Settings

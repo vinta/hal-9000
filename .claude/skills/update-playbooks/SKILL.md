@@ -14,7 +14,6 @@ allowed-tools:
   - Bash(curl:*)
   - Bash(make lint:*)
   - Bash(ansible-galaxy collection list:*)
-  - Skill(commit)
 metadata:
   internal: true
 ---

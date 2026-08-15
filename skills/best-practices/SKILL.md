@@ -3,12 +3,10 @@ name: best-practices
 description: Use when about to choose, configure, or refine a tool, library, config format, API pattern, or project setup, or before proposing a design of your own — research current guidance, pitfalls, and prior art first; already knowing an approach, or assuming no prior art exists, is not an exemption. Also use when the user asks about best practices, gotchas, or recommended patterns, or says "search online"
 user-invocable: true
 allowed-tools:
-  - Agent
   - WebSearch
   - Bash(ctx7:*)
   - Bash(npx ctx7:*)
   - Bash(npx ctx7@latest:*)
-  - Skill(find-docs)
 ---
 
 # Best Practices

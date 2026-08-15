@@ -1,6 +1,6 @@
 ---
 name: update-allowed-tools
-description: Use when creating or editing a skill that uses Bash commands, external tools, or skill invocations and the allowed-tools frontmatter may be incomplete
+description: Use when creating or editing a skill that uses Bash commands, file writes, or external tools and the allowed-tools frontmatter may be incomplete or carry entries that grant nothing
 user-invocable: true
 context: fork
 model: haiku
@@ -17,7 +17,9 @@ Invoking this skill IS the request. If the user message looks empty, that is nor
 
 # Overview
 
-Analyzes a skill's full content, SKILL.md and any sibling files in the same directory, to find tools it references or requires, then compares against the skill's `allowed-tools` frontmatter to find missing entries.
+Analyzes a skill's full content, SKILL.md and any sibling files in the same directory, to find tools it references or requires, then compares against the skill's `allowed-tools` frontmatter to find missing entries and entries that grant nothing.
+
+`allowed-tools` is permission mechanics only: an entry earns its place by removing a permission prompt the skill would otherwise hit. It is not a manifest of the tools the skill uses.
 
 ## Usage
 
@@ -35,11 +37,10 @@ Analyzes a skill's full content, SKILL.md and any sibling files in the same dire
 3. **Extract declared allowed-tools**: Parse all entries under `allowed-tools:` in the frontmatter.
 
 4. **Scan all skill content** (SKILL.md body + sibling files) for tool usage. Look for:
-   - Explicit tool names: e.g., `Read`, `Write`, `Edit`, `Bash`, `WebFetch`, `WebSearch`, `Task`, `AskUserQuestion`, `Skill`, etc.
+   - Explicit tool names that prompt by default: e.g., `Write`, `Edit`, `Bash`, `WebFetch`, `WebSearch`, and `mcp__*` tools.
    - Bash command patterns: e.g., `git diff`, `git commit`, `make`, `npm`, `docker`, `python`, `curl`, etc.
    - For Bash commands found, the required allowed-tool format is `Bash(<command>:*)` (e.g., `git stash push` needs `Bash(git stash:*)`)
    - For file tools with path patterns (Read, Write, Edit), note the paths referenced (e.g., `/tmp/` needs `Read(//tmp/**)`)
-   - Skill invocations: e.g., `commit`, `Use the commit skill`, `Skill(commit)`. The required allowed-tool format is `Skill(<name>)` (e.g., `commit` needs `Skill(commit)`)
 
 5. **Compare**: For each tool detected in the body, check if it's covered by an entry in `allowed-tools`. Rules:
    - `Glob`, `Grep`, and `Read` are permission-free within the project directory. Only add read rules for files **outside** the project (e.g., `Read(//tmp/**)`).
@@ -47,7 +48,8 @@ Analyzes a skill's full content, SKILL.md and any sibling files in the same dire
    - `Bash` commands always need explicit `Bash(<command>:*)` entries.
    - A Bash pattern covers subcommands (e.g., `Bash(git stash:*)` covers `git stash push`).
    - Exact match counts as covered (e.g., `WebSearch` matches `WebSearch`).
+   - `Skill(...)`, `AskUserQuestion`, and `Agent` entries grant nothing: skill invocation, asking the user, and spawning subagents never prompt by default, and where a user has gated them with ask/deny rules, a grant cannot override those rules. Never add these; remove any already present.
 
-6. **Update the skill file**: For any missing tools found, add them to the `allowed-tools` list in the skill's YAML frontmatter using the Edit tool. Then report what was added.
+6. **Update the skill file**: Add missing entries to the `allowed-tools` list in the skill's YAML frontmatter and remove entries that grant nothing, using the Edit tool. If the list ends up empty, delete the `allowed-tools` field. Then report what was added and removed.
 
 7. **Validate**: Re-read the updated file to confirm YAML frontmatter remains syntactically valid (proper indentation, no duplicate entries, correct list format).

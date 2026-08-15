@@ -4,7 +4,6 @@ description: Use when refactoring a user-level or project-level CLAUDE.md for pr
 argument-hint: [user | project]
 user-invocable: true
 allowed-tools:
-  - AskUserQuestion
   - WebFetch
   - Edit(~/.claude/CLAUDE.md)
   - Edit(~/.claude/rules/**)

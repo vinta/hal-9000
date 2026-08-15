@@ -4,11 +4,7 @@ description: Use when the user asks for a blindspot pass or to find their unknow
 argument-hint: "[unfamiliar topic, tool, or codebase area]"
 user-invocable: true
 allowed-tools:
-  - AskUserQuestion
-  - Agent
   - WebSearch
-  - Skill(find-docs)
-  - Skill(best-practices)
 ---
 
 # Blindspot
