@@ -1,6 +1,6 @@
 ---
 name: blindspot
-description: Use when the user asks for a blindspot pass or to find their unknown unknowns, or signals unfamiliarity with a domain, tool, or codebase area ("never used X", "first time doing Y", "no idea where to start", "don't know what I don't know") before working there. Turns unknown unknowns into known unknowns so the user can prompt well
+description: Use when the user asks for a blindspot pass or to find their unknown unknowns, or signals unfamiliarity with a domain, tool, or codebase area ("never used X", "first time doing Y", "no idea where to start", "don't know what I don't know") before working there. Interviews the user with recon-fed questions, turning unknown unknowns into known unknowns and naming silent assumptions so they can prompt well
 argument-hint: "[unfamiliar topic, tool, or codebase area]"
 user-invocable: true
 allowed-tools:
@@ -13,43 +13,49 @@ allowed-tools:
 
 # Blindspot
 
-The user is about to work in territory they don't know. They may not know what questions to ask, what good looks like, what prior art exists, or which potholes are waiting. Survey the territory for them, then hand back a map they can prompt with.
+The user is about to work in territory they don't know. Two kinds of blindness live there: unknown unknowns (questions they don't know exist) and unknown knowns (assumptions too obvious to write down, and things they're sure of that are wrong). Convert the first into known unknowns, name the second, then hand back a map they can prompt with.
 
-This is not a tutorial (teach the minimum needed to prompt well) and not a plan (that comes after, from the sharpened prompt).
+Boundaries: best-practices returns recommendations — this skill returns questions. Grilling stress-tests decisions the user can already defend — this skill maps territory where they can't answer yet. Neither a tutorial nor a plan.
 
 ## Workflow
 
-### 1. Calibrate
+### 1. Surface the framing
 
-If the invocation doesn't already say, ask one `AskUserQuestion` round covering: what they're trying to do, and their familiarity with the involved domain, tool, or codebase area. Skip this step entirely when their prompt already answers both. Never stretch calibration into a full interview (that's the grilling skill's job).
+Before asking anything, state as bullets: the assumptions the request takes for granted, and the missing information that would change the approach. This names the user's unknown knowns up front. If their goal or familiarity is still unclear, fold one calibration question into the first interview round.
 
-### 2. Survey the territory
+### 2. Recon
 
-Ground everything in current sources, not training data:
+Facts are your job, never the user's. Sweep before asking:
 
-- **Repo prior art**: search the codebase for existing patterns, conventions, and adjacent solutions. Use an Explore agent for broad sweeps.
-- **Tools and libraries**: invoke `find-docs` for current APIs and config. Add a `WebSearch` for pitfalls ("X gotchas", "X common mistakes"): pitfalls live in issue threads and post-mortems, not getting-started docs. For terrain dominated by one tool's setup choices, delegate the sweep to the `best-practices` skill instead. It covers both halves with parallel subagents.
-- **Non-code domains** (design, audio, infra concepts): `WebSearch` for how practitioners judge quality in this domain.
+- **Repo**: Explore agent for existing patterns, conventions, and adjacent solutions.
+- **Tools and domain**: `find-docs` for current APIs and config; `WebSearch` for pitfalls ("X gotchas", "X common mistakes") — pitfalls live in issue threads and post-mortems, not getting-started docs.
 
-### 3. Terrain briefing
+Recon output is question fuel, not findings: each item becomes a question only the user can answer, an assumption to name, or nothing. A user who wants recommendations instead of questions wants the best-practices skill.
 
-Report compactly, in this order:
+### 3. Interview
 
-1. **Core concepts and vocabulary**: the 3-7 terms needed to speak the domain, one line each
-2. **What good looks like**: how quality is judged here, so the user can recognize it when they see it
-3. **Potholes**: the mistakes that actually bite, each with its consequence
-4. **Prior art**: what already exists in the repo or the user's setup that this work should build on
-5. **Decisions now visible**: the choices the user didn't know they'd need to make, phrased as concrete questions
+`AskUserQuestion` rounds, up to 4 questions each, 2–3 rounds total.
+
+- Ask where importance is high and evidence is low: architecture-changers and behavior-definers recon couldn't settle. Skip polish.
+- Anchor in the user's concrete past ("last time you did X, what happened?"), not hypotheticals — people speculate confidently and wrongly.
+- Give each option a trade-off description; put your recommended option first, labeled "(Recommended)". The built-in "Other" is the escape hatch.
+- Include one premortem question phrased in past tense — "it's three months later and this failed: what broke?" — past tense recruits prospective hindsight; "what could go wrong" is measurably weaker.
+- "I don't know" is a first-class answer: record it as a known unknown and move on.
+
+Recompute between rounds — answers unlock questions that depended on them. Stop at saturation (a round surfaces nothing new) or when the remaining unknowns are cheaper to discover while implementing. Close the final round with: "what are you sure of here that might be wrong?" and "what haven't I asked about that worries you?"
 
 ### 4. Hand off
 
 End with:
 
-- A sharpened prompt draft the user could send, with the newly visible decisions resolved where the survey answered them and listed as open questions where it didn't
-- Offers, not auto-runs: resolve the open decisions now via `AskUserQuestion`, stress-test with the grilling skill, prototype, or enter plan mode
+1. **Territory map**: decisions made (from answers); named assumptions — every open decision this skill resolved by guessing gets its own bullet; known unknowns, including every recorded "I don't know"; recon sources cited so the user can dig deeper.
+2. **Sharpened prompt draft** the user could send: answered decisions resolved inline, known unknowns listed as open questions.
+3. **Offers, not auto-runs**: stress-test the now-visible decisions with the grilling skill, get recommendations via best-practices, or enter plan mode.
+
+Every interview answer must land in the map or the prompt draft — an answer that shapes nothing was a wasted question.
 
 ## Constraints
 
-- Teach to prompt, not to master. If the briefing exceeds roughly one page, cut.
-- Cite what was surveyed (files, docs, sources) so the user can dig deeper.
-- Never skip the survey and answer from training data. A stale briefing is worse than none: it creates false known-knowns.
+- Ask only what recon can't answer: a question the codebase or docs already answer wastes a round and erodes trust.
+- Teach to prompt, not to master. If the hand-off exceeds roughly one page, cut.
+- Ground every question in recon, not training data: a stale question plants false known-knowns.

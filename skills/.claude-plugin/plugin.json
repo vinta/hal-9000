@@ -1,6 +1,6 @@
 {
   "name": "hal-skills",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Skills, subagents, MCP servers, and LSP servers",
   "skills": [
     "./commit",
