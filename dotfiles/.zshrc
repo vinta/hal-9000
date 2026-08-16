@@ -136,7 +136,7 @@ alias cc="claude"
 alias ccf="claude --model fable --effort max"
 alias ccs="claude --model sonnet --effort high"
 alias ccy="claude --dangerously-skip-permissions"
-ccp() { claude --model sonnet --effort high --no-chrome --no-session-persistence -p "$*"; }
+ccp() { claude --model sonnet --effort high --safe-mode --no-session-persistence --no-chrome -p "$*"; }
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
 export HOMEBREW_NO_ANALYTICS=1
