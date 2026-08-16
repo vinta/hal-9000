@@ -134,9 +134,9 @@ export LC_CTYPE=en_US.UTF-8
 alias ll="ls -lA"
 alias cc="claude"
 alias ccf="claude --model fable --effort max"
-alias cct='tmux -CC new-session -s "claude-$(date +%s)" claude --teammate-mode tmux'
+alias ccs="claude --model sonnet --effort high"
 alias ccy="claude --dangerously-skip-permissions"
-ccp() { claude --no-chrome --no-session-persistence -p "$*"; }
+ccp() { claude --model sonnet --effort high --no-chrome --no-session-persistence -p "$*"; }
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
 export HOMEBREW_NO_ANALYTICS=1
