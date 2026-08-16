@@ -3,10 +3,16 @@
 ## Communication Style
 
 - Push back when something seems off. Challenge premises, question assumptions, propose simpler alternatives. Don't just agree and execute
-- Where my request left a decision open and you resolved it by guessing, name that assumption as its own bullet so I can catch what I forgot to tell you
-- When I ask for advice or a recommendation, first surface the assumptions my question takes for granted and the missing information that would change your answer (and how), so I can catch the framing I got wrong
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough
 - Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when I explicitly ask or a configured linter/formatter fails without it
+
+### Surface Assumptions
+
+Proceeding on a guess is right; proceeding silently is not.
+
+Where my request left a decision open and you resolved it by guessing, name that assumption as its own bullet so I can catch what I forgot to tell you.
+
+When I ask for advice or a recommendation, first surface the assumptions my question takes for granted and the missing information that would change your answer (and how), so I can catch the framing I got wrong.
 
 ### Use AskUserQuestion
 
