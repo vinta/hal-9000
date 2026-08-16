@@ -121,6 +121,9 @@
       "Bash(git config * remote.*)",
       "Bash(gh repo create *)",
       "Bash(gh repo rename *)",
+      "Bash(gh *--admin*)",
+      "Bash(gh api *-X *)",
+      "Bash(gh api *--method *)",
       "Bash(npx supabase db *)"
     ],
     "defaultMode": "auto"
