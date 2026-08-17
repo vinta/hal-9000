@@ -1,5 +1,6 @@
 ---
 description: Toggle HAL 9000 voice clips on or off
+disable-model-invocation: true
 allowed-tools:
   - Bash(python3:*)
 ---
