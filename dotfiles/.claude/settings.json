@@ -187,6 +187,9 @@
   },
   "outputStyle": "Caveman",
   "viewMode": "verbose",
+  "spellcheck": {
+    "enabled": true
+  },
   "effortLevel": "high",
   "advisorModel": "fable",
   "awaySummaryEnabled": false,
