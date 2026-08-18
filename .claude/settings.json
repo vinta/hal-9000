@@ -13,14 +13,14 @@
           },
           {
             "type": "command",
-            "command": "bash .claude/hooks/lint-on-edit.sh lint-python",
+            "command": "make lint-python >&2 || exit 2",
             "if": "Edit(**/*.py)",
             "timeout": 30,
             "statusMessage": "Linting Python code..."
           },
           {
             "type": "command",
-            "command": "bash .claude/hooks/lint-on-edit.sh lint-ansible",
+            "command": "make lint-ansible >&2 || exit 2",
             "if": "Edit(/playbooks/**)",
             "timeout": 30,
             "statusMessage": "Linting Ansible playbooks..."
