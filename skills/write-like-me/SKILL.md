@@ -1,6 +1,6 @@
 ---
 name: write-like-me
-description: Use when writing English prose the user will sign — READMEs, blog posts, project docs, code comments, issues, PRs, emails — drafted or rewritten in their own voice at native fluency
+description: Use when writing English prose the user will sign — READMEs, blog posts, docs, code comments, issues, PRs, emails — drafted or rewritten in their own voice at native fluency. Prose added mid-task while doing other work, and text you draft for the user to approve, are not exemptions
 argument-hint: [text, file, or pointer to draft or rewrite]
 user-invocable: true
 model: claude-opus-4-6
