@@ -1,7 +1,7 @@
 {
   "name": "hal-skills",
   "version": "2.3.0",
-  "description": "Skills, subagents, and LSP servers",
+  "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
     "./best-practices",

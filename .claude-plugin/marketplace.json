@@ -39,7 +39,7 @@
     },
     {
       "name": "hal-skills",
-      "description": "Skills, subagents, and LSP servers",
+      "description": "Opinionated agentic skills that do the boring parts for you",
       "source": "./skills",
       "skills": [
         "./commit",
