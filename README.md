@@ -41,7 +41,7 @@ Tool configs hardened against supply chain attacks and tuned for better DX:
 
 ### CLAUDE.md / AGENTS.md
 
-Opinionated yet meticulously crafted global instructions for agentic coding:
+Dogmatic yet meticulously crafted global instructions for agentic coding:
 
 - [`~/.claude/CLAUDE.md`](dotfiles/.claude/CLAUDE.md)
 - [`~/.codex/AGENTS.md`](dotfiles/.codex/AGENTS.md)
