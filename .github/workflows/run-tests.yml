@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        python-version: ["3.13", "3.14"]
+        python-version: ["3.14"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -58,6 +58,7 @@ jobs:
             bin/hal.py \
             dotfiles/.claude/hooks/guard-bash-paths.py \
             plugins/hal-statusline/hal-statusline.py \
+            plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py \
             plugins/hal-voice/scripts/hal-voice.py
 
       - name: Check scripts still import under system python3
@@ -71,6 +72,7 @@ jobs:
               "bin/hal.py",
               "dotfiles/.claude/hooks/guard-bash-paths.py",
               "plugins/hal-statusline/hal-statusline.py",
+              "plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py",
               "plugins/hal-voice/scripts/hal-voice.py",
           ]
 
@@ -90,3 +92,14 @@ jobs:
 
           sys.exit(1 if failed else 0)
           PY
+
+      # py_compile and the import check only cover syntax and module level, so a 3.10+ stdlib call inside a function would pass both
+      - name: Check scripts avoid stdlib APIs newer than 3.9
+        run: |
+          pip install vermin==1.8.0
+          vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --exclude 'typing.NotRequired' \
+            bin/hal.py \
+            dotfiles/.claude/hooks/guard-bash-paths.py \
+            plugins/hal-statusline/hal-statusline.py \
+            plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py \
+            plugins/hal-voice/scripts/hal-voice.py
