@@ -33,13 +33,12 @@ only-binary = [":all:"]
 [tool.ruff]
 line-length = 200
 
-# These run under whatever `python3` resolves to, which on a stock macOS is 3.9, so they cannot follow the project floor
+# Everything under these directories ships to other machines and runs under whatever `python3` they have, which on a stock macOS is 3.9
 [tool.ruff.per-file-target-version]
-"bin/hal.py" = "py39"
-"dotfiles/.claude/hooks/guard-bash-paths.py" = "py39"
-"plugins/hal-statusline/hal-statusline.py" = "py39"
-"plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py" = "py39"
-"plugins/hal-voice/scripts/hal-voice.py" = "py39"
+"bin/**/*.py" = "py39"
+"dotfiles/**/*.py" = "py39"
+"plugins/**/*.py" = "py39"
+"skills/**/*.py" = "py39"
 
 [tool.ruff.lint]
 select = ["ALL"]

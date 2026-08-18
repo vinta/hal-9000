@@ -38,7 +38,7 @@ jobs:
       - name: Run tests
         run: make test
 
-  system-python-compatibility:
+  system-python-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -52,54 +52,14 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Check scripts still parse under system python3
+      # The project itself requires 3.14, so this job installs pytest directly instead of using uv. pytest 9 dropped 3.9
+      - name: Run tests under system python3
         run: |
-          python -m py_compile \
-            bin/hal.py \
-            dotfiles/.claude/hooks/guard-bash-paths.py \
-            plugins/hal-statusline/hal-statusline.py \
-            plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py \
-            plugins/hal-voice/scripts/hal-voice.py
+          pip install pytest==8.4.2
+          pytest tests/ -q
 
-      - name: Check scripts still import under system python3
-        run: |
-          python - <<'PY'
-          import importlib.machinery
-          import importlib.util
-          import sys
-
-          SCRIPTS = [
-              "bin/hal.py",
-              "dotfiles/.claude/hooks/guard-bash-paths.py",
-              "plugins/hal-statusline/hal-statusline.py",
-              "plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py",
-              "plugins/hal-voice/scripts/hal-voice.py",
-          ]
-
-          failed = []
-          for path in SCRIPTS:
-              name = path.rsplit("/", 1)[-1].replace("-", "_").replace(".py", "")
-              loader = importlib.machinery.SourceFileLoader(name, path)
-              spec = importlib.util.spec_from_loader(name, loader)
-              module = importlib.util.module_from_spec(spec)
-              try:
-                  spec.loader.exec_module(module)
-              except Exception as exc:
-                  failed.append(path)
-                  print("FAIL {}: {}: {}".format(path, type(exc).__name__, exc))
-              else:
-                  print("ok   {}".format(path))
-
-          sys.exit(1 if failed else 0)
-          PY
-
-      # py_compile and the import check only cover syntax and module level, so a 3.10+ stdlib call inside a function would pass both
+      # The tests only execute the code paths they cover, so a 3.10+ stdlib call on an uncovered branch would pass them
       - name: Check scripts avoid stdlib APIs newer than 3.9
         run: |
           pip install vermin==1.8.0
-          vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --exclude 'typing.NotRequired' \
-            bin/hal.py \
-            dotfiles/.claude/hooks/guard-bash-paths.py \
-            plugins/hal-statusline/hal-statusline.py \
-            plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py \
-            plugins/hal-voice/scripts/hal-voice.py
+          vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --hidden --exclude 'typing.NotRequired' bin/ dotfiles/ plugins/ skills/

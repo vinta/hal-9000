@@ -12,7 +12,6 @@ paths:
 - Version specifiers in `pyproject.toml`: use `>=` floors (uv's `add-bounds` default)
   - Exact reproducibility lives in `uv.lock` + `uv sync --locked`, so `==` pins in `pyproject.toml` would only duplicate the lockfile and block `uv lock --upgrade`
   - Pin exact `==` versions only where no lockfile exists (standalone scripts, requirements.txt)
-- Scripts run by system `python3` must work on Python 3.9 — add `from __future__ import annotations` and avoid 3.10+ stdlib APIs
 - Use `uv` for project and environment management
   - `uv run` instead of `python3` — picks up the project venv and dependencies automatically
   - Projects with a `[build-system]` need `no-build = false` in `[tool.uv]` — the global `no-build = true` in `~/.config/uv/uv.toml` merges down and blocks the editable install

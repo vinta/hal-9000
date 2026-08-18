@@ -24,12 +24,7 @@ lint-python: ## Run ruff formatter check, linter, type checker, and system pytho
 	uv run ruff format --check .
 	uv run ruff check .
 	uv run ty check
-	uv run vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --exclude 'typing.NotRequired' \
-		bin/hal.py \
-		dotfiles/.claude/hooks/guard-bash-paths.py \
-		plugins/hal-statusline/hal-statusline.py \
-		plugins/hal-session-auto-rename/scripts/hal-session-auto-rename.py \
-		plugins/hal-voice/scripts/hal-voice.py
+	uv run vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --hidden --exclude 'typing.NotRequired' bin/ dotfiles/ plugins/ skills/
 
 lint-ansible: ## Run ansible-lint and a playbook syntax check
 	uv run ansible-lint playbooks/
