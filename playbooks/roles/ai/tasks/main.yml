@@ -31,6 +31,13 @@
     executable: /bin/bash
   changed_when: false
 
+# http://aspell.net/
+- name: Install spell checker
+  homebrew:
+    name:
+      - aspell
+    state: latest
+
 - name: Ensure AI environment is sourced in .zshrc
   lineinfile:
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
