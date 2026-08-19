@@ -1,9 +1,13 @@
-# simple wildcards like *.log already match recursively,
-# you only need **/ when matching a rule not starts with *
+# simple wildcards like *.log already match recursively, you only need **/ when matching a rule not starts with *
 **/.DS_Store
 
+# temp
+tmp/
+
+# local
+*.local.*
+
 # secrets
-**/*.local.*
 *.key
 *.pem
 **/.env*
@@ -13,12 +17,7 @@
 *.log
 *_history
 
-# claude code
-.superpowers/
-.gstack/
-
-# scratch scripts, anchored to the repo root
-/tmp/
-
-# playwright
+# agents
 .playwright-cli/
+.scratch/
+.superpowers/
