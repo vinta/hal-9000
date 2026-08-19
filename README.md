@@ -56,6 +56,7 @@ Agentic skills sharpened by daily use:
 
 - [commit](skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
 - [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
+- [brainstorm](skills/brainstorm/SKILL.md): Generates one-line ideas from 6 independent perspectives, a quarter deliberately absurd
 - [blindspot](skills/blindspot/SKILL.md): Surfaces your unknown unknowns before you work in an unfamiliar domain
 - [simple-english](skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
 - [write-like-me](skills/write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
