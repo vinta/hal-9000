@@ -96,6 +96,9 @@ enabled = true
 [plugins."browser@openai-bundled"]
 enabled = true
 
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
 [projects."/usr/local/hal-9000"]
 trust_level = "trusted"
 
@@ -136,7 +139,4 @@ usePointerCursors = true
 enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
 conversationDetailMode = "STEPS_COMMANDS"
 
-[hooks.state]
 
-[hooks.state."/usr/local/hal-9000/.codex/hooks.json:post_tool_use:0:0"]
-trusted_hash = "sha256:a9645d94b70aa40e726714ac5fdc9f0694f1652a94b59843a33021d33b08ac5a"
