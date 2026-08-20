@@ -104,6 +104,13 @@
     ],
     "ask": [
       "Bash(open *)",
+      "Bash(curl *-d *)",
+      "Bash(curl *--data*)",
+      "Bash(curl *--json *)",
+      "Bash(curl *-F *)",
+      "Bash(curl *--form *)",
+      "Bash(curl *-T *)",
+      "Bash(curl *--upload-file *)",
       "Bash(brew install *)",
       "Bash(pip install *)",
       "Bash(uv pip install *)",
