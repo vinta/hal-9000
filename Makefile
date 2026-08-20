@@ -63,3 +63,6 @@ audit-detect-secrets-report: ## Interactively review detected secrets
 hal-completion: ## Regenerate zsh completion script for hal
 	uv run python scripts/generate-completion.py
 	hal sync
+
+aspell-dicts: ## Rebuild aspell dictionaries from cspell word lists for Claude Code spellcheck
+	uv run python scripts/generate-aspell-dicts.py

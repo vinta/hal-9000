@@ -104,6 +104,10 @@
       "dest": "{{HOME}}/.playwright/cli.config.json"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.aspell.en.pws",
+      "dest": "{{HOME}}/.aspell.en.pws"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.claude/CLAUDE.md",
       "dest": "{{HOME}}/.claude/CLAUDE.md"
     },
