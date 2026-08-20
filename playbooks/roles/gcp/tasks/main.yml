@@ -22,17 +22,16 @@
   register: gcp_command_result
   changed_when: "'All components are up to date' not in gcp_command_result.stderr"
 
-# Tracks the Python range gcloud supports, which is not the machine's default Python. Minor
-# version only: uv links a venv built from an exact patch version to that patch's directory,
+# Minor version only: uv links a venv built from an exact patch version to that patch's directory,
 # which `uv python upgrade` leaves behind, while `3.14` follows the symlink uv repoints on upgrade.
 # https://docs.cloud.google.com/sdk/docs/install
-- name: Create the virtualenv gcloud runs on
+- name: Create gcloud venv with Python 3.14
   command: uv venv --python 3.14 {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv"
 
 # https://docs.cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
-- name: Install NumPy into the gcloud virtualenv
+- name: Install NumPy in gcloud venv
   command: uv pip install --python {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv/bin/python numpy
   register: gcp_command_result
   changed_when: "'Installed' in gcp_command_result.stderr"
