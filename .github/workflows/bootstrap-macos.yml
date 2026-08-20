@@ -80,6 +80,7 @@ jobs:
             aws --version
             eksctl version
             gcloud --version
+            "$CLOUDSDK_PYTHON" -c "import numpy; print(numpy.__version__)"
             claude --version
             codex --version
             ctx7 --version
