@@ -61,5 +61,5 @@ audit-detect-secrets-report: ## Interactively review detected secrets
 	uv run detect-secrets audit .secrets.baseline
 
 hal-completion: ## Regenerate zsh completion script for hal
-	uv run python scripts/generate-completion.py
+	uv run python scripts/generate-zsh-completion.py
 	hal sync
