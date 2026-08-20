@@ -82,7 +82,6 @@ jobs:
             gcloud --version
             claude --version
             codex --version
-            aspell --version
             ctx7 --version
           '
 
