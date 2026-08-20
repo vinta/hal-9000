@@ -43,7 +43,7 @@ class TestCheck:
 class TestHookProcessContract:
     """End-to-end cases pinning the stdin/stdout hook protocol."""
 
-    def test_denied_command_emits_deny_json(self):
+    def test_denied_command_emits_ask_json(self):
         hook_input = json.dumps({"tool_input": {"command": "cat ~/.ssh/id_rsa"}})
         result = subprocess.run(  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
             [sys.executable, str(GUARD_PATH)],
@@ -53,7 +53,7 @@ class TestHookProcessContract:
         )
         assert result.returncode == 0
         output = json.loads(result.stdout)
-        assert output["hookSpecificOutput"]["permissionDecision"] == "deny"
+        assert output["hookSpecificOutput"]["permissionDecision"] == "ask"
         assert output["hookSpecificOutput"]["hookEventName"] == "PreToolUse"
 
     def test_benign_command_emits_nothing(self):
