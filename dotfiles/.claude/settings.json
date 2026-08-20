@@ -103,8 +103,6 @@
       "Bash(crontab *)"
     ],
     "ask": [
-      "Bash(curl *)",
-      "Bash(wget *)",
       "Bash(open *)",
       "Bash(* install *)",
       "Bash(bun add *)",
@@ -144,6 +142,10 @@
           {
             "type": "command",
             "command": "python3 ~/.claude/hooks/guard-bash-paths.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/hooks/guard-network-egress.py"
           }
         ]
       }
