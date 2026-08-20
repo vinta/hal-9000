@@ -4,3 +4,4 @@
 [discovery_one:vars]
 REPO_ROOT=/usr/local/hal-9000
 REPO_URL=https://github.com/vinta/hal-9000
+PYTHON_VERSION=3.14.6

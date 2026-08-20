@@ -23,8 +23,11 @@
   changed_when: "'All components are up to date' not in gcp_command_result.stderr"
 
 # https://docs.cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
+# Minor version only: uv links a venv built from an exact patch version to that patch's
+# directory, which `uv python upgrade` leaves behind, while `3.14` follows the symlink uv
+# repoints on upgrade.
 - name: Create the virtualenv gcloud runs on
-  command: uv venv --python 3.14 {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv
+  command: uv venv --python {{ PYTHON_VERSION.split('.')[:2] | join('.') }} {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv"
 
