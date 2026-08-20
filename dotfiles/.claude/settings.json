@@ -104,11 +104,16 @@
     ],
     "ask": [
       "Bash(open *)",
-      "Bash(* install *)",
-      "Bash(bun add *)",
+      "Bash(brew install *)",
+      "Bash(pip install *)",
+      "Bash(uv pip install *)",
+      "Bash(uv tool install *)",
+      "Bash(uv add *)",
+      "Bash(npm install *)",
+      "Bash(npm i *)",
       "Bash(yarn add *)",
       "Bash(pnpm add *)",
-      "Bash(uv add *)",
+      "Bash(bun add *)",
       "Bash(git push *)",
       "Bash(git remote add *)",
       "Bash(git remote rename *)",
@@ -121,8 +126,7 @@
       "Bash(gh repo rename *)",
       "Bash(gh *--admin*)",
       "Bash(gh api *-X *)",
-      "Bash(gh api *--method *)",
-      "Bash(npx supabase db *)"
+      "Bash(gh api *--method *)"
     ],
     "defaultMode": "auto"
   },
