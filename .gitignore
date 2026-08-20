@@ -1,6 +1,9 @@
 # Claude Code
 CLAUDE.local.md
 
+# Skills
+.scratch/
+
 # Ansible
 .ansible/
 playbooks/site.retry

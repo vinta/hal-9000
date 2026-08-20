@@ -17,7 +17,5 @@ tmp/
 *.log
 *_history
 
-# agents
+# tools
 .playwright-cli/
-.scratch/
-.superpowers/
