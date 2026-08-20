@@ -106,4 +106,3 @@ output_path.write_text(completion_content)
 
 print("Generating zsh completion...")
 print(f"Completion generated: {output_path}")
-print("Run 'hal sync' to update your local completion.")
