@@ -111,6 +111,8 @@
       "Bash(curl *--form *)",
       "Bash(curl *-T *)",
       "Bash(curl *--upload-file *)",
+      "Bash(curl *-H *)",
+      "Bash(curl *--header *)",
       "Bash(brew install *)",
       "Bash(pip install *)",
       "Bash(uv pip install *)",
