@@ -5,6 +5,5 @@ fi
 
 if [ -x "$HOME/.google-cloud-sdk-venv/bin/python" ]; then
   export CLOUDSDK_PYTHON="$HOME/.google-cloud-sdk-venv/bin/python"
-  # Drops the -S that would otherwise hide NumPy from gcloud.
   export CLOUDSDK_PYTHON_SITEPACKAGES=1
 fi

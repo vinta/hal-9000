@@ -31,7 +31,7 @@
     creates: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv"
 
 # https://docs.cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
-- name: Install NumPy in gcloud venv
+- name: Install numpy in gcloud venv
   command: uv pip install --python {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv/bin/python numpy
   register: gcp_command_result
   changed_when: "'Installed' in gcp_command_result.stderr"
