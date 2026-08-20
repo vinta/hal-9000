@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-PreToolUse guard blocking Bash access to sensitive paths.
+PreToolUse guard forcing a prompt on Bash access to sensitive paths.
 
 This is a cheap text-level first filter, not a real security boundary. It inspects the Bash command string, so it cannot see inside script files (`python3 leak.py`)
 or resolve command substitution (`$(...)`, backticks): closing those would require executing the command, defeating a pre-execution guard.
@@ -88,8 +88,8 @@ if __name__ == "__main__":
             {
                 "hookSpecificOutput": {
                     "hookEventName": "PreToolUse",
-                    "permissionDecision": "deny",
-                    "permissionDecisionReason": f"[guard-bash-paths hook] Blocked Bash access to denied path: {blocked}",
+                    "permissionDecision": "ask",
+                    "permissionDecisionReason": f"[guard-bash-paths hook] Confirm Bash access to sensitive path: {blocked}",
                 }
             },
             sys.stdout,
