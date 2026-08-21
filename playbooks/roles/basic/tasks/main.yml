@@ -23,6 +23,7 @@
   homebrew:
     name:
       - ast-grep
+      - betterleaks
       - fd
       - fzf
       - htop
@@ -37,7 +38,6 @@
   homebrew:
     name:
       - git
-      - betterleaks
       - gh
     state: latest
 
