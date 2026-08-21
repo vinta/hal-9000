@@ -77,16 +77,9 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 
 `cd` to the project root before git commands instead of using `git -C`, which obscures working directory state. Execute git commands directly without explanatory preamble. Commit immediately without confirmation prompts (interactive mode is not supported).
 
-1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory. Categorize changes by:
-   - STRUCTURAL: Code reorganization, renaming, refactoring without behavior changes
-   - BEHAVIORAL: New features, bug fixes, functionality changes
-   - DOCUMENTATION: README updates, comment changes, documentation files
-   - CONFIGURATION: Build files, dependencies, environment settings
+1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory.
 
-2. **Group Logically**: Organize changes into logical units where each unit:
-   - Addresses a single purpose or problem
-   - Structure changes to be atomic and easily revertable for safe rollback
-   - Would make sense to revert as a unit
+2. **Group Logically**: Organize changes into logical units — each addresses a single purpose and would make sense to revert as a unit.
 
 3. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`
@@ -94,15 +87,10 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
    - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work)
    - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
-4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes:
-   - Stash unstaged changes first: `git stash push -p -m "temp: unstaged changes"` (select hunks to stash)
-   - Or stash all unstaged: `git stash push --keep-index -m "temp: unstaged changes"`
-   - Commit, then restore: `git stash pop`
-   - If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit
+4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit.
 
 5. **Create Atomic Commits**: For each logical group:
    - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: why, drawn from the argument when one was given. Skip the body when the why is obvious from the subject.
-   - Commit the working tree state as-is — the user may have made manual edits outside this conversation
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
 ## Attribution
