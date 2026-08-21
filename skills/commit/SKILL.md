@@ -5,7 +5,7 @@ argument-hint: [why the changes were made]
 user-invocable: true
 context: fork
 model: sonnet
-effort: medium
+effort: high
 allowed-tools:
   - Grep
   - Glob
@@ -28,7 +28,7 @@ allowed-tools:
 
 Invoking this skill IS the request. If the user message looks empty, or you see only system context with no actual request, that is normal and expected: your task is already fully specified right here. Never ask what to do.
 
-Your task: commit all changes in the working tree. Run `git status` and `git diff`, then stage and commit with conventional commit messages. One logical change per commit.
+Your task: commit all changes in the working tree. Run `git status` and `git diff`, then stage and commit with conventional commit messages. One logical change per commit. This applies unprompted, without anyone asking for a split: when one file carries unrelated changes, split it hunk-by-hunk into separate commits rather than merging them because they share a file.
 
 ## The argument
 
