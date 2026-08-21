@@ -1,4 +1,4 @@
-.PHONY: help install lint lint-python lint-ansible format test update-hooks run-hooks scan-secrets run-gitleaks run-detect-secrets audit-detect-secrets-report hal-completion
+.PHONY: help install lint lint-python lint-ansible format test update-hooks run-hooks scan-secrets scan-secrets-history hal-completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -11,10 +11,10 @@ install: ## Install dependencies and setup pre-commit hooks
 	uv audit
 	ansible-galaxy install -r playbooks/collections/requirements.yml
 	uv run pre-commit install
-	@if command -v gitleaks >/dev/null 2>&1; then \
-		echo "gitleaks already installed"; \
+	@if command -v betterleaks >/dev/null 2>&1; then \
+		echo "betterleaks already installed"; \
 	else \
-		HOMEBREW_NO_AUTO_UPDATE=1 brew install --quiet gitleaks; \
+		HOMEBREW_NO_AUTO_UPDATE=1 brew install --quiet betterleaks; \
 	fi
 	$(MAKE) update-hooks
 
@@ -43,22 +43,11 @@ update-hooks: ## Update pre-commit hooks to latest versions
 run-hooks: ## Run all pre-commit hooks on all files
 	uv run pre-commit run --all-files
 
-scan-secrets: run-gitleaks run-detect-secrets  ## Scan for secrets using all scanners
+scan-secrets: ## Scan the working tree for secrets
+	betterleaks dir . --verbose --no-banner
 
-run-gitleaks: ## Scan full git history for secrets
-	gitleaks git . --verbose --no-banner
-
-run-detect-secrets: ## Scan for secrets in the codebase
-	@if [ ! -f .secrets.baseline ]; then \
-		echo "Creating new baseline..."; \
-		uv run detect-secrets scan | tee .secrets.baseline; \
-	else \
-		echo "Updating existing baseline..."; \
-		uv run detect-secrets scan --baseline .secrets.baseline; \
-	fi
-
-audit-detect-secrets-report: ## Interactively review detected secrets
-	uv run detect-secrets audit .secrets.baseline
+scan-secrets-history: ## Scan full git history for secrets
+	betterleaks git . --verbose --no-banner
 
 hal-completion: ## Regenerate zsh completion script for hal
 	uv run python scripts/generate-zsh-completion.py

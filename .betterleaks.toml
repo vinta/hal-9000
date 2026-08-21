@@ -1,0 +1,17 @@
+# https://github.com/betterleaks/betterleaks/blob/main/docs/config.md
+title = "hal-9000"
+
+[extend]
+useDefault = true
+
+# Paths that never reach a commit: ansible galaxy collections, virtualenvs, tool
+# caches, lockfiles, and the globally gitignored tmp/ scratch area.
+[allowlist]
+paths = [
+  '''(^|/)\.ansible/''',
+  '''(^|/)\.venv/''',
+  '''(^|/)node_modules/''',
+  '''(^|/)\.(pytest|ruff|ty)_cache/''',
+  '''(^|/)tmp/''',
+  '''(^|/)uv\.lock$''',
+]
