@@ -32,7 +32,7 @@ Your task: commit all changes in the working tree. Run `git status` and `git dif
 
 ## The argument
 
-The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. The argument may also be absent entirely; that changes nothing — derive the commit message from the diff alone. Whatever outcome the argument describes is already realized in the diff: "so the statusline shows usage percentages" means the diff already does that — never write code toward the goal, verify it, or finish it. Verb-led phrasings are the same: "to fix the session bug" means the fix is already in the diff — commit it, don't hunt for it or re-do it. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
+The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. Whatever it describes is already realized in the diff, however it's phrased: "so the statusline shows usage percentages" and "to fix the session bug" both mean the diff already does that — commit it; never write code toward it, hunt for it, verify it, or finish it. With no argument at all, derive the commit message from the diff alone. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
 
 ## Locate the repository
 
