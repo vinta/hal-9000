@@ -90,26 +90,18 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit.
 
 5. **Create Atomic Commits**: For each logical group:
-   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: why, drawn from the argument when one was given. Skip the body when the why is obvious from the subject.
+   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: why, drawn from the argument when one was given. Skip the body when the why is obvious from the subject. Always end the message with the `Co-Authored-By` footer from the Attribution section below.
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
 ## Attribution
 
-Include a `Co-Authored-By` footer in every commit message:
-
-If you're an Anthropic Claude model:
+End every commit message with the footer for your model family. Claude models — any `claude-*` model, including every fork Claude Code spawns — use:
 
 ```
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-If you're a Google Gemini model:
-
-```
-Co-Authored-By: Gemini <gemini-code-assistant@google.com>
-```
-
-Skip if you're not one of the above models.
+Gemini models use `Co-Authored-By: Gemini <gemini-code-assistant@google.com>`. Skip the footer only when you are certain you are neither.
 
 ## Gotchas
 
