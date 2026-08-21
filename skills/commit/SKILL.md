@@ -94,9 +94,9 @@ Incorrect behavior: fetching GitHub Actions docs, verifying version pins, then e
 
 3. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`
-   - Hunk-by-hunk: `git diff <file> > /tmp/${CLAUDE_SESSION_ID}-patch.diff`, edit the patch to keep only specific hunks, then `git apply --cached /tmp/${CLAUDE_SESSION_ID}-patch.diff`
+   - Hunk-by-hunk: `git diff <file> > /tmp/${CLAUDE_SESSION_ID}-patch.diff`, edit the patch, then `git apply --cached /tmp/${CLAUDE_SESSION_ID}-patch.diff`. Dropping whole hunks is safe. Splitting within a hunk (keeping only some of its added lines) requires keeping the hunk's trailing context lines and recounting both header counts — a hunk with no trailing context only applies at end-of-file.
    - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work)
-   - Fallback: If `git apply --cached` fails (malformed patch), stage the whole file with `git add <file>` instead
+   - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes:
    - Stash unstaged changes first: `git stash push -p -m "temp: unstaged changes"` (select hunks to stash)
@@ -130,7 +130,7 @@ Skip if you're not one of the above models.
 ## Gotchas
 
 - **Don't commit plan or spec docs unless the user explicitly asked you to.** Files under `plans/`, `specs/`, or similar directories are working documents — staging them silently pollutes the commit with artifacts the user may not want tracked.
-- **`git apply --cached` fails on malformed patches.** Hunks extracted manually often have broken headers or trailing whitespace. Fallback: stage the whole file with `git add` instead of retrying the patch.
+- **A failed `git apply --cached` is a trigger, not a mystery.** The first failure on an edited patch means stage the whole file with `git add`. Do not diagnose — a patch whose every line byte-matches the file can still be structurally unappliable: git anchors a hunk with no trailing context lines to end-of-file, so a mid-file insertion without trailing context always fails with `error: while searching for:` even though the context plainly exists.
 - **No `$()` or heredoc subshells in `git commit -m`.** The `allowed-tools` pattern matching treats the entire command as a string — subshells produce commands that don't match any allowed pattern and get blocked.
 - **Pre-commit hooks that auto-format staged files cause loops.** The hook modifies the file, which un-stages the formatted version. Fix: re-add the modified files and retry the commit once. Don't retry indefinitely.
 - **Use `git restore --staged` to unstage, never `git reset --hard`.** `--hard` destroys working tree changes.
