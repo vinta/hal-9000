@@ -95,17 +95,15 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 
 ## Attribution
 
-End every commit message with the footer for your model family. Claude models — any `claude-*` model, including every fork Claude Code spawns — use:
+End every commit message with the footer for your model family.
 
-```
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
+- Claude models use `Co-Authored-By: Claude <noreply@anthropic.com>`
+- Gemini models use `Co-Authored-By: Gemini <gemini-code-assistant@google.com>`
 
-Gemini models use `Co-Authored-By: Gemini <gemini-code-assistant@google.com>`. Skip the footer only when you are certain you are neither.
+Skip the footer only when you are certain you are neither.
 
 ## Gotchas
 
-- **Don't commit plan or spec docs unless the user explicitly asked you to.** Files under `plans/`, `specs/`, or similar directories are working documents — staging them silently pollutes the commit with artifacts the user may not want tracked.
 - **A failed `git apply --cached` is a trigger, not a mystery.** The first failure on an edited patch means stage the whole file with `git add`. Do not diagnose — a patch whose every line byte-matches the file can still be structurally unappliable: git anchors a hunk with no trailing context lines to end-of-file, so a mid-file insertion without trailing context always fails with `error: while searching for:` even though the context plainly exists.
 - **No `$()` or heredoc subshells in `git commit -m`.** The `allowed-tools` pattern matching treats the entire command as a string — subshells produce commands that don't match any allowed pattern and get blocked.
 - **Pre-commit hooks that auto-format staged files cause loops.** The hook modifies the file, which un-stages the formatted version. Fix: re-add the modified files and retry the commit once. Don't retry indefinitely.
