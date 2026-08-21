@@ -5,7 +5,7 @@ argument-hint: [why the changes were made]
 user-invocable: true
 context: fork
 model: sonnet
-effort: high
+effort: medium
 allowed-tools:
   - Grep
   - Glob
@@ -75,6 +75,14 @@ The diff adds a new `.github/workflows/ci.yml` file. You wonder if the action ve
 Correct behavior: commit as-is.
 
 Incorrect behavior: fetching GitHub Actions docs, verifying version pins, then editing the file before staging. The author already chose those versions. Research belongs in a separate turn, not inside the commit.
+</example>
+
+<example>
+You edited a patch to split one file's changes across two commits, and `git apply --cached` fails on it.
+
+Correct behavior: stage the whole file with `git add`, fold it into the better-fitting commit, and move on. Total cost: seconds.
+
+Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or otherwise investigating why it failed. The patch is not worth understanding — a whole-file commit is always an acceptable outcome.
 </example>
 
 ## Workflow
