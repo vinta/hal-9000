@@ -36,13 +36,7 @@ The argument passed to this skill is **why the changes were made** — the motiv
 
 ## Locate the repository
 
-A forked session may start in a directory that is not the git repository — e.g. a workspace root whose repo lives in a subdirectory. Before concluding anything about the repo state:
-
-1. `git rev-parse --show-toplevel` — if it succeeds, `cd` there.
-2. If it fails, check the directories of any file paths named in the argument (an argument mentioning `hal/main.py` means the repo is likely `hal/`).
-3. Otherwise Glob for `*/.git` and `*/*/.git` to find nested repos.
-
-If exactly one candidate repo has uncommitted changes, `cd` into it and proceed. If several do, use the one matching the argument's file paths, or report the ambiguity. Only report "not a git repository" after all three checks fail.
+`cd` to `git rev-parse --show-toplevel` before anything else. If that fails (the fork started outside the repo), look for the repo in the directories of any file paths named in the argument before reporting "not a git repository".
 
 ## Scope
 
