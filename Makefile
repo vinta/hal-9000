@@ -51,4 +51,3 @@ scan-secrets-history: ## Scan full git history for secrets
 
 hal-completion: ## Regenerate zsh completion script for hal
 	uv run python scripts/generate-zsh-completion.py
-	hal sync
