@@ -197,7 +197,7 @@
       "autoUpdate": true
     }
   },
-  "outputStyle": "Caveman",
+  "outputStyle": "Concise",
   "viewMode": "verbose",
   "effortLevel": "high",
   "advisorModel": "fable",
