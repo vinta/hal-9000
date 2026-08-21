@@ -87,7 +87,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
    - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work)
    - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
-4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit.
+4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry indefinitely.
 
 5. **Create Atomic Commits**: For each logical group:
    - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: why, drawn from the argument when one was given. Skip the body when the why is obvious from the subject. Always end the message with the `Co-Authored-By` footer from the Attribution section below.
@@ -104,10 +104,5 @@ Skip the footer only when you are certain you are neither.
 
 ## Gotchas
 
-- **A failed `git apply --cached` is a trigger, not a mystery.** The first failure on an edited patch means stage the whole file with `git add`. Do not diagnose — a patch whose every line byte-matches the file can still be structurally unappliable: git anchors a hunk with no trailing context lines to end-of-file, so a mid-file insertion without trailing context always fails with `error: while searching for:` even though the context plainly exists.
-- **No `$()` or heredoc subshells in `git commit -m`.** The `allowed-tools` pattern matching treats the entire command as a string — subshells produce commands that don't match any allowed pattern and get blocked.
-- **Pre-commit hooks that auto-format staged files cause loops.** The hook modifies the file, which un-stages the formatted version. Fix: re-add the modified files and retry the commit once. Don't retry indefinitely.
-- **Use `git restore --staged` to unstage, never `git reset --hard`.** `--hard` destroys working tree changes.
-- **Stash before commit if hooks complain about unstaged changes.** Use `git stash push --keep-index` to isolate unstaged work, commit, then `git stash pop`. Forgetting the pop leaves work stranded in the stash.
 - **Unstaged changes are still changes.** `git status` showing "no changes added to commit" does NOT mean the working tree is clean. It means nothing is staged yet. Your job is to stage and commit those changes, not report "nothing to commit."
 - **Never use `git add -f`.** If `git add` reports "The following paths are ignored by one of your .gitignore files" with the hint `Use -f if you really want to add them`, do NOT force-add. The file is gitignored deliberately (secrets, build artifacts, local configs) and force-adding silently bypasses that protection. Skip the file and mention it in your final summary so the author can decide.
