@@ -71,6 +71,23 @@ class StatusLineData(TypedDict):
     context_window: NotRequired[ContextWindow]
 
 
+# https://code.claude.com/docs/en/statusline#subagent-status-lines
+class SubagentTask(TypedDict):
+    id: str
+    name: NotRequired[str]  # documented but absent from real payloads as of 2.1.220
+    description: str
+    label: str
+    tokenCount: int
+    model: NotRequired[str]  # omitted until the task's model is resolved
+    contextWindowSize: NotRequired[int]  # omitted together with model
+    effort: NotRequired[str | int]  # absent when the subagent inherits the session effort
+
+
+class SubagentStatusData(TypedDict):
+    columns: int
+    tasks: list[SubagentTask]
+
+
 class OllamaGenerateResponse(TypedDict):
     response: str
 
@@ -130,7 +147,9 @@ def basic_info(data: StatusLineData) -> None:
     if current_dir.startswith(home):
         current_dir = "~" + current_dir[len(home) :]
 
-    status_parts = [f"{data['model']['id']} {data['effort']['level']}", current_dir]
+    effort = data.get("effort")
+    model_part = f"{data['model']['id']} {effort['level']}" if effort else data["model"]["id"]
+    status_parts = [model_part, current_dir]
 
     try:
         result = subprocess.run(  # noqa: PLW1510 subprocess-run-without-check
@@ -162,6 +181,39 @@ def basic_info(data: StatusLineData) -> None:
 
     separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
+
+
+SEPARATOR_WIDTH = len(" · ")
+
+
+def subagent_row(task: SubagentTask, columns: int) -> str:
+    model = task["model"].removeprefix("claude-")
+    effort = task.get("effort")
+    model_part = f"{model} {effort}" if effort is not None else model
+    name = task.get("name")  # promised by the docs, but 2.1.220 payloads omit it
+    parts = [name, model_part] if name else [model_part]
+
+    ctx_pct = int(task["tokenCount"] / task["contextWindowSize"] * 100)
+    ctx_plain = f"Ctx {ctx_pct}%"
+    used = sum(len(part) for part in parts) + len(ctx_plain) + len(parts) * SEPARATOR_WIDTH
+    parts.append(f"{usage_color(ctx_pct)}{ctx_plain}{RESET}{BLUE}")
+
+    description = task["description"] or task["label"]
+    budget = columns - used - SEPARATOR_WIDTH
+    if len(description) > budget:
+        description = description[: budget - 1] + "…" if budget >= 2 else ""  # noqa: PLR2004 magic-value-comparison
+    if description:
+        parts.append(description)
+
+    separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
+    return f"{BLUE}{separator.join(parts)}{RESET}"
+
+
+def subagent_status(data: SubagentStatusData) -> None:
+    for task in data["tasks"]:
+        if "model" not in task or "contextWindowSize" not in task:
+            continue
+        print(json.dumps({"id": task["id"], "content": subagent_row(task, data["columns"])}))
 
 
 NON_PROMPT_PREFIXES = (
@@ -449,6 +501,12 @@ def grammar_check(data: StatusLineData) -> None:
 def main() -> None:
     if len(sys.argv) >= 3 and sys.argv[1] == "--grammar-worker":  # noqa: PLR2004 magic-value-comparison
         run_grammar_worker(sys.argv[2])
+        return
+
+    if len(sys.argv) >= 2 and sys.argv[1] == "--subagents":  # noqa: PLR2004 magic-value-comparison
+        subagent_data: SubagentStatusData = json.load(sys.stdin)
+        logger.debug("subagents data=%s", json.dumps(subagent_data))
+        subagent_status(subagent_data)
         return
 
     data: StatusLineData = json.load(sys.stdin)
