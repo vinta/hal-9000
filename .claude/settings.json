@@ -2,7 +2,7 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Write|Edit",
+        "matcher": "Edit",
         "hooks": [
           {
             "type": "command",
@@ -22,6 +22,25 @@
             "type": "command",
             "command": "make lint-ansible >&2 || exit 2",
             "if": "Edit(/playbooks/**)",
+            "timeout": 30,
+            "statusMessage": "Linting Ansible playbooks..."
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "make lint-python >&2 || exit 2",
+            "if": "Write(**/*.py)",
+            "timeout": 30,
+            "statusMessage": "Linting Python code..."
+          },
+          {
+            "type": "command",
+            "command": "make lint-ansible >&2 || exit 2",
+            "if": "Write(/playbooks/**)",
             "timeout": 30,
             "statusMessage": "Linting Ansible playbooks..."
           }
