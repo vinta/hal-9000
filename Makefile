@@ -10,13 +10,9 @@ install: ## Install dependencies and setup pre-commit hooks
 	uv sync --locked
 	uv audit
 	ansible-galaxy install -r playbooks/collections/requirements.yml
+	HOMEBREW_NO_AUTO_UPDATE=1 brew install --quiet betterleaks
 	uv run pre-commit install
-	@if command -v betterleaks >/dev/null 2>&1; then \
-		echo "betterleaks already installed"; \
-	else \
-		HOMEBREW_NO_AUTO_UPDATE=1 brew install --quiet betterleaks; \
-	fi
-	$(MAKE) update-hooks
+	uv run pre-commit autoupdate
 
 lint: lint-python lint-ansible ## Run all linters
 
@@ -36,12 +32,6 @@ format: ## Auto-format and fix lint issues
 
 test: ## Run tests
 	uv run pytest -v
-
-update-hooks: ## Update pre-commit hooks to latest versions
-	uv run pre-commit autoupdate
-
-run-hooks: ## Run all pre-commit hooks on all files
-	uv run pre-commit run --all-files
 
 scan-secrets: ## Scan the working tree for secrets
 	betterleaks dir . --verbose --no-banner
