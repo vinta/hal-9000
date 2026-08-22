@@ -1,4 +1,4 @@
-.PHONY: help install lint lint-python lint-ansible format test update-hooks run-hooks scan-secrets scan-secrets-history hal-completion
+.PHONY: help install lint lint-python lint-ansible format test scan-secrets scan-secrets-history hal-completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
