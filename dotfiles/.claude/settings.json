@@ -167,6 +167,10 @@
     "command": "python3 ~/.claude/statusline/hal-statusline.py",
     "refreshInterval": 1
   },
+  "subagentStatusLine": {
+    "type": "command",
+    "command": "python3 ~/.claude/statusline/hal-statusline.py --subagents"
+  },
   "enabledPlugins": {
     "codex@openai-codex": true,
     "mattpocock-skills@mattpocock": true,

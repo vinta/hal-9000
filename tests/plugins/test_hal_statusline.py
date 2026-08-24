@@ -126,3 +126,90 @@ class TestBasicInfo:
 
         out = strip_ansi(capsys.readouterr().out)
         assert out.startswith("Current: claude-fable-5 max · ")
+
+
+def make_task(**overrides):
+    task = {
+        "id": "task-1",
+        "name": "hal-skills-commit",
+        "type": "general-purpose",
+        "status": "running",
+        "description": "/hal-skills:commit all pending changes",
+        "label": "commit",
+        "startTime": 1754000000000,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "contextWindowSize": 200000,
+        "tokenCount": 24000,
+        "tokenSamples": [],
+        "cwd": "/usr/local/hal-9000",
+    }
+    task.update(overrides)
+    return task
+
+
+def subagent_rows(capsys):
+    return [json.loads(line) for line in capsys.readouterr().out.splitlines()]
+
+
+class TestSubagentStatus:
+    def test_full_task_renders_row(self, statusline, capsys):
+        statusline.subagent_status({"columns": 120, "tasks": [make_task()]})
+
+        rows = subagent_rows(capsys)
+        assert len(rows) == 1
+        assert rows[0]["id"] == "task-1"
+        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 high · Ctx 12% · /hal-skills:commit all pending changes"
+
+    def test_inherited_effort_omitted(self, statusline, capsys):
+        task = make_task()
+        del task["effort"]
+
+        statusline.subagent_status({"columns": 120, "tasks": [task]})
+
+        rows = subagent_rows(capsys)
+        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 · Ctx 12% · /hal-skills:commit all pending changes"
+
+    def test_unresolved_model_keeps_default_row(self, statusline, capsys):
+        task = make_task()
+        del task["model"]
+        del task["contextWindowSize"]
+
+        statusline.subagent_status({"columns": 120, "tasks": [task, make_task(id="task-2")]})
+
+        rows = subagent_rows(capsys)
+        assert [row["id"] for row in rows] == ["task-2"]
+
+    def test_description_truncates_to_columns(self, statusline, capsys):
+        statusline.subagent_status({"columns": 60, "tasks": [make_task()]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "hal-skills-commit · sonnet-5 high · Ctx 12% · /hal-skills:c…"
+        assert len(content) == 60
+
+    def test_description_dropped_when_no_room(self, statusline, capsys):
+        statusline.subagent_status({"columns": 46, "tasks": [make_task()]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "hal-skills-commit · sonnet-5 high · Ctx 12%"
+
+    def test_numeric_effort_budget_rendered_verbatim(self, statusline, capsys):
+        statusline.subagent_status({"columns": 120, "tasks": [make_task(effort=50000)]})
+
+        assert "sonnet-5 50000" in strip_ansi(subagent_rows(capsys)[0]["content"])
+
+    def test_empty_description_falls_back_to_label(self, statusline, capsys):
+        statusline.subagent_status({"columns": 120, "tasks": [make_task(description="")]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "hal-skills-commit · sonnet-5 high · Ctx 12% · commit"
+
+    def test_task_without_name_renders_model_first(self, statusline, capsys):
+        task = make_task(model="claude-opus-5[1m]", contextWindowSize=1000000, tokenCount=28261, description="List repo files")
+        del task["name"]
+        del task["effort"]
+
+        statusline.subagent_status({"columns": 120, "tasks": [task]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "opus-5[1m] · Ctx 2% · List repo files"
