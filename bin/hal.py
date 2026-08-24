@@ -19,14 +19,14 @@ except ImportError:
     argcomplete = None  # ty: ignore[invalid-assignment]
 
 
-class Setting:
+class Settings:
     REPO_ROOT: str = str(Path(__file__).resolve().parent.parent)
     DOTFILES_ROOT: str = str(Path(REPO_ROOT) / "dotfiles")
     IGNORE_PATTERNS: tuple[str, ...] = (".DS_Store", ".venv", ".*_cache", "__pycache__", "node_modules", "-private-tmp*")
 
 
 class Dotfiles:
-    DEFAULT_CONFIG: str = str(Path(Setting.DOTFILES_ROOT) / "hal_dotfiles.json")
+    DEFAULT_CONFIG: str = str(Path(Settings.DOTFILES_ROOT) / "hal_dotfiles.json")
     ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest")
 
     def __init__(self, path: str | None = None) -> None:
@@ -127,13 +127,13 @@ class HAL9000:
 
     def _validate_path(self, path: str) -> None:
         resolved = Path(path).resolve()
-        allowed_roots = (Path.home(), Path(Setting.REPO_ROOT))
+        allowed_roots = (Path.home(), Path(Settings.REPO_ROOT))
         if not any(resolved.is_relative_to(root) for root in allowed_roots):
             self._hal_says(f"I'm sorry, Dave. I'm afraid I can't do that: {resolved}")
             sys.exit(1)
 
     def _expand_template(self, path: str) -> str:
-        expanded = path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", Setting.REPO_ROOT)
+        expanded = path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", Settings.REPO_ROOT)
         self._validate_path(expanded)
         return expanded
 
@@ -144,13 +144,13 @@ class HAL9000:
         home = str(Path.home())
         relative_path = str(Path(filepath).relative_to(home)) if filepath.startswith(home) else Path(filepath).name
 
-        dest_path = str(Path(Setting.DOTFILES_ROOT) / relative_path)
+        dest_path = str(Path(Settings.DOTFILES_ROOT) / relative_path)
         dest_dir = str(Path(dest_path).parent)
 
-        if dest_dir != Setting.DOTFILES_ROOT:
+        if dest_dir != Settings.DOTFILES_ROOT:
             Path(dest_dir).mkdir(parents=True, exist_ok=True)
 
-        template_src = dest_path.replace(Setting.REPO_ROOT, "{{REPO_ROOT}}")
+        template_src = dest_path.replace(Settings.REPO_ROOT, "{{REPO_ROOT}}")
         template_dest = filepath.replace(home, "{{HOME}}")
 
         return filepath, dest_path, template_src, template_dest
@@ -182,13 +182,13 @@ class HAL9000:
 
         import os  # noqa: PLC0415 import-outside-top-level
 
-        os.chdir(Setting.REPO_ROOT)
+        os.chdir(Settings.REPO_ROOT)
         self._run("git fetch")
         returncode = self._run("git pull")
         if returncode != 0:
             sys.exit(returncode)
 
-        os.chdir(str(Path(Setting.REPO_ROOT) / "playbooks"))
+        os.chdir(str(Path(Settings.REPO_ROOT) / "playbooks"))
         command = "ansible-playbook site.yml -v"
         if extra_args:
             command = " ".join([command, *(shlex.quote(arg) for arg in extra_args)])
@@ -309,7 +309,7 @@ class HAL9000:
     @staticmethod
     def _is_ignored(path: str) -> bool:
         name = Path(path).name
-        return any(fnmatch.fnmatch(name, pattern) for pattern in Setting.IGNORE_PATTERNS)
+        return any(fnmatch.fnmatch(name, pattern) for pattern in Settings.IGNORE_PATTERNS)
 
     def _copy_one(self, src: str, dest: str) -> None:
         if self._is_ignored(src):
@@ -320,7 +320,7 @@ class HAL9000:
             shutil.copytree(
                 src,
                 dest,
-                ignore=shutil.ignore_patterns(*Setting.IGNORE_PATTERNS),
+                ignore=shutil.ignore_patterns(*Settings.IGNORE_PATTERNS),
                 copy_function=self._copy_file_allow_overwrite,
                 dirs_exist_ok=True,
             )
@@ -394,7 +394,7 @@ class HAL9000:
     def open_the_pod_bay_doors(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
-        filepath = str(Path(Setting.REPO_ROOT) / "assets" / "im-sorry-dave-im-afraid-i-cant-do-that.mp3")
+        filepath = str(Path(Settings.REPO_ROOT) / "assets" / "im-sorry-dave-im-afraid-i-cant-do-that.mp3")
         self._run(f"afplay {shlex.quote(filepath)}", verbose=False)
 
     def read_lips(self) -> None:

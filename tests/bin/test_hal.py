@@ -40,7 +40,7 @@ class TestValidatePath:
         hal_instance._validate_path(path)
 
     def test_valid_path_under_repo_root(self, hal_instance, hal_module):
-        path = f"{hal_module.Setting.REPO_ROOT}/dotfiles/.zshrc"
+        path = f"{hal_module.Settings.REPO_ROOT}/dotfiles/.zshrc"
         hal_instance._validate_path(path)
 
     def test_path_traversal_outside_home(self, hal_instance):
@@ -70,7 +70,7 @@ class TestValidatePath:
         home = (tmp_path / "home").resolve()
         with (
             patch("pathlib.Path.home", return_value=home),
-            patch.object(hal_module.Setting, "REPO_ROOT", str((tmp_path / "repo").resolve())),
+            patch.object(hal_module.Settings, "REPO_ROOT", str((tmp_path / "repo").resolve())),
         ):
             hal_instance._validate_path(f"{home}/inside/stuff")
             with pytest.raises(SystemExit):
@@ -80,7 +80,7 @@ class TestValidatePath:
         repo_root = (tmp_path / "repo").resolve()
         with (
             patch("pathlib.Path.home", return_value=(tmp_path / "home").resolve()),
-            patch.object(hal_module.Setting, "REPO_ROOT", str(repo_root)),
+            patch.object(hal_module.Settings, "REPO_ROOT", str(repo_root)),
         ):
             hal_instance._validate_path(f"{repo_root}/inside/stuff")
             with pytest.raises(SystemExit):
@@ -347,7 +347,7 @@ class TestCopyEntryMerge:
         copy_entry = {"src": str(src), "dest": str(dest)}
         with (
             patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
-            patch.object(hal_module.Setting, "IGNORE_PATTERNS", ("*.tmp",)),
+            patch.object(hal_module.Settings, "IGNORE_PATTERNS", ("*.tmp",)),
         ):
             hal_instance._copy_entry(copy_entry)
 
