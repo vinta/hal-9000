@@ -22,7 +22,7 @@ except ImportError:
 class Setting:
     REPO_ROOT: str = str(Path(__file__).resolve().parent.parent)
     DOTFILES_ROOT: str = str(Path(REPO_ROOT) / "dotfiles")
-    IGNORE_PATTERNS: tuple[str, ...] = (".DS_Store", "__pycache__", "node_modules")
+    IGNORE_PATTERNS: tuple[str, ...] = (".DS_Store", ".venv", ".*_cache", "__pycache__", "node_modules", "-private-tmp*")
 
 
 class Dotfiles:
