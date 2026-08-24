@@ -130,7 +130,8 @@ def basic_info(data: StatusLineData) -> None:
     if current_dir.startswith(home):
         current_dir = "~" + current_dir[len(home) :]
 
-    status_parts = [f"{data['model']['id']} {data['effort']['level']}", current_dir]
+    model_part = f"{data['model']['id']} {data.get('effort', {}).get('level', '')}".rstrip()
+    status_parts = [model_part, current_dir]
 
     try:
         result = subprocess.run(  # noqa: PLW1510 subprocess-run-without-check
