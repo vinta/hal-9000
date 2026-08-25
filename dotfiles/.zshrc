@@ -136,7 +136,6 @@ alias cc="claude"
 alias ccfable="claude --model fable --effort max"
 alias ccsonnet="claude --model sonnet --effort high"
 alias ccyolo="claude --dangerously-skip-permissions"
-alias ccsandbox="claude --dangerously-skip-permissions --settings ~/.claude/settings.sandbox.json"
 ccp() { claude --model sonnet --effort high --safe-mode --no-session-persistence --no-chrome -p "$*"; }
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
