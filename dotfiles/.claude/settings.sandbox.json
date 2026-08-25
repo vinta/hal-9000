@@ -4,7 +4,8 @@
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
     "network": {
-      "allowedDomains": []
+      "allowedDomains": [],
+      "strictAllowlist": true
     }
   }
 }
