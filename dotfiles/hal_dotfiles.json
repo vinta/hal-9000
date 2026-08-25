@@ -112,6 +112,10 @@
       "dest": "{{HOME}}/.claude/settings.json"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.sandbox.json",
+      "dest": "{{HOME}}/.claude/settings.sandbox.json"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.claude/rules/",
       "dest": "{{HOME}}/.claude/rules/"
     },
