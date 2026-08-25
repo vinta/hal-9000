@@ -133,9 +133,9 @@ export LC_CTYPE=en_US.UTF-8
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ll="ls -lA"
 alias cc="claude"
-alias ccf="claude --model fable --effort max"
-alias ccs="claude --model sonnet --effort high"
-alias ccy="claude --dangerously-skip-permissions"
+alias ccfable="claude --model fable --effort max"
+alias ccsonnet="claude --model sonnet --effort high"
+alias ccyolo="claude --dangerously-skip-permissions"
 ccp() { claude --model sonnet --effort high --safe-mode --no-session-persistence --no-chrome -p "$*"; }
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
