@@ -268,10 +268,15 @@ class HAL9000:
             self._hal_says(f"not found in dotfiles: {self._abbreviate_home(src_path)}")
             return
 
+        # A real directory at dest is one `hal sync` refused to replace, and it may hold files
+        # no manifest entry covers. shutil.move would nest src inside it instead of replacing it.
+        if Path(dest_path).is_dir() and not Path(dest_path).is_symlink():
+            self._hal_says(f"refusing to replace directory {self._abbreviate_home(dest_path)}")
+            return
+
         if Path(dest_path).is_symlink():
             Path(dest_path).unlink()
-        shutil.copy2(src_path, dest_path)
-        Path(src_path).unlink()
+        shutil.move(src_path, dest_path)
 
         self.dotfiles.data["links"].remove(ln_dict)
 

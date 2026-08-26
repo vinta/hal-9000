@@ -158,6 +158,75 @@ class TestUserFilenameValidation:
             hal_instance.copy(ns)
 
 
+class TestUnlink:
+    """unlink reverses a link entry, whether the entry names a file or a directory."""
+
+    @staticmethod
+    def _link_entry(hal_instance, hal_module, tmp_path, entry):
+        """Point the manifest at a temp file and register one link entry as templates."""
+        hal_instance.dotfiles = hal_module.Dotfiles(str(tmp_path / "hal_dotfiles.json"))
+        hal_instance.dotfiles.data["links"].append(entry)
+
+    def test_moves_directory_back_to_dest(self, hal_instance, hal_module, tmp_path):
+        """A directory entry is restored whole, which shutil.copy2 could never do."""
+        src = tmp_path / "dotfiles" / "rules"
+        src.mkdir(parents=True)
+        (src / "managed.md").write_text("from repo")
+
+        dest = tmp_path / "rules"
+        dest.symlink_to(src)
+
+        self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+            hal_instance.unlink(argparse.Namespace(filename="~/rules/"))
+
+        assert dest.is_dir()
+        assert not dest.is_symlink()
+        assert (dest / "managed.md").read_text() == "from repo"
+        assert not src.exists()
+        assert hal_instance.dotfiles.data["links"] == []
+
+    def test_moves_file_back_to_dest(self, hal_instance, hal_module, tmp_path):
+        """The single-file case the old copy2 handled keeps working under shutil.move."""
+        src = tmp_path / "dotfiles" / ".zshrc"
+        src.parent.mkdir(parents=True)
+        src.write_text("from repo")
+
+        dest = tmp_path / ".zshrc"
+        dest.symlink_to(src)
+
+        self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/.zshrc", "dest": "{{HOME}}/.zshrc"})
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+            hal_instance.unlink(argparse.Namespace(filename="~/.zshrc"))
+
+        assert not dest.is_symlink()
+        assert dest.read_text() == "from repo"
+        assert not src.exists()
+        assert hal_instance.dotfiles.data["links"] == []
+
+    def test_refuses_to_replace_real_directory(self, hal_instance, hal_module, tmp_path):
+        """A real directory at dest is what sync refused to link, so unlink leaves it alone."""
+        src = tmp_path / "dotfiles" / "rules"
+        src.mkdir(parents=True)
+        (src / "managed.md").write_text("from repo")
+
+        dest = tmp_path / "rules"
+        dest.mkdir()
+        (dest / "unmanaged.md").write_text("preserve me")
+
+        entry = {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"}
+        self._link_entry(hal_instance, hal_module, tmp_path, entry)
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+            hal_instance.unlink(argparse.Namespace(filename="~/rules/"))
+
+        assert sorted(p.name for p in dest.iterdir()) == ["unmanaged.md"]
+        assert (src / "managed.md").read_text() == "from repo"
+        assert hal_instance.dotfiles.data["links"] == [entry]
+
+
 class TestSyncLinks:
     """_sync_links never destroys a real directory unless forced."""
 
