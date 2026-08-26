@@ -179,7 +179,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
 
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
-            hal_instance.unlink(argparse.Namespace(filename="~/rules/"))
+            hal_instance.unlink(argparse.Namespace(filename=str(dest)))
 
         assert dest.is_dir()
         assert not dest.is_symlink()
@@ -199,7 +199,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/.zshrc", "dest": "{{HOME}}/.zshrc"})
 
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
-            hal_instance.unlink(argparse.Namespace(filename="~/.zshrc"))
+            hal_instance.unlink(argparse.Namespace(filename=str(dest)))
 
         assert not dest.is_symlink()
         assert dest.read_text() == "from repo"
@@ -220,11 +220,82 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, entry)
 
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
-            hal_instance.unlink(argparse.Namespace(filename="~/rules/"))
+            hal_instance.unlink(argparse.Namespace(filename=str(dest)))
 
         assert sorted(p.name for p in dest.iterdir()) == ["unmanaged.md"]
         assert (src / "managed.md").read_text() == "from repo"
         assert hal_instance.dotfiles.data["links"] == [entry]
+
+    def test_matches_entry_dest_with_trailing_slash(self, hal_instance, hal_module, tmp_path):
+        """Directory entries are hand-written with a trailing slash the typed path never has."""
+        src = tmp_path / "dotfiles" / "rules"
+        src.mkdir(parents=True)
+        (src / "managed.md").write_text("from repo")
+
+        dest = tmp_path / "rules"
+        dest.symlink_to(src)
+
+        self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+            hal_instance.unlink(argparse.Namespace(filename=str(tmp_path / "rules")))
+
+        assert hal_instance.dotfiles.data["links"] == []
+
+    def test_matches_entry_from_relative_filename(self, hal_instance, hal_module, tmp_path, monkeypatch):
+        """A bare name is resolved against the current directory, not against the home directory."""
+        src = tmp_path / "dotfiles" / "rules"
+        src.mkdir(parents=True)
+        (src / "managed.md").write_text("from repo")
+
+        dest = tmp_path / "sub" / "rules"
+        dest.parent.mkdir()
+        dest.symlink_to(src)
+
+        self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/sub/rules"})
+
+        monkeypatch.chdir(dest.parent)
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+            hal_instance.unlink(argparse.Namespace(filename="rules"))
+
+        assert hal_instance.dotfiles.data["links"] == []
+
+    def test_matches_entry_from_tilde_filename(self, hal_instance, hal_module, tmp_path, monkeypatch):
+        """A quoted ~/ reaches hal unexpanded, since the shell never saw it."""
+        src = tmp_path / "dotfiles" / "rules"
+        src.mkdir(parents=True)
+        (src / "managed.md").write_text("from repo")
+
+        dest = tmp_path / "rules"
+        dest.symlink_to(src)
+
+        self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
+
+        monkeypatch.setenv("HOME", str(tmp_path))
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+            hal_instance.unlink(argparse.Namespace(filename="~/rules/"))
+
+        assert hal_instance.dotfiles.data["links"] == []
+
+    def test_reports_path_no_entry_covers(self, hal_instance, hal_module, tmp_path, capsys):
+        """A path outside the manifest leaves both the manifest and the filesystem alone."""
+        src = tmp_path / "dotfiles" / "rules"
+        src.mkdir(parents=True)
+        (src / "managed.md").write_text("from repo")
+
+        dest = tmp_path / "rules"
+        dest.symlink_to(src)
+
+        entry = {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"}
+        self._link_entry(hal_instance, hal_module, tmp_path, entry)
+
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+            hal_instance.unlink(argparse.Namespace(filename=str(tmp_path / "unmanaged")))
+
+        assert "not found in manifest:" in capsys.readouterr().out
+        assert hal_instance.dotfiles.data["links"] == [entry]
+        assert dest.is_symlink()
+        assert (src / "managed.md").read_text() == "from repo"
 
 
 class TestSyncLinks:

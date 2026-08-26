@@ -5,6 +5,7 @@ import argparse
 import concurrent.futures
 import fnmatch
 import json
+import os
 import shlex
 import shutil
 import stat
@@ -214,8 +215,6 @@ class HAL9000:
                 self._hal_says("You should use Homebrew's ansible")
                 sys.exit(1)
 
-        import os  # noqa: PLC0415 import-outside-top-level
-
         os.chdir(Settings.REPO_ROOT)
         self._run("git fetch")
         returncode = self._run("git pull")
@@ -253,12 +252,11 @@ class HAL9000:
         self.dotfiles.show()
 
     def unlink(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
-        relative_path = namespace.filename.removeprefix("~/")
-        template_dest = "{{HOME}}/" + relative_path
-
-        ln_dict = self.dotfiles.find_by_key("dest", template_dest, "links")
+        # abspath, not Path.resolve(): the path at dest IS the symlink this removes, and resolving it would land inside the dotfiles repo
+        filepath = Path(os.path.abspath(Path(namespace.filename).expanduser()))  # noqa: PTH100 os-path-abspath
+        ln_dict = next((entry for entry in self.dotfiles.data["links"] if Path(self._expand_template(entry["dest"])) == filepath), None)
         if not ln_dict:
-            self._hal_says(f"not found in manifest: {relative_path}")
+            self._hal_says(f"not found in manifest: {self._abbreviate_home(filepath)}")
             return
 
         src_path = self._expand_template(ln_dict["src"])
