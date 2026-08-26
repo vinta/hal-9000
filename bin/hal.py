@@ -459,24 +459,28 @@ class HAL9000:
             return False
         return True
 
+    @staticmethod
+    def _abbreviate_home(path: str) -> str:
+        home = str(Path.home())
+        return f"~{path[len(home) :]}" if path.startswith(home) else path
+
     def _prune(self) -> None:
         orphans: list[Path] = []
         for entry in self.dotfiles.data["backups"]:
             if entry.get("prune", True):
                 orphans.extend(self._find_orphans(entry))
             else:
-                self._hal_says(f"prune disabled {entry['src']}")
+                self._hal_says(f"prune disabled {self._abbreviate_home(self._expand_template(entry['dest']))}")
 
         if not orphans:
             self._hal_says("nothing to prune")
             return
 
         orphans.sort()
-        home = str(Path.home())
         counted = f"{len(orphans)} orphan" if len(orphans) == 1 else f"{len(orphans)} orphans"
         self._hal_says(f"{counted} in backup, absent from source:")
         for path in orphans:
-            print(f"  {str(path).replace(home, '~', 1)}")
+            print(f"  {self._abbreviate_home(str(path))}")
 
         try:
             answer = input(f"Delete {counted} from backup? [y/N] ")

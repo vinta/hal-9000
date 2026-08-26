@@ -812,6 +812,28 @@ class TestBackupPrune:
 
         assert not (dest / "gone").exists()
 
+    def test_opted_out_entry_reports_its_expanded_destination(self, hal_instance, tmp_path, capsys):
+        """The manifest stores a {{HOME}} template, which is not a path the reader can act on."""
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "archived.txt").write_text("only copy left")
+
+        # Real _expand_template, so the template is genuinely expanded; only its
+        # under-home guard is neutralised, since tmp_path is outside both allowed roots
+        with (
+            patch.object(hal_instance, "_validate_path"),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+            patch("builtins.input", return_value=""),
+        ):
+            mock_dotfiles.data = {"backups": [{"src": "{{HOME}}/hal-prune-test-absent", "dest": str(dest), "prune": False}]}
+            hal_instance.backup(argparse.Namespace(prune=True))
+
+        assert f"prune disabled {dest}" in capsys.readouterr().out
+
     def test_entry_can_opt_out_of_pruning(self, hal_instance, tmp_path):
         """A backup whose destination outlives its source keeps its orphans."""
         src = tmp_path / "live"
