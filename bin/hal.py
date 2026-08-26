@@ -361,9 +361,16 @@ class HAL9000:
         self._copy_one(src, dest)
 
     @staticmethod
-    def _walk_names(root: Path) -> set[str]:
-        """Every path under root, relative to it, skipping ignored names and not descending into symlinked directories."""
+    def _walk_names(root: Path, *, follow_symlinks: bool) -> set[str]:
+        """Every path under root, relative to it, skipping ignored names.
+
+        A source is walked through its symlinked directories because backup copies them
+        dereferenced, leaving the destination holding their contents as real files; not
+        descending would read every one of those files as an orphan. A destination is not,
+        so a symlink there stays a single entry to unlink rather than a way out of the backup.
+        """
         names: set[str] = set()
+        visited = {root.resolve()}
         stack = [(root, "")]
         while stack:
             directory, prefix = stack.pop()
@@ -372,8 +379,16 @@ class HAL9000:
                     continue
                 relative = f"{prefix}/{child.name}" if prefix else child.name
                 names.add(relative)
-                if child.is_dir() and not child.is_symlink():
-                    stack.append((child, relative))
+                if not child.is_dir():
+                    continue
+                if child.is_symlink():
+                    if not follow_symlinks:
+                        continue
+                    resolved = child.resolve()
+                    if resolved in visited:
+                        continue
+                    visited.add(resolved)
+                stack.append((child, relative))
         return names
 
     def _find_orphans(self, entry: dict[str, str]) -> list[Path]:
@@ -394,10 +409,10 @@ class HAL9000:
         if not src.is_dir() or not dest.is_dir():
             return []
 
-        src_names = self._walk_names(src)
+        src_names = self._walk_names(src, follow_symlinks=True)
         if not src_names:
             return []
-        return sorted(dest / name for name in self._walk_names(dest) - src_names)
+        return sorted(dest / name for name in self._walk_names(dest, follow_symlinks=False) - src_names)
 
     def _remove_orphan(self, path: Path) -> bool:
         if path.is_symlink() or not path.is_dir():
@@ -433,12 +448,13 @@ class HAL9000:
 
         orphans.sort()
         home = str(Path.home())
-        self._hal_says(f"{len(orphans)} orphans in backup, absent from source:")
+        counted = f"{len(orphans)} orphan" if len(orphans) == 1 else f"{len(orphans)} orphans"
+        self._hal_says(f"{counted} in backup, absent from source:")
         for path in orphans:
             print(f"  {str(path).replace(home, '~', 1)}")
 
         try:
-            answer = input(f"Delete {len(orphans)} orphans from backup? [y/N] ")
+            answer = input(f"Delete {counted} from backup? [y/N] ")
         except EOFError:
             answer = ""
         if answer.strip().lower() != "y":

@@ -812,6 +812,84 @@ class TestBackupPrune:
 
         assert not (dest / "gone").exists()
 
+    def test_symlinked_source_directory_is_followed(self, hal_instance, tmp_path):
+        """copytree dereferences source symlinks, so the backup holds real files that must not read as orphans."""
+        src = tmp_path / "live"
+        (src / "real" / "skill").mkdir(parents=True)
+        (src / "real" / "skill" / "SKILL.md").write_text("skill")
+        (src / "linked").symlink_to(src / "real")
+
+        dest = tmp_path / "dropbox"
+        (dest / "real" / "skill").mkdir(parents=True)
+        (dest / "real" / "skill" / "SKILL.md").write_text("skill")
+        (dest / "linked" / "skill").mkdir(parents=True)
+        (dest / "linked" / "skill" / "SKILL.md").write_text("skill")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert (dest / "linked" / "skill" / "SKILL.md").read_text() == "skill"
+
+    def test_file_deleted_behind_a_symlinked_source_directory_is_an_orphan(self, hal_instance, tmp_path):
+        """Following the symlink must still surface what was deleted on the other side of it."""
+        src = tmp_path / "live"
+        (src / "real").mkdir(parents=True)
+        (src / "real" / "kept.md").write_text("kept")
+        (src / "linked").symlink_to(src / "real")
+
+        dest = tmp_path / "dropbox"
+        (dest / "real").mkdir(parents=True)
+        (dest / "real" / "kept.md").write_text("kept")
+        (dest / "linked").mkdir()
+        (dest / "linked" / "kept.md").write_text("kept")
+        (dest / "linked" / "removed.md").write_text("orphan")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert (dest / "linked" / "kept.md").read_text() == "kept"
+        assert not (dest / "linked" / "removed.md").exists()
+
+    def test_symlink_loop_in_source_terminates(self, hal_instance, tmp_path):
+        """A source symlink pointing at its own ancestor must not walk forever.
+
+        Diffing only, not through backup(): shutil.copytree follows the loop until the
+        filesystem stops it, so a source shaped like this breaks `hal backup` on its own.
+        """
+        src = tmp_path / "live"
+        (src / "nested").mkdir(parents=True)
+        (src / "nested" / "current.txt").write_text("current")
+        (src / "nested" / "loop").symlink_to(src)
+
+        dest = tmp_path / "dropbox"
+        (dest / "nested").mkdir(parents=True)
+        (dest / "nested" / "current.txt").write_text("current")
+        (dest / "orphan.txt").write_text("orphan")
+
+        entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            orphans = hal_instance._find_orphans(entry)
+
+        assert orphans == [dest / "orphan.txt"]
+
+    def test_symlinked_destination_directory_is_not_followed(self, hal_instance, tmp_path):
+        """Descending a destination symlink would delete through it, outside the backup."""
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        (outside / "unrelated.txt").write_text("not part of any backup")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "current.txt").write_text("current")
+        (dest / "link").symlink_to(outside)
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert not (dest / "link").exists()
+        assert (outside / "unrelated.txt").read_text() == "not part of any backup"
+
     def test_undeletable_directory_is_kept_and_prune_continues(self, hal_instance, tmp_path):
         """A directory holding something the listing never accounted for survives, and later orphans still go."""
         src = tmp_path / "live"
@@ -911,7 +989,7 @@ class TestBackupPrune:
         self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}], answer="")
 
         out = capsys.readouterr().out
-        assert "1 orphans in backup, absent from source:" in out
+        assert "1 orphan in backup, absent from source:" in out
         assert str(dest / "orphan.txt") in out
 
 
