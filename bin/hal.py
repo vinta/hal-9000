@@ -11,6 +11,12 @@ import stat
 import subprocess
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING, TypedDict, cast
+
+if TYPE_CHECKING:
+    # NotRequired is 3.11+, but this runs under whatever `python3` resolves to, which on a stock macOS is 3.9
+    # The `annotations` future keeps every annotation below a string, so it is never evaluated at runtime
+    from typing import NotRequired
 
 # Only needed for generating shell completion during local development
 try:
@@ -29,16 +35,24 @@ class Settings:
     DIFF_IGNORE_PATTERNS: tuple[str, ...] = (".git",)
 
 
+class Entry(TypedDict):
+    src: str
+    dest: str
+    prune: NotRequired[bool]  # Backup entries only: false keeps --prune away from this destination
+
+
 class Dotfiles:
     DEFAULT_CONFIG: str = str(Path(Settings.DOTFILES_ROOT) / "hal_dotfiles.json")
-    ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest")
+    # save() rebuilds every entry from these keys, so a key missing here is dropped
+    # from the manifest the next time any command writes it back
+    ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest", "prune")
 
     def __init__(self, path: str | None = None) -> None:
         self.path: str = path or self.DEFAULT_CONFIG
-        self._data: dict[str, list[dict[str, str]]] | None = None
+        self._data: dict[str, list[Entry]] | None = None
 
     @property
-    def data(self) -> dict[str, list[dict[str, str]]]:
+    def data(self) -> dict[str, list[Entry]]:
         if self._data is None:
             try:
                 with Path(self.path).open() as f:
@@ -49,15 +63,23 @@ class Dotfiles:
         assert self._data is not None  # noqa: S101 assert
         return self._data
 
-    def find_by_key(self, key: str, value: str, field_name: str) -> dict[str, str] | None:
+    def find_by_key(self, key: str, value: str, field_name: str) -> Entry | None:
         entries = self.data[field_name]
         try:
-            return next(entry for entry in entries if entry[key] == value)
+            # Looked up by a caller-supplied key, which a TypedDict cannot be subscripted with
+            return next(entry for entry in entries if cast("dict[str, object]", entry).get(key) == value)
         except StopIteration:
             return None
 
-    def _ordered_data(self) -> dict[str, list[dict[str, str]]]:
-        return {field_name: [{key: entry[key] for key in self.ENTRY_KEY_ORDER if key in entry} for entry in entries] for field_name, entries in sorted(self.data.items())}
+    @staticmethod
+    def _ordered_entry(entry: Entry) -> dict[str, object]:
+        # Projected through ENTRY_KEY_ORDER by keys held in a variable, which a TypedDict cannot be subscripted with
+        fields = cast("dict[str, object]", entry)
+        return {key: fields[key] for key in Dotfiles.ENTRY_KEY_ORDER if key in fields}
+
+    def _ordered_data(self) -> dict[str, list[dict[str, object]]]:
+        """The manifest as written back to disk, so plain mappings rather than Entry values."""
+        return {field_name: [self._ordered_entry(entry) for entry in entries] for field_name, entries in sorted(self.data.items())}
 
     def show(self) -> None:
         print(json.dumps(self._ordered_data(), indent=2, separators=(",", ": ")))
@@ -264,7 +286,7 @@ class HAL9000:
         self.dotfiles.save()
         self.dotfiles.show()
 
-    def _sync_links(self, link: dict[str, str], *, force: bool = False) -> None:
+    def _sync_links(self, link: Entry, *, force: bool = False) -> None:
         src = self._expand_template(link["src"])
         if not Path(src).exists():
             self._hal_says(f"not found {src}")
@@ -337,7 +359,7 @@ class HAL9000:
             shutil.copy2(src, dest)
         self._hal_says(f"copy {src} -> {dest}")
 
-    def _copy_entry(self, entry: dict[str, str]) -> None:
+    def _copy_entry(self, entry: Entry) -> None:
         src = self._expand_template(entry["src"])
 
         if "*" in src:
@@ -391,7 +413,7 @@ class HAL9000:
                 stack.append((child, relative))
         return names
 
-    def _find_orphans(self, entry: dict[str, str]) -> list[Path]:
+    def _find_orphans(self, entry: Entry) -> list[Path]:
         """Paths in this entry's backup destination that no longer exist in its source.
 
         An entry whose source is missing or empty yields nothing: there the backup is
@@ -440,7 +462,10 @@ class HAL9000:
     def _prune(self) -> None:
         orphans: list[Path] = []
         for entry in self.dotfiles.data["backups"]:
-            orphans.extend(self._find_orphans(entry))
+            if entry.get("prune", True):
+                orphans.extend(self._find_orphans(entry))
+            else:
+                self._hal_says(f"prune disabled {entry['src']}")
 
         if not orphans:
             self._hal_says("nothing to prune")

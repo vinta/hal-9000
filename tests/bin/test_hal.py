@@ -812,6 +812,57 @@ class TestBackupPrune:
 
         assert not (dest / "gone").exists()
 
+    def test_entry_can_opt_out_of_pruning(self, hal_instance, tmp_path):
+        """A backup whose destination outlives its source keeps its orphans."""
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "archived.txt").write_text("only copy left")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest), "prune": False}], answer="y")
+
+        assert (dest / "archived.txt").read_text() == "only copy left"
+
+    def test_opting_one_entry_out_leaves_the_others(self, hal_instance, tmp_path):
+        kept_src = tmp_path / "kept_live"
+        kept_src.mkdir()
+        (kept_src / "current.txt").write_text("current")
+        kept_dest = tmp_path / "kept_dropbox"
+        kept_dest.mkdir()
+        (kept_dest / "archived.txt").write_text("only copy left")
+
+        pruned_src = tmp_path / "pruned_live"
+        pruned_src.mkdir()
+        (pruned_src / "current.txt").write_text("current")
+        pruned_dest = tmp_path / "pruned_dropbox"
+        pruned_dest.mkdir()
+        (pruned_dest / "orphan.txt").write_text("orphan")
+
+        entries = [
+            {"src": str(kept_src), "dest": str(kept_dest), "prune": False},
+            {"src": str(pruned_src), "dest": str(pruned_dest)},
+        ]
+        self._prune(hal_instance, entries)
+
+        assert (kept_dest / "archived.txt").read_text() == "only copy left"
+        assert not (pruned_dest / "orphan.txt").exists()
+
+    def test_prune_true_is_the_same_as_omitting_it(self, hal_instance, tmp_path):
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "orphan.txt").write_text("orphan")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest), "prune": True}])
+
+        assert not (dest / "orphan.txt").exists()
+
     def test_symlinked_source_directory_is_followed(self, hal_instance, tmp_path):
         """copytree dereferences source symlinks, so the backup holds real files that must not read as orphans."""
         src = tmp_path / "live"
@@ -1017,3 +1068,17 @@ class TestArgParsing:
         with pytest.raises(SystemExit) as exc_info:
             hal.read_lips()
         assert exc_info.value.code == 2
+
+
+class TestManifestRoundTrip:
+    def test_prune_field_survives_save(self, hal_module, tmp_path):
+        """save() rebuilds entries from ENTRY_KEY_ORDER, so an unlisted key would be dropped by any `hal link`."""
+        manifest = tmp_path / "hal_dotfiles.json"
+        entries = {"backups": [{"src": "a", "dest": "b", "prune": False}], "copies": [], "links": []}
+        manifest.write_text(json.dumps(entries))
+
+        dotfiles = hal_module.Dotfiles(str(manifest))
+        _ = dotfiles.data
+        dotfiles.save()
+
+        assert json.loads(manifest.read_text())["backups"][0] == {"src": "a", "dest": "b", "prune": False}
