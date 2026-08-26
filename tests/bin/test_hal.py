@@ -573,7 +573,7 @@ class TestBackupRestore:
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
-            hal_instance.backup(argparse.Namespace())
+            hal_instance.backup(argparse.Namespace(prune=False))
 
         assert dest.read_text() == "live data"
 
@@ -593,7 +593,7 @@ class TestBackupRestore:
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
-            hal_instance.backup(argparse.Namespace())
+            hal_instance.backup(argparse.Namespace(prune=False))
 
         assert (dest / "current.txt").read_text() == "current"
         assert (dest / "deleted_long_ago.txt").read_text() == "keep me"
@@ -691,6 +691,230 @@ class TestBackupRestore:
         assert not dest.exists()
 
 
+class TestBackupPrune:
+    """--prune deletes files that exist only in the backup destination."""
+
+    @staticmethod
+    def _prune(hal_instance, entries, answer="y"):
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+            patch("builtins.input", return_value=answer),
+        ):
+            mock_dotfiles.data = {"backups": entries}
+            hal_instance.backup(argparse.Namespace(prune=True))
+
+    def test_deletes_orphans_after_confirmation(self, hal_instance, tmp_path):
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "current.txt").write_text("current")
+        (dest / "deleted_long_ago.txt").write_text("orphan")
+        (dest / "gone").mkdir()
+        (dest / "gone" / "nested.txt").write_text("orphan")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert (dest / "current.txt").read_text() == "current"
+        assert not (dest / "deleted_long_ago.txt").exists()
+        assert not (dest / "gone").exists()
+
+    def test_declining_keeps_everything(self, hal_instance, tmp_path):
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "orphan.txt").write_text("orphan")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}], answer="")
+
+        assert (dest / "orphan.txt").read_text() == "orphan"
+
+    def test_backup_without_prune_deletes_nothing(self, hal_instance, tmp_path):
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "orphan.txt").write_text("orphan")
+
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
+            hal_instance.backup(argparse.Namespace(prune=False))
+
+        assert (dest / "orphan.txt").read_text() == "orphan"
+
+    def test_missing_source_is_skipped(self, hal_instance, tmp_path):
+        """A source that no longer exists must not turn its whole backup into orphans."""
+        src = tmp_path / "unmounted"
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "only_copy.txt").write_text("irreplaceable")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert (dest / "only_copy.txt").read_text() == "irreplaceable"
+
+    def test_source_holding_only_ignored_files_is_skipped(self, hal_instance, tmp_path):
+        """A source that walks to nothing once ignores are applied counts as empty, not as fully deleted."""
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / ".DS_Store").write_text("finder")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "only_copy.txt").write_text("irreplaceable")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert (dest / "only_copy.txt").read_text() == "irreplaceable"
+
+    def test_git_internals_are_never_pruned(self, hal_instance, tmp_path):
+        """Objects git reclaimed locally stay in the backup instead of dominating the listing."""
+        src = tmp_path / "live"
+        (src / ".git" / "objects").mkdir(parents=True)
+        (src / "README.md").write_text("readme")
+
+        dest = tmp_path / "dropbox"
+        (dest / ".git" / "objects").mkdir(parents=True)
+        (dest / ".git" / "objects" / "stale").write_text("superseded")
+        (dest / "README.md").write_text("readme")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert (dest / ".git" / "objects" / "stale").read_text() == "superseded"
+
+    def test_orphan_directory_holding_ignored_files_is_removed(self, hal_instance, tmp_path):
+        """.DS_Store is filtered out of the diff, so rmdir would fail on a directory still holding one."""
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "current.txt").write_text("current")
+        (dest / "gone").mkdir()
+        (dest / "gone" / ".DS_Store").write_text("finder")
+        (dest / "gone" / "cached").mkdir()
+        (dest / "gone" / "cached" / "__pycache__").mkdir()
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert not (dest / "gone").exists()
+
+    def test_undeletable_directory_is_kept_and_prune_continues(self, hal_instance, tmp_path):
+        """A directory holding something the listing never accounted for survives, and later orphans still go."""
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "current.txt").write_text("current")
+        (dest / "abandoned_repo").mkdir()
+        (dest / "abandoned_repo" / ".git").mkdir()
+        (dest / "zz_orphan.txt").write_text("orphan")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert (dest / "abandoned_repo" / ".git").is_dir()
+        assert not (dest / "zz_orphan.txt").exists()
+
+    def test_symlink_orphan_is_unlinked_without_touching_target(self, hal_instance, tmp_path):
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        target = tmp_path / "target"
+        target.mkdir()
+        (target / "keep.txt").write_text("keep")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "current.txt").write_text("current")
+        (dest / "link").symlink_to(target)
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert not (dest / "link").exists()
+        assert (target / "keep.txt").read_text() == "keep"
+
+    def test_glob_entry_prunes_unmatched_files(self, hal_instance, tmp_path):
+        src_dir = tmp_path / "projects"
+        src_dir.mkdir()
+        (src_dir / "acme.code-workspace").write_text("acme")
+
+        dest_dir = tmp_path / "dropbox"
+        dest_dir.mkdir()
+        (dest_dir / "acme.code-workspace").write_text("acme")
+        (dest_dir / "renamed.code-workspace").write_text("orphan")
+        (dest_dir / "notes.txt").write_text("not covered by the pattern")
+
+        entry = {"src": str(src_dir / "*.code-workspace"), "dest": str(dest_dir / "*.code-workspace")}
+        self._prune(hal_instance, [entry])
+
+        assert (dest_dir / "acme.code-workspace").read_text() == "acme"
+        assert not (dest_dir / "renamed.code-workspace").exists()
+        assert (dest_dir / "notes.txt").exists()
+
+    def test_glob_entry_with_no_source_matches_is_skipped(self, hal_instance, tmp_path):
+        src_dir = tmp_path / "projects"
+        src_dir.mkdir()
+
+        dest_dir = tmp_path / "dropbox"
+        dest_dir.mkdir()
+        (dest_dir / "only_copy.code-workspace").write_text("irreplaceable")
+
+        entry = {"src": str(src_dir / "*.code-workspace"), "dest": str(dest_dir / "*.code-workspace")}
+        self._prune(hal_instance, [entry])
+
+        assert (dest_dir / "only_copy.code-workspace").read_text() == "irreplaceable"
+
+    def test_no_orphans_skips_the_prompt(self, hal_instance, tmp_path):
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+
+        def fail_if_called(_prompt):
+            pytest.fail("prompted with nothing to prune")
+
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+            patch("builtins.input", side_effect=fail_if_called),
+        ):
+            mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
+            hal_instance.backup(argparse.Namespace(prune=True))
+
+    def test_listing_precedes_the_prompt(self, hal_instance, tmp_path, capsys):
+        src = tmp_path / "live"
+        src.mkdir()
+        (src / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "orphan.txt").write_text("orphan")
+
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}], answer="")
+
+        out = capsys.readouterr().out
+        assert "1 orphans in backup, absent from source:" in out
+        assert str(dest / "orphan.txt") in out
+
+
 class TestArgParsing:
     def test_unknown_args_rejected_for_link(self, hal_module):
         """Non-update commands should reject unknown arguments."""
@@ -703,6 +927,14 @@ class TestArgParsing:
     def test_unknown_args_rejected_for_sync(self, hal_module):
         """sync should also reject unknown arguments."""
         sys.argv = ["hal", "sync", "--unknown"]
+        hal = hal_module.HAL9000()
+        with pytest.raises(SystemExit) as exc_info:
+            hal.read_lips()
+        assert exc_info.value.code == 2
+
+    def test_prune_rejected_for_restore(self, hal_module):
+        """--prune belongs to backup only; restore must not silently accept it."""
+        sys.argv = ["hal", "restore", "--prune"]
         hal = hal_module.HAL9000()
         with pytest.raises(SystemExit) as exc_info:
             hal.read_lips()

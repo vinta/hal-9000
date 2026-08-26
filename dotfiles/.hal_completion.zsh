@@ -48,7 +48,12 @@ _hal() {
                     '(-h --help)'{-h,--help}'[show this help message and exit]' \
                     '--force[replace real directories at link destinations]'
                 ;;
-            backup|restore|open-the-pod-bay-doors)
+            backup)
+                _arguments \
+                    '(-h --help)'{-h,--help}'[show this help message and exit]' \
+                    '--prune[after backing up, list files present only in the backup and offer to delete them]'
+                ;;
+            restore|open-the-pod-bay-doors)
                 _arguments \
                     '(-h --help)'{-h,--help}'[show this help message and exit]'
                 ;;

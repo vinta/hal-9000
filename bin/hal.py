@@ -23,6 +23,10 @@ class Settings:
     REPO_ROOT: str = str(Path(__file__).resolve().parent.parent)
     DOTFILES_ROOT: str = str(Path(REPO_ROOT) / "dotfiles")
     IGNORE_PATTERNS: tuple[str, ...] = (".DS_Store", ".venv", ".*_cache", "__pycache__", "node_modules", "-private-tmp*")
+    # Skipped when diffing a backup against its source, but still copied by backup itself:
+    # git reclaims loose objects and packs locally, so a copy-only backup keeps every
+    # superseded one forever and they would drown out the orphans worth seeing.
+    DIFF_IGNORE_PATTERNS: tuple[str, ...] = (".git",)
 
 
 class Dotfiles:
@@ -112,6 +116,7 @@ class HAL9000:
 
         backup_parser = subparsers.add_parser("backup", help="back up all backup entries to their destinations")
         backup_parser.set_defaults(func=self.backup)
+        backup_parser.add_argument("--prune", action="store_true", help="after backing up, list files present only in the backup and offer to delete them")
 
         restore_parser = subparsers.add_parser("restore", help="restore all backup entries, overwriting local files")
         restore_parser.set_defaults(func=self.restore)
@@ -355,6 +360,94 @@ class HAL9000:
         dest = self._expand_template(entry["dest"])
         self._copy_one(src, dest)
 
+    @staticmethod
+    def _walk_names(root: Path) -> set[str]:
+        """Every path under root, relative to it, skipping ignored names and not descending into symlinked directories."""
+        names: set[str] = set()
+        stack = [(root, "")]
+        while stack:
+            directory, prefix = stack.pop()
+            for child in directory.iterdir():
+                if HAL9000._is_ignored(str(child)) or child.name in Settings.DIFF_IGNORE_PATTERNS:
+                    continue
+                relative = f"{prefix}/{child.name}" if prefix else child.name
+                names.add(relative)
+                if child.is_dir() and not child.is_symlink():
+                    stack.append((child, relative))
+        return names
+
+    def _find_orphans(self, entry: dict[str, str]) -> list[Path]:
+        """Paths in this entry's backup destination that no longer exist in its source.
+
+        An entry whose source is missing or empty yields nothing: there the backup is
+        the only surviving copy, and every file in it would otherwise read as an orphan.
+        """
+        src = Path(self._expand_template(entry["src"]))
+        dest = Path(self._expand_template(entry["dest"]))
+
+        if "*" in str(src):
+            src_names = {match.name for match in src.parent.glob(src.name)}
+            if not src_names:
+                return []
+            return sorted(match for match in dest.parent.glob(dest.name) if match.name not in src_names)
+
+        if not src.is_dir() or not dest.is_dir():
+            return []
+
+        src_names = self._walk_names(src)
+        if not src_names:
+            return []
+        return sorted(dest / name for name in self._walk_names(dest) - src_names)
+
+    def _remove_orphan(self, path: Path) -> bool:
+        if path.is_symlink() or not path.is_dir():
+            path.unlink()
+            return True
+
+        # Orphans are removed deepest first, so anything left inside a directory was
+        # filtered out of the diff and never listed. Clear those, then rmdir, which
+        # still refuses any directory holding something the listing did not account for.
+        for child in path.iterdir():
+            if not self._is_ignored(str(child)):
+                continue
+            if child.is_dir() and not child.is_symlink():
+                shutil.rmtree(child)
+            else:
+                child.unlink()
+
+        try:
+            path.rmdir()
+        except OSError as error:
+            self._hal_says(f"kept {path}: {error.strerror}")
+            return False
+        return True
+
+    def _prune(self) -> None:
+        orphans: list[Path] = []
+        for entry in self.dotfiles.data["backups"]:
+            orphans.extend(self._find_orphans(entry))
+
+        if not orphans:
+            self._hal_says("nothing to prune")
+            return
+
+        orphans.sort()
+        home = str(Path.home())
+        self._hal_says(f"{len(orphans)} orphans in backup, absent from source:")
+        for path in orphans:
+            print(f"  {str(path).replace(home, '~', 1)}")
+
+        try:
+            answer = input(f"Delete {len(orphans)} orphans from backup? [y/N] ")
+        except EOFError:
+            answer = ""
+        if answer.strip().lower() != "y":
+            self._hal_says("aborted")
+            return
+
+        removed = sum(self._remove_orphan(path) for path in sorted(orphans, reverse=True))
+        self._hal_says(f"pruned {removed}")
+
     def sync(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures: list[concurrent.futures.Future[None]] = []
@@ -368,6 +461,9 @@ class HAL9000:
             futures = [executor.submit(self._copy_entry, entry) for entry in self.dotfiles.data["backups"]]
             for f in concurrent.futures.as_completed(futures):
                 f.result()
+
+        if namespace.prune:
+            self._prune()
 
     def restore(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         entries = self.dotfiles.data["backups"]
