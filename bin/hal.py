@@ -151,17 +151,17 @@ class HAL9000:
 
     @staticmethod
     def _abbreviate_home(text: str) -> str:
-        """Home shown as ~ wherever it appears, so a message naming both a source and a destination abbreviates the two alike."""
+        """Home shown as ~ wherever it appears in a message, so one naming both a source and a destination abbreviates the two alike."""
         return text.replace(str(Path.home()), "~")
 
     def _hal_says(self, text: str) -> None:
-        print(f"HAL: {self._abbreviate_home(text)}")
+        print(f"HAL: {text}")
 
     def _validate_path(self, path: str) -> None:
         resolved = Path(path).resolve()
         allowed_roots = (Path.home(), Path(Settings.REPO_ROOT))
         if not any(resolved.is_relative_to(root) for root in allowed_roots):
-            self._hal_says(f"I'm sorry, Dave. I'm afraid I can't do that: {resolved}")
+            self._hal_says(self._abbreviate_home(f"I'm sorry, Dave. I'm afraid I can't do that: {resolved}"))
             sys.exit(1)
 
     def _expand_template(self, path: str) -> str:
@@ -208,7 +208,7 @@ class HAL9000:
         if returncode == 0:
             ansible_path = output.decode().strip()
             if not ansible_path.startswith("/opt/homebrew/bin/"):
-                self._hal_says(f"Found ansible at: {ansible_path}")
+                self._hal_says(self._abbreviate_home(f"Found ansible at: {ansible_path}"))
                 self._hal_says("You should use Homebrew's ansible")
                 sys.exit(1)
 
@@ -233,13 +233,13 @@ class HAL9000:
         filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)
 
         shutil.move(filepath, dest_path)
-        self._hal_says(f"mv {filepath} -> {dest_path}")
+        self._hal_says(self._abbreviate_home(f"mv {filepath} -> {dest_path}"))
 
         ln_dest = Path(filepath)
         if ln_dest.is_symlink() or ln_dest.exists():
             ln_dest.unlink()
         ln_dest.symlink_to(dest_path)
-        self._hal_says(f"ln {dest_path} -> {filepath}")
+        self._hal_says(self._abbreviate_home(f"ln {dest_path} -> {filepath}"))
 
         ln_dict = self.dotfiles.find_by_key("src", template_src, "links")
         if ln_dict:
@@ -263,7 +263,7 @@ class HAL9000:
         dest_path = self._expand_template(ln_dict["dest"])
 
         if not Path(src_path).exists():
-            self._hal_says(f"not found in dotfiles: {src_path}")
+            self._hal_says(self._abbreviate_home(f"not found in dotfiles: {src_path}"))
             return
 
         if Path(dest_path).is_symlink():
@@ -280,7 +280,7 @@ class HAL9000:
         filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)
 
         shutil.copy2(filepath, dest_path)
-        self._hal_says(f"cp {filepath} -> {dest_path}")
+        self._hal_says(self._abbreviate_home(f"cp {filepath} -> {dest_path}"))
 
         cp_dict = self.dotfiles.find_by_key("src", template_src, "copies")
         if cp_dict:
@@ -294,7 +294,7 @@ class HAL9000:
     def _sync_links(self, link: Entry, *, force: bool = False) -> None:
         src = self._expand_template(link["src"])
         if not Path(src).exists():
-            self._hal_says(f"not found {src}")
+            self._hal_says(self._abbreviate_home(f"not found {src}"))
             return
 
         dest = self._expand_template(link["dest"]).rstrip("/")
@@ -304,7 +304,7 @@ class HAL9000:
         # It may hold files no manifest entry covers, so make destroying them explicit.
         if Path(dest).is_dir() and not Path(dest).is_symlink():
             if not force:
-                self._hal_says(f"refusing to replace directory {dest}, re-run with --force")
+                self._hal_says(self._abbreviate_home(f"refusing to replace directory {dest}, re-run with --force"))
                 return
             shutil.rmtree(dest)
 
@@ -312,7 +312,7 @@ class HAL9000:
         if dest_path.is_symlink() or dest_path.exists():
             dest_path.unlink()
         dest_path.symlink_to(src)
-        self._hal_says(f"link {src} -> {dest}")
+        self._hal_says(self._abbreviate_home(f"link {src} -> {dest}"))
 
     @staticmethod
     def _is_unchanged(src: str, dest: str) -> bool:
@@ -345,7 +345,7 @@ class HAL9000:
 
     def _copy_one(self, src: str, dest: str) -> None:
         if self._is_ignored(src):
-            self._hal_says(f"ignored {src}")
+            self._hal_says(self._abbreviate_home(f"ignored {src}"))
             return
 
         if Path(src).is_dir():
@@ -358,11 +358,11 @@ class HAL9000:
             )
         else:
             if self._is_unchanged(src, dest):
-                self._hal_says(f"unchanged {src}")
+                self._hal_says(self._abbreviate_home(f"unchanged {src}"))
                 return
             Path(dest).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(src, dest)
-        self._hal_says(f"copy {src} -> {dest}")
+        self._hal_says(self._abbreviate_home(f"copy {src} -> {dest}"))
 
     def _copy_entry(self, entry: Entry) -> None:
         src = self._expand_template(entry["src"])
@@ -373,7 +373,7 @@ class HAL9000:
             dprefix, _, dsuffix = dest.partition("*")
             matches = sorted(str(match) for match in Path(src).parent.glob(Path(src).name))
             if not matches:
-                self._hal_says(f"no matches {src}")
+                self._hal_says(self._abbreviate_home(f"no matches {src}"))
                 return
             for match in matches:
                 star = match[len(prefix) : len(match) - len(suffix)]
@@ -381,7 +381,7 @@ class HAL9000:
             return
 
         if not Path(src).exists():
-            self._hal_says(f"not found {src}")
+            self._hal_says(self._abbreviate_home(f"not found {src}"))
             return
 
         dest = self._expand_template(entry["dest"])
@@ -460,7 +460,7 @@ class HAL9000:
         try:
             path.rmdir()
         except OSError as error:
-            self._hal_says(f"kept {path}: {error.strerror}")
+            self._hal_says(self._abbreviate_home(f"kept {path}: {error.strerror}"))
             return False
         return True
 
@@ -470,7 +470,7 @@ class HAL9000:
             if entry.get("prune", True):
                 orphans.extend(self._find_orphans(entry))
             else:
-                self._hal_says(f"prune disabled {self._expand_template(entry['dest'])}")
+                self._hal_says(self._abbreviate_home(f"prune disabled {self._expand_template(entry['dest'])}"))
 
         if not orphans:
             self._hal_says("nothing to prune")
@@ -517,7 +517,7 @@ class HAL9000:
             return
 
         for entry in entries:
-            self._hal_says(f"{self._expand_template(entry['dest'])} -> {self._expand_template(entry['src'])}")
+            self._hal_says(self._abbreviate_home(f"{self._expand_template(entry['dest'])} -> {self._expand_template(entry['src'])}"))
 
         try:
             answer = input("Overwrite local files with backups? [y/N] ")
