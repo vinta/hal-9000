@@ -366,20 +366,33 @@ class HAL9000:
             shutil.copy2(src, dest)
         self._hal_says(f"copy {self._abbreviate_home(src)} -> {self._abbreviate_home(dest)}")
 
+    def _glob_pairs(self, entry: Entry) -> list[tuple[str, str]]:
+        """The (src, dest) pairs a single-`*` entry expands to, with each star spliced into dest.
+
+        Copying and pruning have to read a pattern pair the same way: these destinations are
+        exactly the ones a backup writes, so anything else matching the dest pattern is an orphan.
+        """
+        src = self._expand_template(entry["src"])
+        dest = self._expand_template(entry["dest"])
+        prefix, _, suffix = src.partition("*")
+        dprefix, _, dsuffix = dest.partition("*")
+        matches = sorted(str(match) for match in Path(src).parent.glob(Path(src).name))
+        pairs = []
+        for match in matches:
+            star = match[len(prefix) : len(match) - len(suffix)]
+            pairs.append((match, f"{dprefix}{star}{dsuffix}"))
+        return pairs
+
     def _copy_entry(self, entry: Entry) -> None:
         src = self._expand_template(entry["src"])
 
         if "*" in src:
-            dest = self._expand_template(entry["dest"])
-            prefix, _, suffix = src.partition("*")
-            dprefix, _, dsuffix = dest.partition("*")
-            matches = sorted(str(match) for match in Path(src).parent.glob(Path(src).name))
-            if not matches:
+            pairs = self._glob_pairs(entry)
+            if not pairs:
                 self._hal_says(f"no matches {self._abbreviate_home(src)}")
                 return
-            for match in matches:
-                star = match[len(prefix) : len(match) - len(suffix)]
-                self._copy_one(match, f"{dprefix}{star}{dsuffix}")
+            for match, match_dest in pairs:
+                self._copy_one(match, match_dest)
             return
 
         if not Path(src).exists():
@@ -430,10 +443,11 @@ class HAL9000:
         dest = Path(self._expand_template(entry["dest"]))
 
         if "*" in str(src):
-            src_names = {match.name for match in src.parent.glob(src.name)}
-            if not src_names:
+            pairs = self._glob_pairs(entry)
+            if not pairs:
                 return []
-            return sorted(match for match in dest.parent.glob(dest.name) if match.name not in src_names)
+            expected = {Path(pair_dest) for _, pair_dest in pairs}
+            return sorted(match for match in dest.parent.glob(dest.name) if match not in expected)
 
         if not src.is_dir() or not dest.is_dir():
             return []

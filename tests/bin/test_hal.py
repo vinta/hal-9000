@@ -1051,6 +1051,40 @@ class TestBackupPrune:
 
         assert (dest_dir / "only_copy.code-workspace").read_text() == "irreplaceable"
 
+    def test_glob_entry_with_renaming_pattern_keeps_what_it_just_copied(self, hal_instance, tmp_path):
+        """Copying splices the star into dest, so pruning must expect the spliced name, not the source name."""
+        src_dir = tmp_path / "projects"
+        src_dir.mkdir()
+        (src_dir / "foo-1.log").write_text("one")
+
+        dest_dir = tmp_path / "dropbox"
+        dest_dir.mkdir()
+
+        entry = {"src": str(src_dir / "foo-*.log"), "dest": str(dest_dir / "bar-*.log")}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(entry)
+            orphans = hal_instance._find_orphans(entry)
+
+        assert (dest_dir / "bar-1.log").read_text() == "one"
+        assert orphans == []
+
+    def test_glob_entry_with_renaming_pattern_still_reports_unmatched_files(self, hal_instance, tmp_path):
+        """A dest file whose star segment no longer has a source match is an orphan under a renaming pair."""
+        src_dir = tmp_path / "projects"
+        src_dir.mkdir()
+        (src_dir / "foo-1.log").write_text("one")
+
+        dest_dir = tmp_path / "dropbox"
+        dest_dir.mkdir()
+        (dest_dir / "bar-9.log").write_text("orphan")
+
+        entry = {"src": str(src_dir / "foo-*.log"), "dest": str(dest_dir / "bar-*.log")}
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+            hal_instance._copy_entry(entry)
+            orphans = hal_instance._find_orphans(entry)
+
+        assert orphans == [dest_dir / "bar-9.log"]
+
     def test_no_orphans_skips_the_prompt(self, hal_instance, tmp_path):
         src = tmp_path / "live"
         src.mkdir()
