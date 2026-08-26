@@ -690,6 +690,26 @@ class TestBackupRestore:
 
         assert not dest.exists()
 
+    def test_messages_abbreviate_the_home_directory(self, hal_instance, tmp_path, capsys):
+        """A copy line names both paths, so a prefix-only abbreviation would shorten just the first."""
+        home = tmp_path / "home"
+        src = home / "live.txt"
+        src.parent.mkdir()
+        src.write_text("live data")
+        dest = home / "dropbox" / "live.txt"
+
+        with (
+            patch("pathlib.Path.home", return_value=home),
+            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
+            hal_instance.backup(argparse.Namespace(prune=False))
+
+        out = capsys.readouterr().out
+        assert "HAL: copy ~/live.txt -> ~/dropbox/live.txt" in out
+        assert str(home) not in out
+
 
 class TestBackupPrune:
     """--prune deletes files that exist only in the backup destination."""

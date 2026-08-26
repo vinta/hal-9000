@@ -149,8 +149,13 @@ class HAL9000:
         if argcomplete:
             argcomplete.autocomplete(parser)
 
+    @staticmethod
+    def _abbreviate_home(text: str) -> str:
+        """Home shown as ~ wherever it appears, so a message naming both a source and a destination abbreviates the two alike."""
+        return text.replace(str(Path.home()), "~")
+
     def _hal_says(self, text: str) -> None:
-        print(f"HAL: {text}")
+        print(f"HAL: {self._abbreviate_home(text)}")
 
     def _validate_path(self, path: str) -> None:
         resolved = Path(path).resolve()
@@ -459,18 +464,13 @@ class HAL9000:
             return False
         return True
 
-    @staticmethod
-    def _abbreviate_home(path: str) -> str:
-        home = str(Path.home())
-        return f"~{path[len(home) :]}" if path.startswith(home) else path
-
     def _prune(self) -> None:
         orphans: list[Path] = []
         for entry in self.dotfiles.data["backups"]:
             if entry.get("prune", True):
                 orphans.extend(self._find_orphans(entry))
             else:
-                self._hal_says(f"prune disabled {self._abbreviate_home(self._expand_template(entry['dest']))}")
+                self._hal_says(f"prune disabled {self._expand_template(entry['dest'])}")
 
         if not orphans:
             self._hal_says("nothing to prune")
