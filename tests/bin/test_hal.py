@@ -883,20 +883,21 @@ class TestCopyEntryGlob:
         assert (local_dir / "acme.code-workspace").read_text() == "backed up"
 
 
-class TestParallel:
-    """_parallel runs every task and re-raises the first failure only after the others have finished."""
+class TestCopyEntries:
+    """_copy_entries copies every entry and re-raises the first failure only after the others have finished."""
 
-    def test_failure_is_reraised_after_the_other_tasks_ran(self, hal_module):
+    def test_failure_is_reraised_after_the_other_entries_ran(self, hal_instance):
         finished = []
 
-        def fail():
-            raise RuntimeError
+        def copy_entry(entry):
+            if entry["src"] == "fail":
+                raise RuntimeError
+            finished.append(entry["src"])
 
-        def succeed():
-            finished.append("ok")
+        hal_instance._copy_entry = copy_entry
 
         with pytest.raises(RuntimeError):
-            hal_module.HAL9000._parallel([fail, succeed])
+            hal_instance._copy_entries([{"src": "fail", "dest": "d"}, {"src": "ok", "dest": "d"}])
 
         assert finished == ["ok"]
 

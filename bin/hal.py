@@ -4,7 +4,6 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import fnmatch
-import functools
 import json
 import os
 import shlex
@@ -349,6 +348,16 @@ class HAL9000:
     def _hal_says(self, text: str) -> None:
         print(f"HAL: {text}")
 
+    def _confirm(self, question: str) -> bool:
+        try:
+            answer = input(question)
+        except EOFError:
+            answer = ""
+        if answer.strip().lower() == "y":
+            return True
+        self._hal_says("aborted")
+        return False
+
     def _validate_path(self, path: Path) -> None:
         resolved = path.resolve()
         allowed_roots = (Path.home(), Settings.REPO_ROOT)
@@ -373,8 +382,7 @@ class HAL9000:
             template_dest = str(filepath)
 
         dest_path = Settings.DOTFILES_ROOT / relative_path
-        if dest_path.parent != Settings.DOTFILES_ROOT:
-            dest_path.parent.mkdir(parents=True, exist_ok=True)
+        dest_path.parent.mkdir(parents=True, exist_ok=True)
 
         template_src = str(Path("{{REPO_ROOT}}") / dest_path.relative_to(Settings.REPO_ROOT))
 
@@ -486,21 +494,15 @@ class HAL9000:
         for path in orphans:
             print(f"  {abbreviate_home(path)}")
 
-        try:
-            answer = input(f"Delete {counted} from backup? [y/N] ")
-        except EOFError:
-            answer = ""
-        if answer.strip().lower() != "y":
-            self._hal_says("aborted")
+        if not self._confirm(f"Delete {counted} from backup? [y/N] "):
             return
 
         removed = sum(self.mirror.remove_orphan(path) for path in reversed(orphans))
         self._hal_says(f"pruned {removed}")
 
-    @staticmethod
-    def _parallel(tasks: Iterable[Callable[[], None]]) -> None:
+    def _copy_entries(self, entries: Iterable[Entry]) -> None:
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = [executor.submit(task) for task in tasks]
+            futures = [executor.submit(self._copy_entry, entry) for entry in entries]
             # Re-raises the first failure, but only after every task has finished: leaving the pool waits for the rest
             for future in concurrent.futures.as_completed(futures):
                 future.result()
@@ -508,10 +510,10 @@ class HAL9000:
     def sync(self, namespace: argparse.Namespace) -> None:
         for link in self.dotfiles.data["links"]:
             self.mirror.link(self._expand_template(link["src"]), self._expand_template(link["dest"]), force=namespace.force)
-        self._parallel(functools.partial(self._copy_entry, copy) for copy in self.dotfiles.data["copies"])
+        self._copy_entries(self.dotfiles.data["copies"])
 
     def backup(self, namespace: argparse.Namespace) -> None:
-        self._parallel(functools.partial(self._copy_entry, entry) for entry in self.dotfiles.data["backups"])
+        self._copy_entries(self.dotfiles.data["backups"])
 
         if namespace.prune:
             self._prune()
@@ -525,15 +527,10 @@ class HAL9000:
         for entry in entries:
             self._hal_says(f"{abbreviate_home(self._expand_template(entry['dest']))} -> {abbreviate_home(self._expand_template(entry['src']))}")
 
-        try:
-            answer = input("Overwrite local files with backups? [y/N] ")
-        except EOFError:
-            answer = ""
-        if answer.strip().lower() != "y":
-            self._hal_says("aborted")
+        if not self._confirm("Overwrite local files with backups? [y/N] "):
             return
 
-        self._parallel(functools.partial(self._copy_entry, Entry(src=entry["dest"], dest=entry["src"])) for entry in entries)
+        self._copy_entries(Entry(src=entry["dest"], dest=entry["src"]) for entry in entries)
 
     def open_the_pod_bay_doors(self, namespace: argparse.Namespace) -> None:  # noqa: ARG002 unused-method-argument
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
