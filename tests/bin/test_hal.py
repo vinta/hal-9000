@@ -8,6 +8,13 @@ from unittest.mock import patch
 import pytest
 
 
+class TestDotfilesLoad:
+    def test_missing_manifest_loads_as_empty(self, hal_module, tmp_path):
+        dotfiles = hal_module.Dotfiles(str(tmp_path / "hal_dotfiles.json"))
+
+        assert dotfiles.data == {"backups": [], "copies": [], "links": []}
+
+
 class TestDotfilesSave:
     """save() truncates the manifest, so it must build its payload first."""
 

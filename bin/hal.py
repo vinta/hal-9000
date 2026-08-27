@@ -57,14 +57,15 @@ class Dotfiles:
     @property
     def data(self) -> dict[str, list[Entry]]:
         if self._data is None:
-            try:
-                with Path(self.path).open() as f:
-                    self._data = json.load(f)
-            except FileNotFoundError:
-                self._data = {"backups": [], "copies": [], "links": []}
-
-        assert self._data is not None  # noqa: S101 assert
+            self._data = self._load()
         return self._data
+
+    def _load(self) -> dict[str, list[Entry]]:
+        try:
+            with Path(self.path).open() as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return {"backups": [], "copies": [], "links": []}
 
     def upsert(self, field_name: str, src: str, dest: str) -> None:
         """Point the entry for src at dest, adding the entry when there is none."""
