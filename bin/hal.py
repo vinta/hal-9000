@@ -97,6 +97,25 @@ class Mirror:
         self._say(f"link {abbreviate_home(src)} -> {abbreviate_home(dest)}")
 
     @staticmethod
+    def _is_unchanged(src: Path, dest: Path) -> bool:
+        if not dest.exists():
+            return False
+
+        src_stat = src.stat()
+        dest_stat = dest.stat()
+        # rsync's quick check: equal size and mtime means no rewrite, so Dropbox and Time Machine never re-examine the file
+        return src_stat.st_size == dest_stat.st_size and src_stat.st_mtime_ns == dest_stat.st_mtime_ns
+
+    @staticmethod
+    def _copy_file_allow_overwrite(src: Path, dest: Path) -> None:
+        if Mirror._is_unchanged(src, dest):
+            return
+
+        if dest.exists() and not dest.stat().st_mode & stat.S_IWUSR:
+            dest.chmod(dest.stat().st_mode | stat.S_IWUSR)
+        shutil.copy2(src, dest)
+
+    @staticmethod
     def _is_ignored(path: Path, patterns: tuple[str, ...]) -> bool:
         return any(fnmatch.fnmatch(path.name, pattern) for pattern in patterns)
 
@@ -105,35 +124,21 @@ class Mirror:
             self._say(f"ignored {abbreviate_home(src)}")
             return
 
-        is_dir = src.is_dir()
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        if not is_dir:
-            if dest.exists():
-                src_stat = src.stat()
-                dest_stat = dest.stat()
-                if src_stat.st_size == dest_stat.st_size and src_stat.st_mtime_ns == dest_stat.st_mtime_ns:
-                    self._say(f"unchanged {abbreviate_home(src)}")
-                    return
-                if not dest_stat.st_mode & stat.S_IWUSR:
-                    dest.chmod(dest_stat.st_mode | stat.S_IWUSR)
-            shutil.copy2(src, dest)
-            self._say(f"copy {abbreviate_home(src)} -> {abbreviate_home(dest)}")
-            return
-
-        subprocess.run(  # noqa: S603
-            [
-                "/usr/bin/rsync",
-                "-aLci",
-                "--extended-attributes",
-                *(f"--exclude={pattern}" for pattern in Settings.IGNORE_PATTERNS),
-                "--",
-                f"{src}/" if is_dir else str(src),
-                f"{dest}/" if is_dir else str(dest),
-            ],
-            check=True,
-            stdout=subprocess.PIPE,
-            text=True,
-        )
+        if src.is_dir():
+            shutil.copytree(
+                src,
+                dest,
+                ignore=shutil.ignore_patterns(*Settings.IGNORE_PATTERNS),
+                # copytree hands its copy_function plain strings
+                copy_function=lambda source, target: self._copy_file_allow_overwrite(Path(source), Path(target)),
+                dirs_exist_ok=True,
+            )
+        else:
+            if self._is_unchanged(src, dest):
+                self._say(f"unchanged {abbreviate_home(src)}")
+                return
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            self._copy_file_allow_overwrite(src, dest)
         self._say(f"copy {abbreviate_home(src)} -> {abbreviate_home(dest)}")
 
     @staticmethod
@@ -166,6 +171,33 @@ class Mirror:
         self._copy_one(src, dest)
 
     @staticmethod
+    def _walk_names(root: Path, *, follow_symlinks: bool) -> set[Path]:
+        names: set[Path] = set()
+        visited = {root.resolve()}
+        stack = [(root, Path())]
+        while stack:
+            directory, prefix = stack.pop()
+            for child in directory.iterdir():
+                if Mirror._is_ignored(child, Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS):
+                    continue
+                relative = prefix / child.name
+                names.add(relative)
+                if not child.is_dir():
+                    continue
+                if child.is_symlink():
+                    # A source is followed because backup copies symlinked directories dereferenced, so their contents
+                    # sit in the destination as real files and would otherwise all read as orphans. A destination is
+                    # not, so a symlink there stays a single entry to unlink rather than a way out of the backup.
+                    if not follow_symlinks:
+                        continue
+                    resolved = child.resolve()
+                    if resolved in visited:
+                        continue
+                    visited.add(resolved)
+                stack.append((child, relative))
+        return names
+
+    @staticmethod
     def find_orphans(src: Path, dest: Path) -> list[Path]:
         if "*" in str(src):
             pairs = Mirror._glob_pairs(src, dest)
@@ -178,24 +210,10 @@ class Mirror:
         if not src.is_dir() or not dest.is_dir():
             return []
 
-        patterns = Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS
-
-        def is_ignored(path: Path) -> bool:
-            return any(fnmatch.fnmatch(part, pattern) for part in path.parts for pattern in patterns)
-
-        if not any(not is_ignored(path.relative_to(src)) for path in src.rglob("*")):
+        src_names = Mirror._walk_names(src, follow_symlinks=True)
+        if not src_names:
             return []
-
-        result = subprocess.run(  # noqa: S603
-            ["/usr/bin/rsync", "-aLni", "--delete", "--", f"{src}/", f"{dest}/"],
-            check=True,
-            stdout=subprocess.PIPE,
-            text=True,
-        )
-        # ponytail: rsync deletion output is line-oriented; restore the Python walk if backup filenames can contain newlines.
-        prefix = "*deleting "
-        relative_paths = (Path(line.removeprefix(prefix).removesuffix("/")) for line in result.stdout.splitlines() if line.startswith(prefix))
-        return sorted(dest / path for path in relative_paths if not is_ignored(path))
+        return sorted(dest / name for name in Mirror._walk_names(dest, follow_symlinks=False) - src_names)
 
     def remove_orphan(self, path: Path) -> bool:
         if path.is_symlink() or not path.is_dir():
