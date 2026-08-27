@@ -55,6 +55,7 @@ Also see:
 Agentic skills sharpened by daily use:
 
 - [commit](skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
+- [fuck-over-engineering](skills/fuck-over-engineering/SKILL.md): Finds what you can delete to simplify your codebase
 - [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
 - [brainstorm](skills/brainstorm/SKILL.md): Generates one-line ideas from 6 independent perspectives, a quarter deliberately absurd
 - [blindspot](skills/blindspot/SKILL.md): Surfaces your unknown unknowns before you work in an unfamiliar domain
