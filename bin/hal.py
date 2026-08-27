@@ -190,11 +190,11 @@ class HAL9000:
 
         return filepath, dest_path, template_src, template_dest
 
-    def _run(self, command: str, *, verbose: bool = True) -> int:
+    def _run(self, command: str, *, cwd: str | None = None, verbose: bool = True) -> int:
         if verbose:
             self._hal_says(command)
 
-        return subprocess.run(command, shell=True).returncode  # noqa: S602 PLW1510 subprocess-popen-with-shell-equals-true subprocess-run-without-check
+        return subprocess.run(command, shell=True, cwd=cwd).returncode  # noqa: S602 PLW1510 subprocess-popen-with-shell-equals-true subprocess-run-without-check
 
     def update(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         ansible_path = shutil.which("ansible")
@@ -203,17 +203,16 @@ class HAL9000:
             self._hal_says("You should use Homebrew's ansible")
             sys.exit(1)
 
-        os.chdir(Settings.REPO_ROOT)
-        self._run("git fetch")
-        returncode = self._run("git pull")
+        self._run("git fetch", cwd=Settings.REPO_ROOT)
+        returncode = self._run("git pull", cwd=Settings.REPO_ROOT)
         if returncode != 0:
             sys.exit(returncode)
 
-        os.chdir(str(Path(Settings.REPO_ROOT) / "playbooks"))
+        playbooks_dir = str(Path(Settings.REPO_ROOT) / "playbooks")
         command = "ansible-playbook site.yml -v"
         if extra_args:
             command = " ".join([command, *(shlex.quote(arg) for arg in extra_args)])
-        returncode = self._run(command)
+        returncode = self._run(command, cwd=playbooks_dir)
         if returncode != 0:
             sys.exit(returncode)
         self._hal_says("Now open a new shell to active your dev environment")

@@ -95,7 +95,7 @@ class TestUpdateSanitization:
         """extra_args with shell metacharacters must be quoted."""
         commands_run = []
 
-        def mock_run(command, *, verbose=True):  # noqa: ARG001 unused-function-argument
+        def mock_run(command, *, cwd=None, verbose=True):  # noqa: ARG001 unused-function-argument
             commands_run.append(command)
             return 0
 
@@ -114,7 +114,7 @@ class TestUpdateFailurePropagation:
 
     @staticmethod
     def _install_mocks(hal_instance, monkeypatch, failing_command):
-        def mock_run(command, *, verbose=True):  # noqa: ARG001 unused-function-argument
+        def mock_run(command, *, cwd=None, verbose=True):  # noqa: ARG001 unused-function-argument
             return 1 if failing_command in command else 0
 
         monkeypatch.setattr("shutil.which", lambda _cmd: "/opt/homebrew/bin/ansible")
@@ -145,7 +145,7 @@ class TestUpdateAnsibleCheck:
     def test_non_homebrew_ansible_exits(self, hal_instance, monkeypatch):
         commands_run = []
 
-        def mock_run(command, *, verbose=True):  # noqa: ARG001 unused-function-argument
+        def mock_run(command, *, cwd=None, verbose=True):  # noqa: ARG001 unused-function-argument
             commands_run.append(command)
             return 0
 
@@ -162,7 +162,7 @@ class TestUpdateAnsibleCheck:
     def test_missing_ansible_skips_check(self, hal_instance, monkeypatch):
         commands_run = []
 
-        def mock_run(command, *, verbose=True):  # noqa: ARG001 unused-function-argument
+        def mock_run(command, *, cwd=None, verbose=True):  # noqa: ARG001 unused-function-argument
             commands_run.append(command)
             return 0
 
@@ -173,6 +173,32 @@ class TestUpdateAnsibleCheck:
         hal_instance.update(ns)
 
         assert "git fetch" in commands_run
+
+
+class TestUpdateWorkingDirectory:
+    """update runs git in the repo root and ansible-playbook in playbooks/ without changing the process's own directory."""
+
+    def test_commands_run_in_their_directories(self, hal_instance, hal_module, monkeypatch):
+        commands_run = []
+
+        def mock_run(command, *, cwd=None, verbose=True):  # noqa: ARG001 unused-function-argument
+            commands_run.append((command, cwd))
+            return 0
+
+        monkeypatch.setattr("shutil.which", lambda _cmd: "/opt/homebrew/bin/ansible")
+        hal_instance._run = mock_run
+        cwd_before = Path.cwd()
+
+        ns = argparse.Namespace(func=hal_instance.update)
+        hal_instance.update(ns)
+
+        repo_root = hal_module.Settings.REPO_ROOT
+        assert commands_run == [
+            ("git fetch", repo_root),
+            ("git pull", repo_root),
+            ("ansible-playbook site.yml -v", str(Path(repo_root) / "playbooks")),
+        ]
+        assert Path.cwd() == cwd_before
 
 
 class TestUserFilenameValidation:
