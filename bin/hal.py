@@ -30,10 +30,9 @@ except ImportError:
     argcomplete = None  # ty: ignore[invalid-assignment]
 
 
-def abbreviate_home(path: str | Path) -> str:
-    home = str(Path.home())
-    text = str(path)
-    return f"~{text[len(home) :]}" if text.startswith(home) else text
+def abbreviate_home(path: Path) -> str:
+    home = Path.home()
+    return f"~{str(path)[len(str(home)) :]}" if path.is_relative_to(home) else str(path)
 
 
 class PathNotAllowedError(Exception):
@@ -392,7 +391,7 @@ class HAL9000:
     def update(self, namespace: argparse.Namespace) -> None:
         ansible_path = shutil.which("ansible")
         if ansible_path and not ansible_path.startswith("/opt/homebrew/bin/"):
-            self._hal_says(f"Found ansible at: {abbreviate_home(ansible_path)}")
+            self._hal_says(f"Found ansible at: {abbreviate_home(Path(ansible_path))}")
             self._hal_says("You should use Homebrew's ansible")
             sys.exit(1)
 

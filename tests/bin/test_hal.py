@@ -8,6 +8,16 @@ from unittest.mock import patch
 import pytest
 
 
+class TestAbbreviateHome:
+    def test_only_paths_under_home_are_abbreviated(self, hal_module, tmp_path, monkeypatch):
+        home = tmp_path / "home"
+        monkeypatch.setattr(Path, "home", lambda: home)
+
+        assert hal_module.abbreviate_home(home) == "~"
+        assert hal_module.abbreviate_home(home / ".zshrc") == "~/.zshrc"
+        assert hal_module.abbreviate_home(tmp_path / "homely" / "x") == str(tmp_path / "homely" / "x")
+
+
 class TestDotfilesLoad:
     def test_missing_manifest_loads_as_empty(self, hal_module, tmp_path):
         dotfiles = hal_module.Dotfiles(str(tmp_path / "hal_dotfiles.json"))
