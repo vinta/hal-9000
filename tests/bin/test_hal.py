@@ -1408,7 +1408,7 @@ class TestArgParsing:
 
 class TestManifestRoundTrip:
     def test_prune_field_survives_save(self, hal_module, tmp_path):
-        """save() rebuilds entries from ENTRY_KEY_ORDER, so an unlisted key would be dropped by any `hal link`."""
+        """prune is written back alongside src and dest."""
         manifest = tmp_path / "hal_dotfiles.json"
         entries = {"backups": [{"src": "a", "dest": "b", "prune": False}], "copies": [], "links": []}
         manifest.write_text(json.dumps(entries))
@@ -1418,3 +1418,13 @@ class TestManifestRoundTrip:
         dotfiles.save()
 
         assert json.loads(manifest.read_text())["backups"][0] == {"src": "a", "dest": "b", "prune": False}
+
+    def test_unknown_key_is_kept_after_the_known_ones(self, hal_module, tmp_path):
+        """A key the schema does not list is written back after the known keys instead of being dropped."""
+        manifest = tmp_path / "hal_dotfiles.json"
+        entries = {"backups": [{"note": "n", "dest": "b", "src": "a"}], "copies": [], "links": []}
+        manifest.write_text(json.dumps(entries))
+
+        hal_module.Dotfiles(str(manifest)).save()
+
+        assert list(json.loads(manifest.read_text())["backups"][0].items()) == [("src", "a"), ("dest", "b"), ("note", "n")]

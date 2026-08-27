@@ -13,7 +13,7 @@ import stat
 import subprocess
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, TypedDict, cast
+from typing import TYPE_CHECKING, TypedDict
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
@@ -47,8 +47,7 @@ class Entry(TypedDict):
 
 class Dotfiles:
     DEFAULT_CONFIG: str = str(Path(Settings.DOTFILES_ROOT) / "hal_dotfiles.json")
-    # save() rebuilds every entry from these keys, so a key missing here is dropped
-    # from the manifest the next time any command writes it back
+    # Keys are written back in this order; any other key follows them, sorted by name
     ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest", "prune")
 
     def __init__(self, path: str | None = None) -> None:
@@ -81,9 +80,11 @@ class Dotfiles:
 
     @staticmethod
     def _ordered_entry(entry: Entry) -> dict[str, object]:
-        # Projected through ENTRY_KEY_ORDER by keys held in a variable, which a TypedDict cannot be subscripted with
-        fields = cast("dict[str, object]", entry)
-        return {key: fields[key] for key in Dotfiles.ENTRY_KEY_ORDER if key in fields}
+        """The entry with its keys in ENTRY_KEY_ORDER, any other key after them by name."""
+        fields = dict(entry.items())
+        known = [key for key in Dotfiles.ENTRY_KEY_ORDER if key in fields]
+        unknown = sorted(key for key in fields if key not in Dotfiles.ENTRY_KEY_ORDER)
+        return {key: fields[key] for key in [*known, *unknown]}
 
     def _ordered_data(self) -> dict[str, list[dict[str, object]]]:
         """The manifest as written back to disk, so plain mappings rather than Entry values."""
