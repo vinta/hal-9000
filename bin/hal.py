@@ -509,8 +509,6 @@ class HAL9000:
                 future.result()
 
     def sync(self, namespace: argparse.Namespace) -> None:
-        # Links are metadata syscalls, so a thread pool costs more in spin-up than it saves; running them
-        # in manifest order also keeps the output stable
         for link in self.dotfiles.data["links"]:
             self.mirror.link(self._expand_template(link["src"]), self._expand_template(link["dest"]), force=namespace.force)
         self._parallel(functools.partial(self._copy_entry, copy) for copy in self.dotfiles.data["copies"])
