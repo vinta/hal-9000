@@ -53,3 +53,11 @@
   shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh/"
+  register: basic_omz_install
+
+# upgrade.sh is the scripting entrypoint; `omz update` is a shell function that only exists in an interactive zsh
+- name: Update oh-my-zsh
+  command: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh/tools/upgrade.sh -v minimal"
+  register: basic_omz_upgrade
+  changed_when: "'already at the latest version' not in basic_omz_upgrade.stdout"
+  when: not basic_omz_install.changed
