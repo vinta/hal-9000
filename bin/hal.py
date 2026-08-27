@@ -175,12 +175,12 @@ class Mirror:
         shutil.copy2(src, dest)
 
     @staticmethod
-    def _is_ignored(path: str) -> bool:
+    def _is_ignored(path: str, patterns: tuple[str, ...]) -> bool:
         name = Path(path).name
-        return any(fnmatch.fnmatch(name, pattern) for pattern in Settings.IGNORE_PATTERNS)
+        return any(fnmatch.fnmatch(name, pattern) for pattern in patterns)
 
     def _copy_one(self, src: str, dest: str) -> None:
-        if self._is_ignored(src):
+        if self._is_ignored(src, Settings.IGNORE_PATTERNS):
             self._say(f"ignored {abbreviate_home(src)}")
             return
 
@@ -247,7 +247,7 @@ class Mirror:
         while stack:
             directory, prefix = stack.pop()
             for child in directory.iterdir():
-                if Mirror._is_ignored(str(child)) or child.name in Settings.DIFF_IGNORE_PATTERNS:
+                if Mirror._is_ignored(str(child), Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS):
                     continue
                 relative = f"{prefix}/{child.name}" if prefix else child.name
                 names.add(relative)
@@ -297,7 +297,7 @@ class Mirror:
         # filtered out of the diff and never listed. Clear those, then rmdir, which
         # still refuses any directory holding something the listing did not account for.
         for child in path.iterdir():
-            if not self._is_ignored(str(child)):
+            if not self._is_ignored(str(child), Settings.IGNORE_PATTERNS):
                 continue
             if child.is_dir() and not child.is_symlink():
                 shutil.rmtree(child)
