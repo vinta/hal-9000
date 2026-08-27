@@ -102,18 +102,7 @@ RESET = "\033[0m"
 
 def colorize_grammar(text: str) -> str:
     color = GREEN if "no issues" in text.lower() else RED
-    lines = text.split("\n")
-    result: list[str] = []
-    for line in lines:
-        if line.startswith("Grammar"):
-            parts = line.split(":", 1)
-            if len(parts) == 2:  # noqa: PLR2004 magic-value-comparison
-                result.append(f"{WHITE}{parts[0]}:{RESET}{color}{parts[1]}{RESET}")
-            else:
-                result.append(f"{color}{line}{RESET}")
-        else:
-            result.append(f"{color}{line}{RESET}")
-    return "\n".join(result)
+    return "\n".join(f"{WHITE}Grammar:{RESET}{color}{line.removeprefix('Grammar:')}{RESET}" if line.startswith("Grammar:") else f"{color}{line}{RESET}" for line in text.split("\n"))
 
 
 def print_grammar_status(message: str) -> None:
