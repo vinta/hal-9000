@@ -91,20 +91,16 @@ class TestValidatePath:
 
 
 class TestUpdateSanitization:
-    def test_extra_args_are_quoted(self, hal_instance):
+    def test_extra_args_are_quoted(self, hal_instance, monkeypatch):
         """extra_args with shell metacharacters must be quoted."""
         commands_run = []
 
-        def mock_run(command, *, shell=True, verbose=True):  # noqa: ARG001 unused-function-argument
+        def mock_run(command, *, verbose=True):  # noqa: ARG001 unused-function-argument
             commands_run.append(command)
             return 0
 
-        def mock_run_with_output(command, *, shell=True, verbose=True, print_output=True):  # noqa: ARG001 unused-function-argument
-            commands_run.append(command)
-            return 0, b"/opt/homebrew/bin/ansible\n"
-
+        monkeypatch.setattr("shutil.which", lambda _cmd: "/opt/homebrew/bin/ansible")
         hal_instance._run = mock_run
-        hal_instance._run_with_output = mock_run_with_output
 
         ns = argparse.Namespace(func=hal_instance.update)
         hal_instance.update(ns, extra_args=["--tags", "foo;rm -rf ~"])
@@ -117,18 +113,24 @@ class TestUpdateFailurePropagation:
     """update exits non-zero when git pull or the playbook run fails."""
 
     @staticmethod
-    def _install_mocks(hal_instance, failing_command):
-        def mock_run(command, *, shell=True, verbose=True):  # noqa: ARG001 unused-function-argument
+    def _install_mocks(hal_instance, monkeypatch, failing_command):
+        def mock_run(command, *, verbose=True):  # noqa: ARG001 unused-function-argument
             return 1 if failing_command in command else 0
 
-        def mock_run_with_output(command, *, shell=True, verbose=True, print_output=True):  # noqa: ARG001 unused-function-argument
-            return 0, b"/opt/homebrew/bin/ansible\n"
-
+        monkeypatch.setattr("shutil.which", lambda _cmd: "/opt/homebrew/bin/ansible")
         hal_instance._run = mock_run
-        hal_instance._run_with_output = mock_run_with_output
 
-    def test_git_pull_failure_exits(self, hal_instance):
-        self._install_mocks(hal_instance, "git pull")
+    def test_git_pull_failure_exits(self, hal_instance, monkeypatch):
+        self._install_mocks(hal_instance, monkeypatch, "git pull")
+
+        ns = argparse.Namespace(func=hal_instance.update)
+        with pytest.raises(SystemExit) as excinfo:
+            hal_instance.update(ns)
+
+        assert excinfo.value.code == 1
+
+    def test_playbook_failure_exits(self, hal_instance, monkeypatch):
+        self._install_mocks(hal_instance, monkeypatch, "ansible-playbook")
 
         ns = argparse.Namespace(func=hal_instance.update)
         with pytest.raises(SystemExit) as excinfo:
@@ -136,14 +138,41 @@ class TestUpdateFailurePropagation:
 
         assert excinfo.value.code == 1
 
-    def test_playbook_failure_exits(self, hal_instance):
-        self._install_mocks(hal_instance, "ansible-playbook")
+
+class TestUpdateAnsibleCheck:
+    """update refuses a non-Homebrew ansible before touching git, and skips the check when none is installed."""
+
+    def test_non_homebrew_ansible_exits(self, hal_instance, monkeypatch):
+        commands_run = []
+
+        def mock_run(command, *, verbose=True):  # noqa: ARG001 unused-function-argument
+            commands_run.append(command)
+            return 0
+
+        monkeypatch.setattr("shutil.which", lambda _cmd: "/usr/local/bin/ansible")
+        hal_instance._run = mock_run
 
         ns = argparse.Namespace(func=hal_instance.update)
         with pytest.raises(SystemExit) as excinfo:
             hal_instance.update(ns)
 
         assert excinfo.value.code == 1
+        assert commands_run == []
+
+    def test_missing_ansible_skips_check(self, hal_instance, monkeypatch):
+        commands_run = []
+
+        def mock_run(command, *, verbose=True):  # noqa: ARG001 unused-function-argument
+            commands_run.append(command)
+            return 0
+
+        monkeypatch.setattr("shutil.which", lambda _cmd: None)
+        hal_instance._run = mock_run
+
+        ns = argparse.Namespace(func=hal_instance.update)
+        hal_instance.update(ns)
+
+        assert "git fetch" in commands_run
 
 
 class TestUserFilenameValidation:

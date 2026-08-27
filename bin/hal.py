@@ -190,30 +190,18 @@ class HAL9000:
 
         return filepath, dest_path, template_src, template_dest
 
-    def _run(self, command: str, *, shell: bool = True, verbose: bool = True) -> int:
+    def _run(self, command: str, *, verbose: bool = True) -> int:
         if verbose:
             self._hal_says(command)
 
-        return subprocess.run(command, shell=shell).returncode  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
-
-    def _run_with_output(self, command: str, *, shell: bool = True, verbose: bool = True, print_output: bool = True) -> tuple[int, bytes]:
-        if verbose:
-            self._hal_says(command)
-
-        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=shell)  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
-        if print_output and result.stdout:
-            print(result.stdout, end="")
-
-        return result.returncode, result.stdout
+        return subprocess.run(command, shell=True).returncode  # noqa: S602 PLW1510 subprocess-popen-with-shell-equals-true subprocess-run-without-check
 
     def update(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
-        returncode, output = self._run_with_output("which ansible", print_output=False)
-        if returncode == 0:
-            ansible_path = output.decode().strip()
-            if not ansible_path.startswith("/opt/homebrew/bin/"):
-                self._hal_says(f"Found ansible at: {self._abbreviate_home(ansible_path)}")
-                self._hal_says("You should use Homebrew's ansible")
-                sys.exit(1)
+        ansible_path = shutil.which("ansible")
+        if ansible_path and not ansible_path.startswith("/opt/homebrew/bin/"):
+            self._hal_says(f"Found ansible at: {self._abbreviate_home(ansible_path)}")
+            self._hal_says("You should use Homebrew's ansible")
+            sys.exit(1)
 
         os.chdir(Settings.REPO_ROOT)
         self._run("git fetch")
