@@ -32,7 +32,7 @@ except ImportError:
 
 def abbreviate_home(path: Path) -> str:
     home = Path.home()
-    return f"~{str(path)[len(str(home)) :]}" if path.is_relative_to(home) else str(path)
+    return f"~{str(path).removeprefix(str(home))}" if path.is_relative_to(home) else str(path)
 
 
 class PathNotAllowedError(Exception):
