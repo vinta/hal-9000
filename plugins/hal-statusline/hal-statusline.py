@@ -256,10 +256,7 @@ def write_cache(cache_file: str, payload: GrammarCache) -> None:
             json.dump(payload, f)
         Path(tmp_path).rename(cache_file)
     except Exception:  # noqa: BLE001 blind-exception
-        try:  # noqa: SIM105 suppressible-exception
-            Path(tmp_path).unlink()
-        except OSError:
-            pass
+        Path(tmp_path).unlink(missing_ok=True)
 
 
 def run_ollama_grammar_model(prompt: str) -> str | None:
