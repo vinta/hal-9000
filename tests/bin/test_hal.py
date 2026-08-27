@@ -22,7 +22,7 @@ class TestDotfilesLoad:
     def test_missing_manifest_loads_as_empty(self, hal_module, tmp_path):
         dotfiles = hal_module.Dotfiles(tmp_path / "hal_dotfiles.json")
 
-        assert dotfiles.data == {"backups": [], "copies": [], "links": []}
+        assert dotfiles.data == {"backups": [], "links": []}
 
 
 class TestDotfilesSave:
@@ -31,7 +31,7 @@ class TestDotfilesSave:
     def test_save_before_any_read_preserves_manifest(self, hal_module, tmp_path):
         """Manifest data loads lazily, so saving an untouched Dotfiles must not lose it."""
         manifest = tmp_path / "hal_dotfiles.json"
-        entries = {"backups": [], "copies": [], "links": [{"src": "a", "dest": "b"}]}
+        entries = {"backups": [], "links": [{"src": "a", "dest": "b"}]}
         manifest.write_text(json.dumps(entries))
 
         hal_module.Dotfiles(manifest).save()
@@ -40,7 +40,7 @@ class TestDotfilesSave:
 
     def test_save_after_read_preserves_manifest(self, hal_module, tmp_path):
         manifest = tmp_path / "hal_dotfiles.json"
-        entries = {"backups": [], "copies": [], "links": [{"src": "a", "dest": "b"}]}
+        entries = {"backups": [], "links": [{"src": "a", "dest": "b"}]}
         manifest.write_text(json.dumps(entries))
 
         dotfiles = hal_module.Dotfiles(manifest)
@@ -60,21 +60,21 @@ class TestDotfilesMutation:
         return hal_module.Dotfiles(manifest)
 
     def test_upsert_adds_a_missing_entry(self, hal_module, tmp_path):
-        dotfiles = self._dotfiles(hal_module, tmp_path, {"backups": [], "copies": [], "links": []})
+        dotfiles = self._dotfiles(hal_module, tmp_path, {"backups": [], "links": []})
 
         dotfiles.upsert("links", "a", "b")
 
         assert dotfiles.data["links"] == [{"src": "a", "dest": "b"}]
 
     def test_upsert_repoints_an_existing_entry(self, hal_module, tmp_path):
-        dotfiles = self._dotfiles(hal_module, tmp_path, {"backups": [], "copies": [], "links": [{"src": "a", "dest": "old"}]})
+        dotfiles = self._dotfiles(hal_module, tmp_path, {"backups": [], "links": [{"src": "a", "dest": "old"}]})
 
         dotfiles.upsert("links", "a", "new")
 
         assert dotfiles.data["links"] == [{"src": "a", "dest": "new"}]
 
     def test_remove_drops_the_entry(self, hal_module, tmp_path):
-        entries = {"backups": [], "copies": [], "links": [{"src": "a", "dest": "b"}, {"src": "c", "dest": "d"}]}
+        entries = {"backups": [], "links": [{"src": "a", "dest": "b"}, {"src": "c", "dest": "d"}]}
         dotfiles = self._dotfiles(hal_module, tmp_path, entries)
 
         dotfiles.remove("links", dotfiles.data["links"][0])
@@ -261,11 +261,6 @@ class TestUserFilenameValidation:
         ns = argparse.Namespace(filename=Path("../../../etc/passwd"))
         with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(hal_module.PathNotAllowedError):
             hal_instance.link(ns)
-
-    def test_copy_validates_filename(self, hal_instance, hal_module, tmp_path):
-        ns = argparse.Namespace(filename=Path("../../../etc/passwd"))
-        with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(hal_module.PathNotAllowedError):
-            hal_instance.copy(ns)
 
 
 class TestPrepareDotfileEntry:
@@ -1018,7 +1013,7 @@ class TestBackupRestore:
         assert local.read_text() == "untouched"
 
     def test_sync_ignores_backups(self, hal_instance, tmp_path):
-        """sync only processes links and copies, never backup entries."""
+        """sync only processes links, never backup entries."""
         src = tmp_path / "live.txt"
         src.write_text("live data")
         dest = tmp_path / "dropbox" / "live.txt"
@@ -1028,7 +1023,7 @@ class TestBackupRestore:
             patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
-            mock_dotfiles.data = {"links": [], "copies": [], "backups": [entry]}
+            mock_dotfiles.data = {"links": [], "backups": [entry]}
             hal_instance.sync(argparse.Namespace())
 
         assert not dest.exists()
@@ -1522,7 +1517,7 @@ class TestPathRefusal:
     def test_unsafe_manifest_entry_exits_1_after_the_other_entries_finish(self, hal_module, tmp_path, monkeypatch, capsys):
         (tmp_path / "ok.txt").write_text("ok")
         manifest = tmp_path / "hal_dotfiles.json"
-        entries = {"backups": [{"src": "{{HOME}}/ok.txt", "dest": "{{HOME}}/ok.bak"}, {"src": "{{HOME}}/ok.txt", "dest": "/etc/hal-test"}], "copies": [], "links": []}
+        entries = {"backups": [{"src": "{{HOME}}/ok.txt", "dest": "{{HOME}}/ok.bak"}, {"src": "{{HOME}}/ok.txt", "dest": "/etc/hal-test"}], "links": []}
         manifest.write_text(json.dumps(entries))
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
         monkeypatch.setattr(hal_module.Dotfiles, "DEFAULT_CONFIG", manifest)
@@ -1540,7 +1535,7 @@ class TestManifestRoundTrip:
     def test_prune_field_survives_save(self, hal_module, tmp_path):
         """prune is written back alongside src and dest."""
         manifest = tmp_path / "hal_dotfiles.json"
-        entries = {"backups": [{"src": "a", "dest": "b", "prune": False}], "copies": [], "links": []}
+        entries = {"backups": [{"src": "a", "dest": "b", "prune": False}], "links": []}
         manifest.write_text(json.dumps(entries))
 
         dotfiles = hal_module.Dotfiles(manifest)
@@ -1552,7 +1547,7 @@ class TestManifestRoundTrip:
     def test_unknown_key_is_kept_after_the_known_ones(self, hal_module, tmp_path):
         """A key the schema does not list is written back after the known keys instead of being dropped."""
         manifest = tmp_path / "hal_dotfiles.json"
-        entries = {"backups": [{"note": "n", "dest": "b", "src": "a"}], "copies": [], "links": []}
+        entries = {"backups": [{"note": "n", "dest": "b", "src": "a"}], "links": []}
         manifest.write_text(json.dumps(entries))
 
         hal_module.Dotfiles(manifest).save()

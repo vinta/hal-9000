@@ -62,7 +62,6 @@
       "dest": "{{HOME}}/Dropbox/Projects/*.code-workspace"
     }
   ],
-  "copies": [],
   "links": [
     {
       "src": "{{REPO_ROOT}}/dotfiles/.hal_completion.zsh",

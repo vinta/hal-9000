@@ -81,7 +81,7 @@ class Dotfiles:
             with self.path.open() as f:
                 return json.load(f)
         except FileNotFoundError:
-            return {"backups": [], "copies": [], "links": []}
+            return {"backups": [], "links": []}
 
     def upsert(self, field_name: str, src: str, dest: str) -> None:
         entries = self.data[field_name]
@@ -324,11 +324,7 @@ class HAL9000:
         unlink_parser.set_defaults(func=self.unlink)
         unlink_parser.add_argument("filename", type=Path)
 
-        copy_parser = subparsers.add_parser("copy", help="copy file into dotfiles (no symlink)")
-        copy_parser.set_defaults(func=self.copy)
-        copy_parser.add_argument("filename", type=Path)
-
-        sync_parser = subparsers.add_parser("sync", help="sync all links and copies")
+        sync_parser = subparsers.add_parser("sync", help="sync all links")
         sync_parser.set_defaults(func=self.sync)
         sync_parser.add_argument("--force", action="store_true", help="replace real directories at link destinations")
 
@@ -459,17 +455,6 @@ class HAL9000:
         self.dotfiles.save()
         self.dotfiles.show()
 
-    def copy(self, namespace: argparse.Namespace) -> None:
-        paths = self._prepare_dotfile_entry(namespace.filename)
-
-        shutil.copy2(paths.filepath, paths.dest_path)
-        self._hal_says(f"cp {abbreviate_home(paths.filepath)} -> {abbreviate_home(paths.dest_path)}")
-
-        self.dotfiles.upsert("copies", paths.template_src, paths.template_dest)
-
-        self.dotfiles.save()
-        self.dotfiles.show()
-
     def _copy_entry(self, entry: Entry) -> None:
         self.mirror.copy(self._expand_template(entry["src"]), self._expand_template(entry["dest"]))
 
@@ -510,7 +495,6 @@ class HAL9000:
     def sync(self, namespace: argparse.Namespace) -> None:
         for link in self.dotfiles.data["links"]:
             self.mirror.link(self._expand_template(link["src"]), self._expand_template(link["dest"]), force=namespace.force)
-        self._copy_entries(self.dotfiles.data["copies"])
 
     def backup(self, namespace: argparse.Namespace) -> None:
         self._copy_entries(self.dotfiles.data["backups"])
