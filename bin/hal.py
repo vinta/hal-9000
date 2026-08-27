@@ -67,13 +67,17 @@ class Dotfiles:
         assert self._data is not None  # noqa: S101 assert
         return self._data
 
-    def find_by_key(self, key: str, value: str, field_name: str) -> Entry | None:
+    def upsert(self, field_name: str, src: str, dest: str) -> None:
+        """Point the entry for src at dest, adding the entry when there is none."""
         entries = self.data[field_name]
-        try:
-            # Looked up by a caller-supplied key, which a TypedDict cannot be subscripted with
-            return next(entry for entry in entries if cast("dict[str, object]", entry).get(key) == value)
-        except StopIteration:
-            return None
+        existing = next((entry for entry in entries if entry["src"] == src), None)
+        if existing:
+            existing["dest"] = dest
+        else:
+            entries.append({"dest": dest, "src": src})
+
+    def remove(self, field_name: str, entry: Entry) -> None:
+        self.data[field_name].remove(entry)
 
     @staticmethod
     def _ordered_entry(entry: Entry) -> dict[str, object]:
@@ -232,11 +236,7 @@ class HAL9000:
         ln_dest.symlink_to(dest_path)
         self._hal_says(f"ln {self._abbreviate_home(dest_path)} -> {self._abbreviate_home(filepath)}")
 
-        ln_dict = self.dotfiles.find_by_key("src", template_src, "links")
-        if ln_dict:
-            ln_dict["dest"] = template_dest
-        else:
-            self.dotfiles.data["links"].append({"dest": template_dest, "src": template_src})
+        self.dotfiles.upsert("links", template_src, template_dest)
 
         self.dotfiles.save()
         self.dotfiles.show()
@@ -266,7 +266,7 @@ class HAL9000:
             Path(dest_path).unlink()
         shutil.move(src_path, dest_path)
 
-        self.dotfiles.data["links"].remove(ln_dict)
+        self.dotfiles.remove("links", ln_dict)
 
         self.dotfiles.save()
         self.dotfiles.show()
@@ -277,11 +277,7 @@ class HAL9000:
         shutil.copy2(filepath, dest_path)
         self._hal_says(f"cp {self._abbreviate_home(filepath)} -> {self._abbreviate_home(dest_path)}")
 
-        cp_dict = self.dotfiles.find_by_key("src", template_src, "copies")
-        if cp_dict:
-            cp_dict["dest"] = template_dest
-        else:
-            self.dotfiles.data["copies"].append({"dest": template_dest, "src": template_src})
+        self.dotfiles.upsert("copies", template_src, template_dest)
 
         self.dotfiles.save()
         self.dotfiles.show()

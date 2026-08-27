@@ -33,6 +33,38 @@ class TestDotfilesSave:
         assert json.loads(manifest.read_text()) == entries
 
 
+class TestDotfilesMutation:
+    """upsert and remove are the only writes to the manifest's entry lists."""
+
+    @staticmethod
+    def _dotfiles(hal_module, tmp_path, entries):
+        manifest = tmp_path / "hal_dotfiles.json"
+        manifest.write_text(json.dumps(entries))
+        return hal_module.Dotfiles(str(manifest))
+
+    def test_upsert_adds_a_missing_entry(self, hal_module, tmp_path):
+        dotfiles = self._dotfiles(hal_module, tmp_path, {"backups": [], "copies": [], "links": []})
+
+        dotfiles.upsert("links", "a", "b")
+
+        assert dotfiles.data["links"] == [{"src": "a", "dest": "b"}]
+
+    def test_upsert_repoints_an_existing_entry(self, hal_module, tmp_path):
+        dotfiles = self._dotfiles(hal_module, tmp_path, {"backups": [], "copies": [], "links": [{"src": "a", "dest": "old"}]})
+
+        dotfiles.upsert("links", "a", "new")
+
+        assert dotfiles.data["links"] == [{"src": "a", "dest": "new"}]
+
+    def test_remove_drops_the_entry(self, hal_module, tmp_path):
+        entries = {"backups": [], "copies": [], "links": [{"src": "a", "dest": "b"}, {"src": "c", "dest": "d"}]}
+        dotfiles = self._dotfiles(hal_module, tmp_path, entries)
+
+        dotfiles.remove("links", dotfiles.data["links"][0])
+
+        assert dotfiles.data["links"] == [{"src": "c", "dest": "d"}]
+
+
 class TestValidatePath:
     def test_valid_path_under_home(self, hal_instance):
         home = str(Path.home())
