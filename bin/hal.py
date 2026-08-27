@@ -57,19 +57,19 @@ class Entry(TypedDict):
 
 
 class DotfilePaths(NamedTuple):
-    filepath: str
-    dest_path: str
+    filepath: Path
+    dest_path: Path
     template_src: str
     template_dest: str
 
 
 class Dotfiles:
-    DEFAULT_CONFIG: str = str(Settings.DOTFILES_ROOT / "hal_dotfiles.json")
+    DEFAULT_CONFIG: Path = Settings.DOTFILES_ROOT / "hal_dotfiles.json"
     # Keys are written back in this order; any other key follows them, sorted by name
     ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest", "prune")
 
-    def __init__(self, path: str | None = None) -> None:
-        self.path: str = path or self.DEFAULT_CONFIG
+    def __init__(self, path: str | Path | None = None) -> None:
+        self.path: Path = Path(path) if path else self.DEFAULT_CONFIG
         self._data: dict[str, list[Entry]] | None = None
 
     @property
@@ -80,7 +80,7 @@ class Dotfiles:
 
     def _load(self) -> dict[str, list[Entry]]:
         try:
-            with Path(self.path).open() as f:
+            with self.path.open() as f:
                 return json.load(f)
         except FileNotFoundError:
             return {"backups": [], "copies": [], "links": []}
@@ -113,7 +113,7 @@ class Dotfiles:
         # Read before opening for write: opening truncates, and data loads lazily,
         # so building the payload inside the with block would read back an empty file
         ordered_data = self._ordered_data()
-        with Path(self.path).open("w") as f:
+        with self.path.open("w") as f:
             json.dump(ordered_data, f, indent=2, separators=(",", ": "))
 
 
@@ -122,30 +122,29 @@ class Mirror:
     def __init__(self, say: Callable[[str], None]) -> None:
         self._say = say
 
-    def link(self, src: str, dest: str, *, force: bool = False) -> None:
-        if not Path(src).exists():
+    def link(self, src: Path, dest: Path, *, force: bool = False) -> None:
+        if not src.exists():
             self._say(f"not found {abbreviate_home(src)}")
             return
 
-        dest = dest.rstrip("/")
-        Path(dest).parent.mkdir(parents=True, exist_ok=True)
+        dest.parent.mkdir(parents=True, exist_ok=True)
 
         # If dest already exists as a real directory, remove it so the symlink replaces it.
         # It may hold files no manifest entry covers, so make destroying them explicit.
-        if Path(dest).is_dir() and not Path(dest).is_symlink():
+        if dest.is_dir() and not dest.is_symlink():
             if not force:
                 self._say(f"refusing to replace directory {abbreviate_home(dest)}, re-run with --force")
                 return
             shutil.rmtree(dest)
 
-        dest_path = Path(dest)
-        if dest_path.is_symlink() or dest_path.exists():
-            dest_path.unlink()
-        dest_path.symlink_to(src)
+        if dest.is_symlink() or dest.exists():
+            dest.unlink()
+        dest.symlink_to(src)
         self._say(f"link {abbreviate_home(src)} -> {abbreviate_home(dest)}")
 
+    # str as well as Path: shutil.copytree hands its copy_function plain strings
     @staticmethod
-    def _is_unchanged(src: str, dest: str) -> bool:
+    def _is_unchanged(src: str | Path, dest: str | Path) -> bool:
         dest_path = Path(dest)
         if not dest_path.exists():
             return False
@@ -156,7 +155,7 @@ class Mirror:
         return src_stat.st_size == dest_stat.st_size and src_stat.st_mtime_ns == dest_stat.st_mtime_ns
 
     @staticmethod
-    def _copy_file_allow_overwrite(src: str, dest: str) -> None:
+    def _copy_file_allow_overwrite(src: str | Path, dest: str | Path) -> None:
         if Mirror._is_unchanged(src, dest):
             return
 
@@ -166,16 +165,15 @@ class Mirror:
         shutil.copy2(src, dest)
 
     @staticmethod
-    def _is_ignored(path: str, patterns: tuple[str, ...]) -> bool:
-        name = Path(path).name
-        return any(fnmatch.fnmatch(name, pattern) for pattern in patterns)
+    def _is_ignored(path: Path, patterns: tuple[str, ...]) -> bool:
+        return any(fnmatch.fnmatch(path.name, pattern) for pattern in patterns)
 
-    def _copy_one(self, src: str, dest: str) -> None:
+    def _copy_one(self, src: Path, dest: Path) -> None:
         if self._is_ignored(src, Settings.IGNORE_PATTERNS):
             self._say(f"ignored {abbreviate_home(src)}")
             return
 
-        if Path(src).is_dir():
+        if src.is_dir():
             shutil.copytree(
                 src,
                 dest,
@@ -187,25 +185,25 @@ class Mirror:
             if self._is_unchanged(src, dest):
                 self._say(f"unchanged {abbreviate_home(src)}")
                 return
-            Path(dest).parent.mkdir(parents=True, exist_ok=True)
+            dest.parent.mkdir(parents=True, exist_ok=True)
             self._copy_file_allow_overwrite(src, dest)
         self._say(f"copy {abbreviate_home(src)} -> {abbreviate_home(dest)}")
 
     @staticmethod
-    def _glob_pairs(src: str, dest: str) -> list[tuple[str, str]]:
+    def _glob_pairs(src: Path, dest: Path) -> list[tuple[Path, Path]]:
         # Shared by copy and find_orphans so both read a pattern pair the same way: these destinations are
         # exactly the ones a backup writes, so anything else matching the dest pattern is an orphan
-        prefix, _, suffix = src.partition("*")
-        dprefix, _, dsuffix = dest.partition("*")
-        matches = sorted(str(match) for match in Path(src).parent.glob(Path(src).name))
+        prefix, _, suffix = str(src).partition("*")
+        dprefix, _, dsuffix = str(dest).partition("*")
         pairs = []
-        for match in matches:
-            star = match[len(prefix) : len(match) - len(suffix)]
-            pairs.append((match, f"{dprefix}{star}{dsuffix}"))
+        for match in sorted(src.parent.glob(src.name), key=str):
+            text = str(match)
+            star = text[len(prefix) : len(text) - len(suffix)]
+            pairs.append((match, Path(f"{dprefix}{star}{dsuffix}")))
         return pairs
 
-    def copy(self, src: str, dest: str) -> None:
-        if "*" in src:
+    def copy(self, src: Path, dest: Path) -> None:
+        if "*" in str(src):
             pairs = self._glob_pairs(src, dest)
             if not pairs:
                 self._say(f"no matches {abbreviate_home(src)}")
@@ -214,7 +212,7 @@ class Mirror:
                 self._copy_one(match, match_dest)
             return
 
-        if not Path(src).exists():
+        if not src.exists():
             self._say(f"not found {abbreviate_home(src)}")
             return
 
@@ -228,7 +226,7 @@ class Mirror:
         while stack:
             directory, prefix = stack.pop()
             for child in directory.iterdir():
-                if Mirror._is_ignored(str(child), Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS):
+                if Mirror._is_ignored(child, Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS):
                     continue
                 relative = f"{prefix}/{child.name}" if prefix else child.name
                 names.add(relative)
@@ -248,25 +246,22 @@ class Mirror:
         return names
 
     @staticmethod
-    def find_orphans(src: str, dest: str) -> list[Path]:
-        dest_path = Path(dest)
-
-        if "*" in src:
+    def find_orphans(src: Path, dest: Path) -> list[Path]:
+        if "*" in str(src):
             pairs = Mirror._glob_pairs(src, dest)
             if not pairs:
                 return []
-            expected = {Path(pair_dest) for _, pair_dest in pairs}
-            return sorted(match for match in dest_path.parent.glob(dest_path.name) if match not in expected)
+            expected = {pair_dest for _, pair_dest in pairs}
+            return sorted(match for match in dest.parent.glob(dest.name) if match not in expected)
 
-        src_path = Path(src)
         # A missing or empty source means the backup is the only surviving copy, and every file in it would read as an orphan
-        if not src_path.is_dir() or not dest_path.is_dir():
+        if not src.is_dir() or not dest.is_dir():
             return []
 
-        src_names = Mirror._walk_names(src_path, follow_symlinks=True)
+        src_names = Mirror._walk_names(src, follow_symlinks=True)
         if not src_names:
             return []
-        return sorted(dest_path / name for name in Mirror._walk_names(dest_path, follow_symlinks=False) - src_names)
+        return sorted(dest / name for name in Mirror._walk_names(dest, follow_symlinks=False) - src_names)
 
     def remove_orphan(self, path: Path) -> bool:
         if path.is_symlink() or not path.is_dir():
@@ -277,7 +272,7 @@ class Mirror:
         # filtered out of the diff and never listed. Clear those, then rmdir, which
         # still refuses any directory holding something the listing did not account for.
         for child in path.iterdir():
-            if not self._is_ignored(str(child), Settings.IGNORE_PATTERNS):
+            if not self._is_ignored(child, Settings.IGNORE_PATTERNS):
                 continue
             if child.is_dir() and not child.is_symlink():
                 shutil.rmtree(child)
@@ -357,32 +352,34 @@ class HAL9000:
     def _hal_says(self, text: str) -> None:
         print(f"HAL: {text}")
 
-    def _validate_path(self, path: str) -> None:
-        resolved = Path(path).resolve()
+    def _validate_path(self, path: Path) -> None:
+        resolved = path.resolve()
         allowed_roots = (Path.home(), Settings.REPO_ROOT)
         if not any(resolved.is_relative_to(root) for root in allowed_roots):
             raise PathNotAllowedError(abbreviate_home(resolved))
 
-    def _expand_template(self, path: str) -> str:
-        expanded = path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", str(Settings.REPO_ROOT))
+    def _expand_template(self, path: str) -> Path:
+        expanded = Path(path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", str(Settings.REPO_ROOT)))
         self._validate_path(expanded)
         return expanded
 
     def _prepare_dotfile_entry(self, filename: str) -> DotfilePaths:
-        filepath = str((Path.cwd() / filename).resolve())
+        filepath = (Path.cwd() / filename).resolve()
         self._validate_path(filepath)
 
-        home = str(Path.home())
-        relative_path = str(Path(filepath).relative_to(home)) if filepath.startswith(home) else Path(filepath).name
+        home = Path.home()
+        if filepath.is_relative_to(home):
+            relative_path = filepath.relative_to(home)
+            template_dest = str(Path("{{HOME}}") / relative_path)
+        else:
+            relative_path = Path(filepath.name)
+            template_dest = str(filepath)
 
-        dest_path = str(Settings.DOTFILES_ROOT / relative_path)
-        dest_dir = Path(dest_path).parent
+        dest_path = Settings.DOTFILES_ROOT / relative_path
+        if dest_path.parent != Settings.DOTFILES_ROOT:
+            dest_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if dest_dir != Settings.DOTFILES_ROOT:
-            dest_dir.mkdir(parents=True, exist_ok=True)
-
-        template_src = dest_path.replace(str(Settings.REPO_ROOT), "{{REPO_ROOT}}")
-        template_dest = filepath.replace(home, "{{HOME}}")
+        template_src = str(Path("{{REPO_ROOT}}") / dest_path.relative_to(Settings.REPO_ROOT))
 
         return DotfilePaths(filepath, dest_path, template_src, template_dest)
 
@@ -419,10 +416,9 @@ class HAL9000:
         shutil.move(paths.filepath, paths.dest_path)
         self._hal_says(f"mv {abbreviate_home(paths.filepath)} -> {abbreviate_home(paths.dest_path)}")
 
-        ln_dest = Path(paths.filepath)
-        if ln_dest.is_symlink() or ln_dest.exists():
-            ln_dest.unlink()
-        ln_dest.symlink_to(paths.dest_path)
+        if paths.filepath.is_symlink() or paths.filepath.exists():
+            paths.filepath.unlink()
+        paths.filepath.symlink_to(paths.dest_path)
         self._hal_says(f"ln {abbreviate_home(paths.dest_path)} -> {abbreviate_home(paths.filepath)}")
 
         self.dotfiles.upsert("links", paths.template_src, paths.template_dest)
@@ -433,7 +429,7 @@ class HAL9000:
     def unlink(self, namespace: argparse.Namespace) -> None:
         # abspath, not Path.resolve(): the path at dest IS the symlink this removes, and resolving it would land inside the dotfiles repo
         filepath = Path(os.path.abspath(Path(namespace.filename).expanduser()))  # noqa: PTH100 os-path-abspath
-        ln_dict = next((entry for entry in self.dotfiles.data["links"] if Path(self._expand_template(entry["dest"])) == filepath), None)
+        ln_dict = next((entry for entry in self.dotfiles.data["links"] if self._expand_template(entry["dest"]) == filepath), None)
         if not ln_dict:
             self._hal_says(f"not found in manifest: {abbreviate_home(filepath)}")
             return
@@ -441,18 +437,18 @@ class HAL9000:
         src_path = self._expand_template(ln_dict["src"])
         dest_path = self._expand_template(ln_dict["dest"])
 
-        if not Path(src_path).exists():
+        if not src_path.exists():
             self._hal_says(f"not found in dotfiles: {abbreviate_home(src_path)}")
             return
 
         # A real directory at dest is one `hal sync` refused to replace, and it may hold files
         # no manifest entry covers. shutil.move would nest src inside it instead of replacing it.
-        if Path(dest_path).is_dir() and not Path(dest_path).is_symlink():
+        if dest_path.is_dir() and not dest_path.is_symlink():
             self._hal_says(f"refusing to replace directory {abbreviate_home(dest_path)}")
             return
 
-        if Path(dest_path).is_symlink():
-            Path(dest_path).unlink()
+        if dest_path.is_symlink():
+            dest_path.unlink()
         shutil.move(src_path, dest_path)
 
         self.dotfiles.remove("links", ln_dict)

@@ -75,22 +75,22 @@ class TestDotfilesMutation:
 class TestValidatePath:
     def test_valid_path_under_home(self, hal_instance):
         home = str(Path.home())
-        path = f"{home}/.zshrc"
+        path = Path(f"{home}/.zshrc")
         hal_instance._validate_path(path)
 
     def test_valid_path_under_repo_root(self, hal_instance, hal_module):
-        path = f"{hal_module.Settings.REPO_ROOT}/dotfiles/.zshrc"
+        path = Path(f"{hal_module.Settings.REPO_ROOT}/dotfiles/.zshrc")
         hal_instance._validate_path(path)
 
     def test_path_traversal_outside_home(self, hal_instance, hal_module):
         home = str(Path.home())
-        path = f"{home}/../../etc/passwd"
+        path = Path(f"{home}/../../etc/passwd")
         with pytest.raises(hal_module.PathNotAllowedError):
             hal_instance._validate_path(path)
 
     def test_path_to_etc(self, hal_instance, hal_module):
         with pytest.raises(hal_module.PathNotAllowedError):
-            hal_instance._validate_path("/etc/crontab")
+            hal_instance._validate_path(Path("/etc/crontab"))
 
     def test_path_traversal_in_template_expansion(self, hal_instance, hal_module):
         with pytest.raises(hal_module.PathNotAllowedError):
@@ -98,7 +98,7 @@ class TestValidatePath:
 
     def test_normal_template_expansion(self, hal_instance):
         result = hal_instance._expand_template("{{HOME}}/.zshrc")
-        assert result == f"{Path.home()}/.zshrc"
+        assert result == Path.home() / ".zshrc"
 
     def test_sibling_directory_sharing_home_prefix(self, hal_instance, hal_module, tmp_path):
         """A sibling whose name merely starts with the home directory's name is not under it.
@@ -111,9 +111,9 @@ class TestValidatePath:
             patch("pathlib.Path.home", return_value=home),
             patch.object(hal_module.Settings, "REPO_ROOT", (tmp_path / "repo").resolve()),
         ):
-            hal_instance._validate_path(f"{home}/inside/stuff")
+            hal_instance._validate_path(Path(f"{home}/inside/stuff"))
             with pytest.raises(hal_module.PathNotAllowedError):
-                hal_instance._validate_path(f"{home}-elsewhere/stuff")
+                hal_instance._validate_path(Path(f"{home}-elsewhere/stuff"))
 
     def test_sibling_directory_sharing_repo_root_prefix(self, hal_instance, hal_module, tmp_path):
         repo_root = (tmp_path / "repo").resolve()
@@ -121,12 +121,12 @@ class TestValidatePath:
             patch("pathlib.Path.home", return_value=(tmp_path / "home").resolve()),
             patch.object(hal_module.Settings, "REPO_ROOT", repo_root),
         ):
-            hal_instance._validate_path(f"{repo_root}/inside/stuff")
+            hal_instance._validate_path(Path(f"{repo_root}/inside/stuff"))
             with pytest.raises(hal_module.PathNotAllowedError):
-                hal_instance._validate_path(f"{repo_root}-elsewhere/stuff")
+                hal_instance._validate_path(Path(f"{repo_root}-elsewhere/stuff"))
 
     def test_home_itself_is_valid(self, hal_instance):
-        hal_instance._validate_path(str(Path.home()))
+        hal_instance._validate_path(Path.home())
 
     def test_copy_entry_rejects_an_unsafe_dest_even_when_src_is_missing(self, hal_instance, hal_module, tmp_path, monkeypatch):
         """Both paths of an entry are expanded and checked before the engine looks at either."""
@@ -273,11 +273,27 @@ class TestPrepareDotfileEntry:
         paths = hal_instance._prepare_dotfile_entry(".config/app.toml")
 
         assert paths == hal_module.DotfilePaths(
-            filepath=str(home / ".config" / "app.toml"),
-            dest_path=str(repo / "dotfiles" / ".config" / "app.toml"),
+            filepath=home / ".config" / "app.toml",
+            dest_path=repo / "dotfiles" / ".config" / "app.toml",
             template_src="{{REPO_ROOT}}/dotfiles/.config/app.toml",
             template_dest="{{HOME}}/.config/app.toml",
         )
+
+    def test_sibling_of_home_is_not_treated_as_inside_it(self, hal_instance, hal_module, tmp_path, monkeypatch):
+        """A path that merely shares home's prefix is outside it, so it lands under dotfiles/ by bare name."""
+        home = tmp_path / "home"
+        home.mkdir()
+        (tmp_path / "homely").mkdir()
+        (tmp_path / "homely" / "note.txt").write_text("x")
+        monkeypatch.setattr(Path, "home", lambda: home)
+        monkeypatch.setattr(hal_module.Settings, "REPO_ROOT", tmp_path)
+        monkeypatch.setattr(hal_module.Settings, "DOTFILES_ROOT", tmp_path / "dotfiles")
+        monkeypatch.chdir(tmp_path)
+
+        paths = hal_instance._prepare_dotfile_entry("homely/note.txt")
+
+        assert paths.dest_path == tmp_path / "dotfiles" / "note.txt"
+        assert paths.template_dest == str(tmp_path / "homely" / "note.txt")
 
 
 class TestUnlink:
@@ -300,7 +316,7 @@ class TestUnlink:
 
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
             hal_instance.unlink(argparse.Namespace(filename=str(dest)))
 
         assert dest.is_dir()
@@ -320,7 +336,7 @@ class TestUnlink:
 
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/.zshrc", "dest": "{{HOME}}/.zshrc"})
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
             hal_instance.unlink(argparse.Namespace(filename=str(dest)))
 
         assert not dest.is_symlink()
@@ -341,7 +357,7 @@ class TestUnlink:
         entry = {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"}
         self._link_entry(hal_instance, hal_module, tmp_path, entry)
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
             hal_instance.unlink(argparse.Namespace(filename=str(dest)))
 
         assert sorted(p.name for p in dest.iterdir()) == ["unmanaged.md"]
@@ -359,7 +375,7 @@ class TestUnlink:
 
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
             hal_instance.unlink(argparse.Namespace(filename=str(tmp_path / "rules")))
 
         assert hal_instance.dotfiles.data["links"] == []
@@ -377,7 +393,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/sub/rules"})
 
         monkeypatch.chdir(dest.parent)
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
             hal_instance.unlink(argparse.Namespace(filename="rules"))
 
         assert hal_instance.dotfiles.data["links"] == []
@@ -394,7 +410,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
 
         monkeypatch.setenv("HOME", str(tmp_path))
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
             hal_instance.unlink(argparse.Namespace(filename="~/rules/"))
 
         assert hal_instance.dotfiles.data["links"] == []
@@ -411,7 +427,7 @@ class TestUnlink:
         entry = {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"}
         self._link_entry(hal_instance, hal_module, tmp_path, entry)
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t.replace("{{HOME}}", str(tmp_path))):
+        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
             hal_instance.unlink(argparse.Namespace(filename=str(tmp_path / "unmanaged")))
 
         assert "not found in manifest:" in capsys.readouterr().out
@@ -429,7 +445,7 @@ class TestMirror:
         src.write_text("content")
         dest = tmp_path / "dest.txt"
 
-        hal_module.Mirror(say=said.append).copy(str(src), str(dest))
+        hal_module.Mirror(say=said.append).copy(src, dest)
 
         assert dest.read_text() == "content"
         assert said == [f"copy {src} -> {dest}"]
@@ -443,7 +459,7 @@ class TestMirror:
         (dest / "keep.txt").write_text("k")
         (dest / "gone.txt").write_text("g")
 
-        assert hal_module.Mirror.find_orphans(str(src), str(dest)) == [dest / "gone.txt"]
+        assert hal_module.Mirror.find_orphans(src, dest) == [dest / "gone.txt"]
 
 
 class TestSyncLinks:
@@ -459,7 +475,7 @@ class TestSyncLinks:
         dest.mkdir()
         (dest / "unmanaged.md").write_text("preserve me")
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._sync_links({"src": str(src), "dest": str(dest)})
 
         assert not dest.is_symlink()
@@ -475,7 +491,7 @@ class TestSyncLinks:
         dest.mkdir()
         (dest / "unmanaged.md").write_text("discard me")
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._sync_links({"src": str(src), "dest": str(dest)}, force=True)
 
         assert dest.is_symlink()
@@ -489,7 +505,7 @@ class TestSyncLinks:
         dest = tmp_path / "dest.txt"
         dest.write_text("pre-existing")
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._sync_links({"src": str(src), "dest": str(dest)})
 
         assert dest.is_symlink()
@@ -506,7 +522,7 @@ class TestSyncLinks:
         dest = tmp_path / "dest"
         dest.symlink_to(stale)
 
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._sync_links({"src": str(src), "dest": str(dest)})
 
         assert dest.is_symlink()
@@ -527,7 +543,7 @@ class TestCopyEntryMerge:
         (dest / "dest_only.txt").write_text("preserve me")
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "from_src.txt").read_text() == "source content"
@@ -544,7 +560,7 @@ class TestCopyEntryMerge:
         (dest / "shared.txt").write_text("old")
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "shared.txt").read_text() == "updated"
@@ -560,7 +576,7 @@ class TestCopyEntryMerge:
         (dest / "existing.txt").write_text("keep")
 
         copy_entry = {"src": str(tmp_path / "src"), "dest": str(tmp_path / "dest")}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (tmp_path / "dest" / "sub" / "new.txt").read_text() == "new"
@@ -575,7 +591,7 @@ class TestCopyEntryMerge:
         dest = tmp_path / "dest"
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "file.txt").read_text() == "content"
@@ -589,7 +605,7 @@ class TestCopyEntryMerge:
         dest.write_text("old content")
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert dest.read_text() == "new content"
@@ -601,7 +617,7 @@ class TestCopyEntryMerge:
         dest = tmp_path / "dest" / ".DS_Store"
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert not dest.exists()
@@ -617,7 +633,7 @@ class TestCopyEntryMerge:
         dest.mkdir()
 
         copy_entry = {"src": str(src / "*"), "dest": str(dest / "*")}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "keep.log").read_text() == "keep"
@@ -634,7 +650,7 @@ class TestCopyEntryMerge:
 
         copy_entry = {"src": str(src), "dest": str(dest)}
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_module.Settings, "IGNORE_PATTERNS", ("*.tmp",)),
         ):
             hal_instance._copy_entry(copy_entry)
@@ -652,7 +668,7 @@ class TestCopyEntryMerge:
         dest = tmp_path / "dest"
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "real.txt").exists()
@@ -671,7 +687,7 @@ class TestCopyEntryMerge:
         dest_file.chmod(0o444)
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert dest_file.read_text() == "new content"
@@ -686,7 +702,7 @@ class TestCopyEntryMerge:
         dest.chmod(0o444)
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert dest.read_text() == "new content"
@@ -701,7 +717,7 @@ class TestCopyEntryMerge:
         dest = tmp_path / "dest"
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "real.txt").exists()
@@ -717,7 +733,7 @@ class TestCopyEntryMerge:
         dest = tmp_path / "dest"
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "real.txt").exists()
@@ -740,7 +756,7 @@ class TestSkipUnchanged:
         self._match_mtime(src, dest)
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert dest.read_text() == "BBBB"
@@ -754,7 +770,7 @@ class TestSkipUnchanged:
         os.utime(dest, ns=(src.stat().st_atime_ns, src.stat().st_mtime_ns + 1_000_000_000))
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert dest.read_text() == "AAAA"
@@ -768,7 +784,7 @@ class TestSkipUnchanged:
         self._match_mtime(src, dest)
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert dest.read_text() == "AAAA"
@@ -787,7 +803,7 @@ class TestSkipUnchanged:
         (dest / "changed.txt").write_text("old content")
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert (dest / "same.txt").read_text() == "BBBB"
@@ -807,7 +823,7 @@ class TestSkipUnchanged:
         dest_file.chmod(0o444)
 
         copy_entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
         assert dest_file.read_text() == "BBBB"
@@ -828,7 +844,7 @@ class TestCopyEntryGlob:
         dest_dir = tmp_path / "dropbox"
 
         entry = {"src": str(src_dir / "*.code-workspace"), "dest": str(dest_dir / "*.code-workspace")}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(entry)
 
         assert (dest_dir / "acme.code-workspace").read_text() == "acme"
@@ -842,7 +858,7 @@ class TestCopyEntryGlob:
         dest_dir = tmp_path / "dropbox"
 
         entry = {"src": str(src_dir / "*.code-workspace"), "dest": str(dest_dir / "*.code-workspace")}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(entry)
 
         assert not dest_dir.exists()
@@ -856,7 +872,7 @@ class TestCopyEntryGlob:
         local_dir = tmp_path / "projects"
 
         swapped = {"src": str(backup_dir / "*.code-workspace"), "dest": str(local_dir / "*.code-workspace")}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(swapped)
 
         assert (local_dir / "acme.code-workspace").read_text() == "backed up"
@@ -890,7 +906,7 @@ class TestBackupRestore:
 
         entry = {"src": str(src), "dest": str(dest)}
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
@@ -910,7 +926,7 @@ class TestBackupRestore:
 
         entry = {"src": str(src), "dest": str(dest)}
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
@@ -929,7 +945,7 @@ class TestBackupRestore:
         entry = {"src": str(local), "dest": str(backup_file)}
         monkeypatch.setattr("builtins.input", lambda _: "y")
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
@@ -947,7 +963,7 @@ class TestBackupRestore:
         entry = {"src": str(local), "dest": str(backup_file)}
         monkeypatch.setattr("builtins.input", lambda _: "y")
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
@@ -965,7 +981,7 @@ class TestBackupRestore:
         entry = {"src": str(local), "dest": str(backup_file)}
         monkeypatch.setattr("builtins.input", lambda _: "")
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
@@ -987,7 +1003,7 @@ class TestBackupRestore:
         entry = {"src": str(local), "dest": str(backup_file)}
         monkeypatch.setattr("builtins.input", raise_eof)
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
@@ -1003,7 +1019,7 @@ class TestBackupRestore:
 
         entry = {"src": str(src), "dest": str(dest)}
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"links": [], "copies": [], "backups": [entry]}
@@ -1021,7 +1037,7 @@ class TestBackupRestore:
 
         with (
             patch("pathlib.Path.home", return_value=home),
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
@@ -1038,7 +1054,7 @@ class TestBackupPrune:
     @staticmethod
     def _prune(hal_instance, entries, answer="y"):
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
             patch("builtins.input", return_value=answer),
         ):
@@ -1086,7 +1102,7 @@ class TestBackupPrune:
         (dest / "orphan.txt").write_text("orphan")
 
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
@@ -1279,7 +1295,7 @@ class TestBackupPrune:
         (dest / "orphan.txt").write_text("orphan")
 
         entry = {"src": str(src), "dest": str(dest)}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             orphans = hal_instance._find_orphans(entry)
 
         assert orphans == [dest / "orphan.txt"]
@@ -1382,7 +1398,7 @@ class TestBackupPrune:
         dest_dir.mkdir()
 
         entry = {"src": str(src_dir / "foo-*.log"), "dest": str(dest_dir / "bar-*.log")}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(entry)
             orphans = hal_instance._find_orphans(entry)
 
@@ -1400,7 +1416,7 @@ class TestBackupPrune:
         (dest_dir / "bar-9.log").write_text("orphan")
 
         entry = {"src": str(src_dir / "foo-*.log"), "dest": str(dest_dir / "bar-*.log")}
-        with patch.object(hal_instance, "_expand_template", side_effect=lambda t: t):
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(entry)
             orphans = hal_instance._find_orphans(entry)
 
@@ -1418,7 +1434,7 @@ class TestBackupPrune:
             pytest.fail("prompted with nothing to prune")
 
         with (
-            patch.object(hal_instance, "_expand_template", side_effect=lambda t: t),
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
             patch("builtins.input", side_effect=fail_if_called),
         ):
@@ -1503,7 +1519,7 @@ class TestPathRefusal:
         entries = {"backups": [{"src": "{{HOME}}/ok.txt", "dest": "{{HOME}}/ok.bak"}, {"src": "{{HOME}}/ok.txt", "dest": "/etc/hal-test"}], "copies": [], "links": []}
         manifest.write_text(json.dumps(entries))
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
-        monkeypatch.setattr(hal_module.Dotfiles, "DEFAULT_CONFIG", str(manifest))
+        monkeypatch.setattr(hal_module.Dotfiles, "DEFAULT_CONFIG", manifest)
         monkeypatch.setattr(sys, "argv", ["hal", "backup"])
 
         with pytest.raises(SystemExit) as exc_info:
