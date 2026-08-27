@@ -44,7 +44,6 @@ class PathNotAllowedError(Exception):
 
 
 def abbreviate_home(path: str | Path) -> str:
-    """A single path with its home directory prefix shown as ~, for messages that name one."""
     home = str(Path.home())
     text = str(path)
     return f"~{text[len(home) :]}" if text.startswith(home) else text
@@ -88,7 +87,6 @@ class Dotfiles:
             return {"backups": [], "copies": [], "links": []}
 
     def upsert(self, field_name: str, src: str, dest: str) -> None:
-        """Point the entry for src at dest, adding the entry when there is none."""
         entries = self.data[field_name]
         existing = next((entry for entry in entries if entry["src"] == src), None)
         if existing:
@@ -101,14 +99,12 @@ class Dotfiles:
 
     @staticmethod
     def _ordered_entry(entry: Entry) -> dict[str, object]:
-        """The entry with its keys in ENTRY_KEY_ORDER, any other key after them by name."""
         fields = dict(entry.items())
         known = [key for key in Dotfiles.ENTRY_KEY_ORDER if key in fields]
         unknown = sorted(key for key in fields if key not in Dotfiles.ENTRY_KEY_ORDER)
         return {key: fields[key] for key in [*known, *unknown]}
 
     def _ordered_data(self) -> dict[str, list[dict[str, object]]]:
-        """The manifest as written back to disk, so plain mappings rather than Entry values."""
         return {field_name: [self._ordered_entry(entry) for entry in entries] for field_name, entries in sorted(self.data.items())}
 
     def show(self) -> None:
