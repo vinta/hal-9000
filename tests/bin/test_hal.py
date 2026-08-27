@@ -472,8 +472,8 @@ class TestMirror:
         assert hal_module.Mirror.find_orphans(src, dest) == [dest / "gone.txt"]
 
 
-class TestSyncLinks:
-    """_sync_links never destroys a real directory unless forced."""
+class TestMirrorLink:
+    """Mirror.link never destroys a real directory unless forced."""
 
     def test_refuses_to_replace_real_directory(self, hal_instance, tmp_path):
         """A real directory at dest is left alone, so unmanaged files survive."""
@@ -485,8 +485,7 @@ class TestSyncLinks:
         dest.mkdir()
         (dest / "unmanaged.md").write_text("preserve me")
 
-        with patch.object(hal_instance, "_expand_template", side_effect=Path):
-            hal_instance._sync_links({"src": str(src), "dest": str(dest)})
+        hal_instance.mirror.link(src, dest)
 
         assert not dest.is_symlink()
         assert (dest / "unmanaged.md").read_text() == "preserve me"
@@ -501,8 +500,7 @@ class TestSyncLinks:
         dest.mkdir()
         (dest / "unmanaged.md").write_text("discard me")
 
-        with patch.object(hal_instance, "_expand_template", side_effect=Path):
-            hal_instance._sync_links({"src": str(src), "dest": str(dest)}, force=True)
+        hal_instance.mirror.link(src, dest, force=True)
 
         assert dest.is_symlink()
         assert dest.resolve() == src.resolve()
@@ -515,8 +513,7 @@ class TestSyncLinks:
         dest = tmp_path / "dest.txt"
         dest.write_text("pre-existing")
 
-        with patch.object(hal_instance, "_expand_template", side_effect=Path):
-            hal_instance._sync_links({"src": str(src), "dest": str(dest)})
+        hal_instance.mirror.link(src, dest)
 
         assert dest.is_symlink()
         assert dest.read_text() == "from repo"
@@ -532,8 +529,7 @@ class TestSyncLinks:
         dest = tmp_path / "dest"
         dest.symlink_to(stale)
 
-        with patch.object(hal_instance, "_expand_template", side_effect=Path):
-            hal_instance._sync_links({"src": str(src), "dest": str(dest)})
+        hal_instance.mirror.link(src, dest)
 
         assert dest.is_symlink()
         assert dest.resolve() == src.resolve()

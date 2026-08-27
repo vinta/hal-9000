@@ -465,9 +465,6 @@ class HAL9000:
         self.dotfiles.save()
         self.dotfiles.show()
 
-    def _sync_links(self, link: Entry, *, force: bool = False) -> None:
-        self.mirror.link(self._expand_template(link["src"]), self._expand_template(link["dest"]), force=force)
-
     def _copy_entry(self, entry: Entry) -> None:
         self.mirror.copy(self._expand_template(entry["src"]), self._expand_template(entry["dest"]))
 
@@ -512,9 +509,11 @@ class HAL9000:
                 future.result()
 
     def sync(self, namespace: argparse.Namespace) -> None:
-        tasks: list[Callable[[], None]] = [functools.partial(self._sync_links, link, force=namespace.force) for link in self.dotfiles.data["links"]]
-        tasks += [functools.partial(self._copy_entry, copy) for copy in self.dotfiles.data["copies"]]
-        self._parallel(tasks)
+        # Links are metadata syscalls, so a thread pool costs more in spin-up than it saves; running them
+        # in manifest order also keeps the output stable
+        for link in self.dotfiles.data["links"]:
+            self.mirror.link(self._expand_template(link["src"]), self._expand_template(link["dest"]), force=namespace.force)
+        self._parallel(functools.partial(self._copy_entry, copy) for copy in self.dotfiles.data["copies"])
 
     def backup(self, namespace: argparse.Namespace) -> None:
         self._parallel(functools.partial(self._copy_entry, entry) for entry in self.dotfiles.data["backups"])
