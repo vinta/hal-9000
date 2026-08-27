@@ -50,8 +50,6 @@ class Entry(TypedDict):
 
 class Dotfiles:
     DEFAULT_CONFIG: Path = Settings.DOTFILES_ROOT / "hal_dotfiles.json"
-    # Keys are written back in this order; any other key follows them, sorted by name
-    ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest", "prune")
 
     def __init__(self, path: Path | None = None) -> None:
         self.path: Path = path or self.DEFAULT_CONFIG
@@ -64,27 +62,17 @@ class Dotfiles:
         if existing:
             existing["dest"] = dest
         else:
-            entries.append({"dest": dest, "src": src})
+            entries.append({"src": src, "dest": dest})
 
     def remove(self, field_name: str, entry: Entry) -> None:
         self.data[field_name].remove(entry)
 
-    @staticmethod
-    def _ordered_entry(entry: Entry) -> dict[str, object]:
-        fields = dict(entry.items())
-        known = [key for key in Dotfiles.ENTRY_KEY_ORDER if key in fields]
-        unknown = sorted(key for key in fields if key not in Dotfiles.ENTRY_KEY_ORDER)
-        return {key: fields[key] for key in [*known, *unknown]}
-
-    def _ordered_data(self) -> dict[str, list[dict[str, object]]]:
-        return {field_name: [self._ordered_entry(entry) for entry in entries] for field_name, entries in sorted(self.data.items())}
-
     def show(self) -> None:
-        print(json.dumps(self._ordered_data(), indent=2))
+        print(json.dumps(self.data, indent=2))
 
     def save(self) -> None:
         with self.path.open("w") as f:
-            json.dump(self._ordered_data(), f, indent=2)
+            json.dump(self.data, f, indent=2)
 
 
 # Takes expanded paths only: the manifest, its templates, and the path-safety check stay with HAL9000
