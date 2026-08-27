@@ -174,7 +174,6 @@ class Config(TypedDict):
 class State(TypedDict):
     last_played: dict[str, str]
     last_stop_time: float
-    last_prompt_time: float
     session_start_times: dict[str, float]
     subagent_sessions: dict[str, float]
     sound_pid: int | None
@@ -190,8 +189,6 @@ class Rule(CommonRule, total=False):
     matcher: str
     # Required when detection is "regex"
     pattern: str
-    # Required when detection is "elapsed"
-    min_seconds: float
     # Optional on any detection, always as a pair: local "HH:MM" clock times, inclusive of `after` and exclusive of `before`
     after: str
     before: str
@@ -223,7 +220,6 @@ DEFAULT_CONFIG: Config = {
 DEFAULT_STATE: State = {
     "last_played": {},
     "last_stop_time": 0.0,
-    "last_prompt_time": 0.0,
     "session_start_times": {},
     "subagent_sessions": {},
     "sound_pid": None,
@@ -267,7 +263,6 @@ def load_state(state_path: Path) -> State:
     return {
         "last_played": data.get("last_played", DEFAULT_STATE["last_played"]),
         "last_stop_time": data.get("last_stop_time", DEFAULT_STATE["last_stop_time"]),
-        "last_prompt_time": data.get("last_prompt_time", DEFAULT_STATE["last_prompt_time"]),
         "session_start_times": data.get("session_start_times", DEFAULT_STATE["session_start_times"]),
         "subagent_sessions": data.get("subagent_sessions", DEFAULT_STATE["subagent_sessions"]),
         "sound_pid": data.get("sound_pid", DEFAULT_STATE["sound_pid"]),
@@ -323,13 +318,6 @@ def _detect_matcher(rule: Rule, hook_input: HookInput) -> bool:
     return bool(re.search(rule.get("matcher", ""), text, re.IGNORECASE))
 
 
-def _detect_elapsed(rule: Rule, state: State) -> bool:
-    last_prompt = state.get("last_prompt_time", 0.0)
-    if last_prompt == 0.0:
-        return False
-    return (time.time() - last_prompt) >= rule["min_seconds"]
-
-
 def _minutes_since_midnight(clock: str) -> int:
     hour, minute = clock.split(":")
     return int(hour) * 60 + int(minute)
@@ -346,7 +334,7 @@ def _within_window(after: str, before: str) -> bool:
     return minutes >= start or minutes < end
 
 
-def evaluate_detection(rule: Rule, hook_input: HookInput, state: State) -> bool:
+def evaluate_detection(rule: Rule, hook_input: HookInput) -> bool:
     if "after" in rule and not _within_window(rule["after"], rule["before"]):
         return False
 
@@ -358,9 +346,6 @@ def evaluate_detection(rule: Rule, hook_input: HookInput, state: State) -> bool:
         return _detect_regex(rule, hook_input)
     if detection == "matcher":
         return _detect_matcher(rule, hook_input)
-    if detection == "elapsed":
-        return _detect_elapsed(rule, state)
-
     logger.error("unknown detection type: %s", detection)
     return False
 
@@ -406,7 +391,7 @@ def match_manifest(manifest: Manifest, hook_event: str, tool_name: str, hook_inp
         for rule in rules:
             if not rule.get("clips"):
                 continue
-            if evaluate_detection(rule, hook_input, state):
+            if evaluate_detection(rule, hook_input):
                 last = state.get("last_played", {}).get(key)
                 return (key, pick_clip(rule["clips"], last))
 
@@ -441,8 +426,6 @@ def play_sound(clip_path: Path, volume: float) -> int | None:
 def _record_tracking(hook_event: str, hook_input: HookInput, state: State, *, session_id: str, now: float) -> None:
     if hook_event == "SessionStart" and session_id:
         state["session_start_times"][session_id] = now
-    if hook_event == "UserPromptSubmit":
-        state["last_prompt_time"] = now
     if hook_event == "SubagentStart":
         child_id = hook_input.get("child_session_id", "")
         if child_id:
