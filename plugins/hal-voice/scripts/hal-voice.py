@@ -6,10 +6,8 @@ import fcntl
 import json
 import logging
 import os
-import platform
 import random
 import re
-import shutil
 import signal
 import subprocess
 import sys
@@ -420,21 +418,6 @@ def cleanup_old_sessions(state: State, *, now: float, max_age: float = 86400) ->
     state["subagent_sessions"] = {k: v for k, v in state["subagent_sessions"].items() if (now - v) < max_age}
 
 
-def _find_audio_player() -> list[str]:
-    ffplay = ("ffplay", ["ffplay", "-nodisp", "-autoexit", "-loglevel", "quiet"])
-
-    candidates = {
-        "Darwin": [("afplay", ["afplay"])],
-        "Linux": [("paplay", ["paplay"]), ("aplay", ["aplay"]), ffplay],
-        "Windows": [ffplay],
-    }.get(platform.system(), [])
-
-    for name, cmd in candidates:
-        if shutil.which(name):
-            return cmd
-    return []
-
-
 def kill_previous_sound(state: State) -> None:
     pid = state.get("sound_pid")
     if pid is None:
@@ -449,15 +432,8 @@ def play_sound(clip_path: Path, volume: float) -> int | None:
         logger.error("audio not found: %s", clip_path)
         return None
 
-    player = _find_audio_player()
-    if not player:
-        logger.error("no audio player found")
-        return None
-
-    volume_args = ["-v", str(volume)] if player[0] == "afplay" else []
-    cmd = [*player, *volume_args, str(clip_path)]
-
-    logger.info("playing %s via %s", clip_path.name, player[0])
+    cmd = ["/usr/bin/afplay", "-v", str(volume), str(clip_path)]
+    logger.info("playing %s via afplay", clip_path.name)
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)  # noqa: S603 subprocess-without-shell-equals-true
     return proc.pid
 

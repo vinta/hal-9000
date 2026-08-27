@@ -338,3 +338,19 @@ class TestCleanupOldSessions:
         assert "new" in state["session_start_times"]
         assert "old-child" not in state["subagent_sessions"]
         assert "new-child" in state["subagent_sessions"]
+
+
+class TestPlaySound:
+    def test_uses_native_afplay(self, hal, tmp_path):
+        clip = tmp_path / "clip.mp3"
+        clip.touch()
+
+        with patch.object(hal.subprocess, "Popen") as popen:
+            popen.return_value.pid = 42
+            assert hal.play_sound(clip, 0.5) == 42
+
+        popen.assert_called_once_with(
+            ["/usr/bin/afplay", "-v", "0.5", str(clip)],
+            stdout=hal.subprocess.DEVNULL,
+            stderr=hal.subprocess.DEVNULL,
+        )
