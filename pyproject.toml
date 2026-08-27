@@ -20,7 +20,6 @@ dev = [
     { include-group = "test" },
     { include-group = "lint" },
     { include-group = "audit" },
-    "argcomplete>=3.7.0",
 ]
 
 [tool.uv]

@@ -22,12 +22,6 @@ if TYPE_CHECKING:
     # The `annotations` future keeps every annotation below a string, so it is never evaluated at runtime
     from typing import NotRequired
 
-# Only needed for generating shell completion during local development
-try:
-    import argcomplete
-except ImportError:
-    argcomplete = None  # ty: ignore[invalid-assignment]
-
 
 def abbreviate_home(path: Path) -> str:
     home = Path.home()
@@ -337,9 +331,6 @@ class HAL9000:
 
         pod_bay_doors_parser = subparsers.add_parser("open-the-pod-bay-doors", help="open the pod bay doors, please, HAL")
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
-
-        if argcomplete:
-            argcomplete.autocomplete(parser)
 
     def _hal_says(self, text: str) -> None:
         print(f"HAL: {text}")
