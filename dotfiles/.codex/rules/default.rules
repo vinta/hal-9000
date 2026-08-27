@@ -1,34 +1,35 @@
-# Narrow command policy for Codex escalations outside the sandbox.
-# https://developers.openai.com/codex/rules
+# https://learn.chatgpt.com/docs/agent-configuration/rules
 
-prefix_rule(pattern=["git", "status"], decision="allow")
-prefix_rule(pattern=["git", "diff"], decision="allow")
-prefix_rule(pattern=["git", "branch"], decision="allow")
-prefix_rule(pattern=["git", "log"], decision="allow")
-prefix_rule(pattern=["git", "stash"], decision="allow")
-prefix_rule(pattern=["git", "add"], decision="allow")
-prefix_rule(pattern=["git", "mv"], decision="allow")
-prefix_rule(pattern=["git", "rm"], decision="allow")
-prefix_rule(pattern=["git", "apply"], decision="allow")
-prefix_rule(pattern=["git", "commit"], decision="allow")
-prefix_rule(pattern=["git", "restore"], decision="allow")
-prefix_rule(pattern=["git", "show"], decision="allow")
-prefix_rule(pattern=["git", "pull"], decision="allow")
+prefix_rule(pattern=["git", ["status", "diff", "branch", "log", "stash", "add", "mv", "rm", "apply", "commit", "restore", "show", "rev-parse", "pull"]], decision="allow")
+prefix_rule(pattern=["gh", "repo", "view"], decision="allow")
+prefix_rule(pattern=["gh", "run", "view"], decision="allow")
 prefix_rule(pattern=["make"], decision="allow")
-
 prefix_rule(pattern=["npx", ["ctx7", "ctx7@latest"]], decision="allow")
 prefix_rule(pattern=["npx", "playwright"], decision="allow")
 prefix_rule(pattern=["playwright-cli", ["open", "goto", "console"]], decision="allow")
-prefix_rule(pattern=["gh", "run", "view"], decision="allow")
 prefix_rule(pattern=["gcloud", "builds", "list"], decision="allow")
 
-prefix_rule(pattern=["curl"], decision="prompt")
-prefix_rule(pattern=["wget"], decision="prompt")
-prefix_rule(pattern=["open"], decision="prompt")
+prefix_rule(pattern=[["open", "chmod", "chown", "kill", "killall", "pkill", "curl"]], decision="prompt")
+prefix_rule(pattern=["brew", "install"], decision="prompt")
+prefix_rule(pattern=["pip", "install"], decision="prompt")
+prefix_rule(pattern=["uv", "pip", "install"], decision="prompt")
+prefix_rule(pattern=["uv", "tool", "install"], decision="prompt")
+prefix_rule(pattern=["uv", "add"], decision="prompt")
 prefix_rule(pattern=["npm", ["install", "i"]], decision="prompt")
 prefix_rule(pattern=["bun", "add"], decision="prompt")
 prefix_rule(pattern=["yarn", "add"], decision="prompt")
 prefix_rule(pattern=["pnpm", "add"], decision="prompt")
-prefix_rule(pattern=["uv", "add"], decision="prompt")
 prefix_rule(pattern=["git", "push"], decision="prompt")
-prefix_rule(pattern=["npx", "supabase", "db"], decision="prompt")
+prefix_rule(pattern=["git", "remote", ["add", "set-url"]], decision="prompt")
+prefix_rule(pattern=["git", "config"], decision="prompt")
+prefix_rule(pattern=["gh", "repo", ["create", "rename"]], decision="prompt")
+prefix_rule(pattern=["gh", "api"], decision="prompt")
+
+prefix_rule(pattern=["git", "-c"], decision="forbidden")
+prefix_rule(pattern=["git", "--config-env"], decision="forbidden")
+prefix_rule(pattern=["git", "--git-dir"], decision="forbidden")
+prefix_rule(pattern=["gh", "repo", "delete"], decision="forbidden")
+prefix_rule(
+    pattern=[["su", "sudo", "passwd", "env", "printenv", "history", "fc", "eval", "exec", "rsync", "sftp", "telnet", "socat", "nc", "ncat", "netcat", "nmap", "chflags", "xattr", "diskutil", "mkfs", "security", "defaults", "launchctl", "osascript", "dscl", "networksetup", "scutil", "systemsetup", "pmset", "crontab"]],
+    decision="forbidden",
+)
