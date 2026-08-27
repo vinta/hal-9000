@@ -366,7 +366,7 @@ class HAL9000:
                 self._hal_says(f"unchanged {self._abbreviate_home(src)}")
                 return
             Path(dest).parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src, dest)
+            self._copy_file_allow_overwrite(src, dest)
         self._hal_says(f"copy {self._abbreviate_home(src)} -> {self._abbreviate_home(dest)}")
 
     def _glob_pairs(self, entry: Entry) -> list[tuple[str, str]]:
