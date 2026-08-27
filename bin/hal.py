@@ -527,7 +527,7 @@ class HAL9000:
             self._hal_says("aborted")
             return
 
-        removed = sum(self.mirror.remove_orphan(path) for path in sorted(orphans, reverse=True))
+        removed = sum(self.mirror.remove_orphan(path) for path in reversed(orphans))
         self._hal_says(f"pruned {removed}")
 
     @staticmethod
