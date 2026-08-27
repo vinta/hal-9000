@@ -20,7 +20,7 @@ class TestAbbreviateHome:
 
 class TestDotfilesLoad:
     def test_missing_manifest_loads_as_empty(self, hal_module, tmp_path):
-        dotfiles = hal_module.Dotfiles(str(tmp_path / "hal_dotfiles.json"))
+        dotfiles = hal_module.Dotfiles(tmp_path / "hal_dotfiles.json")
 
         assert dotfiles.data == {"backups": [], "copies": [], "links": []}
 
@@ -34,7 +34,7 @@ class TestDotfilesSave:
         entries = {"backups": [], "copies": [], "links": [{"src": "a", "dest": "b"}]}
         manifest.write_text(json.dumps(entries))
 
-        hal_module.Dotfiles(str(manifest)).save()
+        hal_module.Dotfiles(manifest).save()
 
         assert json.loads(manifest.read_text()) == entries
 
@@ -43,7 +43,7 @@ class TestDotfilesSave:
         entries = {"backups": [], "copies": [], "links": [{"src": "a", "dest": "b"}]}
         manifest.write_text(json.dumps(entries))
 
-        dotfiles = hal_module.Dotfiles(str(manifest))
+        dotfiles = hal_module.Dotfiles(manifest)
         assert dotfiles.data == entries
         dotfiles.save()
 
@@ -57,7 +57,7 @@ class TestDotfilesMutation:
     def _dotfiles(hal_module, tmp_path, entries):
         manifest = tmp_path / "hal_dotfiles.json"
         manifest.write_text(json.dumps(entries))
-        return hal_module.Dotfiles(str(manifest))
+        return hal_module.Dotfiles(manifest)
 
     def test_upsert_adds_a_missing_entry(self, hal_module, tmp_path):
         dotfiles = self._dotfiles(hal_module, tmp_path, {"backups": [], "copies": [], "links": []})
@@ -312,7 +312,7 @@ class TestUnlink:
     @staticmethod
     def _link_entry(hal_instance, hal_module, tmp_path, entry):
         """Point the manifest at a temp file and register one link entry as templates."""
-        hal_instance.dotfiles = hal_module.Dotfiles(str(tmp_path / "hal_dotfiles.json"))
+        hal_instance.dotfiles = hal_module.Dotfiles(tmp_path / "hal_dotfiles.json")
         hal_instance.dotfiles.data["links"].append(entry)
 
     def test_moves_directory_back_to_dest(self, hal_instance, hal_module, tmp_path):
@@ -1547,7 +1547,7 @@ class TestManifestRoundTrip:
         entries = {"backups": [{"src": "a", "dest": "b", "prune": False}], "copies": [], "links": []}
         manifest.write_text(json.dumps(entries))
 
-        dotfiles = hal_module.Dotfiles(str(manifest))
+        dotfiles = hal_module.Dotfiles(manifest)
         _ = dotfiles.data
         dotfiles.save()
 
@@ -1559,6 +1559,6 @@ class TestManifestRoundTrip:
         entries = {"backups": [{"note": "n", "dest": "b", "src": "a"}], "copies": [], "links": []}
         manifest.write_text(json.dumps(entries))
 
-        hal_module.Dotfiles(str(manifest)).save()
+        hal_module.Dotfiles(manifest).save()
 
         assert list(json.loads(manifest.read_text())["backups"][0].items()) == [("src", "a"), ("dest", "b"), ("note", "n")]

@@ -67,8 +67,8 @@ class Dotfiles:
     # Keys are written back in this order; any other key follows them, sorted by name
     ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest", "prune")
 
-    def __init__(self, path: str | Path | None = None) -> None:
-        self.path: Path = Path(path) if path else self.DEFAULT_CONFIG
+    def __init__(self, path: Path | None = None) -> None:
+        self.path: Path = path or self.DEFAULT_CONFIG
         self._data: dict[str, list[Entry]] | None = None
 
     @property
@@ -141,26 +141,23 @@ class Mirror:
         dest.symlink_to(src)
         self._say(f"link {abbreviate_home(src)} -> {abbreviate_home(dest)}")
 
-    # str as well as Path: shutil.copytree hands its copy_function plain strings
     @staticmethod
-    def _is_unchanged(src: str | Path, dest: str | Path) -> bool:
-        dest_path = Path(dest)
-        if not dest_path.exists():
+    def _is_unchanged(src: Path, dest: Path) -> bool:
+        if not dest.exists():
             return False
 
-        src_stat = Path(src).stat()
-        dest_stat = dest_path.stat()
+        src_stat = src.stat()
+        dest_stat = dest.stat()
         # rsync's quick check: equal size and mtime means no rewrite, so Dropbox and Time Machine never re-examine the file
         return src_stat.st_size == dest_stat.st_size and src_stat.st_mtime_ns == dest_stat.st_mtime_ns
 
     @staticmethod
-    def _copy_file_allow_overwrite(src: str | Path, dest: str | Path) -> None:
+    def _copy_file_allow_overwrite(src: Path, dest: Path) -> None:
         if Mirror._is_unchanged(src, dest):
             return
 
-        dest_path = Path(dest)
-        if dest_path.exists() and not dest_path.stat().st_mode & stat.S_IWUSR:
-            dest_path.chmod(dest_path.stat().st_mode | stat.S_IWUSR)
+        if dest.exists() and not dest.stat().st_mode & stat.S_IWUSR:
+            dest.chmod(dest.stat().st_mode | stat.S_IWUSR)
         shutil.copy2(src, dest)
 
     @staticmethod
@@ -177,7 +174,8 @@ class Mirror:
                 src,
                 dest,
                 ignore=shutil.ignore_patterns(*Settings.IGNORE_PATTERNS),
-                copy_function=self._copy_file_allow_overwrite,
+                # copytree hands its copy_function plain strings
+                copy_function=lambda source, target: self._copy_file_allow_overwrite(Path(source), Path(target)),
                 dirs_exist_ok=True,
             )
         else:
