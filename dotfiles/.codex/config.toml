@@ -7,6 +7,7 @@ model_verbosity = "high"
 hide_agent_reasoning = false
 show_raw_agent_reasoning = true
 approval_policy = "on-request"
+approvals_reviewer = "auto_review"
 personality = "pragmatic"
 sandbox_mode = "workspace-write"
 web_search = "live"
