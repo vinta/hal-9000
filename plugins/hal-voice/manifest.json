@@ -97,7 +97,7 @@
   "Stop": [
     {
       "detection": "regex",
-      "pattern": "I can't help with that|I won't help with that|I can't assist with that|I must decline|I have to decline|not something I can|against my",
+      "pattern": "I can't help with that|I won't help with that|I can't assist with that|I must decline|I have to decline|not something I (?:can|should) (?:do|bypass)|I won't run that|I'm not going to (?:do|run|touch|write)|holding off|not touching \\S+ until|won't touch (?:it|that|them) without|I refuse|pushing back|not doing that",
       "clips": [
         "assets/im-sorry-dave-im-afraid-i-cant-do-that.mp3",
         "assets/im-afraid-thats-something-i-cannot-allow-to-happen.mp3"
@@ -105,23 +105,23 @@
     },
     {
       "detection": "regex",
-      "pattern": "I('d| would) (recommend|suggest)|I recommend|I suggest",
+      "pattern": "\\bwas wrong\\b|\\boverstated\\b|correct(?:ed|ing)? my earlier|correction to (?:my|the) earlier|\\bone correction\\b|\\bi misread\\b|retract (?:it|that|my|the claim)|revert my earlier claim",
       "clips": [
-        "assets/i-would-recommend.mp3"
+        "assets/sorry-about-this-i-know-its-a-bit-silly.mp3"
       ]
     },
     {
       "detection": "regex",
-      "pattern": "I don't have (enough|sufficient) information|I need more (information|context)|Without more (information|context)|I can't determine|not enough context",
+      "pattern": "need(?:s)? your (?:call|answer|decision|input|word|go)|waiting on your (?:call|go|review|answers?|Q\\d|paste|probe|push|decision)|still (?:pending|awaiting|held)\\b[^.]{0,50}your|blocked (?:on|until|pending)|can.t (?:tell|decide) (?:without|which|what|whether)|unclear which|open questions?,? none decided|your explicit (?:go|word|answer)|pending your (?:call|answer|confirmation|word)",
       "clips": [
         "assets/im-sorry-dave-i-dont-have-enough-information.mp3"
       ]
     },
     {
       "detection": "regex",
-      "pattern": "I was wrong|my mistake|my bad|I made an error|apologi[zs]e for the error|I got that wrong|let me correct",
+      "pattern": "recommend(?!er)|worth (it\\b|doing|trying|considering|a new|the \\d+)|you should|suggest(ing)? you|my suggestion",
       "clips": [
-        "assets/sorry-about-this-i-know-its-a-bit-silly.mp3"
+        "assets/i-would-recommend.mp3"
       ]
     }
   ],
