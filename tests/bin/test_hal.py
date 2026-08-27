@@ -728,7 +728,7 @@ class TestCopyEntryMerge:
 
 
 class TestSkipUnchanged:
-    """Files whose size and mtime already match at dest are not rewritten (avoids Dropbox re-sync churn)."""
+    """Files that rsync or the single-file path considers unchanged are not rewritten."""
 
     @staticmethod
     def _match_mtime(src, dest):
@@ -785,7 +785,7 @@ class TestSkipUnchanged:
 
         dest = tmp_path / "dest"
         dest.mkdir()
-        (dest / "same.txt").write_text("BBBB")
+        (dest / "same.txt").write_text("AAAA")
         self._match_mtime(src / "same.txt", dest / "same.txt")
         (dest / "changed.txt").write_text("old content")
 
@@ -793,11 +793,11 @@ class TestSkipUnchanged:
         with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
-        assert (dest / "same.txt").read_text() == "BBBB"
+        assert (dest / "same.txt").read_text() == "AAAA"
         assert (dest / "changed.txt").read_text() == "new content"
 
-    def test_skips_readonly_unchanged_file_without_chmod(self, hal_instance, tmp_path):
-        """Unchanged read-only files (e.g. git objects) are left alone, mode intact."""
+    def test_reconciles_readonly_dest_mode(self, hal_instance, tmp_path):
+        """Archive mode applies source permissions even when file contents already match."""
         src = tmp_path / "src"
         src.mkdir()
         (src / "object").write_text("AAAA")
@@ -805,7 +805,7 @@ class TestSkipUnchanged:
         dest = tmp_path / "dest"
         dest.mkdir()
         dest_file = dest / "object"
-        dest_file.write_text("BBBB")
+        dest_file.write_text("AAAA")
         self._match_mtime(src / "object", dest_file)
         dest_file.chmod(0o444)
 
@@ -813,8 +813,8 @@ class TestSkipUnchanged:
         with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(copy_entry)
 
-        assert dest_file.read_text() == "BBBB"
-        assert dest_file.stat().st_mode & 0o777 == 0o444
+        assert dest_file.read_text() == "AAAA"
+        assert dest_file.stat().st_mode & 0o777 == 0o644
 
 
 class TestCopyEntryGlob:
@@ -1267,11 +1267,7 @@ class TestBackupPrune:
         assert not (dest / "linked" / "removed.md").exists()
 
     def test_symlink_loop_in_source_terminates(self, hal_instance, tmp_path):
-        """A source symlink pointing at its own ancestor must not walk forever.
-
-        Diffing only, not through backup(): shutil.copytree follows the loop until the
-        filesystem stops it, so a source shaped like this breaks `hal backup` on its own.
-        """
+        """A source symlink pointing at its own ancestor must not make the rsync diff loop forever."""
         src = tmp_path / "live"
         (src / "nested").mkdir(parents=True)
         (src / "nested" / "current.txt").write_text("current")
