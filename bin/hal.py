@@ -40,7 +40,7 @@ class Settings:
 
 
 class PathNotAllowedError(Exception):
-    """A path outside the home directory and the repo, the only places hal touches."""
+    pass
 
 
 def abbreviate_home(path: str | Path) -> str:
@@ -56,8 +56,6 @@ class Entry(TypedDict):
 
 
 class DotfilePaths(NamedTuple):
-    """Where hal link and hal copy put a file, and how the manifest records it."""
-
     filepath: str
     dest_path: str
     template_src: str
@@ -118,13 +116,8 @@ class Dotfiles:
             json.dump(ordered_data, f, indent=2, separators=(",", ": "))
 
 
+# Takes expanded paths only: the manifest, its templates, and the path-safety check stay with HAL9000
 class Mirror:
-    """Copies, links, and diffs real paths, reporting each step through say.
-
-    Everything here takes expanded paths: the manifest, its templates, and the
-    path-safety check stay with the caller.
-    """
-
     def __init__(self, say: Callable[[str], None]) -> None:
         self._say = say
 
@@ -152,16 +145,13 @@ class Mirror:
 
     @staticmethod
     def _is_unchanged(src: str, dest: str) -> bool:
-        """Same quick check as rsync: matching size and mtime means no rewrite needed.
-
-        Rewriting an identical file makes Dropbox and Time Machine re-examine it, so skip it.
-        """
         dest_path = Path(dest)
         if not dest_path.exists():
             return False
 
         src_stat = Path(src).stat()
         dest_stat = dest_path.stat()
+        # rsync's quick check: equal size and mtime means no rewrite, so Dropbox and Time Machine never re-examine the file
         return src_stat.st_size == dest_stat.st_size and src_stat.st_mtime_ns == dest_stat.st_mtime_ns
 
     @staticmethod
@@ -202,11 +192,8 @@ class Mirror:
 
     @staticmethod
     def _glob_pairs(src: str, dest: str) -> list[tuple[str, str]]:
-        """The (src, dest) pairs a single-`*` entry expands to, with each star spliced into dest.
-
-        Copying and pruning have to read a pattern pair the same way: these destinations are
-        exactly the ones a backup writes, so anything else matching the dest pattern is an orphan.
-        """
+        # Shared by copy and find_orphans so both read a pattern pair the same way: these destinations are
+        # exactly the ones a backup writes, so anything else matching the dest pattern is an orphan
         prefix, _, suffix = src.partition("*")
         dprefix, _, dsuffix = dest.partition("*")
         matches = sorted(str(match) for match in Path(src).parent.glob(Path(src).name))
@@ -234,13 +221,6 @@ class Mirror:
 
     @staticmethod
     def _walk_names(root: Path, *, follow_symlinks: bool) -> set[str]:
-        """Every path under root, relative to it, skipping ignored names.
-
-        A source is walked through its symlinked directories because backup copies them
-        dereferenced, leaving the destination holding their contents as real files; not
-        descending would read every one of those files as an orphan. A destination is not,
-        so a symlink there stays a single entry to unlink rather than a way out of the backup.
-        """
         names: set[str] = set()
         visited = {root.resolve()}
         stack = [(root, "")]
@@ -254,6 +234,9 @@ class Mirror:
                 if not child.is_dir():
                     continue
                 if child.is_symlink():
+                    # A source is followed because backup copies symlinked directories dereferenced, so their contents
+                    # sit in the destination as real files and would otherwise all read as orphans. A destination is
+                    # not, so a symlink there stays a single entry to unlink rather than a way out of the backup.
                     if not follow_symlinks:
                         continue
                     resolved = child.resolve()
@@ -265,11 +248,6 @@ class Mirror:
 
     @staticmethod
     def find_orphans(src: str, dest: str) -> list[Path]:
-        """Paths in the backup destination that no longer exist in its source.
-
-        A source that is missing or empty yields nothing: there the backup is the only
-        surviving copy, and every file in it would otherwise read as an orphan.
-        """
         dest_path = Path(dest)
 
         if "*" in src:
@@ -280,6 +258,7 @@ class Mirror:
             return sorted(match for match in dest_path.parent.glob(dest_path.name) if match not in expected)
 
         src_path = Path(src)
+        # A missing or empty source means the backup is the only surviving copy, and every file in it would read as an orphan
         if not src_path.is_dir() or not dest_path.is_dir():
             return []
 
@@ -531,13 +510,9 @@ class HAL9000:
 
     @staticmethod
     def _parallel(tasks: Iterable[Callable[[], None]]) -> None:
-        """Run every task on a thread pool.
-
-        The first failure is re-raised on the calling thread, but only after every task
-        has finished, because leaving the pool waits for the ones still running.
-        """
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = [executor.submit(task) for task in tasks]
+            # Re-raises the first failure, but only after every task has finished: leaving the pool waits for the rest
             for future in concurrent.futures.as_completed(futures):
                 future.result()
 
