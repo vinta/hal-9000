@@ -67,9 +67,6 @@ class Dotfiles:
     def remove(self, field_name: str, entry: Entry) -> None:
         self.data[field_name].remove(entry)
 
-    def show(self) -> None:
-        print(json.dumps(self.data, indent=2))
-
     def save(self) -> None:
         with self.path.open("w") as f:
             json.dump(self.data, f, indent=2)
@@ -369,7 +366,6 @@ class HAL9000:
         self.dotfiles.upsert("links", template_src, template_dest)
 
         self.dotfiles.save()
-        self.dotfiles.show()
 
     def unlink(self, namespace: argparse.Namespace) -> None:
         # abspath, not Path.resolve(): the path at dest IS the symlink this removes, and resolving it would land inside the dotfiles repo
@@ -395,11 +391,11 @@ class HAL9000:
         if dest_path.is_symlink():
             dest_path.unlink()
         shutil.move(src_path, dest_path)
+        self._hal_says(f"mv {abbreviate_home(src_path)} -> {abbreviate_home(dest_path)}")
 
         self.dotfiles.remove("links", ln_dict)
 
         self.dotfiles.save()
-        self.dotfiles.show()
 
     def _copy_entry(self, entry: Entry) -> None:
         self.mirror.copy(self._expand_template(entry["src"]), self._expand_template(entry["dest"]))
