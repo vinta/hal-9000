@@ -263,8 +263,13 @@ class TestUserFilenameValidation:
             hal_instance.link(ns)
 
 
-class TestPrepareDotfileEntry:
-    def test_paths_for_a_file_under_home(self, hal_instance, hal_module, tmp_path, monkeypatch):
+class TestLink:
+    @staticmethod
+    def _manifest(hal_instance, hal_module, path):
+        path.write_text(json.dumps({"backups": [], "links": []}))
+        hal_instance.dotfiles = hal_module.Dotfiles(path)
+
+    def test_moves_a_file_under_home_into_dotfiles_and_links_it_back(self, hal_instance, hal_module, tmp_path, monkeypatch):
         home = tmp_path / "home"
         (home / ".config").mkdir(parents=True)
         (home / ".config" / "app.toml").write_text("x")
@@ -273,15 +278,13 @@ class TestPrepareDotfileEntry:
         monkeypatch.setattr(hal_module.Settings, "REPO_ROOT", repo)
         monkeypatch.setattr(hal_module.Settings, "DOTFILES_ROOT", repo / "dotfiles")
         monkeypatch.chdir(home)
+        self._manifest(hal_instance, hal_module, tmp_path / "hal_dotfiles.json")
 
-        paths = hal_instance._prepare_dotfile_entry(".config/app.toml")
+        hal_instance.link(argparse.Namespace(filename=Path(".config/app.toml")))
 
-        assert paths == hal_module.DotfilePaths(
-            filepath=home / ".config" / "app.toml",
-            dest_path=repo / "dotfiles" / ".config" / "app.toml",
-            template_src="{{REPO_ROOT}}/dotfiles/.config/app.toml",
-            template_dest="{{HOME}}/.config/app.toml",
-        )
+        assert (repo / "dotfiles" / ".config" / "app.toml").read_text() == "x"
+        assert (home / ".config" / "app.toml").readlink() == repo / "dotfiles" / ".config" / "app.toml"
+        assert hal_instance.dotfiles.data["links"] == [{"src": "{{REPO_ROOT}}/dotfiles/.config/app.toml", "dest": "{{HOME}}/.config/app.toml"}]
 
     def test_sibling_of_home_is_not_treated_as_inside_it(self, hal_instance, hal_module, tmp_path, monkeypatch):
         """A path that merely shares home's prefix is outside it, so it lands under dotfiles/ by bare name."""
@@ -293,11 +296,12 @@ class TestPrepareDotfileEntry:
         monkeypatch.setattr(hal_module.Settings, "REPO_ROOT", tmp_path)
         monkeypatch.setattr(hal_module.Settings, "DOTFILES_ROOT", tmp_path / "dotfiles")
         monkeypatch.chdir(tmp_path)
+        self._manifest(hal_instance, hal_module, tmp_path / "hal_dotfiles.json")
 
-        paths = hal_instance._prepare_dotfile_entry("homely/note.txt")
+        hal_instance.link(argparse.Namespace(filename=Path("homely/note.txt")))
 
-        assert paths.dest_path == tmp_path / "dotfiles" / "note.txt"
-        assert paths.template_dest == str(tmp_path / "homely" / "note.txt")
+        assert (tmp_path / "dotfiles" / "note.txt").read_text() == "x"
+        assert hal_instance.dotfiles.data["links"] == [{"src": "{{REPO_ROOT}}/dotfiles/note.txt", "dest": str(tmp_path / "homely" / "note.txt")}]
 
 
 class TestUnlink:

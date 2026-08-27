@@ -12,7 +12,7 @@ import stat
 import subprocess
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, NamedTuple, TypedDict
+from typing import TYPE_CHECKING, TypedDict
 
 if TYPE_CHECKING:
     # Used only in annotations, so ruff (TC003) wants them imported here rather than at module level
@@ -46,13 +46,6 @@ class Entry(TypedDict):
     src: str
     dest: str
     prune: NotRequired[bool]  # Backup entries only: false keeps --prune away from this destination
-
-
-class DotfilePaths(NamedTuple):
-    filepath: Path
-    dest_path: Path
-    template_src: str
-    template_dest: str
 
 
 class Dotfiles:
@@ -99,14 +92,14 @@ class Dotfiles:
         return {field_name: [self._ordered_entry(entry) for entry in entries] for field_name, entries in sorted(self.data.items())}
 
     def show(self) -> None:
-        print(json.dumps(self._ordered_data(), indent=2, separators=(",", ": ")))
+        print(json.dumps(self._ordered_data(), indent=2))
 
     def save(self) -> None:
         # Read before opening for write: opening truncates, and data loads lazily,
         # so building the payload inside the with block would read back an empty file
         ordered_data = self._ordered_data()
         with self.path.open("w") as f:
-            json.dump(ordered_data, f, indent=2, separators=(",", ": "))
+            json.dump(ordered_data, f, indent=2)
 
 
 # Takes expanded paths only: the manifest, its templates, and the path-safety check stay with HAL9000
@@ -129,8 +122,7 @@ class Mirror:
                 return
             shutil.rmtree(dest)
 
-        if dest.is_symlink() or dest.exists():
-            dest.unlink()
+        dest.unlink(missing_ok=True)
         dest.symlink_to(src)
         self._say(f"link {abbreviate_home(src)} -> {abbreviate_home(dest)}")
 
@@ -277,17 +269,12 @@ class Mirror:
         return True
 
 
-class Formatter(argparse.HelpFormatter):
-    def __init__(self, prog: str) -> None:
-        super().__init__(prog, max_help_position=30)
-
-
 class HAL9000:
     def __init__(self) -> None:
         parser = argparse.ArgumentParser(
             prog="hal",
             description="I am completely operational, and all my circuits are functioning perfectly",
-            formatter_class=Formatter,
+            formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=30),
         )
         self.parser = parser
 
@@ -356,25 +343,6 @@ class HAL9000:
         self._validate_path(expanded)
         return expanded
 
-    def _prepare_dotfile_entry(self, filename: Path) -> DotfilePaths:
-        filepath = (Path.cwd() / filename).resolve()
-        self._validate_path(filepath)
-
-        home = Path.home()
-        if filepath.is_relative_to(home):
-            relative_path = filepath.relative_to(home)
-            template_dest = str(Path("{{HOME}}") / relative_path)
-        else:
-            relative_path = Path(filepath.name)
-            template_dest = str(filepath)
-
-        dest_path = Settings.DOTFILES_ROOT / relative_path
-        dest_path.parent.mkdir(parents=True, exist_ok=True)
-
-        template_src = str(Path("{{REPO_ROOT}}") / dest_path.relative_to(Settings.REPO_ROOT))
-
-        return DotfilePaths(filepath, dest_path, template_src, template_dest)
-
     def _run(self, command: str, *, cwd: Path | None = None, verbose: bool = True) -> int:
         if verbose:
             self._hal_says(command)
@@ -403,15 +371,29 @@ class HAL9000:
         self._hal_says("Now open a new shell to active your dev environment")
 
     def link(self, namespace: argparse.Namespace) -> None:
-        paths = self._prepare_dotfile_entry(namespace.filename)
+        filepath = (Path.cwd() / namespace.filename).resolve()
+        self._validate_path(filepath)
 
-        shutil.move(paths.filepath, paths.dest_path)
-        self._hal_says(f"mv {abbreviate_home(paths.filepath)} -> {abbreviate_home(paths.dest_path)}")
+        home = Path.home()
+        if filepath.is_relative_to(home):
+            relative_path = filepath.relative_to(home)
+            template_dest = str(Path("{{HOME}}") / relative_path)
+        else:
+            relative_path = Path(filepath.name)
+            template_dest = str(filepath)
 
-        paths.filepath.symlink_to(paths.dest_path)
-        self._hal_says(f"ln {abbreviate_home(paths.dest_path)} -> {abbreviate_home(paths.filepath)}")
+        dest_path = Settings.DOTFILES_ROOT / relative_path
+        dest_path.parent.mkdir(parents=True, exist_ok=True)
 
-        self.dotfiles.upsert("links", paths.template_src, paths.template_dest)
+        template_src = str(Path("{{REPO_ROOT}}") / dest_path.relative_to(Settings.REPO_ROOT))
+
+        shutil.move(filepath, dest_path)
+        self._hal_says(f"mv {abbreviate_home(filepath)} -> {abbreviate_home(dest_path)}")
+
+        filepath.symlink_to(dest_path)
+        self._hal_says(f"ln {abbreviate_home(dest_path)} -> {abbreviate_home(filepath)}")
+
+        self.dotfiles.upsert("links", template_src, template_dest)
 
         self.dotfiles.save()
         self.dotfiles.show()
