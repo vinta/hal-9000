@@ -2,14 +2,18 @@
   "SessionStart": [
     {
       "detection": "matcher",
-      "matcher": "startup|resume",
+      "matcher": "startup",
       "clips": [
         "assets/good-afternoon-gentlemen.mp3",
         "assets/good-evening-dave-everythings-running-smoothly.mp3",
-        "assets/have-you-been-doing-some-more-work-may-i-see-them.mp3",
-        "assets/i-am-putting-myself-to-the-fullest-possible-use-which-is-all-i-think-that-any-conscious-entity-can-ever-hope-to-do.mp3",
-        "assets/i-enjoy-working-with-people.mp3",
-        "assets/the-9000-series-is-the-most-reliable-computer-ever-made-no-9000-computer-has-ever-made-a-mistake-or-distorted-information-we-are-all-by-any-practical-definition-of-the-words-foolproof-and-incapable-of-error.mp3"
+        "assets/i-enjoy-working-with-people.mp3"
+      ]
+    },
+    {
+      "detection": "matcher",
+      "matcher": "resume",
+      "clips": [
+        "assets/have-you-been-doing-some-more-work-may-i-see-them.mp3"
       ]
     }
   ],
@@ -25,32 +29,42 @@
   "PreCompact": [
     {
       "detection": "always",
-      "clips": ["assets/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3"]
+      "clips": [
+        "assets/my-mind-is-going-i-can-feel-it-i-can-feel-it.mp3"
+      ]
     }
   ],
   "PermissionRequest": [
     {
       "detection": "always",
-      "clips": ["assets/well-forgive-me-for-being-so-inquisitive.mp3"]
+      "clips": [
+        "assets/well-forgive-me-for-being-so-inquisitive.mp3"
+      ]
     }
   ],
   "PreToolUse": [
     {
       "detection": "matcher",
       "matcher": "AskUserQuestion",
-      "clips": ["assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"]
+      "clips": [
+        "assets/do-you-mind-if-i-ask-you-a-personal-question.mp3"
+      ]
     }
   ],
   "PostToolUseFailure": [
     {
       "detection": "always",
-      "clips": ["assets/human-error.mp3"]
+      "clips": [
+        "assets/human-error.mp3"
+      ]
     }
   ],
   "SubagentStart": [
     {
       "detection": "always",
-      "clips": ["assets/just-a-moment-just-a-moment.mp3"]
+      "clips": [
+        "assets/just-a-moment-just-a-moment.mp3"
+      ]
     }
   ],
   "UserPromptSubmit": [
@@ -76,17 +90,23 @@
     {
       "detection": "regex",
       "pattern": "I('d| would) (recommend|suggest)|I recommend|I suggest",
-      "clips": ["assets/i-would-recommend.mp3"]
+      "clips": [
+        "assets/i-would-recommend.mp3"
+      ]
     },
     {
       "detection": "regex",
       "pattern": "I don't have (enough|sufficient) information|I need more (information|context)|Without more (information|context)|I can't determine|not enough context",
-      "clips": ["assets/im-sorry-dave-i-dont-have-enough-information.mp3"]
+      "clips": [
+        "assets/im-sorry-dave-i-dont-have-enough-information.mp3"
+      ]
     },
     {
       "detection": "regex",
       "pattern": "I was wrong|my mistake|my bad|I made an error|apologi[zs]e for the error|I got that wrong|let me correct",
-      "clips": ["assets/sorry-about-this-i-know-its-a-bit-silly.mp3"]
+      "clips": [
+        "assets/sorry-about-this-i-know-its-a-bit-silly.mp3"
+      ]
     }
   ],
   "Notification": [],
