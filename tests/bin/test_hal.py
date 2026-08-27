@@ -18,27 +18,8 @@ class TestAbbreviateHome:
         assert hal_module.abbreviate_home(tmp_path / "homely" / "x") == str(tmp_path / "homely" / "x")
 
 
-class TestDotfilesLoad:
-    def test_missing_manifest_loads_as_empty(self, hal_module, tmp_path):
-        dotfiles = hal_module.Dotfiles(tmp_path / "hal_dotfiles.json")
-
-        assert dotfiles.data == {"backups": [], "links": []}
-
-
 class TestDotfilesSave:
-    """save() truncates the manifest, so it must build its payload first."""
-
-    def test_save_before_any_read_preserves_manifest(self, hal_module, tmp_path):
-        """Manifest data loads lazily, so saving an untouched Dotfiles must not lose it."""
-        manifest = tmp_path / "hal_dotfiles.json"
-        entries = {"backups": [], "links": [{"src": "a", "dest": "b"}]}
-        manifest.write_text(json.dumps(entries))
-
-        hal_module.Dotfiles(manifest).save()
-
-        assert json.loads(manifest.read_text()) == entries
-
-    def test_save_after_read_preserves_manifest(self, hal_module, tmp_path):
+    def test_save_preserves_manifest(self, hal_module, tmp_path):
         manifest = tmp_path / "hal_dotfiles.json"
         entries = {"backups": [], "links": [{"src": "a", "dest": "b"}]}
         manifest.write_text(json.dumps(entries))
@@ -310,8 +291,9 @@ class TestUnlink:
     @staticmethod
     def _link_entry(hal_instance, hal_module, tmp_path, entry):
         """Point the manifest at a temp file and register one link entry as templates."""
-        hal_instance.dotfiles = hal_module.Dotfiles(tmp_path / "hal_dotfiles.json")
-        hal_instance.dotfiles.data["links"].append(entry)
+        manifest = tmp_path / "hal_dotfiles.json"
+        manifest.write_text(json.dumps({"backups": [], "links": [entry]}))
+        hal_instance.dotfiles = hal_module.Dotfiles(manifest)
 
     def test_moves_directory_back_to_dest(self, hal_instance, hal_module, tmp_path):
         """A directory entry is restored whole, which shutil.copy2 could never do."""

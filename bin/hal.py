@@ -55,20 +55,8 @@ class Dotfiles:
 
     def __init__(self, path: Path | None = None) -> None:
         self.path: Path = path or self.DEFAULT_CONFIG
-        self._data: dict[str, list[Entry]] | None = None
-
-    @property
-    def data(self) -> dict[str, list[Entry]]:
-        if self._data is None:
-            self._data = self._load()
-        return self._data
-
-    def _load(self) -> dict[str, list[Entry]]:
-        try:
-            with self.path.open() as f:
-                return json.load(f)
-        except FileNotFoundError:
-            return {"backups": [], "links": []}
+        with self.path.open() as f:
+            self.data: dict[str, list[Entry]] = json.load(f)
 
     def upsert(self, field_name: str, src: str, dest: str) -> None:
         entries = self.data[field_name]
@@ -95,11 +83,8 @@ class Dotfiles:
         print(json.dumps(self._ordered_data(), indent=2))
 
     def save(self) -> None:
-        # Read before opening for write: opening truncates, and data loads lazily,
-        # so building the payload inside the with block would read back an empty file
-        ordered_data = self._ordered_data()
         with self.path.open("w") as f:
-            json.dump(ordered_data, f, indent=2)
+            json.dump(self._ordered_data(), f, indent=2)
 
 
 # Takes expanded paths only: the manifest, its templates, and the path-safety check stay with HAL9000
@@ -477,10 +462,6 @@ class HAL9000:
 
     def restore(self, namespace: argparse.Namespace) -> None:  # noqa: ARG002 unused-method-argument
         entries = self.dotfiles.data["backups"]
-        if not entries:
-            self._hal_says("nothing to restore")
-            return
-
         for entry in entries:
             self._hal_says(f"{abbreviate_home(self._expand_template(entry['dest']))} -> {abbreviate_home(self._expand_template(entry['src']))}")
 
