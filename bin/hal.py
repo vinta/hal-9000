@@ -394,7 +394,6 @@ class HAL9000:
             self._hal_says("You should use Homebrew's ansible")
             sys.exit(1)
 
-        self._run("git fetch", cwd=Settings.REPO_ROOT)
         returncode = self._run("git pull", cwd=Settings.REPO_ROOT)
         if returncode != 0:
             sys.exit(returncode)
@@ -414,8 +413,6 @@ class HAL9000:
         shutil.move(paths.filepath, paths.dest_path)
         self._hal_says(f"mv {abbreviate_home(paths.filepath)} -> {abbreviate_home(paths.dest_path)}")
 
-        if paths.filepath.is_symlink() or paths.filepath.exists():
-            paths.filepath.unlink()
         paths.filepath.symlink_to(paths.dest_path)
         self._hal_says(f"ln {abbreviate_home(paths.dest_path)} -> {abbreviate_home(paths.filepath)}")
 

@@ -228,7 +228,7 @@ class TestUpdateAnsibleCheck:
         ns = argparse.Namespace(func=hal_instance.update, extra_args=[])
         hal_instance.update(ns)
 
-        assert "git fetch" in commands_run
+        assert "git pull" in commands_run
 
 
 class TestUpdateWorkingDirectory:
@@ -250,7 +250,6 @@ class TestUpdateWorkingDirectory:
 
         repo_root = hal_module.Settings.REPO_ROOT
         assert commands_run == [
-            ("git fetch", repo_root),
             ("git pull", repo_root),
             ("ansible-playbook site.yml -v", repo_root / "playbooks"),
         ]
