@@ -41,8 +41,8 @@ class PathNotAllowedError(Exception):
 
 
 class Settings:
-    REPO_ROOT: str = str(Path(__file__).resolve().parent.parent)
-    DOTFILES_ROOT: str = str(Path(REPO_ROOT) / "dotfiles")
+    REPO_ROOT: Path = Path(__file__).resolve().parent.parent
+    DOTFILES_ROOT: Path = REPO_ROOT / "dotfiles"
     IGNORE_PATTERNS: tuple[str, ...] = (".DS_Store", ".venv", ".*_cache", "__pycache__", "node_modules", "-private-tmp*")
     # Skipped when diffing a backup against its source, but still copied by backup itself:
     # git reclaims loose objects and packs locally, so a copy-only backup keeps every
@@ -64,7 +64,7 @@ class DotfilePaths(NamedTuple):
 
 
 class Dotfiles:
-    DEFAULT_CONFIG: str = str(Path(Settings.DOTFILES_ROOT) / "hal_dotfiles.json")
+    DEFAULT_CONFIG: str = str(Settings.DOTFILES_ROOT / "hal_dotfiles.json")
     # Keys are written back in this order; any other key follows them, sorted by name
     ENTRY_KEY_ORDER: tuple[str, ...] = ("src", "dest", "prune")
 
@@ -359,12 +359,12 @@ class HAL9000:
 
     def _validate_path(self, path: str) -> None:
         resolved = Path(path).resolve()
-        allowed_roots = (Path.home(), Path(Settings.REPO_ROOT))
+        allowed_roots = (Path.home(), Settings.REPO_ROOT)
         if not any(resolved.is_relative_to(root) for root in allowed_roots):
             raise PathNotAllowedError(abbreviate_home(resolved))
 
     def _expand_template(self, path: str) -> str:
-        expanded = path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", Settings.REPO_ROOT)
+        expanded = path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", str(Settings.REPO_ROOT))
         self._validate_path(expanded)
         return expanded
 
@@ -375,18 +375,18 @@ class HAL9000:
         home = str(Path.home())
         relative_path = str(Path(filepath).relative_to(home)) if filepath.startswith(home) else Path(filepath).name
 
-        dest_path = str(Path(Settings.DOTFILES_ROOT) / relative_path)
-        dest_dir = str(Path(dest_path).parent)
+        dest_path = str(Settings.DOTFILES_ROOT / relative_path)
+        dest_dir = Path(dest_path).parent
 
         if dest_dir != Settings.DOTFILES_ROOT:
-            Path(dest_dir).mkdir(parents=True, exist_ok=True)
+            dest_dir.mkdir(parents=True, exist_ok=True)
 
-        template_src = dest_path.replace(Settings.REPO_ROOT, "{{REPO_ROOT}}")
+        template_src = dest_path.replace(str(Settings.REPO_ROOT), "{{REPO_ROOT}}")
         template_dest = filepath.replace(home, "{{HOME}}")
 
         return DotfilePaths(filepath, dest_path, template_src, template_dest)
 
-    def _run(self, command: str, *, cwd: str | None = None, verbose: bool = True) -> int:
+    def _run(self, command: str, *, cwd: Path | None = None, verbose: bool = True) -> int:
         if verbose:
             self._hal_says(command)
 
@@ -404,7 +404,7 @@ class HAL9000:
         if returncode != 0:
             sys.exit(returncode)
 
-        playbooks_dir = str(Path(Settings.REPO_ROOT) / "playbooks")
+        playbooks_dir = Settings.REPO_ROOT / "playbooks"
         command = "ansible-playbook site.yml -v"
         if namespace.extra_args:
             command = " ".join([command, *(shlex.quote(arg) for arg in namespace.extra_args)])
@@ -550,7 +550,7 @@ class HAL9000:
     def open_the_pod_bay_doors(self, namespace: argparse.Namespace) -> None:  # noqa: ARG002 unused-method-argument
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
-        filepath = str(Path(Settings.REPO_ROOT) / "assets" / "im-sorry-dave-im-afraid-i-cant-do-that.mp3")
+        filepath = str(Settings.REPO_ROOT / "assets" / "im-sorry-dave-im-afraid-i-cant-do-that.mp3")
         self._run(f"afplay {shlex.quote(filepath)}", verbose=False)
 
     def read_lips(self) -> None:

@@ -109,7 +109,7 @@ class TestValidatePath:
         home = (tmp_path / "home").resolve()
         with (
             patch("pathlib.Path.home", return_value=home),
-            patch.object(hal_module.Settings, "REPO_ROOT", str((tmp_path / "repo").resolve())),
+            patch.object(hal_module.Settings, "REPO_ROOT", (tmp_path / "repo").resolve()),
         ):
             hal_instance._validate_path(f"{home}/inside/stuff")
             with pytest.raises(hal_module.PathNotAllowedError):
@@ -119,7 +119,7 @@ class TestValidatePath:
         repo_root = (tmp_path / "repo").resolve()
         with (
             patch("pathlib.Path.home", return_value=(tmp_path / "home").resolve()),
-            patch.object(hal_module.Settings, "REPO_ROOT", str(repo_root)),
+            patch.object(hal_module.Settings, "REPO_ROOT", repo_root),
         ):
             hal_instance._validate_path(f"{repo_root}/inside/stuff")
             with pytest.raises(hal_module.PathNotAllowedError):
@@ -242,7 +242,7 @@ class TestUpdateWorkingDirectory:
         assert commands_run == [
             ("git fetch", repo_root),
             ("git pull", repo_root),
-            ("ansible-playbook site.yml -v", str(Path(repo_root) / "playbooks")),
+            ("ansible-playbook site.yml -v", repo_root / "playbooks"),
         ]
         assert Path.cwd() == cwd_before
 
@@ -266,8 +266,8 @@ class TestPrepareDotfileEntry:
         (home / ".config" / "app.toml").write_text("x")
         repo = tmp_path / "repo"
         monkeypatch.setattr(Path, "home", lambda: home)
-        monkeypatch.setattr(hal_module.Settings, "REPO_ROOT", str(repo))
-        monkeypatch.setattr(hal_module.Settings, "DOTFILES_ROOT", str(repo / "dotfiles"))
+        monkeypatch.setattr(hal_module.Settings, "REPO_ROOT", repo)
+        monkeypatch.setattr(hal_module.Settings, "DOTFILES_ROOT", repo / "dotfiles")
         monkeypatch.chdir(home)
 
         paths = hal_instance._prepare_dotfile_entry(".config/app.toml")
