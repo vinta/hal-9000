@@ -14,7 +14,6 @@ class TestLoadConfig:
         assert config["volume"] == 0.5
         assert config["debounce_seconds"] == 5
         assert config["replay_suppression_seconds"] == 3
-        assert config["suppress_subagent_complete"] is True
 
     def test_partial_override(self, hal, tmp_path):
         cfg_path = tmp_path / "config.json"
@@ -32,7 +31,6 @@ class TestLoadConfig:
                     "volume": 0.1,
                     "debounce_seconds": 10,
                     "replay_suppression_seconds": 0,
-                    "suppress_subagent_complete": False,
                 }
             )
         )
@@ -247,13 +245,7 @@ class TestIsSuppressed:
 
     def test_subagent_stop_suppressed(self, hal):
         state = {"subagent_sessions": {"child-1": 1000.0}}
-        config = {"suppress_subagent_complete": True}
-        assert hal._is_suppressed("Stop", state, config, session_id="child-1", now=2000.0) is True
-
-    def test_subagent_suppression_disabled(self, hal):
-        state = {"subagent_sessions": {"child-1": 1000.0}}
-        config = {"suppress_subagent_complete": False}
-        assert hal._is_suppressed("Stop", state, config, session_id="child-1", now=2000.0) is False
+        assert hal._is_suppressed("Stop", state, {}, session_id="child-1", now=2000.0) is True
 
     def test_clean_state_allows(self, hal):
         assert hal._is_suppressed("Stop", {}, {}, session_id="sess-1", now=1000.0) is False

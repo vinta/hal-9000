@@ -168,7 +168,6 @@ class Config(TypedDict):
     volume: float
     debounce_seconds: float
     replay_suppression_seconds: float
-    suppress_subagent_complete: bool
 
 
 class State(TypedDict):
@@ -214,7 +213,6 @@ DEFAULT_CONFIG: Config = {
     "volume": 0.5,
     "debounce_seconds": 5,
     "replay_suppression_seconds": 3,
-    "suppress_subagent_complete": True,
 }
 
 DEFAULT_STATE: State = {
@@ -371,9 +369,7 @@ def should_suppress_replay(state: State, config: Config, *, session_id: str, now
     return (now - start_time) < config["replay_suppression_seconds"]
 
 
-def should_suppress_subagent(state: State, config: Config, *, session_id: str) -> bool:
-    if not config.get("suppress_subagent_complete", True):
-        return False
+def should_suppress_subagent(state: State, *, session_id: str) -> bool:
     return session_id in state.get("subagent_sessions", {})
 
 
@@ -439,7 +435,7 @@ def _is_suppressed(hook_event: str, state: State, config: Config, *, session_id:
     if hook_event != "SessionStart" and should_suppress_replay(state, config, session_id=session_id, now=now):
         logger.info("suppressed replay event %s", hook_event)
         return True
-    if hook_event == "Stop" and should_suppress_subagent(state, config, session_id=session_id):
+    if hook_event == "Stop" and should_suppress_subagent(state, session_id=session_id):
         logger.info("suppressed subagent Stop for %s", session_id)
         return True
     return False
