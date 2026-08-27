@@ -194,6 +194,9 @@ class Rule(CommonRule, total=False):
     pattern: str
     # Required when detection is "elapsed"
     min_seconds: float
+    # Optional on any detection, always as a pair: local "HH:MM" clock times, inclusive of `after` and exclusive of `before`
+    after: str
+    before: str
 
 
 # Keyed by hook event, optionally suffixed with ":<tool_name>"
@@ -329,7 +332,26 @@ def _detect_elapsed(rule: Rule, state: State) -> bool:
     return (time.time() - last_prompt) >= rule["min_seconds"]
 
 
+def _minutes_since_midnight(clock: str) -> int:
+    hour, minute = clock.split(":")
+    return int(hour) * 60 + int(minute)
+
+
+def _within_window(after: str, before: str) -> bool:
+    now = time.localtime()
+    minutes = now.tm_hour * 60 + now.tm_min
+    start = _minutes_since_midnight(after)
+    end = _minutes_since_midnight(before)
+    if start <= end:
+        return start <= minutes < end
+    # The window wraps past midnight, so it is the two open-ended halves
+    return minutes >= start or minutes < end
+
+
 def evaluate_detection(rule: Rule, hook_input: HookInput, state: State) -> bool:
+    if "after" in rule and not _within_window(rule["after"], rule["before"]):
+        return False
+
     detection = rule["detection"]
 
     if detection == "always":

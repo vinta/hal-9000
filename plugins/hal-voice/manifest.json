@@ -3,9 +3,25 @@
     {
       "detection": "matcher",
       "matcher": "startup",
+      "after": "13:00",
+      "before": "18:00",
       "clips": [
-        "assets/good-afternoon-gentlemen.mp3",
-        "assets/good-evening-dave-everythings-running-smoothly.mp3",
+        "assets/good-afternoon-gentlemen.mp3"
+      ]
+    },
+    {
+      "detection": "matcher",
+      "matcher": "startup",
+      "after": "18:00",
+      "before": "04:00",
+      "clips": [
+        "assets/good-evening-dave-everythings-running-smoothly.mp3"
+      ]
+    },
+    {
+      "detection": "matcher",
+      "matcher": "startup",
+      "clips": [
         "assets/i-enjoy-working-with-people.mp3"
       ]
     },

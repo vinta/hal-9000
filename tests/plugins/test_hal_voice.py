@@ -1,5 +1,10 @@
 import json
+import time
 from unittest.mock import patch
+
+
+def at_clock(hour, minute=0):
+    return time.struct_time((2026, 8, 27, hour, minute, 0, 3, 239, 0))
 
 
 class TestLoadConfig:
@@ -151,6 +156,63 @@ class TestEvaluateDetection:
     def test_elapsed_no_prompt_time(self, hal):
         rule = {"detection": "elapsed", "min_seconds": 120}
         assert hal.evaluate_detection(rule, {}, {"last_prompt_time": 0.0}) is False
+
+    def test_window_inside(self, hal):
+        rule = {"detection": "always", "after": "13:00", "before": "17:00"}
+        for clock in ((13, 0), (16, 59)):
+            with patch("time.localtime", return_value=at_clock(*clock)):
+                assert hal.evaluate_detection(rule, {}, {}) is True
+
+    def test_window_after_is_inclusive_before_is_exclusive(self, hal):
+        rule = {"detection": "always", "after": "13:00", "before": "17:00"}
+        with patch("time.localtime", return_value=at_clock(13, 0)):
+            assert hal.evaluate_detection(rule, {}, {}) is True
+        with patch("time.localtime", return_value=at_clock(17, 0)):
+            assert hal.evaluate_detection(rule, {}, {}) is False
+
+    def test_window_outside(self, hal):
+        rule = {"detection": "always", "after": "13:00", "before": "17:00"}
+        with patch("time.localtime", return_value=at_clock(9, 30)):
+            assert hal.evaluate_detection(rule, {}, {}) is False
+
+    def test_window_honours_minutes(self, hal):
+        rule = {"detection": "always", "after": "14:24", "before": "14:26"}
+        with patch("time.localtime", return_value=at_clock(14, 23)):
+            assert hal.evaluate_detection(rule, {}, {}) is False
+        with patch("time.localtime", return_value=at_clock(14, 25)):
+            assert hal.evaluate_detection(rule, {}, {}) is True
+        with patch("time.localtime", return_value=at_clock(14, 26)):
+            assert hal.evaluate_detection(rule, {}, {}) is False
+
+    def test_window_wrapping_past_midnight(self, hal):
+        rule = {"detection": "always", "after": "19:00", "before": "04:00"}
+        for clock in ((19, 0), (23, 59), (0, 0), (3, 59)):
+            with patch("time.localtime", return_value=at_clock(*clock)):
+                assert hal.evaluate_detection(rule, {}, {}) is True
+        for clock in ((4, 0), (12, 0), (18, 59)):
+            with patch("time.localtime", return_value=at_clock(*clock)):
+                assert hal.evaluate_detection(rule, {}, {}) is False
+
+    def test_window_ending_at_midnight(self, hal):
+        # Alertmanager needs "24:00" here because it has no wrap; the wrap branch covers it, so "00:00" means midnight
+        rule = {"detection": "always", "after": "19:00", "before": "00:00"}
+        with patch("time.localtime", return_value=at_clock(23, 59)):
+            assert hal.evaluate_detection(rule, {}, {}) is True
+        with patch("time.localtime", return_value=at_clock(0, 0)):
+            assert hal.evaluate_detection(rule, {}, {}) is False
+
+    def test_window_gates_before_detection(self, hal):
+        rule = {"detection": "matcher", "matcher": "startup", "after": "13:00", "before": "17:00"}
+        hook_input = {"hook_event_name": "SessionStart", "source": "startup"}
+        with patch("time.localtime", return_value=at_clock(9, 0)):
+            assert hal.evaluate_detection(rule, hook_input, {}) is False
+        with patch("time.localtime", return_value=at_clock(14, 0)):
+            assert hal.evaluate_detection(rule, hook_input, {}) is True
+
+    def test_no_window_ignores_clock(self, hal):
+        rule = {"detection": "always"}
+        with patch("time.localtime", return_value=at_clock(3, 0)):
+            assert hal.evaluate_detection(rule, {}, {}) is True
 
 
 class TestPickClip:
