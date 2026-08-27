@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple, TypedDict
 
 if TYPE_CHECKING:
+    # Used only in annotations, so ruff (TC003) wants them imported here rather than at module level
     from collections.abc import Callable, Iterable
 
     # NotRequired is 3.11+, but this runs under whatever `python3` resolves to, which on a stock macOS is 3.9
