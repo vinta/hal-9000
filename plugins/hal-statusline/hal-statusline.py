@@ -102,7 +102,13 @@ RESET = "\033[0m"
 
 def colorize_grammar(text: str) -> str:
     color = GREEN if "no issues" in text.lower() else RED
-    return "\n".join(f"{WHITE}Grammar:{RESET}{color}{line.removeprefix('Grammar:')}{RESET}" if line.startswith("Grammar:") else f"{color}{line}{RESET}" for line in text.split("\n"))
+
+    def colorize(line: str) -> str:
+        if line.startswith("Grammar:"):
+            return f"{WHITE}Grammar:{RESET}{color}{line.removeprefix('Grammar:')}{RESET}"
+        return f"{color}{line}{RESET}"
+
+    return "\n".join(colorize(line) for line in text.split("\n"))
 
 
 def print_grammar_status(message: str) -> None:
