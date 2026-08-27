@@ -14,7 +14,6 @@ class TestLoadConfig:
         assert config["volume"] == 0.5
         assert config["debounce_seconds"] == 5
         assert config["replay_suppression_seconds"] == 3
-        assert config["suppress_subagent_complete"] is True
 
     def test_partial_override(self, hal, tmp_path):
         cfg_path = tmp_path / "config.json"
@@ -32,7 +31,6 @@ class TestLoadConfig:
                     "volume": 0.1,
                     "debounce_seconds": 10,
                     "replay_suppression_seconds": 0,
-                    "suppress_subagent_complete": False,
                 }
             )
         )
@@ -71,7 +69,6 @@ class TestLoadState:
         state = hal.load_state(tmp_path / "nonexistent.json")
         assert state["last_played"] == {}
         assert state["last_stop_time"] == 0.0
-        assert state["last_prompt_time"] == 0.0
         assert state["session_start_times"] == {}
         assert state["subagent_sessions"] == {}
         assert state["sound_pid"] is None
@@ -95,124 +92,108 @@ class TestLoadState:
 
 class TestEvaluateDetection:
     def test_always(self, hal):
-        assert hal.evaluate_detection({"detection": "always"}, {}, {}) is True
+        assert hal.evaluate_detection({"detection": "always"}, {}) is True
 
     def test_regex_match(self, hal):
         rule = {"detection": "regex", "pattern": "I can't|I cannot"}
         hook_input = {"last_assistant_message": "I can't do that"}
-        assert hal.evaluate_detection(rule, hook_input, {}) is True
+        assert hal.evaluate_detection(rule, hook_input) is True
 
     def test_regex_no_match(self, hal):
         rule = {"detection": "regex", "pattern": "I can't|I cannot"}
         hook_input = {"last_assistant_message": "Here is the result"}
-        assert hal.evaluate_detection(rule, hook_input, {}) is False
+        assert hal.evaluate_detection(rule, hook_input) is False
 
     def test_regex_empty_message(self, hal):
         rule = {"detection": "regex", "pattern": "error"}
-        assert hal.evaluate_detection(rule, {}, {}) is False
+        assert hal.evaluate_detection(rule, {}) is False
 
     def test_regex_uses_prompt_for_user_prompt_submit(self, hal):
         rule = {"detection": "regex", "pattern": "hello"}
         hook_input = {"hook_event_name": "UserPromptSubmit", "prompt": "hello world"}
-        assert hal.evaluate_detection(rule, hook_input, {}) is True
+        assert hal.evaluate_detection(rule, hook_input) is True
 
     def test_matcher_session_start_source(self, hal):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "startup"}, {}) is True
-        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "resume"}, {}) is True
+        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "startup"}) is True
+        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "resume"}) is True
 
     def test_matcher_session_start_no_match(self, hal):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "compact"}, {}) is False
+        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "compact"}) is False
 
     def test_matcher_tool_name(self, hal):
         rule = {"detection": "matcher", "matcher": "Bash"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "PreToolUse", "tool_name": "Bash"}, {}) is True
+        assert hal.evaluate_detection(rule, {"hook_event_name": "PreToolUse", "tool_name": "Bash"}) is True
 
     def test_matcher_notification_type(self, hal):
         rule = {"detection": "matcher", "matcher": "idle_prompt"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "Notification", "notification_type": "idle_prompt"}, {}) is True
+        assert hal.evaluate_detection(rule, {"hook_event_name": "Notification", "notification_type": "idle_prompt"}) is True
 
     def test_matcher_unknown_event(self, hal):
         rule = {"detection": "matcher", "matcher": "startup"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "Unknown"}, {}) is False
+        assert hal.evaluate_detection(rule, {"hook_event_name": "Unknown"}) is False
 
     def test_matcher_missing_event(self, hal):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
-        assert hal.evaluate_detection(rule, {}, {}) is False
-
-    def test_elapsed_above_threshold(self, hal):
-        rule = {"detection": "elapsed", "min_seconds": 120}
-        state = {"last_prompt_time": 1000.0}
-        with patch("time.time", return_value=1200.0):
-            assert hal.evaluate_detection(rule, {}, state) is True
-
-    def test_elapsed_below_threshold(self, hal):
-        rule = {"detection": "elapsed", "min_seconds": 120}
-        state = {"last_prompt_time": 1000.0}
-        with patch("time.time", return_value=1050.0):
-            assert hal.evaluate_detection(rule, {}, state) is False
-
-    def test_elapsed_no_prompt_time(self, hal):
-        rule = {"detection": "elapsed", "min_seconds": 120}
-        assert hal.evaluate_detection(rule, {}, {"last_prompt_time": 0.0}) is False
+        assert hal.evaluate_detection(rule, {}) is False
 
     def test_window_inside(self, hal):
         rule = {"detection": "always", "after": "13:00", "before": "17:00"}
         for clock in ((13, 0), (16, 59)):
             with patch("time.localtime", return_value=at_clock(*clock)):
-                assert hal.evaluate_detection(rule, {}, {}) is True
+                assert hal.evaluate_detection(rule, {}) is True
 
     def test_window_after_is_inclusive_before_is_exclusive(self, hal):
         rule = {"detection": "always", "after": "13:00", "before": "17:00"}
         with patch("time.localtime", return_value=at_clock(13, 0)):
-            assert hal.evaluate_detection(rule, {}, {}) is True
+            assert hal.evaluate_detection(rule, {}) is True
         with patch("time.localtime", return_value=at_clock(17, 0)):
-            assert hal.evaluate_detection(rule, {}, {}) is False
+            assert hal.evaluate_detection(rule, {}) is False
 
     def test_window_outside(self, hal):
         rule = {"detection": "always", "after": "13:00", "before": "17:00"}
         with patch("time.localtime", return_value=at_clock(9, 30)):
-            assert hal.evaluate_detection(rule, {}, {}) is False
+            assert hal.evaluate_detection(rule, {}) is False
 
     def test_window_honours_minutes(self, hal):
         rule = {"detection": "always", "after": "14:24", "before": "14:26"}
         with patch("time.localtime", return_value=at_clock(14, 23)):
-            assert hal.evaluate_detection(rule, {}, {}) is False
+            assert hal.evaluate_detection(rule, {}) is False
         with patch("time.localtime", return_value=at_clock(14, 25)):
-            assert hal.evaluate_detection(rule, {}, {}) is True
+            assert hal.evaluate_detection(rule, {}) is True
         with patch("time.localtime", return_value=at_clock(14, 26)):
-            assert hal.evaluate_detection(rule, {}, {}) is False
+            assert hal.evaluate_detection(rule, {}) is False
 
     def test_window_wrapping_past_midnight(self, hal):
         rule = {"detection": "always", "after": "19:00", "before": "04:00"}
         for clock in ((19, 0), (23, 59), (0, 0), (3, 59)):
             with patch("time.localtime", return_value=at_clock(*clock)):
-                assert hal.evaluate_detection(rule, {}, {}) is True
+                assert hal.evaluate_detection(rule, {}) is True
         for clock in ((4, 0), (12, 0), (18, 59)):
             with patch("time.localtime", return_value=at_clock(*clock)):
-                assert hal.evaluate_detection(rule, {}, {}) is False
+                assert hal.evaluate_detection(rule, {}) is False
 
     def test_window_ending_at_midnight(self, hal):
         # Alertmanager needs "24:00" here because it has no wrap; the wrap branch covers it, so "00:00" means midnight
         rule = {"detection": "always", "after": "19:00", "before": "00:00"}
         with patch("time.localtime", return_value=at_clock(23, 59)):
-            assert hal.evaluate_detection(rule, {}, {}) is True
+            assert hal.evaluate_detection(rule, {}) is True
         with patch("time.localtime", return_value=at_clock(0, 0)):
-            assert hal.evaluate_detection(rule, {}, {}) is False
+            assert hal.evaluate_detection(rule, {}) is False
 
     def test_window_gates_before_detection(self, hal):
         rule = {"detection": "matcher", "matcher": "startup", "after": "13:00", "before": "17:00"}
         hook_input = {"hook_event_name": "SessionStart", "source": "startup"}
         with patch("time.localtime", return_value=at_clock(9, 0)):
-            assert hal.evaluate_detection(rule, hook_input, {}) is False
+            assert hal.evaluate_detection(rule, hook_input) is False
         with patch("time.localtime", return_value=at_clock(14, 0)):
-            assert hal.evaluate_detection(rule, hook_input, {}) is True
+            assert hal.evaluate_detection(rule, hook_input) is True
 
     def test_no_window_ignores_clock(self, hal):
         rule = {"detection": "always"}
         with patch("time.localtime", return_value=at_clock(3, 0)):
-            assert hal.evaluate_detection(rule, {}, {}) is True
+            assert hal.evaluate_detection(rule, {}) is True
 
 
 class TestPickClip:
@@ -264,13 +245,7 @@ class TestIsSuppressed:
 
     def test_subagent_stop_suppressed(self, hal):
         state = {"subagent_sessions": {"child-1": 1000.0}}
-        config = {"suppress_subagent_complete": True}
-        assert hal._is_suppressed("Stop", state, config, session_id="child-1", now=2000.0) is True
-
-    def test_subagent_suppression_disabled(self, hal):
-        state = {"subagent_sessions": {"child-1": 1000.0}}
-        config = {"suppress_subagent_complete": False}
-        assert hal._is_suppressed("Stop", state, config, session_id="child-1", now=2000.0) is False
+        assert hal._is_suppressed("Stop", state, {}, session_id="child-1", now=2000.0) is True
 
     def test_clean_state_allows(self, hal):
         assert hal._is_suppressed("Stop", {}, {}, session_id="sess-1", now=1000.0) is False
@@ -338,3 +313,19 @@ class TestCleanupOldSessions:
         assert "new" in state["session_start_times"]
         assert "old-child" not in state["subagent_sessions"]
         assert "new-child" in state["subagent_sessions"]
+
+
+class TestPlaySound:
+    def test_uses_native_afplay(self, hal, tmp_path):
+        clip = tmp_path / "clip.mp3"
+        clip.touch()
+
+        with patch.object(hal.subprocess, "Popen") as popen:
+            popen.return_value.pid = 42
+            assert hal.play_sound(clip, 0.5) == 42
+
+        popen.assert_called_once_with(
+            ["/usr/bin/afplay", "-v", "0.5", str(clip)],
+            stdout=hal.subprocess.DEVNULL,
+            stderr=hal.subprocess.DEVNULL,
+        )

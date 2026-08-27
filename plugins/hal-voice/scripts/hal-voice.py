@@ -6,10 +6,8 @@ import fcntl
 import json
 import logging
 import os
-import platform
 import random
 import re
-import shutil
 import signal
 import subprocess
 import sys
@@ -170,13 +168,11 @@ class Config(TypedDict):
     volume: float
     debounce_seconds: float
     replay_suppression_seconds: float
-    suppress_subagent_complete: bool
 
 
 class State(TypedDict):
     last_played: dict[str, str]
     last_stop_time: float
-    last_prompt_time: float
     session_start_times: dict[str, float]
     subagent_sessions: dict[str, float]
     sound_pid: int | None
@@ -192,8 +188,6 @@ class Rule(CommonRule, total=False):
     matcher: str
     # Required when detection is "regex"
     pattern: str
-    # Required when detection is "elapsed"
-    min_seconds: float
     # Optional on any detection, always as a pair: local "HH:MM" clock times, inclusive of `after` and exclusive of `before`
     after: str
     before: str
@@ -219,13 +213,11 @@ DEFAULT_CONFIG: Config = {
     "volume": 0.5,
     "debounce_seconds": 5,
     "replay_suppression_seconds": 3,
-    "suppress_subagent_complete": True,
 }
 
 DEFAULT_STATE: State = {
     "last_played": {},
     "last_stop_time": 0.0,
-    "last_prompt_time": 0.0,
     "session_start_times": {},
     "subagent_sessions": {},
     "sound_pid": None,
@@ -269,7 +261,6 @@ def load_state(state_path: Path) -> State:
     return {
         "last_played": data.get("last_played", DEFAULT_STATE["last_played"]),
         "last_stop_time": data.get("last_stop_time", DEFAULT_STATE["last_stop_time"]),
-        "last_prompt_time": data.get("last_prompt_time", DEFAULT_STATE["last_prompt_time"]),
         "session_start_times": data.get("session_start_times", DEFAULT_STATE["session_start_times"]),
         "subagent_sessions": data.get("subagent_sessions", DEFAULT_STATE["subagent_sessions"]),
         "sound_pid": data.get("sound_pid", DEFAULT_STATE["sound_pid"]),
@@ -325,13 +316,6 @@ def _detect_matcher(rule: Rule, hook_input: HookInput) -> bool:
     return bool(re.search(rule.get("matcher", ""), text, re.IGNORECASE))
 
 
-def _detect_elapsed(rule: Rule, state: State) -> bool:
-    last_prompt = state.get("last_prompt_time", 0.0)
-    if last_prompt == 0.0:
-        return False
-    return (time.time() - last_prompt) >= rule["min_seconds"]
-
-
 def _minutes_since_midnight(clock: str) -> int:
     hour, minute = clock.split(":")
     return int(hour) * 60 + int(minute)
@@ -348,7 +332,7 @@ def _within_window(after: str, before: str) -> bool:
     return minutes >= start or minutes < end
 
 
-def evaluate_detection(rule: Rule, hook_input: HookInput, state: State) -> bool:
+def evaluate_detection(rule: Rule, hook_input: HookInput) -> bool:
     if "after" in rule and not _within_window(rule["after"], rule["before"]):
         return False
 
@@ -360,9 +344,6 @@ def evaluate_detection(rule: Rule, hook_input: HookInput, state: State) -> bool:
         return _detect_regex(rule, hook_input)
     if detection == "matcher":
         return _detect_matcher(rule, hook_input)
-    if detection == "elapsed":
-        return _detect_elapsed(rule, state)
-
     logger.error("unknown detection type: %s", detection)
     return False
 
@@ -388,9 +369,7 @@ def should_suppress_replay(state: State, config: Config, *, session_id: str, now
     return (now - start_time) < config["replay_suppression_seconds"]
 
 
-def should_suppress_subagent(state: State, config: Config, *, session_id: str) -> bool:
-    if not config.get("suppress_subagent_complete", True):
-        return False
+def should_suppress_subagent(state: State, *, session_id: str) -> bool:
     return session_id in state.get("subagent_sessions", {})
 
 
@@ -408,7 +387,7 @@ def match_manifest(manifest: Manifest, hook_event: str, tool_name: str, hook_inp
         for rule in rules:
             if not rule.get("clips"):
                 continue
-            if evaluate_detection(rule, hook_input, state):
+            if evaluate_detection(rule, hook_input):
                 last = state.get("last_played", {}).get(key)
                 return (key, pick_clip(rule["clips"], last))
 
@@ -418,21 +397,6 @@ def match_manifest(manifest: Manifest, hook_event: str, tool_name: str, hook_inp
 def cleanup_old_sessions(state: State, *, now: float, max_age: float = 86400) -> None:
     state["session_start_times"] = {k: v for k, v in state["session_start_times"].items() if (now - v) < max_age}
     state["subagent_sessions"] = {k: v for k, v in state["subagent_sessions"].items() if (now - v) < max_age}
-
-
-def _find_audio_player() -> list[str]:
-    ffplay = ("ffplay", ["ffplay", "-nodisp", "-autoexit", "-loglevel", "quiet"])
-
-    candidates = {
-        "Darwin": [("afplay", ["afplay"])],
-        "Linux": [("paplay", ["paplay"]), ("aplay", ["aplay"]), ffplay],
-        "Windows": [ffplay],
-    }.get(platform.system(), [])
-
-    for name, cmd in candidates:
-        if shutil.which(name):
-            return cmd
-    return []
 
 
 def kill_previous_sound(state: State) -> None:
@@ -449,15 +413,8 @@ def play_sound(clip_path: Path, volume: float) -> int | None:
         logger.error("audio not found: %s", clip_path)
         return None
 
-    player = _find_audio_player()
-    if not player:
-        logger.error("no audio player found")
-        return None
-
-    volume_args = ["-v", str(volume)] if player[0] == "afplay" else []
-    cmd = [*player, *volume_args, str(clip_path)]
-
-    logger.info("playing %s via %s", clip_path.name, player[0])
+    cmd = ["/usr/bin/afplay", "-v", str(volume), str(clip_path)]
+    logger.info("playing %s via afplay", clip_path.name)
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)  # noqa: S603 subprocess-without-shell-equals-true
     return proc.pid
 
@@ -465,8 +422,6 @@ def play_sound(clip_path: Path, volume: float) -> int | None:
 def _record_tracking(hook_event: str, hook_input: HookInput, state: State, *, session_id: str, now: float) -> None:
     if hook_event == "SessionStart" and session_id:
         state["session_start_times"][session_id] = now
-    if hook_event == "UserPromptSubmit":
-        state["last_prompt_time"] = now
     if hook_event == "SubagentStart":
         child_id = hook_input.get("child_session_id", "")
         if child_id:
@@ -480,7 +435,7 @@ def _is_suppressed(hook_event: str, state: State, config: Config, *, session_id:
     if hook_event != "SessionStart" and should_suppress_replay(state, config, session_id=session_id, now=now):
         logger.info("suppressed replay event %s", hook_event)
         return True
-    if hook_event == "Stop" and should_suppress_subagent(state, config, session_id=session_id):
+    if hook_event == "Stop" and should_suppress_subagent(state, session_id=session_id):
         logger.info("suppressed subagent Stop for %s", session_id)
         return True
     return False

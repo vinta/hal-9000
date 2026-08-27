@@ -102,18 +102,13 @@ RESET = "\033[0m"
 
 def colorize_grammar(text: str) -> str:
     color = GREEN if "no issues" in text.lower() else RED
-    lines = text.split("\n")
-    result: list[str] = []
-    for line in lines:
-        if line.startswith("Grammar"):
-            parts = line.split(":", 1)
-            if len(parts) == 2:  # noqa: PLR2004 magic-value-comparison
-                result.append(f"{WHITE}{parts[0]}:{RESET}{color}{parts[1]}{RESET}")
-            else:
-                result.append(f"{color}{line}{RESET}")
-        else:
-            result.append(f"{color}{line}{RESET}")
-    return "\n".join(result)
+
+    def colorize(line: str) -> str:
+        if line.startswith("Grammar:"):
+            return f"{WHITE}Grammar:{RESET}{color}{line.removeprefix('Grammar:')}{RESET}"
+        return f"{color}{line}{RESET}"
+
+    return "\n".join(colorize(line) for line in text.split("\n"))
 
 
 def print_grammar_status(message: str) -> None:
@@ -146,20 +141,15 @@ def basic_info(data: StatusLineData) -> None:
     except Exception:  # noqa: BLE001 S110 blind-exception try-except-pass
         pass
 
-    # All three percentages below can legitimately be 0, so check `is not None` — a falsy check would hide them
-    context_used = data.get("context_window", {}).get("used_percentage")
-    if context_used is not None:
-        status_parts.append(f"{usage_color(context_used)}Context {int(context_used)}%{RESET}{BLUE}")
-
     rate_limits = data.get("rate_limits", {})
-
-    five_hour_used = rate_limits.get("five_hour", {}).get("used_percentage")
-    if five_hour_used is not None:
-        status_parts.append(f"{usage_color(five_hour_used)}5h Usage {int(five_hour_used)}%{RESET}{BLUE}")
-
-    seven_day_used = rate_limits.get("seven_day", {}).get("used_percentage")
-    if seven_day_used is not None:
-        status_parts.append(f"{usage_color(seven_day_used)}7d Usage {int(seven_day_used)}%{RESET}{BLUE}")
+    usages = (
+        ("Context", data.get("context_window", {}).get("used_percentage")),
+        ("5h Usage", rate_limits.get("five_hour", {}).get("used_percentage")),
+        ("7d Usage", rate_limits.get("seven_day", {}).get("used_percentage")),
+    )
+    for label, used in usages:
+        if used is not None:  # 0 is a real reading
+            status_parts.append(f"{usage_color(used)}{label} {int(used)}%{RESET}{BLUE}")
 
     separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
@@ -272,10 +262,7 @@ def write_cache(cache_file: str, payload: GrammarCache) -> None:
             json.dump(payload, f)
         Path(tmp_path).rename(cache_file)
     except Exception:  # noqa: BLE001 blind-exception
-        try:  # noqa: SIM105 suppressible-exception
-            Path(tmp_path).unlink()
-        except OSError:
-            pass
+        Path(tmp_path).unlink(missing_ok=True)
 
 
 def run_ollama_grammar_model(prompt: str) -> str | None:

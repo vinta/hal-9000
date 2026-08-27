@@ -10,6 +10,8 @@ A Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionSta
 
 ## Installation
 
+**This plugin is currently macOS only**: audio clips play through the built-in `afplay`.
+
 ```bash
 claude plugin marketplace add vinta/hal-9000
 claude plugin install hal-voice@hal-9000
