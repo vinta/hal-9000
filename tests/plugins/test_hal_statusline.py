@@ -126,3 +126,15 @@ class TestBasicInfo:
 
         out = strip_ansi(capsys.readouterr().out)
         assert out.startswith("Current: claude-fable-5 max · ")
+
+    def test_usage_percentages_include_zero(self, statusline, capsys, tmp_path):
+        statusline.basic_info(
+            {
+                "model": {"id": "claude-fable-5"},
+                "workspace": {"current_dir": str(tmp_path)},
+                "context_window": {"used_percentage": 0},
+                "rate_limits": {"five_hour": {"used_percentage": 75}, "seven_day": {"used_percentage": 95}},
+            }
+        )
+
+        assert "Context 0% · 5h Usage 75% · 7d Usage 95%" in strip_ansi(capsys.readouterr().out)
