@@ -64,6 +64,9 @@ class Dotfiles:
         else:
             entries.append({"src": src, "dest": dest})
 
+    def remove(self, field_name: str, entry: Entry) -> None:
+        self.data[field_name].remove(entry)
+
     def save(self) -> None:
         with self.path.open("w") as f:
             json.dump(self.data, f, indent=2)
@@ -372,18 +375,21 @@ class HAL9000:
         shutil.move(src_path, dest_path)
         self._hal_says(f"mv {abbreviate_home(src_path)} -> {abbreviate_home(dest_path)}")
 
-        self.dotfiles.data["links"].remove(ln_dict)
+        self.dotfiles.remove("links", ln_dict)
 
         self.dotfiles.save()
 
     def _copy_entry(self, entry: Entry) -> None:
         self.mirror.copy(self._expand_template(entry["src"]), self._expand_template(entry["dest"]))
 
+    def _find_orphans(self, entry: Entry) -> list[Path]:
+        return self.mirror.find_orphans(self._expand_template(entry["src"]), self._expand_template(entry["dest"]))
+
     def _prune(self) -> None:
         orphans: list[Path] = []
         for entry in self.dotfiles.data["backups"]:
             if entry.get("prune", True):
-                orphans.extend(self.mirror.find_orphans(self._expand_template(entry["src"]), self._expand_template(entry["dest"])))
+                orphans.extend(self._find_orphans(entry))
             else:
                 self._hal_says(f"prune disabled {abbreviate_home(self._expand_template(entry['dest']))}")
 

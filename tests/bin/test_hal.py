@@ -32,7 +32,7 @@ class TestDotfilesSave:
 
 
 class TestDotfilesMutation:
-    """upsert writes the manifest's link entries."""
+    """upsert and remove are the only writes to the manifest's entry lists."""
 
     @staticmethod
     def _dotfiles(hal_module, tmp_path, entries):
@@ -54,6 +54,14 @@ class TestDotfilesMutation:
         dotfiles.upsert("links", "a", "new")
 
         assert dotfiles.data["links"] == [{"src": "a", "dest": "new"}]
+
+    def test_remove_drops_the_entry(self, hal_module, tmp_path):
+        entries = {"backups": [], "links": [{"src": "a", "dest": "b"}, {"src": "c", "dest": "d"}]}
+        dotfiles = self._dotfiles(hal_module, tmp_path, entries)
+
+        dotfiles.remove("links", dotfiles.data["links"][0])
+
+        assert dotfiles.data["links"] == [{"src": "c", "dest": "d"}]
 
 
 class TestValidatePath:
@@ -1270,7 +1278,9 @@ class TestBackupPrune:
         (dest / "nested" / "current.txt").write_text("current")
         (dest / "orphan.txt").write_text("orphan")
 
-        orphans = hal_instance.mirror.find_orphans(src, dest)
+        entry = {"src": str(src), "dest": str(dest)}
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
+            orphans = hal_instance._find_orphans(entry)
 
         assert orphans == [dest / "orphan.txt"]
 
@@ -1374,7 +1384,7 @@ class TestBackupPrune:
         entry = {"src": str(src_dir / "foo-*.log"), "dest": str(dest_dir / "bar-*.log")}
         with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(entry)
-            orphans = hal_instance.mirror.find_orphans(Path(entry["src"]), Path(entry["dest"]))
+            orphans = hal_instance._find_orphans(entry)
 
         assert (dest_dir / "bar-1.log").read_text() == "one"
         assert orphans == []
@@ -1392,7 +1402,7 @@ class TestBackupPrune:
         entry = {"src": str(src_dir / "foo-*.log"), "dest": str(dest_dir / "bar-*.log")}
         with patch.object(hal_instance, "_expand_template", side_effect=Path):
             hal_instance._copy_entry(entry)
-            orphans = hal_instance.mirror.find_orphans(Path(entry["src"]), Path(entry["dest"]))
+            orphans = hal_instance._find_orphans(entry)
 
         assert orphans == [dest_dir / "bar-9.log"]
 
