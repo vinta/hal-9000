@@ -1412,6 +1412,24 @@ class TestArgParsing:
             hal.read_lips()
         assert exc_info.value.code == 2
 
+    def test_unknown_args_without_subcommand_rejected(self, hal_module, monkeypatch):
+        """A bare unknown flag gets the usage error, not a traceback from the missing func default."""
+        monkeypatch.setattr(sys, "argv", ["hal", "--bogus"])
+        hal = hal_module.HAL9000()
+        with pytest.raises(SystemExit) as exc_info:
+            hal.read_lips()
+        assert exc_info.value.code == 2
+
+    def test_unknown_args_pass_through_for_update(self, hal_module, monkeypatch):
+        """update forwards unrecognized arguments instead of rejecting them."""
+        forwarded = []
+        monkeypatch.setattr(hal_module.HAL9000, "update", lambda _self, _namespace, extra_args=None: forwarded.append(extra_args))
+        monkeypatch.setattr(sys, "argv", ["hal", "update", "--tags", "python"])
+
+        hal_module.HAL9000().read_lips()
+
+        assert forwarded == [["--tags", "python"]]
+
 
 class TestManifestRoundTrip:
     def test_prune_field_survives_save(self, hal_module, tmp_path):

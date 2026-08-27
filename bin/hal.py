@@ -118,6 +118,9 @@ class HAL9000:
 
         self.parser.add_argument("-v", "--version", action="version", version="9000")
 
+        # Commands that forward unrecognized arguments override this on their own subparser
+        parser.set_defaults(passthrough=False)
+
         subparsers = parser.add_subparsers(title="sub commands")
 
         update_parser = subparsers.add_parser(
@@ -126,7 +129,7 @@ class HAL9000:
             usage="hal update [-h] [ansible-playbook args ...]",
             description="pull repo and run ansible-playbook; extra args pass through to ansible-playbook, e.g. hal update --tags python,node",
         )
-        update_parser.set_defaults(func=self.update)
+        update_parser.set_defaults(func=self.update, passthrough=True)
 
         self.dotfiles = Dotfiles()
 
@@ -555,7 +558,7 @@ class HAL9000:
 
         namespace, extra_args = self.parser.parse_known_args()
 
-        if extra_args and namespace.func != self.update:
+        if extra_args and not namespace.passthrough:
             self.parser.parse_args()  # Will error with usage message on unrecognized args
 
         namespace.func(namespace, extra_args)
