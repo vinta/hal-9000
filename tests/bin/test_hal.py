@@ -128,6 +128,15 @@ class TestValidatePath:
     def test_home_itself_is_valid(self, hal_instance):
         hal_instance._validate_path(str(Path.home()))
 
+    def test_copy_entry_rejects_an_unsafe_dest_even_when_src_is_missing(self, hal_instance, tmp_path, monkeypatch):
+        """Both paths of an entry are expanded and checked before the engine looks at either."""
+        monkeypatch.setattr(Path, "home", lambda: tmp_path)
+
+        with pytest.raises(SystemExit) as exc_info:
+            hal_instance._copy_entry({"src": str(tmp_path / "missing"), "dest": "/etc/hal-test"})
+
+        assert exc_info.value.code == 1
+
 
 class TestUpdateSanitization:
     def test_extra_args_are_quoted(self, hal_instance, monkeypatch):
@@ -411,6 +420,32 @@ class TestUnlink:
         assert hal_instance.dotfiles.data["links"] == [entry]
         assert dest.is_symlink()
         assert (src / "managed.md").read_text() == "from repo"
+
+
+class TestMirror:
+    """Mirror works on expanded paths and needs only a reporter."""
+
+    def test_copy_reports_through_say(self, hal_module, tmp_path):
+        said = []
+        src = tmp_path / "src.txt"
+        src.write_text("content")
+        dest = tmp_path / "dest.txt"
+
+        hal_module.Mirror(say=said.append).copy(str(src), str(dest))
+
+        assert dest.read_text() == "content"
+        assert said == [f"copy {src} -> {dest}"]
+
+    def test_find_orphans_needs_no_reporter(self, hal_module, tmp_path):
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "keep.txt").write_text("k")
+        dest = tmp_path / "dest"
+        dest.mkdir()
+        (dest / "keep.txt").write_text("k")
+        (dest / "gone.txt").write_text("g")
+
+        assert hal_module.Mirror.find_orphans(str(src), str(dest)) == [dest / "gone.txt"]
 
 
 class TestSyncLinks:
