@@ -216,16 +216,16 @@ class Mirror:
         self._copy_one(src, dest)
 
     @staticmethod
-    def _walk_names(root: Path, *, follow_symlinks: bool) -> set[str]:
-        names: set[str] = set()
+    def _walk_names(root: Path, *, follow_symlinks: bool) -> set[Path]:
+        names: set[Path] = set()
         visited = {root.resolve()}
-        stack = [(root, "")]
+        stack = [(root, Path())]
         while stack:
             directory, prefix = stack.pop()
             for child in directory.iterdir():
                 if Mirror._is_ignored(child, Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS):
                     continue
-                relative = f"{prefix}/{child.name}" if prefix else child.name
+                relative = prefix / child.name
                 names.add(relative)
                 if not child.is_dir():
                     continue
@@ -319,15 +319,15 @@ class HAL9000:
 
         link_parser = subparsers.add_parser("link", help="move file into dotfiles and symlink it back")
         link_parser.set_defaults(func=self.link)
-        link_parser.add_argument("filename", type=str)
+        link_parser.add_argument("filename", type=Path)
 
         unlink_parser = subparsers.add_parser("unlink", help="move file back from dotfiles and remove symlink")
         unlink_parser.set_defaults(func=self.unlink)
-        unlink_parser.add_argument("filename", type=str)
+        unlink_parser.add_argument("filename", type=Path)
 
         copy_parser = subparsers.add_parser("copy", help="copy file into dotfiles (no symlink)")
         copy_parser.set_defaults(func=self.copy)
-        copy_parser.add_argument("filename", type=str)
+        copy_parser.add_argument("filename", type=Path)
 
         sync_parser = subparsers.add_parser("sync", help="sync all links and copies")
         sync_parser.set_defaults(func=self.sync)
@@ -360,7 +360,7 @@ class HAL9000:
         self._validate_path(expanded)
         return expanded
 
-    def _prepare_dotfile_entry(self, filename: str) -> DotfilePaths:
+    def _prepare_dotfile_entry(self, filename: Path) -> DotfilePaths:
         filepath = (Path.cwd() / filename).resolve()
         self._validate_path(filepath)
 
@@ -387,9 +387,10 @@ class HAL9000:
         return subprocess.run(command, shell=True, cwd=cwd).returncode  # noqa: S602 PLW1510 subprocess-popen-with-shell-equals-true subprocess-run-without-check
 
     def update(self, namespace: argparse.Namespace) -> None:
-        ansible_path = shutil.which("ansible")
-        if ansible_path and not ansible_path.startswith("/opt/homebrew/bin/"):
-            self._hal_says(f"Found ansible at: {abbreviate_home(Path(ansible_path))}")
+        which = shutil.which("ansible")
+        ansible_path = Path(which) if which else None
+        if ansible_path and not ansible_path.is_relative_to("/opt/homebrew/bin"):
+            self._hal_says(f"Found ansible at: {abbreviate_home(ansible_path)}")
             self._hal_says("You should use Homebrew's ansible")
             sys.exit(1)
 
@@ -425,7 +426,7 @@ class HAL9000:
 
     def unlink(self, namespace: argparse.Namespace) -> None:
         # abspath, not Path.resolve(): the path at dest IS the symlink this removes, and resolving it would land inside the dotfiles repo
-        filepath = Path(os.path.abspath(Path(namespace.filename).expanduser()))  # noqa: PTH100 os-path-abspath
+        filepath = Path(os.path.abspath(namespace.filename.expanduser()))  # noqa: PTH100 os-path-abspath
         ln_dict = next((entry for entry in self.dotfiles.data["links"] if self._expand_template(entry["dest"]) == filepath), None)
         if not ln_dict:
             self._hal_says(f"not found in manifest: {abbreviate_home(filepath)}")

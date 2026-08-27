@@ -259,12 +259,12 @@ class TestUpdateWorkingDirectory:
 
 class TestUserFilenameValidation:
     def test_link_validates_filename(self, hal_instance, hal_module, tmp_path):
-        ns = argparse.Namespace(filename="../../../etc/passwd")
+        ns = argparse.Namespace(filename=Path("../../../etc/passwd"))
         with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(hal_module.PathNotAllowedError):
             hal_instance.link(ns)
 
     def test_copy_validates_filename(self, hal_instance, hal_module, tmp_path):
-        ns = argparse.Namespace(filename="../../../etc/passwd")
+        ns = argparse.Namespace(filename=Path("../../../etc/passwd"))
         with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(hal_module.PathNotAllowedError):
             hal_instance.copy(ns)
 
@@ -327,7 +327,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
 
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
-            hal_instance.unlink(argparse.Namespace(filename=str(dest)))
+            hal_instance.unlink(argparse.Namespace(filename=dest))
 
         assert dest.is_dir()
         assert not dest.is_symlink()
@@ -347,7 +347,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/.zshrc", "dest": "{{HOME}}/.zshrc"})
 
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
-            hal_instance.unlink(argparse.Namespace(filename=str(dest)))
+            hal_instance.unlink(argparse.Namespace(filename=dest))
 
         assert not dest.is_symlink()
         assert dest.read_text() == "from repo"
@@ -368,7 +368,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, entry)
 
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
-            hal_instance.unlink(argparse.Namespace(filename=str(dest)))
+            hal_instance.unlink(argparse.Namespace(filename=dest))
 
         assert sorted(p.name for p in dest.iterdir()) == ["unmanaged.md"]
         assert (src / "managed.md").read_text() == "from repo"
@@ -386,7 +386,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, {"src": "{{HOME}}/dotfiles/rules/", "dest": "{{HOME}}/rules/"})
 
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
-            hal_instance.unlink(argparse.Namespace(filename=str(tmp_path / "rules")))
+            hal_instance.unlink(argparse.Namespace(filename=tmp_path / "rules"))
 
         assert hal_instance.dotfiles.data["links"] == []
 
@@ -404,7 +404,7 @@ class TestUnlink:
 
         monkeypatch.chdir(dest.parent)
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
-            hal_instance.unlink(argparse.Namespace(filename="rules"))
+            hal_instance.unlink(argparse.Namespace(filename=Path("rules")))
 
         assert hal_instance.dotfiles.data["links"] == []
 
@@ -421,7 +421,7 @@ class TestUnlink:
 
         monkeypatch.setenv("HOME", str(tmp_path))
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
-            hal_instance.unlink(argparse.Namespace(filename="~/rules/"))
+            hal_instance.unlink(argparse.Namespace(filename=Path("~/rules/")))
 
         assert hal_instance.dotfiles.data["links"] == []
 
@@ -438,7 +438,7 @@ class TestUnlink:
         self._link_entry(hal_instance, hal_module, tmp_path, entry)
 
         with patch.object(hal_instance, "_expand_template", side_effect=lambda t: Path(t.replace("{{HOME}}", str(tmp_path)))):
-            hal_instance.unlink(argparse.Namespace(filename=str(tmp_path / "unmanaged")))
+            hal_instance.unlink(argparse.Namespace(filename=tmp_path / "unmanaged"))
 
         assert "not found in manifest:" in capsys.readouterr().out
         assert hal_instance.dotfiles.data["links"] == [entry]
