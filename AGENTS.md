@@ -25,7 +25,6 @@ Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skippi
 | -------------- | ------------------------------------------ |
 | ansible        | `/websites/ansible_projects_ansible`       |
 | ansible-lint   | `/ansible/ansible-lint`                    |
-| argcomplete    | `/kislyuk/argcomplete`                     |
 | betterleaks    | `/betterleaks/betterleaks`                 |
 | fnm            | `/schniz/fnm`                              |
 | github-actions | `/websites/github_en_actions`              |

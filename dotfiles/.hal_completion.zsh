@@ -16,8 +16,7 @@ _hal() {
         'update:pull repo and run ansible-playbook (extra args pass through, e.g. --tags python,node)'
         'link:move file into dotfiles and symlink it back'
         'unlink:move file back from dotfiles and remove symlink'
-        'copy:copy file into dotfiles (no symlink)'
-        'sync:sync all links and copies'
+        'sync:sync all links'
         'backup:back up all backup entries to their destinations'
         'restore:restore all backup entries, overwriting local files'
         'open-the-pod-bay-doors:open the pod bay doors, please, HAL'
@@ -38,7 +37,7 @@ _hal() {
                     '--tags[only run plays and tasks tagged with these values]:tags:_hal_tags' \
                     '--skip-tags[skip plays and tasks whose tags match these values]:tags:_hal_tags'
                 ;;
-            link|unlink|copy)
+            link|unlink)
                 _arguments \
                     '(-h --help)'{-h,--help}'[show this help message and exit]' \
                     ':filename:_files'
