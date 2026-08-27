@@ -8,5 +8,10 @@
   },
   "repository": "https://github.com/vinta/hal-9000",
   "license": "MIT",
-  "keywords": ["hal-9000", "hooks", "voice", "audio"]
+  "keywords": [
+    "hal-9000",
+    "hooks",
+    "voice",
+    "audio"
+  ]
 }

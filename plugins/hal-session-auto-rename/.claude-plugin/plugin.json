@@ -8,5 +8,12 @@
   },
   "repository": "https://github.com/vinta/hal-9000",
   "license": "MIT",
-  "keywords": ["hal-9000", "hooks", "session", "auto-rename", "title", "ai-title"]
+  "keywords": [
+    "hal-9000",
+    "hooks",
+    "session",
+    "auto-rename",
+    "title",
+    "ai-title"
+  ]
 }

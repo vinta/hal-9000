@@ -20,8 +20,18 @@
       "repository": "https://github.com/vinta/hal-9000",
       "license": "MIT",
       "category": "entertainment",
-      "keywords": ["hal-9000", "hooks", "voice", "audio"],
-      "tags": ["hal-9000", "hooks", "voice", "audio"]
+      "keywords": [
+        "hal-9000",
+        "hooks",
+        "voice",
+        "audio"
+      ],
+      "tags": [
+        "hal-9000",
+        "hooks",
+        "voice",
+        "audio"
+      ]
     },
     {
       "name": "hal-session-auto-rename",
@@ -34,8 +44,22 @@
       "repository": "https://github.com/vinta/hal-9000",
       "license": "MIT",
       "category": "productivity",
-      "keywords": ["hal-9000", "hooks", "session", "auto-rename", "title", "ai-title"],
-      "tags": ["hal-9000", "hooks", "session", "auto-rename", "title", "ai-title"]
+      "keywords": [
+        "hal-9000",
+        "hooks",
+        "session",
+        "auto-rename",
+        "title",
+        "ai-title"
+      ],
+      "tags": [
+        "hal-9000",
+        "hooks",
+        "session",
+        "auto-rename",
+        "title",
+        "ai-title"
+      ]
     },
     {
       "name": "hal-skills",
