@@ -82,18 +82,18 @@ class TestValidatePath:
         path = f"{hal_module.Settings.REPO_ROOT}/dotfiles/.zshrc"
         hal_instance._validate_path(path)
 
-    def test_path_traversal_outside_home(self, hal_instance):
+    def test_path_traversal_outside_home(self, hal_instance, hal_module):
         home = str(Path.home())
         path = f"{home}/../../etc/passwd"
-        with pytest.raises(SystemExit):
+        with pytest.raises(hal_module.PathNotAllowedError):
             hal_instance._validate_path(path)
 
-    def test_path_to_etc(self, hal_instance):
-        with pytest.raises(SystemExit):
+    def test_path_to_etc(self, hal_instance, hal_module):
+        with pytest.raises(hal_module.PathNotAllowedError):
             hal_instance._validate_path("/etc/crontab")
 
-    def test_path_traversal_in_template_expansion(self, hal_instance):
-        with pytest.raises(SystemExit):
+    def test_path_traversal_in_template_expansion(self, hal_instance, hal_module):
+        with pytest.raises(hal_module.PathNotAllowedError):
             hal_instance._expand_template("{{HOME}}/../../etc/crontab")
 
     def test_normal_template_expansion(self, hal_instance):
@@ -112,7 +112,7 @@ class TestValidatePath:
             patch.object(hal_module.Settings, "REPO_ROOT", str((tmp_path / "repo").resolve())),
         ):
             hal_instance._validate_path(f"{home}/inside/stuff")
-            with pytest.raises(SystemExit):
+            with pytest.raises(hal_module.PathNotAllowedError):
                 hal_instance._validate_path(f"{home}-elsewhere/stuff")
 
     def test_sibling_directory_sharing_repo_root_prefix(self, hal_instance, hal_module, tmp_path):
@@ -122,20 +122,18 @@ class TestValidatePath:
             patch.object(hal_module.Settings, "REPO_ROOT", str(repo_root)),
         ):
             hal_instance._validate_path(f"{repo_root}/inside/stuff")
-            with pytest.raises(SystemExit):
+            with pytest.raises(hal_module.PathNotAllowedError):
                 hal_instance._validate_path(f"{repo_root}-elsewhere/stuff")
 
     def test_home_itself_is_valid(self, hal_instance):
         hal_instance._validate_path(str(Path.home()))
 
-    def test_copy_entry_rejects_an_unsafe_dest_even_when_src_is_missing(self, hal_instance, tmp_path, monkeypatch):
+    def test_copy_entry_rejects_an_unsafe_dest_even_when_src_is_missing(self, hal_instance, hal_module, tmp_path, monkeypatch):
         """Both paths of an entry are expanded and checked before the engine looks at either."""
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
 
-        with pytest.raises(SystemExit) as exc_info:
+        with pytest.raises(hal_module.PathNotAllowedError):
             hal_instance._copy_entry({"src": str(tmp_path / "missing"), "dest": "/etc/hal-test"})
-
-        assert exc_info.value.code == 1
 
 
 class TestUpdateSanitization:
@@ -250,14 +248,14 @@ class TestUpdateWorkingDirectory:
 
 
 class TestUserFilenameValidation:
-    def test_link_validates_filename(self, hal_instance, tmp_path):
+    def test_link_validates_filename(self, hal_instance, hal_module, tmp_path):
         ns = argparse.Namespace(filename="../../../etc/passwd")
-        with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(SystemExit):
+        with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(hal_module.PathNotAllowedError):
             hal_instance.link(ns)
 
-    def test_copy_validates_filename(self, hal_instance, tmp_path):
+    def test_copy_validates_filename(self, hal_instance, hal_module, tmp_path):
         ns = argparse.Namespace(filename="../../../etc/passwd")
-        with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(SystemExit):
+        with patch("pathlib.Path.cwd", return_value=tmp_path), pytest.raises(hal_module.PathNotAllowedError):
             hal_instance.copy(ns)
 
 
@@ -1485,6 +1483,35 @@ class TestArgParsing:
         hal_module.HAL9000().read_lips()
 
         assert forwarded == [["--tags", "python"]]
+
+
+class TestPathRefusal:
+    """PathNotAllowedError raised anywhere below dispatch becomes the refusal line and exit code 1."""
+
+    def test_unsafe_filename_exits_1_with_the_refusal(self, hal_module, monkeypatch, capsys):
+        monkeypatch.setattr(sys, "argv", ["hal", "link", "/etc/passwd"])
+
+        with pytest.raises(SystemExit) as exc_info:
+            hal_module.HAL9000().read_lips()
+
+        assert exc_info.value.code == 1
+        assert "I'm sorry, Dave. I'm afraid I can't do that:" in capsys.readouterr().out
+
+    def test_unsafe_manifest_entry_exits_1_after_the_other_entries_finish(self, hal_module, tmp_path, monkeypatch, capsys):
+        (tmp_path / "ok.txt").write_text("ok")
+        manifest = tmp_path / "hal_dotfiles.json"
+        entries = {"backups": [{"src": "{{HOME}}/ok.txt", "dest": "{{HOME}}/ok.bak"}, {"src": "{{HOME}}/ok.txt", "dest": "/etc/hal-test"}], "copies": [], "links": []}
+        manifest.write_text(json.dumps(entries))
+        monkeypatch.setattr(Path, "home", lambda: tmp_path)
+        monkeypatch.setattr(hal_module.Dotfiles, "DEFAULT_CONFIG", str(manifest))
+        monkeypatch.setattr(sys, "argv", ["hal", "backup"])
+
+        with pytest.raises(SystemExit) as exc_info:
+            hal_module.HAL9000().read_lips()
+
+        assert exc_info.value.code == 1
+        assert (tmp_path / "ok.bak").read_text() == "ok"
+        assert "I'm sorry, Dave. I'm afraid I can't do that:" in capsys.readouterr().out
 
 
 class TestManifestRoundTrip:

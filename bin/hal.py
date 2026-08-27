@@ -39,6 +39,10 @@ class Settings:
     DIFF_IGNORE_PATTERNS: tuple[str, ...] = (".git",)
 
 
+class PathNotAllowedError(Exception):
+    """A path outside the home directory and the repo, the only places hal touches."""
+
+
 def abbreviate_home(path: str | Path) -> str:
     """A single path with its home directory prefix shown as ~, for messages that name one."""
     home = str(Path.home())
@@ -381,8 +385,7 @@ class HAL9000:
         resolved = Path(path).resolve()
         allowed_roots = (Path.home(), Path(Settings.REPO_ROOT))
         if not any(resolved.is_relative_to(root) for root in allowed_roots):
-            self._hal_says(f"I'm sorry, Dave. I'm afraid I can't do that: {abbreviate_home(resolved)}")
-            sys.exit(1)
+            raise PathNotAllowedError(abbreviate_home(resolved))
 
     def _expand_template(self, path: str) -> str:
         expanded = path.replace("{{HOME}}", str(Path.home())).replace("{{REPO_ROOT}}", Settings.REPO_ROOT)
@@ -589,7 +592,11 @@ class HAL9000:
             self.parser.parse_args()  # Will error with usage message on unrecognized args
 
         namespace.extra_args = extra_args
-        namespace.func(namespace)
+        try:
+            namespace.func(namespace)
+        except PathNotAllowedError as error:
+            self._hal_says(f"I'm sorry, Dave. I'm afraid I can't do that: {error}")
+            sys.exit(1)
 
 
 if __name__ == "__main__":
