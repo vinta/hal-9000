@@ -13,7 +13,7 @@ import stat
 import subprocess
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, NamedTuple, TypedDict
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable
@@ -43,6 +43,15 @@ class Entry(TypedDict):
     src: str
     dest: str
     prune: NotRequired[bool]  # Backup entries only: false keeps --prune away from this destination
+
+
+class DotfilePaths(NamedTuple):
+    """Where hal link and hal copy put a file, and how the manifest records it."""
+
+    filepath: str
+    dest_path: str
+    template_src: str
+    template_dest: str
 
 
 class Dotfiles:
@@ -184,7 +193,7 @@ class HAL9000:
         self._validate_path(expanded)
         return expanded
 
-    def _prepare_dotfile_entry(self, filename: str) -> tuple[str, str, str, str]:
+    def _prepare_dotfile_entry(self, filename: str) -> DotfilePaths:
         filepath = str((Path.cwd() / filename).resolve())
         self._validate_path(filepath)
 
@@ -200,7 +209,7 @@ class HAL9000:
         template_src = dest_path.replace(Settings.REPO_ROOT, "{{REPO_ROOT}}")
         template_dest = filepath.replace(home, "{{HOME}}")
 
-        return filepath, dest_path, template_src, template_dest
+        return DotfilePaths(filepath, dest_path, template_src, template_dest)
 
     def _run(self, command: str, *, cwd: str | None = None, verbose: bool = True) -> int:
         if verbose:
@@ -230,18 +239,18 @@ class HAL9000:
         self._hal_says("Now open a new shell to active your dev environment")
 
     def link(self, namespace: argparse.Namespace) -> None:
-        filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)
+        paths = self._prepare_dotfile_entry(namespace.filename)
 
-        shutil.move(filepath, dest_path)
-        self._hal_says(f"mv {self._abbreviate_home(filepath)} -> {self._abbreviate_home(dest_path)}")
+        shutil.move(paths.filepath, paths.dest_path)
+        self._hal_says(f"mv {self._abbreviate_home(paths.filepath)} -> {self._abbreviate_home(paths.dest_path)}")
 
-        ln_dest = Path(filepath)
+        ln_dest = Path(paths.filepath)
         if ln_dest.is_symlink() or ln_dest.exists():
             ln_dest.unlink()
-        ln_dest.symlink_to(dest_path)
-        self._hal_says(f"ln {self._abbreviate_home(dest_path)} -> {self._abbreviate_home(filepath)}")
+        ln_dest.symlink_to(paths.dest_path)
+        self._hal_says(f"ln {self._abbreviate_home(paths.dest_path)} -> {self._abbreviate_home(paths.filepath)}")
 
-        self.dotfiles.upsert("links", template_src, template_dest)
+        self.dotfiles.upsert("links", paths.template_src, paths.template_dest)
 
         self.dotfiles.save()
         self.dotfiles.show()
@@ -277,12 +286,12 @@ class HAL9000:
         self.dotfiles.show()
 
     def copy(self, namespace: argparse.Namespace) -> None:
-        filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)
+        paths = self._prepare_dotfile_entry(namespace.filename)
 
-        shutil.copy2(filepath, dest_path)
-        self._hal_says(f"cp {self._abbreviate_home(filepath)} -> {self._abbreviate_home(dest_path)}")
+        shutil.copy2(paths.filepath, paths.dest_path)
+        self._hal_says(f"cp {self._abbreviate_home(paths.filepath)} -> {self._abbreviate_home(paths.dest_path)}")
 
-        self.dotfiles.upsert("copies", template_src, template_dest)
+        self.dotfiles.upsert("copies", paths.template_src, paths.template_dest)
 
         self.dotfiles.save()
         self.dotfiles.show()

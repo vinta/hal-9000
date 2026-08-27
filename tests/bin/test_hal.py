@@ -252,6 +252,27 @@ class TestUserFilenameValidation:
             hal_instance.copy(ns)
 
 
+class TestPrepareDotfileEntry:
+    def test_paths_for_a_file_under_home(self, hal_instance, hal_module, tmp_path, monkeypatch):
+        home = tmp_path / "home"
+        (home / ".config").mkdir(parents=True)
+        (home / ".config" / "app.toml").write_text("x")
+        repo = tmp_path / "repo"
+        monkeypatch.setattr(Path, "home", lambda: home)
+        monkeypatch.setattr(hal_module.Settings, "REPO_ROOT", str(repo))
+        monkeypatch.setattr(hal_module.Settings, "DOTFILES_ROOT", str(repo / "dotfiles"))
+        monkeypatch.chdir(home)
+
+        paths = hal_instance._prepare_dotfile_entry(".config/app.toml")
+
+        assert paths == hal_module.DotfilePaths(
+            filepath=str(home / ".config" / "app.toml"),
+            dest_path=str(repo / "dotfiles" / ".config" / "app.toml"),
+            template_src="{{REPO_ROOT}}/dotfiles/.config/app.toml",
+            template_dest="{{HOME}}/.config/app.toml",
+        )
+
+
 class TestUnlink:
     """unlink reverses a link entry, whether the entry names a file or a directory."""
 
