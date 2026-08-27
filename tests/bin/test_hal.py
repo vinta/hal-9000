@@ -141,8 +141,8 @@ class TestUpdateSanitization:
         monkeypatch.setattr("shutil.which", lambda _cmd: "/opt/homebrew/bin/ansible")
         hal_instance._run = mock_run
 
-        ns = argparse.Namespace(func=hal_instance.update)
-        hal_instance.update(ns, extra_args=["--tags", "foo;rm -rf ~"])
+        ns = argparse.Namespace(func=hal_instance.update, extra_args=["--tags", "foo;rm -rf ~"])
+        hal_instance.update(ns)
 
         ansible_cmd = next(c for c in commands_run if "ansible-playbook" in c)
         assert "'foo;rm -rf ~'" in ansible_cmd
@@ -162,7 +162,7 @@ class TestUpdateFailurePropagation:
     def test_git_pull_failure_exits(self, hal_instance, monkeypatch):
         self._install_mocks(hal_instance, monkeypatch, "git pull")
 
-        ns = argparse.Namespace(func=hal_instance.update)
+        ns = argparse.Namespace(func=hal_instance.update, extra_args=[])
         with pytest.raises(SystemExit) as excinfo:
             hal_instance.update(ns)
 
@@ -171,7 +171,7 @@ class TestUpdateFailurePropagation:
     def test_playbook_failure_exits(self, hal_instance, monkeypatch):
         self._install_mocks(hal_instance, monkeypatch, "ansible-playbook")
 
-        ns = argparse.Namespace(func=hal_instance.update)
+        ns = argparse.Namespace(func=hal_instance.update, extra_args=[])
         with pytest.raises(SystemExit) as excinfo:
             hal_instance.update(ns)
 
@@ -191,7 +191,7 @@ class TestUpdateAnsibleCheck:
         monkeypatch.setattr("shutil.which", lambda _cmd: "/usr/local/bin/ansible")
         hal_instance._run = mock_run
 
-        ns = argparse.Namespace(func=hal_instance.update)
+        ns = argparse.Namespace(func=hal_instance.update, extra_args=[])
         with pytest.raises(SystemExit) as excinfo:
             hal_instance.update(ns)
 
@@ -208,7 +208,7 @@ class TestUpdateAnsibleCheck:
         monkeypatch.setattr("shutil.which", lambda _cmd: None)
         hal_instance._run = mock_run
 
-        ns = argparse.Namespace(func=hal_instance.update)
+        ns = argparse.Namespace(func=hal_instance.update, extra_args=[])
         hal_instance.update(ns)
 
         assert "git fetch" in commands_run
@@ -228,7 +228,7 @@ class TestUpdateWorkingDirectory:
         hal_instance._run = mock_run
         cwd_before = Path.cwd()
 
-        ns = argparse.Namespace(func=hal_instance.update)
+        ns = argparse.Namespace(func=hal_instance.update, extra_args=[])
         hal_instance.update(ns)
 
         repo_root = hal_module.Settings.REPO_ROOT
@@ -1423,7 +1423,7 @@ class TestArgParsing:
     def test_unknown_args_pass_through_for_update(self, hal_module, monkeypatch):
         """update forwards unrecognized arguments instead of rejecting them."""
         forwarded = []
-        monkeypatch.setattr(hal_module.HAL9000, "update", lambda _self, _namespace, extra_args=None: forwarded.append(extra_args))
+        monkeypatch.setattr(hal_module.HAL9000, "update", lambda _self, namespace: forwarded.append(namespace.extra_args))
         monkeypatch.setattr(sys, "argv", ["hal", "update", "--tags", "python"])
 
         hal_module.HAL9000().read_lips()

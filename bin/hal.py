@@ -208,7 +208,7 @@ class HAL9000:
 
         return subprocess.run(command, shell=True, cwd=cwd).returncode  # noqa: S602 PLW1510 subprocess-popen-with-shell-equals-true subprocess-run-without-check
 
-    def update(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    def update(self, namespace: argparse.Namespace) -> None:
         ansible_path = shutil.which("ansible")
         if ansible_path and not ansible_path.startswith("/opt/homebrew/bin/"):
             self._hal_says(f"Found ansible at: {self._abbreviate_home(ansible_path)}")
@@ -222,14 +222,14 @@ class HAL9000:
 
         playbooks_dir = str(Path(Settings.REPO_ROOT) / "playbooks")
         command = "ansible-playbook site.yml -v"
-        if extra_args:
-            command = " ".join([command, *(shlex.quote(arg) for arg in extra_args)])
+        if namespace.extra_args:
+            command = " ".join([command, *(shlex.quote(arg) for arg in namespace.extra_args)])
         returncode = self._run(command, cwd=playbooks_dir)
         if returncode != 0:
             sys.exit(returncode)
         self._hal_says("Now open a new shell to active your dev environment")
 
-    def link(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    def link(self, namespace: argparse.Namespace) -> None:
         filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)
 
         shutil.move(filepath, dest_path)
@@ -246,7 +246,7 @@ class HAL9000:
         self.dotfiles.save()
         self.dotfiles.show()
 
-    def unlink(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    def unlink(self, namespace: argparse.Namespace) -> None:
         # abspath, not Path.resolve(): the path at dest IS the symlink this removes, and resolving it would land inside the dotfiles repo
         filepath = Path(os.path.abspath(Path(namespace.filename).expanduser()))  # noqa: PTH100 os-path-abspath
         ln_dict = next((entry for entry in self.dotfiles.data["links"] if Path(self._expand_template(entry["dest"])) == filepath), None)
@@ -276,7 +276,7 @@ class HAL9000:
         self.dotfiles.save()
         self.dotfiles.show()
 
-    def copy(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    def copy(self, namespace: argparse.Namespace) -> None:
         filepath, dest_path, template_src, template_dest = self._prepare_dotfile_entry(namespace.filename)
 
         shutil.copy2(filepath, dest_path)
@@ -515,18 +515,18 @@ class HAL9000:
             for future in concurrent.futures.as_completed(futures):
                 future.result()
 
-    def sync(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    def sync(self, namespace: argparse.Namespace) -> None:
         tasks: list[Callable[[], None]] = [functools.partial(self._sync_links, link, force=namespace.force) for link in self.dotfiles.data["links"]]
         tasks += [functools.partial(self._copy_entry, copy) for copy in self.dotfiles.data["copies"]]
         self._parallel(tasks)
 
-    def backup(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    def backup(self, namespace: argparse.Namespace) -> None:
         self._parallel(functools.partial(self._copy_entry, entry) for entry in self.dotfiles.data["backups"])
 
         if namespace.prune:
             self._prune()
 
-    def restore(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    def restore(self, namespace: argparse.Namespace) -> None:  # noqa: ARG002 unused-method-argument
         entries = self.dotfiles.data["backups"]
         if not entries:
             self._hal_says("nothing to restore")
@@ -545,7 +545,7 @@ class HAL9000:
 
         self._parallel(functools.partial(self._copy_entry, Entry(src=entry["dest"], dest=entry["src"])) for entry in entries)
 
-    def open_the_pod_bay_doors(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    def open_the_pod_bay_doors(self, namespace: argparse.Namespace) -> None:  # noqa: ARG002 unused-method-argument
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")
 
         filepath = str(Path(Settings.REPO_ROOT) / "assets" / "im-sorry-dave-im-afraid-i-cant-do-that.mp3")
@@ -561,7 +561,8 @@ class HAL9000:
         if extra_args and not namespace.passthrough:
             self.parser.parse_args()  # Will error with usage message on unrecognized args
 
-        namespace.func(namespace, extra_args)
+        namespace.extra_args = extra_args
+        namespace.func(namespace)
 
 
 if __name__ == "__main__":
