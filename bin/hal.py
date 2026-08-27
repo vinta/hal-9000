@@ -30,6 +30,16 @@ except ImportError:
     argcomplete = None  # ty: ignore[invalid-assignment]
 
 
+def abbreviate_home(path: str | Path) -> str:
+    home = str(Path.home())
+    text = str(path)
+    return f"~{text[len(home) :]}" if text.startswith(home) else text
+
+
+class PathNotAllowedError(Exception):
+    pass
+
+
 class Settings:
     REPO_ROOT: str = str(Path(__file__).resolve().parent.parent)
     DOTFILES_ROOT: str = str(Path(REPO_ROOT) / "dotfiles")
@@ -38,16 +48,6 @@ class Settings:
     # git reclaims loose objects and packs locally, so a copy-only backup keeps every
     # superseded one forever and they would drown out the orphans worth seeing.
     DIFF_IGNORE_PATTERNS: tuple[str, ...] = (".git",)
-
-
-class PathNotAllowedError(Exception):
-    pass
-
-
-def abbreviate_home(path: str | Path) -> str:
-    home = str(Path.home())
-    text = str(path)
-    return f"~{text[len(home) :]}" if text.startswith(home) else text
 
 
 class Entry(TypedDict):
