@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import fnmatch
+import functools
 import json
 import os
 import shlex
@@ -15,6 +16,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict, cast
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable
+
     # NotRequired is 3.11+, but this runs under whatever `python3` resolves to, which on a stock macOS is 3.9
     # The `annotations` future keeps every annotation below a string, so it is never evaluated at runtime
     from typing import NotRequired
@@ -499,19 +502,25 @@ class HAL9000:
         removed = sum(self._remove_orphan(path) for path in sorted(orphans, reverse=True))
         self._hal_says(f"pruned {removed}")
 
-    def sync(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+    @staticmethod
+    def _parallel(tasks: Iterable[Callable[[], None]]) -> None:
+        """Run every task on a thread pool.
+
+        The first failure is re-raised on the calling thread, but only after every task
+        has finished, because leaving the pool waits for the ones still running.
+        """
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures: list[concurrent.futures.Future[None]] = []
-            futures.extend(executor.submit(self._sync_links, link, force=namespace.force) for link in self.dotfiles.data["links"])
-            futures.extend(executor.submit(self._copy_entry, copy) for copy in self.dotfiles.data["copies"])
-            for f in concurrent.futures.as_completed(futures):
-                f.result()
+            futures = [executor.submit(task) for task in tasks]
+            for future in concurrent.futures.as_completed(futures):
+                future.result()
+
+    def sync(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
+        tasks: list[Callable[[], None]] = [functools.partial(self._sync_links, link, force=namespace.force) for link in self.dotfiles.data["links"]]
+        tasks += [functools.partial(self._copy_entry, copy) for copy in self.dotfiles.data["copies"]]
+        self._parallel(tasks)
 
     def backup(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self._copy_entry, entry) for entry in self.dotfiles.data["backups"]]
-            for f in concurrent.futures.as_completed(futures):
-                f.result()
+        self._parallel(functools.partial(self._copy_entry, entry) for entry in self.dotfiles.data["backups"])
 
         if namespace.prune:
             self._prune()
@@ -533,10 +542,7 @@ class HAL9000:
             self._hal_says("aborted")
             return
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = [executor.submit(self._copy_entry, {"src": entry["dest"], "dest": entry["src"]}) for entry in entries]
-            for f in concurrent.futures.as_completed(futures):
-                f.result()
+        self._parallel(functools.partial(self._copy_entry, Entry(src=entry["dest"], dest=entry["src"])) for entry in entries)
 
     def open_the_pod_bay_doors(self, namespace: argparse.Namespace, extra_args: list[str] | None = None) -> None:  # noqa: ARG002 unused-method-argument
         self._hal_says("I'm sorry Dave, I'm afraid I can't do that.")

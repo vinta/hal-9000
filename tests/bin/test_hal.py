@@ -769,6 +769,24 @@ class TestCopyEntryGlob:
         assert (local_dir / "acme.code-workspace").read_text() == "backed up"
 
 
+class TestParallel:
+    """_parallel runs every task and re-raises the first failure only after the others have finished."""
+
+    def test_failure_is_reraised_after_the_other_tasks_ran(self, hal_module):
+        finished = []
+
+        def fail():
+            raise RuntimeError
+
+        def succeed():
+            finished.append("ok")
+
+        with pytest.raises(RuntimeError):
+            hal_module.HAL9000._parallel([fail, succeed])
+
+        assert finished == ["ok"]
+
+
 class TestBackupRestore:
     """backup copies src->dest, restore copies dest->src after confirmation."""
 
