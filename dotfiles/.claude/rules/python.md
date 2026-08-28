@@ -23,4 +23,4 @@ paths:
   - All `# noqa` comments must include the rule name: `# noqa: S603 subprocess-without-shell-equals-true` or `# noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check` if multiple rules
 - Use `ty` for type checking
 - Use `ty` LSP tool for code navigation when grep's text matching would be ambiguous
-- Use `TypedDict` for structured dicts — not plain dicts or dataclasses
+- Use `TypedDict` for dict shapes crossing a JSON boundary — not plain dicts
