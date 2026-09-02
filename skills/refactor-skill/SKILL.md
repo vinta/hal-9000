@@ -1,6 +1,6 @@
 ---
 name: refactor-skill
-description: Use when refactoring an existing skill, its SKILL.md and sibling files, for progressive disclosure. Not for creating a skill from scratch or for fixing only its allowed-tools
+description: Use when about to refactor or refine an existing skill, its SKILL.md or sibling files, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption. Not for creating a skill from scratch or for fixing only its allowed-tools
 argument-hint: [skill name | path/to/SKILL.md]
 user-invocable: true
 allowed-tools:
@@ -15,7 +15,7 @@ Refactor a skill toward progressive disclosure. A skill spends two budgets. Its 
 
 ## Instructions
 
-1. **Pick the target.** If the invocation names one, resolve it to its `SKILL.md`. Otherwise ask which skill. Read `SKILL.md` and every sibling file in its directory.
+1. **Pick the target.** If the invocation names one, resolve it to its `SKILL.md`. Otherwise ask which skill. Read `SKILL.md` and every sibling file in its directory. If the invocation also names a change to make, that change sets the scope: the verdicts below cover the lines it adds or touches, the rest of the skill stays as it is, and anything noticed there is a follow-up.
 
 2. **Fetch the yardsticks.** Fetch these pages. They calibrate the delete, demote, and rewrite verdicts below:
    - https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
