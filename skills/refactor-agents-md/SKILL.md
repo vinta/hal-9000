@@ -1,6 +1,6 @@
 ---
 name: refactor-agents-md
-description: Use when refactoring a user-level or project-level AGENTS.md for progressive disclosure
+description: Use when refactoring a user-level or project-level AGENTS.md
 user-invocable: true
 ---
 

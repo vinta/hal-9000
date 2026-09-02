@@ -1,6 +1,6 @@
 ---
 name: refactor-claude-md
-description: Use when refactoring a user-level or project-level CLAUDE.md for progressive disclosure
+description: Use when refactoring a user-level or project-level CLAUDE.md
 argument-hint: [user | project]
 user-invocable: true
 allowed-tools:
