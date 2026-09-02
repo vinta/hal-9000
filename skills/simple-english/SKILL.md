@@ -1,6 +1,6 @@
 ---
 name: simple-english
-description: "Use when the user explicitly asks for simple English, plain English, or Global English, or for text a non-native English speaker can read easily — rewrites docs, READMEs, issues, comments, or UI text into plain words and translation-friendly grammar, still native-sounding. Prose the user signs in their own voice goes to write-like-me instead, unless they asked for simple English"
+description: Use when the user explicitly asks for simple English, plain English, or for text a non-native English speaker can read easily — rewrites docs, READMEs, issues, comments, or UI text into plain words and translation-friendly grammar, still native-sounding. Prose the user signs in their own voice goes to write-like-me instead
 argument-hint: [text, file, or pointer to rewrite]
 user-invocable: true
 ---
