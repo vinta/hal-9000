@@ -12,9 +12,9 @@
     "./audit-claude-settings",
     "./refactor-claude-md",
     "./refactor-agents-md",
+    "./refactor-memory",
     "./refactor-skill",
-    "./update-allowed-tools",
-    "./refactor-memory"
+    "./update-allowed-tools"
   ],
   "author": {
     "name": "Vinta Chen",
@@ -44,6 +44,7 @@
     "env-vars",
     "refactor",
     "claude-md",
-    "agents-md"
+    "agents-md",
+    "auto-memory"
   ]
 }
