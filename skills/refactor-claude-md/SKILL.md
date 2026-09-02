@@ -29,7 +29,7 @@ The file serves every model the user runs, not only the one this session runs on
 2. **Fetch the yardsticks.** Fetch these pages. They calibrate the delete and rewrite verdicts below:
    - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
    - https://www.aihero.dev/a-complete-guide-to-agents-md
-   - The pages for both models, whichever one this session runs on:
+   - The pages for both models, regardless of which one this session runs on:
      - Fable 5.1: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1
      - Opus 5: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5
    - The published claude.ai system prompts for both models, as a signal of what Anthropic itself has to tell each model. They apply to claude.ai, not to the API or Claude Code, so they never settle whether Claude Code's own prompt already carries a line:
@@ -37,10 +37,10 @@ The file serves every model the user runs, not only the one this session runs on
      - Opus 5: https://platform.claude.com/docs/en/release-notes/system-prompts/claude-opus-5
 
 3. **Audit.** Read the file and give every instruction exactly one verdict, judged against the target's bar below. Done when no instruction lacks one.
-   - **contradiction**: conflicts with another instruction, or one model's page says to remove it while the other model still needs it. Record both sides.
-   - **delete**: fails the no-op test on both models, meaning each would behave the same without it, or its page says to remove it because it was written for an earlier model's habits. Judge defaults against the fetched pages and the probe below, not memory; a behavior the published claude.ai prompt has to spell out for a model is not that model's default. Covers instructions the models already follow by default, instructions too vague to act on, and platitudes like "write clean code". A line only one model needs is a keep.
+   - **contradiction**: conflicts with another instruction, or the two model pages pull it opposite ways: one says to remove it while the other model still needs it, or no single wording satisfies both pages. Record both sides.
+   - **delete**: fails the no-op test on both models, meaning each would behave the same without it, or a model page says to remove it because it was written for an earlier model's habits and the other model does not need it either. Judge defaults against the fetched pages and the probe below, not memory; a behavior the published claude.ai prompt has to spell out for a model is not that model's default. Covers instructions the models already follow by default, instructions too vague to act on, and platitudes like "write clean code". A line only one model needs is a keep.
    - **demote**: real instruction that only applies to some paths or tasks. Pick its destination from the bar. If it describes a multi-step workflow, propose a skill instead. Name the destination in the sign-off.
-   - **rewrite**: right meaning, phrasing falls short of the fetched best practices. Where a model page gives measured wording for the same instruction, use that wording.
+   - **rewrite**: right meaning, phrasing falls short of the fetched best practices. Where a model page gives measured wording for the same instruction and the other model's page allows it, use that wording.
    - **keep**: earns its always-loaded cost as written.
 
    A delete that rests on the shipped system prompt already saying the same thing needs evidence from both models, because the prompt differs per model. Pick the exact phrase of the prompt that makes the line redundant and ask each model whether it is there. Pass `--safe-mode` so the answer reflects the shipped prompt alone, since print mode otherwise loads CLAUDE.md files, plugins, and output styles too; `--no-session-persistence --max-turns 1` keep the probe from leaving a transcript or running tools; and always pass `--model` (`claude-fable-5-1`, `claude-opus-5`) since print mode otherwise inherits the settings.json default:
