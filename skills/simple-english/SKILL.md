@@ -1,9 +1,8 @@
 ---
 name: simple-english
-description: Use when you want docs, issues, READMEs, comments, or UI text written in Global English — plain words, translation-friendly grammar, still native-sounding
+description: "Use when the user explicitly asks for simple English, plain English, or Global English, or for text a non-native English speaker can read easily — rewrites docs, READMEs, issues, comments, or UI text into plain words and translation-friendly grammar, still native-sounding. Prose the user signs in their own voice goes to write-like-me instead, unless they asked for simple English"
 argument-hint: [text, file, or pointer to rewrite]
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # Simple English
