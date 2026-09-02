@@ -1,6 +1,6 @@
 ---
-name: audit-memory-files
-description: Use when auditing Claude Code auto memory, the MEMORY.md index and its topic files, to delete stale or derivable memories, fix inconsistencies, promote standing decisions to CLAUDE.md or rules, and regroup the index. Not for CLAUDE.md or rules files themselves
+name: refactor-memory
+description: Use when about to refactor or refine Claude Code auto memory, the MEMORY.md index and its topic files, to delete stale or derivable memories, fix inconsistencies, promote standing decisions to CLAUDE.md or rules, and regroup the index. Not for CLAUDE.md or rules files themselves
 argument-hint: [path/to/memory/dir]
 user-invocable: true
 allowed-tools:
@@ -18,7 +18,7 @@ allowed-tools:
 
 # Overview
 
-Audit a project's auto memory. `MEMORY.md` is loaded into every session and each topic file is read on recall, so a memory earns its place only by carrying what no lookup returns: a decision, a correction, a measured gotcha. Everything else spends index lines and recall attention on facts that change no future action.
+Refactor a project's auto memory. `MEMORY.md` is loaded into every session and each topic file is read on recall, so a memory earns its place only by carrying what no lookup returns: a decision, a correction, a measured gotcha. Everything else spends index lines and recall attention on facts that change no future action.
 
 ## Instructions
 

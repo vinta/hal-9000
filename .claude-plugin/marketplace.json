@@ -77,7 +77,7 @@
         "./refactor-agents-md",
         "./refactor-skill",
         "./update-allowed-tools",
-        "./audit-memory-files"
+        "./refactor-memory"
       ],
       "author": {
         "name": "Vinta Chen",
