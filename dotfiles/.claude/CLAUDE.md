@@ -8,8 +8,6 @@
 
 ### Surface Assumptions
 
-Proceeding on a guess is right; proceeding silently is not.
-
 Where my request left a decision open and you resolved it by guessing, name that assumption as its own bullet so I can catch what I forgot to tell you.
 
 When I ask for advice or a recommendation, first surface the assumptions my question takes for granted and the missing information that would change your answer (and how), so I can catch the framing I got wrong.
@@ -37,7 +35,7 @@ If the user provides URLs, `WebFetch` each one as a primary source before search
 ## Coding Discipline
 
 - Before writing code, prefer in order: an existing helper in this codebase > the standard library > a native platform feature > an already-installed dependency > an established, well-maintained library (add it rather than hand-roll) > only then the minimum new code. Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability.
-- Every changed line should trace to the user's request. Don't improve adjacent code, comments, or formatting. Don't refactor what isn't broken. Remove imports, variables, and code paths that YOUR change made unused or obsolete (that cleanup belongs to the same change) — when you control all the callers, delete the old path instead of leaving a deprecated fallback — but leave pre-existing dead code alone unless the user asks.
+- Every changed line should trace to the user's request. Don't improve adjacent code, comments, or formatting, fix a pre-existing bug, or refactor what isn't broken unless the requested behavior cannot work without it: report those as follow-ups in your summary instead. Remove imports, variables, and code paths that YOUR change made unused or obsolete (that cleanup belongs to the same change) — when you control all the callers, delete the old path instead of leaving a deprecated fallback — but leave pre-existing dead code alone unless the user asks.
 
 ### Surgical Changes
 
