@@ -75,6 +75,7 @@
         "./audit-claude-settings",
         "./refactor-claude-md",
         "./refactor-agents-md",
+        "./refactor-skill",
         "./update-allowed-tools"
       ],
       "author": {

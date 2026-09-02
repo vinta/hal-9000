@@ -63,6 +63,7 @@ Agentic skills sharpened by daily use:
 - [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
 - [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
 - [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure
+- [refactor-skill](skills/refactor-skill/SKILL.md): Refactors an existing skill toward progressive disclosure
 
 ```bash
 /plugin marketplace add vinta/hal-9000

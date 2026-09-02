@@ -1,6 +1,6 @@
 {
   "name": "hal-skills",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
@@ -12,6 +12,7 @@
     "./audit-claude-settings",
     "./refactor-claude-md",
     "./refactor-agents-md",
+    "./refactor-skill",
     "./update-allowed-tools"
   ],
   "author": {
