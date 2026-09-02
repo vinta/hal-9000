@@ -46,7 +46,6 @@ For topics not well covered by Context7, use `WebFetch` on these URLs:
 
 - Claude Prompting Best Practices
   - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
-  - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5
 - Claude Code Settings
   - https://code.claude.com/docs/en/settings
 - Claude Code Rules

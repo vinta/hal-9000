@@ -1,6 +1,6 @@
 ---
 name: fuck-over-engineering
-description: Use when the user asks what could be deleted or reduced to simplify a codebase, says "over-engineered", "find bloat", "YAGNI pass", or wants a repo-, folder-, or file-wide audit for over-engineering — hunts dead code, reinvented stdlib, needless dependencies, and single-implementation abstractions, reports ranked cuts, applies only the picks. Not a diff review and not a bug hunt
+description: Use when the user asks what could be deleted or reduced to simplify a codebase, says "simplify", "over-engineered", or wants a repo-, folder-, or file-wide audit for over-engineering — hunts dead code, reinvented stdlib, needless dependencies, and single-implementation abstractions, reports ranked cuts, applies only the picks. Not a diff review and not a bug hunt
 argument-hint: "[path, module, or area — omit for whole repo]"
 user-invocable: true
 ---
