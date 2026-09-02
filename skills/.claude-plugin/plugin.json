@@ -1,6 +1,6 @@
 {
   "name": "hal-skills",
-  "version": "2.6.7",
+  "version": "2.7.0",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
@@ -13,7 +13,8 @@
     "./refactor-claude-md",
     "./refactor-agents-md",
     "./refactor-skill",
-    "./update-allowed-tools"
+    "./update-allowed-tools",
+    "./audit-memory-files"
   ],
   "author": {
     "name": "Vinta Chen",
