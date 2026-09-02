@@ -64,6 +64,7 @@ Agentic skills sharpened by daily use:
 - [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md
 - [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md
 - [refactor-skill](skills/refactor-skill/SKILL.md): Refactors an existing skill
+- [audit-memory-files](skills/audit-memory-files/SKILL.md): Audits your Claude Code auto memory, deletes stale entries, and regroups the index
 
 ```bash
 /plugin marketplace add vinta/hal-9000
