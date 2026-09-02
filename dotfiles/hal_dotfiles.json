@@ -42,6 +42,10 @@
       "dest": "{{HOME}}/Dropbox/Projects/hal-9000/tmp/write-like-me-local/"
     },
     {
+      "src": "{{HOME}}/Projects/pangu.js/CLAUDE.local.md",
+      "dest": "{{HOME}}/Dropbox/Projects/pangu.js/CLAUDE.local.md"
+    },
+    {
       "src": "{{HOME}}/Projects/laughing-man/CLAUDE.local.md",
       "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md"
     },
