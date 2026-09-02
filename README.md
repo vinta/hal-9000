@@ -54,17 +54,17 @@ Also see:
 
 Agentic skills sharpened by daily use:
 
-- [commit](skills/commit/SKILL.md): Creates clean, atomic git commits with conventional messages
-- [fuck-over-engineering](skills/fuck-over-engineering/SKILL.md): Finds what you can delete to simplify your codebase
-- [best-practices](skills/best-practices/SKILL.md): Researches current best practices from docs and the web before you code
-- [blindspot](skills/blindspot/SKILL.md): Surfaces your unknown unknowns before you work in an unfamiliar domain
-- [simple-english](skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
+- [commit](skills/commit/SKILL.md): Splits your changes into atomic conventional commits, hunk by hunk if needed
+- [fuck-over-engineering](skills/fuck-over-engineering/SKILL.md): Ranks what to cut in your codebase, deletes only what you pick
+- [best-practices](skills/best-practices/SKILL.md): Searches the web for the recommended way and common gotchas
+- [blindspot](skills/blindspot/SKILL.md): Interviews you to turn unknown unknowns into questions you can prompt with
+- [simple-english](skills/simple-english/SKILL.md): Rewrites text in Global English: plain words, still native-sounding
 - [write-like-me](skills/write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
-- [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
-- [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md
-- [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md
-- [refactor-memory](skills/refactor-memory/SKILL.md): Refactors your Claude Code auto memory, deletes stale entries, and regroups the index
-- [refactor-skill](skills/refactor-skill/SKILL.md): Refactors an existing skill
+- [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings against the latest docs
+- [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md so every line earns its always-loaded cost
+- [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md the same way, for Codex
+- [refactor-memory](skills/refactor-memory/SKILL.md): Prunes stale Claude Code auto memory and regroups the MEMORY.md index
+- [refactor-skill](skills/refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
 
 ```bash
 /plugin marketplace add vinta/hal-9000
