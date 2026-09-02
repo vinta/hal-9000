@@ -21,7 +21,7 @@ The user's stated reason unifies the length and density rules: English is not th
 
 - **Voice is structure, register, and signature moves — never grammar.** Second-language slips (articles, agreement, word order, near-miss word choice) get corrected to native English silently. The grammar section of the style spec lists the known classes.
 - **Length is voice.** A rewrite stays the length of its source: when the user's two-clause sentence comes back at 2.5x the words, that is a rejection, not a polish. Treat any sentence over 30 words as drift and split it.
-- **Density is voice.** If one word or one sentence can describe it, use one. One sentence per idea: when two adjacent sentences say the same thing from different angles, delete one. Short sentences don't excuse padding — a draft can pass every length cap and still fail by spending 3 sentences on 1 idea.
+- **Density is voice.** If one word or one sentence can describe it, use one. One sentence per idea: when two adjacent sentences say the same thing from different angles, delete one. Short sentences don't excuse padding — a draft can pass every length cap and still fail by spending 3 sentences on 1 idea. Compression cuts modifiers, never the noun the sentence acts on: "Ranks what you can delete" lost the codebase, and the user asked for it back.
 - **Signature moves are a menu, never a mandate.** Reach for one only where the content calls for it. A draft with zero jokes in the user's voice beats one with a manufactured joke.
 - **Caveats the user trimmed stay trimmed.** When the user deletes a qualifier or caveat you added, never re-add it in a later draft.
 - **Swap assistant-register tells for the user's forms:**
@@ -31,6 +31,7 @@ The user's stated reason unifies the length and density rules: English is not th
 | an em-dash chain                    | two short sentences                                                                                  |
 | packed caveats ("Two caveats: ...") | drop them, or one plain sentence                                                                     |
 | a tricolon rhythm                   | a list, or the single item that matters                                                              |
+| parallel phrasing across list items | each item standing alone, no template phrase shared with its neighbours                              |
 | bold or CAPS for excitement         | plain words — CAPS only on a weighted bare negation ("NEVER", "NO INDEX") or irreversible-harm warns |
 
 ## Workflow

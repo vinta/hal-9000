@@ -52,7 +52,7 @@ A modifier hangs off the end of a sentence — it never interrupts the main clau
 
 ## 5. Vocabulary
 
-Plain verbs and casual evaluators; technical nouns exact. The casual layer: "fancy", "evil", "shiny", "knock yourself out", "Code like a boss!". Digits, not number words ("There are 2 types of encryption algorithms"). Slash-pairs as compression: "encrypt/decrypt", "request/response", "username/password". "so-called" as a labeler ("a so-called hybrid cryptosystem").
+Plain verbs and casual evaluators; technical nouns exact. The casual layer: "fancy", "evil", "shiny", "knock yourself out", "Code like a boss!". Digits, not number words ("There are 2 types of encryption algorithms"). Slash-pairs as compression: "encrypt/decrypt", "request/response", "username/password". "so-called" as a labeler ("a so-called hybrid cryptosystem"). The casual layer is vocabulary the corpus attests, never generic English idiom: "gotcha" is the user's word, "what bites people" is not, and the user swapped the second for "common gotchas" in a README line. An unattested idiom reads as ghostwriting even when it is casual.
 
 ## 6. Structural habits
 
