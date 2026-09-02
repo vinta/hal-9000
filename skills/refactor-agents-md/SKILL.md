@@ -1,12 +1,12 @@
 ---
 name: refactor-agents-md
-description: Use when refactoring a user-level or project-level AGENTS.md
+description: Use when about to refactor or refine a user-level or project-level AGENTS.md
 user-invocable: true
 ---
 
 # Refactor AGENTS.md
 
-Refactor an `AGENTS.md` toward progressive disclosure. Every retained line enters each Codex session in its scope, so it must earn that attention. Move narrower guidance to the closest applicable scope or a reusable skill, and remove instructions that do not change behavior.
+Refactor an `AGENTS.md`. Every retained line enters each Codex session in its scope, so it must earn that attention. Move narrower guidance to the closest applicable scope or a reusable skill, and remove instructions that do not change behavior.
 
 ## Instructions
 

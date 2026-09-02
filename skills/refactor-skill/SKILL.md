@@ -11,7 +11,7 @@ allowed-tools:
 
 # Overview
 
-Refactor a skill toward progressive disclosure. A skill spends two budgets. Its description is loaded into every session, so each word there must do triggering work. Its body enters the context on invocation and stays there for the rest of the session, so each line there must be a step the agent performs or reference every path through the skill needs. Everything else moves behind a pointer or out of the skill.
+Refactor a skill. A skill spends two budgets. Its description is loaded into every session, so each word there must do triggering work. Its body enters the context on invocation and stays there for the rest of the session, so each line there must be a step the agent performs or reference every path through the skill needs. Everything else moves behind a pointer or out of the skill.
 
 ## Instructions
 

@@ -61,9 +61,9 @@ Agentic skills sharpened by daily use:
 - [simple-english](skills/simple-english/SKILL.md): Rewrites technical writing in Global English, clear for a global audience
 - [write-like-me](skills/write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
 - [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings and suggests tailored changes
-- [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md toward progressive disclosure
-- [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md toward progressive disclosure
-- [refactor-skill](skills/refactor-skill/SKILL.md): Refactors an existing skill toward progressive disclosure
+- [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md
+- [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md
+- [refactor-skill](skills/refactor-skill/SKILL.md): Refactors an existing skill
 
 ```bash
 /plugin marketplace add vinta/hal-9000

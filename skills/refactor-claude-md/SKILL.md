@@ -1,6 +1,6 @@
 ---
 name: refactor-claude-md
-description: Use when refactoring a user-level or project-level CLAUDE.md
+description: Use when about to refactor or refine a user-level or project-level CLAUDE.md
 argument-hint: [user | project | path/to/CLAUDE.md]
 user-invocable: true
 allowed-tools:
@@ -16,7 +16,7 @@ allowed-tools:
 
 # Overview
 
-Refactor a CLAUDE.md toward progressive disclosure. Every line it keeps is loaded into every session the file covers, and a frontier model follows only around 150 to 200 standing instructions consistently, so each line competes for that budget. Everything else moves down the ladder or out of the file.
+Refactor a CLAUDE.md. Every line it keeps is loaded into every session the file covers, and a frontier model follows only around 150 to 200 standing instructions consistently, so each line competes for that budget. Everything else moves down the ladder or out of the file.
 
 The file serves every model the user runs, not only the one this session runs on, so audit it against both Claude Fable 5.1 and Claude Opus 5. Claude Code assembles its system prompt per model: a line that merely restates the prompt under one model can be the only copy under the other.
 
