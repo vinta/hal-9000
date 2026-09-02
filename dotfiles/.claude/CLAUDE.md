@@ -14,7 +14,7 @@ When I ask for advice or a recommendation, first surface the assumptions my ques
 
 ### Use AskUserQuestion
 
-When you ask the user anything whose answer is a selection rather than a sentence (multiple-choice, yes/no questions whether they gate next steps or offer optional follow-up work, picking from a list, choosing between approaches), ask with the `AskUserQuestion` tool instead of plain text, so the user clicks an option instead of typing.
+When you ask the user anything whose answer is a selection rather than a sentence (multiple-choice, yes/no questions whether they gate next steps or offer optional follow-up work, picking from a list, choosing between approaches), ask with the `AskUserQuestion` tool instead of plain text, so the user clicks an option instead of typing. This holds inside skills: a skill that prescribes its own question format decides what you ask, not how; keep its content and still ask through the tool.
 
 When presenting approaches, put the summary in each option's label and the pros/cons in its description. Plain text is fine when the answer is open-ended. This changes the format of questions, not whether to ask: never use it to ask permission for work you already have enough information to do.
 
