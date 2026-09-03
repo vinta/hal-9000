@@ -140,6 +140,10 @@
       "dest": "{{HOME}}/.codex/AGENTS.md"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/agents/",
+      "dest": "{{HOME}}/.codex/agents/"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/config.toml",
       "dest": "{{HOME}}/.codex/config.toml"
     },

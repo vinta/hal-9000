@@ -17,6 +17,10 @@
 - Fail fast with errors that name the failure, relevant input, and likely fix.
 - Comment only to explain intent or non-obvious constraints.
 
+## Delegation
+
+- When committing, delegate the entire commit operation to the `committer` agent, pass the user's stated reason for the changes, and wait for its verified commit hashes and final status.
+
 ## Long-Running Tools
 
 - For empty `write_stdin` polls and `functions.wait`, use the longest yield allowed by higher-priority instructions; prefer `300000` ms when no intermediate output is needed, but shorten it to preserve the active user-update cadence.
