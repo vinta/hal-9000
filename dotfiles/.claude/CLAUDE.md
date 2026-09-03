@@ -53,3 +53,11 @@ Each change should be purely behavioral or purely structural. Never both in the 
 - **Structural**: renames, extract/inline, reorganize (no behavior change)
 
 Mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs.
+
+## Code Conventions
+
+- An identifier mirrors its domain type name (`lateFixes: LateFix[]`, `ambiguousShape: AmbiguousShape`), never a shortened synonym. This covers parameters, loop variables, and destructured locals. A generic platform type (`Node`, `string`) carries nothing, so that identifier names its role instead: `contextNode`, not `node`
+- One value has one name everywhere it appears. When two records carry the same value under two names, rename to the one that already matches the domain vocabulary
+- Name a field or local by its state (`unspaced`, `settled`), never by relative position (`before`, `after`) or by mechanism (`pending`, `unflushed`). One thing at two moments is an `extends` pair: the later type adds only the fields the later moment makes available
+- Prefer the concrete compound that names the visible thing and matches existing code or setting names (`AmbiguousShape`, not `Ambiguity`) over an abstract or mechanism noun
+- Code comments are my notes to future me, so I write the final wording. Draft one version, then review mine for a claim the code contradicts, a grammar slip, or a glossary synonym. Do not rephrase it
