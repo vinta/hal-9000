@@ -34,22 +34,6 @@
       "dest": "{{HOME}}/Dropbox/Apps/Codex/memories/"
     },
     {
-      "src": "{{REPO_ROOT}}/CLAUDE.local.md",
-      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/CLAUDE.local.md"
-    },
-    {
-      "src": "{{REPO_ROOT}}/tmp/write-like-me-local/",
-      "dest": "{{HOME}}/Dropbox/Projects/hal-9000/tmp/write-like-me-local/"
-    },
-    {
-      "src": "{{HOME}}/Projects/pangu.js/CLAUDE.local.md",
-      "dest": "{{HOME}}/Dropbox/Projects/pangu.js/CLAUDE.local.md"
-    },
-    {
-      "src": "{{HOME}}/Projects/laughing-man/CLAUDE.local.md",
-      "dest": "{{HOME}}/Dropbox/Projects/laughing-man/CLAUDE.local.md"
-    },
-    {
       "src": "{{HOME}}/Projects/finance/",
       "dest": "{{HOME}}/Dropbox/Projects/finance/"
     },
@@ -60,6 +44,14 @@
     {
       "src": "{{HOME}}/Projects/personal/",
       "dest": "{{HOME}}/Dropbox/Projects/personal/"
+    },
+    {
+      "src": "{{HOME}}/Projects/*/tmp/",
+      "dest": "{{HOME}}/Dropbox/Projects/*/tmp/"
+    },
+    {
+      "src": "{{HOME}}/Projects/*/CLAUDE.local.md",
+      "dest": "{{HOME}}/Dropbox/Projects/*/CLAUDE.local.md"
     },
     {
       "src": "{{HOME}}/Projects/*.code-workspace",

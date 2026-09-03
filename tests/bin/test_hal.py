@@ -838,6 +838,32 @@ class TestCopyEntryGlob:
         assert (dest_dir / "beta.code-workspace").read_text() == "beta"
         assert not (dest_dir / "notes.txt").exists()
 
+    def test_pattern_in_parent_copies_files(self, hal_instance, tmp_path):
+        src_dir = tmp_path / "projects"
+        (src_dir / "acme").mkdir(parents=True)
+        (src_dir / "acme" / "CLAUDE.local.md").write_text("acme")
+        (src_dir / "beta").mkdir()
+
+        dest_dir = tmp_path / "dropbox"
+        entry = {"src": str(src_dir / "*" / "CLAUDE.local.md"), "dest": str(dest_dir / "*" / "CLAUDE.local.md")}
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
+            hal_instance._copy_entry(entry)
+
+        assert (dest_dir / "acme" / "CLAUDE.local.md").read_text() == "acme"
+        assert not (dest_dir / "beta").exists()
+
+    def test_pattern_in_parent_copies_directories(self, hal_instance, tmp_path):
+        src_dir = tmp_path / "projects"
+        (src_dir / "acme" / "tmp").mkdir(parents=True)
+        (src_dir / "acme" / "tmp" / "notes.txt").write_text("notes")
+
+        dest_dir = tmp_path / "dropbox"
+        entry = {"src": str(src_dir / "*" / "tmp"), "dest": str(dest_dir / "*" / "tmp")}
+        with patch.object(hal_instance, "_expand_template", side_effect=Path):
+            hal_instance._copy_entry(entry)
+
+        assert (dest_dir / "acme" / "tmp" / "notes.txt").read_text() == "notes"
+
     def test_pattern_no_matches_is_noop(self, hal_instance, tmp_path):
         """A pattern that matches nothing copies nothing and does not create the dest."""
         src_dir = tmp_path / "projects"
@@ -1375,6 +1401,20 @@ class TestBackupPrune:
         self._prune(hal_instance, [entry])
 
         assert (dest_dir / "only_copy.code-workspace").read_text() == "irreplaceable"
+
+    def test_glob_in_parent_prunes_unmatched_directories(self, hal_instance, tmp_path):
+        src_dir = tmp_path / "projects"
+        (src_dir / "acme" / "tmp").mkdir(parents=True)
+
+        dest_dir = tmp_path / "dropbox"
+        (dest_dir / "acme" / "tmp").mkdir(parents=True)
+        (dest_dir / "retired" / "tmp").mkdir(parents=True)
+
+        entry = {"src": str(src_dir / "*" / "tmp"), "dest": str(dest_dir / "*" / "tmp")}
+        self._prune(hal_instance, [entry])
+
+        assert (dest_dir / "acme" / "tmp").is_dir()
+        assert not (dest_dir / "retired" / "tmp").exists()
 
     def test_glob_entry_with_renaming_pattern_keeps_what_it_just_copied(self, hal_instance, tmp_path):
         """Copying splices the star into dest, so pruning must expect the spliced name, not the source name."""

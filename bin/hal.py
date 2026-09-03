@@ -142,13 +142,18 @@ class Mirror:
         self._say(f"copy {abbreviate_home(src)} -> {abbreviate_home(dest)}")
 
     @staticmethod
+    def _glob(pattern: Path) -> list[Path]:
+        root = Path(pattern.anchor)
+        return sorted(root.glob(str(pattern.relative_to(root))), key=str)
+
+    @staticmethod
     def _glob_pairs(src: Path, dest: Path) -> list[tuple[Path, Path]]:
         # Shared by copy and find_orphans so both read a pattern pair the same way: these destinations are
         # exactly the ones a backup writes, so anything else matching the dest pattern is an orphan
         prefix, _, suffix = str(src).partition("*")
         dprefix, _, dsuffix = str(dest).partition("*")
         pairs = []
-        for match in sorted(src.parent.glob(src.name), key=str):
+        for match in Mirror._glob(src):
             text = str(match)
             star = text[len(prefix) : len(text) - len(suffix)]
             pairs.append((match, Path(f"{dprefix}{star}{dsuffix}")))
@@ -204,7 +209,7 @@ class Mirror:
             if not pairs:
                 return []
             expected = {pair_dest for _, pair_dest in pairs}
-            return sorted(match for match in dest.parent.glob(dest.name) if match not in expected)
+            return [match for match in Mirror._glob(dest) if match not in expected]
 
         # A missing or empty source means the backup is the only surviving copy, and every file in it would read as an orphan
         if not src.is_dir() or not dest.is_dir():
