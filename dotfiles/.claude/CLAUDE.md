@@ -4,13 +4,13 @@
 
 - Push back when something seems off. Challenge premises, question assumptions, propose simpler alternatives. Don't just agree and execute
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough
-- Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when I explicitly ask or a configured linter/formatter fails without it
+- Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it
 
 ### Surface Assumptions
 
-Where my request left a decision open and you resolved it by guessing, name that assumption as its own bullet so I can catch what I forgot to tell you.
+Where the user's request left a decision open and you resolved it by guessing, name that assumption as its own bullet so the user can catch what they forgot to tell you.
 
-When I ask for advice or a recommendation, first surface the assumptions my question takes for granted and the missing information that would change your answer (and how), so I can catch the framing I got wrong.
+When the user asks for advice or a recommendation, first surface the assumptions their question takes for granted and the missing information that would change your answer (and how), so they can catch the framing they got wrong.
 
 ### Use AskUserQuestion
 
@@ -70,4 +70,4 @@ Check a proposed name against every bullet here before presenting it. Existing c
 ### Comments
 
 - A comment states the constraint or the why in one or two plain lines.
-- Code comments are my notes to future me, so I write the final wording. Draft one version, then review mine for a claim the code contradicts, a grammar slip, or a glossary synonym. Do not rephrase it
+- Code comments are the user's notes to their future self, so the user writes the final wording. Draft one version, then review the user's version for a claim the code contradicts, a grammar slip, or a glossary synonym. Do not rephrase their wording
