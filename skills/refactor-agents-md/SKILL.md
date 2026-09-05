@@ -17,7 +17,6 @@ Refactor an `AGENTS.md`. Every retained line enters each Codex session in its sc
 
 2. **Fetch the yardsticks.** Fetch these pages to calibrate the audit:
    - https://developers.openai.com/api/docs/guides/latest-model?model=gpt-5.6
-   - https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6
    - https://www.aihero.dev/a-complete-guide-to-agents-md
 
 3. **Audit.** Read the target and applicable broader `AGENTS.md` files. Give every instruction in the target exactly one verdict against the target's bar below. Finish only when every instruction has a verdict.
@@ -31,6 +30,6 @@ Refactor an `AGENTS.md`. Every retained line enters each Codex session in its sc
    - **User-level**: a keep must apply across all projects. Demote project or directory guidance to the applicable project's `AGENTS.md`, and task workflows to skills.
    - **Project or nested**: a keep must apply to every task and file in the target directory's subtree and be underivable from the repository. Keep concise project context, commands Codex would otherwise guess wrong, domain concepts, constraints, and gotchas. Delete restatements of the code and volatile inventories such as file trees. Demote narrower guidance to a closer nested `AGENTS.md`, a linked document, or a skill.
 
-4. **Get decisions.** Ask the user to resolve each contradiction. Then present the delete and demote lists, including every proposed destination, for sign-off. Leave all files untouched until the user signs off.
+4. **Get decisions.** One `request_user_input` per contradiction. Then present the delete and demote lists, including every proposed destination, for sign-off. Leave all files untouched until the user signs off.
 
 5. **Rewrite.** Apply the signed-off verdicts in one pass. Place each new nested `AGENTS.md` in the nearest directory whose whole subtree shares its guidance. Finish only when every audited instruction is kept, rewritten, demoted to its named destination, or deleted as approved.
