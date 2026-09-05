@@ -49,7 +49,6 @@ status_line = [
     "model-with-reasoning",
     "current-dir",
     "git-branch",
-    "codex-version",
     "context-remaining",
     "five-hour-limit",
     "weekly-limit",
