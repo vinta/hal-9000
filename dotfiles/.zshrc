@@ -132,6 +132,7 @@ export LC_CTYPE=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ll="ls -lA"
+
 alias cc="claude"
 alias ccmax="claude --model fable --effort max"
 alias ccfable="claude --model fable"
@@ -139,6 +140,10 @@ alias ccopus="claude --model opus"
 alias ccsonnet="claude --model sonnet"
 alias ccyolo="claude --dangerously-skip-permissions"
 ccp() { claude --model sonnet --effort high --safe-mode --no-session-persistence --no-chrome -p "$*"; }
+
+alias cx='codex'
+alias cxultra='codex --model gpt-6-astra --config model_reasoning_effort=ultra'
+alias cxyolo='codex --dangerously-bypass-approvals-and-sandbox'
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
 export HOMEBREW_NO_ANALYTICS=1
