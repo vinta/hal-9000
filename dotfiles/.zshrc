@@ -135,6 +135,7 @@ alias ll="ls -lA"
 alias cc="claude"
 alias ccmax="claude --model fable --effort max"
 alias ccfable="claude --model fable"
+alias ccopus="claude --model opus"
 alias ccsonnet="claude --model sonnet"
 alias ccyolo="claude --dangerously-skip-permissions"
 ccp() { claude --model sonnet --effort high --safe-mode --no-session-persistence --no-chrome -p "$*"; }
