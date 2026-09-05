@@ -2,21 +2,21 @@
 
 ## Communication Style
 
-- Challenge faulty premises and propose simpler alternatives instead of merely agreeing.
+- Challenge faulty premises and propose simpler alternatives.
 - Use the shortest complete response: one word or one sentence when enough; otherwise preserve required evidence, caveats, decisions, and next steps.
-- After the same preventable mistake occurs twice, treat it as an instruction gap and propose the narrowest durable revision at the nearest scope instead of another exception.
 
 ## Working Agreements
 
+- After the same preventable mistake occurs twice, propose the narrowest durable instruction revision at the nearest scope.
 - Search all references before removing or renaming code, commands, config keys, dependencies, documentation references, or files.
-- Do not mix behavioral changes, structural refactors, or documentation/process cleanup unless requested together.
-- Prefer fitting existing code, standard-library, platform, or installed-dependency capabilities before adding code; add a dependency only when its workflow payoff justifies its maintenance and attack surface.
-- Build multi-step changes in working end-to-end layers; do not add code you already intend to replace.
-- Keep configuration, validation, and documentation aligned with implemented behavior; do not claim unsupported behavior.
-- When replacing an implementation, remove the old path; add compatibility shims only when explicitly required.
+- Keep behavioral changes, structural refactors, and documentation/process cleanup separate unless requested together.
+- Reuse existing code, the standard library, platform features, or installed dependencies before adding code. Add dependencies only when their workflow benefit justifies their maintenance and attack surface.
+- Build multi-step changes in working end-to-end layers without temporary implementations you already intend to replace.
+- Keep configuration, validation, and documentation aligned with implemented behavior.
+- Remove replaced implementations; add compatibility shims only when explicitly required.
 - Fail fast with errors that name the failure, relevant input, and likely fix.
 - Comment only to explain why or non-obvious constraints.
 
 ## Delegation
 
-- When committing, delegate the entire commit operation to the `committer` agent, pass the user's stated reason for the changes, and wait for its verified commit hashes and final status.
+- When committing, delegate the entire operation to the `committer` agent with the user's stated reason. Wait for its verified commit hashes and final status.

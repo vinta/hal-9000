@@ -4,22 +4,22 @@ macOS dev environment automation: dotfiles, AI agent configs, skills, and dev st
 
 ## Commands
 
-Run `make help` to list targets and `hal --help` for the CLI. Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags (e.g. `make lint-python` runs ruff format --check and ruff check; `make lint-ansible` runs ansible-lint and a playbook syntax check; `make lint` runs both).
+Use `make help` to find targets and `hal --help` for CLI usage. When a matching Makefile target exists, use it to run the required tools and flags together.
 
 ## Gotchas
 
-- **Dotfiles are the source of truth**: `dotfiles/` is the source of truth for files under `~/`. `dotfiles/.claude/` syncs to `~/.claude/` via `hal_dotfiles.json`. Always edit under `dotfiles/`, never under `~/` directly.
-- **Skills are the source of truth in `skills/`**: Distributed via Claude Code plugin marketplaces configured in `dotfiles/.claude/settings.json` (the `hal-9000` marketplace loads the published version from GitHub), and via `npx skills add vinta/hal-9000`.
-- **The hal-skills `skills` array is duplicated on purpose**: `skills/.claude-plugin/plugin.json` is what Claude Code reads for the plugin's author and skill count, and the copy in `.claude-plugin/marketplace.json` is what `npx skills` reads to group the skills under "Hal Skills" (it only looks for a `plugin.json` at the repo root, so it never sees the one under `skills/`). Keep both lists in sync instead of deduplicating them.
-- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal.py`).
+- Edit managed home-directory files in `dotfiles/`; `dotfiles/hal_dotfiles.json` maps them to their destinations under `~/`.
+- Edit skills in `skills/`. The `hal-9000` Claude Code marketplace installs the published GitHub version, so local edits do not update that installed plugin. Distribution commands are in [README.md](README.md#skills).
+- Keep the `hal-skills` skill lists in `skills/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` synchronized. Both copies are intentional: Claude Code reads the first for author and skill count; `npx skills` needs the second to group skills because it only looks for a root `plugin.json`.
+- Regenerate generated artifacts with their repo command. After changing `bin/hal.py`, run `make hal-completion` to update zsh completion.
 
 ## External Tool Documentation
 
-When you need information about tools used in this project, use the `find-docs` skill or `WebFetch`.
+When looking up tool behavior or configuration, use `find-docs` or an available documentation/web fetch tool.
 
 ### Context7 Library IDs
 
-Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skipping the `ctx7 library` step:
+Use these pre-resolved IDs with `find-docs`. Pass the matching ID directly to `npx ctx7@latest docs <libraryId> "<query>"`, skipping library resolution. If an ID no longer resolves, look it up again with `find-docs`.
 
 | Tool           | `libraryId`                                |
 | -------------- | ------------------------------------------ |
@@ -40,10 +40,8 @@ Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skippi
 
 ### Documentation Links
 
-For topics not well covered by Context7, use `WebFetch` on these URLs:
+Fetch the relevant official page when changing prompts or configuration:
 
-- Codex Prompting Best Practices
-  - https://developers.openai.com/api/docs/guides/latest-model
-  - https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6
-- Codex Configs
-  - https://learn.chatgpt.com/docs/config-file/config-reference
+- [GPT-6 prompting guidance](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra#prompting-best-practices).
+- [GPT-5.6 prompting guidance](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) when targeting GPT-5.6.
+- [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
