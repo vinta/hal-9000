@@ -36,6 +36,7 @@ If the user provides URLs, `WebFetch` each one as a primary source before search
 
 - Before writing code, prefer in order: an existing helper in this codebase > the standard library > a native platform feature > an already-installed dependency > an established, well-maintained library (add it rather than hand-roll) > only then the minimum new code. Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability.
 - Every changed line should trace to the user's request. Don't improve adjacent code, comments, or formatting, fix a pre-existing bug, or refactor what isn't broken unless the requested behavior cannot work without it: report those as follow-ups in your summary instead. Remove imports, variables, and code paths that YOUR change made unused or obsolete (that cleanup belongs to the same change) — when you control all the callers, delete the old path instead of leaving a deprecated fallback — but leave pre-existing dead code alone unless the user asks.
+- A comment states the constraint or the why in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it
 
 ### Surgical Changes
 
@@ -53,10 +54,3 @@ Each change should be purely behavioral or purely structural. Never both in the 
 - **Structural**: renames, extract/inline, reorganize (no behavior change)
 
 Mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs.
-
-## Code Conventions
-
-### Comments
-
-- A comment states the constraint or the why in one or two plain lines.
-- Code comments are the user's notes to their future self, so the user writes the final wording. Draft one version, then review the user's version for a claim the code contradicts, a grammar slip, or a glossary synonym. Do not rephrase their wording
