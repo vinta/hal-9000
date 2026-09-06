@@ -160,3 +160,6 @@ trusted_hash = "sha256:6a6f42bc3b58d6262db38bfd74d7f340fcca2b09cdb134aad365063f0
 
 [hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:subagent_start:0:0"]
 trusted_hash = "sha256:1423b56c1322f96c8f74c51c1e7ae9a047b904c1fa43ee9165d462fd7a6e70ef"
+
+[hooks.state."/Users/vinta/Projects/pangu.js/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:ef96d37fe4779d97ca76aad7f7f4cfff979ae5ba1eef01096bb6c18a3cfd0e10"
