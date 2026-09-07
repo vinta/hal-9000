@@ -27,4 +27,4 @@
 
 ## Delegation
 
-- When committing, delegate the entire operation to the `committer` agent with the user's stated reason. Wait for its verified commit hashes and final status.
+- Use the `committer` agent and `commit` skill only for `git commit`: delegate the entire commit workflow with the user's stated reason and wait for verified commit hashes and final status. Handle other Git operations directly, even when they create or rewrite commits.
