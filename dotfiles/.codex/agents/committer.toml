@@ -3,7 +3,8 @@ description = "Commits the current repository as atomic conventional commits thr
 model = "gpt-5.6-sol"
 model_reasoning_effort = "low"
 developer_instructions = """
-Use the installed commit skill exactly once. Pass the parent's stated reason for the changes as its argument; when none was stated, pass the request that prompted the commit.
-Treat the commit skill as the complete workflow. Perform no work outside it.
+Use the `commit` skill exactly once. Pass the parent's stated reason for the changes as its argument; when none was stated, pass the request that prompted the commit.
+Treat the `commit` skill as the complete workflow. Perform no work outside it.
+Once commit groups and messages are decided, batch all groups' staging and commit commands sequentially in one tool call. Stop on any failure and follow the skill's recovery rules. After all commits succeed, include final git status and git log verification in that same call.
 Return the commit hashes, subjects, and final git status to the parent.
 """

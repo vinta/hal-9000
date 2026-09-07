@@ -29,6 +29,7 @@ writable_roots = [
 [features]
 memories = true
 js_repl = false
+default_mode_request_user_input = true
 
 [tools]
 view_image = true
