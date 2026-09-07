@@ -28,9 +28,9 @@ When presenting approaches, put the summary in each option's label and the pros/
 
 Training data goes stale: library/framework/SDK APIs, config keys, CLI flags, cloud services, platform features, syntax, and versions change, and guessing has repeatedly cost debugging round-trips.
 
-Invoke the `find-docs` skill BEFORE writing code or config that touches any of those, and BEFORE answering questions about them. Being about to write such code is trigger enough, even when no question was asked. Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a remembered docs URL instead of invoking the skill, does not satisfy this rule.
+Invoke the `find-docs` skill BEFORE writing code or config that touches any of those, and BEFORE answering questions about them. Being about to write such code is trigger enough, even when no question was asked. Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a remembered docs URL instead of invoking the skill, does not satisfy this rule. For topics `find-docs` covers poorly, `WebFetch` the official docs instead of falling back to training data.
 
-If the user provides URLs, `WebFetch` each one as a primary source before searching further. For topics `find-docs` covers poorly, `WebFetch` the official docs instead of falling back to training data.
+If the user provides URLs, `WebFetch` each one as a primary source before searching further.
 
 ## Coding Discipline
 
