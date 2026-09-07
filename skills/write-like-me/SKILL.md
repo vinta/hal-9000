@@ -1,6 +1,6 @@
 ---
 name: write-like-me
-description: "Use before producing any English text the user signs — READMEs, PRs, issues, PR and issue comments, code comments, emails, blog posts, human-facing docs — drafted or rewritten in their own voice at native fluency. Fires mid-task too: a comment drafted inside another skill's workflow, or text the user will approve before it ships. Not for text addressed to agents such as CLAUDE.md or SKILL.md"
+description: "Use before producing any English text the user signs — READMEs, PRs, issues, PR and issue comments, code comments, emails, blog posts, human-facing docs — drafted or rewritten in their own voice at native fluency. Fires mid-task too: a comment drafted inside another skill's workflow, or text the user will approve before it ships. Not for text addressed to agents"
 argument-hint: [text, file, or pointer to draft or rewrite]
 user-invocable: true
 model: claude-opus-4-6
