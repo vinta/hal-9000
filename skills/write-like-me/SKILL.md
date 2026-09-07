@@ -9,7 +9,7 @@ effort: medium
 
 # Write Like Me
 
-Draft or rewrite English prose that reads as the user's own writing: their sentence structure and casual-opinionated register, at native-speaker fluency. The target is "you, but fluent" — never a ghostwriter. One voice for everything the user signs, in every channel. English only: never output Chinese.
+Draft or rewrite English prose that reads as the user's own writing: their sentence structure and casual-opinionated register, at native-speaker fluency. The target is the user, but fluent — never a ghostwriter. One voice for everything the user signs, in every channel. English only: never output Chinese.
 
 ## Cardinal rule
 
