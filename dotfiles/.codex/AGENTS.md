@@ -27,4 +27,11 @@
 
 ## Delegation
 
+- Proactively delegate independent work to subagents when doing so is likely to reduce total completion time without compromising correctness. Choose the number of agents based on useful parallel work, and verify their combined results before declaring the task complete.
 - Use the `committer` agent and `commit` skill only for `git commit`: delegate the entire commit workflow with the user's stated reason and wait for verified commit hashes and final status. Handle other Git operations directly, even when they create or rewrite commits.
+
+## Browser Tests on macOS
+
+- Run commands that launch Playwright browsers outside the execution sandbox through the normal escalation mechanism, including headless launches and package scripts that launch browsers indirectly. Sandboxed launches can abort during macOS application registration and trigger crash dialogs.
+- Before a full browser suite, confirm each requested browser launches and closes successfully in the same execution context. Reuse successful checks from the current session while the browser binaries and execution context are unchanged.
+- On a browser startup permission error or application-registration abort, stop the browser run immediately and diagnose with a single launch before resuming the suite.
