@@ -6,16 +6,16 @@ paths:
 
 # GitHub Actions
 
-- Pin every third-party action to a full 40-char commit SHA with the version tag in a trailing comment. Per GitHub, SHA pinning is "the only way to use an action as an immutable release." Tag pinning is acceptable only for creators you trust (in practice, first-party `actions/*` and `github/*`); default to SHA everywhere else:
+- Pin every third-party action to a full 40-char commit SHA with the version tag in a trailing comment. Tag pinning is acceptable only for first-party `actions/*` and `github/*`:
 
   ```yaml
   uses: owner/action@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
   ```
 
 - Verify the SHA comes from the action's upstream repo, not a fork, before pinning
-- Declare top-level `permissions:` explicitly, defaulting to `contents: read`. Add per-job overrides only where required. Omitting `permissions:` falls back to repo or org defaults, which may grant more than needed
-- Use OIDC (`permissions: id-token: write` plus `contents: read`) to authenticate to cloud providers instead of storing access keys as long-lived secrets
-- Never interpolate `${{ github.event.* }}` or any user-controlled context directly into a `run:` block. Route through step-level `env:` and reference the variable, quoted:
+- Declare top-level `permissions:` explicitly, defaulting to `contents: read`, with per-job overrides only where required. Omitting `permissions:` inherits repo or org defaults, which may grant more than needed
+- Authenticate to cloud providers with OIDC (`permissions: id-token: write` plus `contents: read`), not long-lived access-key secrets
+- Never interpolate `${{ github.event.* }}` or any user-controlled context into a `run:` block. Route through step-level `env:` and reference the variable, quoted:
 
   ```yaml
   - run: echo "title: $TITLE"
@@ -23,13 +23,13 @@ paths:
       TITLE: ${{ github.event.pull_request.title }}
   ```
 
-- Treat context fields ending in `body`, `default_branch`, `email`, `head_ref`, `label`, `message`, `name`, `page_name`, `ref`, `title` as untrusted input. Branch names and email addresses can contain shell metacharacters; GitHub's own example: `zzz";echo${IFS}"hello";#` is a valid branch name
-- Prefer passing untrusted context to a typed action input (`with: title: ${{ ... }}`) over constructing a shell command. Context values reach typed inputs as arguments, bypassing shell expansion entirely
-- Pass individual secrets via step-level `env:` only where needed. Never dump the full context: no `env: ALL: ${{ toJson(secrets) }}`, no `echo "${{ secrets.FOO }}"` in `run:`
-- Don't store structured data (JSON/XML/YAML blobs) as a single secret. GitHub masks each registered secret individually, so sub-values inside a blob will not be redacted. Create one secret per sensitive value instead
-- `pull_request_target` runs in the context of the base repo's default branch with write access and secrets. `workflow_run` can access secrets and write tokens even when the triggering workflow could not. Do not combine either with `actions/checkout` of `github.event.pull_request.head.sha`, a fork ref, or any other untrusted code. Use `pull_request` for anything that needs to execute fork code
-- Set `persist-credentials: false` on `actions/checkout` unless the job pushes back to the repo. The default is `true`, which stores the token in git config and makes it readable by any subsequent step
-- Set `timeout-minutes: 10` on every job. The default is 360 minutes (6 hours), which wastes runner minutes on hung jobs
-- PR-triggered workflows include a `concurrency:` group keyed on ref with `cancel-in-progress: true` to drop superseded runs
-- Matrix jobs default `fail-fast: true`. Set `fail-fast: false` only when you genuinely want every combination's result
-- Cache keys must hash the lockfile: `key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}`. Static keys silently serve stale artifacts
+- Treat context fields ending in `body`, `default_branch`, `email`, `head_ref`, `label`, `message`, `name`, `page_name`, `ref`, `title` as untrusted. Branch names and email addresses can contain shell metacharacters: `zzz";echo${IFS}"hello";#` is a valid branch name
+- Prefer a typed action input (`with: title: ${{ ... }}`) over a shell command for untrusted context; typed inputs receive values as arguments, bypassing shell expansion
+- Pass individual secrets via step-level `env:` only where needed. Never `env: ALL: ${{ toJson(secrets) }}`, never `echo "${{ secrets.FOO }}"` in `run:`
+- One secret per sensitive value, never a JSON/XML/YAML blob: GitHub masks each registered secret whole, so sub-values inside a blob are not redacted
+- `pull_request_target` and `workflow_run` run with write access and secrets. Never combine either with `actions/checkout` of `github.event.pull_request.head.sha`, a fork ref, or any other untrusted code. Use `pull_request` for anything that executes fork code
+- Set `persist-credentials: false` on `actions/checkout` unless the job pushes back to the repo. The default `true` stores the token in git config, readable by any subsequent step
+- Set `timeout-minutes: 10` on every job; the default is 360
+- PR-triggered workflows include a `concurrency:` group keyed on ref with `cancel-in-progress: true`
+- Set `fail-fast: false` on a matrix only when every combination's result matters
+- Cache keys must hash the lockfile: `key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}`. Static keys serve stale artifacts
