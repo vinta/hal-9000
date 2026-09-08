@@ -15,7 +15,6 @@ paths:
 - Avoid enums. Use union types (`type Status = 'active' | 'inactive'`) or `as const` objects
 - Mark properties and parameters `readonly` when they should not be mutated
 - Do not add explicit return types. Let TypeScript infer them
-- Use the `typescript` LSP tool for code navigation when grep would be ambiguous
 
 ## Naming
 

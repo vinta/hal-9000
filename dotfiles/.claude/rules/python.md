@@ -19,5 +19,4 @@ paths:
 - When the linter flags something, read the rule (`ruff rule <CODE>`) and fix the code. Suppress with `# noqa` only when the rule does not apply to the project
   - Every `# noqa` includes the rule name: `# noqa: S603 subprocess-without-shell-equals-true`, or `# noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check` for multiple rules
 - Use `ty` for type checking
-- Use the `ty` LSP tool for code navigation when grep would be ambiguous
 - Use `TypedDict`, not plain dicts, for dict shapes crossing a JSON boundary
