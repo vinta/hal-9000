@@ -209,7 +209,11 @@ class Mirror:
             if not pairs:
                 return []
             expected = {pair_dest for _, pair_dest in pairs}
-            return [match for match in Mirror._glob(dest) if match not in expected]
+            orphans = [match for match in Mirror._glob(dest) if match not in expected]
+            # A matched pair is a plain entry in its own right, so files deleted inside it are orphans too
+            for pair_src, pair_dest in pairs:
+                orphans.extend(Mirror.find_orphans(pair_src, pair_dest))
+            return sorted(orphans)
 
         # A missing or empty source means the backup is the only surviving copy, and every file in it would read as an orphan
         if not src.is_dir() or not dest.is_dir():

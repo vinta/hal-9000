@@ -1416,6 +1416,22 @@ class TestBackupPrune:
         assert (dest_dir / "acme" / "tmp").is_dir()
         assert not (dest_dir / "retired" / "tmp").exists()
 
+    def test_glob_in_parent_prunes_files_inside_matched_directories(self, hal_instance, tmp_path):
+        src_dir = tmp_path / "projects"
+        (src_dir / "acme" / "tmp").mkdir(parents=True)
+        (src_dir / "acme" / "tmp" / "kept.md").write_text("kept")
+
+        dest_dir = tmp_path / "dropbox"
+        (dest_dir / "acme" / "tmp").mkdir(parents=True)
+        (dest_dir / "acme" / "tmp" / "kept.md").write_text("kept")
+        (dest_dir / "acme" / "tmp" / "deleted.md").write_text("orphan")
+
+        entry = {"src": str(src_dir / "*" / "tmp"), "dest": str(dest_dir / "*" / "tmp")}
+        self._prune(hal_instance, [entry])
+
+        assert (dest_dir / "acme" / "tmp" / "kept.md").read_text() == "kept"
+        assert not (dest_dir / "acme" / "tmp" / "deleted.md").exists()
+
     def test_glob_entry_with_renaming_pattern_keeps_what_it_just_copied(self, hal_instance, tmp_path):
         """Copying splices the star into dest, so pruning must expect the spliced name, not the source name."""
         src_dir = tmp_path / "projects"
