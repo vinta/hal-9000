@@ -8,6 +8,7 @@ paths:
 # TypeScript / JavaScript
 
 - Pin exact dependency versions in `package.json` — no `^` or `~` prefixes
+- Pin `@types/node` to the latest release of the oldest Node.js major in `engines.node`, so the compiler flags APIs that major lacks
 - Use the `node:` prefix for Node.js built-in modules (`node:fs`, `node:path`)
 - Write proper types/interfaces instead of `any` or casts like `as any` / `as unknown`
   - When a value is genuinely untypable, use `unknown` and narrow it explicitly. `any` is the last resort when no typed alternative exists
