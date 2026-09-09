@@ -4,6 +4,7 @@
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
+    "./pr",
     "./fuck-over-engineering",
     "./best-practices",
     "./blindspot",
@@ -27,6 +28,8 @@
     "commit",
     "stash",
     "hunk",
+    "pull-request",
+    "merge",
     "over-engineering",
     "yagni",
     "simplify",

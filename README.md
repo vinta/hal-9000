@@ -55,6 +55,7 @@ Also see:
 Agentic skills sharpened by daily use:
 
 - [commit](skills/commit/SKILL.md): Splits your changes into atomic conventional commits, hunk by hunk if needed
+- [pr](skills/pr/SKILL.md): Pushes the branch and opens a PR or waits for CI and merges it
 - [fuck-over-engineering](skills/fuck-over-engineering/SKILL.md): Ranks what to cut in your codebase, deletes only what you pick
 - [best-practices](skills/best-practices/SKILL.md): Searches the web for the recommended way and common gotchas
 - [blindspot](skills/blindspot/SKILL.md): Interviews you to turn unknown unknowns into questions you can prompt with
