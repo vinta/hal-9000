@@ -8,21 +8,21 @@ def at_clock(hour, minute=0):
 
 
 class TestLoadConfig:
-    def test_missing_file_returns_defaults(self, hal, tmp_path):
-        config = hal.load_config(tmp_path / "nonexistent.json")
+    def test_missing_file_returns_defaults(self, hal_voice, tmp_path):
+        config = hal_voice.load_config(tmp_path / "nonexistent.json")
         assert config["enabled"] is True
         assert config["volume"] == 0.5
         assert config["debounce_seconds"] == 5
         assert config["replay_suppression_seconds"] == 3
 
-    def test_partial_override(self, hal, tmp_path):
+    def test_partial_override(self, hal_voice, tmp_path):
         cfg_path = tmp_path / "config.json"
         cfg_path.write_text(json.dumps({"volume": 0.8}))
-        config = hal.load_config(cfg_path)
+        config = hal_voice.load_config(cfg_path)
         assert config["volume"] == 0.8
         assert config["enabled"] is True
 
-    def test_full_override(self, hal, tmp_path):
+    def test_full_override(self, hal_voice, tmp_path):
         cfg_path = tmp_path / "config.json"
         cfg_path.write_text(
             json.dumps(
@@ -34,240 +34,240 @@ class TestLoadConfig:
                 }
             )
         )
-        config = hal.load_config(cfg_path)
+        config = hal_voice.load_config(cfg_path)
         assert config["enabled"] is False
         assert config["volume"] == 0.1
 
-    def test_corrupt_file_returns_defaults(self, hal, tmp_path):
+    def test_corrupt_file_returns_defaults(self, hal_voice, tmp_path):
         cfg_path = tmp_path / "config.json"
         cfg_path.write_text("not json")
-        config = hal.load_config(cfg_path)
+        config = hal_voice.load_config(cfg_path)
         assert config["enabled"] is True
 
 
 class TestEntrypoint:
-    def test_unset_is_cli(self, hal, monkeypatch):
+    def test_unset_is_cli(self, hal_voice, monkeypatch):
         monkeypatch.delenv("CLAUDE_CODE_ENTRYPOINT", raising=False)
-        assert hal.current_entrypoint() == "cli"
+        assert hal_voice.current_entrypoint() == "cli"
 
-    def test_desktop_app(self, hal, monkeypatch):
+    def test_desktop_app(self, hal_voice, monkeypatch):
         monkeypatch.setenv("CLAUDE_CODE_ENTRYPOINT", "claude-desktop")
-        assert hal.current_entrypoint() == "claude-desktop"
+        assert hal_voice.current_entrypoint() == "claude-desktop"
 
-    def test_only_cli_allowed_by_default(self, hal):
-        assert hal.DEFAULT_CONFIG["entrypoints"] == ["cli"]
+    def test_only_cli_allowed_by_default(self, hal_voice):
+        assert hal_voice.DEFAULT_CONFIG["entrypoints"] == ["cli"]
 
-    def test_config_can_allow_another_surface(self, hal, tmp_path):
+    def test_config_can_allow_another_surface(self, hal_voice, tmp_path):
         cfg_path = tmp_path / "config.json"
         cfg_path.write_text(json.dumps({"entrypoints": ["cli", "claude-desktop"]}))
-        config = hal.load_config(cfg_path)
+        config = hal_voice.load_config(cfg_path)
         assert config["entrypoints"] == ["cli", "claude-desktop"]
 
 
 class TestLoadState:
-    def test_missing_file_returns_empty(self, hal, tmp_path):
-        state = hal.load_state(tmp_path / "nonexistent.json")
+    def test_missing_file_returns_empty(self, hal_voice, tmp_path):
+        state = hal_voice.load_state(tmp_path / "nonexistent.json")
         assert state["last_played"] == {}
         assert state["last_stop_time"] == 0.0
         assert state["session_start_times"] == {}
         assert state["subagent_sessions"] == {}
         assert state["sound_pid"] is None
 
-    def test_roundtrip(self, hal, tmp_path):
+    def test_roundtrip(self, hal_voice, tmp_path):
         state_path = tmp_path / "state.json"
-        state = hal.load_state(state_path)
+        state = hal_voice.load_state(state_path)
         state["last_played"]["Stop"] = "assets/foo.mp3"
         state["sound_pid"] = 12345
-        hal.save_state(state_path, state)
-        loaded = hal.load_state(state_path)
+        hal_voice.save_state(state_path, state)
+        loaded = hal_voice.load_state(state_path)
         assert loaded["last_played"]["Stop"] == "assets/foo.mp3"
         assert loaded["sound_pid"] == 12345
 
-    def test_corrupt_file_returns_empty(self, hal, tmp_path):
+    def test_corrupt_file_returns_empty(self, hal_voice, tmp_path):
         state_path = tmp_path / "state.json"
         state_path.write_text("{corrupt")
-        state = hal.load_state(state_path)
+        state = hal_voice.load_state(state_path)
         assert state["last_played"] == {}
 
 
 class TestEvaluateDetection:
-    def test_always(self, hal):
-        assert hal.evaluate_detection({"detection": "always"}, {}) is True
+    def test_always(self, hal_voice):
+        assert hal_voice.evaluate_detection({"detection": "always"}, {}) is True
 
-    def test_regex_match(self, hal):
+    def test_regex_match(self, hal_voice):
         rule = {"detection": "regex", "pattern": "I can't|I cannot"}
         hook_input = {"last_assistant_message": "I can't do that"}
-        assert hal.evaluate_detection(rule, hook_input) is True
+        assert hal_voice.evaluate_detection(rule, hook_input) is True
 
-    def test_regex_no_match(self, hal):
+    def test_regex_no_match(self, hal_voice):
         rule = {"detection": "regex", "pattern": "I can't|I cannot"}
         hook_input = {"last_assistant_message": "Here is the result"}
-        assert hal.evaluate_detection(rule, hook_input) is False
+        assert hal_voice.evaluate_detection(rule, hook_input) is False
 
-    def test_regex_empty_message(self, hal):
+    def test_regex_empty_message(self, hal_voice):
         rule = {"detection": "regex", "pattern": "error"}
-        assert hal.evaluate_detection(rule, {}) is False
+        assert hal_voice.evaluate_detection(rule, {}) is False
 
-    def test_regex_uses_prompt_for_user_prompt_submit(self, hal):
+    def test_regex_uses_prompt_for_user_prompt_submit(self, hal_voice):
         rule = {"detection": "regex", "pattern": "hello"}
         hook_input = {"hook_event_name": "UserPromptSubmit", "prompt": "hello world"}
-        assert hal.evaluate_detection(rule, hook_input) is True
+        assert hal_voice.evaluate_detection(rule, hook_input) is True
 
-    def test_matcher_session_start_source(self, hal):
+    def test_matcher_session_start_source(self, hal_voice):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "startup"}) is True
-        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "resume"}) is True
+        assert hal_voice.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "startup"}) is True
+        assert hal_voice.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "resume"}) is True
 
-    def test_matcher_session_start_no_match(self, hal):
+    def test_matcher_session_start_no_match(self, hal_voice):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "compact"}) is False
+        assert hal_voice.evaluate_detection(rule, {"hook_event_name": "SessionStart", "source": "compact"}) is False
 
-    def test_matcher_tool_name(self, hal):
+    def test_matcher_tool_name(self, hal_voice):
         rule = {"detection": "matcher", "matcher": "Bash"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "PreToolUse", "tool_name": "Bash"}) is True
+        assert hal_voice.evaluate_detection(rule, {"hook_event_name": "PreToolUse", "tool_name": "Bash"}) is True
 
-    def test_matcher_notification_type(self, hal):
+    def test_matcher_notification_type(self, hal_voice):
         rule = {"detection": "matcher", "matcher": "idle_prompt"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "Notification", "notification_type": "idle_prompt"}) is True
+        assert hal_voice.evaluate_detection(rule, {"hook_event_name": "Notification", "notification_type": "idle_prompt"}) is True
 
-    def test_matcher_unknown_event(self, hal):
+    def test_matcher_unknown_event(self, hal_voice):
         rule = {"detection": "matcher", "matcher": "startup"}
-        assert hal.evaluate_detection(rule, {"hook_event_name": "Unknown"}) is False
+        assert hal_voice.evaluate_detection(rule, {"hook_event_name": "Unknown"}) is False
 
-    def test_matcher_missing_event(self, hal):
+    def test_matcher_missing_event(self, hal_voice):
         rule = {"detection": "matcher", "matcher": "startup|resume"}
-        assert hal.evaluate_detection(rule, {}) is False
+        assert hal_voice.evaluate_detection(rule, {}) is False
 
-    def test_window_inside(self, hal):
+    def test_window_inside(self, hal_voice):
         rule = {"detection": "always", "after": "13:00", "before": "17:00"}
         for clock in ((13, 0), (16, 59)):
             with patch("time.localtime", return_value=at_clock(*clock)):
-                assert hal.evaluate_detection(rule, {}) is True
+                assert hal_voice.evaluate_detection(rule, {}) is True
 
-    def test_window_after_is_inclusive_before_is_exclusive(self, hal):
+    def test_window_after_is_inclusive_before_is_exclusive(self, hal_voice):
         rule = {"detection": "always", "after": "13:00", "before": "17:00"}
         with patch("time.localtime", return_value=at_clock(13, 0)):
-            assert hal.evaluate_detection(rule, {}) is True
+            assert hal_voice.evaluate_detection(rule, {}) is True
         with patch("time.localtime", return_value=at_clock(17, 0)):
-            assert hal.evaluate_detection(rule, {}) is False
+            assert hal_voice.evaluate_detection(rule, {}) is False
 
-    def test_window_outside(self, hal):
+    def test_window_outside(self, hal_voice):
         rule = {"detection": "always", "after": "13:00", "before": "17:00"}
         with patch("time.localtime", return_value=at_clock(9, 30)):
-            assert hal.evaluate_detection(rule, {}) is False
+            assert hal_voice.evaluate_detection(rule, {}) is False
 
-    def test_window_honours_minutes(self, hal):
+    def test_window_honours_minutes(self, hal_voice):
         rule = {"detection": "always", "after": "14:24", "before": "14:26"}
         with patch("time.localtime", return_value=at_clock(14, 23)):
-            assert hal.evaluate_detection(rule, {}) is False
+            assert hal_voice.evaluate_detection(rule, {}) is False
         with patch("time.localtime", return_value=at_clock(14, 25)):
-            assert hal.evaluate_detection(rule, {}) is True
+            assert hal_voice.evaluate_detection(rule, {}) is True
         with patch("time.localtime", return_value=at_clock(14, 26)):
-            assert hal.evaluate_detection(rule, {}) is False
+            assert hal_voice.evaluate_detection(rule, {}) is False
 
-    def test_window_wrapping_past_midnight(self, hal):
+    def test_window_wrapping_past_midnight(self, hal_voice):
         rule = {"detection": "always", "after": "19:00", "before": "04:00"}
         for clock in ((19, 0), (23, 59), (0, 0), (3, 59)):
             with patch("time.localtime", return_value=at_clock(*clock)):
-                assert hal.evaluate_detection(rule, {}) is True
+                assert hal_voice.evaluate_detection(rule, {}) is True
         for clock in ((4, 0), (12, 0), (18, 59)):
             with patch("time.localtime", return_value=at_clock(*clock)):
-                assert hal.evaluate_detection(rule, {}) is False
+                assert hal_voice.evaluate_detection(rule, {}) is False
 
-    def test_window_ending_at_midnight(self, hal):
+    def test_window_ending_at_midnight(self, hal_voice):
         # Alertmanager needs "24:00" here because it has no wrap; the wrap branch covers it, so "00:00" means midnight
         rule = {"detection": "always", "after": "19:00", "before": "00:00"}
         with patch("time.localtime", return_value=at_clock(23, 59)):
-            assert hal.evaluate_detection(rule, {}) is True
+            assert hal_voice.evaluate_detection(rule, {}) is True
         with patch("time.localtime", return_value=at_clock(0, 0)):
-            assert hal.evaluate_detection(rule, {}) is False
+            assert hal_voice.evaluate_detection(rule, {}) is False
 
-    def test_window_gates_before_detection(self, hal):
+    def test_window_gates_before_detection(self, hal_voice):
         rule = {"detection": "matcher", "matcher": "startup", "after": "13:00", "before": "17:00"}
         hook_input = {"hook_event_name": "SessionStart", "source": "startup"}
         with patch("time.localtime", return_value=at_clock(9, 0)):
-            assert hal.evaluate_detection(rule, hook_input) is False
+            assert hal_voice.evaluate_detection(rule, hook_input) is False
         with patch("time.localtime", return_value=at_clock(14, 0)):
-            assert hal.evaluate_detection(rule, hook_input) is True
+            assert hal_voice.evaluate_detection(rule, hook_input) is True
 
-    def test_no_window_ignores_clock(self, hal):
+    def test_no_window_ignores_clock(self, hal_voice):
         rule = {"detection": "always"}
         with patch("time.localtime", return_value=at_clock(3, 0)):
-            assert hal.evaluate_detection(rule, {}) is True
+            assert hal_voice.evaluate_detection(rule, {}) is True
 
 
 class TestPickClip:
-    def test_single_clip(self, hal):
-        assert hal.pick_clip(["a.mp3"], None) == "a.mp3"
+    def test_single_clip(self, hal_voice):
+        assert hal_voice.pick_clip(["a.mp3"], None) == "a.mp3"
 
-    def test_single_clip_ignores_last_played(self, hal):
-        assert hal.pick_clip(["a.mp3"], "a.mp3") == "a.mp3"
+    def test_single_clip_ignores_last_played(self, hal_voice):
+        assert hal_voice.pick_clip(["a.mp3"], "a.mp3") == "a.mp3"
 
-    def test_avoids_last_played(self, hal):
+    def test_avoids_last_played(self, hal_voice):
         clips = ["a.mp3", "b.mp3"]
         for _ in range(50):
-            result = hal.pick_clip(clips, "a.mp3")
+            result = hal_voice.pick_clip(clips, "a.mp3")
             assert result == "b.mp3"
 
-    def test_multiple_clips_returns_from_pool(self, hal):
+    def test_multiple_clips_returns_from_pool(self, hal_voice):
         clips = ["a.mp3", "b.mp3", "c.mp3"]
-        result = hal.pick_clip(clips, "a.mp3")
+        result = hal_voice.pick_clip(clips, "a.mp3")
         assert result in ("b.mp3", "c.mp3")
 
 
 class TestIsSuppressed:
     """_is_suppressed composes the suppression predicates with per-event conditioning."""
 
-    def test_recent_stop_debounced(self, hal):
+    def test_recent_stop_debounced(self, hal_voice):
         state = {"last_stop_time": 1000.0}
         config = {"debounce_seconds": 5}
-        assert hal._is_suppressed("Stop", state, config, session_id="sess-1", now=1003.0) is True
+        assert hal_voice._is_suppressed("Stop", state, config, session_id="sess-1", now=1003.0) is True
 
-    def test_stop_outside_debounce_window(self, hal):
+    def test_stop_outside_debounce_window(self, hal_voice):
         state = {"last_stop_time": 1000.0}
         config = {"debounce_seconds": 5}
-        assert hal._is_suppressed("Stop", state, config, session_id="sess-1", now=1006.0) is False
+        assert hal_voice._is_suppressed("Stop", state, config, session_id="sess-1", now=1006.0) is False
 
-    def test_non_stop_never_debounced(self, hal):
+    def test_non_stop_never_debounced(self, hal_voice):
         state = {"last_stop_time": 1000.0}
         config = {"debounce_seconds": 5}
-        assert hal._is_suppressed("PostToolUse", state, config, session_id="sess-1", now=1003.0) is False
+        assert hal_voice._is_suppressed("PostToolUse", state, config, session_id="sess-1", now=1003.0) is False
 
-    def test_replay_window_suppresses_non_stop(self, hal):
+    def test_replay_window_suppresses_non_stop(self, hal_voice):
         state = {"session_start_times": {"sess-1": 1000.0}}
         config = {"replay_suppression_seconds": 3}
-        assert hal._is_suppressed("PostToolUse", state, config, session_id="sess-1", now=1002.0) is True
+        assert hal_voice._is_suppressed("PostToolUse", state, config, session_id="sess-1", now=1002.0) is True
 
-    def test_session_start_exempt_from_replay(self, hal):
+    def test_session_start_exempt_from_replay(self, hal_voice):
         state = {"session_start_times": {"sess-1": 1000.0}}
         config = {"replay_suppression_seconds": 3}
-        assert hal._is_suppressed("SessionStart", state, config, session_id="sess-1", now=1002.0) is False
+        assert hal_voice._is_suppressed("SessionStart", state, config, session_id="sess-1", now=1002.0) is False
 
-    def test_subagent_stop_suppressed(self, hal):
+    def test_subagent_stop_suppressed(self, hal_voice):
         state = {"subagent_sessions": {"child-1": 1000.0}}
-        assert hal._is_suppressed("Stop", state, {}, session_id="child-1", now=2000.0) is True
+        assert hal_voice._is_suppressed("Stop", state, {}, session_id="child-1", now=2000.0) is True
 
-    def test_clean_state_allows(self, hal):
-        assert hal._is_suppressed("Stop", {}, {}, session_id="sess-1", now=1000.0) is False
+    def test_clean_state_allows(self, hal_voice):
+        assert hal_voice._is_suppressed("Stop", {}, {}, session_id="sess-1", now=1000.0) is False
 
 
 class TestMatchManifest:
-    def test_plain_key_match(self, hal):
+    def test_plain_key_match(self, hal_voice):
         manifest = {"SessionStart": [{"detection": "always", "clips": ["a.mp3"]}]}
-        result = hal.match_manifest(manifest, "SessionStart", "", {}, {})
+        result = hal_voice.match_manifest(manifest, "SessionStart", "", {}, {})
         assert result == ("SessionStart", "a.mp3")
 
-    def test_tool_matcher_key(self, hal):
+    def test_tool_matcher_key(self, hal_voice):
         manifest = {"PreToolUse:AskUserQuestion": [{"detection": "always", "clips": ["q.mp3"]}]}
-        result = hal.match_manifest(manifest, "PreToolUse", "AskUserQuestion", {}, {})
+        result = hal_voice.match_manifest(manifest, "PreToolUse", "AskUserQuestion", {}, {})
         assert result == ("PreToolUse:AskUserQuestion", "q.mp3")
 
-    def test_tool_matcher_wrong_tool(self, hal):
+    def test_tool_matcher_wrong_tool(self, hal_voice):
         manifest = {"PreToolUse:AskUserQuestion": [{"detection": "always", "clips": ["q.mp3"]}]}
-        result = hal.match_manifest(manifest, "PreToolUse", "Bash", {}, {})
+        result = hal_voice.match_manifest(manifest, "PreToolUse", "Bash", {}, {})
         assert result is None
 
-    def test_first_match_wins(self, hal):
+    def test_first_match_wins(self, hal_voice):
         manifest = {
             "Stop": [
                 {"detection": "regex", "pattern": "error", "clips": ["err.mp3"]},
@@ -275,11 +275,11 @@ class TestMatchManifest:
             ],
         }
         hook_input = {"last_assistant_message": "an error occurred"}
-        result = hal.match_manifest(manifest, "Stop", "", hook_input, {})
+        result = hal_voice.match_manifest(manifest, "Stop", "", hook_input, {})
         assert result is not None
         assert result[1] == "err.mp3"
 
-    def test_falls_through_to_second_rule(self, hal):
+    def test_falls_through_to_second_rule(self, hal_voice):
         manifest = {
             "Stop": [
                 {"detection": "regex", "pattern": "error", "clips": ["err.mp3"]},
@@ -287,28 +287,28 @@ class TestMatchManifest:
             ],
         }
         hook_input = {"last_assistant_message": "all good"}
-        result = hal.match_manifest(manifest, "Stop", "", hook_input, {})
+        result = hal_voice.match_manifest(manifest, "Stop", "", hook_input, {})
         assert result is not None
         assert result[1] == "default.mp3"
 
-    def test_no_match(self, hal):
+    def test_no_match(self, hal_voice):
         manifest = {"SessionStart": [{"detection": "always", "clips": ["a.mp3"]}]}
-        result = hal.match_manifest(manifest, "Stop", "", {}, {})
+        result = hal_voice.match_manifest(manifest, "Stop", "", {}, {})
         assert result is None
 
-    def test_empty_clips_skipped(self, hal):
+    def test_empty_clips_skipped(self, hal_voice):
         manifest = {"Stop": [{"detection": "always", "clips": []}]}
-        result = hal.match_manifest(manifest, "Stop", "", {}, {})
+        result = hal_voice.match_manifest(manifest, "Stop", "", {}, {})
         assert result is None
 
 
 class TestCleanupOldSessions:
-    def test_removes_expired(self, hal):
+    def test_removes_expired(self, hal_voice):
         state = {
             "session_start_times": {"old": 1000.0, "new": 90000.0},
             "subagent_sessions": {"old-child": 1000.0, "new-child": 90000.0},
         }
-        hal.cleanup_old_sessions(state, now=100000.0, max_age=86400)
+        hal_voice.cleanup_old_sessions(state, now=100000.0, max_age=86400)
         assert "old" not in state["session_start_times"]
         assert "new" in state["session_start_times"]
         assert "old-child" not in state["subagent_sessions"]
@@ -316,16 +316,16 @@ class TestCleanupOldSessions:
 
 
 class TestPlaySound:
-    def test_uses_native_afplay(self, hal, tmp_path):
+    def test_uses_native_afplay(self, hal_voice, tmp_path):
         clip = tmp_path / "clip.mp3"
         clip.touch()
 
-        with patch.object(hal.subprocess, "Popen") as popen:
+        with patch.object(hal_voice.subprocess, "Popen") as popen:
             popen.return_value.pid = 42
-            assert hal.play_sound(clip, 0.5) == 42
+            assert hal_voice.play_sound(clip, 0.5) == 42
 
         popen.assert_called_once_with(
             ["/usr/bin/afplay", "-v", "0.5", str(clip)],
-            stdout=hal.subprocess.DEVNULL,
-            stderr=hal.subprocess.DEVNULL,
+            stdout=hal_voice.subprocess.DEVNULL,
+            stderr=hal_voice.subprocess.DEVNULL,
         )

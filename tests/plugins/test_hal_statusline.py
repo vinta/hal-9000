@@ -34,12 +34,12 @@ def make_cache(uuid, *, status="done", result="", timed_out=False):
 
 
 class TestGrammarCheckPlaceholders:
-    def test_no_transcript_path(self, statusline, capsys):
-        statusline.grammar_check({"session_id": "test-session"})
+    def test_no_transcript_path(self, hal_statusline, capsys):
+        hal_statusline.grammar_check({"session_id": "test-session"})
 
         assert "Grammar: transcript_path not found" in capsys.readouterr().out
 
-    def test_no_checkable_input_shows_skipped(self, statusline, capsys, tmp_path):
+    def test_no_checkable_input_shows_skipped(self, hal_statusline, capsys, tmp_path):
         transcript = write_transcript(
             tmp_path,
             [
@@ -48,11 +48,11 @@ class TestGrammarCheckPlaceholders:
             ],
         )
 
-        statusline.grammar_check(make_data(transcript))
+        hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: skipped" in capsys.readouterr().out
 
-    def test_command_after_real_prompt_shows_skipped(self, statusline, capsys, tmp_path):
+    def test_command_after_real_prompt_shows_skipped(self, hal_statusline, capsys, tmp_path):
         transcript = write_transcript(
             tmp_path,
             [
@@ -61,74 +61,74 @@ class TestGrammarCheckPlaceholders:
             ],
         )
 
-        statusline.grammar_check(make_data(transcript))
+        hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: skipped" in capsys.readouterr().out
 
-    def test_empty_transcript_shows_nothing_to_check(self, statusline, capsys, tmp_path):
+    def test_empty_transcript_shows_nothing_to_check(self, hal_statusline, capsys, tmp_path):
         transcript = write_transcript(tmp_path, [])
 
-        statusline.grammar_check(make_data(transcript))
+        hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: nothing to check" in capsys.readouterr().out
 
-    def test_no_session_id(self, statusline, capsys, tmp_path):
+    def test_no_session_id(self, hal_statusline, capsys, tmp_path):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase")])
         data = make_data(transcript)
         del data["session_id"]
 
-        statusline.grammar_check(data)
+        hal_statusline.grammar_check(data)
 
         assert "Grammar: session_id not found" in capsys.readouterr().out
 
-    def test_model_timeout_shows_timed_out(self, statusline, capsys, tmp_path, monkeypatch):
+    def test_model_timeout_shows_timed_out(self, hal_statusline, capsys, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase", uuid="uuid-9")])
-        monkeypatch.setattr(statusline, "read_cache", lambda _cache_file: make_cache("uuid-9", timed_out=True))
+        monkeypatch.setattr(hal_statusline, "read_cache", lambda _cache_file: make_cache("uuid-9", timed_out=True))
 
-        statusline.grammar_check(make_data(transcript))
+        hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: timed out" in capsys.readouterr().out
 
-    def test_pending_run_shows_checking(self, statusline, capsys, tmp_path, monkeypatch):
+    def test_pending_run_shows_checking(self, hal_statusline, capsys, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase", uuid="uuid-9")])
-        monkeypatch.setattr(statusline, "read_cache", lambda _cache_file: make_cache("uuid-9", status="pending"))
+        monkeypatch.setattr(hal_statusline, "read_cache", lambda _cache_file: make_cache("uuid-9", status="pending"))
 
-        statusline.grammar_check(make_data(transcript))
+        hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: checking…" in capsys.readouterr().out
 
-    def test_cached_empty_result_shows_not_found(self, statusline, capsys, tmp_path, monkeypatch):
+    def test_cached_empty_result_shows_not_found(self, hal_statusline, capsys, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase", uuid="uuid-9")])
-        monkeypatch.setattr(statusline, "read_cache", lambda _cache_file: make_cache("uuid-9"))
+        monkeypatch.setattr(hal_statusline, "read_cache", lambda _cache_file: make_cache("uuid-9"))
 
-        statusline.grammar_check(make_data(transcript))
+        hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: result not found" in capsys.readouterr().out
 
-    def test_cached_result_still_prints_grammar(self, statusline, capsys, tmp_path, monkeypatch):
+    def test_cached_result_still_prints_grammar(self, hal_statusline, capsys, tmp_path, monkeypatch):
         transcript = write_transcript(tmp_path, [user_entry("fix the bug plase", uuid="uuid-9")])
-        monkeypatch.setattr(statusline, "read_cache", lambda _cache_file: make_cache("uuid-9", result="Grammar: no issues"))
+        monkeypatch.setattr(hal_statusline, "read_cache", lambda _cache_file: make_cache("uuid-9", result="Grammar: no issues"))
 
-        statusline.grammar_check(make_data(transcript))
+        hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: no issues" in strip_ansi(capsys.readouterr().out)
 
 
 class TestBasicInfo:
-    def test_agent_view_payload_without_effort(self, statusline, capsys, tmp_path):
-        statusline.basic_info({"model": {"id": "claude-haiku-4-5-20251001"}, "workspace": {"current_dir": str(tmp_path)}})
+    def test_agent_view_payload_without_effort(self, hal_statusline, capsys, tmp_path):
+        hal_statusline.basic_info({"model": {"id": "claude-haiku-4-5-20251001"}, "workspace": {"current_dir": str(tmp_path)}})
 
         out = strip_ansi(capsys.readouterr().out)
         assert out.startswith("Current: claude-haiku-4-5-20251001 · ")
 
-    def test_effort_rendered_when_present(self, statusline, capsys, tmp_path):
-        statusline.basic_info({"model": {"id": "claude-fable-5"}, "effort": {"level": "max"}, "workspace": {"current_dir": str(tmp_path)}})
+    def test_effort_rendered_when_present(self, hal_statusline, capsys, tmp_path):
+        hal_statusline.basic_info({"model": {"id": "claude-fable-5"}, "effort": {"level": "max"}, "workspace": {"current_dir": str(tmp_path)}})
 
         out = strip_ansi(capsys.readouterr().out)
         assert out.startswith("Current: claude-fable-5 max · ")
 
-    def test_usage_percentages_include_zero(self, statusline, capsys, tmp_path):
-        statusline.basic_info(
+    def test_usage_percentages_include_zero(self, hal_statusline, capsys, tmp_path):
+        hal_statusline.basic_info(
             {
                 "model": {"id": "claude-fable-5"},
                 "workspace": {"current_dir": str(tmp_path)},
