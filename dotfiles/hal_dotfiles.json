@@ -116,10 +116,6 @@
       "dest": "{{HOME}}/.claude/rules/"
     },
     {
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/output-styles/",
-      "dest": "{{HOME}}/.claude/output-styles/"
-    },
-    {
       "src": "{{REPO_ROOT}}/dotfiles/.claude/hooks/guard-bash-paths.py",
       "dest": "{{HOME}}/.claude/hooks/guard-bash-paths.py"
     },
