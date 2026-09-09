@@ -147,6 +147,10 @@ usePointerCursors = true
 enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
 conversationDetailMode = "STEPS_COMMANDS"
 
+[marketplaces.hal-9000]
+source_type = "git"
+source = "https://github.com/vinta/hal-9000.git"
+
 [marketplaces.ponytail]
 source_type = "git"
 source = "https://github.com/DietrichGebert/ponytail.git"
