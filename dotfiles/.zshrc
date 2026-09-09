@@ -142,7 +142,7 @@ alias ccyolo="claude --dangerously-skip-permissions"
 ccp() { claude --model sonnet --effort high --safe-mode --no-session-persistence --no-chrome -p "$*"; }
 
 alias cx='codex'
-alias cxultra='codex --model gpt-6-astra --config model_reasoning_effort=ultra'
+alias cxmax='codex --model gpt-6-astra --config model_reasoning_effort=max'
 alias cxyolo='codex --dangerously-bypass-approvals-and-sandbox'
 
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
