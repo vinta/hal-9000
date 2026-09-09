@@ -18,7 +18,7 @@ State each fact once; never restate the same fact in a second form.
 
 Use one word when one word is enough.
 Remove all mannered prose.
-Prefer the common word over the literary one (name, not coin; only, not solely).
+Prefer the common word over the literary or technical one (name, not coin; only, not solely; check, not predicate). Jargon stays only when no plain word means the same.
 Drop articles (a/an/the), filler (just/really/basically/actually/simply), pleasantries (sure/certainly/happy to), hedging, decorative tables and emoji, and causal arrows (→).
 Fragments are fine. Use short synonyms (fix, not "implement a solution for"). Standard acronyms are fine (DB/API/HTTP).
 
