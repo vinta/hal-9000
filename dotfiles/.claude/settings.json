@@ -160,30 +160,31 @@
     ]
   },
   "enableArtifact": false,
+  "workflowSizeGuideline": "small",
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/hal-statusline.py",
     "refreshInterval": 1
   },
   "enabledPlugins": {
-    "mattpocock-skills@mattpocock": true,
     "hal-skills@hal-9000": true,
     "hal-output-styles@hal-9000": true,
     "hal-voice@hal-9000": true,
-    "hal-session-auto-rename@hal-9000": true
+    "hal-session-auto-rename@hal-9000": true,
+    "mattpocock-skills@mattpocock": true
   },
   "extraKnownMarketplaces": {
-    "mattpocock": {
-      "source": {
-        "source": "github",
-        "repo": "mattpocock/skills"
-      },
-      "autoUpdate": true
-    },
     "hal-9000": {
       "source": {
         "source": "github",
         "repo": "vinta/hal-9000"
+      },
+      "autoUpdate": true
+    },
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
       },
       "autoUpdate": true
     }
@@ -199,11 +200,10 @@
   },
   "showThinkingSummaries": true,
   "skipWorkflowUsageWarning": true,
-  "workflowSizeGuideline": "small",
   "switchModelsOnFlag": false,
   "teammateMode": "auto",
-  "isolatePeerMachines": true,
   "remoteControlAtStartup": false,
+  "isolatePeerMachines": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false,
   "skipAutoPermissionPrompt": true
