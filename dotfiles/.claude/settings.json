@@ -4,7 +4,6 @@
   "env": {
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_RETRY_WATCHDOG": "1",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
@@ -13,6 +12,7 @@
     "HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA": "1"
   },
   "includeGitInstructions": false,
+  "bashOutputMaxChars": 100000,
   "permissions": {
     "allow": [
       "Read(~/Projects/**)",
@@ -200,8 +200,10 @@
   },
   "showThinkingSummaries": true,
   "skipWorkflowUsageWarning": true,
+  "workflowSizeGuideline": "small",
   "switchModelsOnFlag": false,
   "teammateMode": "auto",
+  "isolatePeerMachines": true,
   "remoteControlAtStartup": false,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false,
