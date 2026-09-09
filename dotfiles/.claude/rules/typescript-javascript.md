@@ -25,7 +25,8 @@ Check a proposed name against every bullet here before presenting it. Existing c
 - An identifier mirrors its domain type name (`lateFixes: LateFix[]`, `ambiguousShape: AmbiguousShape`), never a shortened synonym. This covers parameters, loop variables, and destructured locals. A generic platform type (`Node`, `string`) carries nothing, so that identifier names its role instead: `contextNode`, not `node`
 - An action is the bare verb, the gerund is the noun or modifier: `spaceText()`, `spacingMode`. A predicate about whether to act takes the verb (`shouldAutoSpace`); a predicate about the concept's state keeps the noun (`hasProperSpacing`). Feature names stay as their ADR spells them (`applyAiSpacing`)
 - Name a field or local by its state (`unspaced`, `settled`), never by relative position (`before`, `after`) or by mechanism (`pending`, `unflushed`). One thing at two moments is two types, never one type with optional later-moment fields
-- Prefer the concrete compound that names the visible thing and matches existing code over an abstract, mechanism, or transport noun: `AmbiguousShape`, not `Ambiguity`; `Candidate`, not `ClassifyRequest`. Only the envelope carries a transport noun (`Message`, `Request`, `Response`)
+- Prefer the concrete compound that names the visible thing and matches existing code over an abstract or mechanism noun: `AmbiguousShape`, not `Ambiguity`
+- A transport noun (`Message`, `Request`, `Response`) belongs to the envelope only; the payload is named by what it is: `Candidate`, not `ClassifyRequest`
 - A result type is the noun of the verb that produces it: `decideBoundarySpacing()` returns `BoundarySpacingDecision`, not `BoundarySpacingVerdict`
 - A callback is named by what changed, never by the container the event came in: `onTextNodesSettled(settledTextNodes)`, not `onBatchSettled`
 - A wrapped function keeps the verb first and the wrapper as a suffix: `spaceTitleDebounced`, not `debouncedSpaceTitle`
