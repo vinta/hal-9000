@@ -44,7 +44,7 @@ Analyzes a skill's full content, SKILL.md and any sibling files in the same dire
 
 5. **Compare**: For each tool detected in the body, check if it's covered by an entry in `allowed-tools`. Rules:
    - `Glob`, `Grep`, and `Read` are permission-free within the project directory. Only add read rules for files **outside** the project (e.g., `Read(//tmp/**)`).
-   - `Write` and `Edit` prompt for approval by default, inside the project too. `allowed-tools` grants permission rather than restricting tools, so add entries scoped to the paths the skill is meant to modify (e.g., `Edit(CLAUDE.md)`, `Write(~/.config/**)`).
+   - `Write` and `Edit` prompt for approval by default, inside the project too. `allowed-tools` grants permission rather than restricting tools, so add entries scoped to the paths the skill is meant to modify (e.g., `Edit(CLAUDE.md)`, `Edit(~/.config/**)`). Use `Edit(path)` for file creation too: Claude Code checks file permissions against `Edit(path)` and `Read(path)` rules only, and never consults a `Write(path)` rule.
    - `Bash` commands always need explicit `Bash(<command>:*)` entries.
    - A Bash pattern covers subcommands (e.g., `Bash(git stash:*)` covers `git stash push`).
    - Exact match counts as covered (e.g., `WebSearch` matches `WebSearch`).
