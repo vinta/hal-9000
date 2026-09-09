@@ -24,7 +24,9 @@ Invoking this skill IS the request. Your task is fully specified here. Never ask
 
 `cd` to `git rev-parse --show-toplevel` before anything else.
 
-Determine the mode from `$ARGUMENTS`: if it contains "merge", run merge mode. Otherwise, run create mode.
+The user invoked this skill with: "$ARGUMENTS"
+
+Arguments containing `merge` mean merge mode. Anything else, including empty, means create mode.
 
 ## Create mode
 
