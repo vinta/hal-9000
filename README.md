@@ -112,7 +112,9 @@ hal update --tags python,node         # Run specific Ansible roles
 hal link ~/.zshrc                     # Move file into dotfiles/ and symlink it back
 hal unlink ~/.zshrc                   # Move file back from dotfiles/ and remove the symlink
 hal sync                              # Sync all links
+hal sync --force                      # Same, but replace real directories sitting at link destinations
 hal backup                            # Back up live data to Dropbox
+hal backup --prune                    # Also delete backup files that no longer exist locally, after asking
 hal restore                           # Restore live data from Dropbox (overwrites local)
 hal open-the-pod-bay-doors            # Open the pod bay doors, please, HAL
 ```
