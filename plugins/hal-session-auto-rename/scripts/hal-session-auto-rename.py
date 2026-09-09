@@ -255,6 +255,7 @@ def run_ollama_title_model(prompt: str) -> str | None:
 
 def run_claude_title_model(prompt: str) -> str | None:
     # `--setting-sources ""` to disable hooks
+    # `--safe-mode` to skip CLAUDE.md/skills/plugins/MCP/auto-memory loading
     # `--no-session-persistence` and `cwd="/tmp"` to avoid polluting your current context
     cmd = """
         claude
@@ -265,6 +266,7 @@ def run_claude_title_model(prompt: str) -> str | None:
         --disable-slash-commands
         --no-session-persistence
         --no-chrome
+        --safe-mode
         --print
     """
     try:
