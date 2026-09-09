@@ -1,7 +1,7 @@
 ---
 name: pr
-description: "Use when the user explicitly asks to push the current branch and open a PR; with `merge`, waits for CI and merges it"
-argument-hint: "[create | merge]"
+description: "Use when the user explicitly asks to push the current branch and open a PR, rewrite an open PR's body from its commits, or wait for CI and merge it"
+argument-hint: "[create | update | merge]"
 user-invocable: true
 context: fork
 model: sonnet
@@ -25,20 +25,33 @@ Your first Bash call is `cd "$(git rev-parse --show-toplevel)"`, alone, once. Th
 
 The user invoked this skill with: "$ARGUMENTS"
 
-Arguments containing `merge` mean merge mode. Anything else, including empty, means create mode.
+Mode comes from the arguments first: `create` means create mode, `update` means update mode, `merge` means merge mode. With none of those three words, including an empty argument, run `gh pr view --json state --jq .state 2>/dev/null` and let its result decide: a non-zero exit (no PR for this branch) means create mode, `OPEN` means update mode, any other state means report that state and stop. Merge mode only ever comes from the argument.
+
+## PR material
+
+Create mode and update mode run these steps where they say "gather PR material":
+
+1. `git log --format='%n%s' --name-only main..HEAD` (fall back to `master..HEAD`). Each commit is a block: its subject, then the files it touched. A flat log next to a branch-wide diff stat lets the writer guess which commit touched which file.
+2. The PR describes the net change of the branch. A commit whose subject starts with `Revert "` and the commit it names cancel each other when both sit in the log, and a subject starting with `chore: bump` describes no change. Remove those blocks from the log before passing it on.
+3. Invoke the `hal-skills:write-like-me` skill. Pass as argument: "Write a GitHub PR title and body. Output the title as the first line, a blank line, then the body, with no labels or headings around them. Title: one plain-English line, no type prefix, under 72 chars, no backticks. Body: 1-3 sentences of prose — what changed, why. No headings, no lists. In the body, wrap every file path, command, flag, and identifier in backticks, at every occurrence, like `plugins/hal-output-styles/plugin.json`, `~/.claude/skills`, `hal sync`, `say-no-more`. Material:" followed by the log from step 2.
+4. From `write-like-me`'s output, take the first line as title, the rest as body.
 
 ## Create mode
 
 1. `git rev-parse --abbrev-ref HEAD` — abort if `main` or `master`.
 2. `gh pr view --json url 2>/dev/null` — if a PR already exists, report its URL and stop.
 3. `git push -u origin HEAD`.
-4. Gather PR material:
-   - `git log --oneline main..HEAD` (fall back to `master..HEAD`)
-   - `git diff --stat main..HEAD`
-5. Invoke the `hal-skills:write-like-me` skill. Pass as argument: "Write a GitHub PR title and body. Output the title as the first line, a blank line, then the body, with no labels or headings around them. Title: one plain-English line, no type prefix, under 72 chars, no backticks. Body: 1-3 sentences of prose — what changed, why. No headings, no lists. In the body, wrap every file path, command, flag, and identifier in backticks, at every occurrence, like `plugins/hal-output-styles/plugin.json`, `~/.claude/skills`, `hal sync`, `say-no-more`. Material:" followed by the git log and diff stat output from step 4.
-6. From `write-like-me`'s output, take the first line as title, the rest as body.
-7. `gh pr create --title "<title>" --body "<body>"`.
-8. Report the PR URL.
+4. Gather PR material.
+5. `gh pr create --title "<title>" --body "<body>"`.
+6. Report the PR URL.
+
+## Update mode
+
+1. `gh pr view --json url,state 2>/dev/null` — abort if no PR or not open.
+2. `git log --oneline @{u}..HEAD` — if it lists commits, `git push` so the PR shows them.
+3. Gather PR material.
+4. `gh pr edit --body "<body>"` — the title stays as it is.
+5. Report the PR URL.
 
 ## Merge mode
 

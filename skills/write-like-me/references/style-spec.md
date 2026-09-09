@@ -1,6 +1,6 @@
 # Style spec — the user's voice
 
-Measurable voice features extracted from the user's published writing (see [README.md](README.md) for sources). Quotes are verbatim. When a rule here fights the cardinal rule in SKILL.md, the cardinal rule wins.
+Measurable voice features extracted from the user's published writing (see [README.md](README.md) for sources). Quotes are verbatim. When a rule here fights the main rule in SKILL.md, the main rule wins.
 
 For cases no rule below covers, fall back to the user's stance: compress — padding is noise, cut it; verify — check a claim before making it; deflate — never hype anything, including the user's own work; cast — reach for a device only where it fits; repair in public — when something was wrong, say so plainly and fix it in the open.
 

@@ -12,7 +12,7 @@ Audit the scope for over-engineering and report what to cut, ranked biggest cut 
 ## Tags
 
 - `delete:` dead code, unused flexibility, speculative feature. Nothing replaces it.
-- `reuse:` bespoke code that a helper already in this codebase, or an installed dependency, already provides. Name the helper or function.
+- `reuse:` hand-written code that a helper already in this codebase, or an installed dependency, already provides. Name the helper or function.
 - `stdlib:` hand-rolled thing the language's standard library ships. Name the function.
 - `native:` dependency or code doing what the platform already does. Name the feature.
 - `yagni:` abstraction with one implementation, config nobody sets, layer with one caller.
@@ -44,4 +44,4 @@ Then offer the findings with AskUserQuestion, multiSelect, in ranked batches of 
 
 ## Boundaries
 
-Over-engineering and complexity only: correctness bugs, security holes, and performance belong to a normal review pass. Trust-boundary validation, data-loss handling, security, and accessibility are never cuts. A single smoke test or assert-based self-check is the minimum, not bloat. Tests enter the report only as collateral of a deleted target.
+Over-engineering and complexity only: correctness bugs, security holes, and performance belong to a normal review pass. Trust-boundary validation, data-loss handling, security, and accessibility are never cuts. A single smoke test or assert-based self-check is the minimum, not bloat. Tests enter the report only as a side effect of a deleted target.

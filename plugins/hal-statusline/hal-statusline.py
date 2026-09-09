@@ -179,7 +179,7 @@ Output format:
 - Each issue on its own line: Grammar: "[corrected]" => explanation in Traditional Chinese
 - Use full-width commas (，) in Chinese explanations
 - No errors: output exactly "Grammar: no issues"
-- Output ONLY the "Grammar: ..." line(s). No extra commentary, no preamble, no explanations beyond the correction format above.
+- Output ONLY the "Grammar: ..." line(s). No commentary, no extra text, no explanations beyond the correction format above.
 </instructions>
 
 <examples>
