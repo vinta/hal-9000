@@ -36,7 +36,7 @@ Arguments containing `merge` mean merge mode. Anything else, including empty, me
 4. Gather PR material:
    - `git log --oneline main..HEAD` (fall back to `master..HEAD`)
    - `git diff --stat main..HEAD`
-5. Invoke the `hal-skills:write-like-me` skill. Pass as argument: "Write a GitHub PR title and body. Title: one plain-English line, no type prefix, under 72 chars. Body: 1-3 sentences — what changed, why. Nothing else. Material:" followed by the git log and diff stat output from step 4.
+5. Invoke the `hal-skills:write-like-me` skill. Pass as argument: "Write a GitHub PR title and body. Output the title as the first line, a blank line, then the body, with no labels or headings around them. Title: one plain-English line, no type prefix, under 72 chars, no backticks. Body: 1-3 sentences of prose — what changed, why. No headings, no lists. In the body, wrap every file path, command, flag, and identifier in backticks, at every occurrence, like `plugins/hal-output-styles/plugin.json`, `~/.claude/skills`, `hal sync`, `say-no-more`. Material:" followed by the git log and diff stat output from step 4.
 6. From `write-like-me`'s output, take the first line as title, the rest as body.
 7. `gh pr create --title "<title>" --body "<body>"`.
 8. Report the PR URL.
