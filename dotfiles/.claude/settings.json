@@ -12,7 +12,6 @@
     "HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA": "1"
   },
   "includeGitInstructions": false,
-  "bashOutputMaxChars": 100000,
   "permissions": {
     "allow": [
       "Read(~/Projects/**)",
