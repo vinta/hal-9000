@@ -1,6 +1,6 @@
 ---
 name: pr
-description: "Push the current branch and open a PR; with `merge`, wait for CI and merge"
+description: "Use when ready to push the current branch and open a PR; with `merge`, waits for CI and merges it"
 argument-hint: "[merge]"
 user-invocable: true
 disable-model-invocation: true
