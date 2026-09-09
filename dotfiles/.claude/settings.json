@@ -160,7 +160,7 @@
       }
     ]
   },
-  "disableArtifact": true,
+  "enableArtifact": false,
   "statusLine": {
     "type": "command",
     "command": "python3 ~/.claude/statusline/hal-statusline.py",
@@ -200,7 +200,6 @@
   },
   "showThinkingSummaries": true,
   "skipWorkflowUsageWarning": true,
-  "verbose": true,
   "switchModelsOnFlag": false,
   "teammateMode": "auto",
   "remoteControlAtStartup": false,
