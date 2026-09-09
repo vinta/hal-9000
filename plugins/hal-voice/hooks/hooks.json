@@ -60,11 +60,10 @@
     ],
     "PostToolUseFailure": [
       {
-        "main_agent_only": true,
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-voice.py --main-agent-only",
             "async": true
           }
         ]

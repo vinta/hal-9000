@@ -198,7 +198,6 @@ Manifest = dict[str, list[Rule]]
 
 
 PLUGIN_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve().parent.parent))
-HOOKS_PATH = PLUGIN_ROOT / "hooks" / "hooks.json"
 MANIFEST_PATH = PLUGIN_ROOT / "manifest.json"
 CONFIG_PATH = PLUGIN_ROOT / "config.json"
 STATE_PATH = Path("/tmp/hal-voice-state.json")  # noqa: S108 hardcoded-temp-file
@@ -231,14 +230,6 @@ if not logger.handlers:
     file_handler = RotatingFileHandler(LOG_PATH, maxBytes=LOG_MAX_BYTES, backupCount=1)
     file_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
     logger.addHandler(file_handler)
-
-
-def _is_main_agent_only(hook_event: str) -> bool:
-    try:
-        hooks_config = json.loads(HOOKS_PATH.read_text())
-    except (FileNotFoundError, json.JSONDecodeError, OSError):
-        return False
-    return any(rule.get("main_agent_only") for rule in hooks_config.get("hooks", {}).get(hook_event, []))
 
 
 def current_entrypoint() -> str:
@@ -468,8 +459,9 @@ def main() -> None:
         try:
             _record_tracking(hook_event, hook_input, state, session_id=session_id, now=now)
 
-            if hook_input.get("agent_id") and _is_main_agent_only(hook_event):
-                logger.info("suppressed %s in subagent (main_agent_only)", hook_event)
+            # hooks.json passes --main-agent-only per rule; a matcher group accepts only "matcher" and "hooks"
+            if hook_input.get("agent_id") and "--main-agent-only" in sys.argv:
+                logger.info("suppressed %s in subagent (--main-agent-only)", hook_event)
                 return
 
             if _is_suppressed(hook_event, state, config, session_id=session_id, now=now):
