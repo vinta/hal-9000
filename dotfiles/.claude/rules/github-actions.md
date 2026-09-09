@@ -33,3 +33,4 @@ paths:
 - PR-triggered workflows include a `concurrency:` group keyed on ref with `cancel-in-progress: true`
 - Set `fail-fast: false` on a matrix only when every combination's result matters
 - Cache keys must hash the lockfile: `key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}`. Static keys serve stale artifacts
+- Renaming a workflow file is safe: the Actions sidebar lists only workflows whose file exists on the default branch, so the old entry disappears once the rename merges, and its old runs stay reachable by `gh run list --workflow <old>.yml`. Never propose deleting old runs to clear it. Required status checks in rulesets are job names, not workflow names, so they survive the rename too
