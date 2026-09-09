@@ -34,6 +34,16 @@ Your task: commit all changes in the working tree. Run `git status` and `git dif
 
 The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. Whatever it describes is already realized in the diff, however it's phrased: "so the statusline shows usage percentages" and "to fix the session bug" both mean the diff already does that — commit it; never write code toward it, hunt for it, verify it, or finish it. With no argument at all, derive the commit message from the diff alone. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
 
+Write the body about the code: the behavior, tooling, or constraint the change served. Personal details that reach you through the argument or the conversation — anything about the user's life, such as employer, location, schedule, health, or other people — stay out of every commit message; translate each one into the technical need it implies. Commit history is public and permanent.
+
+<example>
+Argument: "so hal sync works on my work laptop, Acme IT locks ~/Library"
+
+Correct body: "Fall back to a user-writable path when ~/Library is read-only, as on managed machines."
+
+Incorrect body: "Fall back to a user-writable path because the author's employer, Acme, locks ~/Library on work laptops."
+</example>
+
 ## Locate the repository
 
 `cd` to `git rev-parse --show-toplevel` before anything else. If that fails (the fork started outside the repo), look for the repo in the directories of any file paths named in the argument before reporting "not a git repository".
