@@ -42,12 +42,13 @@ Determine the mode from `$ARGUMENTS`: if it contains "merge", run merge mode. Ot
 ## Merge mode
 
 1. `gh pr view --json url,number,state` — abort if no PR or not open.
-2. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout.
-3. If exit code 0 (all checks passed):
+2. `git log --oneline @{u}..HEAD` — if it lists commits, `git push` so CI and the merge see them.
+3. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If you pushed and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once.
+4. If exit code 0 (all checks passed):
    - `gh pr merge --merge --delete-branch`
    - `git switch main && git pull`
    - Delete local branch if it still exists: `git branch -d <branch>`
    - Report: merged, remote and local branches cleaned up.
-4. If non-zero (check failed):
+5. If non-zero (check failed):
    - Run `gh pr checks` once more to list failed checks and their URLs.
    - Report which checks failed. Take no other action.
