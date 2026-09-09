@@ -85,14 +85,14 @@ Plugins that wire their own hooks and run themselves:
 - [hal-output-styles](plugins/hal-output-styles): Make Claude Code talk like an INTJ
   - [Say no more](plugins/hal-output-styles/output-styles/say-no-more.md)
   - [ASD-STE100](plugins/hal-output-styles/output-styles/asd-ste100.md)
-- [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 - [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session and rename it as the conversation evolves
+- [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
 /plugin marketplace add vinta/hal-9000
 /plugin install hal-output-styles@hal-9000
-/plugin install hal-voice@hal-9000
 /plugin install hal-session-auto-rename@hal-9000
+/plugin install hal-voice@hal-9000
 ```
 
 ### Claude Code Statusline
