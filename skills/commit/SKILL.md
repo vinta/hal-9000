@@ -85,7 +85,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 
 ## Workflow
 
-`cd` to the project root before git commands instead of using `git -C`, which obscures working directory state. Execute git commands directly without explanatory preamble. Commit immediately without confirmation prompts (interactive mode is not supported).
+`cd` to the project root before git commands instead of using `git -C`, which hides working directory state. Execute git commands directly without explanation. Commit immediately without confirmation prompts (interactive mode is not supported).
 
 1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory.
 
@@ -97,7 +97,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
    - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work)
    - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
-4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry indefinitely.
+4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry forever.
 
 5. **Create Atomic Commits**: For each logical group:
    - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: why, drawn from the argument when one was given. Skip the body when the why is obvious from the subject. Always end the message with the `Co-Authored-By` footer from the Attribution section below.

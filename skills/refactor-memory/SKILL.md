@@ -24,7 +24,7 @@ Refactor a project's auto memory. `MEMORY.md` is loaded into every session and e
 
 1. **Pick the target.** If the invocation names a directory, use it. Otherwise use the memory directory named in this session's system prompt, the one holding `MEMORY.md`. Read `MEMORY.md`, every topic file, and what the audit compares against: the loaded CLAUDE.md files, `.claude/rules/`, and `~/.claude/rules/`.
 
-2. **Fetch the yardstick.** Fetch https://code.claude.com/docs/en/memory#auto-memory for the current index load limits, the memory types, and what auto memory is meant to skip.
+2. **Fetch the guide.** Fetch https://code.claude.com/docs/en/memory#auto-memory for the current index load limits, the memory types, and what auto memory is meant to skip.
 
 3. **Audit topic files.** Give every topic file exactly one verdict, with the evidence beside it. Done when no file lacks one.
    - **contradiction**: conflicts with another memory, or with the current state of the rule, CLAUDE.md line, or code it describes. Record both sides.

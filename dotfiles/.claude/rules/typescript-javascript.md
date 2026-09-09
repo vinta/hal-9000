@@ -19,7 +19,7 @@ paths:
 
 ## Naming
 
-Every name you coin, in code or in a proposal, passes every bullet here before it lands. An existing name that fails a bullet is not precedent to copy, and not a rename in this change; report it as a follow-up.
+Every name you pick, in code or in a proposal, passes every bullet here before it lands. An existing name that fails a bullet is not precedent to copy, and not a rename in this change; report it as a follow-up.
 
 - **One value has one name everywhere it appears**. When two records carry the same value under two names, rename to the one that already matches the domain vocabulary
 - An identifier mirrors its domain type name (`lateFixes: LateFix[]`, `ambiguousShape: AmbiguousShape`), never a shortened synonym. This covers parameters, loop variables, and destructured locals. A generic platform type (`Node`, `string`) carries nothing, so that identifier names its role instead: `contextNode`, not `node`

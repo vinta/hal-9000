@@ -26,7 +26,7 @@ The file serves every model the user runs, not only the one this session runs on
    - The user-level CLAUDE.md at `~/.claude/CLAUDE.md`
    - The current project's CLAUDE.md
 
-2. **Fetch the yardsticks.** Fetch these pages. They calibrate the delete and rewrite verdicts below:
+2. **Fetch the guides.** Fetch these pages. They calibrate the delete and rewrite verdicts below:
    - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
    - https://www.aihero.dev/a-complete-guide-to-agents-md
    - The pages for both models, regardless of which one this session runs on:

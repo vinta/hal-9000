@@ -2,7 +2,7 @@
 
 A synthesis of the global-audience guidance that mainstream tech documentation teams use: the Google and Microsoft style guides, MDN, Red Hat, GitLab, John Kohl's Global English, and the US Federal Plain Language Guidelines. Sources with links are in [README.md](README.md).
 
-These are guidelines, not a controlled language. Kohl's cardinal rule governs every edit: make no change that sounds unnatural to a native speaker. When a rule fights naturalness or accuracy in a specific sentence, the sentence wins.
+These are guidelines, not a controlled language. Kohl's main rule governs every edit: make no change that sounds unnatural to a native speaker. When a rule fights naturalness or accuracy in a specific sentence, the sentence wins.
 
 ## Paragraphs
 
@@ -54,7 +54,7 @@ Translation and comprehension fail on omitted function words. Keep them:
 - Common contractions are fine (it's, you're, don't). Avoid uncommon ones (mightn't, it'd).
 - Prefer positive constructions: say what to do, not only what to avoid. Rewrite a negative as its positive equivalent when one exists ("The build fails only when the cache is missing", not "The build does not fail unless the cache is missing"), and never stack negatives.
 - Gender-neutral language. Singular "they" is correct.
-- Keep the author's voice. Clarity edits that flatten prose into staccato fragments trade one reading problem for another.
+- Keep the author's voice. Clarity edits that flatten prose into choppy fragments trade one reading problem for another.
 
 ## What this ruleset deliberately does not do
 

@@ -14,7 +14,7 @@ Refactor an `AGENTS.md` for GPT-6 Astra. Every retained line enters each Codex s
    - The current project's root `AGENTS.md`.
    - Any nested `AGENTS.md` on the path from the project root to the current working directory.
 
-2. **Fetch the yardsticks.** Fetch these pages to calibrate the audit. Use the GPT-6 Astra prompting guidance for model behavior and the AGENTS.md guide for organization; preserve explicit user choices where the guides offer defaults. If a source is unavailable, disclose the gap and continue with available evidence.
+2. **Fetch the guides.** Fetch these pages to calibrate the audit. Use the GPT-6 Astra prompting guidance for model behavior and the AGENTS.md guide for organization; preserve explicit user choices where the guides offer defaults. If a source is unavailable, disclose the gap and continue with available evidence.
    - https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra
    - https://www.aihero.dev/a-complete-guide-to-agents-md
 
