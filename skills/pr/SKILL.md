@@ -35,7 +35,7 @@ Determine the mode from `$ARGUMENTS`: if it contains "merge", run merge mode. Ot
    - `git log --oneline main..HEAD` (fall back to `master..HEAD`)
    - `git diff --stat main..HEAD`
 5. Invoke the `hal-skills:write-like-me` skill. Pass as argument: "Write a GitHub PR title and body. Title: one plain-English line, no type prefix, under 72 chars. Body: 1-3 sentences — what changed, why. Nothing else. Material:" followed by the git log and diff stat output from step 4.
-6. From write-like-me's output, take the first line as title, the rest as body.
+6. From `write-like-me`'s output, take the first line as title, the rest as body.
 7. `gh pr create --title "<title>" --body "<body>"`.
 8. Report the PR URL.
 
