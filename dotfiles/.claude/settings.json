@@ -167,7 +167,6 @@
     "refreshInterval": 1
   },
   "enabledPlugins": {
-    "codex@openai-codex": true,
     "mattpocock-skills@mattpocock": true,
     "hal-skills@hal-9000": true,
     "hal-output-styles@hal-9000": true,
@@ -175,13 +174,6 @@
     "hal-session-auto-rename@hal-9000": true
   },
   "extraKnownMarketplaces": {
-    "openai-codex": {
-      "source": {
-        "source": "github",
-        "repo": "openai/codex-plugin-cc"
-      },
-      "autoUpdate": true
-    },
     "mattpocock": {
       "source": {
         "source": "github",
