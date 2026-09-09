@@ -11,7 +11,7 @@ Opinionated AI coding agent and dev environment automation for macOS that domina
 All-in-one command to set up:
 
 - [Agent Skills](skills)
-- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Output Styles](dotfiles/.claude/output-styles) / [Statusline](plugins/hal-statusline)
+- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
 - [Codex](dotfiles/.codex)
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
@@ -82,13 +82,17 @@ npx skills add vinta/hal-9000
 
 Plugins that wire their own hooks and run themselves:
 
-- [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session and rename it as the conversation evolves
+- [hal-output-styles](plugins/hal-output-styles): Make Claude Code talk like an INTJ
+  - [Say no more](plugins/hal-output-styles/output-styles/say-no-more.md)
+  - [ASD-STE100](plugins/hal-output-styles/output-styles/asd-ste100.md)
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
+- [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session and rename it as the conversation evolves
 
 ```bash
 /plugin marketplace add vinta/hal-9000
-/plugin install hal-session-auto-rename@hal-9000
+/plugin install hal-output-styles@hal-9000
 /plugin install hal-voice@hal-9000
+/plugin install hal-session-auto-rename@hal-9000
 ```
 
 ### Claude Code Statusline

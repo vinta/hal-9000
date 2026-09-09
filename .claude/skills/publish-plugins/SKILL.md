@@ -25,6 +25,7 @@ Each plugin owns its version in its own `.claude-plugin/plugin.json`, and the re
 | Plugin                    | Manifest                                                     |
 | ------------------------- | ------------------------------------------------------------ |
 | `hal-skills`              | `skills/.claude-plugin/plugin.json`                          |
+| `hal-output-styles`       | `plugins/hal-output-styles/.claude-plugin/plugin.json`       |
 | `hal-voice`               | `plugins/hal-voice/.claude-plugin/plugin.json`               |
 | `hal-session-auto-rename` | `plugins/hal-session-auto-rename/.claude-plugin/plugin.json` |
 
@@ -71,6 +72,7 @@ It exits non-zero naming each problem. Fix the manifests it names, then run it a
 ```bash
 claude plugin validate .
 claude plugin validate ./skills
+claude plugin validate ./plugins/hal-output-styles
 claude plugin validate ./plugins/hal-voice
 claude plugin validate ./plugins/hal-session-auto-rename
 ```
