@@ -1,9 +1,8 @@
 ---
 name: pr
-description: "Use when ready to push the current branch and open a PR; with `merge`, waits for CI and merges it"
+description: "Use when the user explicitly asks to push the current branch and open a PR; with `merge`, waits for CI and merges it"
 argument-hint: "[create | merge]"
 user-invocable: true
-disable-model-invocation: true
 context: fork
 model: sonnet
 effort: medium
