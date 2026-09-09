@@ -128,14 +128,6 @@
       "dest": "{{HOME}}/.claude/statusline/hal-statusline.py"
     },
     {
-      "src": "{{REPO_ROOT}}/skills/commit",
-      "dest": "{{HOME}}/.claude/skills/commit"
-    },
-    {
-      "src": "{{REPO_ROOT}}/skills/pr",
-      "dest": "{{HOME}}/.claude/skills/pr"
-    },
-    {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md",
       "dest": "{{HOME}}/.codex/AGENTS.md"
     },
