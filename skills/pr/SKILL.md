@@ -49,12 +49,10 @@ Add pr skill for pushing branches and opening PRs
 Adds a `pr` skill that pushes the current branch, drafts a PR title and body with `write-like-me`, and opens the PR with `gh`. Wires it into the plugin manifest and marketplace so it ships with `hal-skills`.
 </example>
 
-Two or more changes: a lead line that counts them, then one `-` item per change, each item 1-3 short sentences stating the change and one before/after example when the change has a visible input and output. Apply this to every change, not only the first.
+Two or more changes: one `-` item per change, each item 1-3 short sentences stating the change and one before/after example when the change has a visible input and output. Apply this to every change, not only the first.
 
 <example>
-Protect URLs and slashes from spacing rules
-
-3 rule changes:
+Move name-suffix into core rules and protect URLs and slashes
 
 - Move `name-suffix` from AI spacing into the core rules.
 - URLs are left alone. Anything starting with `http://` or `https://` is hidden from the rules, so `%E4%B8%AD` and `/wiki/CJK#CJK` survive.
