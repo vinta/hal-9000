@@ -32,9 +32,38 @@ Mode comes from the arguments first: `create` means create mode, `update` means 
 Create mode and update mode run these steps where they say "gather PR material":
 
 1. `git log --format='%n%s' --name-only main..HEAD` (fall back to `master..HEAD`). Each commit is a block: its subject, then the files it touched. A flat log next to a branch-wide diff stat lets the writer guess which commit touched which file.
+
 2. The PR describes the net change of the branch. A commit whose subject starts with `Revert "` and the commit it names cancel each other when both sit in the log, and a subject starting with `chore: bump` describes no change. Remove those blocks from the log before passing it on.
-3. Invoke the `write-like-me` skill. Pass as argument: "Write a GitHub PR title and body. Output the title as the first line, a blank line, then the body, with no labels or headings around them. Title: one plain-English line, no type prefix, under 72 chars, no backticks. Body: 1-3 sentences of prose — what changed, why. No headings, no lists. In the body, wrap every file path, command, flag, and identifier in backticks, at every occurrence, like `plugins/hal-output-styles/plugin.json`, `~/.claude/skills`, `hal sync`, `say-no-more`. Material:" followed by the log from step 2.
-4. From `write-like-me`'s output, take the first line as title, the rest as body.
+
+3. `git log --format=%b main..HEAD` (same fallback). Collect every issue number written as `#N` or as a GitHub issue URL. Each one becomes a `Fix #N` line at the end of the body, one per line, no duplicates.
+
+4. Invoke the `write-like-me` skill. Pass as argument: "Write a GitHub PR title and body from the material below. Output the title as the first line, a blank line, then the body, and nothing else: the caller splits on the first line, so a label or heading would land in the title.
+
+Title: one plain-English line under 72 chars that names the change itself, with no `fix:` or `feat:` type prefix. GitHub shows titles as plain text, so write file names bare, without backticks. Body: GitHub renders it as markdown, so wrap every file path, command, flag, and identifier in backticks, at every occurrence. Body shape depends on how many separate changes the branch holds.
+
+One change: 1-3 sentences of prose, what changed and why, no list.
+
+<example>
+Add pr skill for pushing branches and opening PRs
+
+Adds a `pr` skill that pushes the current branch, drafts a PR title and body with `write-like-me`, and opens the PR with `gh`. Wires it into the plugin manifest and marketplace so it ships with `hal-skills`.
+</example>
+
+Two or more changes: a lead line that counts them, then one `-` item per change, each item 1-3 short sentences stating the change and one before/after example when the change has a visible input and output. Apply this to every change, not only the first.
+
+<example>
+Protect URLs and slashes from spacing rules
+
+3 rule changes:
+
+- Move `name-suffix` from AI spacing into the core rules.
+- URLs are left alone. Anything starting with `http://` or `https://` is hidden from the rules, so `%E4%B8%AD` and `/wiki/CJK#CJK` survive.
+- `/` next to CJK never gets spaces anymore. `CJK/CJK` stays `CJK/CJK`, same as `_`. File paths still work: `CJK/homeCJK` becomes `CJK /home CJK`.
+</example>
+
+<material>" followed by the log from step 2, then a closing "</material>" line.
+
+5. From `write-like-me`'s output, take the first line as title, the rest as body. Append a blank line and the `Fix #N` lines from step 3 to the body.
 
 ## Create mode
 
