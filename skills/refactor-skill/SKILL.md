@@ -22,11 +22,11 @@ Refactor a skill. A skill spends two budgets. Its description is loaded into eve
    - https://code.claude.com/docs/en/skills#frontmatter-reference and https://code.claude.com/docs/en/skills#skill-content-lifecycle
    - https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/writing-for-agents/SKILL.md
    - https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/writing-for-agents/SKILL-MECHANICS.md
-   - The page for the model the skill targets: its `model:` frontmatter when set, otherwise the most capable model:
-     - No `model:` or Fable 5.1: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1
+   - One model guide, picked by the target skill's `model:` frontmatter. Unset or `inherit` means the most capable model of the family running this skill: `fable` under Claude, `gpt-6-astra` under a GPT model.
+     - `fable`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1
      - `opus`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5
      - `sonnet`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5
-     - `haiku`: no page of its own, use https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
+     - `gpt-6-astra`: https://developers.openai.com/api/docs/guides/latest-model
 
 3. **Audit.** Give every frontmatter key, every instruction in the body, and every sibling file exactly one verdict, judged against its bar below. For `allowed-tools`, run the `update-allowed-tools` skill instead of auditing entries here. Done when nothing lacks a verdict.
    - **contradiction**: conflicts with another instruction, or the frontmatter promises what the body does not deliver, such as a `context: fork` skill whose body assumes conversation history. Record both sides.
