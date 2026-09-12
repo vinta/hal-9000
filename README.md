@@ -64,7 +64,7 @@ Agentic skills sharpened by daily use:
 - [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings against the latest docs
 - [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md so every line earns its always-loaded cost
 - [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md the same way, for Codex
-- [refactor-memory](skills/refactor-memory/SKILL.md): Prunes stale Claude Code auto memory and regroups the MEMORY.md index
+- [refactor-memory](skills/refactor-memory/SKILL.md): Prunes stale Claude Code and Codex memories, applies only what you pick
 - [refactor-skill](skills/refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
 
 ```bash
