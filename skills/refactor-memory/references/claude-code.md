@@ -4,11 +4,11 @@
 
 Use the memory directory the user names, otherwise the directory supplied in the session instructions. Read `MEMORY.md`, every topic file, the loaded `CLAUDE.md` files, and applicable project and user `.claude/rules/` files. Each topic file is an audit entry.
 
-Fetch the [auto memory guide](https://code.claude.com/docs/en/memory#auto-memory) for current storage, memory types, and load limits. `MEMORY.md` is loaded at startup up to the first 200 lines or 25 KB, whichever comes first; topic files are read on demand. Use the fetched limits if they change.
+Fetch the [auto memory guide](https://code.claude.com/docs/en/memory#auto-memory) for current storage, memory types, and load limits. Topic files are read on demand.
 
 ## Index and links
 
-Each topic file should have exactly one index entry, and every index entry should point to an existing file. Headings and introductory text are not file entries. Check topic descriptions against their bodies and validate links against the active memory format; do not assume `[[link]]` targets are filenames or `name:` fields without checking.
+Each topic file should have exactly one index entry, and every index entry should point to an existing file. Headings and introductory text are not file entries. Check topic descriptions against their bodies and check that every `[[link]]` names a `name:` slug some memory carries, as the session's memory instructions define them; a filename is a broken link.
 
 Past about twelve entries, group them under `##` headings by the subject a reader scans for. Move misplaced entries and fold headings with one or two entries into their nearest neighbor. Done when the index fits the load limits, each file has an entry, and no heading holds a stray.
 

@@ -21,7 +21,6 @@ Refactor memories so each entry carries what no lookup returns: a decision, a co
 ## Instructions
 
 1. **Pick the target.** Use the scope or directory the user names, otherwise the platform default below. Load the reference for the active environment before reading memories:
-
    - **Claude Code:** [references/claude-code.md](references/claude-code.md) for project memory files, index rules, promotion destinations, and direct edits.
    - **Codex:** [references/codex.md](references/codex.md) for shared storage, project filtering, promotion destinations, and session-authorized updates.
 
@@ -38,6 +37,6 @@ Refactor memories so each entry carries what no lookup returns: a decision, a co
 
 4. **Audit recall.** Apply the platform's index or summary checks. Check discoverability, duplicate claims, scope, and evidence references. Propose the layout changes needed for the entries in scope.
 
-5. **Get decisions.** Present each unresolved contradiction with both sides as choices. Then present numbered delete, rewrite, and promote lists with evidence and the proposed layout. Use the platform's question tool to let the user select the verdicts to apply. Honor choices already made; otherwise leave memories unchanged until the user chooses. A missing answer is not a selection.
+5. **Get decisions.** Present each unresolved contradiction with both sides as choices. Then present numbered delete, rewrite, and promote lists with evidence and the proposed layout. Use the platform's question tool to let the user select the verdicts to apply. Nothing changes until the user chooses.
 
-6. **Apply and verify.** Apply the selected verdicts through the platform's update mechanism without asking again. Edit managed instruction files at their source. Remove a promoted memory only after its destination carries the instruction. Verify the result using the platform reference and report any pending consolidation separately from completed changes. Anything else noticed while editing is a follow-up.
+6. **Apply and verify.** Apply the selected verdicts through the platform's update mechanism without asking again. Remove a promoted memory only after its destination carries the instruction. Verify the result using the platform reference and report any pending consolidation separately from completed changes. Anything else noticed while editing is a follow-up.
