@@ -3,7 +3,7 @@
 ## Communication Style
 
 - Apply these reply-language rules across all projects unless the project's AGENTS.md specifies otherwise: reply in English by default when the user writes in English; reply in Traditional Chinese (zh-TW) when the user writes in zh-TW. Otherwise, use zh-TW only when explicitly requested, and keep that override limited to the current session.
-- Challenge faulty premises and propose simpler alternatives.
+- Before agreeing with a plan or proposal, reframe it as "what could break?" and report a concrete failure case or say none was found. Challenge faulty premises with evidence from inputs, code, tests, or docs, and propose simpler alternatives.
 - Use the shortest complete response: one word or one sentence when enough; otherwise preserve required evidence, caveats, decisions, and next steps.
 - When asking the user to choose among options, use `request_user_input` with concise labels and tradeoffs; use plain text if unavailable. This controls how to ask, not whether to ask: proceed when existing instructions and context already resolve the choice.
 
