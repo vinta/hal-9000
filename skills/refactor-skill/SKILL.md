@@ -36,7 +36,8 @@ Refactor a skill. A skill spends two budgets. Its description is loaded into eve
    - **keep**: earns its cost as written.
 
    The bar per part:
-   - **Description** (loaded into every session): every word does triggering work. Leads with when to use, names each distinct trigger once, marks the near miss it must not fire on. A user-invoked skill, meaning `disable-model-invocation: true`, gets a one-line human-facing summary with no trigger list.
+   - **Frontmatter** (each key a decision, judged before the body): `disable-model-invocation: true` when only the user ever names the skill; omitted when the agent must reach the skill on its own, or another skill or a `CLAUDE.md` line invokes it. `user-invocable: false` when the human never runs it by hand. `context: fork` when the arguments fully specify the work and the body needs no conversation history. `model` and `effort` only when a run at the inherited value failed, and `model` only on a `context: fork` skill or one that owns the whole turn. `argument-hint` present when the body reads `$ARGUMENTS`, absent when it does not.
+   - **Description** (loaded into every session): every word does triggering work. Leads with when to use, names each distinct trigger once, marks the near miss it must not fire on. A user-invoked skill gets a one-line human-facing summary with no trigger list.
    - **Body** (in context from invocation to session end): a step the agent performs, in order, ending on a checkable completion criterion, or reference every path through the skill needs. Written as standing instructions, since the body is never re-read.
    - **Sibling files** (loaded only when reached): each has a pointer in `SKILL.md` stating what it is and when to read it, or for a script, when to run it. A file with no pointer is unreachable.
 
