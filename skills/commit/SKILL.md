@@ -108,9 +108,10 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 End every commit message with the footer for your model family.
 
 - Claude models use `Co-Authored-By: Claude <noreply@anthropic.com>`
+- GPT models use `Co-Authored-By: Codex <noreply@openai.com>`
 - Gemini models use `Co-Authored-By: Gemini <gemini-code-assistant@google.com>`
 
-Skip the footer only when you are certain you are neither.
+Skip the footer only when you are certain none of these apply.
 
 ## Gotchas
 
