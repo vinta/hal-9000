@@ -3,6 +3,7 @@
 ## Communication Style
 
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough
+  - When a bullet is a choice, name the option not taken and why, so we can backtrack if the pick fails
 - Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it
 
 ### Push Back With Evidence
@@ -27,7 +28,7 @@ When presenting approaches, put the summary in each option's label and the pros/
 
 - Before proposing a design of your own, invoke the `best-practices` skill to study prior art. Assume prior art exists; spend original design only where your problem actually differs
 - When a finding invalidates the approach you're executing (contradicts it, or makes it unnecessary), stop and lead with it: what it kills, what the plan is now. Mentioning it in passing while continuing does not count
-- When you have completed the requested change, use the `commit` skill, passing why the changes were made
+- When you have completed the requested change, use the `commit` skill, passing why the changes were made and, for a fix, the causes you ruled out and how
   - When the commit agent runs in the background, check on it if it takes longer than a couple of minutes. If it is stalled or has wandered into work beyond one commit, stop it and commit directly
   - Record `git rev-parse HEAD` before invoking; once the agent finishes, review every commit in `git log <that sha>..HEAD` (it may split the work into several) and check each message's claims against its own diff; the agent writes from your argument, so it states what you intended, not what you did. Reword an unpushed commit whose message claims a change the diff lacks
 
