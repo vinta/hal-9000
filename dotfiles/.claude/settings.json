@@ -192,6 +192,17 @@
   "outputStyle": "hal-output-styles:Say no more",
   "viewMode": "verbose",
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    },
+    "claude-opus-5": {
+      "effortLevel": "xhigh"
+    },
+    "claude-sonnet-5": {
+      "effortLevel": "high"
+    }
+  },
   "advisorModel": "fable",
   "awaySummaryEnabled": false,
   "showClearContextOnPlanAccept": true,
