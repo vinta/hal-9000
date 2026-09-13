@@ -105,10 +105,6 @@ laughing-man, direct address:
 
 > If you're the type who skips the manual, just copy this prompt to your agent:
 
-dear-ai, the purest sass sample — italics for the pivot, then a plain shrug:
-
-> Yes, you _could_ just use a one-line prompt like `Fetch and follow https://vinta.github.io/dear-ai/guide-name.md` to get things done. But if you _really_ need everything wrapped in a shiny agentic skill so you can pretend it's more productive, fine, knock yourself out:
-
 dear-ai, division of labor in plain second person:
 
 > Open your AI coding agent in the terminal, point it at a guide listed below, and let it handle the server setup, installation, and configuration. You handle the parts that need a browser: creating accounts, clicking OAuth buttons, copying tokens, and payments.
