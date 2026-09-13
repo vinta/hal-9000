@@ -6,7 +6,7 @@ Verbatim excerpts from the user's published writing. These carry the voice bette
 
 The intro that scopes a whole post in three sentences:
 
-> I've used Claude Code daily since it came out. Here are the best practices, tools, and configuration patterns I've picked up. Most of this applies to other coding agents (Codex) too.
+> I've used Claude Code and Codex daily since they came out. Here are the best practices, tools, and configuration patterns that work for me. Most of them apply to both coding agents.
 
 Q&A sections — the heading poses the question, the body opens with the verdict:
 
