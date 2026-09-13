@@ -6,7 +6,7 @@ For cases no rule below covers, fall back to the user's stance: compress — pad
 
 ## 1. Sentence length
 
-Short units everywhere. Blog prose: median ~13 words per sentence, 95th percentile ~30 — treat any sentence past 30 words as drift and split it. README prose runs shorter (median ~9). Issues, PRs, and emails run shortest: verdict or ask first, evidence after. Short is enforced, not accidental: when an AI rewrite came back 2.5x longer, the user rejected it and published a version the same length as their original.
+Short units everywhere. Blog prose: median ~13 words per sentence, 95th percentile ~30 — treat any sentence past 30 words as drift and split it. README prose runs shorter (median ~9). A README tagline or GitHub repo description is one line, verb optional, often opening with the "Opinionated" self-label; an extension is a bare ", with [noun phrase]" and stops there — no "for", no "so", no second sentence (published: "Opinionated paranoid text spacing in JavaScript, with on-device AI semantic judgment"; three drafts with an explaining clause lost to it). The same shape wins inside README prose: "a one-time model download, started from the options page" became "a one-time model download from the options page" on the user's second pass. Issues, PRs, and emails run shortest: verdict or ask first, evidence after. Short is enforced, not accidental: when an AI rewrite came back 2.5x longer, the user rejected it and published a version the same length as their original.
 
 Density is the same rule from the other side: short sentences don't excuse padding. A paragraph of 13 short sentences carrying 8 ideas fails even though every sentence passes the cap — one sentence per idea, and if one word can carry it, one word (the user's own rule: "if you can use one word or one sentence to describe it, just use one").
 
@@ -52,12 +52,13 @@ A modifier hangs off the end of a sentence — it never interrupts the main clau
 
 ## 5. Vocabulary
 
-Plain verbs and casual evaluators; technical nouns exact. The casual layer: "fancy", "evil", "shiny", "knock yourself out", "Code like a boss!". Digits, not number words ("There are 2 types of encryption algorithms"). Slash-pairs as compression: "encrypt/decrypt", "request/response", "username/password". "so-called" as a labeler ("a so-called hybrid cryptosystem"). The casual layer is vocabulary the corpus attests, never generic English idiom: "gotcha" is the user's word, "what bites people" is not, and the user swapped the second for "common gotchas" in a README line. An unattested idiom reads as ghostwriting even when it is casual.
+Plain verbs and casual evaluators; technical nouns exact. The casual layer: "fancy", "evil", "shiny", "btw", "knock yourself out", "Code like a boss!". A deflating tail closes a feature paragraph: "It's free, btw." Digits, not number words ("There are 2 types of encryption algorithms"). Slash-pairs as compression: "encrypt/decrypt", "request/response", "username/password". "so-called" as a labeler ("a so-called hybrid cryptosystem"). The casual layer is vocabulary the corpus attests, never generic English idiom: "gotcha" is the user's word, "what bites people" is not, and the user swapped the second for "common gotchas" in a README line. An unattested idiom reads as ghostwriting even when it is casual.
 
 ## 6. Structural habits
 
 - Paragraphs are short and single-purpose: a 1-2 sentence lead paragraph carries the action, then one gotcha per paragraph, one by one. Never a prose wall packing 3 gotchas.
 - A colon then a list wherever 2 or more items line up; list items are fragments or gerunds.
+- A verbless fragment stands as a sentence: "Fully offline, nothing leaves your machine."; "No CMS, no database, no code."
 - A line reading exactly "ref:" followed by naked URLs closes blog sections.
 - "Also see:" / "Recommended:" / "The full settings I use:" as one-line lead-ins to link lists.
 - A comment per command in shell blocks, jokes allowed ("# open the pod bay doors, please, HAL").
@@ -82,7 +83,8 @@ Use a move only where it fits; never force one in.
 - Em-dashes are rare. No em-dash chains, no "X — not Y, but Z" pivots. Where a dash is truly needed, README prose has used spaced double hyphens (" -- ") instead.
 - Exclamation marks are scarce and warm ("Your contributions are always welcome!", "Code like a boss!") — enthusiasm, never emphasis inflation.
 - No packed caveats. The user deletes them wholesale rather than trimming them.
-- No tricolon rhythm.
+- No content noun repeated within a sentence or in the next one. The fix is a synonym or a more exact noun, even a longer one: "distinguish symbols like these" became "distinguish semantic nuances like these" because the sentence before opens "The same symbol can mean ...". Proper names and feature names stay ("text spacing ... AI Spacing" was flagged and kept); a deliberate parallel opener is section 7 anaphora, not a repeat.
+- Parallel phrasing follows parallel content. Matched sentences, anaphora, and a closing three-beat are the user's own symmetry where the reader already saw the matched cases laid out (two readings of one symbol, two conditions with two actions): "When a case fails, it interviews Gemini Nano for clues. When progress stalls, it searches online for new approaches to test. Prompts for a model, tuned by a bigger model, judged on real data." A three-beat that enumerates detail the sentence didn't need, or a template phrase shared over unlike items, is the tell: the seed pair's tricolon and the README hook rewrite's echoed phrase were both rejected.
 - Nothing hyped. Features get deflated, including the user's own work.
 - Emphasis budget: bold and CAPS spend on irreversible harm ("Never store a hardware wallet's seed phrase digitally, NEVER.") or a bare negation carrying weight ("NO INDEX at all") — never on excitement.
 

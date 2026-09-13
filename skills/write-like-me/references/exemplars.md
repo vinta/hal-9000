@@ -85,6 +85,14 @@ And defended verbatim when an AI rewrite tried to drop it (chat, quoted with app
 
 > Refine it, but keep dominate and cats rule the internet.
 
+pangu.js, a tagline whose tail is a bare noun phrase, then the README paragraphs it points at — symmetric sentences over symmetric content, a verbless sentence, a deflating tail:
+
+> Opinionated paranoid text spacing in JavaScript, with on-device AI semantic judgment
+
+> Regex rules can't distinguish semantic nuances like these, so the extension asks an LLM. It uses Chrome's built-in [Prompt API](https://developer.chrome.com/docs/ai/prompt-api), which runs Gemini Nano on your device. Fully offline, nothing leaves your machine. Needs a one-time model download from the options page. It's free, btw.
+>
+> GPT-6 Astra writes the prompts. It runs the [prompt-experiments](.agents/skills/prompt-experiments/SKILL.md) skill: propose a change, then test it against the real Gemini Nano in Chrome. When a case fails, it interviews Gemini Nano for clues. When progress stalls, it searches online for new approaches to test. Prompts for a model, tuned by a bigger model, judged on real data.
+
 dockerfiles, a 2014 README whose body is one joke link:
 
 > My dockerfiles for [making the world a better place](https://www.youtube.com/watch?v=J-GVd_HLlps).
