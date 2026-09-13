@@ -130,6 +130,13 @@ class TestEvaluateDetection:
         rule = {"detection": "matcher", "matcher": "idle_prompt"}
         assert hal_voice.evaluate_detection(rule, {"hook_event_name": "Notification", "notification_type": "idle_prompt"}) is True
 
+    def test_matcher_post_model_switch_to_model(self, hal_voice):
+        rule = {"detection": "matcher", "matcher": "opus"}
+        hook_input = {"hook_event_name": "PostModelSwitch", "from_model": "claude-opus-5", "to_model": "claude-sonnet-5"}
+        assert hal_voice.evaluate_detection(rule, hook_input) is False
+        hook_input = {"hook_event_name": "PostModelSwitch", "from_model": "claude-sonnet-5", "to_model": "claude-opus-5"}
+        assert hal_voice.evaluate_detection(rule, hook_input) is True
+
     def test_matcher_unknown_event(self, hal_voice):
         rule = {"detection": "matcher", "matcher": "startup"}
         assert hal_voice.evaluate_detection(rule, {"hook_event_name": "Unknown"}) is False

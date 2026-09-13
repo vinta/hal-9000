@@ -125,6 +125,14 @@
       ]
     }
   ],
+  "PostModelSwitch": [
+    {
+      "detection": "always",
+      "clips": [
+        "assets/yes-and-it-will-stay-that-way-until-it-fails.mp3"
+      ]
+    }
+  ],
   "Notification": [],
   "TaskCompleted": []
 }

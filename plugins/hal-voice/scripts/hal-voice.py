@@ -35,6 +35,7 @@ class CommonInput(TypedDict):
         "PermissionDenied",
         "PermissionRequest",
         "PostCompact",
+        "PostModelSwitch",
         "PostToolBatch",
         "PostToolUse",
         "PostToolUseFailure",
@@ -62,7 +63,7 @@ class HookInput(CommonInput, total=False):
     permission_mode: Literal["default", "plan", "acceptEdits", "auto", "dontAsk", "bypassPermissions"]
     prompt_id: str
     effort: dict[str, Any]
-    # SessionStart, ConfigChange, DirectoryAdded
+    # SessionStart, ConfigChange, DirectoryAdded, PostModelSwitch
     source: str
     # SessionStart
     model: str
@@ -150,6 +151,15 @@ class HookInput(CommonInput, total=False):
     custom_instructions: str
     # PostCompact
     compact_summary: str
+    # PostModelSwitch
+    from_model: str
+    to_model: str
+    requested_model: str | None
+    context_tokens: int
+    prompt_cache_warm: bool
+    cache_ttl: str
+    estimated_cache_write_usd: float
+    pricing: str
     # Elicitation, ElicitationResult
     mcp_server_name: str
     mode: str
@@ -280,6 +290,8 @@ _MATCHER_FIELD: dict[str, str] = {
     "StopFailure": "error",
     "PreCompact": "trigger",
     "PostCompact": "trigger",
+    # Claude Code matches PostModelSwitch on the canonical name it derives from `to_model`; hal-voice matches its own manifest rules against the raw model ID
+    "PostModelSwitch": "to_model",
     "ConfigChange": "source",
     "DirectoryAdded": "source",
     "InstructionsLoaded": "load_reason",
