@@ -106,7 +106,7 @@
     },
     {
       "detection": "regex",
-      "pattern": "\\bwas wrong\\b|\\boverstated\\b|correct(?:ed|ing)? my earlier|correction to (?:my|the) earlier|\\bone correction\\b|\\bi misread\\b|retract (?:it|that|my|the claim)|revert my earlier claim",
+      "pattern": "\\bwas wrong\\b|\\boverstated\\b|correct(?:ed|ing)? my earlier|correction to (?:my|the) earlier|\\bone correction\\b|\\bi misread\\b|retract (?:it|that|my|the claim)|revert my earlier claim|\\bcorrection:|\\bbuilt on (?:the )?wrong\\b",
       "clips": [
         "assets/sorry-about-this-i-know-its-a-bit-silly.mp3"
       ]
