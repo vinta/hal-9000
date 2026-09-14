@@ -12,6 +12,9 @@
     "HAL_SESSION_AUTO_RENAME_USE_OLLAMA": "1",
     "HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA": "1"
   },
+  "attribution": {
+    "sessionUrl": false
+  },
   "includeGitInstructions": false,
   "permissions": {
     "allow": [
