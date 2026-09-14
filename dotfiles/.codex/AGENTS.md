@@ -15,7 +15,7 @@
 ## Change Management
 
 - Search all references before removing or renaming code, commands, config keys, dependencies, documentation references, or files.
-- Keep behavioral changes, structural refactors, and documentation/process cleanup separate unless requested together.
+- Keep unrelated behavioral changes, structural refactors, and documentation/process cleanup separate unless requested together.
 - Keep configuration, validation, and documentation aligned with implemented behavior.
 - Build multi-step changes in working end-to-end layers.
 
