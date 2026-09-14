@@ -17,7 +17,7 @@ Use `make` targets instead of running the underlying commands directly. They cha
 
 ## External Tool Documentation
 
-Invoke the `find-docs` skill BEFORE writing code or config that touches the tools below, not only when asked about them. Do not answer from training data, even for familiar tools. Use `WebFetch` for user-provided URLs and the documentation links below.
+Invoke the `find-docs` skill BEFORE writing code or config that touches the tools below, not only when asked about them. Do not answer from training data, even for familiar tools. Fetch user-provided URLs and the documentation links below.
 
 ### Context7 Library IDs
 
@@ -42,7 +42,7 @@ Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skippi
 
 ### Documentation Links
 
-For topics not well covered by Context7, use `WebFetch` on these URLs:
+For topics not well covered by Context7, fetch these URLs:
 
 - Claude Prompting Best Practices
   - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
