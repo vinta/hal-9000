@@ -1,6 +1,9 @@
 ---
 name: refactor-agents-md
 description: Use when about to refactor or refine a user-level or project-level AGENTS.md
+allowed-tools:
+  - WebFetch
+  - Read(~/.codex/AGENTS.md)
 ---
 
 # Refactor AGENTS.md

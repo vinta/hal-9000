@@ -6,12 +6,7 @@ user-invocable: true
 allowed-tools:
   - WebFetch
   - Read(~/.claude/**)
-  - Edit(~/.claude/projects/**/memory/**)
-  - Edit(~/.claude/CLAUDE.md)
   - Edit(CLAUDE.md)
-  - Edit(~/.claude/rules/**)
-  - Edit(.claude/rules/**)
-  - Bash(rm ~/.claude/projects/*/memory/*.md)
 ---
 
 # Overview

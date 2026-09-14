@@ -4,6 +4,7 @@ description: Use when about to choose, configure, or refine a tool, library, con
 user-invocable: true
 allowed-tools:
   - WebSearch
+  - WebFetch
   - Bash(ctx7:*)
   - Bash(npx ctx7:*)
   - Bash(npx ctx7@latest:*)

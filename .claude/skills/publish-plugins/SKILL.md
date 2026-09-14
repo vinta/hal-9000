@@ -5,11 +5,8 @@ user-invocable: true
 model: sonnet
 effort: medium
 allowed-tools:
-  - Glob
-  - Read
-  - Edit
-  - Bash(git:*)
-  - Bash(python3:*)
+  - Edit(**/.claude-plugin/*.json)
+  - Bash(python3 .claude/skills/publish-plugins/scripts/check_manifest_sync.py:*)
   - Bash(claude plugin validate:*)
   - Bash(npx -y skills@latest add . -l)
 metadata:

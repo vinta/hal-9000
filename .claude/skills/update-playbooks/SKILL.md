@@ -5,11 +5,9 @@ user-invocable: true
 model: sonnet
 effort: high
 allowed-tools:
-  - Grep
-  - Read
-  - Edit
+  - Edit(./playbooks/roles/**)
+  - Edit(./playbooks/collections/requirements.yml)
   - WebFetch
-  - Bash(grep:*)
   - Bash(gh api:*)
   - Bash(curl:*)
   - Bash(make lint:*)

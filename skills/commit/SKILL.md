@@ -7,13 +7,6 @@ context: fork
 model: sonnet
 effort: high
 allowed-tools:
-  - Grep
-  - Glob
-  - Bash(git status:*)
-  - Bash(git diff:*)
-  - Bash(git branch:*)
-  - Bash(git log:*)
-  - Bash(git rev-parse:*)
   - Bash(git stash:*)
   - Bash(git add:*)
   - Bash(git restore:*)
@@ -22,7 +15,6 @@ allowed-tools:
   - Bash(git apply:*)
   - Bash(git commit:*)
   - Read(//tmp/**)
-  - Write(//tmp/**)
   - Edit(//tmp/**)
 ---
 

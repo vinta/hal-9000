@@ -6,7 +6,6 @@ user-invocable: true
 allowed-tools:
   - WebFetch
   - Edit(**/skills/**)
-  - Edit(~/.claude/skills/**)
 ---
 
 # Overview

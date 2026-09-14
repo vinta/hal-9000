@@ -5,12 +5,7 @@ allowed-tools:
   - Bash(curl -sfL https://code.claude.com/*)
   - Bash(python3 -m json.tool:*)
   - Bash(strings:*)
-  - Bash(which claude)
-  - Bash(grep:*)
-  - Bash(git diff:*)
   - Read(~/.claude/**)
-  - Edit(~/.claude/settings*.json)
-  - Edit(.claude/settings*.json)
 ---
 
 # Audit Claude Code Settings

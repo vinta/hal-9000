@@ -7,11 +7,7 @@ context: fork
 model: sonnet
 effort: medium
 allowed-tools:
-  - Bash(git status:*)
   - Bash(git branch:*)
-  - Bash(git log:*)
-  - Bash(git diff:*)
-  - Bash(git rev-parse:*)
   - Bash(git push:*)
   - Bash(git switch:*)
   - Bash(git pull:*)
