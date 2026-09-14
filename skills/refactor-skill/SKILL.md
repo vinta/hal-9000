@@ -17,16 +17,10 @@ Refactor a skill. A skill spends two budgets. Its description is loaded into eve
 
 1. **Pick the target.** If the invocation names one, resolve it to its `SKILL.md`. Otherwise ask which skill. Read `SKILL.md` and every sibling file in its directory. If the invocation also names a change to make, that change sets the scope: the verdicts below cover the lines it adds or touches, the rest of the skill stays as it is, and anything noticed there is a follow-up.
 
-2. **Fetch the guides.** Fetch these pages. They calibrate the delete, demote, and rewrite verdicts below:
-   - https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
-   - https://code.claude.com/docs/en/skills#frontmatter-reference and https://code.claude.com/docs/en/skills#skill-content-lifecycle
-   - https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/writing-for-agents/SKILL.md
-   - https://raw.githubusercontent.com/mattpocock/skills/main/skills/productivity/writing-for-agents/SKILL-MECHANICS.md
-   - One model guide, picked by the target skill's `model:` frontmatter. Unset or `inherit` means the most capable model of the family running this skill: `fable` under Claude, `gpt-6-astra` under a GPT model.
-     - `fable`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1
-     - `opus`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5
-     - `sonnet`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5
-     - `gpt-6-astra`: https://developers.openai.com/api/docs/guides/latest-model
+2. **Fetch the guides.** The platform and model guides below calibrate the delete, demote, and rewrite verdicts.
+   - Fetch one model guide, picked by the target skill's `model:` frontmatter. Unset or `inherit` means the most capable model of the family running this skill: `fable` under Claude, `gpt-6-astra` under a GPT model. Read the matching reference and follow its fetch instructions:
+     - **Claude Code** (`fable`, `opus`, `sonnet`): [references/claude-code.md](references/claude-code.md).
+     - **Codex** (`gpt-6-astra`): [references/codex.md](references/codex.md).
 
 3. **Audit.** Give every frontmatter key, every instruction in the body, and every sibling file exactly one verdict, judged against its bar below. For `allowed-tools`, run the `update-allowed-tools` skill instead of auditing entries here. Done when nothing lacks a verdict.
    - **contradiction**: conflicts with another instruction, or the frontmatter promises what the body does not deliver, such as a `context: fork` skill whose body assumes conversation history. Record both sides.
