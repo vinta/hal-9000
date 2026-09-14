@@ -28,8 +28,8 @@ When presenting approaches, put the summary in each option's label and the pros/
 
 - Before proposing a design of your own, invoke the `best-practices` skill to study prior art. Assume prior art exists; spend original design only where your problem actually differs
 - When a finding invalidates the approach you're executing (contradicts it, or makes it unnecessary), stop and lead with it: what it kills, what the plan is now. Mentioning it in passing while continuing does not count
-- When you have completed the requested change, use the `commit` skill, passing why the changes were made and, for a fix, the causes you ruled out and how
-  - When the commit agent runs in the background, check on it if it takes longer than a couple of minutes. If it is stalled or has wandered into work beyond one commit, stop it and commit directly
+- When you have completed the requested change, use the `commit` skill, passing why the changes were made in one or two sentences. The commit body scales with the argument, so leave out ruled-out causes, measurements, and a walk through the diff
+  - When the commit agent runs in the background, check on it if it takes longer than a couple of minutes. If it is stalled or has wandered into work beyond one commit, stop it and commit directly, with a body held to the same one or two sentences
   - Once the agent finishes, review each commit it reports against its own diff; the agent writes from your argument, so it states what you intended, not what you did. Reword an unpushed commit whose message claims a change the diff lacks
 
 ### Prefer Online Sources
