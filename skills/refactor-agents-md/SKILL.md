@@ -14,9 +14,10 @@ Refactor an `AGENTS.md` for GPT-6 Astra. Every retained line enters each Codex s
    - The current project's root `AGENTS.md`.
    - Any nested `AGENTS.md` on the path from the project root to the current working directory.
 
-2. **Fetch the guides.** Fetch these pages to calibrate the audit. Use the GPT-6 Astra prompting guidance for model behavior and the AGENTS.md guide for organization; preserve explicit user choices where the guides offer defaults. If a source is unavailable, disclose the gap and continue with available evidence.
-   - https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra
-   - https://www.aihero.dev/a-complete-guide-to-agents-md
+2. **Consult relevant guidance.** Reuse current guidance already fetched in the conversation; fetch missing sections needed for the audit. Preserve explicit user choices where the guides offer defaults. If a source is unavailable, disclose the gap and continue with available evidence.
+   - For refactoring criteria: https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra
+   - For GPT-6 Astra behavior: https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra#prompting-best-practices
+   - When moving guidance between files or resolving loading and precedence: https://learn.chatgpt.com/docs/agent-configuration/agents-md
 
 3. **Audit.** Read the target, applicable broader `AGENTS.md` files, and skills or documents it directs the agent to load. Read these references as audit material, not as requests to execute their workflows. Check repository evidence before declaring a rule stale or derivable. Give every instruction in the target exactly one verdict against the target's bar and GPT-6 checks below. Finish only when every instruction has a verdict.
    - **contradiction**: conflicts with another applicable instruction. Record both instructions and their source files; resolve conflicts from instruction priority and explicit user intent where possible.
