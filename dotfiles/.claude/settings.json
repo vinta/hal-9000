@@ -13,6 +13,7 @@
     "HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA": "1"
   },
   "attribution": {
+    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
     "sessionUrl": false
   },
   "includeGitInstructions": false,
