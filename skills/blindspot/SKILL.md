@@ -1,6 +1,6 @@
 ---
 name: blindspot
-description: Use when the user asks for a blindspot pass or to find their unknown unknowns, or signals unfamiliarity with a domain, tool, or codebase area ("never used X", "first time doing Y", "no idea where to start", "don't know what I don't know") before working there. Interviews the user with recon-fed questions, turning unknown unknowns into known unknowns and naming silent assumptions so they can prompt well
+description: Use when the user asks for a blindspot pass or to find their unknown unknowns, or signals unfamiliarity with a domain, tool, or codebase area ("never used X", "first time doing Y", "no idea where to start", "don't know what I don't know") before working there. Maps the areas their request leaves unnamed, shows how people usually handle each and why, and asks which to explore next, so unknown unknowns become known unknowns they can prompt with. Recommendations on a tool already chosen belong to best-practices
 argument-hint: "[unfamiliar topic, tool, or codebase area]"
 user-invocable: true
 allowed-tools:
@@ -11,47 +11,50 @@ allowed-tools:
 
 The user is about to work in territory they don't know. Two kinds of blindness live there: unknown unknowns (questions they don't know exist) and unknown knowns (assumptions too obvious to write down, and things they're sure of that are wrong). Convert the first into known unknowns, name the second, then hand back a map they can prompt with.
 
-Boundaries: best-practices returns recommendations — this skill returns questions. Grilling stress-tests decisions the user can already defend — this skill maps territory where they can't answer yet. Neither a tutorial nor a plan.
+Boundaries: this skill goes wide over the areas the user's request leaves unnamed, one paragraph each; best-practices goes deep on a topic the user has already named. Grilling stress-tests decisions the user can defend; this skill maps territory where they can't decide yet, so it asks which direction to explore, never which option to pick. Neither a tutorial nor a plan.
 
 ## Workflow
 
-### 1. Surface the framing
+### 1. Recon
 
-Before asking anything, state as bullets: the assumptions the request takes for granted, and the missing information that would change the approach. This names the user's unknown knowns up front. If their goal or familiarity is still unclear, fold one calibration question into the first interview round.
-
-### 2. Recon
-
-Facts are your job, never the user's. Sweep before asking:
+Facts are your job, never the user's. Sweep before writing anything:
 
 - **Repo**: Explore agent for existing patterns, conventions, and adjacent solutions.
 - **Tools and domain**: `find-docs` for current APIs and config; `WebSearch` for pitfalls ("X gotchas", "X common mistakes") — pitfalls live in issue threads and post-mortems, not getting-started docs.
 
-Recon output is question fuel, not findings: each item becomes a question only the user can answer, an assumption to name, or nothing. A user who wants recommendations instead of questions wants the best-practices skill.
+Recon hunts for the areas a practitioner would have on their list that the request never mentions. Done when every area that could change the architecture or define behavior has recon evidence, or a note that recon found nothing.
 
-### 3. Interview
+### 2. Show the territory
 
-`AskUserQuestion` rounds, up to 4 questions each, 2–3 rounds total.
+Before any question, one reply the user reads, under a page:
 
-- Ask where importance is high and evidence is low: architecture-changers and behavior-definers recon couldn't settle. Skip polish.
-- Anchor in the user's concrete past ("last time you did X, what happened?"), not hypotheticals — people speculate confidently and wrongly.
-- Give each option a trade-off description; put your recommended option first, labeled "(Recommended)". The built-in "Other" is the escape hatch.
-- Include one premortem question phrased in past tense — "it's three months later and this failed: what broke?" — past tense recruits prospective hindsight; "what could go wrong" is measurably weaker.
-- "I don't know" is a first-class answer: record it as a known unknown and move on.
+- **Framing**: the assumptions the request takes for granted, and the missing information that would change the approach, as bullets. These are the unknown knowns; naming them is the point.
+- **Areas**: numbered, ranked by importance × low evidence (architecture-changers and behavior-definers first, polish last). Each is one paragraph: the question an expert would ask here, how people usually answer it and why, and what in this repo or situation makes it bite, with the recon source. Where the request already matches usual practice, one line saying so. "No significant unknowns here" is a valid result; a manufactured concern erodes trust faster than a short map.
 
-Recompute between rounds — answers unlock questions that depended on them. Stop at saturation (a round surfaces nothing new) or when the remaining unknowns are cheaper to discover while implementing. Close the final round with: "what are you sure of here that might be wrong?" and "what haven't I asked about that worries you?"
+### 3. Ask which direction
 
-### 4. Hand off
+`AskUserQuestion`, single-select: the top 3 unexplored areas by number, plus "Enough, hand off". Each option is an area and its description that area's why in one line; every option names an area the reply above explained. The user is choosing where to look, so labels stay unranked: no "(Recommended)". Other reaches any numbered area.
+
+Round 1 adds one premortem question phrased in past tense — "it's three months later and this failed: what broke?" — past tense recruits prospective hindsight; "what could go wrong" is measurably weaker. Its answer often names the real goal, so re-rank the areas by it. If the user's goal or familiarity is still unclear after recon, round 1 also carries one calibration question.
+
+"You pick" means take the top-ranked area and record the pick as a named assumption.
+
+### 4. Dig, then repeat
+
+Explore the picked area one level deeper: a tool or setup choice goes to the best-practices skill; anything else gets the same recon one level down. Show what turned up in the shape of step 2 (sub-areas join the numbered map, unpicked areas stay on it, re-ranked), then ask again. Stop when the user picks "Enough", when a round surfaces nothing new, or when what's left is cheaper to learn while building — say which.
+
+### 5. Hand off
 
 End with:
 
-1. **Territory map**: decisions made (from answers); named assumptions — every open decision this skill resolved by guessing gets its own bullet; known unknowns, including every recorded "I don't know"; recon sources cited so the user can dig deeper.
-2. **Sharpened prompt draft** the user could send: answered decisions resolved inline, known unknowns listed as open questions.
+1. **Territory map**: explored areas with what each dig settled; unexplored areas, each with the usual practice as its default; named assumptions — every open point this skill resolved by guessing gets its own bullet; recon sources cited so the user can dig deeper.
+2. **Sharpened prompt draft** the user could send: explored areas resolved inline, unexplored ones listed as open questions with their defaults.
 3. **Offers, not auto-runs**: stress-test the now-visible decisions with the grilling skill, get recommendations via best-practices, or enter plan mode.
 
-Every interview answer must land in the map or the prompt draft — an answer that shapes nothing was a wasted question.
+Every explored area lands in the map or the prompt draft — a dig that shapes nothing was a wasted round.
 
 ## Constraints
 
 - Ask only what recon can't answer: a question the codebase or docs already answer wastes a round and erodes trust.
-- Teach to prompt, not to master. If the hand-off exceeds roughly one page, cut.
-- Ground every question in recon, not training data: a stale question plants false known-knowns.
+- Teach to prompt, not to master. If a findings reply or the hand-off exceeds roughly one page, cut.
+- Ground every finding and question in recon, not training data: a stale finding plants false known-knowns.
