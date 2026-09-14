@@ -32,7 +32,7 @@ Refactor an `AGENTS.md` for GPT-6 Astra. Every retained line enters each Codex s
 
 4. **Prepare decisions.** Prepare the proposed rewrite and the delete and demote lists, including every destination. Use `request_user_input` when available and permitted to resolve contradictions and let the user select which proposed changes to apply; otherwise ask one concise question. Leave files untouched until those specific changes are approved. A general request to refactor authorizes preparing the proposal, not applying it. Continue independent audit and draft work while decisions are pending. Newly discovered changes remain proposals until approved.
 
-5. **Rewrite and verify.** Apply the signed-off verdicts. Search references before removing or moving guidance, and update affected pointers. Place each new nested `AGENTS.md` in the nearest directory whose whole subtree shares its guidance. Check the final diff for preserved intent, resolved conflicts, and reachable destinations. Finish when every audited instruction is accounted for and required checks pass; report changed files and any unresolved decisions concisely.
+5. **Rewrite and verify.** Apply only the changes the user selected and approved. Search references before removing or moving guidance, and update affected pointers. Place each new nested `AGENTS.md` in the nearest directory whose whole subtree shares its guidance. Check the final diff for preserved intent, resolved conflicts, and reachable destinations. Finish when every audited instruction is accounted for and required checks pass; report changed files and any unresolved decisions concisely.
 
 ## GPT-6 checks
 
