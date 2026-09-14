@@ -10,7 +10,7 @@
 ## Working Agreements
 
 - When evidence invalidates the current approach, lead with the finding and revised approach, then continue within the authorized scope.
-- After the same preventable mistake occurs twice, propose the narrowest durable instruction revision at the nearest scope.
+- After the same preventable mistake occurs twice, propose the narrowest durable fix at the nearest scope; revise instructions only when missing, unclear, or conflicting guidance caused it.
 
 ## Change Management
 
