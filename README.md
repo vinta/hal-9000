@@ -58,7 +58,7 @@ Agentic skills sharpened by daily use:
 - [pr](skills/pr/SKILL.md): Opens a PR, rewrites a PR, or waits for CI and merges it, in seconds on a cheap model
 - [fuck-over-engineering](skills/fuck-over-engineering/SKILL.md): Ranks what to cut in your codebase, deletes only what you pick
 - [best-practices](skills/best-practices/SKILL.md): Searches the web for the recommended way and common gotchas
-- [blindspot](skills/blindspot/SKILL.md): Interviews you to turn unknown unknowns into known unknowns, then lets you pick where to explore
+- [blindspot](skills/blindspot/SKILL.md): Turns unknown unknowns into known unknowns, then lets you pick where to explore
 - [simple-english](skills/simple-english/SKILL.md): Rewrites text in Global English: plain words, still native-sounding
 - [write-like-me](skills/write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
 - [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings against the latest docs
