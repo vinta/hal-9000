@@ -54,13 +54,17 @@
         "write-like-me",
         "writing-voice",
         "technical-writing",
+        "claude-code",
         "audit",
         "claude-settings",
         "env-vars",
         "refactor",
         "claude-md",
+        "codex",
         "agents-md",
-        "auto-memory"
+        "auto-memory",
+        "skill-md",
+        "allowed-tools"
       ],
       "tags": [
         "git",
@@ -87,7 +91,9 @@
         "refactor",
         "claude-md",
         "agents-md",
-        "auto-memory"
+        "auto-memory",
+        "skill-md",
+        "allowed-tools"
       ]
     },
     {

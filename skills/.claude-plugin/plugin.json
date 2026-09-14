@@ -1,6 +1,6 @@
 {
   "name": "hal-skills",
-  "version": "2.9.4",
+  "version": "2.9.5",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
@@ -48,6 +48,8 @@
     "refactor",
     "claude-md",
     "agents-md",
-    "auto-memory"
+    "auto-memory",
+    "skill-md",
+    "allowed-tools"
   ]
 }
