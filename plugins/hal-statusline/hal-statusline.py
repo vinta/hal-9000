@@ -74,7 +74,7 @@ class StatusLineData(TypedDict):
 # https://code.claude.com/docs/en/statusline#subagent-status-lines
 class SubagentTask(TypedDict):
     id: str
-    name: NotRequired[str]  # documented but absent from real payloads as of 2.1.220
+    name: NotRequired[str]  # documented, but only skill forks send it; Agent tool subagents omit it
     description: str
     label: str
     tokenCount: int
@@ -179,7 +179,7 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
     model = task["model"].removeprefix("claude-")
     effort = task.get("effort")
     model_part = f"{model} {effort}" if effort is not None else model
-    name = task.get("name")  # promised by the docs, but 2.1.220 payloads omit it
+    name = task.get("name")
     parts = [name, model_part] if name else [model_part]
 
     ctx_pct = int(task["tokenCount"] / task["contextWindowSize"] * 100)
