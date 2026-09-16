@@ -26,7 +26,7 @@ Refactor an `AGENTS.md` for GPT-6 Astra. Every retained line enters each Codex s
    - **contradiction**: conflicts with another applicable instruction. Record both instructions and their source files; resolve conflicts from instruction priority and explicit user intent where possible.
    - **delete**: fails the no-op test because GPT-6 Astra would behave the same without it. This includes redundant defaults, vague directions, and platitudes such as "write clean code." Cite the evidence or rationale; retain an explicit constraint when its redundancy is uncertain.
    - **demote**: changes behavior but applies only to a narrower directory or task. Choose and name its destination. Put directory-specific guidance in the closest nested `AGENTS.md`; put a multi-step task workflow in a skill; put reference material in a linked document.
-   - **rewrite**: has the right scope and meaning, but its phrasing falls short of the fetched prompting guidance.
+   - **rewrite**: has the right scope and meaning, but its phrasing falls short of the fetched prompting guidance. Also a rewrite when the line carries words that fail the no-op test on their own: a duplicate of another line, a definition of a term the model knows, or emphasis; a rationale or example stays, since both steer the model.
    - **keep**: earns its always-loaded cost as written.
 
    Apply the bar for the target:
