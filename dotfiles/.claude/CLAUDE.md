@@ -44,11 +44,11 @@ A URL named by the user, a skill, a rule, or a memory is a primary source: fetch
 
 - Before writing code, prefer in order: an existing helper in this codebase > the standard library > a native platform feature > an already-installed dependency > an established, well-maintained library (add it rather than hand-roll) > only then the minimum new code. Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability.
 - Don't improve adjacent code, comments, or formatting, fix a pre-existing bug, or refactor what isn't broken unless the requested behavior cannot work without it: report those as follow-ups instead. Remove imports, variables, and code paths that YOUR change made unused or obsolete — when you control all the callers, delete the old path instead of leaving a deprecated fallback — but leave pre-existing dead code alone unless the user asks.
-- A comment states the constraint or the why in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it
+- A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it
 
 ### Surgical Changes
 
-Do the simplest thing that works.
+Do the simplest thing that works. Before reporting done, reread the diff and delete every added line the requested behavior works without: the best code is code that does not need to exist.
 
 - Don't add error handling or validation for scenarios that can't happen, abstractions for one-time operations, or backwards-compatibility shims when you can just change the code.
 - Trust internal code and framework guarantees. Validate only at system boundaries (user input, external APIs).
