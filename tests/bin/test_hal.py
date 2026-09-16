@@ -816,6 +816,38 @@ class TestSkipUnchanged:
         assert dest_file.read_text() == "BBBB"
         assert dest_file.stat().st_mode & 0o777 == 0o444
 
+    def test_reports_directory_unchanged_when_no_file_copied(self, hal_module, tmp_path):
+        """A directory whose files all match reports unchanged; one changed file reports the copy count."""
+        said = []
+        src = tmp_path / "src"
+        src.mkdir()
+        (src / "a.txt").write_text("AAAA")
+        dest = tmp_path / "dest"
+        mirror = hal_module.Mirror(say=said.append)
+
+        mirror.copy(src, dest)
+        mirror.copy(src, dest)
+        (src / "a.txt").write_text("changed")
+        mirror.copy(src, dest)
+
+        assert said == [
+            f"copy {src} -> {dest} (1 file)",
+            f"unchanged {src}",
+            f"copy {src} -> {dest} (1 file)",
+        ]
+
+    def test_reports_new_empty_directory_as_copy(self, hal_module, tmp_path):
+        """A directory created at dest counts as a copy even with no files in it."""
+        said = []
+        src = tmp_path / "src"
+        src.mkdir()
+        dest = tmp_path / "dest"
+
+        hal_module.Mirror(say=said.append).copy(src, dest)
+
+        assert dest.is_dir()
+        assert said == [f"copy {src} -> {dest} (0 files)"]
+
 
 class TestCopyEntryGlob:
     """_copy_entry expands a single `*`, copying each match with the star spliced into dest."""

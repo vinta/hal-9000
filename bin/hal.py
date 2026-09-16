@@ -107,13 +107,14 @@ class Mirror:
         return src_stat.st_size == dest_stat.st_size and src_stat.st_mtime_ns == dest_stat.st_mtime_ns
 
     @staticmethod
-    def _copy_file_allow_overwrite(src: Path, dest: Path) -> None:
+    def _copy_file_allow_overwrite(src: Path, dest: Path) -> bool:
         if Mirror._is_unchanged(src, dest):
-            return
+            return False
 
         if dest.exists() and not dest.stat().st_mode & stat.S_IWUSR:
             dest.chmod(dest.stat().st_mode | stat.S_IWUSR)
         shutil.copy2(src, dest)
+        return True
 
     @staticmethod
     def _is_ignored(path: Path, patterns: tuple[str, ...]) -> bool:
@@ -125,21 +126,33 @@ class Mirror:
             return
 
         if src.is_dir():
+            existed = dest.exists()
+            copied = 0
+
+            # copytree hands its copy_function plain strings
+            def copy_file(source: str, target: str) -> None:
+                nonlocal copied
+                copied += self._copy_file_allow_overwrite(Path(source), Path(target))
+
             shutil.copytree(
                 src,
                 dest,
                 ignore=shutil.ignore_patterns(*Settings.IGNORE_PATTERNS),
-                # copytree hands its copy_function plain strings
-                copy_function=lambda source, target: self._copy_file_allow_overwrite(Path(source), Path(target)),
+                copy_function=copy_file,
                 dirs_exist_ok=True,
             )
+            if existed and not copied:
+                self._say(f"unchanged {abbreviate_home(src)}")
+                return
+            count = f" ({copied} file{'' if copied == 1 else 's'})"
         else:
             if self._is_unchanged(src, dest):
                 self._say(f"unchanged {abbreviate_home(src)}")
                 return
             dest.parent.mkdir(parents=True, exist_ok=True)
             self._copy_file_allow_overwrite(src, dest)
-        self._say(f"copy {abbreviate_home(src)} -> {abbreviate_home(dest)}")
+            count = ""
+        self._say(f"copy {abbreviate_home(src)} -> {abbreviate_home(dest)}{count}")
 
     @staticmethod
     def _glob(pattern: Path) -> list[Path]:
