@@ -1,6 +1,6 @@
 ---
 name: blindspot
-description: Use when the user asks for a blindspot pass or to find their unknown unknowns, or signals unfamiliarity with a domain, tool, or codebase area ("never used X", "first time doing Y", "no idea where to start", "don't know what I don't know") before working there. Maps the areas their request leaves unnamed, shows how people usually handle each and why, and asks which to explore next, so unknown unknowns become known unknowns they can prompt with. Recommendations on a tool already chosen belong to best-practices
+description: Use when the user asks for a blindspot pass or to find their unknown unknowns, or signals unfamiliarity with a domain, tool, or codebase area ("never used X", "first time doing Y", "no idea where to start", "don't know what I don't know") before working there. Maps the areas their request leaves unnamed, purpose and shape before mechanics, shows how people usually answer each and why, and asks which to explore next, so unknown unknowns become known unknowns they can prompt with. Recommendations on a tool already chosen belong to best-practices
 argument-hint: "[unfamiliar topic, tool, or codebase area]"
 user-invocable: true
 allowed-tools:
@@ -24,7 +24,7 @@ Facts are your job, never the user's. Sweep before writing anything:
 - **Repo**: Explore agent for existing patterns, conventions, and adjacent solutions.
 - **Tools and domain**: `find-docs` for current APIs and config; `WebSearch` for pitfalls ("X gotchas", "X common mistakes") — pitfalls live in issue threads and post-mortems, not getting-started docs.
 
-Recon hunts for the areas a practitioner would have on their list that the request never mentions. Done when every area that could change the architecture or define behavior has recon evidence, or a note that recon found nothing.
+Recon hunts for the areas a practitioner would have on their list that the request never mentions. Done when every area that could reorder the map has its source, recon or a premise, or a note that recon found nothing.
 
 ### 2. Show the territory
 
