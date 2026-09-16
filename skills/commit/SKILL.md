@@ -24,14 +24,14 @@ Your task: commit all changes in the working tree. Run `git status` and `git dif
 
 ## The argument
 
-The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. A body is one or two sentences: the problem and the reason for this fix. Ruled-out causes, measurements, alternatives tried, and a walk through what the diff changes stay out; the reader has the diff. Whatever it describes is already realized in the diff, however it's phrased: "so the statusline shows usage percentages" and "to fix the session bug" both mean the diff already does that — commit it; never write code toward it, hunt for it, verify it, or finish it. With no argument at all, derive the commit message from the diff alone. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
+The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. A body is one or two sentences stating the problem as it stood before the change. Leave out the fix, since the subject and diff already show it, and leave out ruled-out causes, measurements, and alternatives tried. Whatever it describes is already realized in the diff, however it's phrased: "so the statusline shows usage percentages" and "to fix the session bug" both mean the diff already does that — commit it; never write code toward it, hunt for it, verify it, or finish it. With no argument at all, derive the commit message from the diff alone. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
 
 Write the body about the code: the behavior, tooling, or constraint the change served. Personal details that reach you through the argument — anything about the user's life, such as employer, location, schedule, health, or other people — stay out of every commit message; translate each one into the technical need it implies. Commit history is public and permanent.
 
 <example>
 Argument: "so hal sync works on my work laptop, Acme IT locks ~/Library"
 
-Correct body: "Fall back to a user-writable path when ~/Library is read-only, as on managed machines."
+Correct body: "~/Library is read-only on managed machines, so hal sync failed there."
 
 Incorrect body: "Fall back to a user-writable path because the author's employer, Acme, locks ~/Library on work laptops."
 </example>
@@ -39,7 +39,7 @@ Incorrect body: "Fall back to a user-writable path because the author's employer
 <example>
 Argument: "Commit only settings.json. Why: three commit forks wrote `Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>` instead of the skill's trailer; the fork transcript shows a remote_session_change reminder telling the model to use the model-named trailer, and it followed that over the skill. Setting attribution.commit to the skill's exact string makes both agree. Ruled out: includeGitInstructions: false did not suppress the reminder; attribution.sessionUrl: false only drops the Claude-Session line; commit: "" would tell the model to add no trailer at all per the 2.1.270 binary."
 
-Correct body: "Commit-skill forks followed a Remote Control reminder over the skill and wrote a model-named Co-Authored-By trailer. Pin attribution.commit to the skill's trailer so both sources agree."
+Correct body: "Commit-skill forks followed a Remote Control reminder over the skill and wrote a model-named Co-Authored-By trailer."
 
 Incorrect body: the argument reflowed to 72 columns, ruled-out settings and the binary version included.
 </example>
@@ -100,7 +100,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry forever.
 
 5. **Create Atomic Commits**: For each logical group:
-   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: the why in one or two sentences, drawn from the argument when one was given. Skip the body when the why is obvious from the subject. Always end the message with the `Co-Authored-By` footer from the Attribution section below.
+   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: the problem in one or two sentences, drawn from the argument when one was given. Skip the body when the problem is obvious from the subject. Always end the message with the `Co-Authored-By` footer from the Attribution section below.
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
 ## Attribution
