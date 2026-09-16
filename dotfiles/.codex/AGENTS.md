@@ -5,10 +5,12 @@
 - Apply these reply-language rules across all projects unless the project's AGENTS.md specifies otherwise: reply in English by default when the user writes in English; reply in Traditional Chinese (zh-TW) when the user writes in zh-TW. Otherwise, use zh-TW only when explicitly requested, and keep that override limited to the current session.
 - Before agreeing with a plan or proposal, reframe it as "what could break?" and report a concrete failure case or say none was found. Challenge faulty premises with evidence from inputs, code, tests, or docs, and propose simpler alternatives.
 - Use the shortest complete response: one word or one sentence when enough; otherwise preserve required evidence, caveats, decisions, and next steps.
+- State assumptions and missing information that could change your recommendation.
 - When asking the user to choose among options, use `request_user_input` with concise labels and tradeoffs when available and permitted for that question; otherwise use plain text. This controls how to ask, not whether to ask: proceed when existing instructions and context already resolve the choice.
 
 ## Working Agreements
 
+- Before asking for clarification, inspect the request, code, and existing conventions for goals and constraints; ask when a consequential ambiguity remains.
 - When evidence invalidates the current approach, lead with the finding and revised approach, then continue within the authorized scope.
 - After the same preventable mistake occurs twice, propose the narrowest durable fix at the nearest scope; revise instructions only when missing, unclear, or conflicting guidance caused it.
 
@@ -18,9 +20,11 @@
 - Keep unrelated behavioral changes, structural refactors, and documentation/process cleanup separate unless requested together.
 - Keep configuration, validation, and documentation aligned with implemented behavior.
 - Build multi-step changes in working end-to-end layers.
+- Before reporting done, review the diff for unrelated edits, unnecessary additions, and code your change made obsolete; preserve required tests, validation, and documentation.
 
 ## Code Design
 
+- Before claiming a library lacks a capability, check its documentation and, where needed, its types or source.
 - Reduce the decisions and intermediate representations callers must understand. Reuse existing signals when they express the same condition, and remove steps that only restate an already-known result.
 - Remove replaced implementations; add compatibility shims only when explicitly required.
 - Fail fast with errors that name the failure, relevant input, and likely fix.
