@@ -29,11 +29,11 @@ The argument passed to this skill is **why the changes were made** — the motiv
 Write the body about the code: the behavior, tooling, or constraint the change served. Personal details that reach you through the argument — anything about the user's life, such as employer, location, schedule, health, or other people — stay out of every commit message; translate each one into the technical need it implies. Commit history is public and permanent.
 
 <example>
-Argument: "so hal sync works on my work laptop, Acme IT locks ~/Library"
+Argument: "so the IAP TCP upload speedup works on my work MacBook; gcloud there picks up uv's Python and pip refuses to install NumPy into it"
 
-Correct body: "~/Library is read-only on managed machines, so hal sync failed there."
+Correct body: "gcloud resolved to a uv-managed Python that pip refuses to install into (PEP 668), so Google's documented one-liner for the IAP TCP upload speedup could not work."
 
-Incorrect body: "Fall back to a user-writable path because the author's employer, Acme, locks ~/Library on work laptops."
+Incorrect body: "Give gcloud its own venv because on the author's work MacBook pip refuses to install into uv's Python."
 </example>
 
 <example>
@@ -42,6 +42,22 @@ Argument: "Commit only settings.json. Why: three commit forks wrote `Co-Authored
 Correct body: "Commit-skill forks followed a Remote Control reminder over the skill and wrote a model-named Co-Authored-By trailer."
 
 Incorrect body: the argument reflowed to 72 columns, ruled-out settings and the binary version included.
+</example>
+
+<example>
+Argument: "Two rules adopted from a CLAUDE.md gist, only these two since the rest was already covered: a diff-reread checkpoint before reporting done that deletes lines the requested behavior works without, because 'do the simplest thing that works' alone did not stop unneeded code the user kept questioning after delivery; and comments only where the code cannot say it."
+
+Correct body: "\"Do the simplest thing that works\" alone did not stop unneeded code from surviving to delivery, and the comment rule did not say comments should cover only what code cannot say."
+
+Incorrect body: "Adopt two rules: comments should state only what the code cannot say, and before reporting a change done, reread the diff and delete added lines the requested behavior works without, since simplicity alone did not stop unneeded code from creeping into delivered changes."
+</example>
+
+<example>
+Argument: "hal sync raised PermissionError [Errno 13] copying a single file onto a read-only dotfile; the directory branch already handled that"
+
+Correct body: "Copying a single file onto a read-only destination (git objects, or a dotfile chmod'ed 444) raised PermissionError; the directory branch already handled that case."
+
+Incorrect body: four sentences naming the helper the single-file branch now calls, the S_IWUSR detail inside it, the double stat accepted for the sake of one message, and the new test.
 </example>
 
 ## Locate the repository
