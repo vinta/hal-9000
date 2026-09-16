@@ -42,6 +42,6 @@ Use these pre-resolved IDs with `find-docs`. Pass the matching ID directly to `n
 
 Fetch the relevant official page when changing prompts or configuration:
 
-- [GPT-6 prompting guidance](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra#prompting-best-practices).
-- [GPT-5.6 prompting guidance](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) when targeting GPT-5.6.
-- [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+- [GPT-6 prompting guidance](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra#prompting-best-practices)
+- [GPT-5.6 prompting guidance](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6)
+- [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
