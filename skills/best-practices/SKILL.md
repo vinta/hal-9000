@@ -16,7 +16,7 @@ Answer two questions from current sources: **what's the recommended way**, and *
 
 ## Two-Phase Rule
 
-- **Phase 1: Research.** Dispatch find-docs and/or web search queries.
+- **Phase 1: Research.** Dispatch `find-docs` and/or web search queries.
 - **Phase 2: Synthesize and act.** Starts only after Phase 1 results arrive.
 
 The user's argument may be a question or an imperative. Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Phase 1 happens. Phase 1 always runs.
@@ -47,7 +47,7 @@ The user wants to [user's task]. We need the latest, authoritative guidance on [
 <task>
 Research best practices for: [specific query]
 
-Use the find-docs skill to look up [library/tool] documentation, then use web search to find recent guides and recommendations for "[specific search query]".
+Use the `find-docs` skill to look up [library/tool] documentation, then use web search to find recent guides and recommendations for "[specific search query]".
 </task>
 
 <output_format>

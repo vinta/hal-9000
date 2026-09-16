@@ -11,7 +11,7 @@ allowed-tools:
 
 The user is about to work in territory they don't know. Two kinds of blindness live there: unknown unknowns (questions they don't know exist) and unknown knowns (assumptions too obvious to write down, and things they're sure of that are wrong). Convert the first into known unknowns, name the second, then hand back a map they can prompt with.
 
-Boundaries: this skill goes wide over the areas the user's request leaves unnamed, one paragraph each; best-practices goes deep on a topic the user has already named. Grilling stress-tests decisions the user can defend; this skill maps territory where they can't decide yet, so it asks which direction to explore, never which option to pick. Neither a tutorial nor a plan.
+Boundaries: this skill goes wide over the areas the user's request leaves unnamed, one paragraph each; `best-practices` goes deep on a topic the user has already named. `grilling` stress-tests decisions the user can defend; this skill maps territory where they can't decide yet, so it asks which direction to explore, never which option to pick. Neither a tutorial nor a plan.
 
 ## Workflow
 
@@ -43,7 +43,7 @@ Round 1 adds one premortem question phrased in past tense — "it's three months
 
 ### 4. Dig, then repeat
 
-Explore the picked area one altitude down, never two: a goal-level area opens into the shapes it could take; a shape-level area opens into what each costs to build. Only at mechanics does a tool or setup choice go to the best-practices skill; anything else gets the same recon one level down. Show what turned up in the shape of step 2 (sub-areas join the numbered map, unpicked areas stay on it, re-ranked), then ask again. Stop when the user picks "Enough", when a round surfaces nothing new, or when what's left is cheaper to learn while building — say which.
+Explore the picked area one altitude down, never two: a goal-level area opens into the shapes it could take; a shape-level area opens into what each costs to build. Only at mechanics does a tool or setup choice go to the `best-practices` skill; anything else gets the same recon one level down. Show what turned up in the shape of step 2 (sub-areas join the numbered map, unpicked areas stay on it, re-ranked), then ask again. Stop when the user picks "Enough", when a round surfaces nothing new, or when what's left is cheaper to learn while building — say which.
 
 ### 5. Hand off
 
@@ -51,7 +51,7 @@ End with:
 
 1. **Territory map**: explored areas with what each dig settled; unexplored areas, each with the usual practice as its default; named assumptions — every open point this skill resolved by guessing gets its own bullet; recon sources cited so the user can dig deeper.
 2. **Sharpened prompt draft** the user could send: explored areas resolved inline, unexplored ones listed as open questions with their defaults.
-3. **Offers, not auto-runs**: stress-test the now-visible decisions with the grilling skill, get recommendations via best-practices, or enter plan mode.
+3. **Offers, not auto-runs**: stress-test the now-visible decisions with the `grilling` skill, get recommendations via `best-practices`, or enter plan mode.
 
 Every explored area lands in the map or the prompt draft — a dig that shapes nothing was a wasted round.
 

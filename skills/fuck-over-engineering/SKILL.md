@@ -24,7 +24,7 @@ Dependencies the stdlib or platform already covers, single-implementation interf
 
 ## Evidence
 
-Every finding cites the evidence that makes it a cut: caller count, implementation count, or the stdlib or platform feature and the version that ships it. Count callers through dynamic dispatch, entry points, hooks, and tests, not grep alone. A published package's public export stays at zero in-repo callers. Verify `stdlib:` and `native:` claims against current docs (the find-docs skill when present) before asserting them.
+Every finding cites the evidence that makes it a cut: caller count, implementation count, or the stdlib or platform feature and the version that ships it. Count callers through dynamic dispatch, entry points, hooks, and tests, not grep alone. A published package's public export stays at zero in-repo callers. Verify `stdlib:` and `native:` claims against current docs (the `find-docs` skill when present) before asserting them.
 
 A finding removes lines or concepts; moving them between files is a refactor, not a cut. Fewer, bigger cuts beat a long list: a `shrink:` that saves two lines earns a slot only when it also removes a concept.
 
