@@ -105,7 +105,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 
 1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory.
 
-2. **Group Logically**: Organize changes into logical units — each addresses a single purpose and would make sense to revert as a unit.
+2. **Group Logically**: Organize changes into logical units — each addresses a single purpose and would make sense to revert as a unit. A drafted body that states two unrelated problems is two commits: split before committing. Several findings of one audit or review are one problem.
 
 3. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`
