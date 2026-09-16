@@ -48,7 +48,7 @@ Dogmatic yet meticulously crafted global instructions for agentic coding:
 
 Also see:
 
-- [Claude Code: Things I Learned After Using It Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html)
+- [Claude Code and Codex: Things I Learned After Using Them Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html)
 
 ### Skills
 
@@ -68,11 +68,16 @@ Agentic skills sharpened by daily use:
 - [refactor-skill](skills/refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
 
 ```bash
-/plugin marketplace add vinta/hal-9000
-/plugin install hal-skills@hal-9000
+# Claude Code
+claude plugin marketplace add vinta/hal-9000
+claude plugin install hal-skills@hal-9000
+
+# Codex
+codex plugin marketplace add vinta/hal-9000
+codex plugin add hal-skills@hal-9000
 ```
 
-If you want to use them in Codex or other coding agents:
+If you want to use them in other coding agents:
 
 ```bash
 npx skills add vinta/hal-9000
@@ -89,10 +94,10 @@ Plugins that wire their own hooks and run themselves:
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
-/plugin marketplace add vinta/hal-9000
-/plugin install hal-output-styles@hal-9000
-/plugin install hal-session-auto-rename@hal-9000
-/plugin install hal-voice@hal-9000
+claude plugin marketplace add vinta/hal-9000
+claude plugin install hal-output-styles@hal-9000
+claude plugin install hal-session-auto-rename@hal-9000
+claude plugin install hal-voice@hal-9000
 ```
 
 ### Claude Code Statusline
