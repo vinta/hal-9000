@@ -831,9 +831,9 @@ class TestSkipUnchanged:
         mirror.copy(src, dest)
 
         assert said == [
-            f"copy {src} -> {dest} (1 file)",
-            f"unchanged {src}",
-            f"copy {src} -> {dest} (1 file)",
+            f"copy {src}/ -> {dest}/ (1 file)",
+            f"unchanged {src}/",
+            f"copy {src}/ -> {dest}/ (1 file)",
         ]
 
     def test_reports_new_empty_directory_as_copy(self, hal_module, tmp_path):
@@ -846,7 +846,7 @@ class TestSkipUnchanged:
         hal_module.Mirror(say=said.append).copy(src, dest)
 
         assert dest.is_dir()
-        assert said == [f"copy {src} -> {dest} (0 files)"]
+        assert said == [f"copy {src}/ -> {dest}/ (0 files)"]
 
 
 class TestCopyEntryGlob:

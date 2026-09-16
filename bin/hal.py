@@ -142,8 +142,9 @@ class Mirror:
                 dirs_exist_ok=True,
             )
             if existed and not copied:
-                self._say(f"unchanged {abbreviate_home(src)}")
+                self._say(f"unchanged {abbreviate_home(src)}/")
                 return
+            slash = "/"
             count = f" ({copied} file{'' if copied == 1 else 's'})"
         else:
             if self._is_unchanged(src, dest):
@@ -151,8 +152,8 @@ class Mirror:
                 return
             dest.parent.mkdir(parents=True, exist_ok=True)
             self._copy_file_allow_overwrite(src, dest)
-            count = ""
-        self._say(f"copy {abbreviate_home(src)} -> {abbreviate_home(dest)}{count}")
+            slash = count = ""
+        self._say(f"copy {abbreviate_home(src)}{slash} -> {abbreviate_home(dest)}{slash}{count}")
 
     @staticmethod
     def _glob(pattern: Path) -> list[Path]:
