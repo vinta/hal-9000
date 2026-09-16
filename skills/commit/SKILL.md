@@ -39,7 +39,7 @@ Incorrect body: "Give gcloud its own venv because on the author's work MacBook p
 <example>
 Argument: "Commit only settings.json. Why: three commit forks wrote `Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>` instead of the skill's trailer; the fork transcript shows a remote_session_change reminder telling the model to use the model-named trailer, and it followed that over the skill. Setting attribution.commit to the skill's exact string makes both agree. Ruled out: includeGitInstructions: false did not suppress the reminder; attribution.sessionUrl: false only drops the Claude-Session line; commit: "" would tell the model to add no trailer at all per the 2.1.270 binary."
 
-Correct body: "Commit-skill forks followed a Remote Control reminder over the skill and wrote a model-named Co-Authored-By trailer."
+Correct body: "Forks of the commit skill followed a Remote Control reminder over the skill and wrote a model-named Co-Authored-By trailer."
 
 Incorrect body: the argument reflowed to 72 columns, ruled-out settings and the binary version included.
 </example>
@@ -116,7 +116,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry forever.
 
 5. **Create Atomic Commits**: For each logical group:
-   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Never add a parenthetical scope like `fix(commit-skill): xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: the problem in one or two sentences, drawn from the argument when one was given. Skip the body when the problem is obvious from the subject. Always end the message with the `Co-Authored-By` footer from the Attribution section below.
+   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: the problem in one or two sentences, drawn from the argument when one was given. Skip the body when the problem is obvious from the subject. Always end the message with the `Co-Authored-By` footer from the Attribution section below.
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
 ## Attribution
