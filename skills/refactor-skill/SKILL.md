@@ -34,6 +34,6 @@ Refactor a skill. A skill spends two budgets. Its description is loaded into eve
    - **Body** (in context from invocation to session end): a step the agent performs, in order, ending on a checkable completion criterion, or reference every path through the skill needs. Written as standing instructions, since the body is never re-read.
    - **Sibling files** (loaded only when reached): each has a pointer in `SKILL.md` stating what it is and when to read it, or for a script, when to run it. A file with no pointer is unreachable.
 
-4. **Get decisions.** One `AskUserQuestion` per contradiction, with each conflicting version as an option. Then present the delete and demote lists and collect sign-off with one `AskUserQuestion`. The skill stays untouched until sign-off.
+4. **Get decisions.** One single-select question per contradiction, with each conflicting version as an option. Then present the delete and demote lists and collect sign-off with one question. The skill stays untouched until sign-off.
 
 5. **Rewrite.** Apply the signed-off verdicts in one pass, without asking again; they are the request. Apply only those: anything else noticed while editing is a follow-up to report in the final message. Keep the directory name and the `name` field, since renaming changes the slash command. Done when every audited item landed where its verdict says: kept, rewritten, demoted, or deleted. When the description changed, point to the `skill-creator` plugin in the final message for trigger evals.

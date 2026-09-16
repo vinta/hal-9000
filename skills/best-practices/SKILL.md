@@ -16,7 +16,7 @@ Answer two questions from current sources: **what's the recommended way**, and *
 
 ## Two-Phase Rule
 
-- **Phase 1: Research.** Dispatch find-docs and/or WebSearch queries.
+- **Phase 1: Research.** Dispatch find-docs and/or web search queries.
 - **Phase 2: Synthesize and act.** Starts only after Phase 1 results arrive.
 
 The user's argument may be a question or an imperative. Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Phase 1 happens. Phase 1 always runs.
@@ -33,11 +33,11 @@ The user's argument may be a question or an imperative. Imperatives ("refine X",
 
 ### 1. Identify Research Targets
 
-Break the topic into 2-4 specific queries. Dedicate at least one query to pitfalls ("common mistakes with X", "X gotchas in production"): pitfalls live in issue threads, migration guides, and post-mortems, not in getting-started docs, so a how-to query won't surface them. For design prior-art (the "before proposing a design of your own" trigger), dedicate queries to how existing open source projects implement it — concrete implementations and comparisons, not just advice posts. For single-library lookups, call `find-docs` or `WebSearch` directly without subagents.
+Break the topic into 2-4 specific queries. Dedicate at least one query to pitfalls ("common mistakes with X", "X gotchas in production"): pitfalls live in issue threads, migration guides, and post-mortems, not in getting-started docs, so a how-to query won't surface them. For design prior-art (the "before proposing a design of your own" trigger), dedicate queries to how existing open source projects implement it — concrete implementations and comparisons, not just advice posts. For single-library lookups, call `find-docs` or web search directly without subagents.
 
 ### 2. Parallel Research
 
-Dispatch one subagent per query in a single message so they run in parallel, passing `model: sonnet` on each Agent call so the bulk research stays cheap while orchestration and synthesis keep the session model. Each uses `find-docs` (Context7) and `WebSearch`. Be concrete in each subagent prompt: pass library names, version constraints, and the user's specific context. Vague prompts produce vague results.
+Dispatch one subagent per query in a single message so they run in parallel, passing `model: sonnet` on each Agent call so the bulk research stays cheap while orchestration and synthesis keep the session model. Each uses `find-docs` (Context7) and web search. Be concrete in each subagent prompt: pass library names, version constraints, and the user's specific context. Vague prompts produce vague results.
 
 <subagent_prompt_template>
 <context>
@@ -47,7 +47,7 @@ The user wants to [user's task]. We need the latest, authoritative guidance on [
 <task>
 Research best practices for: [specific query]
 
-Use the find-docs skill to look up [library/tool] documentation, then use WebSearch to find recent guides and recommendations for "[specific search query]".
+Use the find-docs skill to look up [library/tool] documentation, then use web search to find recent guides and recommendations for "[specific search query]".
 </task>
 
 <output_format>
@@ -86,5 +86,5 @@ Deliver to the user in this structure:
 
 - **2-4 focused subagents, not more.** Each carries ~20K tokens of startup overhead. Fewer focused queries beat many shallow ones.
 - **User-provided URLs are additive.** If the user provided specific URLs, fetch those too, but they supplement research, not replace it.
-- **Context7 quota limits exist.** If `find-docs` fails with quota errors, fall back to `WebSearch` only and note the limitation.
-- If both `find-docs` and `WebSearch` fail, say so explicitly rather than falling back to training data.
+- **Context7 quota limits exist.** If `find-docs` fails with quota errors, fall back to web search only and note the limitation.
+- If both `find-docs` and web search fail, say so explicitly rather than falling back to training data.

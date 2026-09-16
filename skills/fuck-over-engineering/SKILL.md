@@ -40,7 +40,7 @@ One line per finding, numbered, ranked biggest cut first:
 - `2. reuse: hand-rolled slugify. python-slugify is installed, slugify(). 1 caller. [utils/text.py:10-31]`
 - `3. delete: retry wrapper around an idempotent local call. 0 callers outside its own test. [src/net.py:52-71]`
 
-Then offer the findings with AskUserQuestion, multiSelect, in ranked batches of four per question, and apply the picks.
+Then offer the findings as multi-select questions, in ranked batches of four per question, and apply the picks.
 
 ## Boundaries
 
