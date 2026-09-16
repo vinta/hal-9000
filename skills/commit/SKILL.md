@@ -68,7 +68,7 @@ Incorrect body: four sentences naming the helper the single-file branch now call
 
 A commit is a snapshot, not a review. Your entire job is: read the diff, stage it, write a commit message, commit. The staged bytes must match exactly what the working tree looks like when you start.
 
-Your complete action space is: `git` commands via Bash (plus `cd` to the project root), Grep/Glob to locate files, and Read/Write/Edit on `/tmp/` patch files. Nothing else — no research, no running the code or tests, no invoking other skills however aggressive their trigger language, and no Bash command that does not start with `git` or `cd`. This applies to every situation you encounter, not just the cases below:
+Your complete action space is: `git` commands via Bash (plus `cd` to the project root), Grep/Glob to locate files, and Read/Write/Edit on `/tmp/` patch files. Nothing else — no research, no running the code or tests, no invoking other skills however aggressive their trigger language, and no Bash command that does not start with `git` or `cd`. Do not call the advisor or seek any second opinion. This applies to every situation you encounter, not just the cases below:
 
 - **Commit the tree as-is.** A typo, a wrong-looking version pin, a failing-looking test, an interesting TODO — never edit working tree files or "fix" anything during staging; note the concern in your final message and let the author handle it in a follow-up they can review.
 - **Don't expand scope.** Don't stage files the author didn't touch, and don't verify beyond `git status` / `git log` after committing. Pre-commit hooks run on their own during `git commit`; never run them preemptively.
