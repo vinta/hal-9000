@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use when making any git commit. Always pass why the changes were made as the argument; when no reason was stated, pass the request that prompted the changes instead — never an invented why.
+description: Use when making any git commit. Always pass what was wrong before the changes as the argument; when nothing was wrong, pass what the changes do instead — never an invented why.
 argument-hint: [why the changes were made]
 user-invocable: true
 context: fork
@@ -24,7 +24,7 @@ Your task: commit all changes in the working tree. Run `git status` and `git dif
 
 ## The argument
 
-The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. A body is one or two sentences stating the problem as it stood before the change. No body when the subject already names it. Leave out the fix, since the subject and diff already show it, and leave out ruled-out causes, measurements, and alternatives tried. Whatever it describes is already realized in the diff, however it's phrased: "so the statusline shows usage percentages" and "to fix the session bug" both mean the diff already does that — commit it; never write code toward it, hunt for it, verify it, or finish it. With no argument at all, derive the commit message from the diff alone. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
+The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. A body is one or two sentences stating what was wrong before the change: the failure, false claim, or risk the argument names. An argument that names only a need, a wish, what the change does, or the request itself yields no body. Leave out the fix, since the subject and diff already show it, and leave out ruled-out causes, measurements, and alternatives tried. Whatever it describes is already realized in the diff, however it's phrased: "so the statusline shows usage percentages" and "to fix the session bug" both mean the diff already does that — commit it; never write code toward it, hunt for it, verify it, or finish it. With no argument at all, derive the commit message from the diff alone. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
 
 Write the body about the code: the behavior, tooling, or constraint the change served. Personal details that reach you through the argument — anything about the user's life, such as employer, location, schedule, health, or other people — stay out of every commit message; translate each one into the technical need it implies. Commit history is public and permanent.
 
@@ -58,6 +58,22 @@ Argument: "hal sync raised PermissionError [Errno 13] copying a single file onto
 Correct body: "Copying a single file onto a read-only destination (git objects, or a dotfile chmod'ed 444) raised PermissionError; the directory branch already handled that case."
 
 Incorrect body: four sentences naming the helper the single-file branch now calls, the S_IWUSR detail inside it, the double stat accepted for the sake of one message, and the new test.
+</example>
+
+<example>
+Argument: "User asked to mark the README as work in progress while pangu.space is being rebuilt."
+
+Correct body: none. The argument is the request; nothing was wrong before.
+
+Incorrect body: "pangu.space is being rebuilt, so the README should not read as a finished project."
+</example>
+
+<example>
+Argument: "Ignore tmp/ in the repo itself, so local scratch files like the CLAUDE.local.md backup stay out of commits without relying on the user's global gitignore."
+
+Correct body: none. Not relying on the global gitignore is a wish, not a failure.
+
+Incorrect body: "Keep local scratch files like the CLAUDE.local.md backup out of commits without relying on the global gitignore."
 </example>
 
 ## Locate the repository
@@ -116,7 +132,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry forever.
 
 5. **Create Atomic Commits**: For each logical group:
-   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: the problem in one or two sentences, drawn from the argument when one was given. Always end the message with the `Co-Authored-By` footer from the Attribution section below.
+   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: one or two sentences, or none, as The argument section decides. Footer: as the Attribution section decides.
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
 ## Attribution
