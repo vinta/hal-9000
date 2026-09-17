@@ -164,7 +164,7 @@
       }
     ]
   },
-  "enableArtifact": false,
+  "enableArtifact": true,
   "workflowSizeGuideline": "small",
   "statusLine": {
     "type": "command",
