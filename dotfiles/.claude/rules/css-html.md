@@ -17,7 +17,6 @@ paths:
 - Use CSS custom properties (`--var`) for colors and repeated values
 - Use `rem` for font sizes and spacing
 - Use `gap` in flex/grid layouts, not margin hacks on children
-- Use logical properties (`margin-inline`, `padding-block`) over physical ones (`margin-left`, `padding-top`)
 - Never use `!important`. Fix specificity instead. Use it only when no better choice exists
 
 ## Visual changes
