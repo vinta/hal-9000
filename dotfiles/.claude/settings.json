@@ -145,7 +145,8 @@
     "claude-api": "off",
     "code-review": "off",
     "fewer-permission-prompts": "off",
-    "keybindings-help": "off"
+    "keybindings-help": "off",
+    "team-onboarding": "off"
   },
   "hooks": {
     "PreToolUse": [
