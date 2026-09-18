@@ -19,3 +19,15 @@ paths:
 - Use `gap` in flex/grid layouts, not margin hacks on children
 - Use logical properties (`margin-inline`, `padding-block`) over physical ones (`margin-left`, `padding-top`)
 - Never use `!important`. Fix specificity instead
+
+## Visual changes
+
+When a change spans several components, states, or colors, or you are choosing between candidates, show it before asking:
+
+- Render each candidate in the real page, compose them into one labeled image side by side, and `open` it. Label each panel with the candidate and its deciding values.
+- Pair the image with a table of the numbers that decide it (contrast ratio, pixel gaps, rendered width, line count), measured from the rendered page.
+- For a palette, render a sheet: one row per element and state (rest, hover), showing the element plus swatches for its text, fill, and border.
+- Prototype with injected CSS or an uncommitted edit. Commit after the user picks, one change per commit so each reverts on its own.
+- Before each capture, set `transition: none; animation: none` on `*, ::before, ::after` and wait for layout. `*` alone misses pseudo-elements, and a mid-fade capture shows the old color.
+
+A one-property tweak on one element skips all this: make it and say what changed.
