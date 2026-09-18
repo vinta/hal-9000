@@ -15,7 +15,7 @@ paths:
 - Keep spacing consistent across sibling components (card lists, grid items): if one card has `padding-bottom: 1rem`, all do.
 - Never use `text-transform`. Write the casing directly in the markup.
 - Use CSS custom properties (`--var`) for colors and repeated values
-- Use `rem` for font sizes and spacing, `px` only for borders and shadows
+- Use `rem` for font sizes and spacing
 - Use `gap` in flex/grid layouts, not margin hacks on children
 - Use logical properties (`margin-inline`, `padding-block`) over physical ones (`margin-left`, `padding-top`)
 - Never use `!important`. Fix specificity instead. Use it only when no better choice exists
