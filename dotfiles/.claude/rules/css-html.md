@@ -10,9 +10,10 @@ paths:
 
 - Main content container defaults to `max-width: 1280px`. Never go below 1200px unless building a narrow-purpose layout (auth forms, modals, settings pages, browser extension pages).
 - Body font size `16px` minimum, `18px` for content-heavy pages. Never use `14px` or `text-sm` for body text.
-- Adjacent heading levels (h1→h2→h3) differ by at least `4px` / `0.25rem`. Never render a heading at body text size.
+- Adjacent heading levels (h1 > h2 > h3) differ by at least `4px` / `0.25rem`. Never render a heading at body text size.
 - Reserve accent and link colors for clickable items. Non-interactive elements (inline code, badges, pills, tags) use a neutral or muted color so users don't mistake them for links.
 - Keep spacing consistent across sibling components (card lists, grid items): if one card has `padding-bottom: 1rem`, all do.
+- Balance the space inside a padded container (card, panel, dialog, callout) by what the eye sees, not by the padding value: the gap above its first line equals the gap below its last. Text carries leading under its last line, so when the container ends in text, trim it with `text-box: trim-end text` on that specific last text element. Never apply it to every last child: a control row, a strip or an image already sits flush. Browsers without `text-box` show a little more space.
 - Never use `text-transform`. Write the casing directly in the markup.
 - Use CSS custom properties (`--var`) for colors and repeated values
 - Use `rem` for font sizes and spacing
