@@ -132,7 +132,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry forever.
 
 5. **Create Atomic Commits**: For each logical group:
-   - Conventional commit format, type only, no scope: `fix: xxx`, `feat: xxx`, `docs: xxx`, `refactor: xxx`. Subject: what changed (≤72 chars), derived from the diff. Body: one or two sentences, or none, as The argument section decides. Footer: as the Attribution section decides.
+   - Conventional commit format `type: subject`, no scope, type one of `feat`, `fix`, `refactor`, `test`, `build`, `docs`, `style`. `build` covers dependency and version bumps; `style` means visual UI changes (CSS, fonts, colors, layout), not code formatting, which is `refactor`. Subject: what changed (≤72 chars), derived from the diff. Body: one or two sentences, or none, as The argument section decides. Footer: as the Attribution section decides.
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
 
 ## Attribution

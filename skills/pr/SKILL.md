@@ -29,7 +29,7 @@ Create mode and update mode run these steps where they say "gather PR material":
 
 1. `git log --format='%n%s' --name-only main..HEAD` (fall back to `master..HEAD`). Each commit is a block: its subject, then the files it touched. A flat log next to a branch-wide diff stat lets the writer guess which commit touched which file.
 
-2. The PR describes the net change of the branch. A commit whose subject starts with `Revert "` and the commit it names cancel each other when both sit in the log, and a subject starting with `chore: bump` describes no change. Remove those blocks from the log before passing it on.
+2. The PR describes the net change of the branch. A commit whose subject starts with `Revert "` and the commit it names cancel each other when both sit in the log, and a subject starting with `build: bump` describes no change. Remove those blocks from the log before passing it on.
 
 3. `git log --format=%b main..HEAD` (same fallback). Collect every issue number written as `#N` or as a GitHub issue URL. Each one becomes a `Fix #N` line at the end of the body, one per line, no duplicates.
 
