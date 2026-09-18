@@ -18,7 +18,7 @@ paths:
 - Use `rem` for font sizes and spacing, `px` only for borders and shadows
 - Use `gap` in flex/grid layouts, not margin hacks on children
 - Use logical properties (`margin-inline`, `padding-block`) over physical ones (`margin-left`, `padding-top`)
-- Never use `!important`. Fix specificity instead
+- Never use `!important`. Fix specificity instead. Use it only when no better choice exists
 
 ## Visual changes
 
