@@ -54,10 +54,6 @@
       "dest": "{{HOME}}/Dropbox/Projects/*/CLAUDE.local.md"
     },
     {
-      "src": "{{HOME}}/Projects/*/AGENTS.local.md",
-      "dest": "{{HOME}}/Dropbox/Projects/*/AGENTS.local.md"
-    },
-    {
       "src": "{{HOME}}/Projects/*.code-workspace",
       "dest": "{{HOME}}/Dropbox/Projects/*.code-workspace"
     }
