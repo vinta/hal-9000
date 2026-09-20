@@ -10,12 +10,11 @@ paths:
 - Pin exact dependency versions in `package.json` — no `^` or `~` prefixes
 - Pin `@types/node` to the latest release of the oldest Node.js major in `engines.node`, so the compiler flags APIs that major lacks
 - Use the `node:` prefix for Node.js built-in modules (`node:fs`, `node:path`)
-- Write proper types/interfaces instead of `any` or casts like `as any` / `as unknown`
-  - When a value is genuinely untypable, use `unknown` and narrow it explicitly. `any` is the last resort when no typed alternative exists
 - Prefer `interface` over `type` for object shapes (extendable, better error messages)
 - Avoid enums. Use union types (`type Status = 'active' | 'inactive'`) or `as const` objects
-- Mark properties and parameters `readonly` when they should not be mutated
-- Do not add explicit return types. Let TypeScript infer them
+- Write a proper type instead of `any` or a cast (`as any`, `as unknown`). For a genuinely untypable value, use `unknown` and narrow it; `any` is the last resort
+- Do not add explicit return types. Let TypeScript infer them, except where the annotation checks returned literals against a declared union or contract
+- Mark a property or parameter `readonly` only when nothing about it changes. One that is never reassigned but whose contents are mutated in place (a queue, a cache, a settings object) stays unmarked
 
 ## Naming
 
