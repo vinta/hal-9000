@@ -14,7 +14,8 @@ paths:
 - Avoid enums. Use union types (`type Status = 'active' | 'inactive'`) or `as const` objects
 - Write a proper type instead of `any` or a cast (`as any`, `as unknown`). For a genuinely untypable value, use `unknown` and narrow it; `any` is the last resort
 - Do not add explicit return types. Let TypeScript infer them, except where the annotation checks returned literals against a declared union or contract
-- Mark a property or parameter `readonly` only when nothing about it changes. One that is never reassigned but whose contents are mutated in place (a queue, a cache, a settings object) stays unmarked
+- Mark a class property `readonly` only when it is set once and its contents never change. One that is never reassigned but mutated in place (a queue, a cache, a settings object) stays unmarked
+- Use a readonly type (`readonly T[]`, `ReadonlySet`, `ReadonlyMap`) only where an accidental mutation would break other code: an exported constant, a parameter a published API only reads, a parameter the body must copy before mutating. The type is shallow: judge the container, not what its items point to. Everything else stays plain
 
 ## Naming
 
