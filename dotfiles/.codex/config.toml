@@ -113,22 +113,13 @@ trust_level = "trusted"
 [projects."/Users/vinta/Projects/pangu.js"]
 trust_level = "trusted"
 
+[projects."/Users/vinta/Projects/pangu.py"]
+trust_level = "trusted"
+
+[projects."/Users/vinta/Projects/pangu.space"]
+trust_level = "trusted"
+
 [projects."/Users/vinta/Projects/laughing-man"]
-trust_level = "trusted"
-
-[projects."/Users/vinta/Projects/vinta.ws"]
-trust_level = "trusted"
-
-[projects."/Users/vinta/Projects/mensab"]
-trust_level = "trusted"
-
-[projects."/Users/vinta/Projects/finance"]
-trust_level = "trusted"
-
-[projects."/Users/vinta/Projects/resume"]
-trust_level = "trusted"
-
-[projects."/Users/vinta/Projects/personal"]
 trust_level = "trusted"
 
 [memories]
