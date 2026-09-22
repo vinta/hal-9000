@@ -135,6 +135,8 @@ usePointerCursors = true
 enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
 conversationDetailMode = "STEPS_COMMANDS"
 projectlessWorkspaceRoot = "/Users/vinta/Projects/personal"
+sansFontSize = 16
+codeFontSize = 14
 
 [marketplaces.hal-9000]
 source_type = "git"
