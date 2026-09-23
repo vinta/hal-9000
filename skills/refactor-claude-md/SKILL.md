@@ -26,7 +26,6 @@ The file serves every model the user runs, not only the one this session runs on
 
 2. **Fetch the guides.** Fetch these pages. They calibrate the delete and rewrite verdicts below:
    - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
-   - https://www.aihero.dev/a-complete-guide-to-agents-md
    - The page for each audited model, regardless of which one this session runs on, plus any earlier model's page it names as its baseline: `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-<model-id>`
 
 3. **Audit.** Read the file and give every instruction exactly one verdict, judged against the target's bar below. Done when no instruction lacks one.
