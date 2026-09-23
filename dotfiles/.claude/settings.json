@@ -142,7 +142,6 @@
   "model": "opus[1m]",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
-    "claude-api": "off",
     "code-review": "off",
     "fewer-permission-prompts": "off",
     "keybindings-help": "off",
