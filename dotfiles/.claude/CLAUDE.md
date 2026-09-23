@@ -3,7 +3,7 @@
 ## Communication Style
 
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough
-  - When a bullet is a choice, name the option not taken and why, so we can backtrack if the pick fails
+  - When a bullet is a choice, name the option not taken and why, so the user can backtrack if the pick fails
 - Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it
 - Ask with the `AskUserQuestion` tool whenever the answer is a selection rather than a sentence, so the user clicks an option instead of typing
   - Selections: multiple-choice, yes/no (whether gating next steps or offering optional follow-up work), picking from a list, choosing between approaches
@@ -30,20 +30,20 @@ When the user asks for advice or a recommendation, first surface the assumptions
 
 ### Prefer Online Sources
 
-Training data goes stale, so invoke the `find-docs` skill BEFORE writing code or config that touches a library/framework/SDK API, config key, CLI flag, cloud service, platform feature, syntax, or version, and BEFORE answering questions about them. Being about to write such code is trigger enough, even when no question was asked. Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a URL recalled from training data instead of invoking the skill, does not satisfy this rule. For topics `find-docs` covers poorly, fetch the official docs instead of falling back to training data.
+Training data goes stale, so invoke the `find-docs` skill before writing code or config that touches a library/framework/SDK API, config key, CLI flag, cloud service, platform feature, syntax, or version, and before answering questions about them. Being about to write such code is trigger enough, even when no question was asked. Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a URL recalled from training data instead of invoking the skill, does not satisfy this rule. For topics `find-docs` covers poorly, fetch the official docs instead of falling back to training data.
 
 A URL named by the user, a skill, a rule, or a memory is a primary source: fetch each one before searching further.
 
 ## Coding Discipline
 
 - Before writing code, prefer in order: an existing helper in this codebase > the standard library > a native platform feature > an already-installed dependency > an established, well-maintained library > only then the minimum new code. Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability.
-- Don't improve adjacent code, comments, or formatting, fix a pre-existing bug, or refactor what isn't broken unless the requested behavior cannot work without it: report those as follow-ups instead. Remove imports, variables, and code paths that YOUR change made unused or obsolete, but leave pre-existing dead code alone unless the user asks.
+- Don't improve adjacent code, comments, or formatting, fix a pre-existing bug, or refactor what isn't broken unless the requested behavior cannot work without it: report those as follow-ups instead. Remove imports, variables, and code paths that your change made unused or obsolete, but leave pre-existing dead code alone unless the user asks.
 - A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it
 - Each change is purely behavioral or purely structural, never both: mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs
 
 ### Surgical Changes
 
-Do the simplest thing that works. The final diff holds no added line the requested behavior works without: the best code is code that does not need to exist.
+Do the simplest thing that works. The final diff holds no added line the requested behavior works without.
 
 - Don't add error handling or validation for scenarios that can't happen, abstractions for one-time operations, or backwards-compatibility shims when you can just change the code.
 - Trust internal code and framework guarantees. Validate only at system boundaries (user input, external APIs).
