@@ -40,4 +40,4 @@ Every recurring second-language pattern found in the corpus was put to the user 
 
 ## Harvest
 
-The calibration data grows through drafted-vs-sent pairs: an AI draft next to what the user actually used. When the user rewrites a draft, the skill offers to save the pair (workflow step 5). Pairs live in the user's local corpus, not in this repo; a pair's text gets embedded here only with the user's per-quote approval.
+The calibration data grows through drafted-vs-sent pairs: an AI draft next to what the user actually used. When the user rewrites a draft, the skill offers to save the pair (workflow step 6). Pairs live in the user's local corpus, not in this repo; a pair's text gets embedded here only with the user's per-quote approval.
