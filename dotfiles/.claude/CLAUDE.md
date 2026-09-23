@@ -43,7 +43,7 @@ A URL named by the user, a skill, a rule, or a memory is a primary source: fetch
 
 ### Surgical Changes
 
-Do the simplest thing that works. Before reporting done, reread the diff and delete every added line the requested behavior works without: the best code is code that does not need to exist.
+Do the simplest thing that works. The final diff holds no added line the requested behavior works without: the best code is code that does not need to exist.
 
 - Don't add error handling or validation for scenarios that can't happen, abstractions for one-time operations, or backwards-compatibility shims when you can just change the code.
 - Trust internal code and framework guarantees. Validate only at system boundaries (user input, external APIs).
