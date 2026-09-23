@@ -1,10 +1,8 @@
 # Claude model guides
 
-Fetch the guide for the selected model:
+Resolve the selected alias to its current full model ID from the model list in your system prompt, then fetch that model's guide, plus any earlier model's guide it names as its baseline:
 
-- `fable`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1
-- `opus`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5
-- `sonnet`: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5
+- `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-<model-id>`
 
 Fetch these platform guides:
 
