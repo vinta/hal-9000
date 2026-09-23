@@ -139,7 +139,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5-1[1m]",
+  "model": "opus[1m]",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "claude-api": "off",
@@ -202,7 +202,7 @@
     "claude-fable-5-1": {
       "effortLevel": "high"
     },
-    "claude-opus-5": {
+    "claude-opus-5-5": {
       "effortLevel": "high"
     },
     "claude-sonnet-5": {
