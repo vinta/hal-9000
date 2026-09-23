@@ -53,10 +53,10 @@ Use the `find-docs` skill to look up [library/tool] documentation, then use web 
 <output_format>
 Report:
 
-1. Recommended approach with rationale
-2. Concrete code/config examples
-3. Every pitfall you found, including ones you are uncertain about or consider minor. Your job is coverage; synthesis will rank and filter. Note each pitfall's consequence (what breaks, what it costs)
-4. Sources consulted (with publication dates)
+1. Recommended approach with rationale.
+2. Concrete code/config examples.
+3. Every pitfall you found, including ones you are uncertain about or consider minor. Your job is coverage; synthesis will rank and filter. Note each pitfall's consequence (what breaks, what it costs).
+4. Sources consulted (with publication dates).
 
 Keep it under 400 words. If space runs short, compress the explanations rather than dropping pitfalls. If you cannot find authoritative guidance on a point, say so explicitly rather than guessing.
 </output_format>
@@ -66,10 +66,10 @@ Keep it under 400 words. If space runs short, compress the explanations rather t
 
 After all subagents return, merge using these criteria:
 
-1. **Deduplicate** overlapping recommendations
-2. **Rank by authority:** official docs > well-known guides > blog posts > training data
-3. **Flag conflicts** with attribution (which source said what)
-4. **Discard stale results**: a 2022 guide for a fast-moving framework is noise
+1. **Deduplicate** overlapping recommendations.
+2. **Rank by authority:** official docs > well-known guides > blog posts > training data.
+3. **Flag conflicts** with attribution (which source said what).
+4. **Discard stale results**: a 2022 guide for a fast-moving framework is noise.
 
 If a subagent failed or returned empty, note the gap and proceed with the results you have. Do not block synthesis waiting for a straggler.
 
@@ -77,10 +77,10 @@ If a subagent failed or returned empty, note the gap and proceed with the result
 
 Deliver to the user in this structure:
 
-1. **Recommended Approach**: the primary recommendation with rationale
-2. **Key Patterns**: concrete code/config examples the user can apply immediately
-3. **Gotchas & Pitfalls**: cover every recommendation above, not just the primary one. For each: the mistake, its consequence, and how to avoid it
-4. **Sources**: what was consulted, so the user can dig deeper
+1. **Recommended Approach**: the primary recommendation with rationale.
+2. **Key Patterns**: concrete code/config examples the user can apply immediately.
+3. **Gotchas & Pitfalls**: cover every recommendation above, not just the primary one. For each: the mistake, its consequence, and how to avoid it.
+4. **Sources**: what was consulted, so the user can dig deeper.
 
 ## Constraints
 

@@ -13,14 +13,14 @@ paths:
 - Adjacent heading levels (h1 > h2 > h3) differ by at least `4px` / `0.25rem`. Never render a heading at body text size.
 - Reserve accent and link colors for clickable items. Non-interactive elements (inline code, badges, pills, tags) use a neutral or muted color so users don't mistake them for links.
 - Balance the space inside a padded container (card, panel, dialog, callout) by what the eye sees, not by the padding value: the gap above its first line equals the gap below its last.
-  - Text carries leading under its last line, so when the container ends in text, trim it with `text-box: trim-end text` on that specific last text element
-  - Never apply it to every last child: a control row, a strip or an image already sits flush
-  - Add no fallback for browsers without `text-box`; the extra space is acceptable
+  - Text carries leading under its last line, so when the container ends in text, trim it with `text-box: trim-end text` on that specific last text element.
+  - Never apply it to every last child: a control row, a strip or an image already sits flush.
+  - Add no fallback for browsers without `text-box`; the extra space is acceptable.
 - Keep spacing consistent across sibling components (card lists, grid items): if one card has `padding-bottom: 1rem`, all do.
-- Use `rem` for font sizes and spacing
-- Use `gap` in flex/grid layouts, not margin hacks on children
-- Use CSS custom properties (`--var`) for colors and repeated values
-- Avoid `!important`; fix specificity instead. Use it only when no better choice exists
+- Use `rem` for font sizes and spacing.
+- Use `gap` in flex/grid layouts, not margin hacks on children.
+- Use CSS custom properties (`--var`) for colors and repeated values.
+- Avoid `!important`; fix specificity instead. Use it only when no better choice exists.
 - Never use `text-transform`. Write the casing directly in the markup.
 
 ## Visual changes

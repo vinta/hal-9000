@@ -19,8 +19,8 @@ The file serves every model the user runs, not only the one this session runs on
 ## Instructions
 
 1. **Pick the target.** If the invocation names one, use it. Otherwise ask with `AskUserQuestion`, one option per file that exists, with the resolved path in the label:
-   - The user-level CLAUDE.md at `~/.claude/CLAUDE.md`
-   - The current project's CLAUDE.md
+   - The user-level CLAUDE.md at `~/.claude/CLAUDE.md`.
+   - The current project's CLAUDE.md.
 
    Then settle the models to audit: the ones the invocation names, otherwise ask in the same question call, multi-select, with this session's model as the first option. Resolve each to its full model ID from the model list in your system prompt.
 

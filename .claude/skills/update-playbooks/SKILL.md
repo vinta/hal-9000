@@ -42,9 +42,9 @@ Adjacent line numbers pair each URL with the task it documents. Done when every 
 
 Fetch each doc URL once and take all three answers off that one page:
 
-- **newest tag inside the release line** — `gh api repos/OWNER/REPO/releases --jq '.[].tag_name'` for a `github.com/OWNER/REPO` link, WebFetch otherwise
-- **the install commands the page currently recommends for macOS** — quote them verbatim, including which method the page calls recommended when it ranks them
-- **where the URL lands** — `curl -sIL -o /dev/null -w '%{http_code} %{url_effective}\n' URL`
+- **newest tag inside the release line** — `gh api repos/OWNER/REPO/releases --jq '.[].tag_name'` for a `github.com/OWNER/REPO` link, WebFetch otherwise.
+- **the install commands the page currently recommends for macOS** — quote them verbatim, including which method the page calls recommended when it ranks them.
+- **where the URL lands** — `curl -sIL -o /dev/null -w '%{http_code} %{url_effective}\n' URL`.
 
 Done when every task has today's version, install commands, and final URL confirmed from its page. Anything recalled from training data is stale by definition.
 

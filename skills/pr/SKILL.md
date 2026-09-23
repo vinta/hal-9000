@@ -84,7 +84,7 @@ Move name-suffix into core rules and protect URLs and slashes
 4. If exit code 0 (all checks passed):
    - `gh pr merge --merge --delete-branch`
    - `git switch main && git pull`
-   - Delete local branch if it still exists: `git branch -d <branch>`
+   - Delete local branch if it still exists: `git branch -d <branch>`.
    - Report: merged, remote and local branches cleaned up.
 5. If non-zero (check failed):
    - Run `gh pr checks` once more to list failed checks and their URLs.

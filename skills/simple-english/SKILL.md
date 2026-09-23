@@ -31,16 +31,16 @@ Write or rewrite the given text in Global English: the global-audience tier that
 5. **Rewrite sentence by sentence.** Subject-verb-object with the subject early, one idea per sentence, active voice and present tense, conditions first, small words kept ("that", "who", articles), pronouns with more than one possible referent replaced by their nouns, noun stacks broken at two modifiers, hidden verbs uncovered ("install", not "perform an installation"), idioms and phrasal-verb bloat swapped per the substitution table. Kohl's main rule decides every edit: no change that sounds unnatural to a native speaker.
 
 6. **Verify every paragraph and sentence** against the checklist:
-   - One topic per paragraph, the point stated in its first sentence
-   - Subject and verb early, at most three linked clauses, no "there is/are" openers
-   - Procedures imperative with conditions first
-   - Every pronoun's referent unambiguous, every abbreviation defined at first use
-   - Terminology consistent with the map from step 4, parallel ideas in parallel form
-   - No idioms, culture-specific references, Latin abbreviations, or directional cross-references ("above", "below")
+   - One topic per paragraph, the point stated in its first sentence.
+   - Subject and verb early, at most three linked clauses, no "there is/are" openers.
+   - Procedures imperative with conditions first.
+   - Every pronoun's referent unambiguous, every abbreviation defined at first use.
+   - Terminology consistent with the map from step 4, parallel ideas in parallel form.
+   - No idioms, culture-specific references, Latin abbreviations, or directional cross-references ("above", "below").
    - The sentence still reads naturally aloud
      Done when every sentence passes, or its deviation is deliberate and appears in the report.
 
 7. **Deliver.** Present the rewrite. Edit files in place only when the user asked for the files to change. After the rewrite, report only what applies:
-   - The terminology map, so the user can veto term choices
-   - Judgment calls where the source was ambiguous and the rewrite picks one reading
-   - Gaps where the source lacks specifics the reader will need
+   - The terminology map, so the user can veto term choices.
+   - Judgment calls where the source was ambiguous and the rewrite picks one reading.
+   - Gaps where the source lacks specifics the reader will need.

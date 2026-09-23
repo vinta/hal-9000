@@ -46,9 +46,9 @@ If a plugin's version already differs from `origin/main`, it was bumped for unre
 
 ## 3. Bump
 
-- **Patch** (0.2.0 -> 0.2.1): bug fixes, config changes, style cleanup
-- **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands
-- **Major** (0.2.0 -> 1.0.0): breaking changes to hook behavior or config format
+- **Patch** (0.2.0 -> 0.2.1): bug fixes, config changes, style cleanup.
+- **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands.
+- **Major** (0.2.0 -> 1.0.0): breaking changes to hook behavior or config format.
 
 ## 4. Check the manifests are in sync
 
@@ -58,9 +58,9 @@ python3 .claude/skills/publish-plugins/scripts/check_manifest_sync.py
 
 Every plugin is described twice on purpose: once in its own `.claude-plugin/plugin.json` and once as an entry in `.claude-plugin/marketplace.json`. For each plugin the script checks that
 
-- both describe the same fields with the same values, apart from `version` (plugin.json only) and `source`, `category`, `tags`, `strict`, `defaultEnabled` (marketplace entry only — Claude Code ignores them in a plugin.json)
-- every component path either manifest declares exists on disk
-- every skill directory in a plugin's root appears in both skill lists
+- both describe the same fields with the same values, apart from `version` (plugin.json only) and `source`, `category`, `tags`, `strict`, `defaultEnabled` (marketplace entry only — Claude Code ignores them in a plugin.json).
+- every component path either manifest declares exists on disk.
+- every skill directory in a plugin's root appears in both skill lists.
 
 It exits non-zero naming each problem. Fix the manifests it names, then run it again.
 

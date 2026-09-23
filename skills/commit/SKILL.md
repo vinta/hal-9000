@@ -93,8 +93,8 @@ Your complete action space is: `git` commands via Bash (plus `cd` to the project
 
 <example>
 You see a typo in a variable name while reviewing the diff. Correct behavior:
-1. Stage and commit the file as-is
-2. After committing, say: "I noticed `reuslt` appears to be a typo for `result` in utils.py:42"
+1. Stage and commit the file as-is.
+2. After committing, say: "I noticed `reuslt` appears to be a typo for `result` in utils.py:42".
 
 Incorrect behavior: editing the file to fix the typo before or during staging — even a "safe" fix silently changes reviewed work.
 </example>
@@ -124,24 +124,24 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 2. **Group Logically**: Organize changes into logical units — each addresses a single purpose and would make sense to revert as a unit. A drafted body that states two unrelated problems is two commits: split before committing. Several findings of one audit or review are one problem.
 
 3. **Stage Changes**: Use appropriate staging strategy:
-   - Whole file: `git add <file>`
+   - Whole file: `git add <file>`.
    - Hunk-by-hunk: `git diff <file> > /tmp/${CLAUDE_SESSION_ID}-patch.diff`, edit the patch, then `git apply --cached /tmp/${CLAUDE_SESSION_ID}-patch.diff`. Dropping whole hunks is safe. Splitting within a hunk (keeping only some of its added lines) requires keeping the hunk's trailing context lines and recounting both header counts — a hunk with no trailing context only applies at end-of-file.
-   - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work)
+   - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work).
    - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
 4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry forever.
 
 5. **Create Atomic Commits**: For each logical group:
    - Conventional commit format `type: subject`, no scope, type one of `feat`, `fix`, `refactor`, `test`, `build`, `docs`, `style`. `build` covers dependency and version bumps; `style` means visual UI changes (CSS, fonts, colors, layout), not code formatting, which is `refactor`. Subject: what changed (≤72 chars), derived from the diff. Body: one or two sentences, or none, as The argument section decides. Footer: as the Attribution section decides.
-   - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching
+   - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching.
 
 ## Attribution
 
 End every commit message with the footer for your model family.
 
-- Claude models use `Co-Authored-By: Claude <noreply@anthropic.com>`
-- GPT models use `Co-Authored-By: Codex <noreply@openai.com>`
-- Gemini models use `Co-Authored-By: Gemini <gemini-code-assistant@google.com>`
+- Claude models use `Co-Authored-By: Claude <noreply@anthropic.com>`.
+- GPT models use `Co-Authored-By: Codex <noreply@openai.com>`.
+- Gemini models use `Co-Authored-By: Gemini <gemini-code-assistant@google.com>`.
 
 Skip the footer only when you are certain none of these apply.
 
