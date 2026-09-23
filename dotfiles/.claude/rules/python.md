@@ -7,7 +7,7 @@ paths:
 # Python
 
 - Check https://awesome-python.com/llms.txt before choosing a library or tool
-- Prefer the standard library over adding a dependency — `tomllib` over `tomli`, `pathlib` over external path libs
+- Standard library picks: `tomllib` over `tomli`, `pathlib` over external path libs
   - `requests` is fine since it's the de facto standard
 - Version specifiers in `pyproject.toml`: `>=` floors (uv's `add-bounds` default). Reproducibility lives in `uv.lock` + `uv sync --locked`; `==` pins there would duplicate the lockfile and block `uv lock --upgrade`
   - Pin `==` only where no lockfile exists (standalone scripts, requirements.txt)

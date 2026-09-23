@@ -15,13 +15,13 @@ paths:
 - Balance the space inside a padded container (card, panel, dialog, callout) by what the eye sees, not by the padding value: the gap above its first line equals the gap below its last.
   - Text carries leading under its last line, so when the container ends in text, trim it with `text-box: trim-end text` on that specific last text element
   - Never apply it to every last child: a control row, a strip or an image already sits flush
-  - Browsers without `text-box` show a little more space
+  - Add no fallback for browsers without `text-box`; the extra space is acceptable
 - Keep spacing consistent across sibling components (card lists, grid items): if one card has `padding-bottom: 1rem`, all do.
 - Use `rem` for font sizes and spacing
 - Use `gap` in flex/grid layouts, not margin hacks on children
 - Use CSS custom properties (`--var`) for colors and repeated values
+- Avoid `!important`; fix specificity instead. Use it only when no better choice exists
 - Never use `text-transform`. Write the casing directly in the markup.
-- Never use `!important`. Fix specificity instead. Use it only when no better choice exists
 
 ## Visual changes
 
