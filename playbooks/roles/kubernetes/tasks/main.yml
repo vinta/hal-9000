@@ -9,13 +9,13 @@
 
 # https://kubernetes.io/releases/
 # https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
-- name: Install kubectl 1.35.6
+- name: Install kubectl 1.35.9
   shell: |
     ARCH=$(uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
-    curl -sLo /tmp/kubectl "https://dl.k8s.io/release/v1.35.6/bin/darwin/${ARCH}/kubectl"
+    curl -sLo /tmp/kubectl "https://dl.k8s.io/release/v1.35.9/bin/darwin/${ARCH}/kubectl"
     mkdir -p "$HOME/.local/bin"
     install -m 0755 /tmp/kubectl "$HOME/.local/bin" && rm /tmp/kubectl
-  when: "'v1.35.6' not in kubernetes_kubectl_version.stdout"
+  when: "'v1.35.9' not in kubernetes_kubectl_version.stdout"
 
 - name: Tap derailed/k9s
   homebrew_tap:
