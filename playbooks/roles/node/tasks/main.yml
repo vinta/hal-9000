@@ -30,8 +30,8 @@
 - name: Install global Node.js packages
   shell: |
     eval "$(fnm env --shell bash)"
-    npm install -g pangu
-    npm install -g npm-check-updates
+    npm install -g pangu@latest
+    npm install -g npm-check-updates@latest
   args:
     executable: /bin/bash
   changed_when: false

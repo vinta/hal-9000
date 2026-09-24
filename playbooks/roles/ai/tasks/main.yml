@@ -26,7 +26,7 @@
 - name: Install ctx7
   shell: |
     eval "$(fnm env --shell bash)"
-    npm install -g ctx7
+    npm install -g ctx7@latest
   args:
     executable: /bin/bash
   changed_when: false
