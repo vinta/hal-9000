@@ -12,6 +12,8 @@ Refactor an `AGENTS.md` for GPT-6 Astra. Every retained line enters each Codex s
 
 ## Instructions
 
+Use `request_user_input` in Codex when available.
+
 1. **Pick the target.** Use the target named by the invocation or established in the conversation. If the target remains ambiguous, ask the user to choose among the files that exist:
    - The user-level file at `$CODEX_HOME/AGENTS.md`, defaulting to `~/.codex/AGENTS.md` when `CODEX_HOME` is unset.
    - The current project's root `AGENTS.md`.

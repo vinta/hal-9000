@@ -30,6 +30,8 @@ A finding removes lines or concepts; moving them between files is a refactor, no
 
 ## Output
 
+Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available.
+
 One line per finding, numbered, ranked biggest cut first:
 
 `N. <tag> <what to cut>. <replacement>. <evidence>. [path:line]`

@@ -14,6 +14,8 @@ Refactor a skill. A skill spends two budgets. Its description is loaded into eve
 
 ## Instructions
 
+Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available.
+
 1. **Pick the target.** If the invocation names one, resolve it to its `SKILL.md`. Otherwise ask which skill. Read `SKILL.md` and every sibling file in its directory. If the invocation also names a change to make, that change sets the scope: the verdicts below cover the lines it adds or touches, the rest of the skill stays as it is, and anything noticed there is a follow-up.
 
 2. **Fetch the guides.** The platform and model guides below calibrate the delete, demote, and rewrite verdicts.

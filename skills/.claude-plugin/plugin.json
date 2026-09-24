@@ -1,6 +1,6 @@
 {
   "name": "hal-skills",
-  "version": "2.11.4",
+  "version": "2.11.5",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",

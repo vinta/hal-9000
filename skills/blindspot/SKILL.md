@@ -35,6 +35,8 @@ Before any question, one reply the user reads, under a page:
 
 ### 3. Ask which direction
 
+Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available.
+
 One single-select question: the top 3 unexplored areas by number, plus "Enough, hand off". Each option is an area and its description that area's why in one line; every option names an area the reply above explained. The user is choosing where to look, so labels stay unranked: no "(Recommended)". A free-text answer reaches any numbered area.
 
 Round 1 adds one premortem question phrased in past tense — "it's three months later and this failed: what broke?" — past tense recruits prospective hindsight; "what could go wrong" is measurably weaker. Its answer often names the real goal, so re-rank the areas by it. If the user's goal or familiarity is still unclear after recon, round 1 also carries one calibration question.
