@@ -24,7 +24,7 @@
 
 # Minor version only: uv links a venv built from an exact patch version to that patch's directory,
 # which `uv python upgrade` leaves behind, while `3.14` follows the symlink uv repoints on upgrade.
-# https://docs.cloud.google.com/sdk/docs/install
+# https://docs.cloud.google.com/sdk/docs/install-sdk
 - name: Create gcloud venv with Python 3.14
   command: uv venv --python 3.14 {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv
   args:
