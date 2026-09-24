@@ -32,7 +32,6 @@ js_repl = false
 default_mode_request_user_input = true
 
 [tools]
-view_image = true
 web_search = { context_size = "high" }
 
 [feedback]
