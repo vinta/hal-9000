@@ -32,6 +32,6 @@ Refactor memories so each entry carries what no lookup returns: a decision, a co
 
 4. **Audit recall.** Apply the platform's index or summary checks. Check discoverability, duplicate claims, scope, and evidence references. Propose the layout changes needed for the entries in scope.
 
-5. **Get decisions.** Present each unresolved contradiction with both sides as choices. Then present numbered delete, rewrite, and promote lists with evidence and the proposed layout. Use the platform's question tool to let the user select the verdicts to apply. Nothing changes until the user chooses.
+5. **Get decisions.** Reuse verdicts the user already selected within the requested scope. Present remaining contradictions with both sides as choices and unselected delete, rewrite, and promote verdicts as numbered lists with evidence and the proposed layout. Use the platform's question tool only for unresolved choices. Apply only the outcomes the user selected.
 
 6. **Apply and verify.** Apply the selected verdicts through the platform's update mechanism without asking again. Remove a promoted memory only after its destination carries the instruction. Verify the result using the platform reference and report any pending consolidation separately from completed changes. Anything else noticed while editing is a follow-up.

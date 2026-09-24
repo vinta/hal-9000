@@ -10,20 +10,20 @@ allowed-tools:
 
 # Overview
 
-Refactor a skill. A skill spends two budgets. Its description is loaded into every session, so each word there must do triggering work. Its body enters the context on invocation and stays there for the rest of the session, so each line there must be a step the agent performs or reference every path through the skill needs. Everything else moves behind a pointer or out of the skill.
+Refactor a skill. A skill spends two budgets. Its description is loaded into every session, so each word there must do triggering work. Its body enters the context on invocation and stays there for the rest of the session, so each line there must guide every path through the skill. Conditional material moves behind a pointer; unnecessary material leaves the skill.
 
 ## Instructions
 
 Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available.
 
-1. **Pick the target.** If the invocation names one, resolve it to its `SKILL.md`. Otherwise ask which skill. Read `SKILL.md` and every sibling file in its directory. If the invocation also names a change to make, that change sets the scope: the verdicts below cover the lines it adds or touches, the rest of the skill stays as it is, and anything noticed there is a follow-up.
+1. **Pick the target.** If the invocation names one, resolve it to its `SKILL.md`. Otherwise ask which skill. For a full audit, read `SKILL.md` and every sibling file in its directory. For a targeted change, read `SKILL.md`, affected files, and references needed to assess their interactions. That change sets the scope: the verdicts below cover the lines it adds or touches, the rest of the skill stays as it is, and anything noticed there is a follow-up.
 
 2. **Fetch the guides.** The platform and model guides below calibrate the delete, demote, and rewrite verdicts.
    - Fetch one model guide, picked by the target skill's `model:` frontmatter. Unset or `inherit` means the most capable model of the family running this skill: `fable` under Claude, `gpt-6-astra` under a GPT model. Read the matching reference and follow its fetch instructions:
      - **Claude Code** (`fable`, `opus`, `sonnet`): [references/claude-code.md](references/claude-code.md).
      - **Codex** (`gpt-6-astra`): [references/codex.md](references/codex.md).
 
-3. **Audit.** Give every frontmatter key, every instruction in the body, and every sibling file exactly one verdict, judged against its bar below. For `allowed-tools`, run the `update-allowed-tools` skill instead of auditing entries here. Done when nothing lacks a verdict.
+3. **Audit.** Give every frontmatter key, body instruction, and sibling file in scope exactly one verdict, judged against its bar below. For `allowed-tools`, run the `update-allowed-tools` skill instead of auditing entries here. Done when nothing in scope lacks a verdict.
    - **contradiction**: conflicts with another instruction, or the frontmatter promises what the body does not deliver, such as a `context: fork` skill whose body assumes conversation history. Record both sides.
    - **delete**: fails the no-op test, meaning the model the skill targets would behave the same without it, or the fetched pages say to remove it because it was written for an earlier model's habits. Judge defaults against those pages, not memory. Covers explanations of what the model already knows, emphasis that carries no instruction, and sibling files nothing points to.
    - **demote**: real content that only some runs of the skill reach. Destinations: a file in the skill directory linked from `SKILL.md`, one level deep; a script under `scripts/` when the steps are deterministic; a separate skill only when it needs its own trigger or another skill must reach it. Name the destination.
@@ -33,9 +33,9 @@ Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when avail
    The bar per part:
    - **Frontmatter** (each key a decision, judged before the body): `disable-model-invocation: true` when only the user ever names the skill; omitted when the agent must reach the skill on its own, or another skill or a `CLAUDE.md` line invokes it. `user-invocable: false` when the human never runs it by hand. `context: fork` when the arguments fully specify the work and the body needs no conversation history. `model` and `effort` only when a run at the inherited value failed, and `model` only on a `context: fork` skill or one that owns the whole turn. `argument-hint` present when the body reads `$ARGUMENTS`, absent when it does not.
    - **Description** (loaded into every session): every word does triggering work. Leads with when to use, names each distinct trigger once, marks the near miss it must not fire on. A user-invoked skill gets a one-line human-facing summary with no trigger list.
-   - **Body** (in context from invocation to session end): a step the agent performs, in order, ending on a checkable completion criterion, or reference every path through the skill needs. Written as standing instructions, since the body is never re-read.
+   - **Body** (in context from invocation to session end): actions, constraints, completion criteria, or reference every path through the skill needs. Require a fixed order only where correctness depends on it; route conditional workflows to supporting files. Written as standing instructions, since the body is never re-read.
    - **Sibling files** (loaded only when reached): each has a pointer in `SKILL.md` stating what it is and when to read it, or for a script, when to run it. A file with no pointer is unreachable.
 
-4. **Get decisions.** One single-select question per contradiction, with each conflicting version as an option. Then present the delete and demote lists and collect sign-off with one question. The skill stays untouched until sign-off.
+4. **Get decisions.** Reuse changes and verdicts the user already authorized. Resolve contradictions from instruction priority and explicit user intent where possible; ask one single-select question per unresolved contradiction. Present any remaining delete and demote proposals and collect sign-off with one question. Preserve explicit review boundaries and leave unapproved proposals untouched.
 
-5. **Rewrite.** Apply the signed-off verdicts in one pass, without asking again; they are the request. Apply only those: anything else noticed while editing is a follow-up to report in the final message. Keep the directory name and the `name` field, since renaming changes the slash command. Done when every audited item landed where its verdict says: kept, rewritten, demoted, or deleted. When the description changed, point to the `skill-creator` plugin in the final message for trigger evals.
+5. **Rewrite.** Apply the authorized changes and verdicts in one pass, without asking again. Apply only those: anything else noticed while editing is a follow-up to report in the final message. Keep the directory name and the `name` field, since renaming changes the slash command. Done when every audited item landed where its verdict says: kept, rewritten, demoted, or deleted. When the description changed, point to the `skill-creator` plugin in the final message for trigger evals.
