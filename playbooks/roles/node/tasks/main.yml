@@ -33,7 +33,7 @@
     eval "$(fnm env --shell bash)"
     npm install -g pangu
     npm install -g npm-check-updates
-    npm install -g typescript typescript-language-server
+    npm install -g typescript@6 typescript-language-server
   args:
     executable: /bin/bash
   changed_when: false
