@@ -31,6 +31,15 @@
     executable: /bin/bash
   changed_when: false
 
+# https://github.com/microsoft/playwright-cli
+- name: Install playwright-cli
+  shell: |
+    eval "$(fnm env --shell bash)"
+    npm install -g @playwright/cli@latest
+  args:
+    executable: /bin/bash
+  changed_when: false
+
 - name: Ensure AI environment is sourced in .zshrc
   lineinfile:
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
