@@ -27,13 +27,11 @@
 
 # https://github.com/vinta/pangu.js
 # https://github.com/raineorshine/npm-check-updates
-# https://github.com/typescript-language-server/typescript-language-server
 - name: Install global Node.js packages
   shell: |
     eval "$(fnm env --shell bash)"
     npm install -g pangu
     npm install -g npm-check-updates
-    npm install -g typescript@6 typescript-language-server
   args:
     executable: /bin/bash
   changed_when: false
