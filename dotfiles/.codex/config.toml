@@ -6,6 +6,7 @@ model_reasoning_summary = "detailed"
 model_verbosity = "high"
 hide_agent_reasoning = false
 show_raw_agent_reasoning = true
+suppress_unstable_features_warning = true
 approval_policy = "on-request"
 approvals_reviewer = "auto_review"
 personality = "pragmatic"
@@ -53,6 +54,7 @@ status_line = [
     "five-hour-limit",
     "weekly-limit",
 ]
+screen_reader_detection_done = true
 
 [tui.model_availability_nux]
 "gpt-5.6-sol" = 1
