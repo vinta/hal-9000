@@ -1,7 +1,7 @@
 ---
 name: difference
-description: Use when the user wants a quick answer on how things differ — A vs B, pros and cons of A, B, C, or the nuance between two sentences
-argument-hint: "[A vs B | A, B, C | two sentences]"
+description: Compare A vs B, weigh pros and cons of A, B, C, ..., or explain the nuance between sentences — a quick answer from what the model already knows
+argument-hint: "[A vs B | A, B, C, ... | sentences]"
 disable-model-invocation: true
 effort: low
 allowed-tools:
@@ -23,7 +23,7 @@ Run one web search only for an item you cannot identify at all, such as a tool r
 Keep it as short as the question allows, and let the items decide the shape. Spend the words on where they actually differ, not on what they share.
 
 - Alternatives someone picks between (tools, approaches, patterns): give each one's pros and cons.
-- Two sentences: how each lands differently — tone, implication, what a reader infers.
+- Sentences: how each lands differently — tone, implication, what a reader infers.
 - An answer that hinges on a version, price, or "latest" fact: add one line saying it is as of your training data.
 
 The last line of the answer is still comparison: no verdict, no offer to dig deeper.
