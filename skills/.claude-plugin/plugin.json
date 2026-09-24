@@ -5,6 +5,7 @@
   "skills": [
     "./commit",
     "./pr",
+    "./difference",
     "./fuck-over-engineering",
     "./best-practices",
     "./blindspot",
@@ -15,8 +16,7 @@
     "./refactor-agents-md",
     "./refactor-memory",
     "./refactor-skill",
-    "./update-allowed-tools",
-    "./difference"
+    "./update-allowed-tools"
   ],
   "author": {
     "name": "Vinta Chen",
