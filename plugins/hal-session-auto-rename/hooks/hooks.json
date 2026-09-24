@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hal-session-auto-rename.py",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/hal-session-auto-rename.py\"",
             "timeout": 5
           }
         ]
