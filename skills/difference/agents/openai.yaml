@@ -1,0 +1,7 @@
+interface:
+  display_name: "Difference"
+  short_description: "Quick answer on how things differ"
+  default_prompt: "Use $difference to compare A vs B."
+
+policy:
+  allow_implicit_invocation: false

@@ -26,7 +26,8 @@
         "./refactor-agents-md",
         "./refactor-memory",
         "./refactor-skill",
-        "./update-allowed-tools"
+        "./update-allowed-tools",
+        "./difference"
       ],
       "author": {
         "name": "Vinta Chen",
