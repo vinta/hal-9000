@@ -44,7 +44,7 @@ metrics_exporter = "none"
 trace_exporter = "none"
 
 [tui]
-notifications = ["agent-turn-complete", "approval-requested"]
+notifications = ["approval-requested"]
 notification_condition = "unfocused"
 status_line = [
     "model-with-reasoning",
