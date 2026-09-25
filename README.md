@@ -16,7 +16,7 @@ All-in-one command to set up:
 - [Python](playbooks/roles/python/tasks/main.yml)
 - [Node.js](playbooks/roles/node/tasks/main.yml)
 - [Bun](playbooks/roles/bun/tasks/main.yml)
-- [Solidity](playbooks/roles/solidity/tasks/main.yml)
+- [Go](playbooks/roles/go/tasks/main.yml)
 - [Docker](playbooks/roles/docker/tasks/main.yml) (OrbStack)
 - [Kubernetes](playbooks/roles/kubernetes/tasks/main.yml)
 - [Amazon Web Services](playbooks/roles/aws/tasks/main.yml)
