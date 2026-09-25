@@ -12,3 +12,10 @@
       - go@1.26
     state: linked
     install_options: force
+
+- name: Ensure Go environment is sourced in .zshrc
+  lineinfile:
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/go/files/go_profile.sh"
+    state: present
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
