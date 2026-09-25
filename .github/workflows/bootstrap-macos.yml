@@ -75,6 +75,7 @@ jobs:
             node --version
             npm --version
             bun --version
+            go version
             kubectl version --client
             k9s version
             aws --version
