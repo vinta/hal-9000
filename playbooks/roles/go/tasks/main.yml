@@ -1,0 +1,14 @@
+---
+# https://go.dev/doc/devel/release
+- name: Install Go 1.26
+  homebrew:
+    name:
+      - go@1.26
+    state: latest
+
+- name: Link Go 1.26 as the default go
+  homebrew:
+    name:
+      - go@1.26
+    state: linked
+    install_options: force
