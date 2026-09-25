@@ -1,3 +1,4 @@
+# ruff: noqa: RUF001 ambiguous-unicode-character-string
 import json
 import re
 
@@ -112,6 +113,36 @@ class TestGrammarCheckPlaceholders:
         hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: no issues" in strip_ansi(capsys.readouterr().out)
+
+
+class TestColorizeGrammar:
+    def test_no_columns_keeps_one_line(self, hal_statusline, monkeypatch):
+        monkeypatch.delenv("COLUMNS", raising=False)
+
+        output = strip_ansi(hal_statusline.colorize_grammar('Grammar: "care" => car 是「汽車」'))
+
+        assert output == 'Grammar: "care" => car 是「汽車」'
+
+    def test_wraps_to_terminal_width(self, hal_statusline, monkeypatch):
+        monkeypatch.setenv("COLUMNS", "36")
+
+        output = strip_ansi(hal_statusline.colorize_grammar('Grammar: I don\'t "care" => car 是「汽車」，這裡要用 care'))
+
+        assert output.split("\n") == [
+            'Grammar: I don\'t "care" => car',
+            "是「汽車」，這裡要用 care",
+        ]
+
+    def test_numbers_multiple_issues(self, hal_statusline, monkeypatch):
+        monkeypatch.setenv("COLUMNS", "36")
+
+        output = strip_ansi(hal_statusline.colorize_grammar('Grammar: "keeps" => 第三人稱單數\nGrammar: "the" result'))
+
+        assert output.split("\n") == [
+            'Grammar 1: "keeps" => 第三人稱單',
+            "數",
+            'Grammar 2: "the" result',
+        ]
 
 
 class TestBasicInfo:

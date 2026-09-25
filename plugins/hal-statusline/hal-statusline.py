@@ -5,11 +5,13 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import shlex
 import subprocess
 import sys
 import tempfile
 import time
+import unicodedata
 import urllib.error
 import urllib.request
 from logging.handlers import RotatingFileHandler
@@ -99,16 +101,40 @@ RED = "\033[31m"
 WHITE = "\033[37m"
 RESET = "\033[0m"
 
+STATUSLINE_PADDING = 4
+
+
+def cell_width(text: str) -> int:
+    return sum(2 if unicodedata.east_asian_width(char) in "WF" else 1 for char in text)
+
+
+def wrap_cells(text: str, width: int) -> list[str]:
+    lines = [""]
+    # A Latin word stays whole, while each CJK or full-width character is its own break point
+    for token in re.findall(r"[^\s\u2e80-\ufaff\uff00-\uffef]+|\s+|.", text):
+        if lines[-1] and cell_width(lines[-1] + token) > width:
+            lines[-1] = lines[-1].rstrip()
+            lines.append("")
+            if token.isspace():
+                continue
+        lines[-1] += token
+    return lines
+
 
 def colorize_grammar(text: str) -> str:
     color = GREEN if "no issues" in text.lower() else RED
+    issues = [line.removeprefix("Grammar:").strip() for line in text.split("\n") if line.strip()]
+    # COLUMNS is the full terminal width, but Claude Code pads both sides of the status line
+    columns = int(os.environ.get("COLUMNS", "0")) - STATUSLINE_PADDING
 
-    def colorize(line: str) -> str:
-        if line.startswith("Grammar:"):
-            return f"{WHITE}Grammar:{RESET}{color}{line.removeprefix('Grammar:')}{RESET}"
-        return f"{color}{line}{RESET}"
-
-    return "\n".join(colorize(line) for line in text.split("\n"))
+    rows = []
+    for number, issue in enumerate(issues, 1):
+        label = "Grammar:" if len(issues) == 1 else f"Grammar {number}:"
+        line = f"{label} {issue}"
+        wrapped = wrap_cells(line, columns) if columns > 0 else [line]
+        rows.append(f"{WHITE}{label}{RESET}{color}{wrapped[0].removeprefix(label)}{RESET}")
+        rows.extend(f"{color}{row}{RESET}" for row in wrapped[1:])
+    return "\n".join(rows)
 
 
 def print_grammar_status(message: str) -> None:
