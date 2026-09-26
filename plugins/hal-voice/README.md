@@ -35,6 +35,10 @@ By default, audio clips only play in the terminal CLI. If you want to hear HAL i
 }
 ```
 
+## Privacy
+
+It logs each hook event to `$TMPDIR/hal-voice.log`: the event name, session ID, and tool name, never your prompts. It keeps its state in `/tmp/hal-voice-state.json` and `/tmp/hal-voice.lock`. Fully offline, nothing leaves your machine.
+
 ## Demo
 
 <video src="https://github.com/user-attachments/assets/b25c4944-3251-4bd5-ba86-2607139f0dfe" width="800" height="450"></video>
