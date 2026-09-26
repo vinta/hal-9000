@@ -35,6 +35,7 @@
       },
       "repository": "https://github.com/vinta/hal-9000",
       "license": "MIT",
+      "icon": "./icon.svg",
       "category": "productivity",
       "keywords": [
         "git",
@@ -113,6 +114,7 @@
       },
       "repository": "https://github.com/vinta/hal-9000",
       "license": "MIT",
+      "icon": "./icon.svg",
       "category": "productivity",
       "keywords": [
         "hal-9000",
@@ -143,6 +145,7 @@
       },
       "repository": "https://github.com/vinta/hal-9000",
       "license": "MIT",
+      "icon": "./icon.svg",
       "category": "productivity",
       "keywords": [
         "hal-9000",
@@ -171,6 +174,7 @@
       },
       "repository": "https://github.com/vinta/hal-9000",
       "license": "MIT",
+      "icon": "./icon.svg",
       "category": "entertainment",
       "keywords": [
         "hal-9000",

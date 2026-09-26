@@ -448,7 +448,8 @@ def _is_suppressed(hook_event: str, state: State, config: Config, *, session_id:
 
 def main() -> None:
     hook_input: HookInput = json.loads(sys.stdin.read())
-    logger.info("hook_input=%s", json.dumps(hook_input, sort_keys=True))
+    # Never log the full hook input: it carries prompt text and tool arguments
+    logger.info("event=%s session=%s tool=%s", hook_input.get("hook_event_name", ""), hook_input.get("session_id", ""), hook_input.get("tool_name", ""))
 
     hook_event = hook_input.get("hook_event_name", "")
     if not hook_event:

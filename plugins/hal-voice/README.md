@@ -1,6 +1,6 @@
 # HAL Voice
 
-![HAL 9000](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/hal-9000.jpg "HAL 9000")
+<img src="icon.svg" width="128" alt="HAL 9000">
 
 A Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionStart`, `SessionEnd`, `PreCompact`, `PermissionRequest`, `PreToolUse`, `PostToolUseFailure`, `SubagentStart`, `UserPromptSubmit`, `Stop`, and `PostModelSwitch`. [Each event maps to a movie quote that fits the moment](manifest.json):
 
@@ -34,6 +34,10 @@ By default, audio clips only play in the terminal CLI. If you want to hear HAL i
   "entrypoints": ["cli", "claude-desktop", "claude-vscode"]
 }
 ```
+
+## Privacy
+
+It logs each hook event to `$TMPDIR/hal-voice.log`: the event name, session ID, and tool name, never your prompts. It keeps its state in `/tmp/hal-voice-state.json` and `/tmp/hal-voice.lock`. Fully offline, nothing leaves your machine.
 
 ## Demo
 
