@@ -31,3 +31,7 @@ A session you named keeps that title for life, whether you passed `--name` at la
 By default the session title is set once per session. If you want the plugin to rename the session as the conversation evolves, turn on refresh mode by setting `HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS=5` (any N > `0`): every N prompts, a background worker regenerates the session title from the recent conversation, applied on your next prompt; unset or `0` disables it.
 
 The refresh overrides whatever name the session currently has: one this plugin set, one carried through `/clear`, or one you set with `--name` or `/rename`.
+
+## Privacy
+
+The hook reads your session transcript to find the `ai-title` entry. In refresh mode, or when a title carries over from `/clear`, a background worker sends the recent conversation to `claude --model haiku -p` to write a new title. That call runs on your Claude account. With `HAL_SESSION_AUTO_RENAME_USE_OLLAMA=1`, it goes to your local Ollama instead. Logs go to `$TMPDIR/hal-session-auto-rename.log`, state to `$TMPDIR/hal-session-auto-rename/`.
