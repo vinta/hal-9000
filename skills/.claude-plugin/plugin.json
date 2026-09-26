@@ -1,6 +1,7 @@
 {
   "name": "hal-skills",
-  "version": "2.11.9",
+  "displayName": "HAL Skills",
+  "version": "2.11.10",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
@@ -23,6 +24,9 @@
     "email": "vinta.chen@gmail.com"
   },
   "repository": "https://github.com/vinta/hal-9000",
+  "homepage": "https://vinta.ws/",
+  "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/skills/README.md",
+  "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
   "icon": "./icon.svg",
   "keywords": [

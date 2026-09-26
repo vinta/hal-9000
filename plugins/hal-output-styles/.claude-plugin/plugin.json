@@ -1,12 +1,16 @@
 {
   "name": "hal-output-styles",
-  "version": "1.0.4",
+  "displayName": "HAL Output Styles",
+  "version": "1.0.5",
   "description": "Make Claude Code talk like an INTJ",
   "author": {
     "name": "Vinta Chen",
     "email": "vinta.chen@gmail.com"
   },
   "repository": "https://github.com/vinta/hal-9000",
+  "homepage": "https://vinta.ws/",
+  "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-output-styles/README.md",
+  "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
   "icon": "./icon.svg",
   "keywords": [

@@ -1,12 +1,16 @@
 {
   "name": "hal-session-auto-rename",
-  "version": "1.3.5",
+  "displayName": "HAL Session Auto-rename",
+  "version": "1.3.6",
   "description": "Automatically name each session and rename it as the conversation evolves",
   "author": {
     "name": "Vinta Chen",
     "email": "vinta.chen@gmail.com"
   },
   "repository": "https://github.com/vinta/hal-9000",
+  "homepage": "https://vinta.ws/",
+  "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-session-auto-rename/README.md",
+  "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
   "icon": "./icon.svg",
   "keywords": [
