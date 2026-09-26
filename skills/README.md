@@ -34,3 +34,13 @@ If you want to use them in other coding agents:
 ```bash
 npx skills add vinta/hal-9000
 ```
+
+## Privacy
+
+These skills collect nothing. A few talk to other services when you run them:
+
+- `pr` pushes your branch and opens, updates, or merges the PR on GitHub, via `git` and `gh`
+- `best-practices` sends search queries to Context7 (through the `find-docs` skill) and to web search
+- `blindspot` and `difference` send search queries to web search
+- `refactor-claude-md` sends lines of your CLAUDE.md to Claude via `claude -p`, on your own account, to check which lines the model already follows
+- `audit-claude-settings`, `refactor-claude-md`, `refactor-agents-md`, `refactor-memory`, `refactor-skill`, and `update-allowed-tools` read public docs from Anthropic, OpenAI, and SchemaStore
