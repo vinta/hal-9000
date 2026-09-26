@@ -4,8 +4,9 @@ description: Use when about to refactor or refine a user-level or project-level 
 argument-hint: [user | project | path/to/CLAUDE.md]
 user-invocable: true
 allowed-tools:
-  - WebFetch
-  - Bash(claude -p *)
+  - WebFetch(domain:platform.claude.com)
+  - WebFetch(domain:code.claude.com)
+  - Bash(claude -p --safe-mode --no-session-persistence --max-turns 1 --model *)
   - Edit(CLAUDE.md)
   - Read(~/.claude/CLAUDE.md)
 ---
