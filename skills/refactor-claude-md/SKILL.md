@@ -6,7 +6,6 @@ user-invocable: true
 allowed-tools:
   - WebFetch(domain:platform.claude.com)
   - WebFetch(domain:code.claude.com)
-  - Bash(claude -p --safe-mode --no-session-persistence --max-turns 1 --model *)
   - Edit(CLAUDE.md)
   - Read(~/.claude/CLAUDE.md)
 ---
