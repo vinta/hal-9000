@@ -8,6 +8,7 @@
   },
   "repository": "https://github.com/vinta/hal-9000",
   "license": "MIT",
+  "icon": "./icon.svg",
   "keywords": [
     "hal-9000",
     "hooks",
