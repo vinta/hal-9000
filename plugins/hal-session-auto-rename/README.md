@@ -34,4 +34,6 @@ The refresh overrides whatever name the session currently has: one this plugin s
 
 ## Privacy
 
-The hook reads your session transcript to find the `ai-title` entry. In refresh mode, or when a title carries over from `/clear`, a background worker sends the recent conversation to `claude --model haiku -p` to write a new title. That call runs on your Claude account. With `HAL_SESSION_AUTO_RENAME_USE_OLLAMA=1`, it goes to your local Ollama instead. Logs go to `$TMPDIR/hal-session-auto-rename.log`, state to `$TMPDIR/hal-session-auto-rename/`.
+The hook reads your session transcript to find the `ai-title` entry. In refresh mode, or when a title carries over from `/clear`, a background worker sends the recent conversation to `claude --model haiku -p` to write a new title. That call runs on your Claude account. With `HAL_SESSION_AUTO_RENAME_USE_OLLAMA=1`, it goes to your local Ollama instead.
+
+Logs go to `$TMPDIR/hal-session-auto-rename.log`, state to `$TMPDIR/hal-session-auto-rename/`. Both never leave your machine.
