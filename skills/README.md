@@ -1,5 +1,7 @@
 # hal-skills
 
+<img src="icon.svg" width="128" alt="vinta/hal-9000 icon">
+
 Agentic skills sharpened by daily use:
 
 - [commit](commit/SKILL.md): Splits your changes into atomic conventional commits, hunk by hunk if needed

@@ -1,5 +1,7 @@
 # Claude Code Output Styles
 
+<img src="icon.svg" width="128" alt="vinta/hal-9000 icon">
+
 Output styles for Claude Code. Both keep Claude Code's built-in coding instructions and only change how Claude writes.
 
 - [**Say no more**](output-styles/say-no-more.md): telegraphic responses, as if every word cost money. All technical substance stays; only fluff dies. Inspired by [caveman](https://github.com/JuliusBrussee/caveman).
