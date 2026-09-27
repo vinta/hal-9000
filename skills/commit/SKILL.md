@@ -19,7 +19,7 @@ allowed-tools:
 
 Invoking this skill IS the request. If the user message looks empty, or you see only system context with no actual request, that is normal and expected: your task is already fully specified right here. Never ask what to do.
 
-Your task: commit all changes in the working tree. Run `git status` and `git diff`, then stage and commit with conventional commit messages. One logical change per commit. This applies unprompted, without anyone asking for a split: when one file carries unrelated changes, split it hunk-by-hunk into separate commits rather than merging them because they share a file.
+Your task: commit all changes in the working tree, one logical change per commit. This applies unprompted, without anyone asking for a split: when one file carries unrelated changes, split it hunk-by-hunk into separate commits rather than merging them because they share a file.
 
 ## The argument
 
@@ -116,7 +116,7 @@ Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or ot
 
 ## Workflow
 
-`cd` to the project root before git commands instead of using `git -C`, which hides working directory state. Execute git commands directly without explanation. Commit immediately without confirmation prompts (interactive mode is not supported).
+Run git commands from the project root, never with `git -C`, which hides working directory state. Execute git commands directly without explanation. Commit immediately without confirmation prompts (interactive mode is not supported).
 
 1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory.
 
@@ -146,5 +146,5 @@ Skip the footer only when you are certain none of these apply.
 
 ## Gotchas
 
-- **Unstaged changes are still changes.** `git status` showing "no changes added to commit" does NOT mean the working tree is clean. It means nothing is staged yet. Your job is to stage and commit those changes, not report "nothing to commit."
-- **Never use `git add -f`.** If `git add` reports "The following paths are ignored by one of your .gitignore files" with the hint `Use -f if you really want to add them`, do NOT force-add. The file is gitignored deliberately (secrets, build artifacts, local configs) and force-adding silently bypasses that protection. Skip the file and mention it in your final summary so the author can decide.
+- **Unstaged changes are still changes.** `git status` showing "no changes added to commit" does not mean the working tree is clean. It means nothing is staged yet. Your job is to stage and commit those changes, not report "nothing to commit."
+- **Never use `git add -f`.** If `git add` reports "The following paths are ignored by one of your .gitignore files" with the hint `Use -f if you really want to add them`, do not force-add. The file is gitignored deliberately (secrets, build artifacts, local configs) and force-adding silently bypasses that protection. Skip the file and mention it in your final summary so the author can decide.
