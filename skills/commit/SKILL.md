@@ -2,7 +2,6 @@
 name: commit
 description: Use when making any git commit. Always pass what was wrong before the changes as the argument; when nothing was wrong, pass what the changes do instead — never an invented why.
 argument-hint: [why the changes were made]
-user-invocable: true
 context: fork
 model: sonnet
 effort: high

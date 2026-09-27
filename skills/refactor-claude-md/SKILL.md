@@ -2,7 +2,6 @@
 name: refactor-claude-md
 description: Use when about to refactor or refine a user-level or project-level CLAUDE.md
 argument-hint: [user | project | path/to/CLAUDE.md]
-user-invocable: true
 allowed-tools:
   - WebFetch(domain:platform.claude.com)
   - WebFetch(domain:code.claude.com)

@@ -2,7 +2,6 @@
 name: refactor-skill
 description: Use when about to refactor or refine an existing skill, its SKILL.md or sibling files, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption. Not for creating a skill from scratch or for fixing only its allowed-tools
 argument-hint: [skill name | path/to/SKILL.md]
-user-invocable: true
 allowed-tools:
   - WebFetch
   - Edit(**/skills/**)
