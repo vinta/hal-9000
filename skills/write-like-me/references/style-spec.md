@@ -39,7 +39,7 @@ Published text talks straight at the reader as "you" and is unafraid of imperati
 > If you're the type who skips the manual, just copy this prompt to your agent:
 > Run it often, you will like it
 
-Collaboration text about shared work (issues, PRs, emails) uses inclusive "we" for the next step the team takes.
+Collaboration text about shared work (issues, PRs, emails) uses inclusive "we" for the next step the team takes. A proposal there is a question ("should we ...?", "how about ...?", "do we need ...?"), and a guess ends in ", I suppose?" (a published FIXME: "But rare cases, I suppose?"). Verdicts stay plain.
 
 ## 4. Connectors and markers
 
@@ -52,7 +52,7 @@ A modifier hangs off the end of a sentence — it never interrupts the main clau
 
 ## 5. Vocabulary
 
-Plain verbs and casual evaluators; technical nouns exact. Name the specific thing over a generic role: "An AI writes the prompts" was published as "GPT-6 Astra writes the prompts". The casual layer: "fancy", "evil", "shiny", "btw", "Code like a boss!". A deflating tail closes a feature paragraph: "It's free, btw." Digits, not number words ("There are 2 types of encryption algorithms"). Slash-pairs as compression: "encrypt/decrypt", "request/response", "username/password". "so-called" as a labeler ("a so-called hybrid cryptosystem"). The casual layer is vocabulary the corpus attests, never generic English idiom: "gotcha" is the user's word, "what bites people" is not, and the user swapped the second for "common gotchas" in a README line. An unattested idiom reads as ghostwriting even when it is casual.
+Plain verbs and casual evaluators; technical nouns exact. Name the specific thing over a generic role: "An AI writes the prompts" was published as "GPT-6 Astra writes the prompts". The casual layer: "fancy", "evil", "shiny", "btw", "Code like a boss!". A deflating tail closes a feature paragraph: "It's free, btw." An intensifier on the one word the line exists for is voice, not padding: the user added "very" to "quickly" on a speed shortcut. Digits, not number words ("There are 2 types of encryption algorithms"). Slash-pairs as compression: "encrypt/decrypt", "request/response", "username/password". "so-called" as a labeler ("a so-called hybrid cryptosystem"). The casual layer is vocabulary the corpus attests, never generic English idiom: "gotcha" is the user's word, "what bites people" is not, and the user swapped the second for "common gotchas" in a README line. An unattested idiom reads as ghostwriting even when it is casual.
 
 ## 6. Structural habits
 
@@ -62,6 +62,7 @@ Plain verbs and casual evaluators; technical nouns exact. Name the specific thin
 - A line reading exactly "ref:" followed by naked URLs closes blog sections.
 - "Also see:" / "Recommended:" / "The full settings I use:" as one-line lead-ins to link lists.
 - A comment per command in shell blocks, jokes allowed ("# open the pod bay doors, please, HAL").
+- Comments in a README code block talk to the reader, often as "use this ...", and a dropped subject or verb there is register, not a slip: the user kept "use this if no bundler" over "use this if you have no bundler".
 - Bold mid-sentence only for the load-bearing phrase; CAPS per the section 8 budget.
 
 ## 7. Signature moves — the menu
@@ -104,7 +105,7 @@ The user ruled every recurring second-language pattern a slip, not voice: gramma
 | "setup" as a verb in prose                                   | "set up" (the noun "setup" and headings stay)                  |
 | "symbols like above"                                         | "symbols like the ones above" (bare "like above" needs a noun) |
 
-Further slip classes attested in the user's unpublished writing, fixed the same way: embedded-question order ("why it is X?" becomes "why is it X?"); statement-plus-question-mark (invert it in published text); third-person -s drops and tense drift; "worth to X" (becomes "worth Xing"); a missing "to" after verbs like want/seem; "neither" where native English uses "either"; bare "even" for "even if/though"; "at the end" for "in the end"; "how it looks like" (becomes "what it looks like"); plural agreement ("does these" becomes "do these"); "the another" (becomes "the other"). Obvious keyboard scrambles get normalized silently too. A newly noticed ambiguous pattern is the user's call, not yours: ask before treating it as either slip or voice.
+Further slip classes attested in the user's unpublished writing, fixed the same way: embedded-question order ("why it is X?" becomes "why is it X?"); statement-plus-question-mark (invert it in published text); third-person -s drops and tense drift; "worth to X" (becomes "worth Xing"); a missing "to" after verbs like want/seem; "neither" where native English uses "either"; bare "even" for "even if/though"; "at the end" for "in the end"; "how it looks like" (becomes "what it looks like"); plural agreement ("does these" becomes "do these"); "the another" (becomes "the other"); "a" before a vowel sound ("a extension"); "how many" with a mass noun ("how many code"); a second tense mark after "does" ("what does it does"); "a bit of" before a plural ("a bit of rare cases"); "-ing" where the adjective needs "-ed" ("over-engineering code" becomes "over-engineered code"); "difficult to me" (becomes "difficult for me"). Obvious keyboard scrambles get normalized silently too. "I think we don't need X" is voice, not a slip: keep it. A newly noticed ambiguous pattern is the user's call, not yours: ask before treating it as either slip or voice.
 
 ## 10. Code comments — ruled register, not corpus-extracted
 

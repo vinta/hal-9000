@@ -93,6 +93,25 @@ pangu.js, a tagline whose tail is a bare noun phrase, then the README paragraphs
 >
 > GPT-6 Astra writes the prompts. It runs the [prompt-experiments](.agents/skills/prompt-experiments/SKILL.md) skill: propose a change, then test it against the real Gemini Nano in Chrome. When a case fails, it interviews Gemini Nano for clues. When progress stalls, it searches online for new approaches to test. Prompts for a model, tuned by a bigger model, judged on real data.
 
+hal-9000 Skills list bullets the user wrote after rejecting drafts that explained how each skill works: purpose, not mechanism:
+
+> - [difference](skills/difference/SKILL.md): A shortcut to answer "what's the difference? pros and cons?" very quickly
+> - [blindspot](skills/blindspot/SKILL.md): Turns unknown unknowns into known unknowns, then lets you pick where to explore
+
+pangu.js, README code-block comments talking to the reader:
+
+> ```js
+> import pangu from 'pangu/browser'; // use this with a bundler
+> // or
+> // import pangu from 'pangu/browser/standalone'; // use this if no bundler, it's one self-contained file
+> ```
+>
+> ```js
+> import pangu from 'pangu';
+> // or
+> // const pangu = require('pangu'); // use this if you're still using CommonJS
+> ```
+
 dockerfiles, a 2014 README whose body is one joke link:
 
 > My dockerfiles for [making the world a better place](https://www.youtube.com/watch?v=J-GVd_HLlps).
