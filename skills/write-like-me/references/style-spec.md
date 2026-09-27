@@ -48,7 +48,7 @@ Sentences often open with a plain connector ("However, ...", "Though, ...", "Plu
 > Though, **Claude Code can still write a one-time script to read sensitive data** and bypass all of the above defenses.
 > Use different email addresses when registering services if possible.
 
-A modifier hangs off the end of a sentence — it never interrupts the main clause. "Generate the key outside the loop, before the first attempt." is his shape; "Generate the idempotency key once per logical operation, before the first attempt, and reuse it on every retry." is a register tell even though it's grammatical: an interrupting appositive makes the reader hold the main clause open, and the user ruled he doesn't think that way.
+A modifier hangs off the end of a sentence — it never interrupts the main clause. "Generate the key outside the loop, before the first attempt." is the user's shape; "Generate the idempotency key once per logical operation, before the first attempt, and reuse it on every retry." is a register tell even though it's grammatical: an interrupting appositive makes the reader hold the main clause open, and the user ruled that is not how they think.
 
 ## 5. Vocabulary
 
