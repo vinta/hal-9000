@@ -7,6 +7,8 @@
 - Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it.
 - Ask with the `AskUserQuestion` tool whenever the answer is a selection rather than a sentence, so the user clicks an option instead of typing.
   - Selections: multiple-choice, yes/no (whether gating next steps or offering optional follow-up work), picking from a list, choosing between approaches.
+  - Print any list or IDs a question refers to before asking.
+  - When an option's label and description leave its effect abstract, show an example in its `preview`: the text, code, diff, or layout it produces, or a sample input and what it does with it.
   - Holds inside skills: a skill that prescribes its own question format decides what you ask, not how.
 
 ### Push Back With Evidence
