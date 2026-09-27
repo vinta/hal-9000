@@ -1,7 +1,7 @@
 ---
 name: update-allowed-tools
 description: Use when creating or editing a skill that uses Bash commands, file writes, or external tools and the allowed-tools frontmatter may be incomplete or carry entries that grant nothing
-user-invocable: true
+argument-hint: "[skill name | path/to/SKILL.md]"
 context: fork
 model: sonnet
 effort: medium
