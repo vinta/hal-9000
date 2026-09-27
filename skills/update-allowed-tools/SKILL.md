@@ -16,16 +16,7 @@ The rules in step 5 are complete and mechanical: apply them and edit. Do not cal
 
 # Overview
 
-Analyzes a skill's full content, SKILL.md and any sibling files in the same directory, to find tools it references or requires, then compares against the skill's `allowed-tools` frontmatter to find missing entries and entries that grant nothing.
-
 `allowed-tools` is permission mechanics only: an entry earns its place by removing a permission prompt the skill would otherwise hit. It is not a manifest of the tools the skill uses. It never restricts anything: every tool stays callable, and the grant lasts only for the turn that invokes the skill.
-
-## Usage
-
-```
-/update-allowed-tools <skill name>
-/update-allowed-tools @path/to/SKILL.md
-```
 
 ## Instructions
 
