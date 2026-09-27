@@ -1,6 +1,6 @@
 ---
 name: audit-claude-settings
-description: Use when auditing Claude Code settings and env vars against the latest docs and suggest tailored changes
+description: Use when auditing Claude Code settings and env vars against the latest docs to suggest tailored changes
 allowed-tools:
   - Bash(curl -sfL https://code.claude.com/*)
   - Bash(python3 -m json.tool:*)
@@ -15,12 +15,12 @@ Scan the three reference pages exhaustively, cross-reference them against the us
 ## 1. Fetch ground truth
 
 ```bash
-curl -sfL https://code.claude.com/docs/en/settings.md -o /tmp/cc-docs-settings.md
-curl -sfL https://code.claude.com/docs/en/settings-reference.md -o /tmp/cc-docs-settings-reference.md
-curl -sfL https://code.claude.com/docs/en/env-vars.md -o /tmp/cc-docs-env-vars.md
+curl -sfL https://code.claude.com/docs/en/settings.md -o <scratchpad>/cc-docs-settings.md
+curl -sfL https://code.claude.com/docs/en/settings-reference.md -o <scratchpad>/cc-docs-settings-reference.md
+curl -sfL https://code.claude.com/docs/en/env-vars.md -o <scratchpad>/cc-docs-env-vars.md
 ```
 
-Every docs page has a raw markdown mirror at its URL plus `.md`. Write to your session's scratchpad directory instead of `/tmp` when the harness provides one. `-f` makes a missing page a failed command instead of a silently saved 404 body. These three files are the only acceptable source for the scan.
+Every docs page has a raw markdown mirror at its URL plus `.md`. `<scratchpad>` is your session's scratchpad directory, or `/tmp` when the harness provides none. `-f` makes a missing page a failed command instead of a silently saved 404 body. These three files are the only acceptable source for the scan.
 
 `settings-reference.md` holds every key: the table under its `## Settings index` heading is one row per key with purpose, topic, and scope, and each key has a `### \`key\`` entry below. `env-vars.md` has the same shape under `## Variables`. Grep both tables for the full key lists, then read the entry of every key and variable the user sets in full — the entries carry the defaults, deprecations, and precedence the tables omit. Read `settings.md` whole for scope and precedence rules. The first line of each file points to https://code.claude.com/docs/llms.txt, the index of every docs page, for follow-ups such as permission rule syntax, hooks, and sandboxing.
 
