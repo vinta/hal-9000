@@ -42,10 +42,6 @@
       "dest": "{{HOME}}/Dropbox/Projects/resume/"
     },
     {
-      "src": "{{HOME}}/Projects/personal/",
-      "dest": "{{HOME}}/Dropbox/Projects/personal/"
-    },
-    {
       "src": "{{HOME}}/Projects/*/tmp/",
       "dest": "{{HOME}}/Dropbox/Projects/*/tmp/"
     },
