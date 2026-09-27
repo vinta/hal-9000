@@ -26,7 +26,6 @@ The user's argument may be a question or an imperative. Imperatives ("refine X",
 | Thought                   | Reality                                                                                |
 | ------------------------- | -------------------------------------------------------------------------------------- |
 | "I already know this"     | Training data goes stale. Config keys get renamed, APIs get deprecated.                |
-| "The user said to act"    | The imperative scopes Phase 2, it does not eliminate Phase 1.                          |
 | "This is a simple lookup" | A 30-second search costs nothing. A wrong recommendation costs a debugging round-trip. |
 
 ## Workflow
