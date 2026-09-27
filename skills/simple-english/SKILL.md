@@ -36,8 +36,9 @@ Write or rewrite the given text in Global English: the global-audience tier that
    - Every pronoun's referent unambiguous, every abbreviation defined at first use.
    - Terminology consistent with the map from step 4, parallel ideas in parallel form.
    - No idioms, culture-specific references, Latin abbreviations, or directional cross-references ("above", "below").
-   - The sentence still reads naturally aloud
-     Done when every sentence passes, or its deviation is deliberate and appears in the report.
+   - The sentence still reads naturally aloud.
+
+   Done when every sentence passes, or its deviation is deliberate and appears in the report.
 
 7. **Deliver.** Present the rewrite. Edit files in place only when the user asked for the files to change. After the rewrite, report only what applies:
    - The terminology map, so the user can veto term choices.
