@@ -1,0 +1,21 @@
+{
+  "printWidth": 200,
+  "singleQuote": true,
+  "quoteProps": "consistent",
+  "htmlWhitespaceSensitivity": "strict",
+  "organizeImportsSkipDestructiveCodeActions": true,
+  "overrides": [
+    {
+      "files": "**/*.json",
+      "options": {
+        "parser": "json-stringify"
+      }
+    },
+    {
+      "files": ["**/*.yaml", "**/*.yml"],
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
+}

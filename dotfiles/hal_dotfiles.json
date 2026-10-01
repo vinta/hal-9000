@@ -84,6 +84,10 @@
       "dest": "{{HOME}}/.npmrc"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.prettierrc",
+      "dest": "{{HOME}}/.prettierrc"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.config/ghostty/config",
       "dest": "{{HOME}}/.config/ghostty/config"
     },
