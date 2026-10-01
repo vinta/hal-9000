@@ -19,6 +19,7 @@ Just use Claude Code as usual. The statusline appears below the input box.
 ## Environment Variables
 
 - `HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA=1`: run the grammar check with a local Ollama model instead of `claude --model haiku -p`.
+- `HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED=1`: turn off the grammar check and show only the basic info line.
 
 ## Screenshots
 

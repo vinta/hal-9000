@@ -414,6 +414,9 @@ def run_grammar_worker(cache_file: str) -> None:
 
 
 def grammar_check(data: StatusLineData) -> None:
+    if os.environ.get("HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED") == "1":
+        return
+
     transcript_path: str | None = data.get("transcript_path")
     if not transcript_path:
         print_grammar_status("transcript_path not found")

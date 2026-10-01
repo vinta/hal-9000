@@ -35,6 +35,12 @@ def make_cache(uuid, *, status="done", result="", timed_out=False):
 
 
 class TestGrammarCheckPlaceholders:
+    def test_disabled_prints_nothing(self, hal_statusline, capsys, monkeypatch):
+        monkeypatch.setenv("HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED", "1")
+        hal_statusline.grammar_check({"session_id": "test-session"})
+
+        assert capsys.readouterr().out == ""
+
     def test_no_transcript_path(self, hal_statusline, capsys):
         hal_statusline.grammar_check({"session_id": "test-session"})
 
