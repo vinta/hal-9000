@@ -205,6 +205,7 @@
   },
   "showThinkingSummaries": true,
   "skipWorkflowUsageWarning": true,
+  "theme": "dark",
   "switchModelsOnFlag": false,
   "teammateMode": "auto",
   "remoteControlAtStartup": false,

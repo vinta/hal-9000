@@ -86,8 +86,7 @@
   "workflowSizeGuideline": "small",
   "statusLine": {
     "type": "command",
-    "command": "python3 ~/.claude-blackwall/statusline/hal-statusline.py",
-    "refreshInterval": 1
+    "command": "python3 ~/.claude-blackwall/statusline/hal-statusline.py"
   },
   "enabledPlugins": {
     "hal-skills@hal-9000": true,
