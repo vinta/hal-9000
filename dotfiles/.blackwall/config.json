@@ -1,0 +1,5 @@
+{
+  "filesystem": {
+    "allowRead": ["/usr/local/hal-9000"]
+  }
+}
