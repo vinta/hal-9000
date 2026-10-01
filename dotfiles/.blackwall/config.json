@@ -1,5 +1,12 @@
 {
+  "network": {
+    "allowedDomains": [
+      "*"
+    ]
+  },
   "filesystem": {
-    "allowRead": ["/usr/local/hal-9000"]
+    "allowRead": [
+      "/usr/local/hal-9000"
+    ]
   }
 }
