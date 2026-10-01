@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 999999,
+  "env": {
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "opus",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_EXTRA_USAGE_COMMAND": "1",
+    "DISABLE_FEEDBACK_COMMAND": "1",
+    "DISABLE_UPGRADE_COMMAND": "1",
+    "HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED": "1"
+  },
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
+    "sessionUrl": false
+  },
+  "includeGitInstructions": false,
+  "permissions": {
+    "allow": [
+      "Read(~/Projects/**)",
+      "Edit(~/Projects/**)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git branch *)",
+      "Bash(git log *)",
+      "Bash(git stash *)",
+      "Bash(git add *)",
+      "Bash(git mv *)",
+      "Bash(git rm *)",
+      "Bash(git apply *)",
+      "Bash(git commit *)",
+      "Bash(git restore *)",
+      "Bash(git show *)",
+      "Bash(git rev-parse *)",
+      "Bash(gh repo view *)",
+      "Bash(ls *)",
+      "Bash(tree *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(pwd *)",
+      "Bash(which *)",
+      "Bash(mkdir *)",
+      "WebSearch"
+    ],
+    "deny": [
+      "Read(~/.aws/**)",
+      "Read(~/.config/**)",
+      "Read(~/.docker/**)",
+      "Read(~/.dropbox/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.gsutil/**)",
+      "Read(~/.kube/**)",
+      "Read(~/.npmrc)",
+      "Read(~/.orbstack/**)",
+      "Read(~/.pypirc)",
+      "Read(~/.ssh/**)",
+      "Read(~/*_history)",
+      "Read(~/**/*credential*)",
+      "Read(~/Library/**)",
+      "Edit(~/Library/**)",
+      "Read(~/Dropbox/**)",
+      "Edit(~/Dropbox/**)",
+      "Read(//etc/**)",
+      "Edit(//etc/**)",
+      "Bash(git -c *)",
+      "Bash(git --config-env*)",
+      "Bash(git --git-dir*)",
+      "Bash(gh repo delete *)",
+      "Bash(su *)",
+      "Bash(sudo *)",
+      "Bash(passwd *)",
+      "Bash(env *)",
+      "Bash(printenv *)",
+      "Bash(history *)",
+      "Bash(fc *)",
+      "Bash(eval *)",
+      "Bash(exec *)",
+      "Bash(rsync *)",
+      "Bash(sftp *)",
+      "Bash(telnet *)",
+      "Bash(socat *)",
+      "Bash(nc *)",
+      "Bash(ncat *)",
+      "Bash(netcat *)",
+      "Bash(nmap *)",
+      "Bash(chflags *)",
+      "Bash(xattr *)",
+      "Bash(diskutil *)",
+      "Bash(mkfs *)",
+      "Bash(security *)",
+      "Bash(defaults *)",
+      "Bash(launchctl *)",
+      "Bash(osascript *)",
+      "Bash(dscl *)",
+      "Bash(networksetup *)",
+      "Bash(scutil *)",
+      "Bash(systemsetup *)",
+      "Bash(pmset *)",
+      "Bash(crontab *)",
+      "Bash(git push *)",
+      "Bash(git remote set-url *)",
+      "Bash(gh repo create *)",
+      "Bash(gh api *-X *)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus[1m]",
+  "disableClaudeAiConnectors": true,
+  "skillOverrides": {
+    "code-review": "off",
+    "fewer-permission-prompts": "off",
+    "keybindings-help": "off",
+    "team-onboarding": "off"
+  },
+  "enableArtifact": true,
+  "workflowSizeGuideline": "small",
+  "statusLine": {
+    "type": "command",
+    "command": "python3 ~/.claude-blackwall/statusline/hal-statusline.py",
+    "refreshInterval": 1
+  },
+  "enabledPlugins": {
+    "hal-skills@hal-9000": true,
+    "hal-output-styles@hal-9000": true,
+    "hal-session-auto-rename@hal-9000": true,
+    "hal-voice@hal-9000": true,
+    "mattpocock-skills@mattpocock": true
+  },
+  "extraKnownMarketplaces": {
+    "hal-9000": {
+      "source": {
+        "source": "github",
+        "repo": "vinta/hal-9000"
+      },
+      "autoUpdate": true
+    },
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
+      },
+      "autoUpdate": true
+    }
+  },
+  "outputStyle": "hal-output-styles:Say no more",
+  "viewMode": "verbose",
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    },
+    "claude-sonnet-5": {
+      "effortLevel": "high"
+    }
+  },
+  "advisorModel": "fable",
+  "awaySummaryEnabled": false,
+  "showClearContextOnPlanAccept": true,
+  "voice": {
+    "enabled": true
+  },
+  "showThinkingSummaries": true,
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark",
+  "switchModelsOnFlag": false,
+  "teammateMode": "auto",
+  "remoteControlAtStartup": false,
+  "isolatePeerMachines": true,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": false,
+  "skipAutoPermissionPrompt": true,
+  "skipDangerousModePermissionPrompt": true
+}
