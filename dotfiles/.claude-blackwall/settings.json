@@ -18,8 +18,6 @@
   "includeGitInstructions": false,
   "permissions": {
     "allow": [
-      "Read(~/Projects/**)",
-      "Edit(~/Projects/**)",
       "Bash(git status *)",
       "Bash(git diff *)",
       "Bash(git branch *)",
@@ -44,28 +42,13 @@
       "WebSearch"
     ],
     "deny": [
-      "Read(~/.aws/**)",
-      "Read(~/.config/**)",
-      "Read(~/.docker/**)",
-      "Read(~/.dropbox/**)",
-      "Read(~/.gnupg/**)",
-      "Read(~/.gsutil/**)",
-      "Read(~/.kube/**)",
-      "Read(~/.npmrc)",
-      "Read(~/.orbstack/**)",
-      "Read(~/.pypirc)",
-      "Read(~/.ssh/**)",
-      "Read(~/*_history)",
-      "Read(~/**/*credential*)",
-      "Read(~/Library/**)",
-      "Edit(~/Library/**)",
-      "Read(~/Dropbox/**)",
-      "Edit(~/Dropbox/**)",
-      "Read(//etc/**)",
-      "Edit(//etc/**)",
       "Bash(git -c *)",
       "Bash(git --config-env*)",
       "Bash(git --git-dir*)",
+      "Bash(git remote add *)",
+      "Bash(git remote set-url *)",
+      "Bash(git config remote.*)",
+      "Bash(git config * remote.*)",
       "Bash(gh repo delete *)",
       "Bash(su *)",
       "Bash(sudo *)",
@@ -97,11 +80,7 @@
       "Bash(scutil *)",
       "Bash(systemsetup *)",
       "Bash(pmset *)",
-      "Bash(crontab *)",
-      "Bash(git push *)",
-      "Bash(git remote set-url *)",
-      "Bash(gh repo create *)",
-      "Bash(gh api *-X *)"
+      "Bash(crontab *)"
     ],
     "defaultMode": "auto"
   },
@@ -133,14 +112,14 @@
         "source": "github",
         "repo": "vinta/hal-9000"
       },
-      "autoUpdate": true
+      "autoUpdate": false
     },
     "mattpocock": {
       "source": {
         "source": "github",
         "repo": "mattpocock/skills"
       },
-      "autoUpdate": true
+      "autoUpdate": false
     }
   },
   "outputStyle": "hal-output-styles:Say no more",
