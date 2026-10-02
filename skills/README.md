@@ -17,7 +17,6 @@ Agentic skills sharpened by daily use:
 - [refactor-agents-md](refactor-agents-md/SKILL.md): Refactors an AGENTS.md the same way, for Codex
 - [refactor-memory](refactor-memory/SKILL.md): Prunes stale Claude Code and Codex memories, applies only what you pick
 - [refactor-skill](refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
-- [update-allowed-tools](update-allowed-tools/SKILL.md): Adds missing `allowed-tools` entries to a skill and drops the ones that grant nothing
 
 ```bash
 # Claude Code
@@ -43,4 +42,4 @@ These skills collect nothing. A few talk to other services when you run them:
 - `best-practices` sends search queries to Context7 (through the `find-docs` skill) and to web search
 - `blindspot` and `difference` send search queries to web search
 - `refactor-claude-md` sends lines of your CLAUDE.md to Claude via `claude -p`, on your own account, to check which lines the model already follows
-- `audit-claude-settings`, `refactor-claude-md`, `refactor-agents-md`, `refactor-memory`, `refactor-skill`, and `update-allowed-tools` read public docs from Anthropic, OpenAI, and SchemaStore
+- `audit-claude-settings`, `refactor-claude-md`, `refactor-agents-md`, `refactor-memory`, and `refactor-skill` read public docs from Anthropic, OpenAI, and SchemaStore

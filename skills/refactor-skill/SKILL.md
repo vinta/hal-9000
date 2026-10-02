@@ -1,6 +1,6 @@
 ---
 name: refactor-skill
-description: Use when about to refactor or refine an existing skill, its SKILL.md or sibling files, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption. Not for creating a skill from scratch or for fixing only its allowed-tools
+description: Use when about to refactor or refine an existing skill, its SKILL.md or sibling files, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption. Not for creating a skill from scratch
 argument-hint: [skill name | path/to/SKILL.md]
 allowed-tools:
   - WebFetch
@@ -22,7 +22,7 @@ Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when avail
      - **Claude Code** (`fable`, `opus`, `sonnet`): [references/claude-code.md](references/claude-code.md).
      - **Codex** (`gpt-6-astra`): [references/codex.md](references/codex.md).
 
-3. **Audit.** Give every frontmatter key, body instruction, and sibling file in scope exactly one verdict, judged against its bar below. For `allowed-tools`, run the `update-allowed-tools` skill instead of auditing entries here. Done when nothing in scope lacks a verdict.
+3. **Audit.** Give every frontmatter key, body instruction, and sibling file in scope exactly one verdict, judged against its bar below. Done when nothing in scope lacks a verdict.
    - **contradiction**: conflicts with another instruction, or the frontmatter promises what the body does not deliver, such as a `context: fork` skill whose body assumes conversation history. Record both sides.
    - **delete**: fails the no-op test, meaning the model the skill targets would behave the same without it, or the fetched pages say to remove it because it was written for an earlier model's habits. Judge defaults against those pages, not memory. Covers explanations of what the model already knows, emphasis that carries no instruction, and sibling files nothing points to.
    - **demote**: real content that only some runs of the skill reach. Destinations: a file in the skill directory linked from `SKILL.md`, one level deep; a script under `scripts/` when the steps are deterministic; a separate skill only when it needs its own trigger or another skill must reach it. Name the destination.

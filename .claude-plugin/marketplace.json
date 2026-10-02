@@ -27,8 +27,7 @@
         "./refactor-claude-md",
         "./refactor-agents-md",
         "./refactor-memory",
-        "./refactor-skill",
-        "./update-allowed-tools"
+        "./refactor-skill"
       ],
       "author": {
         "name": "Vinta Chen",
