@@ -9,8 +9,7 @@
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
     "DISABLE_UPGRADE_COMMAND": "1",
-    "HAL_SESSION_AUTO_RENAME_USE_OLLAMA": "1",
-    "HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA": "1"
+    "HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED": "1"
   },
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
@@ -19,8 +18,6 @@
   "includeGitInstructions": false,
   "permissions": {
     "allow": [
-      "Read(~/Projects/**)",
-      "Edit(~/Projects/**)",
       "Bash(git branch *)",
       "Bash(git stash *)",
       "Bash(git add *)",
@@ -35,24 +32,6 @@
       "WebSearch"
     ],
     "deny": [
-      "Read(~/.aws/**)",
-      "Read(~/.config/**)",
-      "Read(~/.docker/**)",
-      "Read(~/.dropbox/**)",
-      "Read(~/.gnupg/**)",
-      "Read(~/.gsutil/**)",
-      "Read(~/.kube/**)",
-      "Read(~/.npmrc)",
-      "Read(~/.orbstack/**)",
-      "Read(~/.pypirc)",
-      "Read(~/.ssh/**)",
-      "Read(~/*_history)",
-      "Read(~/Library/**)",
-      "Edit(~/Library/**)",
-      "Read(~/Dropbox/**)",
-      "Edit(~/Dropbox/**)",
-      "Read(//etc/**)",
-      "Edit(//etc/**)",
       "Bash(git -c *)",
       "Bash(git --config-env*)",
       "Bash(git --git-dir*)",
@@ -93,39 +72,6 @@
       "Bash(pmset *)",
       "Bash(crontab *)"
     ],
-    "ask": [
-      "Bash(open *)",
-      "Bash(chmod *)",
-      "Bash(chown *)",
-      "Bash(kill *)",
-      "Bash(killall *)",
-      "Bash(pkill *)",
-      "Bash(curl *-d *)",
-      "Bash(curl *--data*)",
-      "Bash(curl *--json *)",
-      "Bash(curl *-F *)",
-      "Bash(curl *--form *)",
-      "Bash(curl *-T *)",
-      "Bash(curl *--upload-file *)",
-      "Bash(curl *-H *)",
-      "Bash(curl *--header *)",
-      "Bash(git push *)",
-      "Bash(gh repo create *)",
-      "Bash(gh repo rename *)",
-      "Bash(gh *--admin*)",
-      "Bash(gh api *-X *)",
-      "Bash(gh api *--method *)",
-      "Bash(brew install *)",
-      "Bash(pip install *)",
-      "Bash(uv pip install *)",
-      "Bash(uv tool install *)",
-      "Bash(uv add *)",
-      "Bash(npm install *)",
-      "Bash(npm i *)",
-      "Bash(yarn add *)",
-      "Bash(pnpm add *)",
-      "Bash(bun add *)"
-    ],
     "defaultMode": "auto"
   },
   "model": "opus[1m]",
@@ -136,29 +82,11 @@
     "keybindings-help": "off",
     "team-onboarding": "off"
   },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/hooks/guard-bash-paths.py"
-          },
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/hooks/guard-network-egress.py"
-          }
-        ]
-      }
-    ]
-  },
   "enableArtifact": true,
   "workflowSizeGuideline": "small",
   "statusLine": {
     "type": "command",
-    "command": "python3 ~/.claude/statusline/hal-statusline.py",
-    "refreshInterval": 1
+    "command": "python3 ~/.claude-blackwall/statusline/hal-statusline.py"
   },
   "enabledPlugins": {
     "hal-skills@hal-9000": true,
@@ -173,14 +101,14 @@
         "source": "github",
         "repo": "vinta/hal-9000"
       },
-      "autoUpdate": true
+      "autoUpdate": false
     },
     "mattpocock": {
       "source": {
         "source": "github",
         "repo": "mattpocock/skills"
       },
-      "autoUpdate": true
+      "autoUpdate": false
     }
   },
   "outputStyle": "hal-output-styles:Say no more",
@@ -212,5 +140,6 @@
   "isolatePeerMachines": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "skipDangerousModePermissionPrompt": true
 }
