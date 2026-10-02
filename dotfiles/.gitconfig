@@ -3,29 +3,27 @@
 	email = vinta.chen@gmail.com
 	signingkey = B93DE4F003C33630
 
-[commit]
-	gpgsign = true
-
-[pull]
-	rebase = false
-
-[push]
-	default = simple
-
-[color]
-	ui = 1
-	diff = auto
-	status = auto
-	branch = auto
-	log = auto
-
 [core]
 	excludesfile = ~/.gitignore_global
-	preloadindex = true
-	ignorecase = false
-
-[help]
-	autocorrect = 1
 
 [credential]
 	helper = osxkeychain
+
+[init]
+	defaultBranch = main
+
+[commit]
+	gpgsign = true
+
+[tag]
+	sort = version:refname
+
+[diff]
+	algorithm = histogram
+	colorMoved = true
+
+[fetch]
+	prune = true
+
+[pull]
+	rebase = false
