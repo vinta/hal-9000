@@ -159,3 +159,6 @@ trusted_hash = "sha256:1423b56c1322f96c8f74c51c1e7ae9a047b904c1fa43ee9165d462fd7
 
 [hooks.state."/Users/vinta/Projects/pangu.js/.codex/hooks.json:post_tool_use:0:0"]
 trusted_hash = "sha256:ef96d37fe4779d97ca76aad7f7f4cfff979ae5ba1eef01096bb6c18a3cfd0e10"
+
+[hooks.state."/Users/vinta/Projects/laughing-man/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:4fdb4c4123148449893318a62c8e1ca0e3fd4d07458fca260a59934a1a47659e"
