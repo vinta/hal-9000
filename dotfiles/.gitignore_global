@@ -1,8 +1,8 @@
-# hide .git/ from Codex's @ picker
-.git/
-
 # simple wildcards like *.log already match recursively, you only need **/ when matching a rule not starts with *
 **/.DS_Store
+
+# hide .git/ from Codex's @ picker
+.git/
 
 # temp
 tmp/
