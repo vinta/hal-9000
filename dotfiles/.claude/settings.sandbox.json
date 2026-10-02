@@ -133,7 +133,7 @@
   },
   "showThinkingSummaries": true,
   "skipWorkflowUsageWarning": true,
-  "theme": "dark",
+  "theme": "custom:sandbox",
   "switchModelsOnFlag": false,
   "teammateMode": "auto",
   "remoteControlAtStartup": false,

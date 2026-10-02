@@ -1,0 +1,8 @@
+{
+  "name": "Sandbox",
+  "base": "dark",
+  "overrides": {
+    "promptBorder": "ansi:red",
+    "promptBorderShimmer": "ansi:redBright"
+  }
+}
