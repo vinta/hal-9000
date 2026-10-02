@@ -10,17 +10,20 @@ Opinionated AI coding agent and dev environment automation for macOS that domina
 
 All-in-one command to set up:
 
-- [Agent Skills](skills)
-- [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
-- [Codex](dotfiles/.codex)
-- [Python](playbooks/roles/python/tasks/main.yml)
-- [Node.js](playbooks/roles/node/tasks/main.yml)
-- [Bun](playbooks/roles/bun/tasks/main.yml)
-- [Go](playbooks/roles/go/tasks/main.yml)
-- [Docker](playbooks/roles/docker/tasks/main.yml) (OrbStack)
-- [Kubernetes](playbooks/roles/kubernetes/tasks/main.yml)
-- [Amazon Web Services](playbooks/roles/aws/tasks/main.yml)
-- [Google Cloud](playbooks/roles/gcp/tasks/main.yml)
+- Coding Agents
+  - [Agent Skills](skills)
+  - [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
+  - [Codex](dotfiles/.codex)
+- Languages
+  - [Python](playbooks/roles/python/tasks/main.yml)
+  - [Node.js](playbooks/roles/node/tasks/main.yml)
+  - [Bun](playbooks/roles/bun/tasks/main.yml)
+  - [Go](playbooks/roles/go/tasks/main.yml)
+- DevOps
+  - [Docker](playbooks/roles/docker/tasks/main.yml) (OrbStack)
+  - [Kubernetes](playbooks/roles/kubernetes/tasks/main.yml)
+  - [Amazon Web Services](playbooks/roles/aws/tasks/main.yml)
+  - [Google Cloud](playbooks/roles/gcp/tasks/main.yml)
 
 ```bash
 curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors.sh | bash
