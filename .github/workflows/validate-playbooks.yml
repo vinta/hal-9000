@@ -29,7 +29,7 @@ jobs:
         run: ansible-galaxy collection install -r playbooks/collections/requirements.yml --force
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@v26.4.0
+        uses: ansible/ansible-lint@v26.9.0
         with:
           # Without a path the action lints every YAML file in the repo, including .github/workflows/. Matches `make lint-ansible`.
           args: playbooks/
@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.x"
 
