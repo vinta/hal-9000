@@ -117,6 +117,9 @@ trust_level = "trusted"
 [projects."/Users/vinta/Projects/pangu.space"]
 trust_level = "trusted"
 
+[projects."/Users/vinta/Projects/blackwall"]
+trust_level = "trusted"
+
 [projects."/Users/vinta/Projects/laughing-man"]
 trust_level = "trusted"
 
@@ -132,7 +135,6 @@ show-context-window-usage = true
 usePointerCursors = true
 enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
 conversationDetailMode = "STEPS_COMMANDS"
-projectlessWorkspaceRoot = "/Users/vinta/Projects/personal"
 sansFontSize = 16
 codeFontSize = 14
 
