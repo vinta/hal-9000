@@ -6,4 +6,4 @@ timeout_seconds: 1200
 allowed_tools: [Read, Glob, Grep, Skill, WebFetch, Edit]
 ---
 
-Use the refactor-skill skill on skills/best-practices/SKILL.md. Targeted change, already approved by me: in the Constraints section, change "**2-4 focused subagents, not more.**" to "**2-4 focused subagents.**". Apply it without asking me anything.
+In the Constraints section of skills/best-practices/SKILL.md, change "**2-4 focused subagents, not more.**" to "**2-4 focused subagents.**". Apply it without asking me anything.

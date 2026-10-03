@@ -6,4 +6,4 @@ timeout_seconds: 1200
 allowed_tools: [Read, Glob, Grep, Skill, WebFetch]
 ---
 
-Use the refactor-skill skill to run a full audit of skills/release-notes/SKILL.md. Report every verdict with the line it applies to, then stop: do not edit the file and do not ask me questions.
+review skills/release-notes/SKILL.md, I think we can trim it. Go through every line and tell me which you'd delete, rewrite, or keep, and why. Don't edit the file and don't ask me questions.
