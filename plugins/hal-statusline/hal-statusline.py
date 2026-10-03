@@ -208,7 +208,7 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
 
     ctx_pct = int(task["tokenCount"] / task["contextWindowSize"] * 100)
     ctx_plain = f"Ctx {ctx_pct}%"
-    parts = [model_part, f"{usage_color(ctx_pct)}{ctx_plain}{RESET}{BLUE}"]
+    parts = [f"{BLUE}{model_part}{RESET}", f"{usage_color(ctx_pct)}{ctx_plain}{RESET}"]
 
     title = task.get("name") or task["description"] or task["label"]
     budget = columns - len(model_part) - len(ctx_plain) - 2 * SEPARATOR_WIDTH
@@ -217,8 +217,7 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
     if title:
         parts.insert(0, title)
 
-    separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
-    return f"{BLUE}{separator.join(parts)}{RESET}"
+    return f" {WHITE}·{RESET} ".join(parts)
 
 
 def subagent_status(data: SubagentStatusData) -> None:

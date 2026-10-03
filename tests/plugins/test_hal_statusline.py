@@ -210,6 +210,14 @@ class TestSubagentStatus:
         assert rows[0]["id"] == "task-1"
         assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 high · Ctx 12%"
 
+    def test_only_model_is_blue_and_ctx_uses_usage_color(self, hal_statusline, capsys):
+        hal_statusline.subagent_status({"columns": 120, "tasks": [make_task()]})
+
+        h = hal_statusline
+        separator = f" {h.WHITE}·{h.RESET} "
+        expected = f"hal-skills-commit{separator}{h.BLUE}sonnet-5 high{h.RESET}{separator}{h.GREEN}Ctx 12%{h.RESET}"
+        assert subagent_rows(capsys)[0]["content"] == expected
+
     def test_inherited_effort_omitted(self, hal_statusline, capsys):
         task = make_task()
         del task["effort"]
