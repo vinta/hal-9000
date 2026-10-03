@@ -8,7 +8,6 @@ effort: medium
 allowed-tools:
   - Bash(git push:*)
   - Bash(gh pr:*)
-  - Bash(gh run:*)
 ---
 
 Invoking this skill IS the request. Your task is fully specified here. Never ask what to do.
