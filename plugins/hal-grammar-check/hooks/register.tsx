@@ -21,47 +21,48 @@ Skip these (NEVER flag):
 - **Unfinished last sentence**: the text is a draft still being typed. Do not flag a final sentence that is cut off mid-way.
 
 Output format:
-- Each issue on its own line: Grammar: "[corrected]" => explanation in Traditional Chinese
+- Each issue on its own line: "[corrected]" => explanation in Traditional Chinese
+- Wrap only the corrected words in double quotes, never the surrounding words
 - Use full-width commas (，) in Chinese explanations
-- No errors: output exactly "Grammar: no issues"
-- Output ONLY the "Grammar: ..." line(s). No commentary, no extra text, no explanations beyond the correction format above.
+- No errors: output exactly "no issues"
+- Output ONLY the issue line(s). No commentary, no extra text, no explanations beyond the correction format above.
 </instructions>
 
 <examples>
 <example>
 Text: I don't car the shop has wife or not. I will use cellar!
 Output:
-Grammar: I don't "care" => car 是「汽車」，這裡應該是要用動詞 care「在乎」
-Grammar: has "Wi-Fi" or not => wife 是「妻子」，你是要說 Wi-Fi「無線網路」吧？
-Grammar: I will use "cellular" => cellar 是「地窖」，這裡應該是 cellular「行動網路」
+I don't "care" => car 是「汽車」，這裡應該是要用動詞 care「在乎」
+has "Wi-Fi" or not => wife 是「妻子」，你應該是要說 Wi-Fi「無線網路」
+I will use "cellular" => cellar 是「地窖」，這裡應該是 cellular「行動網路」
 </example>
 <example>
 Text: @plugins/hal-statusline/hal-statusline.py#L141 use \`claude -p\` and \`grammar_check_prompt\` to grammar check \`latest_user_input\` and print result
 Output:
-Grammar: to "grammar-check" latest_user_input => 要用連字號 "-" 連接形成複合動詞
-Grammar: print "the" result => result 前面要加定冠詞 the
+to "grammar-check" latest_user_input => 要用連字號 "-" 連接形成複合動詞
+print "the" result => result 前面要加定冠詞 the
 </example>
 <example>
 Text: The code is works but I don't know why it keep crashing
 Output:
-Grammar: The code "works" => 不需要 is，直接用動詞 works；或改成 is working
-Grammar: why it "keeps" crashing => 第三人稱單數 it 要用 keeps
+The code "works" => 不需要 is，直接用動詞 works；或改成 is working
+why it "keeps" crashing => 第三人稱單數 it 要用 keeps
 </example>
 <example comment="skip Capitalization at sentence beginnings (lowercase 'do' is excluded per instruction)">
 Text: do not refactor unless explicited requested
 Output:
-Grammar: "explicitly requested" => 要用副詞 explicitly，沒有 explicited 這個詞
+"explicitly requested" => 要用副詞 explicitly，沒有 explicited 這個詞
 </example>
 <example comment="skip Capitalization (lowercase pronoun 'i' and sentence-start 'check' are excluded per instruction)">
 Text: Wait, i seems broke it. check codebase again
 Output:
-Grammar: I "seem to have broken" it => 用 seem to have + 過去分詞表示「好像已經...」
-Grammar: Check "the" codebase => 特指這個 codebase，要加定冠詞 the
+I "seem to have broken" it => 用 seem to have + 過去分詞表示「好像已經...」
+Check "the" codebase => 特指這個 codebase，要加定冠詞 the
 </example>
 <example comment="skip Capitalization at sentence beginnings; demonstrate 'no issues' output">
 Text: can you review my PR?
 Output:
-Grammar: no issues
+no issues
 </example>
 </examples>
 
@@ -120,7 +121,7 @@ async function runOllama($: EngineInterface, draft: string, mine: number): Promi
   }
   const { code } = await curl.result
   if (code !== 0) {
-    return [`Grammar: ollama unreachable (${stderr.trim() || `curl exited ${code}`})`]
+    return [`ollama unreachable (${stderr.trim() || `curl exited ${code}`})`]
   }
   return toLines(answer)
 }
@@ -149,7 +150,7 @@ async function grammarCheck($: EngineInterface, draft: string, mine: number) {
   try {
     lines = await runOllama($, draft, mine)
   } catch (error) {
-    lines = [`Grammar: ollama unreachable (${error instanceof Error ? error.message : String(error)})`]
+    lines = [`ollama unreachable (${error instanceof Error ? error.message : String(error)})`]
   }
   if (mine === seq) {
     const result: GrammarCheck = { status: 'done', lines }
@@ -216,13 +217,12 @@ export const register: Register = on => {
     const isDimmed = current.status === 'checking' || current.status === 'submitted'
     // Same colors as hal-statusline's colorize_grammar: white label, green for no issues, red otherwise
     const color = current.lines.some(line => line.toLowerCase().includes('no issues')) ? 'green' : 'red'
-    const issues = current.lines.map(line => line.replace(/^Grammar:/, '').trim())
 
     return (
       <Box flexDirection="column" marginTop={1}>
         <Text color="white" dimColor={isDimmed}>⏺ hal-grammar-check{isChecking ? ' (checking…)' : ''}</Text>
         <Box flexDirection="column" paddingLeft={2}>
-          {issues.map((issue, i) => {
+          {current.lines.map((issue, i) => {
             const arrow = issue.indexOf(' => ')
             if (arrow === -1) {
               return (
