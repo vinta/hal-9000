@@ -14,9 +14,12 @@
   "license": "MIT",
   "icon": "./icon.svg",
   "keywords": [
-    "hal-9000",
-    "hooks",
     "grammar",
+    "grammar-check",
+    "spelling",
+    "spell-check",
+    "hooks",
+    "mods",
     "ollama"
   ],
   "types": "./types/index.d.ts"

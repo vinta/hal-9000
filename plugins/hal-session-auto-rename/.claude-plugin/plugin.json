@@ -1,7 +1,7 @@
 {
   "name": "hal-session-auto-rename",
   "displayName": "HAL Session Auto-rename",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "Automatically name each session and rename it as the conversation evolves",
   "author": {
     "name": "Vinta Chen",
@@ -14,11 +14,11 @@
   "license": "MIT",
   "icon": "./icon.svg",
   "keywords": [
-    "hal-9000",
-    "hooks",
     "session",
+    "session-title",
     "auto-rename",
     "title",
-    "ai-title"
+    "ai-title",
+    "hooks"
   ]
 }

@@ -141,39 +141,6 @@
       ]
     },
     {
-      "name": "hal-session-auto-rename",
-      "displayName": "HAL Session Auto-rename",
-      "description": "Automatically name each session and rename it as the conversation evolves",
-      "source": "./plugins/hal-session-auto-rename",
-      "author": {
-        "name": "Vinta Chen",
-        "email": "vinta.chen@gmail.com"
-      },
-      "repository": "https://github.com/vinta/hal-9000",
-      "homepage": "https://vinta.ws/",
-      "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-session-auto-rename/README.md",
-      "supportUrl": "https://github.com/vinta/hal-9000/issues",
-      "license": "MIT",
-      "icon": "./icon.svg",
-      "category": "productivity",
-      "keywords": [
-        "session",
-        "session-title",
-        "auto-rename",
-        "title",
-        "ai-title",
-        "hooks"
-      ],
-      "tags": [
-        "session",
-        "session-title",
-        "auto-rename",
-        "title",
-        "ai-title",
-        "hooks"
-      ]
-    },
-    {
       "name": "hal-grammar-check",
       "displayName": "HAL Grammar Check",
       "description": "Grammar-check your prompt as you type, shown above the prompt box",
@@ -207,6 +174,39 @@
         "hooks",
         "mods",
         "ollama"
+      ]
+    },
+    {
+      "name": "hal-session-auto-rename",
+      "displayName": "HAL Session Auto-rename",
+      "description": "Automatically name each session and rename it as the conversation evolves",
+      "source": "./plugins/hal-session-auto-rename",
+      "author": {
+        "name": "Vinta Chen",
+        "email": "vinta.chen@gmail.com"
+      },
+      "repository": "https://github.com/vinta/hal-9000",
+      "homepage": "https://vinta.ws/",
+      "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-session-auto-rename/README.md",
+      "supportUrl": "https://github.com/vinta/hal-9000/issues",
+      "license": "MIT",
+      "icon": "./icon.svg",
+      "category": "productivity",
+      "keywords": [
+        "session",
+        "session-title",
+        "auto-rename",
+        "title",
+        "ai-title",
+        "hooks"
+      ],
+      "tags": [
+        "session",
+        "session-title",
+        "auto-rename",
+        "title",
+        "ai-title",
+        "hooks"
       ]
     },
     {

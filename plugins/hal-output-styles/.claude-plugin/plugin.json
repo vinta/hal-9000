@@ -1,7 +1,7 @@
 {
   "name": "hal-output-styles",
   "displayName": "HAL Output Styles",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Make Claude Code talk like an INTJ",
   "author": {
     "name": "Vinta Chen",
@@ -14,7 +14,6 @@
   "license": "MIT",
   "icon": "./icon.svg",
   "keywords": [
-    "hal-9000",
     "output-style",
     "telegraphic",
     "concise",
