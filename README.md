@@ -87,25 +87,22 @@ If you want to use them in other coding agents:
 npx skills add vinta/hal-9000
 ```
 
-### Claude Code Mods
-
-- [hal-grammar-check](plugins/hal-grammar-check): Grammar-check your prompt as you type, shown above the prompt box
-
-### Claude Code Plugins
+### Claude Code Plugins / Mods
 
 Plugins that wire their own hooks and run themselves:
 
 - [hal-output-styles](plugins/hal-output-styles): Make Claude Code talk like an INTJ
   - [Say no more](plugins/hal-output-styles/output-styles/say-no-more.md)
   - [ASD-STE100](plugins/hal-output-styles/output-styles/asd-ste100.md)
+- [hal-grammar-check](plugins/hal-grammar-check): Grammar-check your prompt as you type, shown above the prompt box
 - [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session and rename it as the conversation evolves
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
 claude plugin marketplace add vinta/hal-9000
 claude plugin install hal-output-styles@hal-9000
-claude plugin install hal-session-auto-rename@hal-9000
 claude plugin install hal-grammar-check@hal-9000
+claude plugin install hal-session-auto-rename@hal-9000
 claude plugin install hal-voice@hal-9000
 ```
 
