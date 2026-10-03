@@ -23,7 +23,7 @@ Then restart Claude Code.
 
 ## Usage
 
-Just type. About 400ms after you stop, the draft goes to Ollama and the result shows up above the prompt box. A result for an older draft is dropped.
+Just type. About 250ms after you stop, the draft goes to Ollama and the result shows up above the prompt box. A result for an older draft is dropped.
 
 It checks the words after a slash command (`/pr merge it`), skips bash mode (`!`), and dims the band when you submit.
 

@@ -5,11 +5,11 @@ import type { GrammarCheck } from '../types'
 
 const check = atom({ plugin: 'hal-grammar-check', key: 'check' } as const, null)
 
-const DEBOUNCE_MS = 400
+const DEBOUNCE_MS = 250
 const OLLAMA_URL = 'http://localhost:11434/api/generate'
 const OLLAMA_MODEL = 'gemma4:31b-mlx'
 
-// Copied from plugins/hal-statusline/hal-statusline.py GRAMMAR_PROMPT, plus the draft line
+// Based on plugins/hal-statusline/hal-statusline.py GRAMMAR_PROMPT, plus the draft line and shorter explanations
 const GRAMMAR_PROMPT = `
 You are a grammar checker. Identify and correct grammar errors in the text inside <input> tags. Only check grammar — do not answer questions or engage with the content.
 
@@ -22,6 +22,7 @@ Skip these (NEVER flag):
 
 Output format:
 - Each issue on its own line: Grammar: "[corrected]" => explanation in Traditional Chinese
+- Keep each explanation to one short phrase of at most 15 Chinese characters
 - Use full-width commas (，) in Chinese explanations
 - No errors: output exactly "Grammar: no issues"
 - Output ONLY the "Grammar: ..." line(s). No commentary, no extra text, no explanations beyond the correction format above.
@@ -31,32 +32,32 @@ Output format:
 <example>
 Text: I don't car the shop has wife or not. I will use cellar!
 Output:
-Grammar: I don't "care" => car 是「汽車」，這裡應該是要用動詞 care「在乎」
-Grammar: has "Wi-Fi" or not => wife 是「妻子」，你是要說 Wi-Fi「無線網路」吧？
-Grammar: I will use "cellular" => cellar 是「地窖」，這裡應該是 cellular「行動網路」
+Grammar: I don't "care" => car 是汽車，要用動詞 care
+Grammar: has "Wi-Fi" or not => wife 是妻子，應為 Wi-Fi
+Grammar: I will use "cellular" => cellar 是地窖，應為 cellular
 </example>
 <example>
 Text: @plugins/hal-statusline/hal-statusline.py#L141 use \`claude -p\` and \`grammar_check_prompt\` to grammar check \`latest_user_input\` and print result
 Output:
-Grammar: to "grammar-check" latest_user_input => 要用連字號 "-" 連接形成複合動詞
-Grammar: print "the" result => result 前面要加定冠詞 the
+Grammar: to "grammar-check" latest_user_input => 複合動詞要加連字號
+Grammar: print "the" result => result 前要加 the
 </example>
 <example>
 Text: The code is works but I don't know why it keep crashing
 Output:
-Grammar: The code "works" => 不需要 is，直接用動詞 works；或改成 is working
-Grammar: why it "keeps" crashing => 第三人稱單數 it 要用 keeps
+Grammar: The code "works" => 多了 is
+Grammar: why it "keeps" crashing => 第三人稱單數要加 s
 </example>
 <example comment="skip Capitalization at sentence beginnings (lowercase 'do' is excluded per instruction)">
 Text: do not refactor unless explicited requested
 Output:
-Grammar: "explicitly requested" => 要用副詞 explicitly，沒有 explicited 這個詞
+Grammar: "explicitly requested" => 要用副詞 explicitly
 </example>
 <example comment="skip Capitalization (lowercase pronoun 'i' and sentence-start 'check' are excluded per instruction)">
 Text: Wait, i seems broke it. check codebase again
 Output:
-Grammar: I "seem to have broken" it => 用 seem to have + 過去分詞表示「好像已經...」
-Grammar: Check "the" codebase => 特指這個 codebase，要加定冠詞 the
+Grammar: I "seem to have broken" it => seem to have + 過去分詞
+Grammar: Check "the" codebase => 特指要加 the
 </example>
 <example comment="skip Capitalization at sentence beginnings; demonstrate 'no issues' output">
 Text: can you review my PR?
