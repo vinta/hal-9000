@@ -28,7 +28,7 @@ Create mode and update mode run these steps where they say "gather PR material":
 
 3. `git log --format=%b main..HEAD` (same fallback). Collect every issue number written as `#N` or as a GitHub issue URL. Each one becomes a `Fix #N` line at the end of the body, one per line, no duplicates.
 
-4. Invoke the `write-like-me` skill. Pass as argument: "Write a GitHub PR title and body from the material below. Output the title as the first line, a blank line, then the body, and nothing else: the caller splits on the first line, so a label or heading would land in the title.
+4. Invoke the `write-like-me` skill. Pass as argument: "Write a GitHub PR title and body from the material below. Shape the draft as the title on the first line, a blank line, then the body, and nothing else: the caller splits on the first line, so a label or heading would land in the title. The draft goes straight into the caller's next `gh` command in the same response, never into a reply: a reply with no tool call ends the caller before the PR exists.
 
 Title: one plain-English line under 72 chars that names the change itself, with no `fix:` or `feat:` type prefix. GitHub shows titles as plain text, so write file names bare, without backticks. Body: GitHub renders it as markdown, so wrap every file path, command, flag, and identifier in backticks, at every occurrence. Body shape depends on how many separate changes the branch holds.
 
