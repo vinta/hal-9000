@@ -17,11 +17,7 @@ Use `make` targets instead of running the underlying commands directly. They cha
 
 ## External Tool Documentation
 
-Invoke the `find-docs` skill BEFORE writing code or config that touches the tools below, not only when asked about them. Do not answer from training data, even for familiar tools. Fetch user-provided URLs and the documentation links below.
-
-### Context7 Library IDs
-
-Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skipping the `ctx7 library` step:
+Pre-resolved Context7 IDs for the `find-docs` skill. Pass them to `ctx7 docs` and skip `ctx7 library`:
 
 | Tool           | `libraryId`                                |
 | -------------- | ------------------------------------------ |
@@ -39,17 +35,3 @@ Pre-resolved IDs for the `find-docs` skill. Pass directly to `ctx7 docs`, skippi
 | ty             | `/websites/astral_sh_ty`                   |
 | uv             | `/websites/astral_sh_uv`                   |
 | zsh            | `/websites/zsh_sourceforge_io_doc_release` |
-
-### Documentation Links
-
-For topics not well covered by Context7, fetch these URLs:
-
-- Claude Prompting Best Practices
-  - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
-- Claude Code Settings
-  - https://code.claude.com/docs/en/settings
-- Claude Code Rules
-  - https://code.claude.com/docs/en/memory#path-specific-rules
-- Claude Code Plugins / Marketplaces
-  - https://code.claude.com/docs/en/plugins-reference
-  - https://code.claude.com/docs/en/plugin-marketplaces

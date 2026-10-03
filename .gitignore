@@ -3,6 +3,7 @@ CLAUDE.local.md
 
 # Skills
 .scratch/
+plugins/evals/results/
 
 # Ansible
 .ansible/
@@ -16,7 +17,5 @@ __pycache__/
 .ty/
 
 # Node.js
-node_modules/
-
-# Remotion
+videos/**/node_modules/
 videos/**/out/

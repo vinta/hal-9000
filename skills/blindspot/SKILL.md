@@ -20,8 +20,8 @@ Facts are your job, never the user's. Sweep before writing anything:
 
 - **Goal**: the goal the request serves, climbed one level at a time through the request and the repo's records until they run out. The map sits at the highest level still open; the request's own wording is usually the lowest.
 - **Premises**: what the request and the repo's design records (ADRs, docs, past decisions) take as settled, restated as questions. Premises are the source of idea-level areas; docs and pitfall searches yield mechanics.
-- **Repo**: an explorer subagent for existing patterns, conventions, and adjacent solutions.
-- **Tools and domain**: `find-docs` for current APIs and config; web search for pitfalls ("X gotchas", "X common mistakes") — pitfalls live in issue threads and post-mortems, not getting-started docs.
+- **Repo**: the `Explore` agent in Claude Code or an `explorer` subagent in Codex, for existing patterns, conventions, and adjacent solutions.
+- **Tools and domain**: `find-docs` for current APIs and config; `WebSearch` in Claude Code or `web_search` in Codex for pitfalls ("X gotchas", "X common mistakes") — pitfalls live in issue threads and post-mortems, not getting-started docs.
 
 Recon hunts for the areas a practitioner would have on their list that the request never mentions. Done when every area that could reorder the map has its source, recon or a premise, or a note that recon found nothing.
 

@@ -6,12 +6,8 @@ context: fork
 model: sonnet
 effort: medium
 allowed-tools:
-  - Bash(git branch:*)
   - Bash(git push:*)
-  - Bash(git switch:*)
-  - Bash(git pull:*)
   - Bash(gh pr:*)
-  - Bash(gh run:*)
 ---
 
 Invoking this skill IS the request. Your task is fully specified here. Never ask what to do.
@@ -28,13 +24,13 @@ Create mode and update mode run these steps where they say "gather PR material":
 
 1. `git log --format='%n%s' --name-only main..HEAD` (fall back to `master..HEAD`). Each commit is a block: its subject, then the files it touched. A flat log next to a branch-wide diff stat lets the writer guess which commit touched which file.
 
-2. The PR describes the net change of the branch. A commit whose subject starts with `Revert "` and the commit it names cancel each other when both sit in the log, and a subject starting with `build: bump` describes no change. Remove those blocks from the log before passing it on.
+2. The PR describes the net change of the branch. A commit whose subject starts with `Revert "` and the commit it names cancel each other when both sit in the log, as does a later commit that restores what an earlier one removed, and a subject starting with `build: bump` describes no change. Remove those blocks from the log before passing it on.
 
 3. `git log --format=%b main..HEAD` (same fallback). Collect every issue number written as `#N` or as a GitHub issue URL. Each one becomes a `Fix #N` line at the end of the body, one per line, no duplicates.
 
-4. Invoke the `write-like-me` skill. Pass as argument: "Write a GitHub PR title and body from the material below. Output the title as the first line, a blank line, then the body, and nothing else: the caller splits on the first line, so a label or heading would land in the title.
+4. Invoke the `write-like-me` skill. Pass as argument: "Write a GitHub PR title and body from the material below. Shape the draft as the title on the first line, a blank line, then the body, and nothing else: the caller splits on the first line, so a label or heading would land in the title. The draft goes straight into the caller's next `gh` command in the same response, never into a reply: a reply with no tool call ends the caller before the PR exists.
 
-Title: one plain-English line under 72 chars that names the change itself, with no `fix:` or `feat:` type prefix. GitHub shows titles as plain text, so write file names bare, without backticks. Body: GitHub renders it as markdown, so wrap every file path, command, flag, and identifier in backticks, at every occurrence. Body shape depends on how many separate changes the branch holds.
+Title: one plain-English line under 72 chars that names the change itself, with no `fix:` or `feat:` type prefix. GitHub shows titles as plain text, so write file names bare, without backticks. Body: GitHub renders it as markdown, so wrap every file path, command, flag, and identifier in backticks, at every occurrence. Leave out changes a reviewer would not miss, such as ignore files, asset moves, and personal config tweaks, unless the branch holds nothing else. Body shape depends on how many separate changes are left.
 
 One change: 1-3 sentences of prose, what changed and why, no list.
 
@@ -44,7 +40,7 @@ Add pr skill for pushing branches and opening PRs
 Adds a `pr` skill that pushes the current branch, drafts a PR title and body with `write-like-me`, and opens the PR with `gh`. Wires it into the plugin manifest and marketplace so it ships with `hal-skills`.
 </example>
 
-Two or more changes: one `-` item per change, each item 1-3 short sentences stating the change and one before/after example when the change has a visible input and output. Apply this to every change, not only the first.
+Two or more changes: one `-` item per change, each item 1-3 short sentences stating the change and one before/after example when the change has a visible input and output. Give every item its example, not only the first.
 
 <example>
 Move name-suffix into core rules and protect URLs and slashes
@@ -81,9 +77,7 @@ Move name-suffix into core rules and protect URLs and slashes
 2. `git log --oneline @{u}..HEAD` — if it lists commits, `git push` so CI and the merge see them.
 3. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If you pushed and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once.
 4. If exit code 0 (all checks passed):
-   - `gh pr merge --merge --delete-branch`
-   - `git switch main && git pull`
-   - Delete local branch if it still exists: `git branch -d <branch>`.
+   - `gh pr merge --merge --delete-branch`. It also switches to the base branch, pulls it, and deletes the local branch.
    - Report: merged, remote and local branches cleaned up.
 5. If non-zero (check failed):
    - Run `gh pr checks` once more to list failed checks and their URLs.
