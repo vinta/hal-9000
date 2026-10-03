@@ -124,7 +124,6 @@
       "icon": "./icon.svg",
       "category": "productivity",
       "keywords": [
-        "hal-9000",
         "output-style",
         "telegraphic",
         "concise",
@@ -133,7 +132,6 @@
         "intj"
       ],
       "tags": [
-        "hal-9000",
         "output-style",
         "telegraphic",
         "concise",
@@ -159,20 +157,20 @@
       "icon": "./icon.svg",
       "category": "productivity",
       "keywords": [
-        "hal-9000",
-        "hooks",
         "session",
+        "session-title",
         "auto-rename",
         "title",
-        "ai-title"
+        "ai-title",
+        "hooks"
       ],
       "tags": [
-        "hal-9000",
-        "hooks",
         "session",
+        "session-title",
         "auto-rename",
         "title",
-        "ai-title"
+        "ai-title",
+        "hooks"
       ]
     },
     {
@@ -193,15 +191,21 @@
       "types": "./types/index.d.ts",
       "category": "productivity",
       "keywords": [
-        "hal-9000",
-        "hooks",
         "grammar",
+        "grammar-check",
+        "spelling",
+        "spell-check",
+        "hooks",
+        "mods",
         "ollama"
       ],
       "tags": [
-        "hal-9000",
-        "hooks",
         "grammar",
+        "grammar-check",
+        "spelling",
+        "spell-check",
+        "hooks",
+        "mods",
         "ollama"
       ]
     },
@@ -223,15 +227,15 @@
       "category": "entertainment",
       "keywords": [
         "hal-9000",
-        "hooks",
         "voice",
-        "audio"
+        "audio",
+        "hooks"
       ],
       "tags": [
         "hal-9000",
-        "hooks",
         "voice",
-        "audio"
+        "audio",
+        "hooks"
       ]
     }
   ]
