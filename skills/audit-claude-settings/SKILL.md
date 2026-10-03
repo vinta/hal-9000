@@ -49,7 +49,7 @@ Each item carries the key, what it does in one line, and the user fact that make
 
 Offer the picks with AskUserQuestion, multiSelect, grouped like the report. When the settings file already has uncommitted changes, commit those first as their own commit.
 
-Apply the picks and validate with `python3 -m json.tool` after edits — a user or project settings file with one invalid entry is rejected as a whole. Say which picks land later, per the "When edits take effect" section of `settings.md`.
+Apply the picks and validate with `python3 -m json.tool` after edits — invalid JSON makes Claude Code skip the whole file. Say which picks land later, per the "When edits take effect" section of `settings.md`.
 
 ## Gotchas
 
