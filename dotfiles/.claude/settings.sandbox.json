@@ -1,9 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 999999,
+  "syncClaudeAiSkills": false,
   "env": {
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_SUBAGENT_MODEL": "opus",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
@@ -88,12 +88,18 @@
     "type": "command",
     "command": "python3 ~/.claude-blackwall/statusline/hal-statusline.py"
   },
+  "subagentStatusLine": {
+    "type": "command",
+    "command": "python3 ~/.claude-blackwall/statusline/hal-statusline.py --subagents"
+  },
   "enabledPlugins": {
+    "cc-plugin-you-should-know@builtin": true,
     "hal-skills@hal-9000": true,
     "hal-output-styles@hal-9000": true,
     "hal-session-auto-rename@hal-9000": true,
     "hal-voice@hal-9000": true,
-    "mattpocock-skills@mattpocock": true
+    "mattpocock-skills@mattpocock": true,
+    "design@synced": false
   },
   "extraKnownMarketplaces": {
     "hal-9000": {
