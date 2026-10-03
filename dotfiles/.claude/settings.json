@@ -11,6 +11,7 @@
     "DISABLE_FEEDBACK_COMMAND": "1",
     "DISABLE_UPGRADE_COMMAND": "1",
     "HAL_SESSION_AUTO_RENAME_USE_OLLAMA": "1",
+    "HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED": "1",
     "HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA": "1"
   },
   "attribution": {
@@ -171,6 +172,7 @@
     "hal-skills@hal-9000": true,
     "hal-output-styles@hal-9000": true,
     "hal-session-auto-rename@hal-9000": true,
+    "hal-grammar-check@hal-9000": true,
     "hal-voice@hal-9000": true,
     "mattpocock-skills@mattpocock": true
   },

@@ -176,6 +176,36 @@
       ]
     },
     {
+      "name": "hal-grammar-check",
+      "displayName": "HAL Grammar Check",
+      "description": "Grammar-check your prompt as you type, shown above the prompt box",
+      "source": "./plugins/hal-grammar-check",
+      "author": {
+        "name": "Vinta Chen",
+        "email": "vinta.chen@gmail.com"
+      },
+      "repository": "https://github.com/vinta/hal-9000",
+      "homepage": "https://vinta.ws/",
+      "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-grammar-check/README.md",
+      "supportUrl": "https://github.com/vinta/hal-9000/issues",
+      "license": "MIT",
+      "icon": "./icon.svg",
+      "types": "./types/index.d.ts",
+      "category": "productivity",
+      "keywords": [
+        "hal-9000",
+        "hooks",
+        "grammar",
+        "ollama"
+      ],
+      "tags": [
+        "hal-9000",
+        "hooks",
+        "grammar",
+        "ollama"
+      ]
+    },
+    {
       "name": "hal-voice",
       "displayName": "HAL Voice",
       "description": "Play HAL 9000 voice clips on Claude Code hook events",

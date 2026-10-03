@@ -1,0 +1,23 @@
+{
+  "name": "hal-grammar-check",
+  "displayName": "HAL Grammar Check",
+  "version": "0.1.0",
+  "description": "Grammar-check your prompt as you type, shown above the prompt box",
+  "author": {
+    "name": "Vinta Chen",
+    "email": "vinta.chen@gmail.com"
+  },
+  "repository": "https://github.com/vinta/hal-9000",
+  "homepage": "https://vinta.ws/",
+  "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-grammar-check/README.md",
+  "supportUrl": "https://github.com/vinta/hal-9000/issues",
+  "license": "MIT",
+  "icon": "./icon.svg",
+  "keywords": [
+    "hal-9000",
+    "hooks",
+    "grammar",
+    "ollama"
+  ],
+  "types": "./types/index.d.ts"
+}
