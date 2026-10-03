@@ -22,7 +22,7 @@ curl -sfL https://code.claude.com/docs/en/env-vars.md -o <scratchpad>/cc-docs-en
 
 Every docs page has a raw markdown mirror at its URL plus `.md`. `<scratchpad>` is your session's scratchpad directory, or `/tmp` when the harness provides none. `-f` makes a missing page a failed command instead of a silently saved 404 body. These three files are the only acceptable source for the scan.
 
-`settings-reference.md` holds every key: the table under its `## Settings index` heading is one row per key with purpose, topic, and scope, and each key has a `### \`key\`` entry below. `env-vars.md` has the same shape under `## Variables`. Grep both tables for the full key lists, then read the entry of every key and variable the user sets in full — the entries carry the defaults, deprecations, and precedence the tables omit. Read `settings.md` whole for scope and precedence rules. The first line of each file points to https://code.claude.com/docs/llms.txt, the index of every docs page, for follow-ups such as permission rule syntax, hooks, and sandboxing.
+`settings-reference.md` holds every key: the table under its `## Settings index` heading is one row per key with purpose, topic, and scope, and each key has a `### \`key\`` entry below. `env-vars.md` lists every variable as one table row under `## Variables`, and that row is its whole entry. Grep both for the full lists, then read the `###` entry of every key the user sets in full — the entries carry the defaults, deprecations, and precedence the index table omits. Read `settings.md` whole for scope and precedence rules. The first line of each file points to https://code.claude.com/docs/llms.txt, the index of every docs page, for follow-ups such as permission rule syntax, hooks, and sandboxing.
 
 ## 2. Collect the user's real config
 
@@ -49,7 +49,7 @@ Each item carries the key, what it does in one line, and the user fact that make
 
 Offer the picks with AskUserQuestion, multiSelect, grouped like the report. When the settings file already has uncommitted changes, commit those first as their own commit.
 
-Apply the picks and validate with `python3 -m json.tool` after edits — a user or project settings file with one invalid entry is rejected as a whole. Say which picks land later: `model` and `outputStyle` load at startup only, keys that shape the system prompt land on `/clear` or restart, and `env` entries reload live.
+Apply the picks and validate with `python3 -m json.tool` after edits — a user or project settings file with one invalid entry is rejected as a whole. Say which picks land later, per the "When edits take effect" section of `settings.md`.
 
 ## Gotchas
 
