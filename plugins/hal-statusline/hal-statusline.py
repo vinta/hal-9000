@@ -73,6 +73,23 @@ class StatusLineData(TypedDict):
     context_window: NotRequired[ContextWindow]
 
 
+# https://code.claude.com/docs/en/statusline#subagent-status-lines
+class SubagentTask(TypedDict):
+    id: str
+    name: NotRequired[str]  # skill forks and named Agent spawns send it; teammates never reach this script
+    description: str
+    label: str
+    tokenCount: int
+    model: NotRequired[str]  # omitted until the task's model is resolved
+    contextWindowSize: NotRequired[int]  # omitted together with model
+    effort: NotRequired[str | int]  # absent when the subagent inherits the session effort
+
+
+class SubagentStatusData(TypedDict):
+    columns: int
+    tasks: list[SubagentTask]
+
+
 class OllamaGenerateResponse(TypedDict):
     response: str
 
@@ -179,6 +196,35 @@ def basic_info(data: StatusLineData) -> None:
 
     separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
     print(f"{WHITE}Current:{RESET} {BLUE}{separator.join(status_parts)}{RESET}")
+
+
+SEPARATOR_WIDTH = len(" · ")
+
+
+def subagent_row(task: SubagentTask, columns: int) -> str:
+    model = task["model"].removeprefix("claude-")
+    effort = task.get("effort")
+    model_part = f"{model} {effort}" if effort is not None else model
+
+    ctx_pct = int(task["tokenCount"] / task["contextWindowSize"] * 100)
+    ctx_plain = f"Context {ctx_pct}%"
+    parts = [f"{BLUE}{model_part}{RESET}", f"{usage_color(ctx_pct)}{ctx_plain}{RESET}"]
+
+    title = task.get("name") or task["description"] or task["label"]
+    budget = columns - len(model_part) - len(ctx_plain) - 2 * SEPARATOR_WIDTH
+    if len(title) > budget:
+        title = title[: budget - 1] + "…" if budget >= 2 else ""  # noqa: PLR2004 magic-value-comparison
+    if title:
+        parts.insert(0, title)
+
+    return f" {WHITE}·{RESET} ".join(parts)
+
+
+def subagent_status(data: SubagentStatusData) -> None:
+    for task in data["tasks"]:
+        if "model" not in task or "contextWindowSize" not in task:
+            continue
+        print(json.dumps({"id": task["id"], "content": subagent_row(task, data["columns"])}))
 
 
 NON_PROMPT_PREFIXES = (
@@ -466,6 +512,12 @@ def grammar_check(data: StatusLineData) -> None:
 def main() -> None:
     if len(sys.argv) >= 3 and sys.argv[1] == "--grammar-worker":  # noqa: PLR2004 magic-value-comparison
         run_grammar_worker(sys.argv[2])
+        return
+
+    if len(sys.argv) >= 2 and sys.argv[1] == "--subagents":  # noqa: PLR2004 magic-value-comparison
+        subagent_data: SubagentStatusData = json.load(sys.stdin)
+        logger.debug("subagents data=%s", json.dumps(subagent_data))
+        subagent_status(subagent_data)
         return
 
     data: StatusLineData = json.load(sys.stdin)

@@ -3,7 +3,6 @@
   "cleanupPeriodDays": 999999,
   "env": {
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_SUBAGENT_MODEL": "opus",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
@@ -159,6 +158,10 @@
     "type": "command",
     "command": "python3 ~/.claude/statusline/hal-statusline.py",
     "refreshInterval": 1
+  },
+  "subagentStatusLine": {
+    "type": "command",
+    "command": "python3 ~/.claude/statusline/hal-statusline.py --subagents"
   },
   "enabledPlugins": {
     "hal-skills@hal-9000": true,

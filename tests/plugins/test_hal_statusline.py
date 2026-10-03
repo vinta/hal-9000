@@ -175,3 +175,101 @@ class TestBasicInfo:
         )
 
         assert "Context 0% · 5h Usage 75% · 7d Usage 95%" in strip_ansi(capsys.readouterr().out)
+
+
+def make_task(**overrides):
+    task = {
+        "id": "task-1",
+        "name": "hal-skills-commit",
+        "type": "general-purpose",
+        "status": "running",
+        "description": "/hal-skills:commit all pending changes",
+        "label": "commit",
+        "startTime": 1754000000000,
+        "model": "claude-sonnet-5",
+        "effort": "high",
+        "contextWindowSize": 200000,
+        "tokenCount": 24000,
+        "tokenSamples": [],
+        "cwd": "/usr/local/hal-9000",
+    }
+    task.update(overrides)
+    return task
+
+
+def subagent_rows(capsys):
+    return [json.loads(line) for line in capsys.readouterr().out.splitlines()]
+
+
+class TestSubagentStatus:
+    def test_full_task_renders_row(self, hal_statusline, capsys):
+        hal_statusline.subagent_status({"columns": 120, "tasks": [make_task()]})
+
+        rows = subagent_rows(capsys)
+        assert len(rows) == 1
+        assert rows[0]["id"] == "task-1"
+        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 high · Context 12%"
+
+    def test_only_model_is_blue_and_ctx_uses_usage_color(self, hal_statusline, capsys):
+        hal_statusline.subagent_status({"columns": 120, "tasks": [make_task()]})
+
+        h = hal_statusline
+        separator = f" {h.WHITE}·{h.RESET} "
+        expected = f"hal-skills-commit{separator}{h.BLUE}sonnet-5 high{h.RESET}{separator}{h.GREEN}Context 12%{h.RESET}"
+        assert subagent_rows(capsys)[0]["content"] == expected
+
+    def test_inherited_effort_omitted(self, hal_statusline, capsys):
+        task = make_task()
+        del task["effort"]
+
+        hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
+
+        rows = subagent_rows(capsys)
+        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 · Context 12%"
+
+    def test_unresolved_model_keeps_default_row(self, hal_statusline, capsys):
+        task = make_task()
+        del task["model"]
+        del task["contextWindowSize"]
+
+        hal_statusline.subagent_status({"columns": 120, "tasks": [task, make_task(id="task-2")]})
+
+        rows = subagent_rows(capsys)
+        assert [row["id"] for row in rows] == ["task-2"]
+
+    def test_name_truncates_to_columns(self, hal_statusline, capsys):
+        hal_statusline.subagent_status({"columns": 39, "tasks": [make_task()]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "hal-skil… · sonnet-5 high · Context 12%"
+        assert len(content) == 39
+
+    def test_name_dropped_when_no_room(self, hal_statusline, capsys):
+        hal_statusline.subagent_status({"columns": 31, "tasks": [make_task()]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "sonnet-5 high · Context 12%"
+
+    def test_numeric_effort_budget_rendered_verbatim(self, hal_statusline, capsys):
+        hal_statusline.subagent_status({"columns": 120, "tasks": [make_task(effort=50000)]})
+
+        assert "sonnet-5 50000" in strip_ansi(subagent_rows(capsys)[0]["content"])
+
+    def test_task_without_name_leads_with_description(self, hal_statusline, capsys):
+        task = make_task(model="claude-opus-5[1m]", contextWindowSize=1000000, tokenCount=28261, description="List repo files")
+        del task["name"]
+        del task["effort"]
+
+        hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "List repo files · opus-5[1m] · Context 2%"
+
+    def test_empty_description_falls_back_to_label(self, hal_statusline, capsys):
+        task = make_task(description="")
+        del task["name"]
+
+        hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "commit · sonnet-5 high · Context 12%"

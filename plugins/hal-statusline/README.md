@@ -4,6 +4,8 @@ A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) th
 
 The grammar check runs in a detached background worker so the statusline never blocks on the model call: it shows "checking…" immediately, then the result appears within a couple of seconds once the worker finishes and the next statusline refresh (driven by `refreshInterval`) picks it up.
 
+The statusline also shows a row for each running subagent: its name, model and effort, and context usage.
+
 ## Installation
 
 ```bash
@@ -24,3 +26,5 @@ Just use Claude Code as usual. The statusline appears below the input box.
 ## Screenshots
 
 ![Claude Code Statusline with English Grammar Check example](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/claude-code-statusline-grammar-check.png)
+
+![Claude Code Statusline subagent rows example](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/claude-code-statusline-subagents.png)
