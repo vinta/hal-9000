@@ -208,7 +208,7 @@ class TestSubagentStatus:
         rows = subagent_rows(capsys)
         assert len(rows) == 1
         assert rows[0]["id"] == "task-1"
-        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 high · Ctx 12% · /hal-skills:commit all pending changes"
+        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 high · Ctx 12%"
 
     def test_inherited_effort_omitted(self, hal_statusline, capsys):
         task = make_task()
@@ -217,7 +217,7 @@ class TestSubagentStatus:
         hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
 
         rows = subagent_rows(capsys)
-        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 · Ctx 12% · /hal-skills:commit all pending changes"
+        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · sonnet-5 · Ctx 12%"
 
     def test_unresolved_model_keeps_default_row(self, hal_statusline, capsys):
         task = make_task()
@@ -229,31 +229,25 @@ class TestSubagentStatus:
         rows = subagent_rows(capsys)
         assert [row["id"] for row in rows] == ["task-2"]
 
-    def test_description_truncates_to_columns(self, hal_statusline, capsys):
-        hal_statusline.subagent_status({"columns": 60, "tasks": [make_task()]})
+    def test_name_truncates_to_columns(self, hal_statusline, capsys):
+        hal_statusline.subagent_status({"columns": 35, "tasks": [make_task()]})
 
         content = strip_ansi(subagent_rows(capsys)[0]["content"])
-        assert content == "hal-skills-commit · sonnet-5 high · Ctx 12% · /hal-skills:c…"
-        assert len(content) == 60
+        assert content == "hal-skil… · sonnet-5 high · Ctx 12%"
+        assert len(content) == 35
 
-    def test_description_dropped_when_no_room(self, hal_statusline, capsys):
-        hal_statusline.subagent_status({"columns": 46, "tasks": [make_task()]})
+    def test_name_dropped_when_no_room(self, hal_statusline, capsys):
+        hal_statusline.subagent_status({"columns": 27, "tasks": [make_task()]})
 
         content = strip_ansi(subagent_rows(capsys)[0]["content"])
-        assert content == "hal-skills-commit · sonnet-5 high · Ctx 12%"
+        assert content == "sonnet-5 high · Ctx 12%"
 
     def test_numeric_effort_budget_rendered_verbatim(self, hal_statusline, capsys):
         hal_statusline.subagent_status({"columns": 120, "tasks": [make_task(effort=50000)]})
 
         assert "sonnet-5 50000" in strip_ansi(subagent_rows(capsys)[0]["content"])
 
-    def test_empty_description_falls_back_to_label(self, hal_statusline, capsys):
-        hal_statusline.subagent_status({"columns": 120, "tasks": [make_task(description="")]})
-
-        content = strip_ansi(subagent_rows(capsys)[0]["content"])
-        assert content == "hal-skills-commit · sonnet-5 high · Ctx 12% · commit"
-
-    def test_task_without_name_renders_model_first(self, hal_statusline, capsys):
+    def test_task_without_name_leads_with_description(self, hal_statusline, capsys):
         task = make_task(model="claude-opus-5[1m]", contextWindowSize=1000000, tokenCount=28261, description="List repo files")
         del task["name"]
         del task["effort"]
@@ -261,4 +255,13 @@ class TestSubagentStatus:
         hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
 
         content = strip_ansi(subagent_rows(capsys)[0]["content"])
-        assert content == "opus-5[1m] · Ctx 2% · List repo files"
+        assert content == "List repo files · opus-5[1m] · Ctx 2%"
+
+    def test_empty_description_falls_back_to_label(self, hal_statusline, capsys):
+        task = make_task(description="")
+        del task["name"]
+
+        hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
+
+        content = strip_ansi(subagent_rows(capsys)[0]["content"])
+        assert content == "commit · sonnet-5 high · Ctx 12%"

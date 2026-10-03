@@ -205,20 +205,17 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
     model = task["model"].removeprefix("claude-")
     effort = task.get("effort")
     model_part = f"{model} {effort}" if effort is not None else model
-    name = task.get("name")
-    parts = [name, model_part] if name else [model_part]
 
     ctx_pct = int(task["tokenCount"] / task["contextWindowSize"] * 100)
     ctx_plain = f"Ctx {ctx_pct}%"
-    used = sum(len(part) for part in parts) + len(ctx_plain) + len(parts) * SEPARATOR_WIDTH
-    parts.append(f"{usage_color(ctx_pct)}{ctx_plain}{RESET}{BLUE}")
+    parts = [model_part, f"{usage_color(ctx_pct)}{ctx_plain}{RESET}{BLUE}"]
 
-    description = task["description"] or task["label"]
-    budget = columns - used - SEPARATOR_WIDTH
-    if len(description) > budget:
-        description = description[: budget - 1] + "…" if budget >= 2 else ""  # noqa: PLR2004 magic-value-comparison
-    if description:
-        parts.append(description)
+    title = task.get("name") or task["description"] or task["label"]
+    budget = columns - len(model_part) - len(ctx_plain) - 2 * SEPARATOR_WIDTH
+    if len(title) > budget:
+        title = title[: budget - 1] + "…" if budget >= 2 else ""  # noqa: PLR2004 magic-value-comparison
+    if title:
+        parts.insert(0, title)
 
     separator = f"{RESET} {WHITE}·{RESET} {BLUE}"
     return f"{BLUE}{separator.join(parts)}{RESET}"
