@@ -6,10 +6,7 @@ context: fork
 model: sonnet
 effort: medium
 allowed-tools:
-  - Bash(git branch:*)
   - Bash(git push:*)
-  - Bash(git switch:*)
-  - Bash(git pull:*)
   - Bash(gh pr:*)
   - Bash(gh run:*)
 ---
@@ -81,9 +78,7 @@ Move name-suffix into core rules and protect URLs and slashes
 2. `git log --oneline @{u}..HEAD` — if it lists commits, `git push` so CI and the merge see them.
 3. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If you pushed and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once.
 4. If exit code 0 (all checks passed):
-   - `gh pr merge --merge --delete-branch`
-   - `git switch main && git pull`
-   - Delete local branch if it still exists: `git branch -d <branch>`.
+   - `gh pr merge --merge --delete-branch`. It also switches to the base branch, pulls it, and deletes the local branch.
    - Report: merged, remote and local branches cleaned up.
 5. If non-zero (check failed):
    - Run `gh pr checks` once more to list failed checks and their URLs.
