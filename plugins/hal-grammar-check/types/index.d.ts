@@ -1,4 +1,4 @@
-export type GrammarCheck = { status: 'checking' | 'done' | 'submitted'; lines: string[] }
+export type GrammarCheck = { status: 'checking' | 'streaming' | 'done' | 'submitted'; lines: string[] }
 
 declare module 'claude-code' {
   interface PluginState {

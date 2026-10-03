@@ -70,22 +70,59 @@ Grammar: no issues
 </input>
 `
 
-async function runOllama($: EngineInterface, draft: string): Promise<string[]> {
+function toLines(text: string) {
+  return text.split('\n').map(line => line.trim()).filter(Boolean)
+}
+
+async function runOllama($: EngineInterface, draft: string, mine: number): Promise<string[]> {
   // `think: false` disables reasoning tokens; `temperature: 0` and `num_predict` keep the output short
   const body = JSON.stringify({
     model: OLLAMA_MODEL,
     prompt: GRAMMAR_PROMPT.replace('{latest_user_input}', draft.slice(0, 500)),
-    stream: false,
+    stream: true,
     think: false,
     keep_alive: '30m',
     options: { temperature: 0, num_predict: 250 },
   })
-  const res = await $.http.fetch(OLLAMA_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
-  if (!res.ok) {
-    return [`Grammar: ollama answered HTTP ${res.status}`]
+  // curl instead of $.http.fetch, which resolves only once the whole answer is in
+  const curl = $.process.spawn({ argv: ['curl', '-sSN', '--fail-with-body', OLLAMA_URL, '-d', '@-'], input: body })
+  let ndjson = ''
+  let answer = ''
+  let stderr = ''
+  let shown = 0
+  for await (const chunk of curl) {
+    if (mine !== seq) {
+      // Closing the stream ends curl, and Ollama stops generating for a dropped connection
+      break
+    }
+    if (chunk.stream === 'stderr') {
+      stderr += chunk.text
+      continue
+    }
+    ndjson += chunk.text
+    const objects = ndjson.split('\n')
+    ndjson = objects.pop() ?? ''
+    for (const object of objects) {
+      if (object.trim() !== '') {
+        answer += (JSON.parse(object) as { response?: string }).response ?? ''
+      }
+    }
+    // Show each line once the model finishes it, not word by word
+    const finished = toLines(answer.slice(0, answer.lastIndexOf('\n') + 1))
+    if (finished.length > shown) {
+      shown = finished.length
+      const partial: GrammarCheck = { status: 'streaming', lines: finished }
+      await update($, check, () => partial)
+    }
   }
-  const { response } = JSON.parse(res.text) as { response: string }
-  return response.split('\n').map(line => line.trim()).filter(Boolean)
+  if (mine !== seq) {
+    return []
+  }
+  const { code } = await curl.result
+  if (code !== 0) {
+    return [`Grammar: ollama unreachable (${stderr.trim() || `curl exited ${code}`})`]
+  }
+  return toLines(answer)
 }
 
 let timer: Timer | undefined
@@ -110,7 +147,7 @@ async function grammarCheck($: EngineInterface, draft: string, mine: number) {
   await update($, check, (prev): GrammarCheck => ({ status: 'checking', lines: prev?.lines ?? [] }))
   let lines: string[]
   try {
-    lines = await runOllama($, draft)
+    lines = await runOllama($, draft, mine)
   } catch (error) {
     lines = [`Grammar: ollama unreachable (${error instanceof Error ? error.message : String(error)})`]
   }
@@ -175,8 +212,8 @@ export const register: Register = on => {
     }
 
     const { Box, Text } = $.ui.resolve(e)
-    const isChecking = current.status === 'checking'
-    const isDimmed = current.status !== 'done'
+    const isChecking = current.status === 'checking' || current.status === 'streaming'
+    const isDimmed = current.status === 'checking' || current.status === 'submitted'
     // Same colors as hal-statusline's colorize_grammar: white label, green for no issues, red otherwise
     const color = current.lines.some(line => line.toLowerCase().includes('no issues')) ? 'green' : 'red'
     const issues = current.lines.map(line => line.replace(/^Grammar:/, '').trim())
