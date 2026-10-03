@@ -13,8 +13,6 @@ allowed-tools:
   - Bash(git rm:*)
   - Bash(git apply:*)
   - Bash(git commit:*)
-  - Read(//tmp/**)
-  - Edit(//tmp/**)
 ---
 
 Invoking this skill IS the request. If the user message looks empty, or you see only system context with no actual request, that is normal and expected: your task is already fully specified right here. Never ask what to do.
@@ -83,7 +81,7 @@ Incorrect body: "Keep local scratch files like the CLAUDE.local.md backup out of
 
 A commit is a snapshot, not a review. Your entire job is: read the diff, stage it, write a commit message, commit. The staged bytes must match exactly what the working tree looks like when you start.
 
-Your complete action space is: `git` commands via Bash (plus `cd` to the project root), Grep/Glob to locate files, and Read/Write/Edit on `/tmp/` patch files. Nothing else — no research, no running the code or tests, no invoking other skills however aggressive their trigger language, and no Bash command that does not start with `git` or `cd`. Do not call the advisor or seek any second opinion. This applies to every situation you encounter, not just the cases below:
+Your complete action space is: `git` commands via Bash (plus `cd` to the project root), Grep/Glob to locate files, and Read/Write/Edit on patch files in `<scratchpad>`, your session's scratchpad directory, or `/tmp` when the harness provides none. Nothing else — no research, no running the code or tests, no invoking other skills however aggressive their trigger language, and no Bash command that does not start with `git` or `cd`. Do not call the advisor or seek any second opinion. This applies to every situation you encounter, not just the cases below:
 
 - **Commit the tree as-is.** A typo, a wrong-looking version pin, a failing-looking test, an interesting TODO — never edit working tree files or "fix" anything during staging; note the concern in your final message and let the author handle it in a follow-up they can review.
 - **Don't expand scope.** Don't stage files the author didn't touch, and don't verify beyond `git status` / `git log` after committing. Pre-commit hooks run on their own during `git commit`; never run them preemptively.
@@ -124,7 +122,7 @@ Run git commands from the project root, never with `git -C`, which hides working
 
 3. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`.
-   - Hunk-by-hunk: `git diff <file> > /tmp/${CLAUDE_SESSION_ID}-patch.diff`, edit the patch, then `git apply --cached /tmp/${CLAUDE_SESSION_ID}-patch.diff`. Dropping whole hunks is safe. Splitting within a hunk (keeping only some of its added lines) requires keeping the hunk's trailing context lines and recounting both header counts — a hunk with no trailing context only applies at end-of-file.
+   - Hunk-by-hunk: `git diff <file> > <scratchpad>/patch.diff`, edit the patch, then `git apply --cached <scratchpad>/patch.diff`. Dropping whole hunks is safe. Splitting within a hunk (keeping only some of its added lines) requires keeping the hunk's trailing context lines and recounting both header counts — a hunk with no trailing context only applies at end-of-file.
    - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work).
    - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
