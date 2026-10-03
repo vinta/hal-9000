@@ -76,7 +76,7 @@ class StatusLineData(TypedDict):
 # https://code.claude.com/docs/en/statusline#subagent-status-lines
 class SubagentTask(TypedDict):
     id: str
-    name: NotRequired[str]  # documented, but only skill forks send it; Agent tool subagents omit it
+    name: NotRequired[str]  # skill forks and named Agent spawns send it; teammates never reach this script
     description: str
     label: str
     tokenCount: int
