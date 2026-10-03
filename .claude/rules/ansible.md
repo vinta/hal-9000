@@ -13,4 +13,4 @@ paths:
 - **Profile-script pattern**: a role that sets up shell environment owns `files/<x>_profile.sh` and appends a `source` line to `~/.zshrc` via `lineinfile`, gated on `when: ansible_facts["env"]["SHELL"] == "/bin/zsh"`. Non-interactive shells make that gate silently skip — CI exports `SHELL: /bin/zsh` for exactly this reason.
 - **Adding a tool means updating CI too**: add the binary's `--version` call to the smoke-test step in `.github/workflows/bootstrap-macos.yml`.
 - **Never run the playbook for real** — it installs software on this machine; CI runs the full bootstrap.
-  - A dry-run via `ansible-playbook site.yml --check --tags <role>` is fine.
+  - A dry-run via `cd playbooks && ansible-playbook site.yml --check --tags <role>` is fine.
