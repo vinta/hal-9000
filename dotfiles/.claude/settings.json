@@ -165,6 +165,7 @@
     "command": "python3 ~/.claude/statusline/hal-statusline.py --subagents"
   },
   "enabledPlugins": {
+    "cc-plugin-you-should-know@builtin": true,
     "hal-skills@hal-9000": true,
     "hal-output-styles@hal-9000": true,
     "hal-session-auto-rename@hal-9000": true,
