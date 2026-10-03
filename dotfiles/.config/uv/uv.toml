@@ -3,6 +3,7 @@
 
 exclude-newer = "3 days"
 no-build = true
+preview-features = ["audit-command", "malware-check"]
 
 [audit]
 malware-check = true
