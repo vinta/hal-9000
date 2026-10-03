@@ -21,15 +21,8 @@ Answer two questions from current sources: **what's the recommended way**, and *
 
 The user's argument may be a question or an imperative. Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Phase 1 happens. Phase 1 always runs.
 
-**Rationalizations that precede skipped research:**
-
-| Thought                   | Reality                                                                                |
-| ------------------------- | -------------------------------------------------------------------------------------- |
-| "I already know this"     | Training data goes stale. Config keys get renamed, APIs get deprecated.                |
-| "This is a simple lookup" | A 30-second search costs nothing. A wrong recommendation costs a debugging round-trip. |
-
 ## Workflow
 
 1. Break the topic into 2-4 specific queries. Dedicate at least one query to pitfalls ("common mistakes with X", "X gotchas in production"): pitfalls live in issue threads, migration guides, and post-mortems, not in getting-started docs. For design prior-art, dedicate queries to how existing open source projects implement it. For single-library lookups, call `find-docs` or web search directly without subagents.
-2. Dispatch one subagent per query in a single message, passing `model: sonnet` on each Agent call. Tell each subagent to use `find-docs` and web search, and to report in under 400 words: the recommended approach, concrete code/config examples, and every pitfall it found with its consequence, including minor or uncertain ones (its job is coverage; you rank and filter), with each claim citing its source and publication date.
+2. Dispatch one subagent per query in a single message, passing `model: sonnet` on each Agent call. Tell each subagent to use `find-docs` and web search, and to report the recommended approach, concrete code/config examples, and every pitfall it found with its consequence, including minor or uncertain ones (its job is coverage; you rank and filter), with each claim citing its source and publication date.
 3. Present the recommended approach, key patterns, and gotchas covering every recommendation (not just the primary one), each claim keeping its source citation.
