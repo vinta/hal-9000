@@ -10,9 +10,8 @@ install: ## Install dependencies and setup pre-commit hooks
 	uv sync --locked
 	uv audit
 	ansible-galaxy install -r playbooks/collections/requirements.yml
-	HOMEBREW_NO_AUTO_UPDATE=1 brew install --quiet betterleaks
+	HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_UPGRADE=1 brew install --quiet betterleaks
 	uv run pre-commit install
-	uv run pre-commit autoupdate
 
 lint: lint-python lint-ansible ## Run all linters
 
