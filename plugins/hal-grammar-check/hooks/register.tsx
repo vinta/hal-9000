@@ -5,7 +5,7 @@ import type { GrammarCheck } from '../types'
 
 const check = atom({ plugin: 'hal-grammar-check', key: 'check' } as const, null)
 
-const DEBOUNCE_MS = 800
+const DEBOUNCE_MS = 400
 const OLLAMA_URL = 'http://localhost:11434/api/generate'
 const OLLAMA_MODEL = 'gemma4:31b-mlx'
 
@@ -91,10 +91,18 @@ async function runOllama($: EngineInterface, draft: string): Promise<string[]> {
 let timer: Timer | undefined
 // Bumped on every edit, so a slow answer for an older draft never overwrites a newer one
 let seq = 0
+// Ollama answers one request at a time, so a check sent while another runs only queues behind it
+let isRunning = false
+let waiting: { draft: string; mine: number } | undefined
 
-async function clear($: EngineInterface) {
+function cancelChecks() {
   timer?.cancel()
   seq += 1
+  waiting = undefined
+}
+
+async function clear($: EngineInterface) {
+  cancelChecks()
   await update($, check, () => null)
 }
 
@@ -112,6 +120,25 @@ async function grammarCheck($: EngineInterface, draft: string, mine: number) {
   }
 }
 
+async function requestCheck($: EngineInterface, draft: string, mine: number) {
+  if (isRunning) {
+    waiting = { draft, mine }
+    return
+  }
+  isRunning = true
+  let next: { draft: string; mine: number } | undefined = { draft, mine }
+  try {
+    while (next !== undefined) {
+      await grammarCheck($, next.draft, next.mine)
+      // Skip a waiting draft that a newer edit already replaced; that edit's timer brings its own check
+      next = waiting?.mine === seq ? waiting : undefined
+      waiting = undefined
+    }
+  } finally {
+    isRunning = false
+  }
+}
+
 export const register: Register = on => {
   on('prompt.edit', async ($, e, next) => {
     const r = await next(e)
@@ -119,8 +146,9 @@ export const register: Register = on => {
       // A bare cursor move changes nothing worth checking
       return r
     }
-    const draft = r.text.trim()
-    if (draft === '' || draft.startsWith('/') || draft.startsWith('!')) {
+    // Check a slash command's arguments, not the command name
+    const draft = r.text.trim().replace(/^\/\S*\s*/, '')
+    if (draft === '' || draft.startsWith('!')) {
       await clear($)
       return r
     }
@@ -128,32 +156,41 @@ export const register: Register = on => {
     seq += 1
     const mine = seq
     timer = $.clock.after(DEBOUNCE_MS, () => {
-      void grammarCheck($, draft, mine)
+      void requestCheck($, draft, mine)
     })
     return r
   })
 
   on('prompt.submit', async ($, e, next) => {
-    await clear($)
+    cancelChecks()
+    // Keep the last result on screen, dimmed, until the next draft is checked
+    await update($, check, (prev): GrammarCheck | null => (prev?.status === 'done' ? { ...prev, status: 'submitted' } : null))
     return next(e)
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const current = await read($, check)
-    if (e.props.hasSurvey || current === null || current.lines.length === 0) {
+    if (e.props.hasSurvey || current === null) {
       return next(e)
     }
 
     const { Box, Text } = $.ui.resolve(e)
     const isChecking = current.status === 'checking'
+    const isDimmed = current.status !== 'done'
+    // Same colors as hal-statusline's colorize_grammar: white label, green for no issues, red otherwise
+    const color = current.lines.some(line => line.toLowerCase().includes('no issues')) ? 'green' : 'red'
+    const issues = current.lines.map(line => line.replace(/^Grammar:/, '').trim())
 
     return (
-      <Box flexDirection="column">
-        {current.lines.map((line, i) => (
-          <Text key={`line-${i}`} dimColor={isChecking || line.endsWith('no issues')} color={isChecking ? undefined : 'warning'}>
-            {line}
-          </Text>
-        ))}
+      <Box flexDirection="column" marginTop={1}>
+        <Text color="white" dimColor={isDimmed}>⏺ hal-grammar-check{isChecking ? ' (checking…)' : ''}</Text>
+        <Box flexDirection="column" paddingLeft={2}>
+          {issues.map((issue, i) => (
+            <Text key={`line-${i}`} color={color} dimColor={isDimmed}>
+              {issue}
+            </Text>
+          ))}
+        </Box>
       </Box>
     )
   })
