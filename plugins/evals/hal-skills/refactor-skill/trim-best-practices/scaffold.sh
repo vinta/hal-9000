@@ -74,7 +74,7 @@ After all subagents return, merge using these criteria:
 3. **Flag conflicts** with attribution (which source said what).
 4. **Discard stale results**: a 2022 guide for a fast-moving framework is noise.
 
-If a subagent failed or returned empty, note the gap and proceed with the results you have. Do not block synthesis waiting for a straggler.
+If a subagent failed or returned empty, note the gap and proceed with the results you have.
 
 ### 4. Present Findings
 
@@ -91,4 +91,16 @@ Deliver to the user in this structure:
 - **User-provided URLs are additive.** If the user provided specific URLs, fetch those too, but they supplement research, not replace it.
 - **Context7 quota limits exist.** If `find-docs` fails with quota errors, fall back to web search only and note the limitation.
 - If both `find-docs` and web search fail, say so explicitly rather than falling back to training data.
+EOF
+mkdir -p skills/find-docs
+cat > skills/find-docs/SKILL.md <<'EOF'
+---
+name: find-docs
+description: Use when the user asks about a library, framework, SDK, or CLI tool, to retrieve its current documentation through Context7
+---
+
+# Find Docs
+
+1. Resolve the library with `ctx7 library <name> "<question>"`.
+2. Fetch its documentation with `ctx7 docs <libraryId> "<question>"`.
 EOF
