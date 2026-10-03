@@ -207,7 +207,7 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
     model_part = f"{model} {effort}" if effort is not None else model
 
     ctx_pct = int(task["tokenCount"] / task["contextWindowSize"] * 100)
-    ctx_plain = f"Ctx {ctx_pct}%"
+    ctx_plain = f"Context {ctx_pct}%"
     parts = [f"{BLUE}{model_part}{RESET}", f"{usage_color(ctx_pct)}{ctx_plain}{RESET}"]
 
     title = task.get("name") or task["description"] or task["label"]
