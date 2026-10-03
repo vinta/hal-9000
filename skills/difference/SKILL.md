@@ -16,7 +16,7 @@ Compare what the arguments name. With no arguments, compare the items just discu
 
 ## Lookups
 
-Run one web search only for an item you cannot identify at all, such as a tool released after your training or an unknown term, then answer. Being unsure of an item's latest version does not count. Use no subagents.
+Run one web search (`WebSearch` in Claude Code, `web_search` in Codex) only for an item you cannot identify at all, such as a tool released after your training or an unknown term, then answer. Being unsure of an item's latest version does not count. Use no subagents.
 
 ## Answer
 

@@ -16,7 +16,7 @@ Answer two questions from current sources: **what's the recommended way**, and *
 
 ## Two-Phase Rule
 
-- **Phase 1: Research.** Dispatch `find-docs` and/or web search queries.
+- **Phase 1: Research.** Dispatch `find-docs` and/or web search queries (`WebSearch` in Claude Code, `web_search` in Codex).
 - **Phase 2: Synthesize and act.** Starts only after Phase 1 results arrive.
 
 The user's argument may be a question or an imperative. Imperatives ("refine X", "set up Y") determine what Phase 2 does, not whether Phase 1 happens. Phase 1 always runs.
