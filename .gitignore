@@ -3,6 +3,7 @@ CLAUDE.local.md
 
 # Skills
 .scratch/
+evals/**/results/
 
 # Ansible
 .ansible/
