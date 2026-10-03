@@ -25,14 +25,12 @@ Then restart Claude Code.
 
 Just type. About 250ms after you stop, the draft goes to Ollama and the result shows up above the prompt box. A result for an older draft is dropped.
 
-It checks the words after a slash command (`/pr merge it`), skips bash mode (`!`), and dims the band when you submit.
-
-If Ollama is not running, the band shows `ollama unreachable (...)`.
-
-### With hal-statusline
-
-[hal-statusline](../hal-statusline) checks each prompt after you submit it. To avoid seeing both, turn that one off with `HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED=1`.
+[hal-statusline](../hal-statusline) checks each prompt after you submit it. To avoid seeing both, turn that one off with `HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED=1` in your environment variables.
 
 ## Privacy
 
 It sends the first 500 characters of your draft to your local Ollama at `localhost:11434`. Fully offline, nothing leaves your machine.
+
+## Screenshots
+
+![Claude Code Grammar Check example](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/claude-code-grammar-check.png)
