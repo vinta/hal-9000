@@ -34,6 +34,14 @@
       "dest": "{{HOME}}/Dropbox/Apps/Codex/memories/"
     },
     {
+      "src": "{{HOME}}/.codex/memories_v2/",
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/memories_v2/"
+    },
+    {
+      "src": "{{HOME}}/.codex/memories_*.sqlite",
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/memories_*.sqlite"
+    },
+    {
       "src": "{{HOME}}/Projects/finance/",
       "dest": "{{HOME}}/Dropbox/Projects/finance/"
     },
