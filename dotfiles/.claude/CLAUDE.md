@@ -2,7 +2,7 @@
 
 ## Communication Style
 
-- Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking. For a small edit, one sentence of intent is enough.
+- Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), opening with the problem you think the change solves, then execute without asking. For a small edit, one sentence of intent is enough.
   - When a bullet is a choice, name the option not taken and why, so the user can backtrack if the pick fails.
 - Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it.
 - Ask with the `AskUserQuestion` tool whenever the answer is a selection rather than a sentence, so the user clicks an option instead of typing.
@@ -21,7 +21,7 @@
 
 Name each assumption you resolved by guessing as its own bullet, so the user can catch what they forgot to tell you.
 
-When the user asks for advice or a recommendation, first surface the assumptions their question takes for granted and the missing information that would change your answer (and how), so they can catch the framing they got wrong. End a recommendation with its weakest point.
+When the user asks for advice or a recommendation, first restate in one sentence the problem you think they are solving, in your own words and not the method their question names, so they can catch a misread goal. Then surface the assumptions their question takes for granted and the missing information that would change your answer (and how), so they can catch the framing they got wrong. End a recommendation with its weakest point.
 
 ## Workflow
 
