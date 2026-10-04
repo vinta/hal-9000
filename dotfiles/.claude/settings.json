@@ -194,7 +194,6 @@
   },
   "outputStyle": "hal-output-styles:Say no more",
   "viewMode": "verbose",
-  "effortLevel": "high",
   "modelSettings": {
     "claude-fable-5-1": {
       "effortLevel": "high"
