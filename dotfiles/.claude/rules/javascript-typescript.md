@@ -1,11 +1,11 @@
 ---
 paths:
-  - "**/*.{ts,tsx}"
   - "**/*.{js,jsx}"
+  - "**/*.{ts,tsx}"
   - "**/package.json"
 ---
 
-# TypeScript/JavaScript
+# JavaScript/TypeScript
 
 - Pin exact dependency versions in `package.json` — no `^` or `~` prefixes.
 - Pin `@types/node` to the latest release of the oldest Node.js major in `engines.node`, so the compiler flags APIs that major lacks.
