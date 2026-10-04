@@ -26,8 +26,7 @@
     },
     {
       "src": "{{HOME}}/.codex/archived_sessions/",
-      "dest": "{{HOME}}/Dropbox/Apps/Codex/archived_sessions/",
-      "prune": false
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/archived_sessions/"
     },
     {
       "src": "{{HOME}}/.codex/memories/",
