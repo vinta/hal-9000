@@ -21,13 +21,16 @@ paths:
 
 Every name you pick, in code or in a proposal, passes every bullet here before it lands. An existing name that fails a bullet is not precedent to copy, and not a rename in this change; report it as a follow-up.
 
-- One value has one name everywhere it appears. When two records carry the same value under two names, rename to the one that already matches the domain vocabulary.
+- One fact has one name everywhere it appears. When two records carry the same fact under two names, rename to the one that already matches the domain vocabulary. Values equal by coincidence are two facts: `MAX_NAME_LENGTH` and `QUEUE_DEPTH` stay separate even when both are `64`.
 - An identifier mirrors its domain type name (`lateFixes: LateFix[]`, `ambiguousShape: AmbiguousShape`), never a shortened synonym. This covers parameters, loop variables, and destructured locals.
 - An action is the bare verb, the gerund is the noun or modifier: `spaceText()`, `spacingMode`. A predicate about whether to act takes the verb (`shouldAutoSpace`); a predicate about the concept's state keeps the noun (`hasProperSpacing`). Feature names stay as their ADR spells them (`applyAiSpacing`).
 - Name a field or local by its state (`unspaced`, `settled`), never by relative position (`before`, `after`) or by mechanism (`pending`, `unflushed`). One thing at two moments is two types, never one type with optional later-moment fields.
+- Name sibling fields as a set that tells one story: duals mirror each other (`src`/`dst`), and a real-world entity's timestamp names its event (`uploadedAt`, not `createdAt`, for a document a user sent).
+- Name a function after what it does, not why this caller needed it; the caller's purpose goes in its own local names. A function whose essence is an existing idiom is the idiom: `{ ...template, ...values }`, not `mergeValuesIntoTemplate()`.
 - Prefer the concrete compound that names the visible thing and matches existing code over an abstract or mechanism noun: `AmbiguousShape`, not `Ambiguity`.
 - A transport noun (`Message`, `Request`, `Response`) belongs to the envelope only; the payload is named by what it is: `Candidate`, not `ClassifyRequest`.
 - A result type is the noun of the verb that produces it: `decideBoundarySpacing()` returns `BoundarySpacingDecision`, not `BoundarySpacingVerdict`.
 - A callback is named by what changed, never by the container the event came in: `onTextNodesSettled(settledTextNodes)`, not `onBatchSettled`.
 - A wrapped function keeps the verb first and the wrapper as a suffix: `spaceTitleDebounced`, not `debouncedSpaceTitle`.
 - A per-item helper beside its batch function is `verbOneNoun` (`classifyCandidates` / `classifyOneCandidate`, `registerContentScripts` / `registerOneContentScript`): the bare singular differs by one trailing `s` and reads alike in a diff. Keep the batch name as is when a message or API shares it.
+- When no candidate passes these bullets, the concept is still vague: report the ambiguity instead of landing a best-effort name.
