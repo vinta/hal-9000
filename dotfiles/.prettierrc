@@ -9,12 +9,6 @@
       "options": {
         "parser": "json-stringify"
       }
-    },
-    {
-      "files": ["**/*.yaml", "**/*.yml"],
-      "options": {
-        "singleQuote": false
-      }
     }
   ]
 }
