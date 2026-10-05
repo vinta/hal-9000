@@ -50,18 +50,12 @@ Done when every task has today's version, install commands, and final URL confir
 
 ## 3. Edit
 
-Apply the drift found, matching the surrounding task style:
+Apply version and link drift, matching the surrounding task style:
 
 - **Version** — replace the old version at every occurrence in the role: the task `name:`, each command line, and any URL. Done when grepping the file for the old version returns nothing.
-- **Method** — adopt the upstream commands and point the `creates:` guard at the binary those commands actually produce.
 - **Link** — repoint the `#` comment at the URL that resolved.
 
-**Prefer Homebrew.** When the page lists Homebrew among the macOS installs it supports, install with the `homebrew` module at `state: latest` rather than the vendor script — `state: latest` also absorbs whatever separate upgrade task the script needed, as fnm and bun already show. Two things disqualify it, and both send you back to the method the page recommends:
-
-- The page steers away from brew — listing it only as community-contributed, or warning that it lags.
-- The formula lives in neither homebrew-core nor a tap the project itself publishes. A vendor-owned tap counts as official and takes a `homebrew_tap` task above the install; an outside third party's tap does not.
-
-Homebrew always installs the newest release, so it cannot hold a pin. Where a task deliberately pins a version, keep the pinned download and leave the method alone — trading the pin for brew is a decision for the user, not drift to close.
+Keep each task's install method, and note each tool whose page recommends a different macOS method for §6. A page that ranks nothing recommends every method it lists, so note a tool only when its task's method is no longer among them.
 
 ## 4. Match the collection pin to brew's ansible
 
@@ -75,4 +69,12 @@ When they differ, set the pin to brew's version. Never the reverse, and never to
 
 ## 5. Verify and commit
 
-Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7` or `install foundryup from getfoundry.sh`. A collection pin bump is its own commit, separate from any role. Close with a summary: what changed per tool, which tools were already current, and any newer release lines waiting on the user.
+Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7` or `install foundryup from getfoundry.sh`. A collection pin bump is its own commit, separate from any role.
+
+## 6. Offer method switches
+
+Once §5's commits are made, ask the user with `AskUserQuestion` whether to switch each tool noted in §3, one question per tool, up to four per call. Each question offers keeping the current method and switching to the page's recommended one, quoting the recommended commands in that option's `preview`; when the switch would cost something the task has, such as a version pin Homebrew cannot hold or a script's self-update, say so in the option's description.
+
+For each yes, adopt the upstream commands; a script install points its `creates:` guard at the binary the script produces. A Homebrew install uses the `homebrew` module at `state: latest`, which also replaces any separate upgrade task, as fnm and bun show; a formula from the project's own tap takes a `homebrew_tap` task above it. Then run `make lint` and commit each switched tool as in §5.
+
+Close with a summary: what changed per tool, which tools were already current, which method switches the user declined, and any newer release lines waiting on the user.
