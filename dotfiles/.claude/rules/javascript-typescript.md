@@ -1,7 +1,7 @@
 ---
 paths:
-  - "**/*.{js,jsx}"
-  - "**/*.{ts,tsx}"
+  - "**/*.{js,mjs,cjs,jsx}"
+  - "**/*.{ts,mts,cts,tsx}"
   - "**/package.json"
 ---
 
