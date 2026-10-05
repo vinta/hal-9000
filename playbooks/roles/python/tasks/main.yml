@@ -7,10 +7,10 @@
     state: latest
 
 # https://www.python.org/downloads/
-- name: Install Python 3.14.7
+- name: Install Python 3.14.8
   shell: |
-    uv python install 3.14.7 --default
-    uv python pin 3.14.7 --global
+    uv python install 3.14.8 --default
+    uv python pin 3.14.8 --global
   args:
     executable: /bin/bash
   register: python_uv_install
