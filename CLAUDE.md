@@ -11,6 +11,7 @@ Use `make` targets instead of running the underlying commands directly. They cha
 ## Gotchas
 
 - **Edit under `dotfiles/`, never under `~/`**: `hal sync` symlinks every `links` entry in `dotfiles/hal_dotfiles.json` into `~/`, so an edit to a linked path is live immediately. A new file outside a linked directory needs its own entry plus `hal sync` before anything references it.
+- **Mirror `dotfiles/.claude/settings.json` edits into `dotfiles/.claude/settings.sandbox.json`**: the sandbox copy is the settings for Claude Code under blackwall and drifts otherwise. Skip what it leaves out on purpose: hooks, the `ask` list, host-path `deny` rules, Ollama-backed plugins and env vars, and its own theme and statusline paths.
 - **Edits under `skills/` and `plugins/` are not live until published**: Claude Code loads them from the `hal-9000` marketplace on GitHub (see `dotfiles/.claude/settings.json`), and other coding agents install `skills/` via `npx skills add vinta/hal-9000`. Publish with a version bump (the `publish-plugins` skill) for a change to reach either.
 - All skill descriptions must start with `Use when`, `Use before`, or `Use after`, except skills with `disable-model-invocation: true`, whose description is a human-facing summary. A project-level skill's description may have a `(project)` prefix.
 - For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal.py`).
