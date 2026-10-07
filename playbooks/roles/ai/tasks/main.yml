@@ -40,6 +40,15 @@
     executable: /bin/bash
   changed_when: false
 
+# https://github.com/vinta/blackwall
+- name: Install blackwall
+  shell: |
+    eval "$(fnm env --shell bash)"
+    npm install -g blackwall-sandbox@latest
+  args:
+    executable: /bin/bash
+  changed_when: false
+
 - name: Ensure AI environment is sourced in .zshrc
   lineinfile:
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"

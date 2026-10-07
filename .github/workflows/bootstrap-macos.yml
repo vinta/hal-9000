@@ -85,6 +85,7 @@ jobs:
             claude --version
             codex --version
             ctx7 --version
+            blackwall --version
           '
 
       - name: Dump ~/.zshrc
