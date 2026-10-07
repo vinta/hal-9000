@@ -14,6 +14,8 @@ All-in-one command to set up:
   - [Agent Skills](skills)
   - [Claude Code](dotfiles/.claude) / [Plugins](plugins) / [Rules](dotfiles/.claude/rules) / [Statusline](plugins/hal-statusline)
   - [Codex](dotfiles/.codex)
+- Sandbox
+  - [Blackwall](https://github.com/vinta/blackwall)
 - Languages
   - [Python](playbooks/roles/python/tasks/main.yml)
   - [Node.js](playbooks/roles/node/tasks/main.yml)
