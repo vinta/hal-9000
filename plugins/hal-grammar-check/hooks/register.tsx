@@ -86,7 +86,8 @@ async function runOllama($: EngineInterface, draft: string, mine: number): Promi
     options: { temperature: 0, num_predict: 250 },
   })
   // curl instead of $.http.fetch, which resolves only once the whole answer is in
-  const curl = $.process.spawn({ argv: ['curl', '-sSN', '--fail-with-body', OLLAMA_URL, '-d', '@-'], input: body })
+  // cwd `/` because the session's may be deleted (a removed worktree), which fails the spawn with ENOENT
+  const curl = $.process.spawn({ argv: ['curl', '-sSN', '--fail-with-body', OLLAMA_URL, '-d', '@-'], cwd: '/', input: body })
   let ndjson = ''
   let answer = ''
   let stderr = ''

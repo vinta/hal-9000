@@ -1,7 +1,7 @@
 {
   "name": "hal-grammar-check",
   "displayName": "HAL Grammar Check",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Grammar-check your prompt as you type, shown above the prompt box",
   "author": {
     "name": "Vinta Chen",
