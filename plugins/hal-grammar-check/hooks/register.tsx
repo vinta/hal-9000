@@ -215,12 +215,12 @@ export const register: Register = on => {
     const { Box, Text } = $.ui.resolve(e)
     const isChecking = current.status === 'checking' || current.status === 'streaming'
     const isDimmed = current.status === 'checking' || current.status === 'submitted'
-    // Same colors as hal-statusline's colorize_grammar: white label, green for no issues, red otherwise
+    // Same colors as hal-statusline's colorize_grammar, except the label and explanation use the theme's text color: green for no issues, red otherwise
     const color = current.lines.some(line => line.toLowerCase().includes('no issues')) ? 'green' : 'red'
 
     return (
       <Box flexDirection="column" marginTop={1}>
-        <Text color="white" dimColor={isDimmed}>⏺ hal-grammar-check:{isChecking ? ' checking...' : ''}</Text>
+        <Text dimColor={isDimmed}>⏺ hal-grammar-check:{isChecking ? ' checking...' : ''}</Text>
         <Box flexDirection="column" paddingLeft={2}>
           {current.lines.map((issue, i) => {
             const arrow = issue.indexOf(' => ')
@@ -236,11 +236,11 @@ export const register: Register = on => {
             return (
               <Text key={`line-${i}`} dimColor={isDimmed}>
                 {parts.map((part, j) => (
-                  <Text key={`part-${j}`} color={j % 2 === 1 ? 'red' : 'white'}>
+                  <Text key={`part-${j}`} color={j % 2 === 1 ? 'red' : undefined}>
                     {part}
                   </Text>
                 ))}
-                <Text color="white"> =&gt; {issue.slice(arrow + 4)}</Text>
+                <Text> =&gt; {issue.slice(arrow + 4)}</Text>
               </Text>
             )
           })}
