@@ -213,6 +213,7 @@ export const register: Register = on => {
     }
 
     const { Box, Text } = $.ui.resolve(e)
+    const isDesktop = e.surface === 'desktop'
     const isChecking = current.status === 'checking' || current.status === 'streaming'
     const isDimmed = current.status === 'checking' || current.status === 'submitted'
     // Same colors as hal-statusline's colorize_grammar, except the label and explanation use the theme's text color: green for no issues, red otherwise
@@ -220,10 +221,13 @@ export const register: Register = on => {
 
     return (
       // The glyph gets its own column: in a proportional font "⏺ " is not two cells wide, so padding would misalign the lines
-      <Box flexDirection="row" marginTop={1}>
-        <Box width={2}>
-          <Text dimColor={isDimmed}>⏺</Text>
-        </Box>
+      // On desktop, one cell of padding matches the inset of the app's own branch card above
+      <Box flexDirection="row" marginTop={1} paddingLeft={isDesktop ? 1 : 0}>
+        {isDesktop ? null : (
+          <Box width={2}>
+            <Text dimColor={isDimmed}>⏺</Text>
+          </Box>
+        )}
         <Box flexDirection="column">
           <Text dimColor={isDimmed}>hal-grammar-check:{isChecking ? ' checking...' : ''}</Text>
           {current.lines.map((issue, i) => {
