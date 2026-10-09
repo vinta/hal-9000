@@ -3,7 +3,9 @@ name: refactor-skill
 description: Use when about to refactor or refine an existing skill, its SKILL.md or sibling files, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption. Not for creating a skill from scratch
 argument-hint: [skill name | path/to/SKILL.md]
 allowed-tools:
-  - WebFetch
+  - WebFetch(domain:platform.claude.com)
+  - WebFetch(domain:code.claude.com)
+  - WebFetch(domain:developers.openai.com)
   - Edit(**/skills/**)
 ---
 
@@ -18,7 +20,7 @@ Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when avail
 1. **Pick the target.** If the invocation names one, resolve it to its `SKILL.md`. Otherwise ask which skill. For a full audit, read `SKILL.md` and every sibling file in its directory. For a targeted change, read `SKILL.md`, affected files, and references needed to assess their interactions. That change sets the scope: the verdicts below cover the lines it adds or touches, the rest of the skill stays as it is, and anything noticed there is a follow-up.
 
 2. **Fetch the guides.** The platform and model guides below calibrate the delete, demote, and rewrite verdicts.
-   - Fetch one model guide, picked by the target skill's `model:` frontmatter. Unset or `inherit` means the most capable model of the family running this skill: `fable` under Claude, `gpt-6-astra` under a GPT model. Read the matching reference and follow its fetch instructions:
+   - Fetch one model guide, picked by the target skill's `model:` frontmatter. Unset or `inherit` means the most capable model of the family running this skill: `fable` under Claude, `gpt-6-astra` under a GPT model. Read the matching reference and fetch the pages it lists:
      - **Claude Code** (`fable`, `opus`, `sonnet`): [references/claude-code.md](references/claude-code.md).
      - **Codex** (`gpt-6-astra`): [references/codex.md](references/codex.md).
 
