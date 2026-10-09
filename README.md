@@ -1,6 +1,6 @@
 # HAL 9000
 
-<img src="skills/icon.svg" width="128" alt="vinta/hal-9000 icon">
+<img src="assets/icon.svg" width="128" alt="vinta/hal-9000 icon">
 
 Opinionated AI coding agent and dev environment automation for macOS that dominates your dev setup like cats rule the Internet.
 

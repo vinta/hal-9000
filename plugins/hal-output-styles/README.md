@@ -1,6 +1,6 @@
 # Claude Code Output Styles
 
-<img src="icon.svg" width="128" alt="vinta/hal-9000 icon">
+<img src="icon.png" width="128" alt="vinta/hal-9000 icon">
 
 Output styles for Claude Code. Both keep Claude Code's built-in coding instructions and only change how Claude writes.
 

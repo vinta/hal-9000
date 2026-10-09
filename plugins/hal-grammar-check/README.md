@@ -1,6 +1,6 @@
 # Claude Code Grammar Check
 
-<img src="icon.svg" width="128" alt="vinta/hal-9000 icon">
+<img src="icon.png" width="128" alt="vinta/hal-9000 icon">
 
 A grammar check on your prompt while you type, with explanations in Traditional Chinese. The corrections show up above the prompt box, before you hit Enter.
 

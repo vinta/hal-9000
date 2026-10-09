@@ -38,7 +38,7 @@
       "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/skills/README.md",
       "supportUrl": "https://github.com/vinta/hal-9000/issues",
       "license": "MIT",
-      "icon": "./icon.svg",
+      "icon": "./icon.png",
       "category": "productivity",
       "keywords": [
         "git",
@@ -121,7 +121,7 @@
       "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-output-styles/README.md",
       "supportUrl": "https://github.com/vinta/hal-9000/issues",
       "license": "MIT",
-      "icon": "./icon.svg",
+      "icon": "./icon.png",
       "category": "productivity",
       "keywords": [
         "output-style",
@@ -154,7 +154,7 @@
       "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-grammar-check/README.md",
       "supportUrl": "https://github.com/vinta/hal-9000/issues",
       "license": "MIT",
-      "icon": "./icon.svg",
+      "icon": "./icon.png",
       "types": "./types/index.d.ts",
       "category": "productivity",
       "keywords": [
@@ -190,7 +190,7 @@
       "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-session-auto-rename/README.md",
       "supportUrl": "https://github.com/vinta/hal-9000/issues",
       "license": "MIT",
-      "icon": "./icon.svg",
+      "icon": "./icon.png",
       "category": "productivity",
       "keywords": [
         "session",
@@ -223,7 +223,7 @@
       "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-voice/README.md",
       "supportUrl": "https://github.com/vinta/hal-9000/issues",
       "license": "MIT",
-      "icon": "./icon.svg",
+      "icon": "./icon.png",
       "category": "entertainment",
       "keywords": [
         "hal-9000",

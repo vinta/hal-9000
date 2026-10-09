@@ -1,7 +1,7 @@
 {
   "name": "hal-output-styles",
   "displayName": "HAL Output Styles",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Make Claude Code talk like an INTJ",
   "author": {
     "name": "Vinta Chen",
@@ -12,7 +12,7 @@
   "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-output-styles/README.md",
   "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
-  "icon": "./icon.svg",
+  "icon": "./icon.png",
   "keywords": [
     "output-style",
     "telegraphic",

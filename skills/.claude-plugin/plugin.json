@@ -1,7 +1,7 @@
 {
   "name": "hal-skills",
   "displayName": "HAL Skills",
-  "version": "2.12.2",
+  "version": "2.12.3",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
@@ -27,7 +27,7 @@
   "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/skills/README.md",
   "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
-  "icon": "./icon.svg",
+  "icon": "./icon.png",
   "keywords": [
     "git",
     "commit",

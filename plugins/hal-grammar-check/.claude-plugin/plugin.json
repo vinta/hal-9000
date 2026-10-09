@@ -1,7 +1,7 @@
 {
   "name": "hal-grammar-check",
   "displayName": "HAL Grammar Check",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Grammar-check your prompt as you type, shown above the prompt box",
   "author": {
     "name": "Vinta Chen",
@@ -12,7 +12,7 @@
   "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-grammar-check/README.md",
   "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
-  "icon": "./icon.svg",
+  "icon": "./icon.png",
   "keywords": [
     "grammar",
     "grammar-check",
