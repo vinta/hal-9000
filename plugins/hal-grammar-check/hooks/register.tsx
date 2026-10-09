@@ -219,9 +219,13 @@ export const register: Register = on => {
     const color = current.lines.some(line => line.toLowerCase().includes('no issues')) ? 'green' : 'red'
 
     return (
-      <Box flexDirection="column" marginTop={1}>
-        <Text dimColor={isDimmed}>⏺ hal-grammar-check:{isChecking ? ' checking...' : ''}</Text>
-        <Box flexDirection="column" paddingLeft={2}>
+      // The glyph gets its own column: in a proportional font "⏺ " is not two cells wide, so padding would misalign the lines
+      <Box flexDirection="row" marginTop={1}>
+        <Box width={2}>
+          <Text dimColor={isDimmed}>⏺</Text>
+        </Box>
+        <Box flexDirection="column">
+          <Text dimColor={isDimmed}>hal-grammar-check:{isChecking ? ' checking...' : ''}</Text>
           {current.lines.map((issue, i) => {
             const arrow = issue.indexOf(' => ')
             if (arrow === -1) {
