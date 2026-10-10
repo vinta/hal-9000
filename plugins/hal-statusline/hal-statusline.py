@@ -77,6 +77,7 @@ class StatusLineData(TypedDict):
 class SubagentTask(TypedDict):
     id: str
     name: NotRequired[str]  # skill forks and named Agent spawns send it; teammates never reach this script
+    status: str
     description: str
     label: str
     tokenCount: int
@@ -199,6 +200,7 @@ def basic_info(data: StatusLineData) -> None:
 
 
 SEPARATOR_WIDTH = len(" · ")
+SUBAGENT_STATUS_COLORS = {"running": YELLOW, "completed": GREEN, "failed": RED, "killed": RED}
 
 
 def subagent_row(task: SubagentTask, columns: int) -> str:
@@ -208,10 +210,16 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
 
     ctx_pct = int(task["tokenCount"] / task["contextWindowSize"] * 100)
     ctx_plain = f"Context {ctx_pct}%"
-    parts = [f"{BLUE}{model_part}{RESET}", f"{usage_color(ctx_pct)}{ctx_plain}{RESET}"]
+    status = task["status"]
+    status_color = SUBAGENT_STATUS_COLORS.get(status, WHITE)
+    parts = [
+        f"{status_color}{status}{RESET}",
+        f"{BLUE}{model_part}{RESET}",
+        f"{usage_color(ctx_pct)}{ctx_plain}{RESET}",
+    ]
 
     title = task.get("name") or task["description"] or task["label"]
-    budget = columns - len(model_part) - len(ctx_plain) - 2 * SEPARATOR_WIDTH
+    budget = columns - len(status) - len(model_part) - len(ctx_plain) - 3 * SEPARATOR_WIDTH
     if len(title) > budget:
         title = title[: budget - 1] + "…" if budget >= 2 else ""  # noqa: PLR2004 magic-value-comparison
     if title:
