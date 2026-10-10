@@ -22,4 +22,4 @@ tmp/
 
 # tools
 .playwright-cli/
-.blackwall/config.json
+.blackwall/
