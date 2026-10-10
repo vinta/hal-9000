@@ -1275,6 +1275,25 @@ class TestBackupPrune:
         assert (kept_dest / "archived.txt").read_text() == "only copy left"
         assert not (pruned_dest / "orphan.txt").exists()
 
+    def test_orphan_under_overlapping_entries_is_listed_and_removed_once(self, hal_instance, tmp_path, capsys):
+        src = tmp_path / "live"
+        (src / "tmp").mkdir(parents=True)
+        (src / "tmp" / "current.txt").write_text("current")
+
+        dest = tmp_path / "dropbox"
+        (dest / "tmp").mkdir(parents=True)
+        (dest / "tmp" / "current.txt").write_text("current")
+        (dest / "tmp" / "orphan.txt").write_text("orphan")
+
+        entries = [
+            {"src": str(src), "dest": str(dest)},
+            {"src": str(src / "tmp"), "dest": str(dest / "tmp")},
+        ]
+        self._prune(hal_instance, entries)
+
+        assert "1 orphan in backup" in capsys.readouterr().out
+        assert not (dest / "tmp" / "orphan.txt").exists()
+
     def test_prune_true_is_the_same_as_omitting_it(self, hal_instance, tmp_path):
         src = tmp_path / "live"
         src.mkdir()

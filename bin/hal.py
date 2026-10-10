@@ -438,7 +438,8 @@ class HAL9000:
             self._hal_says("nothing to prune")
             return
 
-        orphans.sort()
+        # Overlapping entries (a directory and a wildcard reaching into it) find the same orphan twice
+        orphans = sorted(set(orphans))
         counted = f"{len(orphans)} orphan" if len(orphans) == 1 else f"{len(orphans)} orphans"
         self._hal_says(f"{counted} in backup, absent from source:")
         for path in orphans:
