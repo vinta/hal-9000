@@ -81,6 +81,7 @@ class SubagentTask(TypedDict):
     description: str
     label: str
     tokenCount: int
+    tokenSamples: list[int]
     model: NotRequired[str]  # omitted until the task's model is resolved
     contextWindowSize: NotRequired[int]  # omitted together with model
     effort: NotRequired[str | int]  # absent when the subagent inherits the session effort
@@ -200,7 +201,16 @@ def basic_info(data: StatusLineData) -> None:
 
 
 SEPARATOR_WIDTH = len(" · ")
-SUBAGENT_STATUS_COLORS = {"running": YELLOW, "completed": GREEN, "failed": RED, "killed": RED}
+SUBAGENT_STATUS_COLORS = {"working": YELLOW, "waiting": WHITE, "completed": GREEN, "failed": RED, "killed": RED}
+# Token count flat across this many refresh ticks marks a running subagent as waiting, usually on a tool call
+WAIT_SAMPLES = 6
+
+
+def subagent_state(task: SubagentTask) -> str:
+    if task["status"] != "running":
+        return task["status"]
+    recent = task["tokenSamples"][-WAIT_SAMPLES:]
+    return "waiting" if len(recent) == WAIT_SAMPLES and len(set(recent)) == 1 else "working"
 
 
 def subagent_row(task: SubagentTask, columns: int) -> str:
@@ -210,7 +220,7 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
 
     ctx_pct = int(task["tokenCount"] / task["contextWindowSize"] * 100)
     ctx_plain = f"Context {ctx_pct}%"
-    status = task["status"]
+    status = subagent_state(task)
     status_color = SUBAGENT_STATUS_COLORS.get(status, WHITE)
     parts = [
         f"{status_color}{status}{RESET}",
