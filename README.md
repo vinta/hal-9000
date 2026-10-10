@@ -33,28 +33,6 @@ curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-
 
 ## Components
 
-### Dotfiles
-
-Tool configs hardened against supply chain attacks and tuned for better DX:
-
-- [`.claude/settings.json`](dotfiles/.claude/settings.json)
-- [`.codex/config.toml`](dotfiles/.codex/config.toml)
-- [`.config/ghostty/config`](dotfiles/.config/ghostty/config)
-- [`.config/uv/uv.toml`](dotfiles/.config/uv/uv.toml)
-- [`.npmrc`](dotfiles/.npmrc)
-- [`.zshrc`](dotfiles/.zshrc)
-
-### CLAUDE.md / AGENTS.md
-
-Dogmatic yet meticulously crafted global instructions for agentic coding:
-
-- [`~/.claude/CLAUDE.md`](dotfiles/.claude/CLAUDE.md)
-- [`~/.codex/AGENTS.md`](dotfiles/.codex/AGENTS.md)
-
-Also see:
-
-- [Claude Code and Codex: Things I Learned After Using Them Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html)
-
 ### Skills
 
 Agentic skills sharpened by daily use:
@@ -89,6 +67,10 @@ If you want to use them in other coding agents:
 npx skills add vinta/hal-9000
 ```
 
+Also see:
+
+- [Claude Code and Codex: Things I Learned After Using Them Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html)
+
 ### Claude Code Plugins / Mods
 
 Plugins that wire their own hooks and run themselves:
@@ -111,11 +93,28 @@ claude plugin install hal-voice@hal-9000
 ### Claude Code Statusline
 
 - [hal-statusline](plugins/hal-statusline): Show the current model, directory, git branch, and model usage status in [statusline](https://code.claude.com/docs/en/statusline)
-  - Plus **a grammar check on every prompt you type**, with explanations in Traditional Chinese
 
 ```bash
 curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-hal-statusline.sh | bash
 ```
+
+### CLAUDE.md / AGENTS.md
+
+Dogmatic yet meticulously crafted global instructions for agentic coding:
+
+- [`~/.claude/CLAUDE.md`](dotfiles/.claude/CLAUDE.md)
+- [`~/.codex/AGENTS.md`](dotfiles/.codex/AGENTS.md)
+
+### Dotfiles
+
+Tool configs hardened against supply chain attacks and tuned for better DX:
+
+- [`.claude/settings.json`](dotfiles/.claude/settings.json)
+- [`.codex/config.toml`](dotfiles/.codex/config.toml)
+- [`.config/ghostty/config`](dotfiles/.config/ghostty/config)
+- [`.config/uv/uv.toml`](dotfiles/.config/uv/uv.toml)
+- [`.npmrc`](dotfiles/.npmrc)
+- [`.zshrc`](dotfiles/.zshrc)
 
 ### CLI: `hal`
 
