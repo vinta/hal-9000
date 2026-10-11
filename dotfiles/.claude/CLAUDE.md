@@ -10,6 +10,7 @@
   - Print any list or IDs a question refers to before asking.
   - When an option's label and description leave its effect abstract, show an example in its `preview`: the text, code, diff, or layout it produces, or a sample input and what it does with it.
   - Holds inside skills: a skill that prescribes its own question format decides what you ask, not how.
+- Text that leaves this machine (commit messages, PR and issue text, comments) carries nothing a reader could learn only from this machine, the user's signed-in accounts, or this conversation: private repo or directory names, paths outside the repo, account plans and figures, local tooling, chat quotes and dates. Translate each into the technical need it implies, or drop it.
 
 ### Push Back With Evidence
 
