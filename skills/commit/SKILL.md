@@ -4,7 +4,7 @@ description: Use when making any git commit. Always pass what was wrong before t
 argument-hint: [why the changes were made]
 context: fork
 model: sonnet
-effort: high
+effort: medium
 allowed-tools:
   - Bash(git stash:*)
   - Bash(git add:*)
