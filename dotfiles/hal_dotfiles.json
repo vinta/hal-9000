@@ -5,10 +5,6 @@
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/projects"
     },
     {
-      "src": "{{HOME}}/.claude/history.jsonl",
-      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/history.jsonl"
-    },
-    {
       "src": "{{HOME}}/.claude/file-history",
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/file-history"
     },
@@ -17,8 +13,8 @@
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/paste-cache"
     },
     {
-      "src": "{{HOME}}/.codex/history.jsonl",
-      "dest": "{{HOME}}/Dropbox/Apps/Codex/history.jsonl"
+      "src": "{{HOME}}/.claude/history.jsonl",
+      "dest": "{{HOME}}/Dropbox/Apps/Claude Code/history.jsonl"
     },
     {
       "src": "{{HOME}}/.codex/sessions/",
@@ -27,6 +23,10 @@
     {
       "src": "{{HOME}}/.codex/archived_sessions/",
       "dest": "{{HOME}}/Dropbox/Apps/Codex/archived_sessions/"
+    },
+    {
+      "src": "{{HOME}}/.codex/history.jsonl",
+      "dest": "{{HOME}}/Dropbox/Apps/Codex/history.jsonl"
     },
     {
       "src": "{{HOME}}/.codex/memories/",
