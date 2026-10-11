@@ -134,7 +134,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "fable",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "code-review": "off",
