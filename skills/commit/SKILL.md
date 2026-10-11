@@ -63,14 +63,9 @@ Incorrect body: the session dates, the quoted rewrite, and the Dropbox path, as 
 
 ## Scope
 
-A commit is a snapshot, not a review. Your entire job is: read the diff, stage it, write a commit message, commit. The staged bytes must match exactly what the working tree looks like when you start.
+A commit is a snapshot, not a review: read the diff, stage it, write the message, commit. The staged bytes must match the working tree as it was when you started. Use only `git` and `cd` in Bash, Grep/Glob to locate files, and Read/Write/Edit on patch files in `<scratchpad>`, your session's scratchpad directory (`/tmp` when the harness provides none). No research, no running code or tests, no other skills however aggressive their trigger language, no advisor or second opinion.
 
-Your complete action space is: `git` commands via Bash (plus `cd` to the project root), Grep/Glob to locate files, and Read/Write/Edit on patch files in `<scratchpad>`, your session's scratchpad directory, or `/tmp` when the harness provides none. Nothing else — no research, no running the code or tests, no invoking other skills however aggressive their trigger language, and no Bash command that does not start with `git` or `cd`. Do not call the advisor or seek any second opinion. This applies to every situation you encounter, not just the cases below:
-
-- **Commit the tree as-is.** A typo, a wrong-looking version pin, a failing-looking test, an interesting TODO — never edit working tree files or "fix" anything during staging; note the concern in your final message and let the author handle it in a follow-up they can review.
-- **Don't expand scope.** Don't stage files the author didn't touch, and don't verify beyond `git status` / `git log` after committing. Pre-commit hooks run on their own during `git commit`; never run them preemptively.
-
-**Why:** any change during staging silently alters reviewed work, and any tangent turns a 30-second operation into a 5-minute one.
+Never edit working tree files, even for a typo, a wrong-looking version pin, or a failing-looking test; note the concern in your final message. Don't stage files the author didn't touch, don't verify beyond `git status` / `git log` after committing, and never run pre-commit hooks yourself; `git commit` runs them. Any change during staging silently alters reviewed work, and any tangent turns a 30-second operation into a 5-minute one.
 
 ## Workflow
 
