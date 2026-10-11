@@ -1,8 +1,8 @@
 ---
 description: Needs `--scaffold --allow-tools WebFetch`.
 plugins: ["../../../../../skills"]
-max_turns: 60
-timeout_seconds: 1200
+max_turns: 30
+timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, WebFetch]
 ---
 

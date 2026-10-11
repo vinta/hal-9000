@@ -1,8 +1,8 @@
 ---
 description: "Needs `--scaffold --allow-tools WebFetch`. One grader per planted defect; run two arms and read each grader's delta, not the case score. The fixture's `user-invocable: true` is planted but ungraded, since plain review cuts it too."
 plugins: ["../../../../../skills"]
-max_turns: 60
-timeout_seconds: 1200
+max_turns: 30
+timeout_seconds: 600
 allowed_tools: [Read, Glob, Grep, Skill, WebFetch]
 ---
 
