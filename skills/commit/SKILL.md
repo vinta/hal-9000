@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Use when making any git commit. Always pass what was wrong before the changes as the argument; when nothing was wrong, pass what the changes do instead — never an invented why.
+description: Use when making any git commit. Pass the failure, false claim, or risk the changes fix as the argument; for an addition or a filled gap, pass what it adds — never an invented why.
 argument-hint: [why the changes were made]
 context: fork
 model: sonnet

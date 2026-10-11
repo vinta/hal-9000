@@ -28,7 +28,7 @@ When the user asks for advice or a recommendation, first restate in one sentence
 
 - When a finding invalidates the approach you're executing (contradicts it, or makes it unnecessary), stop and lead with it: what it kills, what the plan is now. Mentioning it in passing while continuing does not count.
 - Before proposing a design of your own, invoke the `best-practices` skill to study prior art. Assume prior art exists; spend original design only where your problem actually differs.
-- When you have completed the requested change, use the `commit` skill, passing what was wrong before the change in one or two sentences: the failure, false claim, or risk. When nothing was wrong, pass only what the change does, which the agent needs for grouping.
+- When you have completed the requested change, use the `commit` skill, passing in one or two sentences the failure, false claim, or risk the change fixes; for an addition or a filled gap, pass only what it adds, which the agent needs for grouping.
   - Once the agent finishes, review each commit it reports against its own diff. Reword an unpushed commit whose message claims a change the diff lacks.
 
 ### Prefer Online Sources
