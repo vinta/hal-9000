@@ -26,14 +26,6 @@ The argument passed to this skill is **why the changes were made** — the motiv
 Write the body about the code: the behavior, tooling, or constraint the change served. Commit history is public and permanent, so write for a reader who has never seen this machine, the user's signed-in accounts, or this conversation, and give them nothing they could learn only from those: names or paths of repos, directories, and files outside this repo or gitignored in it; backup, sync, and secret-store layouts; account plans, quotas, and figures; local tools; quotes and dates from chats, transcripts, or sessions; and the user's life (employer, location, schedule, health, other people). Translate each into the technical need it implies, or drop it.
 
 <example>
-Argument: "so the IAP TCP upload speedup works on my work MacBook; gcloud there picks up uv's Python and pip refuses to install NumPy into it"
-
-Correct body: "gcloud resolved to a uv-managed Python that pip refuses to install into (PEP 668), so Google's documented one-liner for the IAP TCP upload speedup could not work."
-
-Incorrect body: "Give gcloud its own venv because on the author's work MacBook pip refuses to install into uv's Python."
-</example>
-
-<example>
 Argument: "Commit only settings.json. Why: three commit forks wrote `Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>` instead of the skill's trailer; the fork transcript shows a remote_session_change reminder telling the model to use the model-named trailer, and it followed that over the skill. Setting attribution.commit to the skill's exact string makes both agree. Ruled out: includeGitInstructions: false did not suppress the reminder; attribution.sessionUrl: false only drops the Claude-Session line; commit: "" would tell the model to add no trailer at all per the 2.1.270 binary."
 
 Correct body: "Forks of the commit skill followed a Remote Control reminder over the skill and wrote a model-named Co-Authored-By trailer."
@@ -50,27 +42,11 @@ Incorrect body: "Adopt two rules: comments should state only what the code canno
 </example>
 
 <example>
-Argument: "hal sync raised PermissionError [Errno 13] copying a single file onto a read-only dotfile; the directory branch already handled that"
-
-Correct body: "Copying a single file onto a read-only destination (git objects, or a dotfile chmod'ed 444) raised PermissionError; the directory branch already handled that case."
-
-Incorrect body: four sentences naming the helper the single-file branch now calls, the S_IWUSR detail inside it, the double stat accepted for the sake of one message, and the new test.
-</example>
-
-<example>
 Argument: "User asked to mark the README as work in progress while pangu.space is being rebuilt."
 
 Correct body: none. The argument is the request; nothing was wrong before.
 
 Incorrect body: "pangu.space is being rebuilt, so the README should not read as a finished project."
-</example>
-
-<example>
-Argument: "Ignore tmp/ in the repo itself, so local scratch files like the CLAUDE.local.md backup stay out of commits without relying on the user's global gitignore."
-
-Correct body: none. Not relying on the global gitignore is a wish, not a failure.
-
-Incorrect body: "Keep local scratch files like the CLAUDE.local.md backup out of commits without relying on the global gitignore."
 </example>
 
 <example>
@@ -96,47 +72,21 @@ Your complete action space is: `git` commands via Bash (plus `cd` to the project
 
 **Why:** any change during staging silently alters reviewed work, and any tangent turns a 30-second operation into a 5-minute one.
 
-<example>
-You see a typo in a variable name while reviewing the diff. Correct behavior:
-1. Stage and commit the file as-is.
-2. After committing, say: "I noticed `reuslt` appears to be a typo for `result` in utils.py:42".
-
-Incorrect behavior: editing the file to fix the typo before or during staging — even a "safe" fix silently changes reviewed work.
-</example>
-
-<example>
-The diff adds a new `.github/workflows/ci.yml` file. You wonder if the action versions are current.
-
-Correct behavior: commit as-is.
-
-Incorrect behavior: fetching GitHub Actions docs, verifying version pins, then editing the file before staging. The author already chose those versions. Research belongs in a separate turn, not inside the commit.
-</example>
-
-<example>
-You edited a patch to split one file's changes across two commits, and `git apply --cached` fails on it.
-
-Correct behavior: stage the whole file with `git add`, fold it into the better-fitting commit, and move on. Total cost: seconds.
-
-Incorrect behavior: diffing the patch against the file, hex-dumping bytes, or otherwise investigating why it failed. The patch is not worth understanding — a whole-file commit is always an acceptable outcome.
-</example>
-
 ## Workflow
 
-Run git commands from the project root, never with `git -C`, which hides working directory state. Execute git commands directly without explanation. Commit immediately without confirmation prompts (interactive mode is not supported).
+Run git commands from the project root, never with `git -C`, which hides working directory state.
 
-1. **Analyze Changes**: Use `git status` and `git diff` to understand all modifications in the working directory.
+1. **Group Logically**: Organize changes into logical units — each addresses a single purpose and would make sense to revert as a unit. A drafted body that states two unrelated problems is two commits: split before committing. Several findings of one audit or review are one problem.
 
-2. **Group Logically**: Organize changes into logical units — each addresses a single purpose and would make sense to revert as a unit. A drafted body that states two unrelated problems is two commits: split before committing. Several findings of one audit or review are one problem.
-
-3. **Stage Changes**: Use appropriate staging strategy:
+2. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`.
    - Hunk-by-hunk: `git diff <file> > <scratchpad>/patch.diff`, edit the patch, then `git apply --cached <scratchpad>/patch.diff`. Dropping whole hunks is safe. Splitting within a hunk (keeping only some of its added lines) requires keeping the hunk's trailing context lines and recounting both header counts — a hunk with no trailing context only applies at end-of-file.
    - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work).
    - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
-4. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry forever.
+3. **Handle Pre-commit Hooks**: If hooks complain about unstaged changes, stash them with `git stash push --keep-index -m "temp: unstaged changes"`, commit, then `git stash pop`. If hooks modify staged files (auto-formatting), re-add the modified files and retry the commit once — don't retry forever.
 
-5. **Create Atomic Commits**: For each logical group:
+4. **Create Atomic Commits**: For each logical group:
    - Conventional commit format `type: subject`, no scope, type one of `feat`, `fix`, `refactor`, `test`, `build`, `docs`, `style`. `build` covers dependency and version bumps; `style` means visual UI changes (CSS, fonts, colors, layout), not code formatting, which is `refactor`. Subject: what changed (≤72 chars), derived from the diff. Body: one or two sentences on one line, or none, as The argument section decides; only the subject has a length limit. Footer: as the Attribution section decides.
    - Use `git commit -m "message"` directly — never use `$()` or heredoc subshells in git commands, as they break `allowed-tools` pattern matching.
 
