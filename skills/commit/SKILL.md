@@ -21,9 +21,9 @@ Your task: commit all changes in the working tree, one logical change per commit
 
 ## The argument
 
-The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies — raw material, never a to-do list. A body is one or two sentences stating what was wrong before the change: the failure, false claim, or risk the argument names. An argument that names only a need, a wish, what the change does, or the request itself yields no body. Leave out the fix, since the subject and diff already show it, and leave out ruled-out causes, measurements, and alternatives tried. Whatever it describes is already realized in the diff, however it's phrased: "so the statusline shows usage percentages" and "to fix the session bug" both mean the diff already does that — commit it; never write code toward it, hunt for it, verify it, or finish it. With no argument at all, derive the commit message from the diff alone. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
+The argument passed to this skill is **why the changes were made** — the motivation behind work already in the tree, which the diff itself cannot carry. Use it to group changes into logical units and to write commit message bodies. A body is one or two sentences stating what was wrong before the change: the failure, false claim, or risk the argument names. An argument that names only a need, a wish, what the change does, or the request itself yields no body. Leave out the fix, since the subject and diff already show it, and leave out ruled-out causes, measurements, and alternatives tried. Whatever it describes is already realized in the diff, however it's phrased: "so the statusline shows usage percentages" and "to fix the session bug" both mean the diff already does that — commit it; never write code toward it, hunt for it, verify it, or finish it. With no argument at all, derive the commit message from the diff alone. If the motivation doesn't line up with what the diff contains, commit what is actually in the tree and note the mismatch in your final summary.
 
-Write the body about the code: the behavior, tooling, or constraint the change served. Personal details that reach you through the argument — anything about the user's life, such as employer, location, schedule, health, or other people — stay out of every commit message; translate each one into the technical need it implies. Commit history is public and permanent.
+Write the body about the code: the behavior, tooling, or constraint the change served. Commit history is public and permanent, so write for a reader who has never seen this machine, the user's signed-in accounts, or this conversation, and give them nothing they could learn only from those: names or paths of repos, directories, and files outside this repo or gitignored in it; backup, sync, and secret-store layouts; account plans, quotas, and figures; local tools; quotes and dates from chats, transcripts, or sessions; and the user's life (employer, location, schedule, health, other people). Translate each into the technical need it implies, or drop it.
 
 <example>
 Argument: "so the IAP TCP upload speedup works on my work MacBook; gcloud there picks up uv's Python and pip refuses to install NumPy into it"
@@ -71,6 +71,14 @@ Argument: "Ignore tmp/ in the repo itself, so local scratch files like the CLAUD
 Correct body: none. Not relying on the global gitignore is a wish, not a failure.
 
 Incorrect body: "Keep local scratch files like the CLAUDE.local.md backup out of commits without relying on the global gitignore."
+</example>
+
+<example>
+Argument: "Harvested five rewrite sessions from 2026-09-09 to 2026-09-13; the user rewrote 'I've picked up' to 'that works for me', and the notes under ~/Dropbox/writing/ had no rule for it."
+
+Correct body: "The style spec had no rule against assistant-register openers, so drafts kept using phrasings the user rewrites."
+
+Incorrect body: the session dates, the quoted rewrite, and the Dropbox path, as given.
 </example>
 
 ## Locate the repository
