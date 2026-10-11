@@ -97,8 +97,6 @@
     ],
     "ask": [
       "Bash(open *)",
-      "Bash(chmod *)",
-      "Bash(chown *)",
       "Bash(kill *)",
       "Bash(killall *)",
       "Bash(pkill *)",
