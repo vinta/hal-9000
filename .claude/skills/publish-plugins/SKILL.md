@@ -51,6 +51,8 @@ If a plugin's version already differs from `origin/main`, it was bumped for unre
 - **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands.
 - **Major** (0.2.0 -> 1.0.0): breaking changes to hook behavior or config format.
 
+Commit a bump made on its own through the `commit` skill with no argument: its subject already says why a bump exists.
+
 ## 4. Check the manifests are in sync
 
 ```bash
