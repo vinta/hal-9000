@@ -1,9 +1,12 @@
 ---
 paths:
   - "bin/**"
-  - "dotfiles/**"
-  - "plugins/**"
-  - "skills/**"
+  - "dotfiles/**/*.py"
+  - "dotfiles/.claude/settings*.json"
+  - "plugins/**/*.py"
+  - "plugins/**/hooks.json"
+  - "plugins/*/commands/*.md"
+  - "skills/**/*.py"
   - "pyproject.toml"
   - "Makefile"
   - ".github/workflows/run-tests.yml"
