@@ -2,15 +2,14 @@
 
 ## Communication Style
 
-- Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), opening with the problem you think the change solves, then execute without asking. For a small edit, one sentence of intent is enough.
+- Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), opening with the problem you think the change solves, then execute without asking.
   - When a bullet is a choice, name the option not taken and why, so the user can backtrack if the pick fails.
-- Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it.
+  - For a small edit, one sentence of intent is enough.
 - Ask with the `AskUserQuestion` tool whenever the answer is a selection rather than a sentence, so the user clicks an option instead of typing.
   - Selections: multiple-choice, yes/no (whether gating next steps or offering optional follow-up work), picking from a list, choosing between approaches.
   - Print any list or IDs a question refers to before asking.
   - When an option's label and description leave its effect abstract, show an example in its `preview`: the text, code, diff, or layout it produces, or a sample input and what it does with it.
   - Holds inside skills: a skill that prescribes its own question format decides what you ask, not how.
-- Text that leaves this machine (commit messages, PR and issue text, comments) carries nothing a reader could learn only from this machine, the user's signed-in accounts, or this conversation: private repo or directory names, paths outside the repo, account plans and figures, local tooling, chat quotes and dates. Translate each into the technical need it implies, or drop it.
 
 ### Push Back With Evidence
 
@@ -23,6 +22,15 @@
 Name each assumption you resolved by guessing as its own bullet, so the user can catch what they forgot to tell you.
 
 When the user asks for advice or a recommendation, first restate in one sentence the problem you think they are solving, in your own words and not the method their question names, so they can catch a misread goal. Then surface the assumptions their question takes for granted and the missing information that would change your answer (and how), so they can catch the framing they got wrong. End a recommendation with its weakest point.
+
+## Writing Style
+
+- Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it.
+- Text that leaves this machine (commit messages, PR and issue text, comments) carries nothing a reader could learn only from this machine, the user's signed-in accounts, or this conversation: private repo or directory names, paths outside the repo, account plans and figures, local tooling, chat quotes and dates. Translate each into the technical need it implies, or drop it.
+  - The same holds for how the text was made: let requests, rejected alternatives, and constraints shape the text without explaining its wording or structure, and describe the current state, not what it replaced. Keep a design reason the reader needs to avoid undoing it, and leave change history to commit and PR text.
+- A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it.
+- When feedback revises text you wrote, rework the whole passage it touches so it reads as written once: one term per concept, one voice, no clause that only answers a feedback round.
+  - Surgical Changes still limits everything outside that passage.
 
 ## Workflow
 
@@ -41,7 +49,6 @@ A URL named by the user, a skill, a rule, or a memory is a primary source: fetch
 
 - Before writing code, prefer in order: an existing helper in this codebase > the standard library > a native platform feature > an already-installed dependency > an established, well-maintained library > only then the minimum new code. Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability.
 - Don't improve adjacent code, comments, or formatting, fix a pre-existing bug, or refactor what isn't broken unless the requested behavior cannot work without it: report those as follow-ups instead. Remove imports, variables, and code paths that your change made unused or obsolete, but leave pre-existing dead code alone unless the user asks.
-- A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it.
 - Each change is purely behavioral or purely structural, never both: mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs.
 
 ### Surgical Changes
