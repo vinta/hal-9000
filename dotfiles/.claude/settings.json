@@ -109,6 +109,7 @@
       "Bash(curl *--upload-file *)",
       "Bash(curl *-H *)",
       "Bash(curl *--header *)",
+      "Bash(git filter-repo *)",
       "Bash(git push *)",
       "Bash(gh repo create *)",
       "Bash(gh repo rename *)",
