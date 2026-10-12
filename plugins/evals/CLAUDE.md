@@ -7,7 +7,7 @@ Eval suites for this repo's plugins, run by `claude plugin eval`. Each case is a
 - Run suites from the repo root with this command, adding `--case <glob>` and `--runs <n>` to narrow it; a bare run does every case three times in both arms. Every run, including the old arm of an A/B run, keeps the Sonnet judge, and `--threshold 0` keeps gradient graders from failing the exit code:
 
   ```bash
-  claude plugin eval . --eval-dir plugins/evals --judge-model sonnet --scaffold --allow-tools WebSearch WebFetch Edit --no-publish -j 4 --threshold 0
+  claude plugin eval . --eval-dir plugins/evals --judge-model sonnet --scaffold --allow-tools WebSearch WebFetch Edit --no-publish -j 8 --threshold 0
   ```
 - `--case` takes one glob without braces, so give cases you run together a shared name prefix.
 - To A/B a skill change, run the committed text as the old arm: `git archive HEAD skills | tar -x -C <dir>`, copy the case directories to the same path under `<dir>`, and run the same command from `<dir>` with `--trust-plugin`.
