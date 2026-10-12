@@ -31,7 +31,7 @@
   - The same holds for how the text was made: let requests, rejected alternatives, and constraints shape the text without explaining its wording or structure. Outside commit and PR text, describe the current state, not what it replaced, but keep a design reason the reader needs to avoid undoing it.
 - When feedback revises text you wrote, rework the whole passage it touches so it reads as written once: one term per concept, one voice, no clause that only answers a feedback round.
   - Surgical Changes still limits everything outside that passage.
-- A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it.
+- A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, not alternatives, and once the user rewrites it, review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it.
 - Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it.
 
 ## Workflow
