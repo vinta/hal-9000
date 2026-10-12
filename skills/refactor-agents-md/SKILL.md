@@ -2,7 +2,8 @@
 name: refactor-agents-md
 description: Use when about to refactor or refine a user-level or project-level AGENTS.md
 allowed-tools:
-  - WebFetch
+  - WebFetch(domain:developers.openai.com)
+  - WebFetch(domain:learn.chatgpt.com)
   - Read(~/.codex/AGENTS.md)
 ---
 
