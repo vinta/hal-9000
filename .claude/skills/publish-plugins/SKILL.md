@@ -61,7 +61,7 @@ python3 .claude/skills/publish-plugins/scripts/check_manifest_sync.py
 
 Every plugin is described twice on purpose: once in its own `.claude-plugin/plugin.json` and once as an entry in `.claude-plugin/marketplace.json`. For each plugin the script checks that
 
-- both describe the same fields with the same values, apart from `version` (plugin.json only) and `source`, `category`, `tags`, `strict`, `defaultEnabled` (marketplace entry only — Claude Code ignores them in a plugin.json).
+- both describe the same fields with the same values, apart from `version` and the directory listing fields `icon`, `documentationUrl`, `supportUrl`, `privacyPolicyUrl`, `termsOfServiceUrl` (plugin.json only) and `source`, `category`, `tags`, `strict`, `defaultEnabled` (marketplace entry only — Claude Code ignores them in a plugin.json).
 - every component path either manifest declares exists on disk.
 - every skill directory in a plugin's root appears in both skill lists.
 

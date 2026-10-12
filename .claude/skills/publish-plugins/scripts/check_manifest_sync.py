@@ -14,6 +14,9 @@ MARKETPLACE = REPO_ROOT / ".claude-plugin" / "marketplace.json"
 # Fields the marketplace entry owns on its own, so plugin.json never carries them.
 MARKETPLACE_ONLY_FIELDS = {"source", "category", "tags", "strict", "defaultEnabled"}
 
+# Fields plugin.json owns on its own: the version, and the listing fields Anthropic's directory reads only from plugin.json.
+PLUGIN_JSON_ONLY_FIELDS = {"version", "icon", "documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl"}
+
 # Fields whose values are paths inside the plugin.
 COMPONENT_PATH_FIELDS = {"skills", "commands", "agents", "workflows", "hooks", "mcpServers", "lspServers", "outputStyles"}
 
@@ -42,10 +45,10 @@ def declared_paths(manifest: dict[str, Any], field: str) -> list[str]:
 def check_fields(entry: dict[str, Any], manifest: dict[str, Any], relative: Path) -> list[str]:
     """Both manifests have to declare the same fields with the same values, apart from the ones with a single home."""
     name = entry["name"]
-    single_home = MARKETPLACE_ONLY_FIELDS | {"version"}
+    single_home = MARKETPLACE_ONLY_FIELDS | PLUGIN_JSON_ONLY_FIELDS
     shared = sorted((set(entry) | set(manifest)) - single_home)
 
-    problems = [f"{name}: version lives in {relative} only, drop it from the marketplace entry"] if "version" in entry else []
+    problems = [f"{name}: {field} lives in {relative} only, drop it from the marketplace entry" for field in sorted(set(entry) & PLUGIN_JSON_ONLY_FIELDS)]
     problems += [f"{name}: {field} belongs in the marketplace entry, not {relative}" for field in sorted(set(manifest) & MARKETPLACE_ONLY_FIELDS)]
     problems += [f"{name}: {field} is in {relative} but missing from the marketplace entry" for field in shared if field not in entry]
     problems += [f"{name}: {field} is in the marketplace entry but missing from {relative}" for field in shared if field not in manifest]
