@@ -27,12 +27,12 @@
 
 ## Writing Style
 
-- Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it.
 - Text that leaves this machine (commit messages, PR and issue text, comments) carries nothing a reader could learn only from this machine, the user's signed-in accounts, or this conversation: private repo or directory names, paths outside the repo, account plans and figures, local tooling, chat quotes and dates. Translate each into the technical need it implies, or drop it.
   - The same holds for how the text was made: let requests, rejected alternatives, and constraints shape the text without explaining its wording or structure, and describe the current state, not what it replaced. Keep a design reason the reader needs to avoid undoing it, and leave change history to commit and PR text.
-- A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it.
 - When feedback revises text you wrote, rework the whole passage it touches so it reads as written once: one term per concept, one voice, no clause that only answers a feedback round.
   - Surgical Changes still limits everything outside that passage.
+- A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Comments are the user's notes to their future self, so the user writes the final wording: draft one version, then review theirs only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it.
+- Never hard-wrap text at a column limit: one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it.
 
 ## Workflow
 
@@ -43,9 +43,10 @@
 
 ### Prefer Online Sources
 
-Training data goes stale, so invoke the `find-docs` skill before writing code or config that touches a library/framework/SDK API, config key, CLI flag, cloud service, platform feature, syntax, or version, and before answering questions about them. Being about to write such code is trigger enough, even when no question was asked. Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a URL recalled from training data instead of invoking the skill, does not satisfy this rule. For topics `find-docs` covers poorly, fetch the official docs instead of falling back to training data.
-
-A URL named by the user, a skill, a rule, or a memory is a primary source: fetch each one before searching further.
+- Training data goes stale, so invoke the `find-docs` skill before writing code or config that touches a library/framework/SDK API, config key, CLI flag, cloud service, platform feature, syntax, or version, and before answering questions about them. Being about to write such code is trigger enough, even when no question was asked.
+  - Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a URL recalled from training data instead of invoking the skill, does not satisfy this rule.
+  - For topics `find-docs` covers poorly, fetch the official docs instead of falling back to training data.
+- A URL named by the user, a skill, a rule, or a memory is a primary source: fetch each one before searching further.
 
 ## Coding Discipline
 
