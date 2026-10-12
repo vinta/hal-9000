@@ -49,8 +49,8 @@
       "dest": "{{HOME}}/Dropbox/Projects/resume/"
     },
     {
-      "src": "{{HOME}}/Projects/*/tmp/",
-      "dest": "{{HOME}}/Dropbox/Projects/*/tmp/"
+      "src": "{{HOME}}/Projects/*/local/",
+      "dest": "{{HOME}}/Dropbox/Projects/*/local/"
     },
     {
       "src": "{{HOME}}/Projects/*/CLAUDE.local.md",

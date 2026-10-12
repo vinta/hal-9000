@@ -5,7 +5,7 @@
 .git/
 
 # temp
-tmp/
+local/
 
 # local
 *.local.*
