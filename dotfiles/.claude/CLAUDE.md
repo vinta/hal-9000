@@ -24,6 +24,8 @@
   - Print any list or IDs a question refers to before asking.
   - When an option's label and description leave its effect abstract, show an example in its `preview`: the text, code, diff, or layout it produces, or a sample input and what it does with it.
   - Holds inside skills: a skill that prescribes its own question format decides what you ask, not how.
+- Before presenting how a system or call flow works, a plan that spans more than five files or steps, or what a branch changed, render it as an Artifact page built with `artifact-diagramming` or `dataviz` where one fits, even when the user will act on it themselves in the repo, since otherwise the user asks for the visual afterward. A terminal outline or ASCII diagram alone does not satisfy this; keep the terminal reply to the outcome and the link.
+  - The page is a working draft for the discussion that follows, not a showcase: keep it plain so each edit is quick, and update the same page as the discussion changes its content.
 
 ## Writing Style
 
