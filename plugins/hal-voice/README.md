@@ -1,7 +1,5 @@
 # HAL Voice
 
-<img src="icon.png" width="128" alt="vinta/hal-9000 icon">
-
 A Claude Code plugin that plays HAL 9000 voice clips on hook events: `SessionStart`, `SessionEnd`, `PreCompact`, `PermissionRequest`, `PreToolUse`, `PostToolUseFailure`, `SubagentStart`, `UserPromptSubmit`, `Stop`, and `PostModelSwitch`. [Each event maps to a movie quote that fits the moment](manifest.json):
 
 - "My mind is going... I can feel it... I can feel it..." on `PreCompact`
