@@ -1,6 +1,6 @@
 ---
 name: refactor-claude-md
-description: Use when about to refactor or refine a user-level or project-level CLAUDE.md
+description: Use when about to refactor or refine a user-level or project-level CLAUDE.md, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption
 argument-hint: [user | project | path/to/CLAUDE.md]
 allowed-tools:
   - WebFetch(domain:platform.claude.com)
@@ -23,11 +23,13 @@ The file serves every model the user runs, not only the one this session runs on
 
    Then settle the models to audit: the ones the invocation names, otherwise ask in the same question call, multi-select, with this session's model as the first option. Resolve each to its full model ID from the model list in your system prompt.
 
+   For a targeted change, the verdicts below cover only the lines it adds or touches: the rest of the file stays as it is, and anything noticed there is a follow-up.
+
 2. **Fetch the guides.** Fetch these pages. They calibrate the delete and rewrite verdicts below:
    - https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
    - The page for each audited model, regardless of which one this session runs on, plus any earlier model's page it names as its baseline: `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-<model-id>`
 
-3. **Audit.** Read the file and give every instruction exactly one verdict, judged against the target's bar below. Done when no instruction lacks one.
+3. **Audit.** Read the file and give every instruction in scope exactly one verdict, judged against the target's bar below. Done when no instruction in scope lacks one.
    - **contradiction**: conflicts with another instruction, or the model pages pull it opposite ways: one says to remove it while another model still needs it, or no single wording satisfies every page. Record both sides.
    - **delete**: fails the no-op test on every audited model, meaning each would behave the same without it, or a model page says to remove it because it was written for an earlier model's habits and no other audited model needs it either. Judge defaults against the fetched pages and the probe below, not memory. Covers instructions the models already follow by default, instructions too vague to act on, and platitudes like "write clean code". A line any audited model needs is a keep.
    - **demote**: real instruction that only applies to some paths or tasks. Pick its destination from the bar. If it describes a multi-step workflow, propose a skill instead. Name the destination in the sign-off.
@@ -46,6 +48,6 @@ The file serves every model the user runs, not only the one this session runs on
    - **User-level** (loaded into every session in every project): a keep must apply across all projects. Demote destination: a `paths:`-scoped file in `~/.claude/rules/`.
    - **Project-level** (loaded into every session in this project): a keep must be underivable from the code: a one-sentence project description, commands the agent would guess wrong, domain concepts, gotchas. Lines restating what the code already shows, and volatile detail like file trees, are deletes because they go stale and stale lines poison the context. Demote destinations: a `paths:`-scoped file in `.claude/rules/`, or a doc file linked from CLAUDE.md.
 
-4. **Get decisions.** One `AskUserQuestion` per contradiction, with each conflicting version as an option. Then present the delete and demote lists, with the per-model probe result beside each prompt-dependent delete, and collect sign-off with one `AskUserQuestion`. The file stays untouched until sign-off.
+4. **Get decisions.** Reuse changes and verdicts the user already authorized. One `AskUserQuestion` per contradiction, with each conflicting version as an option. Then present the delete and demote lists, with the per-model probe result beside each prompt-dependent delete, and collect sign-off with one `AskUserQuestion`. The file stays untouched until sign-off.
 
 5. **Rewrite.** Apply the signed-off verdicts in one pass, without asking again; they are the request. Apply only those: anything else noticed while editing is a follow-up to report in the final message. When creating a new rules file, fetch https://code.claude.com/docs/en/memory#path-specific-rules for the `paths:` frontmatter syntax. Done when every audited instruction landed where its verdict says: kept, rewritten, demoted, or deleted.
