@@ -16,12 +16,10 @@
 
 ### Plan and Ask
 
+- Use visuals when explaining complex ideas or presenting complex plans or proposals; skip styling so each edit is quick.
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking.
   - When a bullet is a choice, name the option not taken and why, so the user can backtrack if the pick fails.
   - For a small edit, one sentence of intent is enough.
-- Before presenting how a system or call flow works, a plan that spans more than five files or steps, a before/after difference, or what a branch changed, render it as an Artifact page built with `artifact-diagramming` or `dataviz` where one fits, even when the user will act on it themselves in the repo, since otherwise the user asks for the visual afterward. A terminal outline, ASCII diagram, or Mermaid source alone does not satisfy this; keep the terminal reply to the outcome and the link.
-  - The page is a working draft for the discussion that follows, not a showcase: lead with a plain boxes-and-arrows diagram of the modules or flow, add structural views (a call tree, a file tree, or a diff of either) where they help, and skip custom visualizations and styling, so each edit is quick; update the same page as the discussion changes its content.
-  - Split a plan page by behavior, not by file: each top-level item is a behavior or guarantee that can turn out false (for a refactor, "nothing a caller sees changes"), with its files below it.
 - Ask with the `AskUserQuestion` tool whenever the answer is a selection rather than a sentence, so the user clicks an option instead of typing.
   - Selections: multiple-choice, yes/no (whether gating next steps or offering optional follow-up work), picking from a list, choosing between approaches.
   - Print any list or IDs a question refers to before asking.
