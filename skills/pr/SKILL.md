@@ -66,7 +66,7 @@ Move name-suffix into core rules and protect URLs and slashes
 ## Update mode
 
 1. `gh pr view --json url,state 2>/dev/null` — abort if no PR or not open.
-2. `git log --oneline @{u}..HEAD` — if it lists commits, `git push` so the PR shows them.
+2. `git push`, alone in its Bash call, every time: it prints `Everything up-to-date` when nothing is ahead. Abort if it fails.
 3. Gather PR material.
 4. `gh pr edit --body "<body>"` — the title stays as it is.
 5. Report the PR URL.
@@ -74,11 +74,12 @@ Move name-suffix into core rules and protect URLs and slashes
 ## Merge mode
 
 1. `gh pr view --json url,number,state` — abort if no PR or not open.
-2. `git log --oneline @{u}..HEAD` — if it lists commits, `git push` so CI and the merge see them.
-3. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If you pushed and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once.
-4. If exit code 0 (all checks passed):
+2. `git push`, alone in its Bash call, every time: it prints `Everything up-to-date` when nothing is ahead. Abort if it fails.
+3. `git rev-parse HEAD`, then `gh pr view --json headRefOid --jq .headRefOid`. If they differ, GitHub has not seen the push yet and `gh pr checks` would report the old head's runs: wait 15 seconds and compare once more, then abort if they still differ.
+4. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If the push sent commits and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once.
+5. If exit code 0 (all checks passed):
    - `gh pr merge --merge --delete-branch`. It also switches to the base branch, pulls it, and deletes the local branch.
    - Report: merged, remote and local branches cleaned up.
-5. If non-zero (check failed):
+6. If non-zero (check failed):
    - Run `gh pr checks` once more to list failed checks and their URLs.
    - Report which checks failed. Take no other action.
