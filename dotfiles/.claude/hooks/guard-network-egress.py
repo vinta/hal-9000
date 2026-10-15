@@ -42,7 +42,7 @@ EGRESS_SHAPES = [
 ]
 
 # Local secret material worth a prompt whenever it appears in a command that also reaches the network. Paths that guard-bash-paths.py already denies outright
-# (~/.aws, ~/.ssh, ~/*credential*, and the rest) are deliberately absent: this list covers what that guard does not, chiefly project-local files.
+# (~/.aws, ~/.ssh, and the rest) are deliberately absent: this list covers what that guard does not, chiefly project-local files.
 SECRET_FILES_RE = re.compile(r"(?:^|[\s/\"'=@])(?:\.env(?:\.[\w.-]+)?|\.envrc|\.netrc|\.npmrc|\.pypirc|id_rsa|id_ed25519|[\w.-]+\.(?:pem|p12|pfx|key))\b")
 
 

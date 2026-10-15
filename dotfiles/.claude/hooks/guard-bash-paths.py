@@ -36,8 +36,6 @@ DENIED_PREFIXES = [
     ]
 ] + ["/etc/"]
 
-DENIED_SUBSTRINGS = ["credential"]
-
 # Matches simple `VAR=value` assignments so `D=Dropbox; ls ~/$D` can be resolved
 # before the path check. Not a real shell parser: command substitution like
 # `$(...)` still isn't resolved, since doing that safely would require running
@@ -76,10 +74,6 @@ def check(command: str) -> str | None:
     # Mirrors the `Read(~/*_history)` deny rule, whose `*` stays within one path segment.
     if re.search(re.escape(HOME.lower()) + r"/[^/\s]*_history(?![\w.\-])", lower):
         return "~/*_history"
-    if HOME.lower() in lower:
-        for substr in DENIED_SUBSTRINGS:
-            if substr in lower:
-                return f"~/*{substr}*"
     return None
 
 

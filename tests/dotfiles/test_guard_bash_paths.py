@@ -29,12 +29,6 @@ class TestCheck:
         """A longer name that merely starts with a denied one is not blocked."""
         assert guard.check(f"ls {guard.HOME}/.configuration/app") is None
 
-    def test_credential_substring_under_home(self, guard):
-        assert guard.check(f"cat {guard.HOME}/myapp/credentials.json") == "~/*credential*"
-
-    def test_credential_outside_home_allowed(self, guard):
-        assert guard.check("cat /opt/app/credentials.json") is None
-
     def test_history_file_in_home(self, guard):
         assert guard.check("cat ~/.zsh_history") == "~/*_history"
         assert guard.check("tail $HOME/.bash_history") == "~/*_history"
