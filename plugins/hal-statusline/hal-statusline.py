@@ -229,12 +229,12 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
         f"{usage_color(ctx_pct)}{ctx_plain}{RESET}",
     ]
 
-    title = f"{task['agentType']}: {task.get('name') or task['description'] or task['label']}"
-    budget = columns - len(status) - len(model_part) - len(ctx_plain) - 3 * SEPARATOR_WIDTH
+    agent_type = f"({task['agentType'].lower()})"
+    title = task.get("name") or task["description"] or task["label"]
+    budget = columns - len(agent_type) - 1 - len(status) - len(model_part) - len(ctx_plain) - 3 * SEPARATOR_WIDTH
     if len(title) > budget:
         title = title[: budget - 1] + "…" if budget >= 2 else ""  # noqa: PLR2004 magic-value-comparison
-    if title:
-        parts.insert(0, title)
+    parts.insert(0, f"{title} {agent_type}" if title else agent_type)
 
     return f" {WHITE}·{RESET} ".join(parts)
 
