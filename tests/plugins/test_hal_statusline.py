@@ -184,6 +184,7 @@ def make_task(**overrides):
         "id": "task-1",
         "name": "hal-skills-commit",
         "type": "general-purpose",
+        "agentType": "general-purpose",
         "status": "running",
         "description": "/hal-skills:commit all pending changes",
         "label": "commit",
@@ -210,14 +211,14 @@ class TestSubagentStatus:
         rows = subagent_rows(capsys)
         assert len(rows) == 1
         assert rows[0]["id"] == "task-1"
-        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · working · sonnet-5 high · Context 12%"
+        assert strip_ansi(rows[0]["content"]) == "general-purpose: hal-skills-commit · working · sonnet-5 high · Context 12%"
 
     def test_only_model_is_blue_and_ctx_uses_usage_color(self, hal_statusline, capsys):
         hal_statusline.subagent_status({"columns": 120, "tasks": [make_task()]})
 
         h = hal_statusline
         separator = f" {h.WHITE}·{h.RESET} "
-        expected = f"hal-skills-commit{separator}{h.YELLOW}working{h.RESET}{separator}{h.BLUE}sonnet-5 high{h.RESET}{separator}{h.GREEN}Context 12%{h.RESET}"
+        expected = f"general-purpose: hal-skills-commit{separator}{h.YELLOW}working{h.RESET}{separator}{h.BLUE}sonnet-5 high{h.RESET}{separator}{h.GREEN}Context 12%{h.RESET}"
         assert subagent_rows(capsys)[0]["content"] == expected
 
     def test_inherited_effort_omitted(self, hal_statusline, capsys):
@@ -227,7 +228,7 @@ class TestSubagentStatus:
         hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
 
         rows = subagent_rows(capsys)
-        assert strip_ansi(rows[0]["content"]) == "hal-skills-commit · working · sonnet-5 · Context 12%"
+        assert strip_ansi(rows[0]["content"]) == "general-purpose: hal-skills-commit · working · sonnet-5 · Context 12%"
 
     def test_unresolved_model_keeps_default_row(self, hal_statusline, capsys):
         task = make_task()
@@ -243,7 +244,7 @@ class TestSubagentStatus:
         hal_statusline.subagent_status({"columns": 49, "tasks": [make_task()]})
 
         content = strip_ansi(subagent_rows(capsys)[0]["content"])
-        assert content == "hal-skil… · working · sonnet-5 high · Context 12%"
+        assert content == "general-… · working · sonnet-5 high · Context 12%"
         assert len(content) == 49
 
     def test_name_dropped_when_no_room(self, hal_statusline, capsys):
@@ -258,14 +259,14 @@ class TestSubagentStatus:
         assert "sonnet-5 50000" in strip_ansi(subagent_rows(capsys)[0]["content"])
 
     def test_task_without_name_leads_with_description(self, hal_statusline, capsys):
-        task = make_task(model="claude-opus-5[1m]", contextWindowSize=1000000, tokenCount=28261, description="List repo files")
+        task = make_task(agentType="Explore", model="claude-opus-5[1m]", contextWindowSize=1000000, tokenCount=28261, description="List repo files")
         del task["name"]
         del task["effort"]
 
         hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
 
         content = strip_ansi(subagent_rows(capsys)[0]["content"])
-        assert content == "List repo files · working · opus-5[1m] · Context 2%"
+        assert content == "Explore: List repo files · working · opus-5[1m] · Context 2%"
 
     def test_empty_description_falls_back_to_label(self, hal_statusline, capsys):
         task = make_task(description="")
@@ -274,7 +275,7 @@ class TestSubagentStatus:
         hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
 
         content = strip_ansi(subagent_rows(capsys)[0]["content"])
-        assert content == "commit · working · sonnet-5 high · Context 12%"
+        assert content == "general-purpose: commit · working · sonnet-5 high · Context 12%"
 
     @pytest.mark.parametrize(
         ("status", "samples", "expected"),
@@ -290,4 +291,4 @@ class TestSubagentStatus:
 
         hal_statusline.subagent_status({"columns": 120, "tasks": [task]})
 
-        assert strip_ansi(subagent_rows(capsys)[0]["content"]) == f"hal-skills-commit · {expected} · sonnet-5 high · Context 12%"
+        assert strip_ansi(subagent_rows(capsys)[0]["content"]) == f"general-purpose: hal-skills-commit · {expected} · sonnet-5 high · Context 12%"

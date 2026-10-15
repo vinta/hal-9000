@@ -77,6 +77,7 @@ class StatusLineData(TypedDict):
 class SubagentTask(TypedDict):
     id: str
     name: NotRequired[str]  # skill forks and named Agent spawns send it; teammates never reach this script
+    agentType: str
     status: str
     description: str
     label: str
@@ -228,7 +229,7 @@ def subagent_row(task: SubagentTask, columns: int) -> str:
         f"{usage_color(ctx_pct)}{ctx_plain}{RESET}",
     ]
 
-    title = task.get("name") or task["description"] or task["label"]
+    title = f"{task['agentType']}: {task.get('name') or task['description'] or task['label']}"
     budget = columns - len(status) - len(model_part) - len(ctx_plain) - 3 * SEPARATOR_WIDTH
     if len(title) > budget:
         title = title[: budget - 1] + "…" if budget >= 2 else ""  # noqa: PLR2004 magic-value-comparison
