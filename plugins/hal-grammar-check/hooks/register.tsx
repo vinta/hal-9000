@@ -196,7 +196,10 @@ async function scheduleCheck($: EngineInterface, text: string) {
 async function dimResult($: EngineInterface) {
   cancelChecks()
   // Keep the last result on screen, dimmed, until the next draft is checked
-  await update($, check, (prev): GrammarCheck | null => (prev?.status === 'done' ? { ...prev, status: 'submitted' } : null))
+  // A submit dims twice, from prompt.submit and from the clear it raises, so an already dimmed result stays
+  await update($, check, (prev): GrammarCheck | null =>
+    prev?.status === 'done' || prev?.status === 'submitted' ? { ...prev, status: 'submitted' } : null,
+  )
 }
 
 export const register: Register = on => {
