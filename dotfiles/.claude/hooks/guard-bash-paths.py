@@ -73,6 +73,9 @@ def check(command: str) -> str | None:
         # so a prefix written with a trailing slash still matches files beneath it.
         if re.search(re.escape(prefix.lower().rstrip("/")) + r"(?:/|(?![\w.\-]))", lower):
             return prefix
+    # Mirrors the `Read(~/*_history)` deny rule, whose `*` stays within one path segment.
+    if re.search(re.escape(HOME.lower()) + r"/[^/\s]*_history(?![\w.\-])", lower):
+        return "~/*_history"
     if HOME.lower() in lower:
         for substr in DENIED_SUBSTRINGS:
             if substr in lower:

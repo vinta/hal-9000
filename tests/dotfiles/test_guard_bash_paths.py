@@ -35,6 +35,14 @@ class TestCheck:
     def test_credential_outside_home_allowed(self, guard):
         assert guard.check("cat /opt/app/credentials.json") is None
 
+    def test_history_file_in_home(self, guard):
+        assert guard.check("cat ~/.zsh_history") == "~/*_history"
+        assert guard.check("tail $HOME/.bash_history") == "~/*_history"
+
+    def test_history_file_outside_home_root_allowed(self, guard):
+        assert guard.check(f"cat {guard.HOME}/project/chat_history.py") is None
+        assert guard.check("cat /var/log/app_history") is None
+
     def test_backslash_in_assignment_value(self, guard):
         assert guard.check(r'RE=\d+; grep "$RE" notes.txt') is None
 
