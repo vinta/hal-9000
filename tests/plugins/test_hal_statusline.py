@@ -183,7 +183,7 @@ def make_task(**overrides):
     task = {
         "id": "task-1",
         "name": "hal-skills-commit",
-        "type": "general-purpose",
+        "type": "local_agent",
         "agentType": "general-purpose",
         "status": "running",
         "description": "/hal-skills:commit all pending changes",
