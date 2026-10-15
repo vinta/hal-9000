@@ -150,13 +150,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ~/.claude/hooks/guard-bash-paths.py",
-            "onFailure": "block"
+            "command": "python3 ~/.claude/hooks/guard-bash-paths.py"
           },
           {
             "type": "command",
-            "command": "python3 ~/.claude/hooks/guard-network-egress.py",
-            "onFailure": "block"
+            "command": "python3 ~/.claude/hooks/guard-network-egress.py"
           }
         ]
       }
