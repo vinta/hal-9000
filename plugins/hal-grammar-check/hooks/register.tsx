@@ -178,6 +178,27 @@ async function requestCheck($: EngineInterface, draft: string, mine: number) {
   }
 }
 
+async function scheduleCheck($: EngineInterface, text: string) {
+  // Check a slash command's arguments, not the command name
+  const draft = text.trim().replace(/^\/\S*\s*/, '')
+  if (draft === '' || draft.startsWith('!')) {
+    await clear($)
+    return
+  }
+  timer?.cancel()
+  seq += 1
+  const mine = seq
+  timer = $.clock.after(DEBOUNCE_MS, () => {
+    void requestCheck($, draft, mine)
+  })
+}
+
+async function dimResult($: EngineInterface) {
+  cancelChecks()
+  // Keep the last result on screen, dimmed, until the next draft is checked
+  await update($, check, (prev): GrammarCheck | null => (prev?.status === 'done' ? { ...prev, status: 'submitted' } : null))
+}
+
 export const register: Register = on => {
   on('prompt.edit', async ($, e, next) => {
     const r = await next(e)
@@ -185,25 +206,12 @@ export const register: Register = on => {
       // A bare cursor move changes nothing worth checking
       return r
     }
-    // Check a slash command's arguments, not the command name
-    const draft = r.text.trim().replace(/^\/\S*\s*/, '')
-    if (draft === '' || draft.startsWith('!')) {
-      await clear($)
-      return r
-    }
-    timer?.cancel()
-    seq += 1
-    const mine = seq
-    timer = $.clock.after(DEBOUNCE_MS, () => {
-      void requestCheck($, draft, mine)
-    })
+    await scheduleCheck($, r.text)
     return r
   })
 
   on('prompt.submit', async ($, e, next) => {
-    cancelChecks()
-    // Keep the last result on screen, dimmed, until the next draft is checked
-    await update($, check, (prev): GrammarCheck | null => (prev?.status === 'done' ? { ...prev, status: 'submitted' } : null))
+    await dimResult($)
     return next(e)
   })
 
