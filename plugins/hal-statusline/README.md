@@ -4,7 +4,7 @@ A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) th
 
 The grammar check runs in a detached background worker so the statusline never blocks on the model call: it shows "checking…" immediately, then the result appears within a couple of seconds once the worker finishes and the next statusline refresh (driven by `refreshInterval`) picks it up.
 
-The statusline also shows a row for each running subagent: its name and type, model and effort, and context usage.
+The statusline also shows a row for each running subagent: its name, type, model, effort, and context usage.
 
 ## Installation
 
