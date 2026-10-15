@@ -210,6 +210,13 @@ export const register: Register = on => {
     return r
   })
 
+  // History recall, undo, clear and plugin fills change the box without a prompt.edit
+  on('prompt.change', async ($, e, next) => {
+    // Dim rather than drop on a clear: a submit raises one too, and its order against prompt.submit is unspecified
+    await (e.origin.kind === 'clear' ? dimResult($) : scheduleCheck($, e.text))
+    return next(e)
+  })
+
   on('prompt.submit', async ($, e, next) => {
     await dimResult($)
     return next(e)
