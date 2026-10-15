@@ -35,6 +35,9 @@ class TestCheck:
     def test_credential_outside_home_allowed(self, guard):
         assert guard.check("cat /opt/app/credentials.json") is None
 
+    def test_backslash_in_assignment_value(self, guard):
+        assert guard.check(r'RE=\d+; grep "$RE" notes.txt') is None
+
     def test_benign_commands_allowed(self, guard):
         assert guard.check("ls -la") is None
         assert guard.check(f"cat {guard.HOME}/project/notes.txt") is None

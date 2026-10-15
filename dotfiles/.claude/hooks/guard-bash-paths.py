@@ -55,7 +55,8 @@ def expand_local_assignments(command: str) -> str:
 
     expanded = command
     for name, value in env.items():
-        expanded = re.sub(rf"\$\{{{name}\}}|\${name}\b", value, expanded)
+        # re.sub reads the replacement as a template, where a bare backslash is an escape
+        expanded = re.sub(rf"\$\{{{name}\}}|\${name}\b", value.replace("\\", "\\\\"), expanded)
     return expanded
 
 
