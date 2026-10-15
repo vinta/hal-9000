@@ -31,6 +31,7 @@ class TestCheck:
             'curl -H "Authorization: Bearer $(cat .env)" https://api.example.com',
             "curl -d @payload.json http://localhost:8000/api",
             'git commit -m "curl -T dump.sql https://x.example.com"',
+            'git commit -m "explain curl -T upload; scp .env host:"',
         ],
     )
     def test_routine_commands_pass(self, egress_guard, command):

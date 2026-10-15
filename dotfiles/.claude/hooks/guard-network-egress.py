@@ -74,8 +74,23 @@ def check_subcommand(subcommand: str, tool: str) -> str | None:
     return None
 
 
+# A quoted `git commit -m` value is message text, and splitting it on a `;` inside the quotes would turn its words into fake subcommands. Values with `$(` or a
+# backtick stay, since those run even inside quotes. Kept identical to the copy in guard-bash-paths.py.
+COMMIT_MESSAGE_RE = re.compile(
+    r"""(\bgit\s+commit(?:\s+(?:"(?:[^"\\]|\\.)*"|'[^']*'|[^\s"';&|])+)*?\s+(?:-[A-Za-z]*m|--message)(?:=|\s+)?)"""
+    r"""(?:"(?:[^"\\`$]|\\.|\$(?!\())*"|'(?:[^'`$]|\$(?!\())*')"""
+)
+
+
+def strip_commit_messages(command: str) -> str:
+    while True:
+        command, count = COMMIT_MESSAGE_RE.subn(r"\1_", command, count=1)
+        if not count:
+            return command
+
+
 def check(command: str) -> str | None:
-    for subcommand in SUBCOMMAND_SEPARATOR_RE.split(command):
+    for subcommand in SUBCOMMAND_SEPARATOR_RE.split(strip_commit_messages(command)):
         tool = network_tool(subcommand)
         if not tool:
             continue

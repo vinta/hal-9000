@@ -2,6 +2,8 @@ import json
 import subprocess
 import sys
 
+import pytest
+
 from .conftest import GUARD_PATH
 
 
@@ -36,6 +38,34 @@ class TestCheck:
     def test_history_file_outside_home_root_allowed(self, guard):
         assert guard.check(f"cat {guard.HOME}/project/chat_history.py") is None
         assert guard.check("cat /var/log/app_history") is None
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            'git commit -m "fix: guard ~/.config reads" -m "Body mentions /etc/hosts and ~/.zsh_history."',
+            "git commit -m 'drop ~/Library check'",
+            'git commit -am "touch ~/.ssh docs"',
+            'git commit --message="mention ~/.aws"',
+            'git commit -m"mention ~/.kube"',
+            'git commit -m "escaped \\" quote ~/.ssh"',
+        ],
+    )
+    def test_commit_message_text_allowed(self, guard, command):
+        assert guard.check(command) is None
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            'git commit -m "x" && cat ~/.ssh/id_rsa',
+            'git commit -m "$(cat ~/.ssh/id_rsa)"',
+            "git commit -m 'safe' -m \"`cat ~/.ssh/id_rsa`\"",
+            "bash -c \"git commit -m '$(cat ~/.ssh/id_rsa)'\"",
+            "git commit -F ~/.ssh/id_rsa",
+            "git commit -m 'x' ~/.ssh/id_rsa",
+        ],
+    )
+    def test_commit_with_real_path_access_asks(self, guard, command):
+        assert guard.check(command) == f"{guard.HOME}/.ssh"
 
     def test_backslash_in_assignment_value(self, guard):
         assert guard.check(r'RE=\d+; grep "$RE" notes.txt') is None

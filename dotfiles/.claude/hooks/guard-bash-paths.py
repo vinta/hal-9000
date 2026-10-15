@@ -58,8 +58,22 @@ def expand_local_assignments(command: str) -> str:
     return expanded
 
 
+# A quoted `git commit -m` value is message text the commit never reads as a path. Values with `$(` or a backtick stay, since those run even inside quotes.
+COMMIT_MESSAGE_RE = re.compile(
+    r"""(\bgit\s+commit(?:\s+(?:"(?:[^"\\]|\\.)*"|'[^']*'|[^\s"';&|])+)*?\s+(?:-[A-Za-z]*m|--message)(?:=|\s+)?)"""
+    r"""(?:"(?:[^"\\`$]|\\.|\$(?!\())*"|'(?:[^'`$]|\$(?!\())*')"""
+)
+
+
+def strip_commit_messages(command: str) -> str:
+    while True:
+        command, count = COMMIT_MESSAGE_RE.subn(r"\1_", command, count=1)
+        if not count:
+            return command
+
+
 def check(command: str) -> str | None:
-    expanded = expand_local_assignments(command)
+    expanded = expand_local_assignments(strip_commit_messages(command))
     normalized = expanded.replace("${HOME}", HOME).replace("$HOME", HOME).replace("~", HOME)
     # Drop quotes and backslashes the shell would collapse at runtime, so
     # `~/Drop"box"` and `~/Drop\box` still resolve to the denied path.
