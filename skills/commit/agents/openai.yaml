@@ -1,0 +1,3 @@
+interface:
+  display_name: "Commit"
+  short_description: "Splits your changes into atomic conventional commits, hunk by hunk if needed"

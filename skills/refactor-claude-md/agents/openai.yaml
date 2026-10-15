@@ -1,0 +1,3 @@
+interface:
+  display_name: "Refactor CLAUDE.md"
+  short_description: "Refactors a CLAUDE.md so every line earns its always-loaded cost"

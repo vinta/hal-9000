@@ -1,0 +1,3 @@
+interface:
+  display_name: "Audit Claude Settings"
+  short_description: "Audits your Claude Code settings against the latest docs"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Refactor Memory"
+  short_description: "Prunes stale Claude Code and Codex memories, applies only what you pick"

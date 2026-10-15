@@ -1,0 +1,3 @@
+interface:
+  display_name: "Simple English"
+  short_description: "Rewrites text in Global English: plain words, still native-sounding"

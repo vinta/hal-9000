@@ -1,0 +1,3 @@
+interface:
+  display_name: "Pull Request"
+  short_description: "Opens a PR, rewrites a PR, or waits for CI and merges it, in seconds on a cheap model"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Refactor Skill"
+  short_description: "Refactors a skill by simplifying it instead of complicating it"

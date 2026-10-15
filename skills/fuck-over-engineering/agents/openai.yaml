@@ -1,0 +1,3 @@
+interface:
+  display_name: "Fuck Over-Engineering"
+  short_description: "Ranks what to cut in your codebase, deletes only what you pick"
