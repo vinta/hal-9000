@@ -45,6 +45,27 @@ EGRESS_SHAPES = [
 # (~/.aws, ~/.ssh, and the rest) are deliberately absent: this list covers what that guard does not, chiefly project-local files.
 SECRET_FILES_RE = re.compile(r"(?:^|[\s/\"'=@])(?:\.env(?:\.[\w.-]+)?|\.envrc|\.netrc|\.npmrc|\.pypirc|id_rsa|id_ed25519|[\w.-]+\.(?:pem|p12|pfx|key))\b")
 
+# curl headers and query strings stand in for settings `ask` rules, which can't tell `-H "Accept: ..."` from `-H "Authorization: Bearer $TOKEN"`.
+CURL_HEADER_RE = re.compile(r"""(?:^|\s)(?:-H|--header)\s*("[^"]*"|'[^']*'|\S+)""")
+CREDENTIAL_HEADER_RE = re.compile(r"^[\w-]*(?:auth|cookie|key|token|secret|session)[\w-]*\s*:", re.IGNORECASE)
+CURL_GET_RE = re.compile(r"(?:^|\s)(?:-[A-Za-z]*G[A-Za-z]*|--get)(?=\s|$)")
+CURL_URLENCODE_FILE_RE = re.compile(r"""--data-urlencode\s+["']?[^\s"'=@]*@""")
+
+
+def check_curl(subcommand: str) -> str | None:
+    for raw in CURL_HEADER_RE.findall(subcommand):
+        value = raw.strip("\"'")
+        if "$" in value or "`" in value or value.startswith("@"):
+            return "the command puts a variable or file into a request header"
+        if CREDENTIAL_HEADER_RE.match(value):
+            return "the command sends a credential header"
+    if "--data-urlencode" in subcommand:
+        if CURL_URLENCODE_FILE_RE.search(subcommand):
+            return "the command puts file contents into the request"
+        if not CURL_GET_RE.search(subcommand):
+            return "the command sends a request body"
+    return None
+
 
 def is_local_only(command: str) -> bool:
     urls = URL_RE.findall(command)
@@ -64,8 +85,11 @@ def check_subcommand(subcommand: str, tool: str) -> str | None:
     for pattern, description in EGRESS_SHAPES:
         if pattern.search(subcommand):
             return f"the command {description}"
-    # A secret file read for a header value goes to the API that issued it, which is routine. A secret file handed to scp, or posted as a request body, is
-    # the file itself leaving the machine.
+    if tool == "curl":
+        reason = check_curl(subcommand)
+        if reason:
+            return reason
+    # A secret file handed to scp, or posted as a request body, is the file itself leaving the machine.
     if tool in TRANSFER_TOOLS or re.search(r"@\S*\.env", subcommand):
         secret = SECRET_FILES_RE.search(subcommand)
         if secret:
