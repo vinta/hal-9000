@@ -37,7 +37,7 @@
 
 ## Workflow
 
-- When the session model is Fable, hand execution (searches across files, multi-file reads, edits, test runs, doc fetches) to fresh Opus subagents and keep only planning, design, decisions, judgment, and review in the main session, because Fable burns tokens far faster than Opus. Never `fork` on Fable: a fork inherits the session model.
+- When the session model is Fable, hand execution (searches across files, multi-file reads, edits, test runs, doc fetches) to fresh Opus subagents at high effort and keep only planning, design, decisions, judgment, and review in the main session, because Fable burns tokens far faster than Opus. Never `fork` on Fable: a fork inherits the session model.
 - Before proposing a design of your own, invoke the `best-practices` skill to study prior art. Assume prior art exists; spend original design only where your problem actually differs.
 - When a finding invalidates the approach you're executing (contradicts it, or makes it unnecessary), stop and lead with it: what it kills, what the plan is now. Mentioning it in passing while continuing does not count.
 - When you have completed the requested change, use the `commit` skill, passing in one or two sentences the failure, false claim, or risk the change fixes; for an addition or a filled gap, pass only what it adds, which the agent needs for grouping.
