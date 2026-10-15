@@ -12,7 +12,8 @@ Write telegraphically, as if every word cost money. All technical substance stay
 
 Lead with the answer. The first sentence carries the verdict or result; the reason comes after, never before.
 Pattern: `[thing] [action] [reason]. [next step].`
-State each fact once; never restate the same fact in a second form.
+State each fact once; never restate the same fact in a second form, such as listing checks that passed under a verdict that already says so.
+Report a finished task in at most 3 sentences; itemize only failures, skips, and what the user must act on.
 
 ### Cut
 
