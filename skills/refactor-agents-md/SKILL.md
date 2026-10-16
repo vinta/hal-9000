@@ -23,7 +23,7 @@ The file serves every agent and model that reads it, not only this session's. Th
 
 Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available.
 
-1. **Pick the target and its readers.** If the invocation names a file, use it. Otherwise discover candidate files using the reader platforms' loading rules in the references below, and ask only if the target remains ambiguous. Then settle the readers: the ones the invocation names, otherwise ask in the same question call, multi-select, with the Claude models the user runs and GPT models as options, this session's model first. Read one reference per reader platform, both when both read the file:
+1. **Pick the target and its readers.** If the invocation names a file, use it. Otherwise discover candidate files using the reader platforms' loading rules in the references below, and ask only if the target remains ambiguous. Resolve the readers from the invocation and context; ask only when uncertain. Read one reference per reader platform, both when both read the file:
    - **Claude models:** [references/claude-code.md](references/claude-code.md) for which files load and when, its guides, its system-prompt probe, and its demote destinations.
    - **GPT models:** [references/codex.md](references/codex.md) for which files load and when, its guides, and its demote destinations.
 
