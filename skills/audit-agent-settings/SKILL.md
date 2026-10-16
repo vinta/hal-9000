@@ -27,7 +27,7 @@ Done when every target has its reference loaded.
 
 ## 2. Fetch ground truth
 
-Curl each raw markdown mirror the reference lists into `<scratchpad>`. `<scratchpad>` is your session's scratchpad directory, or `/tmp` when the harness provides none. `-f` makes a missing page a failed command instead of a silently saved 404 body. Use these files for the documentation scan and the reference's installed-CLI probes to verify behavior.
+Curl each raw markdown mirror the reference lists into `<scratchpad>`. `<scratchpad>` is your session's scratchpad directory, or `/tmp` when the harness provides none. `-f` makes a missing page a failed command instead of a silently saved 404 body. These files are the only acceptable source for the scan; the reference's installed-CLI probes verify behavior, they do not replace the files.
 
 Follow the reference's notes on how keys and variables are laid out in those files, and grep them for the full lists. Read the full entry of every key the user sets, since the entries carry the defaults, deprecations, and precedence the index omits.
 
@@ -60,6 +60,6 @@ Apply the picks and validate with the reference's validator after edits. Say whi
 
 ## Gotchas
 
-- Summaries can omit entries needed for an exhaustive audit. Fetch the raw markdown with curl and read it yourself.
+- WebFetch and similar fetch tools answer through a small summarizer model. On a "list everything" prompt against a long page they truncate, and on a "continue the list" prompt they fabricate plausible keys (observed: `rubyCrimsionPath`). The raw markdown mirror is the ground truth; fetch it with curl and read it yourself.
 - Undocumented is not the same as dead. A key can live on a different docs page than the fetched files. Grep all the fetched files, then check the platform's other docs pages the reference points to and run its dead-key probe before you call a key dead.
 - Docs churn fast. Results from a previous audit go stale; fetch fresh files every run, and treat remembered page content as expired.

@@ -25,7 +25,7 @@ Validate with `python3 -m json.tool` after edits — invalid JSON makes Claude C
 ## Dead-key probe
 
 - The installed CLI binary has the final say on undocumented keys and env vars: `strings -a "$(which claude)" | grep -o -E '.{300}<name>.{300}'`. Zero hits means dead; hits mean live code reads it, and the surrounding minified code tells you what it actually does — read it before proposing any change. Observed both failure modes: a docs-only audit flagged `skipAutoPermissionPrompt` dead while a migration in the binary still read it, and `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` turned out to force every session to start in `default` (manual) permission mode, silently overriding `defaultMode: "auto"` with no warning shown.
-- Undocumented is not the same as dead: `skillOverrides` sat on the skills page before the settings page listed it. Grep all three files, then check llms.txt pages, before you call a key dead.
+- Observed undocumented-but-live key: `skillOverrides` sat on the skills page before the settings page listed it.
 - The `$schema` line (`https://json.schemastore.org/claude-code-settings.json`) gives editors validation, but the published schema lags new CLI releases. A schema warning on a recently documented key is not proof of a dead key.
 
 ## Leave-alone example
