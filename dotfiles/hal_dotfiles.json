@@ -163,8 +163,12 @@
       "dest": "{{HOME}}/.codex/config.toml"
     },
     {
-      "src": "{{REPO_ROOT}}/dotfiles/.codex/rules/",
-      "dest": "{{HOME}}/.codex/rules/"
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/rules/default.rules",
+      "dest": "{{HOME}}/.codex/rules/default.rules"
+    },
+    {
+      "src": "{{REPO_ROOT}}/dotfiles/.codex/rules/default.sandbox.rules",
+      "dest": "{{HOME}}/.codex-blackwall/rules/default.rules"
     }
   ]
 }
