@@ -29,7 +29,7 @@ Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when avail
 
    For a targeted change, the verdicts below cover only the lines it adds or touches: the rest of the file stays as it is, and anything noticed there is a follow-up.
 
-2. **Fetch the guides.** Follow each loaded reference's guide-fetching instructions. Reuse current guidance already fetched in this conversation.
+2. **Fetch the guides.** Follow each loaded reference's guide-fetching instructions, for a one-line change too: a verdict without the guides rests on memory. Reuse current guidance already fetched in this conversation. Done when each page a reference lists has been fetched for each reader in this session.
 
 3. **Audit.** Read the file and give every instruction in scope exactly one verdict, judged against the target's bar below. Done when no instruction in scope lacks one.
    - **contradiction**: conflicts with another instruction or a reader's requirements such that both cannot be satisfied. Record both sides.
