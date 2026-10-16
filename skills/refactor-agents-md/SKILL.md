@@ -15,7 +15,7 @@ allowed-tools:
 
 # Overview
 
-Refactor an instruction file (`CLAUDE.md` or `AGENTS.md`). Every line it keeps is loaded into every session the file covers, and a frontier model follows only around 150 to 200 standing instructions consistently, so each line competes for that budget. Everything else moves down the ladder or out of the file.
+Refactor an instruction file (`CLAUDE.md` or `AGENTS.md`). Every retained instruction competes for attention in the sessions that load it.
 
 The file serves every agent and model that reads it, not only this session's. The filename does not say who reads it, since Claude Code reads `AGENTS.md` too. Each reader assembles its own system prompt, so a line that restates one reader's prompt can be the only copy for another. Audit each line against every reader.
 
