@@ -1,7 +1,7 @@
 {
   "name": "hal-skills",
   "displayName": "HAL Skills",
-  "version": "2.12.13",
+  "version": "2.13.0",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
@@ -13,7 +13,6 @@
     "./simple-english",
     "./write-like-me",
     "./audit-claude-settings",
-    "./refactor-claude-md",
     "./refactor-agents-md",
     "./refactor-memory",
     "./refactor-skill"

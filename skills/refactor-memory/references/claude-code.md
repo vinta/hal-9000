@@ -18,7 +18,7 @@ Past about twelve entries, group them under `##` headings by the subject a reade
 - Instructions for every project: `~/.claude/CLAUDE.md`.
 - Instructions for particular paths: a `paths:`-scoped file in `.claude/rules/` or `~/.claude/rules/`.
 
-For `CLAUDE.md` destinations, apply the keep bar from the `refactor-claude-md` skill. When creating a scoped rule, fetch the [path-specific rules guide](https://code.claude.com/docs/en/memory#path-specific-rules) for its frontmatter syntax.
+For `CLAUDE.md` destinations, apply the keep bar from the `refactor-agents-md` skill. When creating a scoped rule, fetch the [path-specific rules guide](https://code.claude.com/docs/en/memory#path-specific-rules) for its frontmatter syntax.
 
 ## Decisions and application
 

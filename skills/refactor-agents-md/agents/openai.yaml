@@ -1,6 +1,3 @@
 interface:
   display_name: "Refactor AGENTS.md"
-  short_description: "Refactors an AGENTS.md the same way, for Codex"
-
-policy:
-  allow_implicit_invocation: false
+  short_description: "Refactors an AGENTS.md or CLAUDE.md so every line earns its always-loaded cost"
