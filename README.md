@@ -46,8 +46,7 @@ Agentic skills sharpened by daily use:
 - [simple-english](skills/simple-english/SKILL.md): Rewrites text in Global English: plain words, still native-sounding
 - [write-like-me](skills/write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
 - [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings against the latest docs
-- [refactor-claude-md](skills/refactor-claude-md/SKILL.md): Refactors a CLAUDE.md so every line earns its always-loaded cost
-- [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors an AGENTS.md the same way, for Codex
+- [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors a CLAUDE.md or AGENTS.md so every line earns its always-loaded cost
 - [refactor-memory](skills/refactor-memory/SKILL.md): Prunes stale Claude Code and Codex memories, applies only what you pick
 - [refactor-skill](skills/refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
 

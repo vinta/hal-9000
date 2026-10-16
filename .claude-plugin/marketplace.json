@@ -24,7 +24,6 @@
         "./simple-english",
         "./write-like-me",
         "./audit-claude-settings",
-        "./refactor-claude-md",
         "./refactor-agents-md",
         "./refactor-memory",
         "./refactor-skill"
