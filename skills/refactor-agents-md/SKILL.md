@@ -7,8 +7,8 @@ allowed-tools:
   - WebFetch(domain:code.claude.com)
   - WebFetch(domain:developers.openai.com)
   - WebFetch(domain:learn.chatgpt.com)
-  - Edit(AGENTS.md)
   - Edit(CLAUDE.md)
+  - Edit(AGENTS.md)
   - Read(~/.claude/CLAUDE.md)
   - Read(~/.codex/AGENTS.md)
 ---
