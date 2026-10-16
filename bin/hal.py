@@ -229,13 +229,11 @@ class Mirror:
                 orphans.extend(Mirror.find_orphans(pair_src, pair_dest))
             return sorted(orphans)
 
-        # A missing or empty source means the backup is the only surviving copy, and every file in it would read as an orphan
+        # A missing source means the backup is the only surviving copy, and every file in it would read as an orphan
         if not src.is_dir() or not dest.is_dir():
             return []
 
         src_names = Mirror._walk_names(src, follow_symlinks=True)
-        if not src_names:
-            return []
         return sorted(dest / name for name in Mirror._walk_names(dest, follow_symlinks=False) - src_names)
 
     def remove_orphan(self, path: Path) -> bool:

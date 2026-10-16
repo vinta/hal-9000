@@ -1168,19 +1168,19 @@ class TestBackupPrune:
 
         assert (dest / "only_copy.txt").read_text() == "irreplaceable"
 
-    def test_source_holding_only_ignored_files_is_skipped(self, hal_instance, tmp_path):
-        """A source that walks to nothing once ignores are applied counts as empty, not as fully deleted."""
+    def test_emptied_source_prunes_its_backup(self, hal_instance, tmp_path):
+        """A source emptied on purpose, down to only ignored files, still lists its backup's files as orphans."""
         src = tmp_path / "live"
         src.mkdir()
         (src / ".DS_Store").write_text("finder")
 
         dest = tmp_path / "dropbox"
         dest.mkdir()
-        (dest / "only_copy.txt").write_text("irreplaceable")
+        (dest / "deleted.txt").write_text("orphan")
 
         self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
 
-        assert (dest / "only_copy.txt").read_text() == "irreplaceable"
+        assert not (dest / "deleted.txt").exists()
 
     def test_git_internals_are_never_pruned(self, hal_instance, tmp_path):
         """Objects git reclaimed locally stay in the backup instead of dominating the listing."""
