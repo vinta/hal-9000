@@ -23,6 +23,7 @@
 - Ask with the `AskUserQuestion` tool whenever the answer is a selection rather than a sentence, so the user clicks an option instead of typing.
   - Selections: multiple-choice, yes/no (whether gating next steps or offering optional follow-up work), picking from a list, choosing between approaches.
   - Print any list or IDs a question refers to before asking.
+  - Option labels and descriptions name their content, never a letter, number, or group name coined outside the question (`Fix stale + missing intros`, not `A + B`), so the question reads with nothing else on screen.
   - When an option's label and description leave its effect abstract, show an example in its `preview`: the text, code, diff, or layout it produces, or a sample input and what it does with it.
   - Holds inside skills: a skill that prescribes its own question format decides what you ask, not how.
 
