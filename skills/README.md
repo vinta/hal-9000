@@ -10,7 +10,7 @@ Agentic skills sharpened by daily use:
 - [blindspot](blindspot/SKILL.md): Turns unknown unknowns into known unknowns, then lets you pick where to explore
 - [simple-english](simple-english/SKILL.md): Rewrites text in Global English: plain words, still native-sounding
 - [write-like-me](write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
-- [audit-claude-settings](audit-claude-settings/SKILL.md): Audits your Claude Code settings against the latest docs
+- [audit-agent-settings](audit-agent-settings/SKILL.md): Audits your Claude Code or Codex settings against the latest docs
 - [refactor-agents-md](refactor-agents-md/SKILL.md): Refactors a CLAUDE.md or AGENTS.md so every line earns its always-loaded cost
 - [refactor-memory](refactor-memory/SKILL.md): Prunes stale Claude Code and Codex memories, applies only what you pick
 - [refactor-skill](refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
@@ -39,4 +39,4 @@ These skills collect nothing. A few talk to other services when you run them:
 - `best-practices` sends search queries to Context7 (through the `find-docs` skill) and to web search
 - `blindspot` and `difference` send search queries to web search
 - `refactor-agents-md` sends lines of your CLAUDE.md or AGENTS.md to Claude via `claude -p`, on your own account, when a Claude model reads the file, to check which lines the model already follows
-- `audit-claude-settings`, `refactor-agents-md`, `refactor-memory`, and `refactor-skill` read public docs from Anthropic, OpenAI, and SchemaStore
+- `audit-agent-settings`, `refactor-agents-md`, `refactor-memory`, and `refactor-skill` read public docs from Anthropic, OpenAI, and SchemaStore

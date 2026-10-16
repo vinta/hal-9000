@@ -45,7 +45,7 @@ Agentic skills sharpened by daily use:
 - [blindspot](skills/blindspot/SKILL.md): Turns unknown unknowns into known unknowns, then lets you pick where to explore
 - [simple-english](skills/simple-english/SKILL.md): Rewrites text in Global English: plain words, still native-sounding
 - [write-like-me](skills/write-like-me/SKILL.md): Drafts or rewrites English prose in my own voice at native fluency
-- [audit-claude-settings](skills/audit-claude-settings/SKILL.md): Audits your Claude Code settings against the latest docs
+- [audit-agent-settings](skills/audit-agent-settings/SKILL.md): Audits your Claude Code or Codex settings against the latest docs
 - [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors a CLAUDE.md or AGENTS.md so every line earns its always-loaded cost
 - [refactor-memory](skills/refactor-memory/SKILL.md): Prunes stale Claude Code and Codex memories, applies only what you pick
 - [refactor-skill](skills/refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
