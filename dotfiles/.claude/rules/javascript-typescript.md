@@ -11,7 +11,6 @@ paths:
 - Pin `@types/node` to the latest release of the oldest Node.js major in `engines.node`, so the compiler flags APIs that major lacks.
 - Use the `node:` prefix for Node.js built-in modules (`node:fs`, `node:path`).
 - Prefer `interface` over `type` for object shapes (extendable, better error messages).
-- Avoid enums. Use union types (`type Status = 'active' | 'inactive'`) or `as const` objects.
 - Write a proper type instead of `any` or a cast (`as any`, `as unknown`). For a genuinely untypable value, use `unknown` and narrow it; `any` is the last resort.
 - Do not add explicit return types. Let TypeScript infer them, except where the annotation checks returned literals against a declared union or contract.
 - Mark a class property `readonly` only when it is set once and its contents never change. One that is never reassigned but mutated in place (a queue, a cache, a settings object) stays unmarked.
