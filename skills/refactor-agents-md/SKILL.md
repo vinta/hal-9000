@@ -23,9 +23,9 @@ The file serves every agent and model that reads it, not only this session's. Th
 
 Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available.
 
-1. **Pick the target and its readers.** If the invocation names a file, use it. Otherwise ask, one option per file that exists among `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, and the project's `CLAUDE.md` and `AGENTS.md`, with the resolved path in the label. Then settle the readers: the ones the invocation names, otherwise ask in the same question call, multi-select, with the Claude models the user runs and GPT-6 Astra as options, this session's model first. Read one reference per reader platform, both when both read the file:
+1. **Pick the target and its readers.** If the invocation names a file, use it. Otherwise ask, one option per file that exists among `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, and the project's `CLAUDE.md` and `AGENTS.md`, with the resolved path in the label. Then settle the readers: the ones the invocation names, otherwise ask in the same question call, multi-select, with the Claude models the user runs and GPT models as options, this session's model first. Read one reference per reader platform, both when both read the file:
    - **Claude models:** [references/claude-code.md](references/claude-code.md) for which files load and when, its guides, its system-prompt probe, and its demote destinations.
-   - **GPT-6 Astra:** [references/codex.md](references/codex.md) for the same, plus the GPT-6 checks.
+   - **GPT models:** [references/codex.md](references/codex.md) for which files load and when, its guides, and its demote destinations.
 
    For a targeted change, the verdicts below cover only the lines it adds or touches: the rest of the file stays as it is, and anything noticed there is a follow-up.
 
