@@ -36,12 +36,12 @@ Done when you hold one list of every key and env var the user sets, plus a short
 
 Two passes, both exhaustive:
 
-- **Validate (set → docs).** Check every user key against all three files. Absent from all three → dead-key candidate; confirm against the binary (see Gotchas) before proposing removal. Named a legacy alias → propose the migration. Default or semantics changed → flag it. No key skipped.
-- **Discover (docs → unset).** Walk every documented key and variable once. Keep a candidate only when a specific user fact argues for it, and name that fact in the item.
+- **Validate (set → docs).** Check every user key against all three files. Absent from all three → dead-key candidate; confirm against the binary (see Gotchas) before proposing removal. Index row says removed or no effect → dead, though documented. Named a legacy alias → propose the migration. Default or semantics changed → flag it. No key skipped.
+- **Discover (docs → unset).** Walk every documented key and variable once, skipping `Managed`-scope keys unless the user deploys managed settings. Keep a candidate only when a specific user fact argues for it, and name that fact in the item.
 
 ## 4. Report
 
-Open with problems in the current config, ranked by impact. Then grouped suggestions: security, workflow, small ideas. Close with leave-alone items — attractive switches that break something the user relies on (example: the blanket telemetry kills also disable Remote Control, cross-session messages, and auto-updates).
+Open with problems in the current config, ranked by impact. Then grouped suggestions: security, workflow, small ideas. Close with leave-alone items — attractive switches that break something the user relies on (example: the blanket telemetry kills also disable what `env-vars.md` lists under `## Features that need feature-flag fetching`).
 
 Each item carries the key, what it does in one line, and the user fact that makes it relevant.
 
