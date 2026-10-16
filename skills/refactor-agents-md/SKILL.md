@@ -1,7 +1,7 @@
 ---
 name: refactor-agents-md
-description: Use when about to refactor or refine a user-level or project-level AGENTS.md or CLAUDE.md, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption
-argument-hint: [user | project | path/to/AGENTS.md or CLAUDE.md]
+description: Use when about to refactor or refine a user-level or project-level CLAUDE.md or AGENTS.md, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption
+argument-hint: [user | project | path/to/CLAUDE.md or AGENTS.md]
 allowed-tools:
   - WebFetch(domain:platform.claude.com)
   - WebFetch(domain:code.claude.com)
@@ -15,7 +15,7 @@ allowed-tools:
 
 # Overview
 
-Refactor an instruction file (`AGENTS.md` or `CLAUDE.md`). Every line it keeps is loaded into every session the file covers, and a frontier model follows only around 150 to 200 standing instructions consistently, so each line competes for that budget. Everything else moves down the ladder or out of the file.
+Refactor an instruction file (`CLAUDE.md` or `AGENTS.md`). Every line it keeps is loaded into every session the file covers, and a frontier model follows only around 150 to 200 standing instructions consistently, so each line competes for that budget. Everything else moves down the ladder or out of the file.
 
 The file serves every agent and model that reads it, not only this session's. The filename does not say who reads it, since Claude Code reads `AGENTS.md` too. Each reader assembles its own system prompt, so a line that restates one reader's prompt can be the only copy for another. Audit each line against every reader.
 
