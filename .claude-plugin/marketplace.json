@@ -23,7 +23,7 @@
         "./blindspot",
         "./simple-english",
         "./write-like-me",
-        "./audit-claude-settings",
+        "./audit-agent-settings",
         "./refactor-agents-md",
         "./refactor-memory",
         "./refactor-skill"

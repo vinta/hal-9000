@@ -1,0 +1,3 @@
+interface:
+  display_name: "Audit Agent Settings"
+  short_description: "Audits your Claude Code or Codex settings against the latest docs"
