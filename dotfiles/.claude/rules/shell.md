@@ -10,15 +10,5 @@ Scripts target macOS. Shebang `#!/usr/bin/env bash` picks up Homebrew's bash 5.x
 
 - In a script you execute, use `set -Eeuo pipefail` with `shopt -s inherit_errexit nullglob`; a sourced file leaves shell options to the shell that sources it. Without `-E` and `inherit_errexit`, errors inside `$(...)` and in functions reached from traps are silently swallowed. Skip `IFS=$'\n\t'` — quoted expansions already prevent word-splitting and the narrow IFS surprises downstream tools.
 - `set -e` is not error handling: it turns off inside `if`, `while`, `&&`, `||` conditions and in functions reached from those contexts. Add an `ERR` trap reporting `$LINENO` and `$BASH_COMMAND`, plus a cleanup `trap ... EXIT` for temp state.
-- `((i++))` exits 1 when `i` is 0 and trips `-e`. Use `((i+=1))` or `i=$((i+1))`. Reserve `(( ))` for conditions, `$(( ))` for assignments.
-- `pipefail` breaks common idioms: `cmd | head -n1` kills the producer with SIGPIPE, `slow | grep -q foo` exits early on match. Scope `pipefail` to specific pipelines if you rely on these.
-- Process substitution `<(cmd)` hides exit codes — `set -e` and `ERR` don't fire when commands inside fail. Use a temp file + trap if you need the status.
-- `mapfile -t arr < <(cmd)` beats `while read` loops (no per-line subshell, no scope traps).
-- `$((08+1))` fails — leading zeros parse as octal. Force base-10: `$((10#$month+1))`.
-- Inside functions, `readonly` is global-scope. Use `local -r` (or `declare -r` without `-g`) for function-scoped constants.
-- Temp files: `tmp=$(mktemp)` (or `mktemp -d`) + `trap 'rm -rf "$tmp"' EXIT`. Never build temp paths from `$$` or `$RANDOM` (symlink race). Set `umask 077` at script start when creating user data — macOS default 022 leaves new files world-readable.
-- Don't pass secrets via argv; `ps` exposes them to any user. Use stdin or a mktemp file.
-- Validate input with a whitelist regex before splicing into shell, SSH commands, or awk programs. Use `printf '%q'` when you must splice untrusted strings.
-- Don't suppress SC2155 — `local x=$(cmd)` masks the exit code under `-e`. Split into `local x; x=$(cmd)`.
 - Separate stages with one blank line: setup from work, each commented step from the next, a test's arrange from its `run` and assertions. Shell has no types or block keywords to show structure, so blank lines are what a reader scans for.
 - When a script grows past ~50 lines or needs arrays of structured data, JSON parsing, or real error types, rewrite it in Python with `uv run` (inline PEP 723 `# /// script` block for deps).
