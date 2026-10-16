@@ -128,7 +128,7 @@ dear-ai, division of labor in plain second person:
 
 > Open your AI coding agent in the terminal, point it at a guide listed below, and let it handle the server setup, installation, and configuration. You handle the parts that need a browser: creating accounts, clicking OAuth buttons, copying tokens, and payments.
 
-awesome-python (2021, pre-AI), softener before a firm ask — note the move survives while the slip gets fixed per the style spec:
+awesome-python (2021, pre-AI), softener before a firm ask:
 
 > Just a gentle reminder: **Try not to submit your own project. Instead, wait for someone finds it useful and submits it for you.**
 
@@ -153,10 +153,3 @@ The user's feedback:
 Published instead:
 
 > `"advisorModel": "fable"`: Use something faster like `sonnet` as the main model, and let it [consult](https://code.claude.com/docs/en/advisor) `fable` when needed
-
-What the diff teaches:
-
-- The rejected draft is 2.5x the length of the user's original sentence; the published line matches the original's length. Length preservation is voice.
-- The em-dash chain, the tricolon ("before committing to an approach, when stuck, before declaring done"), and the packed caveats were all deleted wholesale, not trimmed.
-- The caveats also died on content, not just register: detail the note's reader didn't need.
-- The published line keeps the user's two-clause structure ("Use X ..., and let it consult Y when needed") and fixes only grammar. The user's structure, native fluency, nothing added.

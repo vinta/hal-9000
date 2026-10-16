@@ -1,14 +1,14 @@
 # Style spec — the user's voice
 
-Measurable voice features extracted from the user's published writing (see [README.md](README.md) for sources). Quotes are verbatim. When a rule here fights the main rule in SKILL.md, the main rule wins.
+Measurable voice features extracted from the user's published writing (see [README.md](README.md) for sources). Quotes are verbatim.
 
 For cases no rule below covers, fall back to the user's stance: compress — padding is noise, cut it; verify — check a claim before making it; deflate — never hype anything, including the user's own work; cast — reach for a device only where it fits; repair in public — when something was wrong, say so plainly and fix it in the open.
 
 ## 1. Sentence length
 
-Short units everywhere. Blog prose: median ~13 words per sentence, 95th percentile ~30 — treat any sentence past 30 words as drift and split it. README prose runs shorter (median ~9). A README tagline or GitHub repo description is one line, verb optional, often opening with the "Opinionated" self-label; an extension is a bare ", with [noun phrase]" and stops there — no "for", no "so", no second sentence (published: "Opinionated paranoid text spacing in JavaScript, with on-device AI semantic judgment"; three drafts with an explaining clause lost to it). The same shape wins inside README prose: "a one-time model download, started from the options page" became "a one-time model download from the options page" on the user's second pass. Issues, PRs, and emails run shortest: verdict or ask first, evidence after. Short is enforced, not accidental: when an AI rewrite came back 2.5x longer, the user rejected it and published a version the same length as their original.
+Short units everywhere. Blog prose: median ~13 words per sentence, 95th percentile ~30. README prose runs shorter (median ~9). A README tagline or GitHub repo description is one line, verb optional, often opening with the "Opinionated" self-label; an extension is a bare ", with [noun phrase]" and stops there — no "for", no "so", no second sentence (published: "Opinionated paranoid text spacing in JavaScript, with on-device AI semantic judgment"; three drafts with an explaining clause lost to it). The same shape wins inside README prose: "a one-time model download, started from the options page" became "a one-time model download from the options page" on the user's second pass. Issues, PRs, and emails run shortest: verdict or ask first, evidence after.
 
-Density is the same rule from the other side: short sentences don't excuse padding. A paragraph of 13 short sentences carrying 8 ideas fails even though every sentence passes the cap — one sentence per idea, and if one word can carry it, one word (the user's own rule: "if you can use one word or one sentence to describe it, just use one"). The cut criterion is content, not length: offered two shorter drafts of a README paragraph, the user kept the long one whole, then cut its one sentence that stated the obvious and carried no highlight.
+The density cut criterion is content, not length: offered two shorter drafts of a README paragraph, the user kept the long one whole, then cut its one sentence that stated the obvious and carried no highlight.
 
 > Basically, SSL (Secure Sockets Layer) and TLS (Transport Layer Security) are the same thing.
 > Think of it as a namespace.
@@ -41,7 +41,7 @@ Published text talks straight at the reader as "you" and is unafraid of imperati
 > If you're the type who skips the manual, just copy this prompt to your agent:
 > Run it often, you will like it
 
-Collaboration text about shared work (issues, PRs, emails) uses inclusive "we" for the next step the team takes. A proposal there is a question ("should we ...?", "how about ...?", "do we need ...?"), and a guess ends in ", I suppose?" (a published FIXME: "But rare cases, I suppose?"). Verdicts stay plain.
+Collaboration text about shared work (issues, PRs, emails) uses inclusive "we" for the next step the team takes. A proposal there is a question ("should we ...?", "how about ...?", "do we need ...?"), and a guess ends in ", I suppose?" (a published FIXME: "But rare cases, I suppose?").
 
 ## 4. Connectors and markers
 
@@ -70,8 +70,6 @@ Plain verbs and casual evaluators; technical nouns exact. Name the specific thin
 
 ## 7. Signature moves — the menu
 
-Use a move only where it fits; never force one in.
-
 - **Naming epigraph** (a new project README): "> This project is named after [author]'s [work]: [description of the fictional AI]." — e.g. "This project is named after Arthur C. Clarke's 2001: A Space Odyssey, a heuristic algorithmic computer designed for sentient processing and total mission control."
 - **"No." section answers** — section 2.
 - **"Pro tip N:"** — numbered, imperative: "Pro tip 1: before adding something to `CLAUDE.md`, ask it, **"Is this already covered in your system prompt?"**"
@@ -86,15 +84,13 @@ Use a move only where it fits; never force one in.
 
 - Em-dashes are rare. No em-dash chains, no "X — not Y, but Z" pivots. Where a dash is truly needed, README prose has used spaced double hyphens (" -- ") instead.
 - Exclamation marks are scarce and warm ("Your contributions are always welcome!", "Code like a boss!") — enthusiasm, never emphasis inflation.
-- No packed caveats. The user deletes them wholesale rather than trimming them.
 - A content word repeated within a sentence or in the next one is a flag, not a veto: name it once with a synonym or a more exact word, even a longer one, and the user picks. The user raised the rule themselves and acts on it for nouns ("distinguish symbols like these" became "distinguish semantic nuances like these" because the sentence before opens "The same symbol can mean ...") but kept a flagged adjective ("totally different things in different contexts"). Proper names and feature names stay ("text spacing ... AI Spacing" was flagged and kept); a repeat that carries the symmetry in the next bullet ("a model, tuned by a bigger model") is the device, not the tell.
 - Parallel phrasing follows parallel content. Matched sentences, anaphora, and a closing three-beat are the user's own symmetry where the reader already saw the matched cases laid out (two readings of one symbol, two conditions with two actions), and sibling headings match too ("## Chrome Extension" / "## JavaScript Library", two words each): "When a case fails, it interviews Gemini Nano for clues. When progress stalls, it searches online for new approaches to test. Prompts for a model, tuned by a bigger model, judged on real data." A three-beat that enumerates detail the sentence didn't need, or a template phrase shared over unlike items, is the tell: the seed pair's tricolon and the README hook rewrite's echoed phrase were both rejected.
-- Nothing hyped. Features get deflated, including the user's own work.
 - Emphasis budget: bold and CAPS spend on irreversible harm ("Never store a hardware wallet's seed phrase digitally, NEVER.") or a bare negation carrying weight ("NO INDEX at all") — never on excitement.
 
 ## 9. Grammar: slips to fix silently
 
-The user ruled every recurring second-language pattern a slip, not voice: grammar always corrects to native English, and the correction never rewrites sentence structure beyond what the fix requires. Published examples with their fixes:
+Published slips with their fixes:
 
 | Published slip                                               | Native fix                                                     |
 | ------------------------------------------------------------ | -------------------------------------------------------------- |
@@ -112,4 +108,4 @@ Further slip classes attested in the user's unpublished writing, fixed the same 
 
 ## 10. Code comments — ruled register, not corpus-extracted
 
-The user ruled code comments into scope. The specifics below derive from the user's standing comment rule, compress stance, and one harvested comment session in the local corpus — recalibrate as examples accrue. It is the shortest register. A comment is a note from the user to their future self, who knows the codebase: it states a constraint, a why, or a warning in 1-2 plain technical lines, "we" voice allowed ("we measured that declaring a supported language does not alter the model output"), no trailing period (14 of 411 comments in pangu.js end with one) — no casual evaluators, no signature moves, and when the code can say it, no comment at all. Name the concrete thing: a field, an identifier, a type, never the abstract relationship between them. Cut a fact only after confirming it lives elsewhere (a doc, the caller's comment, a rules file). Match the surrounding file's comment density. The one corpus habit carries over: shell blocks keep a comment per command, jokes allowed there (section 6).
+The specifics below derive from the user's standing comment rule, compress stance, and one harvested comment session in the local corpus — recalibrate as examples accrue. It is the shortest register. A comment is a note from the user to their future self, who knows the codebase: it states a constraint, a why, or a warning in 1-2 plain technical lines, "we" voice allowed ("we measured that declaring a supported language does not alter the model output"), no trailing period (14 of 411 comments in pangu.js end with one) — no casual evaluators, no signature moves, and when the code can say it, no comment at all. Name the concrete thing: a field, an identifier, a type, never the abstract relationship between them. Cut a fact only after confirming it lives elsewhere (a doc, the caller's comment, a rules file). Match the surrounding file's comment density. The one corpus habit carries over: shell blocks keep a comment per command, jokes allowed there (section 6).
