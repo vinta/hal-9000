@@ -210,12 +210,6 @@
         "mods"
       ],
       "userConfig": {
-        "refreshEveryNTurns": {
-          "type": "number",
-          "title": "Refresh every N turns",
-          "description": "Regenerate the session title every N turns. 0 keeps the first title.",
-          "default": 5
-        },
         "model": {
           "type": "string",
           "title": "Model",
@@ -225,6 +219,12 @@
             "ollama/gemma4:31b-mlx"
           ],
           "default": "claude/haiku"
+        },
+        "refreshEveryNTurns": {
+          "type": "number",
+          "title": "Refresh every N turns",
+          "description": "Regenerate the session title every N turns. 0 keeps the first title.",
+          "default": 5
         }
       }
     },
