@@ -15,7 +15,3 @@ __pycache__/
 *.py[cod]
 .ruff_cache/
 .ty/
-
-# Node.js
-videos/**/node_modules/
-videos/**/out/
