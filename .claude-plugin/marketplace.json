@@ -164,7 +164,15 @@
         "hooks",
         "mods",
         "ollama"
-      ]
+      ],
+      "userConfig": {
+        "model": {
+          "type": "string",
+          "title": "Model",
+          "description": "claude/<alias or id> runs on your Claude account; ollama/<model> runs on a local Ollama at localhost:11434.",
+          "default": "ollama/gemma4:31b-mlx"
+        }
+      }
     },
     {
       "name": "hal-session-auto-rename",

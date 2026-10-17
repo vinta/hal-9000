@@ -7,7 +7,6 @@ const check = atom({ plugin: 'hal-grammar-check', key: 'check' } as const, null)
 
 const DEBOUNCE_MS = 250
 const OLLAMA_URL = 'http://localhost:11434/api/generate'
-const OLLAMA_MODEL = 'gemma4:31b-mlx'
 
 // Copied from plugins/hal-statusline/hal-statusline.py GRAMMAR_PROMPT, plus the draft line
 const GRAMMAR_PROMPT = `
@@ -75,11 +74,16 @@ function toLines(text: string) {
   return text.split('\n').map(line => line.trim()).filter(Boolean)
 }
 
-async function runOllama($: EngineInterface, draft: string, mine: number): Promise<string[]> {
+async function runClaude($: EngineInterface, prompt: string): Promise<string[]> {
+  const result = await $.model.complete({ model, prompt, maxTokens: 250, timeoutMs: 30_000 })
+  return result.isAnswered ? toLines(result.text) : []
+}
+
+async function runOllama($: EngineInterface, prompt: string, mine: number): Promise<string[]> {
   // `think: false` disables reasoning tokens; `temperature: 0` and `num_predict` keep the output short
   const body = JSON.stringify({
-    model: OLLAMA_MODEL,
-    prompt: GRAMMAR_PROMPT.replace('{latest_user_input}', draft.slice(0, 500)),
+    model,
+    prompt,
     stream: true,
     think: false,
     keep_alive: '30m',
@@ -127,6 +131,9 @@ async function runOllama($: EngineInterface, draft: string, mine: number): Promi
   return toLines(answer)
 }
 
+// Set by register from the `model` option
+let backend = ''
+let model = ''
 let timer: Timer | undefined
 // Bumped on every edit, so a slow answer for an older draft never overwrites a newer one
 let seq = 0
@@ -147,11 +154,12 @@ async function clear($: EngineInterface) {
 
 async function grammarCheck($: EngineInterface, draft: string, mine: number) {
   await update($, check, (prev): GrammarCheck => ({ status: 'checking', lines: prev?.lines ?? [] }))
+  const prompt = GRAMMAR_PROMPT.replace('{latest_user_input}', draft.slice(0, 500))
   let lines: string[]
   try {
-    lines = await runOllama($, draft, mine)
+    lines = await (backend === 'claude' ? runClaude($, prompt) : runOllama($, prompt, mine))
   } catch (error) {
-    lines = [`ollama unreachable (${error instanceof Error ? error.message : String(error)})`]
+    lines = [`${backend} unreachable (${error instanceof Error ? error.message : String(error)})`]
   }
   if (mine === seq) {
     const result: GrammarCheck = { status: 'done', lines }
@@ -202,7 +210,15 @@ async function dimResult($: EngineInterface) {
   )
 }
 
-export const register: Register = on => {
+export const register: Register = (on, options) => {
+  const value = String(options.model)
+  const slash = value.indexOf('/')
+  backend = value.slice(0, slash)
+  model = value.slice(slash + 1)
+  if (slash === -1 || model === '' || (backend !== 'claude' && backend !== 'ollama')) {
+    throw new Error(`model "${value}" must be claude/<alias or id> or ollama/<model>`)
+  }
+
   on('prompt.edit', async ($, e, next) => {
     const r = await next(e)
     if (r.text === e.text) {
