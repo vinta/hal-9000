@@ -156,18 +156,18 @@ describe('renaming', () => {
 })
 
 describe('the model option', () => {
-  test('claude/<alias> asks that model on the Claude account', { options: { model: 'claude/sonnet' } }, async ($, on) => {
+  test('claude/haiku asks haiku on the Claude account', { options: { model: 'claude/haiku' } }, async ($, on) => {
     const world = worldOf(on)
     const clock = mock.clock(on)
 
     await $.turn.complete(TURN)
     await clock.settle()
 
-    expect(world.models).toEqual(['sonnet'])
+    expect(world.models).toEqual(['haiku'])
     expect(world.renames).toEqual(['debug-oauth-token-refresh'])
   })
 
-  test('ollama/<model> asks that model on the local Ollama', { options: { model: 'ollama/foo' } }, async ($, on) => {
+  test('ollama/gemma4:31b-mlx asks gemma4:31b-mlx on the local Ollama', { options: { model: 'ollama/gemma4:31b-mlx' } }, async ($, on) => {
     const world = worldOf(on)
     const clock = mock.clock(on)
     const requests: { url: string; model: string }[] = []
@@ -179,18 +179,10 @@ describe('the model option', () => {
     await $.turn.complete(TURN)
     await clock.settle()
 
-    expect(requests).toEqual([{ url: 'http://localhost:11434/api/generate', model: 'foo' }])
+    expect(requests).toEqual([{ url: 'http://localhost:11434/api/generate', model: 'gemma4:31b-mlx' }])
     expect(world.models).toEqual([])
     expect(world.renames).toEqual(['plan-birthday-party-menu'])
   })
-
-  for (const model of ['haiku', 'openai/gpt']) {
-    test(`${model} fails the load`, { options: { model } }, async ($, on) => {
-      worldOf(on)
-
-      await expect($.turn.complete(TURN)).rejects.toThrow(`model "${model}" is not claude/<alias or id> or ollama/<model>`)
-    })
-  }
 })
 
 describe('the title prompt', () => {

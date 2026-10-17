@@ -23,9 +23,3 @@ test('claude/haiku checks the draft with $.model.complete', { options: { model: 
 
   expect(models).toEqual(['haiku'])
 })
-
-test('a model without a known backend fails the load', { options: { model: 'gpt-4' } }, async ($, on) => {
-  on('prompt.change', ($, e) => ({ text: e.text }))
-
-  await expect(change($)).rejects.toThrow('model "gpt-4" must be claude/<alias or id> or ollama/<model>')
-})

@@ -169,7 +169,11 @@
         "model": {
           "type": "string",
           "title": "Model",
-          "description": "claude/<alias or id> runs on your Claude account; ollama/<model> runs on a local Ollama at localhost:11434.",
+          "description": "claude/haiku runs on your Claude account; ollama/gemma4:31b-mlx runs on a local Ollama at localhost:11434.",
+          "options": [
+            "claude/haiku",
+            "ollama/gemma4:31b-mlx"
+          ],
           "default": "claude/haiku"
         }
       }
@@ -215,7 +219,11 @@
         "model": {
           "type": "string",
           "title": "Model",
-          "description": "claude/<alias or id> runs on your Claude account; ollama/<model> runs on a local Ollama at localhost:11434.",
+          "description": "claude/haiku runs on your Claude account; ollama/gemma4:31b-mlx runs on a local Ollama at localhost:11434.",
+          "options": [
+            "claude/haiku",
+            "ollama/gemma4:31b-mlx"
+          ],
           "default": "claude/haiku"
         }
       }

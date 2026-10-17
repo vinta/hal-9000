@@ -215,9 +215,6 @@ export const register: Register = (on, options) => {
   const slash = value.indexOf('/')
   backend = value.slice(0, slash)
   model = value.slice(slash + 1)
-  if (slash === -1 || model === '' || (backend !== 'claude' && backend !== 'ollama')) {
-    throw new Error(`model "${value}" must be claude/<alias or id> or ollama/<model>`)
-  }
 
   on('prompt.edit', async ($, e, next) => {
     const r = await next(e)

@@ -188,9 +188,6 @@ export const register: Register = (on, options) => {
   const slash = option.indexOf('/')
   const backend = option.slice(0, slash)
   const model = option.slice(slash + 1)
-  if (slash === -1 || !model || (backend !== 'claude' && backend !== 'ollama')) {
-    throw new Error(`model "${option}" is not claude/<alias or id> or ollama/<model>`)
-  }
 
   on('turn.complete', ($, e, next) => {
     if (e.agentId === undefined && !e.isAborted) {

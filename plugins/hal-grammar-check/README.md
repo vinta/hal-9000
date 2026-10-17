@@ -12,7 +12,7 @@ claude plugin install hal-grammar-check --marketplace vinta/hal-9000
 
 Then restart Claude Code.
 
-To keep everything on your machine, set `model` to `ollama/<model>` instead. That needs a local [Ollama](https://ollama.com/) with the model pulled:
+To keep everything on your machine, pick `ollama/gemma4:31b-mlx` in `/config` instead. That needs a local [Ollama](https://ollama.com/) with the model pulled:
 
 ```bash
 ollama pull gemma4:31b-mlx
@@ -26,13 +26,13 @@ Just type. About 250ms after you stop, the draft goes to the model and the resul
 
 ## Options
 
-- `model`: which model checks your draft, default `claude/haiku`.
-  - `claude/<alias or id>` runs on your Claude account. It bills one call every time you pause typing.
-  - `ollama/<model>` (e.g. `ollama/gemma4:31b-mlx`) runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
+- `model`: which of the two models below checks your draft, default `claude/haiku`.
+  - `claude/haiku` runs on your Claude account. It bills one call every time you pause typing.
+  - `ollama/gemma4:31b-mlx` runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
 
 ## Privacy
 
-It sends the first 500 characters of your draft to the model. With `claude/…`, it goes to Anthropic through your Claude account, like any other prompt. With `ollama/…`, that's your local Ollama at `localhost:11434`: fully offline, nothing leaves your machine.
+It sends the first 500 characters of your draft to the model. With `claude/haiku`, it goes to Anthropic through your Claude account, like any other prompt. With `ollama/gemma4:31b-mlx`, that's your local Ollama at `localhost:11434`: fully offline, nothing leaves your machine.
 
 ## Screenshots
 

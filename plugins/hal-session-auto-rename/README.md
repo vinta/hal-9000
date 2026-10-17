@@ -27,10 +27,12 @@ Each `/rename` makes Claude Code tell the model that the user named the session.
 Set them in `/config`:
 
 - `refreshEveryNTurns`: how often to regenerate the title, `5` by default. `0` keeps the first title.
-- `model`: which model writes the title, `claude/haiku` by default. `claude/<alias or id>` runs on your Claude account; `ollama/<model>` runs on your local [Ollama](https://ollama.com/).
+- `model`: which of the two models below writes the title, `claude/haiku` by default.
+  - `claude/haiku` runs on your Claude account. It bills one call for every title.
+  - `ollama/gemma4:31b-mlx` runs on your local [Ollama](https://ollama.com/) at `localhost:11434`. It's the free, offline choice.
 
 ## Privacy
 
-It sends the current title and the first 1500 and last 2000 characters of your conversation to the model you pick. With `claude/…`, it goes to that model through the session's own API client, on your Claude account. With `ollama/…`, it goes to `localhost:11434` instead, and nothing leaves your machine.
+It sends the current title and the first 1500 and last 2000 characters of your conversation to the model you pick. With `claude/haiku`, it goes to haiku through the session's own API client, on your Claude account. With `ollama/gemma4:31b-mlx`, it goes to `localhost:11434` instead, and nothing leaves your machine.
 
 The plugin's store holds only one flag per session you named yourself.
