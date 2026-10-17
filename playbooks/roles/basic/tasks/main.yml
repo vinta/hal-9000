@@ -22,7 +22,6 @@
 - name: Install utility packages
   homebrew:
     name:
-      - ast-grep
       - betterleaks
       - fd
       - fzf
