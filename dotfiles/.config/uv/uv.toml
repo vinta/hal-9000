@@ -3,7 +3,7 @@
 
 exclude-newer = "3 days"
 no-build = true
-preview-features = ["audit-command", "malware-check"]
+preview-features = ["audit-command", "malware-check", "python-install-default"]
 
 [audit]
 malware-check = true
