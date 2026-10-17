@@ -185,7 +185,8 @@
         "auto-rename",
         "title",
         "ai-title",
-        "hooks"
+        "hooks",
+        "mods"
       ],
       "tags": [
         "session",
@@ -193,8 +194,23 @@
         "auto-rename",
         "title",
         "ai-title",
-        "hooks"
-      ]
+        "hooks",
+        "mods"
+      ],
+      "userConfig": {
+        "refreshEveryNTurns": {
+          "type": "number",
+          "title": "Refresh every N turns",
+          "description": "Regenerate the session title every N turns. 0 keeps the first title.",
+          "default": 5
+        },
+        "useOllama": {
+          "type": "boolean",
+          "title": "Use Ollama",
+          "description": "Generate the session title with gemma4:31b-mlx on your local Ollama instead of haiku.",
+          "default": false
+        }
+      }
     },
     {
       "name": "hal-voice",
