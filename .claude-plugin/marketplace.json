@@ -33,7 +33,7 @@
         "email": "vinta.chen@gmail.com"
       },
       "repository": "https://github.com/vinta/hal-9000",
-      "homepage": "https://vinta.ws/",
+      "homepage": "https://vinta.ws/code/",
       "license": "MIT",
       "category": "productivity",
       "keywords": [
@@ -113,7 +113,7 @@
         "email": "vinta.chen@gmail.com"
       },
       "repository": "https://github.com/vinta/hal-9000",
-      "homepage": "https://vinta.ws/",
+      "homepage": "https://vinta.ws/code/",
       "license": "MIT",
       "category": "productivity",
       "keywords": [
@@ -143,7 +143,7 @@
         "email": "vinta.chen@gmail.com"
       },
       "repository": "https://github.com/vinta/hal-9000",
-      "homepage": "https://vinta.ws/",
+      "homepage": "https://vinta.ws/code/",
       "license": "MIT",
       "types": "./types/index.d.ts",
       "category": "productivity",
@@ -188,7 +188,7 @@
         "email": "vinta.chen@gmail.com"
       },
       "repository": "https://github.com/vinta/hal-9000",
-      "homepage": "https://vinta.ws/",
+      "homepage": "https://vinta.ws/code/",
       "license": "MIT",
       "category": "productivity",
       "keywords": [
@@ -238,7 +238,7 @@
         "email": "vinta.chen@gmail.com"
       },
       "repository": "https://github.com/vinta/hal-9000",
-      "homepage": "https://vinta.ws/",
+      "homepage": "https://vinta.ws/code/",
       "license": "MIT",
       "category": "entertainment",
       "keywords": [
