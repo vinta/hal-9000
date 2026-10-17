@@ -4,19 +4,11 @@ A grammar check on your prompt while you type, with explanations in Traditional 
 
 ## Installation
 
-It's a [mod](https://code.claude.com/docs/en/plugins/mods/overview), so it needs Claude Code 2.1.287 or later. The default `claude/haiku` model runs on your Claude account, no setup needed.
-
 ```bash
 claude plugin install hal-grammar-check --marketplace vinta/hal-9000
 ```
 
 Then restart Claude Code.
-
-To keep everything on your machine, pick `ollama/gemma4:31b-mlx` in `/config` instead. That needs a local [Ollama](https://ollama.com/) with the model pulled:
-
-```bash
-ollama pull gemma4:31b-mlx
-```
 
 ## Usage
 
@@ -26,9 +18,17 @@ Just type. About 250ms after you stop, the draft goes to the model and the resul
 
 ## Options
 
+Set them in `/config`:
+
 - `model`: which of the two models below checks your draft, default `claude/haiku`.
   - `claude/haiku` runs on your Claude account. It bills one call every time you pause typing.
   - `ollama/gemma4:31b-mlx` runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
+
+Pick `ollama/gemma4:31b-mlx` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
+
+```bash
+ollama pull gemma4:31b-mlx
+```
 
 ## Privacy
 

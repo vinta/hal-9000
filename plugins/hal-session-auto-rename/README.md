@@ -6,8 +6,6 @@ After your first turn (your prompt plus everything Claude does until it stops), 
 
 ## Installation
 
-It's a [mod](https://code.claude.com/docs/en/plugins/mods/overview), so it needs Claude Code 2.1.302 or later.
-
 ```bash
 claude plugin install hal-session-auto-rename --marketplace vinta/hal-9000
 ```
@@ -16,20 +14,24 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual. By default N is 5. A title that comes out the same as the current one is skipped.
+Just use Claude Code as usual. By default N is 5. A title that comes out the same as the current one is skipped. Each `/rename` makes Claude Code tell the model that the user named the session. That's not true for this plugin's renames, so the plugin rewrites that system reminder to say the title was auto-generated.
 
-Name the session yourself, with `/rename` or `--name`, and the plugin never touches it again.
-
-Each `/rename` makes Claude Code tell the model that the user named the session. That's not true for this plugin's renames, so the plugin rewrites that system reminder to say the title was auto-generated.
+If you name the session yourself, with `/rename` or `--name`, the plugin never touches it again.
 
 ## Options
 
 Set them in `/config`:
 
-- `refreshEveryNTurns`: how often to regenerate the title, `5` by default. `0` keeps the first title.
 - `model`: which of the two models below writes the title, `claude/haiku` by default.
   - `claude/haiku` runs on your Claude account. It bills one call for every title.
   - `ollama/gemma4:31b-mlx` runs on your local [Ollama](https://ollama.com/) at `localhost:11434`. It's the free, offline choice.
+- `refreshEveryNTurns`: how often to regenerate the title, `5` by default. `0` keeps the first title.
+
+Pick `ollama/gemma4:31b-mlx` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
+
+```bash
+ollama pull gemma4:31b-mlx
+```
 
 ## Privacy
 
