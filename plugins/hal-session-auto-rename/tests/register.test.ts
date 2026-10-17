@@ -10,7 +10,7 @@ const TURN = { answer: 'Fixed the refresh race.', durationMs: 1, isAborted: fals
 
 // Stands in for everything beneath the plugin: the session, the model and the commands it runs
 function worldOf(on: On, initialTitle = 'Debug OAuth token refresh', stored: Record<string, unknown> = {}) {
-  const world = { sessionId: 's1', title: initialTitle, renames: [] as string[], prompts: [] as string[], stored, conversation: 'the oauth refresh races' }
+  const world = { sessionId: 's1', title: initialTitle, renames: [] as string[], prompts: [] as string[], models: [] as string[], stored, conversation: 'the oauth refresh races' }
   on('store.get', ($, e) => ({ value: world.stored[e.key] }))
   on('store.set', ($, e) => {
     world.stored[e.key] = e.value
@@ -20,6 +20,7 @@ function worldOf(on: On, initialTitle = 'Debug OAuth token refresh', stored: Rec
   on('session.messages', () => ({ value: [{ role: 'user', text: world.conversation, toolUses: [] }] }))
   on('model.complete', ($, e) => {
     world.prompts.push(e.prompt)
+    world.models.push(e.model ?? '')
     return { value: { isAnswered: true, text: world.title, usage: USAGE } }
   })
   on('command.run', ($, e: CommandRunInput) => {
@@ -152,6 +153,44 @@ describe('renaming', () => {
 
     expect(world.renames).toEqual(['plan-birthday-party-menu'])
   })
+})
+
+describe('the model option', () => {
+  test('claude/<alias> asks that model on the Claude account', { options: { model: 'claude/sonnet' } }, async ($, on) => {
+    const world = worldOf(on)
+    const clock = mock.clock(on)
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.models).toEqual(['sonnet'])
+    expect(world.renames).toEqual(['debug-oauth-token-refresh'])
+  })
+
+  test('ollama/<model> asks that model on the local Ollama', { options: { model: 'ollama/foo' } }, async ($, on) => {
+    const world = worldOf(on)
+    const clock = mock.clock(on)
+    const requests: { url: string; model: string }[] = []
+    on('http.fetch', ($, e) => {
+      requests.push({ url: e.url, model: JSON.parse(String(e.init?.body)).model })
+      return { value: { status: 200, ok: true, headers: {}, text: JSON.stringify({ response: 'Plan birthday party menu' }) } }
+    })
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(requests).toEqual([{ url: 'http://localhost:11434/api/generate', model: 'foo' }])
+    expect(world.models).toEqual([])
+    expect(world.renames).toEqual(['plan-birthday-party-menu'])
+  })
+
+  for (const model of ['haiku', 'openai/gpt']) {
+    test(`${model} fails the load`, { options: { model } }, async ($, on) => {
+      worldOf(on)
+
+      await expect($.turn.complete(TURN)).rejects.toThrow(`model "${model}" is not claude/<alias or id> or ollama/<model>`)
+    })
+  }
 })
 
 describe('the title prompt', () => {

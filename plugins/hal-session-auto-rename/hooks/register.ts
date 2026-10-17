@@ -11,7 +11,6 @@ const TITLE_MAX_WORDS = 12
 const TITLE_MAX_CHARS = 100
 
 const OLLAMA_URL = 'http://localhost:11434/api/generate'
-const OLLAMA_MODEL = 'gemma4:31b-mlx'
 
 interface OllamaGenerateResponse {
   response: string
@@ -111,18 +110,18 @@ async function sessionTextParts($: EngineInterface, answer: string) {
   return { start: fullText.slice(0, TITLE_START_CHARS).trim(), recent: fullText.slice(-TITLE_WINDOW_CHARS).trim() }
 }
 
-async function askHaiku($: EngineInterface, prompt: string) {
-  const result = await $.model.complete({ model: 'haiku', prompt, maxTokens: 30, timeoutMs: 30_000 })
+async function askClaude($: EngineInterface, model: string, prompt: string) {
+  const result = await $.model.complete({ model, prompt, maxTokens: 30, timeoutMs: 30_000 })
   return result.isAnswered ? result.text : ''
 }
 
-async function askOllama($: EngineInterface, prompt: string) {
+async function askOllama($: EngineInterface, model: string, prompt: string) {
   // `think: false` disables reasoning tokens; `temperature: 0` and a small `num_predict` keep the title short and deterministic
   const response = await $.http.fetch(OLLAMA_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: OLLAMA_MODEL,
+      model,
       prompt,
       stream: false,
       think: false,
@@ -150,7 +149,7 @@ async function isUserOwned($: EngineInterface, sessionId: string) {
   return (await $.store.get(sessionId)) === true
 }
 
-async function generateTitle($: EngineInterface, answer: string, useOllama: boolean) {
+async function generateTitle($: EngineInterface, answer: string, backend: string, model: string) {
   if (isGenerating) {
     return
   }
@@ -165,7 +164,7 @@ async function generateTitle($: EngineInterface, answer: string, useOllama: bool
       return
     }
     const prompt = titlePrompt(latestSeenTitle ?? lastSetTitle, start, recent)
-    const slug = slugify(sanitize(await (useOllama ? askOllama($, prompt) : askHaiku($, prompt))))
+    const slug = slugify(sanitize(await (backend === 'ollama' ? askOllama($, model, prompt) : askClaude($, model, prompt))))
     if (!slug) {
       // No usable title this time, so the next turn tries again instead of waiting a full cycle
       turnsSinceTitle = undefined
@@ -185,7 +184,13 @@ async function generateTitle($: EngineInterface, answer: string, useOllama: bool
 
 export const register: Register = (on, options) => {
   const refreshEveryNTurns = Number(options.refreshEveryNTurns)
-  const useOllama = options.useOllama === true
+  const option = String(options.model)
+  const slash = option.indexOf('/')
+  const backend = option.slice(0, slash)
+  const model = option.slice(slash + 1)
+  if (slash === -1 || !model || (backend !== 'claude' && backend !== 'ollama')) {
+    throw new Error(`model "${option}" is not claude/<alias or id> or ollama/<model>`)
+  }
 
   on('turn.complete', ($, e, next) => {
     if (e.agentId === undefined && !e.isAborted) {
@@ -193,7 +198,7 @@ export const register: Register = (on, options) => {
       turnsSinceTitle = isDue ? 0 : (turnsSinceTitle ?? 0) + 1
       if (isDue) {
         // `/rename` waits for an idle session, so it runs from a timer rather than inside the turn this hook is holding
-        $.clock.after(0, () => void generateTitle($, e.answer, useOllama))
+        $.clock.after(0, () => void generateTitle($, e.answer, backend, model))
       }
     }
     return next(e)

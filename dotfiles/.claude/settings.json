@@ -183,7 +183,7 @@
   "pluginConfigs": {
     "hal-session-auto-rename@hal-9000": {
       "options": {
-        "useOllama": true
+        "model": "ollama/gemma4:31b-mlx"
       }
     }
   },

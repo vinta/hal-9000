@@ -204,11 +204,11 @@
           "description": "Regenerate the session title every N turns. 0 keeps the first title.",
           "default": 5
         },
-        "useOllama": {
-          "type": "boolean",
-          "title": "Use Ollama",
-          "description": "Generate the session title with gemma4:31b-mlx on your local Ollama instead of haiku.",
-          "default": false
+        "model": {
+          "type": "string",
+          "title": "Model",
+          "description": "claude/<alias or id> runs on your Claude account; ollama/<model> runs on a local Ollama at localhost:11434.",
+          "default": "claude/haiku"
         }
       }
     },
