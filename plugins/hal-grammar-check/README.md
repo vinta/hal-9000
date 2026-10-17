@@ -4,19 +4,19 @@ A grammar check on your prompt while you type, with explanations in Traditional 
 
 ## Installation
 
-With the default `ollama/gemma4:31b-mlx` model, **this plugin needs a local [Ollama](https://ollama.com/)** with that model pulled:
-
-```bash
-ollama pull gemma4:31b-mlx
-```
-
-It's a [mod](https://code.claude.com/docs/en/plugins/mods/overview), so it also needs Claude Code 2.1.287 or later.
+It's a [mod](https://code.claude.com/docs/en/plugins/mods/overview), so it needs Claude Code 2.1.287 or later. The default `claude/haiku` model runs on your Claude account, no setup needed.
 
 ```bash
 claude plugin install hal-grammar-check --marketplace vinta/hal-9000
 ```
 
 Then restart Claude Code.
+
+To keep everything on your machine, set `model` to `ollama/<model>` instead. That needs a local [Ollama](https://ollama.com/) with the model pulled:
+
+```bash
+ollama pull gemma4:31b-mlx
+```
 
 ## Usage
 
@@ -26,13 +26,13 @@ Just type. About 250ms after you stop, the draft goes to the model and the resul
 
 ## Options
 
-- `model`: which model checks your draft, default `ollama/gemma4:31b-mlx`.
-  - `ollama/<model>` runs on your local Ollama at `localhost:11434`.
-  - `claude/<alias or id>` (e.g. `claude/haiku`) runs on your Claude account. It bills one call every time you pause typing, so it's the costlier choice.
+- `model`: which model checks your draft, default `claude/haiku`.
+  - `claude/<alias or id>` runs on your Claude account. It bills one call every time you pause typing.
+  - `ollama/<model>` (e.g. `ollama/gemma4:31b-mlx`) runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
 
 ## Privacy
 
-It sends the first 500 characters of your draft to the model. With `ollama/…`, that's your local Ollama at `localhost:11434`: fully offline, nothing leaves your machine. With `claude/…`, it goes to Anthropic through your Claude account, like any other prompt.
+It sends the first 500 characters of your draft to the model. With `claude/…`, it goes to Anthropic through your Claude account, like any other prompt. With `ollama/…`, that's your local Ollama at `localhost:11434`: fully offline, nothing leaves your machine.
 
 ## Screenshots
 
