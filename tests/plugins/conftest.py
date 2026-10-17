@@ -23,6 +23,7 @@ def hal_voice():
 
 @pytest.fixture
 def hal_statusline(monkeypatch):
-    # The developer shell may export this, and inheriting it would silence every grammar check test
+    # The developer shell may export these, and inheriting them would silence or redirect every grammar check test
     monkeypatch.delenv("HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED", raising=False)
+    monkeypatch.delenv("HAL_STATUSLINE_GRAMMAR_CHECK_MODEL", raising=False)
     return load_module("hal_statusline", PLUGINS_DIR / "hal-statusline" / "hal-statusline.py")

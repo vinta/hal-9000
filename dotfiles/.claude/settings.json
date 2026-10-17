@@ -11,7 +11,7 @@
     "DISABLE_FEEDBACK_COMMAND": "1",
     "DISABLE_UPGRADE_COMMAND": "1",
     "HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED": "1",
-    "HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA": "1"
+    "HAL_STATUSLINE_GRAMMAR_CHECK_MODEL": "ollama/gemma4:31b-mlx"
   },
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",

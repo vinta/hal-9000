@@ -356,12 +356,12 @@ def write_cache(cache_file: str, payload: GrammarCache) -> None:
         Path(tmp_path).unlink(missing_ok=True)
 
 
-def run_ollama_grammar_model(prompt: str) -> str | None:
+def run_ollama_grammar_model(prompt: str, model: str) -> str | None:
     # `think: false` disables reasoning tokens
     # `temperature: 0` and a `num_predict` cap keep output short and deterministic and prevent runaway generation from stalling the statusline
     body = json.dumps(
         {
-            "model": "gemma4:31b-mlx",
+            "model": model,
             "prompt": prompt,
             "stream": False,
             "think": False,
@@ -378,13 +378,12 @@ def run_ollama_grammar_model(prompt: str) -> str | None:
         return None
 
 
-def run_claude_grammar_model(prompt: str) -> str | None:
+def run_claude_grammar_model(prompt: str, model: str) -> str | None:
     # `--setting-sources ""` to disable hooks
     # `--safe-mode` to skip CLAUDE.md/skills/plugins/MCP/auto-memory loading
     # `--no-session-persistence` and `cwd="/tmp"` to avoid polluting your current context
     cmd = """
         claude
-        --model haiku
         --max-turns 1
         --setting-sources ""
         --tools ""
@@ -396,7 +395,7 @@ def run_claude_grammar_model(prompt: str) -> str | None:
     """
     try:
         result = subprocess.run(  # noqa: S603 PLW1510 subprocess-without-shell-equals-true subprocess-run-without-check
-            [*shlex.split(cmd), prompt],
+            [*shlex.split(cmd), "--model", model, prompt],
             capture_output=True,
             text=True,
             timeout=30,
@@ -407,11 +406,17 @@ def run_claude_grammar_model(prompt: str) -> str | None:
     return result.stdout
 
 
+def read_grammar_model() -> tuple[str, str, str]:
+    value = os.environ.get("HAL_STATUSLINE_GRAMMAR_CHECK_MODEL", "claude/haiku")
+    backend, _, model = value.partition("/")
+    return value, backend, model
+
+
 def run_grammar_model(prompt: str) -> GrammarRun | None:
-    use_ollama = os.environ.get("HAL_STATUSLINE_GRAMMAR_CHECK_USE_OLLAMA") == "1"
+    _, backend, model = read_grammar_model()
 
     start_time = time.time()
-    result_text = run_ollama_grammar_model(prompt) if use_ollama else run_claude_grammar_model(prompt)
+    result_text = run_ollama_grammar_model(prompt, model) if backend == "ollama" else run_claude_grammar_model(prompt, model)
     if result_text is None:
         return None
     elapsed = time.time() - start_time
@@ -419,7 +424,7 @@ def run_grammar_model(prompt: str) -> GrammarRun | None:
     return {
         "result": "\n".join(line for line in result_text.strip().splitlines() if line.strip()),
         "elapsed": elapsed,
-        "backend": "ollama" if use_ollama else "claude",
+        "backend": backend,
     }
 
 
@@ -480,6 +485,11 @@ def run_grammar_worker(cache_file: str) -> None:
 
 def grammar_check(data: StatusLineData) -> None:
     if os.environ.get("HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED") == "1":
+        return
+
+    value, backend, model = read_grammar_model()
+    if backend not in ("claude", "ollama") or not model:
+        print_grammar_status(f'bad HAL_STATUSLINE_GRAMMAR_CHECK_MODEL "{value}"')
         return
 
     transcript_path: str | None = data.get("transcript_path")

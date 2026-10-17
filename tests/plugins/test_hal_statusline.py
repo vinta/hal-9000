@@ -1,4 +1,5 @@
 # ruff: noqa: RUF001 ambiguous-unicode-character-string
+import io
 import json
 import re
 
@@ -121,6 +122,57 @@ class TestGrammarCheckPlaceholders:
         hal_statusline.grammar_check(make_data(transcript))
 
         assert "Grammar: no issues" in strip_ansi(capsys.readouterr().out)
+
+
+class TestGrammarModel:
+    def test_claude_model_passed_to_cli(self, hal_statusline, monkeypatch):
+        monkeypatch.setenv("HAL_STATUSLINE_GRAMMAR_CHECK_MODEL", "claude/sonnet")
+        calls = []
+
+        def fake_run(argv, **_kwargs):
+            calls.append(argv)
+            return hal_statusline.subprocess.CompletedProcess(argv, 0, stdout="Grammar: no issues")
+
+        monkeypatch.setattr(hal_statusline.subprocess, "run", fake_run)
+
+        run = hal_statusline.run_grammar_model("prompt")
+
+        argv = calls[0]
+        assert argv[argv.index("--model") + 1] == "sonnet"
+        assert run is not None
+        assert run["backend"] == "claude"
+
+    def test_ollama_model_sent_in_request(self, hal_statusline, monkeypatch):
+        monkeypatch.setenv("HAL_STATUSLINE_GRAMMAR_CHECK_MODEL", "ollama/foo")
+        requests = []
+
+        def fake_urlopen(req, **_kwargs):
+            requests.append(req)
+            return io.BytesIO(json.dumps({"response": "Grammar: no issues"}).encode())
+
+        monkeypatch.setattr(hal_statusline.urllib.request, "urlopen", fake_urlopen)
+
+        run = hal_statusline.run_grammar_model("prompt")
+
+        assert json.loads(requests[0].data)["model"] == "foo"
+        assert run is not None
+        assert run["backend"] == "ollama"
+
+    @pytest.mark.parametrize("value", ["haiku", "claude/", "openai/gpt"])
+    def test_bad_value_shows_error_without_model_call(self, hal_statusline, capsys, tmp_path, monkeypatch, value):
+        monkeypatch.setenv("HAL_STATUSLINE_GRAMMAR_CHECK_MODEL", value)
+
+        def fail(*_args, **_kwargs):
+            pytest.fail("model call attempted")
+
+        monkeypatch.setattr(hal_statusline.subprocess, "Popen", fail)
+        monkeypatch.setattr(hal_statusline.subprocess, "run", fail)
+        monkeypatch.setattr(hal_statusline.urllib.request, "urlopen", fail)
+        transcript = write_transcript(tmp_path, [user_entry("fix the bug plase")])
+
+        hal_statusline.grammar_check(make_data(transcript))
+
+        assert f'Grammar: bad HAL_STATUSLINE_GRAMMAR_CHECK_MODEL "{value}"' in capsys.readouterr().out
 
 
 class TestColorizeGrammar:
