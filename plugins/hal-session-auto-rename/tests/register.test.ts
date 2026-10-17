@@ -131,6 +131,27 @@ describe('renaming', () => {
 
     expect(world.renames).toEqual(['debug-oauth-token-refresh', 'debug-oauth-token-refresh'])
   })
+
+  test("the store remembers the plugin's own title for the session", async ($, on) => {
+    const world = worldOf(on)
+    const clock = mock.clock(on)
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.stored).toEqual({ s1: 'debug-oauth-token-refresh' })
+  })
+
+  test("a resumed session still titled with the plugin's own title keeps being renamed", { options: { refreshEveryNTurns: 1 } }, async ($, on) => {
+    const world = worldOf(on, 'Plan birthday party menu', { s1: 'debug-oauth-token-refresh' })
+    const clock = mock.clock(on)
+
+    await $.classic.SessionStart({ source: 'resume', session_title: 'debug-oauth-token-refresh', session_id: 's1' })
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.renames).toEqual(['plan-birthday-party-menu'])
+  })
 })
 
 describe('user-named sessions', () => {
@@ -170,6 +191,18 @@ describe('user-named sessions', () => {
     await clock.settle()
 
     expect(world.renames).toEqual([])
+  })
+
+  test('a resumed session the user named where the plugin was not loaded is never renamed', async ($, on) => {
+    const world = worldOf(on, undefined, { s1: 'debug-oauth-token-refresh' })
+    const clock = mock.clock(on)
+
+    await $.classic.SessionStart({ source: 'resume', session_title: 'my-name', session_id: 's1' })
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.renames).toEqual([])
+    expect(world.stored).toEqual({ s1: true })
   })
 })
 

@@ -164,6 +164,7 @@ async function generateTitle($: EngineInterface, answer: string, useOllama: bool
     }
     lastSetTitle = slug
     await $.command.run({ command: 'rename', args: slug })
+    await $.store.set(sessionId, slug)
   } finally {
     isGenerating = false
   }
@@ -200,9 +201,15 @@ export const register: Register = (on, options) => {
   })
 
   on('classic.SessionStart', async ($, e, next) => {
-    // A title at startup came from `--name`
+    // A title at startup came from `--name`; a resumed title other than this plugin's last one was set by the user where this plugin wasn't loaded
     if (e.source === 'startup' && e.session_title) {
       await $.store.set(e.session_id, true)
+    }
+    if (e.source === 'resume' && e.session_title) {
+      const stored = await $.store.get(e.session_id)
+      if (stored !== true && stored !== e.session_title) {
+        await $.store.set(e.session_id, true)
+      }
     }
     return next(e)
   })
