@@ -8,8 +8,7 @@ Output styles for Claude Code. Both keep Claude Code's built-in coding instructi
 ## Installation
 
 ```bash
-claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-output-styles@hal-9000
+claude plugin install hal-output-styles --marketplace vinta/hal-9000
 ```
 
 ## Usage

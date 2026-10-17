@@ -52,8 +52,7 @@ Agentic skills sharpened by daily use:
 
 ```bash
 # Claude Code
-claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-skills@hal-9000
+claude plugin install hal-skills --marketplace vinta/hal-9000
 
 # Codex
 codex plugin marketplace add vinta/hal-9000
@@ -82,11 +81,10 @@ Plugins that wire their own hooks and run themselves:
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
-claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-output-styles@hal-9000
-claude plugin install hal-grammar-check@hal-9000
-claude plugin install hal-session-auto-rename@hal-9000
-claude plugin install hal-voice@hal-9000
+claude plugin install hal-output-styles --marketplace vinta/hal-9000
+claude plugin install hal-grammar-check --marketplace vinta/hal-9000
+claude plugin install hal-session-auto-rename --marketplace vinta/hal-9000
+claude plugin install hal-voice --marketplace vinta/hal-9000
 ```
 
 ### Claude Code Statusline

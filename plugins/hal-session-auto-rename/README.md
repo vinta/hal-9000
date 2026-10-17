@@ -7,8 +7,7 @@ Claude Code already titles each session once, from its first real prompt, and st
 ## Installation
 
 ```bash
-claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-session-auto-rename@hal-9000
+claude plugin install hal-session-auto-rename --marketplace vinta/hal-9000
 ```
 
 Then restart Claude Code.

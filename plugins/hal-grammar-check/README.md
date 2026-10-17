@@ -13,8 +13,7 @@ ollama pull gemma4:31b-mlx
 It's a [mod](https://code.claude.com/docs/en/plugins/mods/overview), so it also needs Claude Code 2.1.287 or later.
 
 ```bash
-claude plugin marketplace add vinta/hal-9000
-claude plugin install hal-grammar-check@hal-9000
+claude plugin install hal-grammar-check --marketplace vinta/hal-9000
 ```
 
 Then restart Claude Code.
