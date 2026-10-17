@@ -136,7 +136,3 @@ make test                             # Run tests
 make hal-completion                   # Regenerate zsh completion after modifying bin/hal.py
 hal sync                              # Update local completion
 ```
-
-## Demo
-
-<video src="https://github.com/user-attachments/assets/e86ead6d-189b-4361-a98b-4453ac0e8c25" width="800" height="450"></video>
