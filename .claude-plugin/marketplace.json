@@ -164,7 +164,19 @@
         "hooks",
         "mods",
         "ollama"
-      ]
+      ],
+      "userConfig": {
+        "model": {
+          "type": "string",
+          "title": "Model",
+          "description": "claude/haiku runs on your Claude account; ollama/gemma4:31b-mlx runs on a local Ollama at localhost:11434.",
+          "options": [
+            "claude/haiku",
+            "ollama/gemma4:31b-mlx"
+          ],
+          "default": "claude/haiku"
+        }
+      }
     },
     {
       "name": "hal-session-auto-rename",
@@ -185,7 +197,8 @@
         "auto-rename",
         "title",
         "ai-title",
-        "hooks"
+        "hooks",
+        "mods"
       ],
       "tags": [
         "session",
@@ -193,8 +206,27 @@
         "auto-rename",
         "title",
         "ai-title",
-        "hooks"
-      ]
+        "hooks",
+        "mods"
+      ],
+      "userConfig": {
+        "model": {
+          "type": "string",
+          "title": "Model",
+          "description": "claude/haiku runs on your Claude account; ollama/gemma4:31b-mlx runs on a local Ollama at localhost:11434.",
+          "options": [
+            "claude/haiku",
+            "ollama/gemma4:31b-mlx"
+          ],
+          "default": "claude/haiku"
+        },
+        "refreshEveryNTurns": {
+          "type": "number",
+          "title": "Refresh every N turns",
+          "description": "Regenerate the session title every N turns. 0 keeps the first title.",
+          "default": 5
+        }
+      }
     },
     {
       "name": "hal-voice",

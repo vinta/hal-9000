@@ -9,6 +9,7 @@ allowed-tools:
   - Bash(python3 .claude/skills/publish-plugins/scripts/check_manifest_sync.py:*)
   - Bash(python3 .claude/skills/publish-plugins/scripts/check_skill_descriptions_sync.py:*)
   - Bash(claude plugin validate:*)
+  - Bash(claude plugin test:*)
   - Bash(npx -y skills@latest add . -l)
 metadata:
   internal: true
@@ -89,7 +90,16 @@ claude plugin validate ./plugins/hal-voice
 
 The first call validates the marketplace manifest; the rest validate each plugin manifest.
 
-## 7. Check the skills still group for other agents
+## 7. Run the mod tests
+
+```bash
+claude plugin test ./plugins/hal-grammar-check
+claude plugin test ./plugins/hal-session-auto-rename
+```
+
+These two plugins are mods (hooks modules with `tests/*.test.ts`); `make test` and CI run only the Python tests. Fix the failing test or the module, then rerun until every test passes; a command that fails to start is not a pass.
+
+## 8. Check the skills still group for other agents
 
 ```bash
 npx -y skills@latest add . -l

@@ -17,21 +17,13 @@ PLUGINS_DIR = Path(__file__).resolve().parent.parent.parent / "plugins"
 
 
 @pytest.fixture
-def hal_session_auto_rename(tmp_path, monkeypatch):
-    mod = load_module("hal_session_auto_rename", PLUGINS_DIR / "hal-session-auto-rename" / "scripts" / "hal-session-auto-rename.py")
-    monkeypatch.setattr(mod, "STATE_DIR", tmp_path / "state")
-    # The developer shell exports this, and inheriting it would flip every test into refresh mode
-    monkeypatch.delenv("HAL_SESSION_AUTO_RENAME_REFRESH_EVERY_N_PROMPTS", raising=False)
-    return mod
-
-
-@pytest.fixture
 def hal_voice():
     return load_module("hal_voice", PLUGINS_DIR / "hal-voice" / "scripts" / "hal-voice.py")
 
 
 @pytest.fixture
 def hal_statusline(monkeypatch):
-    # The developer shell may export this, and inheriting it would silence every grammar check test
+    # The developer shell may export these, and inheriting them would silence or redirect every grammar check test
     monkeypatch.delenv("HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED", raising=False)
+    monkeypatch.delenv("HAL_STATUSLINE_GRAMMAR_CHECK_MODEL", raising=False)
     return load_module("hal_statusline", PLUGINS_DIR / "hal-statusline" / "hal-statusline.py")
