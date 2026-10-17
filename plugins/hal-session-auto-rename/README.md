@@ -2,7 +2,7 @@
 
 Automatically name each session and rename it as the conversation evolves.
 
-After your first turn, and every N turns after that, the model you pick (haiku by default) writes a short title from the recent conversation. The plugin applies it with `/rename`, so every change shows up as a `/rename` row in the transcript.
+After your first turn (your prompt plus everything Claude does until it stops), and every N turns after that, the model you pick (haiku by default) writes a short title from the recent conversation. The plugin applies it with `/rename`, so every change shows up as a `/rename` row in the transcript.
 
 ## Installation
 
