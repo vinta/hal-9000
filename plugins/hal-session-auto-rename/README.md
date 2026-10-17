@@ -31,6 +31,6 @@ Set them in `/config`:
 
 ## Privacy
 
-It sends the last 2000 characters of your conversation to haiku, through the session's own API client, on your Claude account. With `useOllama`, it goes to `localhost:11434` instead, and nothing leaves your machine.
+It sends the current title and the first 1500 and last 2000 characters of your conversation to haiku, through the session's own API client, on your Claude account. With `useOllama`, it goes to `localhost:11434` instead, and nothing leaves your machine.
 
 The plugin's store holds only one flag per session you named yourself.

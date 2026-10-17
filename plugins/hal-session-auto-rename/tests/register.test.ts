@@ -10,14 +10,14 @@ const TURN = { answer: 'Fixed the refresh race.', durationMs: 1, isAborted: fals
 
 // Stands in for everything beneath the plugin: the session, the model and the commands it runs
 function worldOf(on: On, initialTitle = 'Debug OAuth token refresh', stored: Record<string, unknown> = {}) {
-  const world = { sessionId: 's1', title: initialTitle, renames: [] as string[], prompts: [] as string[], stored }
+  const world = { sessionId: 's1', title: initialTitle, renames: [] as string[], prompts: [] as string[], stored, conversation: 'the oauth refresh races' }
   on('store.get', ($, e) => ({ value: world.stored[e.key] }))
   on('store.set', ($, e) => {
     world.stored[e.key] = e.value
     return { value: undefined }
   })
   on('session.id', () => ({ value: world.sessionId }))
-  on('session.messages', () => ({ value: [{ role: 'user', text: 'the oauth refresh races', toolUses: [] }] }))
+  on('session.messages', () => ({ value: [{ role: 'user', text: world.conversation, toolUses: [] }] }))
   on('model.complete', ($, e) => {
     world.prompts.push(e.prompt)
     return { value: { isAnswered: true, text: world.title, usage: USAGE } }
@@ -151,6 +151,52 @@ describe('renaming', () => {
     await clock.settle()
 
     expect(world.renames).toEqual(['plan-birthday-party-menu'])
+  })
+})
+
+describe('the title prompt', () => {
+  function section(prompt: string | undefined, tag: string) {
+    return prompt?.match(new RegExp(`<${tag}>\\n([\\s\\S]*?)\\n</${tag}>`))?.[1]
+  }
+
+  test('a long session sends how it started and its most recent part', async ($, on) => {
+    const world = worldOf(on)
+    const clock = mock.clock(on)
+    world.conversation = `the oauth refresh races ${'a'.repeat(1500)} middle step ${'b'.repeat(2000)} latest step`
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    const start = section(world.prompts[0], 'session-start')
+    const recent = section(world.prompts[0], 'session-recent')
+    expect(start).toBe(world.conversation.slice(0, 1500))
+    expect(recent).toHaveLength(2000)
+    expect(recent?.endsWith('latest step\nFixed the refresh race.')).toBe(true)
+    expect(world.prompts[0]).not.toContain('middle step')
+  })
+
+  test('a short session sends its text once, as the most recent part', async ($, on) => {
+    const world = worldOf(on)
+    const clock = mock.clock(on)
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(section(world.prompts[0], 'session-recent')).toBe('the oauth refresh races\nFixed the refresh race.')
+    expect(section(world.prompts[0], 'session-start')).toBeUndefined()
+  })
+
+  test('the current title is sent on a refresh but not for the first title', { options: { refreshEveryNTurns: 1 } }, async ($, on) => {
+    const world = worldOf(on)
+    const clock = mock.clock(on)
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(section(world.prompts[0], 'current-title')).toBeUndefined()
+    expect(section(world.prompts[1], 'current-title')).toBe('debug-oauth-token-refresh')
   })
 })
 
