@@ -12,12 +12,6 @@ approvals_reviewer = "auto_review"
 default_permissions = "my-projects"
 web_search = "live"
 
-[analytics]
-enabled = false
-
-[history]
-persistence = "save-all"
-
 [permissions.my-projects]
 extends = ":workspace"
 
@@ -54,10 +48,14 @@ web_search = { context_size = "high" }
 [feedback]
 enabled = false
 
-[otel]
-exporter = "none"
-metrics_exporter = "none"
-trace_exporter = "none"
+[analytics]
+enabled = false
+
+[history]
+persistence = "save-all"
+
+[memories]
+disable_on_external_context = true
 
 [tui]
 notifications = ["approval-requested"]
@@ -71,6 +69,18 @@ status_line = [
     "weekly-limit",
 ]
 screen_reader_detection_done = true
+
+[desktop]
+followUpQueueMode = "steer"
+preventSleepWhileRunning = true
+dictationDictionary = []
+dock-icon-preference = "app-default"
+show-context-window-usage = true
+usePointerCursors = true
+enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
+conversationDetailMode = "STEPS_COMMANDS"
+sansFontSize = 16
+codeFontSize = 14
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
@@ -140,21 +150,6 @@ trust_level = "trusted"
 
 [projects."/Users/vinta/Projects/laughing-man"]
 trust_level = "trusted"
-
-[memories]
-disable_on_external_context = true
-
-[desktop]
-followUpQueueMode = "steer"
-preventSleepWhileRunning = true
-dictationDictionary = []
-dock-icon-preference = "app-default"
-show-context-window-usage = true
-usePointerCursors = true
-enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
-conversationDetailMode = "STEPS_COMMANDS"
-sansFontSize = 16
-codeFontSize = 14
 
 [marketplaces.hal-9000]
 source_type = "git"
