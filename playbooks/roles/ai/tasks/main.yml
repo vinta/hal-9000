@@ -49,6 +49,17 @@
     executable: /bin/bash
   changed_when: false
 
+# $ZSH_CUSTOM/completions is on oh-my-zsh's fpath, so no .zshrc edit is needed
+- name: Install blackwall zsh completion
+  shell: |
+    eval "$(fnm env --shell bash)"
+    mkdir -p "$HOME/.oh-my-zsh/custom/completions"
+    blackwall --completion zsh > "$HOME/.oh-my-zsh/custom/completions/_blackwall"
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
+
 - name: Ensure AI environment is sourced in .zshrc
   lineinfile:
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
