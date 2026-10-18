@@ -10,6 +10,7 @@ suppress_unstable_features_warning = true
 approval_policy = "on-request"
 approvals_reviewer = "auto_review"
 default_permissions = "my-projects"
+cli_auth_credentials_store = "keyring"
 web_search = "live"
 
 [permissions.my-projects]
