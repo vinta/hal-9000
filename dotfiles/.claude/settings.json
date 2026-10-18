@@ -180,18 +180,6 @@
     "hal-voice@hal-9000": true,
     "mattpocock-skills@mattpocock": true
   },
-  "pluginConfigs": {
-    "hal-grammar-check@hal-9000": {
-      "options": {
-        "model": "ollama/gemma4:31b-mlx"
-      }
-    },
-    "hal-session-auto-rename@hal-9000": {
-      "options": {
-        "model": "ollama/gemma4:31b-mlx"
-      }
-    }
-  },
   "extraKnownMarketplaces": {
     "hal-9000": {
       "source": {
@@ -224,6 +212,18 @@
   "advisorModel": "fable",
   "awaySummaryEnabled": false,
   "showClearContextOnPlanAccept": true,
+  "pluginConfigs": {
+    "hal-grammar-check@hal-9000": {
+      "options": {
+        "model": "ollama/gemma4:31b-mlx"
+      }
+    },
+    "hal-session-auto-rename@hal-9000": {
+      "options": {
+        "model": "ollama/gemma4:31b-mlx"
+      }
+    }
+  },
   "voice": {
     "enabled": true
   },
