@@ -1,5 +1,5 @@
 import { expect, mock, test } from 'claude-code/testing'
-import type { PromptChangeInput, PromptChangeResult } from 'claude-code'
+import type { PromptChangeInput, PromptChangeResult, PromptEditInput, PromptEditResult } from 'claude-code'
 
 const USAGE = { input_tokens: 0, output_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 }
 const DRAFT: PromptChangeInput = { text: 'I has a apple', cursor: 13, origin: { kind: 'history' } }
@@ -22,4 +22,30 @@ test('claude/haiku checks the draft with $.model.complete', { options: { model: 
   await clock.advance(250)
 
   expect(models).toEqual(['haiku'])
+})
+
+function edit($: unknown, text: string, inputText: string) {
+  const e: PromptEditInput = { text, cursor: text.length, start: text.length, end: text.length, inputText, origin: { kind: 'composer' } }
+  return ($ as { prompt: { edit: (e: PromptEditInput) => Promise<PromptEditResult> } }).prompt.edit(e)
+}
+
+test('a bare digit in an empty prompt is left to the band hotkeys, not checked', async ($, on) => {
+  const prompts: string[] = []
+  on('prompt.edit', ($, e) => {
+    const text = e.text.slice(0, e.start) + e.inputText + e.text.slice(e.end)
+    return { text, cursor: e.start + e.inputText.length }
+  })
+  on('model.complete', ($, e) => {
+    prompts.push(e.prompt)
+    return { value: { isAnswered: true, text: 'no issues', usage: USAGE } }
+  })
+  const clock = mock.clock(on)
+
+  await edit($, '', '1')
+  await clock.advance(250)
+  expect(prompts).toEqual([])
+
+  await edit($, '1', '.')
+  await clock.advance(250)
+  expect(prompts, 'a prompt that starts with a digit is still checked').toHaveLength(1)
 })

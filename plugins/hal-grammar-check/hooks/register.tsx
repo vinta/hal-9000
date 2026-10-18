@@ -218,8 +218,9 @@ export const register: Register = (on, options) => {
 
   on('prompt.edit', async ($, e, next) => {
     const r = await next(e)
-    if (r.text === e.text) {
-      // A bare cursor move changes nothing worth checking
+    // A bare cursor move changes nothing worth checking
+    // A bare digit in an empty prompt presses a band Button's hotkey, and a check redrawing the band before that press lands makes it miss
+    if (r.text === e.text || (e.text === '' && /^[0-9]$/.test(r.text))) {
       return r
     }
     await scheduleCheck($, r.text)
