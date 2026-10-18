@@ -24,6 +24,23 @@ extends = ":workspace"
 [permissions.my-projects.workspace_roots]
 "~/Projects" = true
 
+[permissions.my-projects.filesystem]
+"~/.aws" = "deny"
+"~/.config" = "deny"
+"~/.docker" = "deny"
+"~/.dropbox" = "deny"
+"~/.gnupg" = "deny"
+"~/.gsutil" = "deny"
+"~/.kube" = "deny"
+"~/.npmrc" = "deny"
+"~/.orbstack" = "deny"
+"~/.pypirc" = "deny"
+"~/.ssh" = "deny"
+"~/*_history" = "deny"
+"~/Library" = "deny"
+"~/Dropbox" = "deny"
+"/etc" = "deny"
+
 [permissions.my-projects.network]
 enabled = true
 
