@@ -14,7 +14,7 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual. By default N is 5. A title that comes out the same as the current one is skipped. Each `/rename` makes Claude Code tell the model that the user named the session. That's not true for this plugin's renames, so the plugin rewrites that system reminder to say the title was auto-generated.
+Just use Claude Code as usual. By default N is 5. A new title that shares at least half its words with the current one, counted against the longer of the two, is only a rewording, so it's skipped. Each `/rename` makes Claude Code tell the model that the user named the session. That's not true for this plugin's renames, so the plugin rewrites that system reminder to say the title was auto-generated.
 
 If you name the session yourself, with `/rename` or `--name`, the plugin never touches it again.
 

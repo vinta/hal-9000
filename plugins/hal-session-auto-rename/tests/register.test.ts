@@ -70,6 +70,28 @@ describe('renaming', () => {
     expect(world.renames).toEqual([])
   })
 
+  test('a reworded title that keeps most of the current words renames nothing', async ($, on) => {
+    const world = worldOf(on, 'Implement zsh completion for blackwall')
+    const clock = mock.clock(on)
+
+    await $.classic.UserPromptSubmit({ prompt: 'hi', session_title: 'add-zsh-completion-for-blackwall' })
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.renames).toEqual([])
+  })
+
+  test('a title that keeps the current words and adds a new topic renames', async ($, on) => {
+    const world = worldOf(on, 'Analyze session renaming and fix grammar check')
+    const clock = mock.clock(on)
+
+    await $.classic.UserPromptSubmit({ prompt: 'hi', session_title: 'analyze-session-renaming-history' })
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.renames).toEqual(['analyze-session-renaming-and-fix-grammar-check'])
+  })
+
   test('the title is regenerated every N turns and applied only when it changed', async ($, on) => {
     const world = worldOf(on)
     const clock = mock.clock(on)

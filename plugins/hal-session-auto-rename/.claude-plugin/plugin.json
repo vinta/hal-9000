@@ -1,7 +1,7 @@
 {
   "name": "hal-session-auto-rename",
   "displayName": "HAL Session Auto-rename",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Automatically name each session and rename it as the conversation evolves",
   "author": {
     "name": "Vinta Chen",

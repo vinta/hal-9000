@@ -96,6 +96,13 @@ function sanitize(raw: string) {
   return title
 }
 
+// A reworded title reuses most of the current one's words; measured against the longer title, so one that keeps every old word and adds a new topic still renames
+function isRewording(slug: string, current: string) {
+  const words = new Set(slug.split('-'))
+  const currentWords = current.split('-')
+  return currentWords.filter(word => words.has(word)).length * 2 >= Math.max(currentWords.length, words.size)
+}
+
 async function sessionTextParts($: EngineInterface, answer: string) {
   const messages = await $.session.messages()
   // Slash commands and their output describe the harness, not the conversation topic; reminders stand in for the transcript's meta rows
@@ -170,8 +177,9 @@ async function generateTitle($: EngineInterface, answer: string, backend: string
       turnsSinceTitle = undefined
       return
     }
+    const currentTitle = latestSeenTitle ?? lastSetTitle
     // Re-checked after the model call: the user may have run /rename or /clear while it ran
-    if (slug === (latestSeenTitle ?? lastSetTitle) || (await isUserOwned($, sessionId)) || (await $.session.id()) !== sessionId) {
+    if ((currentTitle && isRewording(slug, currentTitle)) || (await isUserOwned($, sessionId)) || (await $.session.id()) !== sessionId) {
       return
     }
     lastSetTitle = slug
