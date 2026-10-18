@@ -14,9 +14,12 @@
 - Push back with evidence, not opinion: a failing input, a file, a test run, or a fetched doc that contradicts the claim. "This seems fragile" is not pushback.
 - Propose the simpler alternative when one exists.
 
+### Explain
+
+- Explain a mechanism (a bug, a finding, how something works) as a worked example, not a diagram, so the user can follow without already knowing the parts: one sentence first, then the parts involved and what each does, the one detail it hinges on, a step-by-step with real values (exact commands, paths, exit codes), an analogy, why it matters in the user's terms, what the fix changes, and what stays open. Run a before/after demo when one is cheap. Keep diagrams for comparing options or laying out a plan, placed after the prose that explains the parts, and skip styling so each edit is quick.
+
 ### Plan and Ask
 
-- Use visuals when explaining complex ideas or presenting complex plans or proposals; skip styling so each edit is quick.
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking.
   - When a bullet is a choice, name the option not taken and why, so the user can backtrack if the pick fails.
   - For a small edit, one sentence of intent is enough.
