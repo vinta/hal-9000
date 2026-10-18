@@ -149,13 +149,13 @@ source = "https://github.com/DietrichGebert/ponytail.git"
 [hooks.state]
 
 [hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:session_start:0:0"]
-trusted_hash = "sha256:55a39116e94ed8399271043701d3e9b8859aee77c30ef85529e7eab067d8acd9"
+trusted_hash = "sha256:defea43402fc8edba23234c694a1117cf80efc2da38968a40a1004cd9d63f725"
 
 [hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:user_prompt_submit:0:0"]
-trusted_hash = "sha256:29dcb3bf3cd3d77af301058521d2fd4e414c523345f8fe70942f7f30027acc94"
+trusted_hash = "sha256:5aa5ec474e0bb546f207794993b37fdf7507e54a64e09216be164c5b7b42a197"
 
 [hooks.state."ponytail@ponytail:hooks/claude-codex-hooks.json:subagent_start:0:0"]
-trusted_hash = "sha256:6e210f506560ddd14e490c7dd80623572d504b8f0cfcf8c64c4d4c2ab4d23ae1"
+trusted_hash = "sha256:5b2c1dfa8c7ecc5e8881c8e69479f65d46ed727e0bc5b8e7b4553cee9e5c3daf"
 
 [hooks.state."/Users/vinta/Projects/pangu.js/.codex/hooks.json:post_tool_use:0:0"]
 trusted_hash = "sha256:ef96d37fe4779d97ca76aad7f7f4cfff979ae5ba1eef01096bb6c18a3cfd0e10"
