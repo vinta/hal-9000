@@ -91,6 +91,10 @@
       "dest": "{{HOME}}/.npmrc"
     },
     {
+      "src": "{{REPO_ROOT}}/dotfiles/.bunfig.toml",
+      "dest": "{{HOME}}/.bunfig.toml"
+    },
+    {
       "src": "{{REPO_ROOT}}/dotfiles/.prettierrc",
       "dest": "{{HOME}}/.prettierrc"
     },

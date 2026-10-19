@@ -1,0 +1,5 @@
+# https://bun.com/docs/runtime/bunfig
+# https://bun.com/docs/pm/cli/install
+
+[install]
+minimumReleaseAge = 259200 # 3 days
