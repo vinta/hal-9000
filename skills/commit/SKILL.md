@@ -75,7 +75,7 @@ Run git commands from the project root, never with `git -C`, which hides working
 
 2. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`.
-   - Hunk-by-hunk: `git diff <file> > <scratchpad>/patch.diff`, edit the patch, then `git apply --cached <scratchpad>/patch.diff`. Dropping whole hunks is safe. Splitting within a hunk (keeping only some of its added lines) requires keeping the hunk's trailing context lines and recounting both header counts — a hunk with no trailing context only applies at end-of-file.
+   - Hunk-by-hunk: `git diff <file> > <scratchpad>/patch.diff`, edit the patch only by deleting lines and fixing header counts, never by retyping patch lines (Write, heredoc, `printf`), since a retyped line can silently change invisible characters such as a BOM and still apply, then `git apply --cached <scratchpad>/patch.diff`. Dropping whole hunks is safe. Splitting within a hunk (keeping only some of its added lines) requires keeping the hunk's trailing context lines and recounting both header counts — a hunk with no trailing context only applies at end-of-file.
    - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work).
    - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
