@@ -148,6 +148,7 @@ alias cxyolo='blackwall codex --dangerously-bypass-approvals-and-sandbox'
 # https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
+export HOMEBREW_VERIFY_ATTESTATIONS=1
 
 source /usr/local/hal-9000/playbooks/roles/hal/files/hal_profile.sh
 source /usr/local/hal-9000/playbooks/roles/python/files/py_profile.sh
