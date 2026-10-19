@@ -10,6 +10,7 @@
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
     "DISABLE_FEEDBACK_COMMAND": "1",
     "DISABLE_UPGRADE_COMMAND": "1",
+    "DISABLE_AUTOUPDATER": "1",
     "HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED": "1"
   },
   "attribution": {
@@ -131,22 +132,25 @@
     }
   },
   "advisorModel": "fable",
-  "awaySummaryEnabled": false,
   "showClearContextOnPlanAccept": true,
+  "askUserQuestionTimeout": "10m",
+  "dialogExpiry": "10m",
+  "tui": "fullscreen",
   "voice": {
     "enabled": false
   },
   "showThinkingSummaries": true,
+  "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "theme": "custom:sandbox",
-  "switchModelsOnFlag": false,
+  "verbose": false,
+  "switchModelsOnFlag": true,
   "showTurnDuration": false,
+  "terminalProgressBarEnabled": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": false,
   "isolatePeerMachines": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": false,
-  "skipAutoPermissionPrompt": true,
-  "skipDangerousModePermissionPrompt": true,
-  "tui": "fullscreen"
+  "skipAutoPermissionPrompt": true
 }
