@@ -10,13 +10,13 @@ allowed-tools:
 
 # Difference
 
-The user wants a fast answer, not research. Invoking this skill is their explicit opt-out of any standing rule to check docs or search before answering: answer from what you already know.
+The user wants a fast answer, not research. Invoking this skill is their explicit opt-out of any standing rule to check docs or search before answering, except the lookup below: answer from what you already know.
 
 Compare what the arguments name. With no arguments, compare the items just discussed; ask only when nothing comparable is there.
 
 ## Lookups
 
-Run one web search (`WebSearch` in Claude Code, `web_search` in Codex) only for an item you cannot identify at all, such as a tool released after your training or an unknown term, then answer. Being unsure of an item's latest version does not count. Use no subagents.
+What you already know includes docs read or fetched earlier in this session; check those first. Then run one web search (`WebSearch` in Claude Code, `web_search` in Codex) before answering when an item is a named identifier (setting key, CLI flag, env var, API field) or something you cannot identify at all, such as a tool released after your training. An identifier's name only suggests what it does, so recognizing the name is no reason to skip the search. Being unsure of an item's latest version does not count. Use no subagents.
 
 ## Answer
 
