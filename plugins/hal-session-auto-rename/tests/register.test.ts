@@ -189,7 +189,7 @@ describe('the model option', () => {
     expect(world.renames).toEqual(['debug-oauth-token-refresh'])
   })
 
-  test('ollama/gemma4:31b-mlx asks gemma4:31b-mlx on the local Ollama', { options: { model: 'ollama/gemma4:31b-mlx' } }, async ($, on) => {
+  test('ollama/gemma4:26b-nvfp4 asks gemma4:26b-nvfp4 on the local Ollama', { options: { model: 'ollama/gemma4:26b-nvfp4' } }, async ($, on) => {
     const world = worldOf(on)
     const clock = mock.clock(on)
     const requests: { url: string; model: string }[] = []
@@ -201,7 +201,7 @@ describe('the model option', () => {
     await $.turn.complete(TURN)
     await clock.settle()
 
-    expect(requests).toEqual([{ url: 'http://localhost:11434/api/generate', model: 'gemma4:31b-mlx' }])
+    expect(requests).toEqual([{ url: 'http://localhost:11434/api/generate', model: 'gemma4:26b-nvfp4' }])
     expect(world.models).toEqual([])
     expect(world.renames).toEqual(['plan-birthday-party-menu'])
   })

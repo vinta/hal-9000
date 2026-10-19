@@ -1,7 +1,7 @@
 {
   "name": "hal-session-auto-rename",
   "displayName": "HAL Session Auto-rename",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Automatically name each session and rename it as the conversation evolves",
   "author": {
     "name": "Vinta Chen",
@@ -26,8 +26,8 @@
     "model": {
       "type": "string",
       "title": "Model",
-      "description": "claude/haiku runs on your Claude account; ollama/gemma4:31b-mlx runs on a local Ollama at localhost:11434.",
-      "options": ["claude/haiku", "ollama/gemma4:31b-mlx"],
+      "description": "claude/haiku runs on your Claude account; ollama/gemma4:26b-nvfp4 runs on a local Ollama at localhost:11434.",
+      "options": ["claude/haiku", "ollama/gemma4:26b-nvfp4"],
       "default": "claude/haiku"
     },
     "refreshEveryNTurns": {

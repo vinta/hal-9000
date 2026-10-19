@@ -24,17 +24,17 @@ Set them in `/config`:
 
 - `model`: which of the two models below writes the title, `claude/haiku` by default.
   - `claude/haiku` runs on your Claude account. It bills one call for every title.
-  - `ollama/gemma4:31b-mlx` runs on your local [Ollama](https://ollama.com/) at `localhost:11434`. It's the free, offline choice.
+  - `ollama/gemma4:26b-nvfp4` runs on your local [Ollama](https://ollama.com/) at `localhost:11434`. It's the free, offline choice.
 - `refreshEveryNTurns`: how often to regenerate the title, `5` by default. `0` keeps the first title.
 
-Pick `ollama/gemma4:31b-mlx` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
+Pick `ollama/gemma4:26b-nvfp4` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
 
 ```bash
-ollama pull gemma4:31b-mlx
+ollama pull gemma4:26b-nvfp4
 ```
 
 ## Privacy
 
-It sends the current title and the first 1500 and last 2000 characters of your conversation to the model you pick. With `claude/haiku`, it goes to haiku through the session's own API client, on your Claude account. With `ollama/gemma4:31b-mlx`, it goes to `localhost:11434` instead, and nothing leaves your machine.
+It sends the current title and the first 1500 and last 2000 characters of your conversation to the model you pick. With `claude/haiku`, it goes to haiku through the session's own API client, on your Claude account. With an `ollama/` model, it goes to `localhost:11434` instead, and nothing leaves your machine.
 
 The plugin's store holds only one flag per session you named yourself.

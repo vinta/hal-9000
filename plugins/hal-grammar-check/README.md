@@ -22,17 +22,17 @@ Set them in `/config`:
 
 - `model`: which of the two models below checks your draft, default `claude/haiku`.
   - `claude/haiku` runs on your Claude account. It bills one call every time you pause typing.
-  - `ollama/gemma4:31b-mlx` runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
+  - `ollama/gemma4:26b-nvfp4` runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
 
-Pick `ollama/gemma4:31b-mlx` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
+Pick `ollama/gemma4:26b-nvfp4` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
 
 ```bash
-ollama pull gemma4:31b-mlx
+ollama pull gemma4:26b-nvfp4
 ```
 
 ## Privacy
 
-It sends the first 500 characters of your draft to the model. With `claude/haiku`, it goes to Anthropic through your Claude account, like any other prompt. With `ollama/gemma4:31b-mlx`, that's your local Ollama at `localhost:11434`: fully offline, nothing leaves your machine.
+It sends the first 500 characters of your draft to the model. With `claude/haiku`, it goes to Anthropic through your Claude account, like any other prompt. With an `ollama/` model, that's your local Ollama at `localhost:11434`: fully offline, nothing leaves your machine.
 
 ## Screenshots
 
