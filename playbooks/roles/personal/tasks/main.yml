@@ -20,3 +20,11 @@
   command: "{{ REPO_ROOT }}/bin/hal sync"
   changed_when: false
   when: ansible_facts["user_id"] == "vinta"
+
+- name: Disable window shadow in screenshots
+  osx_defaults:
+    domain: com.apple.screencapture
+    key: disable-shadow
+    type: bool
+    value: true
+  when: ansible_facts["user_id"] == "vinta"
