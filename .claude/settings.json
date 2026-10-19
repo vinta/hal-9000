@@ -6,21 +6,21 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bin/hal sync 2>/dev/null || true",
+            "command": "\"${CLAUDE_PROJECT_DIR}\"/bin/hal sync 2>/dev/null || true",
             "if": "Edit(/dotfiles/hal_dotfiles.json)",
             "timeout": 30,
             "statusMessage": "Syncing dotfiles..."
           },
           {
             "type": "command",
-            "command": "make lint-python >&2 || exit 2",
+            "command": "make -C \"${CLAUDE_PROJECT_DIR}\" lint-python >&2 || exit 2",
             "if": "Edit(**/*.py)",
             "timeout": 30,
             "statusMessage": "Linting Python code..."
           },
           {
             "type": "command",
-            "command": "make lint-ansible >&2 || exit 2",
+            "command": "make -C \"${CLAUDE_PROJECT_DIR}\" lint-ansible >&2 || exit 2",
             "if": "Edit(/playbooks/**)",
             "timeout": 30,
             "statusMessage": "Linting Ansible playbooks..."
@@ -32,14 +32,14 @@
         "hooks": [
           {
             "type": "command",
-            "command": "make lint-python >&2 || exit 2",
+            "command": "make -C \"${CLAUDE_PROJECT_DIR}\" lint-python >&2 || exit 2",
             "if": "Write(**/*.py)",
             "timeout": 30,
             "statusMessage": "Linting Python code..."
           },
           {
             "type": "command",
-            "command": "make lint-ansible >&2 || exit 2",
+            "command": "make -C \"${CLAUDE_PROJECT_DIR}\" lint-ansible >&2 || exit 2",
             "if": "Write(/playbooks/**)",
             "timeout": 30,
             "statusMessage": "Linting Ansible playbooks..."
