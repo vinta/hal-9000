@@ -14,8 +14,8 @@ Repository = "https://github.com/vinta/hal-9000"
 
 [dependency-groups]
 test = ["pytest>=9.1.1"]
-lint = ["ansible-lint>=26.6.0", "ruff>=0.16.0", "ty>=0.0.64", "vermin>=1.8.0"]
-audit = ["pre-commit>=4.6.1"]
+lint = ["ansible-lint>=26.10.1", "ruff>=0.17.1", "ty>=0.0.89", "vermin>=1.9.1"]
+audit = ["pre-commit>=4.7.0"]
 dev = [
     { include-group = "test" },
     { include-group = "lint" },

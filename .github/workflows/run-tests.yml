@@ -26,7 +26,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
@@ -61,5 +61,5 @@ jobs:
       # The tests only execute the code paths they cover, so a 3.10+ stdlib call on an uncovered branch would pass them
       - name: Check scripts avoid stdlib APIs newer than 3.9
         run: |
-          pip install vermin==1.8.0
+          pip install vermin==1.9.1
           vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --hidden --exclude 'typing.NotRequired' bin/ dotfiles/ plugins/ skills/

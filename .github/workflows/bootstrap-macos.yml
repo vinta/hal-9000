@@ -85,6 +85,8 @@ jobs:
             claude --version
             codex --version
             ctx7 --version
+            playwright-cli --version
+            ollama --version
             blackwall --version
           '
 
