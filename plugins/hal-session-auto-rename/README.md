@@ -2,7 +2,7 @@
 
 Automatically name each session and rename it as the conversation evolves.
 
-After your first turn (your prompt plus everything Claude does until it stops), and every N turns after that, the model you pick (haiku by default) writes a short title from the recent conversation. The plugin applies it with `/rename`, so every change shows up as a `/rename` row in the transcript.
+After your first turn (your prompt plus everything Claude does until it stops), and every N turns after that, the model you pick (haiku by default) writes a short title from how the session started and the recent conversation. The plugin applies it with `/rename`, so every change shows up as a `/rename` row in the transcript.
 
 ## Installation
 
@@ -39,4 +39,4 @@ ollama pull gemma4:26b-nvfp4
 
 It sends the current title and the first 1500 and last 2000 characters of your conversation to the model you pick. With `claude/haiku`, it goes to haiku through the session's own API client, on your Claude account. With an `ollama/` model, it goes to `localhost:11434` instead, and nothing leaves your machine.
 
-The plugin's store holds only one flag per session you named yourself.
+The plugin's store holds one entry per session: a flag for a session you named yourself, otherwise the last title the plugin set, so a resume can tell the two apart.

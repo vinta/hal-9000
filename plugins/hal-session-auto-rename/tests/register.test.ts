@@ -168,6 +168,21 @@ describe('renaming', () => {
     expect(world.renames).toEqual(['debug-oauth-token-refresh', 'debug-oauth-token-refresh'])
   })
 
+  test('/resume starts the resumed session over with a title of its own', async ($, on) => {
+    const world = worldOf(on)
+    const clock = mock.clock(on)
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+    await $.session.end({ reason: 'resume', sessionId: 's1', resume: { id: 's1' } })
+    world.sessionId = 's2'
+    world.title = 'Plan birthday party menu'
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.renames).toEqual(['debug-oauth-token-refresh', 'plan-birthday-party-menu'])
+  })
+
   test("the store remembers the plugin's own title for the session", async ($, on) => {
     const world = worldOf(on)
     const clock = mock.clock(on)

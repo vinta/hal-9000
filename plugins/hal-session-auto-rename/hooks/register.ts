@@ -147,7 +147,7 @@ async function askOllama($: EngineInterface, model: string, prompt: string) {
   return generated.response
 }
 
-// Per-session state lives in the module, so a hot reload or a resume starts over with a fresh title on the next turn
+// Per-session state lives in the module, so a hot reload, /clear, /resume, or /branch starts over with a fresh title on the next turn
 let lastSetTitle: string | undefined
 // The title as of the latest prompt; it can change without a /rename (accepting a plan retitles the session)
 let latestSeenTitle: string | undefined
@@ -243,8 +243,8 @@ export const register: Register = (on, options) => {
     return next(e)
   })
 
-  // A /clear goes on under a new session id with no session.start
-  on('session.end', { reason: 'clear' }, ($, e, next) => {
+  // /clear, /resume, and /branch go on under another session id with no session.start; /branch reports `resume`
+  on('session.end', { reason: ['clear', 'resume'] }, ($, e, next) => {
     lastSetTitle = undefined
     latestSeenTitle = undefined
     turnsSinceTitle = undefined
