@@ -20,7 +20,7 @@ Instruction files to read for workflow signals: `~/.claude/CLAUDE.md`, the proje
 
 ## Validator
 
-Validate with `python3 -m json.tool` after edits — invalid JSON makes Claude Code skip the whole file. Which picks land later is in the "When edits take effect" section of `settings.md`.
+Validate with `claude doctor` after edits and read its `Invalid settings` section, since it exits 0 either way. It reports invalid JSON and values the schema rejects, either of which can make Claude Code skip the whole file, while `python3 -m json.tool` catches only the JSON and passes `{"cleanupPeriodDays": "soon"}`. Which picks land later is in the "When edits take effect" section of `settings.md`.
 
 ## Dead-key probe
 

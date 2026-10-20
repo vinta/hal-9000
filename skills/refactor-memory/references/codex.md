@@ -22,7 +22,7 @@ When promoting a memory, read the `refactor-agents-md` skill and apply its crite
 
 ## Decisions
 
-For unresolved outcomes or contradictory claims, use `request_user_input` when available and permitted by the active session. Follow the tool's current question and option limits. For single-choice tools, ask per entry or offer a proposed set; let the user specify numbered exceptions in free text. Use plain text when the tool is unavailable or the question requires permission.
+For unresolved outcomes or contradictory claims, use `request_user_input` when available and permitted by the active session. Follow the tool's current question and option limits. `request_user_input` has no multi-select, so ask one Apply/Skip question per entry for verdict selections. Use plain text when the tool is unavailable or the question requires permission.
 
 ## Application and verification
 

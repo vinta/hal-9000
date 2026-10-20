@@ -37,6 +37,9 @@ These skills collect nothing. A few talk to other services when you run them:
 
 - `pr` pushes your branch and opens, updates, or merges the PR on GitHub, via `git` and `gh`
 - `best-practices` sends search queries to Context7 (through the `find-docs` skill) and to web search
-- `blindspot` and `difference` send search queries to web search
+- `blindspot` sends search queries to Context7 (through the `find-docs` skill) and to web search
+- `difference` sends search queries to web search
+- `fuck-over-engineering` sends search queries to Context7 (through the `find-docs` skill, when installed)
+- `write-like-me` reads READMEs and docs in your other repos, and your recent PRs and issues, to match your existing writing
 - `refactor-agents-md` sends lines of your CLAUDE.md or AGENTS.md to Claude via `claude -p`, on your own account, when a Claude model reads the file, to check which lines the model already follows
 - `audit-agent-settings`, `refactor-agents-md`, `refactor-memory`, and `refactor-skill` read public docs from Anthropic, OpenAI, and SchemaStore

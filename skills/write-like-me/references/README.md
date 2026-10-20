@@ -12,7 +12,7 @@ Where the voice evidence in [style-spec.md](style-spec.md) and [exemplars.md](ex
 Every quote in these files comes from published text:
 
 - Blog posts on vinta.ws:
-  - [Claude Code: Things I Learned After Using It Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html) — the heaviest-weight source, the actively maintained current voice
+  - [Claude Code and Codex: Things I Learned After Using Them Every Day](https://vinta.ws/code/claude-code-useful-plugins-skills-and-mcps.html) — the heaviest-weight source, the actively maintained current voice
   - [Surviving the Digital Dark Forest: Tips for Staying Safe Online](https://vinta.ws/code/how-to-stay-safe-online-tips-for-personal-security.html)
   - [How HTTPS Works in Layman's Terms - TLS 1.2 and 1.3](https://vinta.ws/code/how-https-works-in-laymans-terms-tls-1-2-and-1-3.html)
   - [The Incomplete Guide to Google Kubernetes Engine](https://vinta.ws/code/the-complete-guide-to-google-kubernetes-engine-gke.html)

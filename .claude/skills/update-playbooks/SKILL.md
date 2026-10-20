@@ -73,7 +73,7 @@ Run `make lint`. Then create one commit per tool with the `commit` skill, passin
 
 ## 6. Offer method switches
 
-Once §5's commits are made, ask the user with `AskUserQuestion` whether to switch each tool noted in §3, one question per tool, up to four per call. Each question offers keeping the current method and switching to the page's recommended one, quoting the recommended commands in that option's `preview`; when the switch would cost something the task has, such as a version pin Homebrew cannot hold or a script's self-update, say so in the option's description.
+Once §5's commits are made, ask the user with `AskUserQuestion` in Claude Code or `request_user_input` in Codex whether to switch each tool noted in §3, one question per tool, up to four per call in Claude Code and three in Codex. Each question offers keeping the current method and switching to the page's recommended one, quoting the recommended commands in that option's `preview`; when the switch would cost something the task has, such as a version pin Homebrew cannot hold or a script's self-update, say so in the option's description.
 
 For each yes, adopt the upstream commands; a script install points its `creates:` guard at the binary the script produces. A Homebrew install uses the `homebrew` module at `state: latest`, which also replaces any separate upgrade task, as fnm and bun show; a formula from the project's own tap takes a `homebrew_tap` task above it. Then run `make lint` and commit each switched tool as in §5.
 
