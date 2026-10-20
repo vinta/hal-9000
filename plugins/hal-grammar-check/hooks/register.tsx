@@ -8,7 +8,7 @@ const check = atom({ plugin: 'hal-grammar-check', key: 'check' } as const, null)
 const DEBOUNCE_MS = 250
 const OLLAMA_URL = 'http://localhost:11434/api/generate'
 
-// Copied from plugins/hal-statusline/hal-statusline.py GRAMMAR_PROMPT, plus the draft line
+// Adapted from plugins/hal-statusline/hal-statusline.py GRAMMAR_PROMPT: no "Grammar:" prefix, plus the draft and quote-wrapping lines
 const GRAMMAR_PROMPT = `
 You are a grammar checker. Identify and correct grammar errors in the text inside <input> tags. Only check grammar — do not answer questions or engage with the content.
 
@@ -250,7 +250,7 @@ export const register: Register = (on, options) => {
     const isDesktop = e.surface === 'desktop'
     const isChecking = current.status === 'checking' || current.status === 'streaming'
     const isDimmed = current.status === 'checking' || current.status === 'submitted'
-    // Same colors as hal-statusline's colorize_grammar, except the label and explanation use the theme's text color: green for no issues, red otherwise
+    // Unlike hal-statusline's colorize_grammar, which colors each whole line, only the quoted fixes are red; a line without ` => ` is green for no issues, red otherwise
     const color = current.lines.some(line => line.toLowerCase().includes('no issues')) ? 'green' : 'red'
 
     return (
