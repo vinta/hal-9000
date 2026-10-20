@@ -15,7 +15,10 @@ import tempfile
 import time
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from typing import Any, Literal, TypedDict
+from typing import TYPE_CHECKING, Any, Literal, TypedDict
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
 class CommonInput(TypedDict):
@@ -173,7 +176,6 @@ class HookInput(CommonInput, total=False):
 
 
 class Config(TypedDict):
-    enabled: bool
     entrypoints: list[str]
     volume: float
     debounce_seconds: float
@@ -208,7 +210,6 @@ Manifest = dict[str, list[Rule]]
 
 PLUGIN_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve().parent.parent))
 MANIFEST_PATH = PLUGIN_ROOT / "manifest.json"
-CONFIG_PATH = Path(os.environ.get("CLAUDE_PLUGIN_DATA", PLUGIN_ROOT)) / "config.json"
 STATE_PATH = Path("/tmp/hal-voice-state.json")  # noqa: S108 hardcoded-temp-file
 LOCK_PATH = Path("/tmp/hal-voice.lock")  # noqa: S108 hardcoded-temp-file
 # `gettempdir()` honours `$TMPDIR`, which on macOS is a per-user directory, so the log never collides with another user's on a shared machine
@@ -216,11 +217,16 @@ LOG_PATH = Path(tempfile.gettempdir()) / "hal-voice.log"
 LOG_MAX_BYTES = 1024 * 1024
 
 DEFAULT_CONFIG: Config = {
-    "enabled": True,
     "entrypoints": ["cli"],
-    "volume": 0.5,
+    "volume": 50,
     "debounce_seconds": 5,
     "replay_suppression_seconds": 3,
+}
+
+ENTRYPOINT_OPTIONS = {
+    "cli": "CLAUDE_PLUGIN_OPTION_PLAY_IN_TERMINAL",
+    "claude-desktop": "CLAUDE_PLUGIN_OPTION_PLAY_IN_DESKTOP_APP",
+    "claude-vscode": "CLAUDE_PLUGIN_OPTION_PLAY_IN_VSCODE",
 }
 
 DEFAULT_STATE: State = {
@@ -245,10 +251,12 @@ def current_entrypoint() -> str:
     return os.environ.get("CLAUDE_CODE_ENTRYPOINT") or "cli"
 
 
-def load_config(config_path: Path) -> Config:
+def load_config(environ: Mapping[str, str]) -> Config:
     config = DEFAULT_CONFIG.copy()
-    with contextlib.suppress(FileNotFoundError, json.JSONDecodeError, OSError):
-        config.update(json.loads(config_path.read_text()))
+    # Claude Code exports only the userConfig options the user has set, booleans as `true`/`false`
+    config["entrypoints"] = [entrypoint for entrypoint, option in ENTRYPOINT_OPTIONS.items() if environ.get(option, str(entrypoint in DEFAULT_CONFIG["entrypoints"]).lower()) == "true"]
+    if "CLAUDE_PLUGIN_OPTION_VOLUME" in environ:
+        config["volume"] = float(environ["CLAUDE_PLUGIN_OPTION_VOLUME"])
     return config
 
 
@@ -409,7 +417,8 @@ def play_sound(clip_path: Path, volume: float) -> int | None:
         logger.error("audio not found: %s", clip_path)
         return None
 
-    cmd = ["/usr/bin/afplay", "-v", str(volume), str(clip_path)]
+    # afplay takes 1 as full volume
+    cmd = ["/usr/bin/afplay", "-v", str(volume / 100), str(clip_path)]
     logger.info("playing %s via afplay", clip_path.name)
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)  # noqa: S603 subprocess-without-shell-equals-true
     return proc.pid
@@ -440,12 +449,12 @@ def main() -> None:
     session_id = hook_input.get("session_id", "")
     now = time.time()
 
-    config = load_config(CONFIG_PATH)
+    config = load_config(os.environ)
 
     # Check the entrypoint before taking the lock so other surfaces never touch the shared state file, where their events would debounce a later CLI clip
     entrypoint = current_entrypoint()
     logger.info("entrypoint=%s", entrypoint)
-    if not config["enabled"] or entrypoint not in config["entrypoints"]:
+    if entrypoint not in config["entrypoints"]:
         return
 
     lock_fd = os.open(str(LOCK_PATH), os.O_CREAT | os.O_RDWR)

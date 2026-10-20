@@ -1,4 +1,3 @@
-import json
 import time
 from unittest.mock import patch
 
@@ -8,41 +7,26 @@ def at_clock(hour, minute=0):
 
 
 class TestLoadConfig:
-    def test_missing_file_returns_defaults(self, hal_voice, tmp_path):
-        config = hal_voice.load_config(tmp_path / "nonexistent.json")
-        assert config["enabled"] is True
-        assert config["volume"] == 0.5
+    def test_unset_options_return_defaults(self, hal_voice):
+        config = hal_voice.load_config({})
+        assert config["volume"] == 50
         assert config["debounce_seconds"] == 5
         assert config["replay_suppression_seconds"] == 3
 
-    def test_partial_override(self, hal_voice, tmp_path):
-        cfg_path = tmp_path / "config.json"
-        cfg_path.write_text(json.dumps({"volume": 0.8}))
-        config = hal_voice.load_config(cfg_path)
-        assert config["volume"] == 0.8
-        assert config["enabled"] is True
+    def test_partial_override(self, hal_voice):
+        config = hal_voice.load_config({"CLAUDE_PLUGIN_OPTION_VOLUME": "80"})
+        assert config["volume"] == 80
 
-    def test_full_override(self, hal_voice, tmp_path):
-        cfg_path = tmp_path / "config.json"
-        cfg_path.write_text(
-            json.dumps(
-                {
-                    "enabled": False,
-                    "volume": 0.1,
-                    "debounce_seconds": 10,
-                    "replay_suppression_seconds": 0,
-                }
-            )
+    def test_full_override(self, hal_voice):
+        config = hal_voice.load_config(
+            {
+                "CLAUDE_PLUGIN_OPTION_PLAY_IN_TERMINAL": "false",
+                "CLAUDE_PLUGIN_OPTION_PLAY_IN_DESKTOP_APP": "true",
+                "CLAUDE_PLUGIN_OPTION_VOLUME": "10",
+            }
         )
-        config = hal_voice.load_config(cfg_path)
-        assert config["enabled"] is False
-        assert config["volume"] == 0.1
-
-    def test_corrupt_file_returns_defaults(self, hal_voice, tmp_path):
-        cfg_path = tmp_path / "config.json"
-        cfg_path.write_text("not json")
-        config = hal_voice.load_config(cfg_path)
-        assert config["enabled"] is True
+        assert config["entrypoints"] == ["claude-desktop"]
+        assert config["volume"] == 10
 
 
 class TestEntrypoint:
@@ -57,10 +41,8 @@ class TestEntrypoint:
     def test_only_cli_allowed_by_default(self, hal_voice):
         assert hal_voice.DEFAULT_CONFIG["entrypoints"] == ["cli"]
 
-    def test_config_can_allow_another_surface(self, hal_voice, tmp_path):
-        cfg_path = tmp_path / "config.json"
-        cfg_path.write_text(json.dumps({"entrypoints": ["cli", "claude-desktop"]}))
-        config = hal_voice.load_config(cfg_path)
+    def test_config_can_allow_another_surface(self, hal_voice):
+        config = hal_voice.load_config({"CLAUDE_PLUGIN_OPTION_PLAY_IN_DESKTOP_APP": "true"})
         assert config["entrypoints"] == ["cli", "claude-desktop"]
 
 
@@ -319,7 +301,7 @@ class TestPlaySound:
 
         with patch.object(hal_voice.subprocess, "Popen") as popen:
             popen.return_value.pid = 42
-            assert hal_voice.play_sound(clip, 0.5) == 42
+            assert hal_voice.play_sound(clip, 50) == 42
 
         popen.assert_called_once_with(
             ["/usr/bin/afplay", "-v", "0.5", str(clip)],

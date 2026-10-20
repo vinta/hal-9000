@@ -22,15 +22,9 @@ Just use Claude Code as usual. HAL 9000 talks to you when the time is right.
 
 ## Configurations
 
-For silence, toggle with the `/hal-voice-toggle` command.
+Every option lives in `/config` under hal-voice: Volume sets how loud HAL speaks. For silence, disable the plugin in `/plugin`.
 
-By default, audio clips only play in the terminal CLI. If you want to hear HAL in the Claude desktop app or the VS Code extension, tell Claude Code to create `config.json` in the plugin's data folder, `~/.claude/plugins/data/hal-voice-hal-9000/`, with the following content:
-
-```json
-{
-  "entrypoints": ["cli", "claude-desktop", "claude-vscode"]
-}
-```
+By default, audio clips only play in the terminal CLI. If you want to hear HAL in the Claude desktop app or the VS Code extension, turn on Play in desktop app or Play in VS Code.
 
 ## Privacy
 
