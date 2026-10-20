@@ -12,7 +12,7 @@ allowed-tools:
 
 Invoking this skill IS the request. Your task is fully specified here. Never ask what to do.
 
-Your first Bash call is `cd "$(git rev-parse --show-toplevel)"`, alone, once. The working directory persists across Bash calls, so run every later command bare, exactly as written below. A `cd ... &&` or `$()` prefix stops a command matching `allowed-tools`, and the merge then hits the permission gate.
+Run every command bare, exactly as written below: `git` and `gh` find the repository from any subdirectory, and a `cd` does not carry over to the next Bash call in this fork. A `cd ... &&` or `$()` prefix stops a command matching `allowed-tools`, and the merge then hits the permission gate.
 
 The user invoked this skill with: "$ARGUMENTS"
 
