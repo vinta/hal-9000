@@ -1,7 +1,7 @@
 ---
 skip_list:
   - command-instead-of-module # Some macOS-specific operations require shell
-  - no-changed-when # Will be addressed in future updates
+  - no-changed-when # A task reporting changed on every run is acceptable (see .claude/rules/ansible.md)
   - risky-shell-pipe # Some operations require pipes
   - fqcn[action] # Allow short names for collection modules (the community.general homebrew* modules)
   - fqcn[action-core] # Allow short names for ansible.builtin modules (shell, file, copy, git)

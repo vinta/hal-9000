@@ -1,2 +1,2 @@
-# https://book.getfoundry.sh/getting-started/installation
+# https://www.getfoundry.sh/introduction/installation
 export PATH="$HOME/.foundry/bin:$PATH"
