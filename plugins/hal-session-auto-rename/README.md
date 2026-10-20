@@ -18,6 +18,8 @@ Just use Claude Code as usual. By default N is 5. A new title that shares at lea
 
 If you name the session yourself, with `/rename` or `--name`, the plugin never touches it again.
 
+In the Claude desktop app, the plugin does nothing. The app shows its own session title, so a rename there changes nothing you can see, and its `/rename` row would dismiss the app's next-step box.
+
 ## Options
 
 Set them in `/config`:

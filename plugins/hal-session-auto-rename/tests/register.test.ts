@@ -10,13 +10,14 @@ const TURN = { answer: 'Fixed the refresh race.', durationMs: 1, isAborted: fals
 
 // Stands in for everything beneath the plugin: the session, the model and the commands it runs
 function worldOf(on: On, initialTitle = 'Debug OAuth token refresh', stored: Record<string, unknown> = {}) {
-  const world = { sessionId: 's1', title: initialTitle, renames: [] as string[], prompts: [] as string[], models: [] as string[], stored, conversation: 'the oauth refresh races' }
+  const world = { sessionId: 's1', title: initialTitle, renames: [] as string[], prompts: [] as string[], models: [] as string[], stored, conversation: 'the oauth refresh races', entrypoint: undefined as string | undefined }
   on('store.get', ($, e) => ({ value: world.stored[e.key] }))
   on('store.set', ($, e) => {
     world.stored[e.key] = e.value
     return { value: undefined }
   })
   on('session.id', () => ({ value: world.sessionId }))
+  on('env.get', () => ({ value: world.entrypoint }))
   on('session.messages', () => ({ value: [{ role: 'user', text: world.conversation, toolUses: [] }] }))
   on('model.complete', ($, e) => {
     world.prompts.push(e.prompt)
@@ -56,6 +57,18 @@ describe('renaming', () => {
     await $.turn.complete({ ...TURN, isAborted: true, reason: 'aborted' })
     await clock.settle()
 
+    expect(world.renames).toEqual([])
+  })
+
+  test('a desktop app session asks no model and renames nothing', async ($, on) => {
+    const world = worldOf(on)
+    world.entrypoint = 'claude-desktop'
+    const clock = mock.clock(on)
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.models).toEqual([])
     expect(world.renames).toEqual([])
   })
 

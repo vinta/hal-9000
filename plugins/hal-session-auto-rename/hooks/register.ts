@@ -12,6 +12,9 @@ const TITLE_MAX_CHARS = 100
 
 const OLLAMA_URL = 'http://localhost:11434/api/generate'
 
+// The desktop app shows its own session title, so a rename there changes nothing visible, and its /rename row dismisses the app's next-step box
+const DESKTOP_ENTRYPOINTS = new Set(['claude-desktop', 'claude-desktop-3p'])
+
 interface OllamaGenerateResponse {
   response: string
 }
@@ -162,6 +165,9 @@ async function generateTitle($: EngineInterface, answer: string, backend: string
   }
   isGenerating = true
   try {
+    if (DESKTOP_ENTRYPOINTS.has((await $.env.get('CLAUDE_CODE_ENTRYPOINT')) ?? '')) {
+      return
+    }
     const sessionId = await $.session.id()
     if (await isUserOwned($, sessionId)) {
       return
