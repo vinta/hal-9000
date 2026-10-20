@@ -109,7 +109,6 @@ class HookInput(CommonInput, total=False):
     notification_type: str
     # SubagentStart, SubagentStop
     agent_id: str
-    child_session_id: str
     # SubagentStop, Stop, StopFailure
     last_assistant_message: str
     # SubagentStop, Stop
@@ -185,7 +184,6 @@ class State(TypedDict):
     last_played: dict[str, str]
     last_stop_time: float
     session_start_times: dict[str, float]
-    subagent_sessions: dict[str, float]
     sound_pid: int | None
 
 
@@ -210,7 +208,7 @@ Manifest = dict[str, list[Rule]]
 
 PLUGIN_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve().parent.parent))
 MANIFEST_PATH = PLUGIN_ROOT / "manifest.json"
-CONFIG_PATH = PLUGIN_ROOT / "config.json"
+CONFIG_PATH = Path(os.environ.get("CLAUDE_PLUGIN_DATA", PLUGIN_ROOT)) / "config.json"
 STATE_PATH = Path("/tmp/hal-voice-state.json")  # noqa: S108 hardcoded-temp-file
 LOCK_PATH = Path("/tmp/hal-voice.lock")  # noqa: S108 hardcoded-temp-file
 # `gettempdir()` honours `$TMPDIR`, which on macOS is a per-user directory, so the log never collides with another user's on a shared machine
@@ -229,7 +227,6 @@ DEFAULT_STATE: State = {
     "last_played": {},
     "last_stop_time": 0.0,
     "session_start_times": {},
-    "subagent_sessions": {},
     "sound_pid": None,
 }
 
@@ -264,7 +261,6 @@ def load_state(state_path: Path) -> State:
         "last_played": data.get("last_played", DEFAULT_STATE["last_played"]),
         "last_stop_time": data.get("last_stop_time", DEFAULT_STATE["last_stop_time"]),
         "session_start_times": data.get("session_start_times", DEFAULT_STATE["session_start_times"]),
-        "subagent_sessions": data.get("subagent_sessions", DEFAULT_STATE["subagent_sessions"]),
         "sound_pid": data.get("sound_pid", DEFAULT_STATE["sound_pid"]),
     }
 
@@ -374,10 +370,6 @@ def should_suppress_replay(state: State, config: Config, *, session_id: str, now
     return (now - start_time) < config["replay_suppression_seconds"]
 
 
-def should_suppress_subagent(state: State, *, session_id: str) -> bool:
-    return session_id in state.get("subagent_sessions", {})
-
-
 def match_manifest(manifest: Manifest, hook_event: str, tool_name: str, hook_input: HookInput, state: State) -> tuple[str, str] | None:
     for key, rules in manifest.items():
         parts = key.split(":", 1)
@@ -401,7 +393,6 @@ def match_manifest(manifest: Manifest, hook_event: str, tool_name: str, hook_inp
 
 def cleanup_old_sessions(state: State, *, now: float, max_age: float = 86400) -> None:
     state["session_start_times"] = {k: v for k, v in state["session_start_times"].items() if (now - v) < max_age}
-    state["subagent_sessions"] = {k: v for k, v in state["subagent_sessions"].items() if (now - v) < max_age}
 
 
 def kill_previous_sound(state: State) -> None:
@@ -424,13 +415,9 @@ def play_sound(clip_path: Path, volume: float) -> int | None:
     return proc.pid
 
 
-def _record_tracking(hook_event: str, hook_input: HookInput, state: State, *, session_id: str, now: float) -> None:
+def _record_tracking(hook_event: str, state: State, *, session_id: str, now: float) -> None:
     if hook_event == "SessionStart" and session_id:
         state["session_start_times"][session_id] = now
-    if hook_event == "SubagentStart":
-        child_id = hook_input.get("child_session_id", "")
-        if child_id:
-            state["subagent_sessions"][child_id] = now
 
 
 def _is_suppressed(hook_event: str, state: State, config: Config, *, session_id: str, now: float) -> bool:
@@ -440,9 +427,6 @@ def _is_suppressed(hook_event: str, state: State, config: Config, *, session_id:
     if hook_event != "SessionStart" and should_suppress_replay(state, config, session_id=session_id, now=now):
         logger.info("suppressed replay event %s", hook_event)
         return True
-    if hook_event == "Stop" and should_suppress_subagent(state, session_id=session_id):
-        logger.info("suppressed subagent Stop for %s", session_id)
-        return True
     return False
 
 
@@ -451,9 +435,7 @@ def main() -> None:
     # Never log the full hook input: it carries prompt text and tool arguments
     logger.info("event=%s session=%s tool=%s", hook_input.get("hook_event_name", ""), hook_input.get("session_id", ""), hook_input.get("tool_name", ""))
 
-    hook_event = hook_input.get("hook_event_name", "")
-    if not hook_event:
-        return
+    hook_event = hook_input["hook_event_name"]
 
     session_id = hook_input.get("session_id", "")
     now = time.time()
@@ -472,7 +454,7 @@ def main() -> None:
 
         state = load_state(STATE_PATH)
         try:
-            _record_tracking(hook_event, hook_input, state, session_id=session_id, now=now)
+            _record_tracking(hook_event, state, session_id=session_id, now=now)
 
             # hooks.json passes --main-agent-only per rule; a matcher group accepts only "matcher" and "hooks"
             if hook_input.get("agent_id") and "--main-agent-only" in sys.argv:

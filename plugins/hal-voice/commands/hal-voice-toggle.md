@@ -14,7 +14,7 @@ python3 -c "
 import json
 from pathlib import Path
 
-config_path = Path('${CLAUDE_PLUGIN_ROOT}') / 'config.json'
+config_path = Path('${CLAUDE_PLUGIN_DATA}') / 'config.json'
 try:
     config = json.loads(config_path.read_text())
 except (FileNotFoundError, json.JSONDecodeError):

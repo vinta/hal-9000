@@ -1,7 +1,7 @@
 {
   "name": "hal-voice",
   "displayName": "HAL Voice",
-  "version": "2.1.9",
+  "version": "2.1.10",
   "description": "Play HAL 9000 voice clips on Claude Code hook events",
   "author": {
     "name": "Vinta Chen",

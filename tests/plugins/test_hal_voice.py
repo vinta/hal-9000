@@ -70,7 +70,6 @@ class TestLoadState:
         assert state["last_played"] == {}
         assert state["last_stop_time"] == 0.0
         assert state["session_start_times"] == {}
-        assert state["subagent_sessions"] == {}
         assert state["sound_pid"] is None
 
     def test_roundtrip(self, hal_voice, tmp_path):
@@ -250,10 +249,6 @@ class TestIsSuppressed:
         config = {"replay_suppression_seconds": 3}
         assert hal_voice._is_suppressed("SessionStart", state, config, session_id="sess-1", now=1002.0) is False
 
-    def test_subagent_stop_suppressed(self, hal_voice):
-        state = {"subagent_sessions": {"child-1": 1000.0}}
-        assert hal_voice._is_suppressed("Stop", state, {}, session_id="child-1", now=2000.0) is True
-
     def test_clean_state_allows(self, hal_voice):
         assert hal_voice._is_suppressed("Stop", {}, {}, session_id="sess-1", now=1000.0) is False
 
@@ -311,15 +306,10 @@ class TestMatchManifest:
 
 class TestCleanupOldSessions:
     def test_removes_expired(self, hal_voice):
-        state = {
-            "session_start_times": {"old": 1000.0, "new": 90000.0},
-            "subagent_sessions": {"old-child": 1000.0, "new-child": 90000.0},
-        }
+        state = {"session_start_times": {"old": 1000.0, "new": 90000.0}}
         hal_voice.cleanup_old_sessions(state, now=100000.0, max_age=86400)
         assert "old" not in state["session_start_times"]
         assert "new" in state["session_start_times"]
-        assert "old-child" not in state["subagent_sessions"]
-        assert "new-child" in state["subagent_sessions"]
 
 
 class TestPlaySound:
