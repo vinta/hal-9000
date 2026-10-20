@@ -145,7 +145,7 @@ alias cx='codex'
 alias cxmax='codex --model gpt-6-astra --config model_reasoning_effort=max'
 alias cxyolo='blackwall codex --dangerously-bypass-approvals-and-sandbox'
 
-# https://github.com/Homebrew/brew/blob/master/docs/Manpage.md#environment
+# https://docs.brew.sh/Manpage#environment
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_VERIFY_ATTESTATIONS=1

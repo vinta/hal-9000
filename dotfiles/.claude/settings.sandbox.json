@@ -88,7 +88,8 @@
   "workflowSizeGuideline": "small",
   "statusLine": {
     "type": "command",
-    "command": "python3 ~/.claude-blackwall/statusline/hal-statusline.py"
+    "command": "python3 ~/.claude-blackwall/statusline/hal-statusline.py",
+    "refreshInterval": 1
   },
   "subagentStatusLine": {
     "type": "command",
@@ -143,7 +144,6 @@
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "theme": "custom:sandbox",
-  "verbose": false,
   "switchModelsOnFlag": true,
   "showTurnDuration": false,
   "terminalProgressBarEnabled": true,
