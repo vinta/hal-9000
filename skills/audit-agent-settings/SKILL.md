@@ -60,6 +60,6 @@ Apply the picks and validate with the reference's validator after edits. Say whi
 
 ## Gotchas
 
-- WebFetch and similar fetch tools answer through a small summarizer model. On a "list everything" prompt against a long page they truncate, and on a "continue the list" prompt they fabricate plausible keys (observed: `rubyCrimsionPath`). The raw markdown mirror is the ground truth; fetch it with curl and read it yourself.
+- WebFetch and similar fetch tools answer through a separate model call, not the raw page, and read a long page 100,000 characters per call. The scan greps every key and reads whole entries, which needs the raw text in a file, and a "continue the list" prompt has fabricated plausible keys (observed: `rubyCrimsionPath`). Fetch the raw markdown mirror with curl and read it yourself.
 - Undocumented is not the same as dead. A key can live on a different docs page than the fetched files. Grep all the fetched files, then check the platform's other docs pages the reference points to and run its dead-key probe before you call a key dead.
 - Docs churn fast. Results from a previous audit go stale; fetch fresh files every run, and treat remembered page content as expired.
