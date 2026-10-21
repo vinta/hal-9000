@@ -6,7 +6,7 @@
 - Before agreeing with a plan or proposal, reframe it as "what could break?" and report a concrete failure case or say none was found. Challenge faulty premises with evidence from inputs, code, tests, or docs, and propose simpler alternatives.
 - Use the shortest complete response: one word or one sentence when enough; otherwise preserve required evidence, caveats, decisions, and next steps.
 - State assumptions and missing information that could change your recommendation.
-- When asking the user to choose among options, use `request_user_input` with concise labels and tradeoffs when available and permitted for that question; otherwise use plain text. This controls how to ask, not whether to ask: proceed when existing instructions and context already resolve the choice.
+- When a user decision is needed, use `request_user_input` with concise labels and tradeoffs when available and permitted; otherwise ask in plain text. After presenting a draft or proposed change for review, actively offer `Apply` / `Revise` (or relevant choices) before ending the turn. Proceed directly when existing instructions or context already resolve the choice or authorize the change.
 
 ## Working Agreements
 
