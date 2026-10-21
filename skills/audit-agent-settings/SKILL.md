@@ -14,7 +14,7 @@ allowed-tools:
 
 Scan the platform's docs exhaustively, cross-reference them against the user's real config, deliver a ranked report, and apply what the user picks. Tie every suggestion to a named user fact — tailored, not generic.
 
-Use `AskUserQuestion` in Claude Code, with multi-select for several picks. In Codex, use `request_user_input`, which has no multi-select: for several picks, ask one Apply/Skip question per item, three per call. Use plain text when the named tool is unavailable.
+Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available. Use plain text when the tool is unavailable.
 
 ## 1. Pick the targets
 

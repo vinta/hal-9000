@@ -29,7 +29,7 @@ A finding removes lines or concepts; moving them between files is a refactor, no
 
 ## Output
 
-Use `AskUserQuestion` in Claude Code, with multi-select. In Codex, `request_user_input` has no multi-select, so ask one Apply/Skip question per finding, three per call. Use plain text when neither tool is available.
+Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available. Use plain text when neither tool is available.
 
 One line per finding, numbered, ranked biggest cut first:
 
@@ -41,7 +41,7 @@ One line per finding, numbered, ranked biggest cut first:
 - `2. reuse: hand-rolled slugify. python-slugify is installed, slugify(). 1 caller. [utils/text.py:10-31]`
 - `3. delete: retry wrapper around an idempotent local call. 0 callers outside its own test. [src/net.py:52-71]`
 
-Then offer the findings in ranked batches, four per multi-select question in Claude Code or three Apply/Skip questions per call in Codex, and apply the picks.
+Then offer the findings in ranked batches, collect the user's picks, and apply them.
 
 ## Boundaries
 
