@@ -22,7 +22,6 @@ extends = ":workspace"
 [permissions.my-projects.filesystem]
 "~/.app-store" = "deny"
 "~/.aws" = "deny"
-"~/.config" = "deny"
 "~/.docker" = "deny"
 "~/.dropbox" = "deny"
 "~/.kube" = "deny"
