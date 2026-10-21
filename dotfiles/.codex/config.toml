@@ -32,7 +32,6 @@ extends = ":workspace"
 "~/*_history" = "deny"
 "~/Library" = "deny"
 "~/Dropbox" = "deny"
-"/etc" = "deny"
 
 [permissions.my-projects.network]
 enabled = true
