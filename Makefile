@@ -21,7 +21,7 @@ lint-python: ## Run ruff formatter check, linter, type checker, and system pytho
 	uv run vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --hidden --exclude 'typing.NotRequired' bin/ dotfiles/ plugins/ skills/
 
 lint-ansible: ## Run ansible-lint and a playbook syntax check
-	ANSIBLE_COLLECTIONS_PATH="$(wildcard $(shell brew --prefix ansible)/libexec/lib/python3.*/site-packages)" uv run ansible-lint playbooks/
+	ANSIBLE_COLLECTIONS_PATH="$(wildcard $(shell brew --prefix ansible)/libexec/lib/python3.*/site-packages)" uv run ansible-lint -q playbooks/
 	cd playbooks && ansible-playbook site.yml --syntax-check
 
 format: ## Auto-format and fix lint issues
