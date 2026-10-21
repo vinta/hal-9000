@@ -29,8 +29,10 @@ extends = ":workspace"
 "~/.pypirc" = "deny"
 "~/.ssh" = "deny"
 "~/*_history" = "deny"
-"~/Library" = "deny"
 "~/Dropbox" = "deny"
+"~/Library" = "deny"
+"~/Library/Keychains" = "read"
+"~/Library/Preferences/com.apple.security.plist" = "read"
 
 [permissions.my-projects.network]
 enabled = true
