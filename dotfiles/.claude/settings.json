@@ -36,6 +36,7 @@
       "WebSearch"
     ],
     "deny": [
+      "Read(~/.app-store/**)",
       "Read(~/.aws/**)",
       "Read(~/.config/**)",
       "Read(~/.docker/**)",
@@ -47,6 +48,7 @@
       "Read(~/.orbstack/**)",
       "Read(~/.pypirc)",
       "Read(~/.ssh/**)",
+      "Read(~/.zsh_sessions/**)",
       "Read(~/*_history)",
       "Read(~/Library/**)",
       "Edit(~/Library/**)",
