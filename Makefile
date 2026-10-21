@@ -9,7 +9,6 @@ help: ## Show this help message
 install: ## Install dependencies and setup pre-commit hooks
 	uv sync --locked
 	uv audit
-	ansible-galaxy install -r playbooks/collections/requirements.yml
 	HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_UPGRADE=1 brew install --quiet betterleaks
 	uv run pre-commit install
 
@@ -22,7 +21,8 @@ lint-python: ## Run ruff formatter check, linter, type checker, and system pytho
 	uv run vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --hidden --exclude 'typing.NotRequired' bin/ dotfiles/ plugins/ skills/
 
 lint-ansible: ## Run ansible-lint and a playbook syntax check
-	uv run ansible-lint playbooks/
+# Lint against the collections bundled with brew's ansible, the ones ansible-playbook runs
+	ANSIBLE_COLLECTIONS_PATH="$$(echo $$(brew --prefix ansible)/libexec/lib/python3.*/site-packages)" uv run ansible-lint playbooks/
 	cd playbooks && ansible-playbook site.yml --syntax-check
 
 format: ## Auto-format and fix lint issues

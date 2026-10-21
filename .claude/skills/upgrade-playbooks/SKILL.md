@@ -59,13 +59,13 @@ Keep each task's install method, and note each tool whose page recommends a diff
 
 ## 4. Match the collection pin to brew's ansible
 
-`playbooks/collections/requirements.yml` pins `community.general`, the collection supplying the `homebrew`, `homebrew_tap`, and `homebrew_cask` modules the roles install through. Upstream releases do not drive this pin — the brew-installed ansible does. Brew bundles its own copy of the collection, `~/.ansible/collections` takes precedence over it, and the pin is what fills `~/.ansible/collections`. So a pin that disagrees with brew means `ansible-lint` validates different module code than `ansible-playbook` executes, silently.
+`playbooks/collections/requirements.yml` pins `community.general`, the collection supplying the `homebrew`, `homebrew_tap`, and `homebrew_cask` modules the roles install through. Upstream releases do not drive this pin — the brew-installed ansible does. Locally, `ansible-playbook` and `make lint` both load the copy brew bundles; only CI, which has no brew, installs the pin. So a pin that disagrees with brew means CI validates different module code than `ansible-playbook` executes here, silently.
 
 ```bash
 ansible-galaxy collection list community.general
 ```
 
-When they differ, set the pin to brew's version. Never the reverse, and never to the newest release on Galaxy — a pin ahead of brew shadows the bundled collection just as badly as one behind it. Editing the pin is where this skill stops: installing it is `make install`'s job, so note in the final summary that the bump takes effect on the next `make install`.
+When they differ, set the pin to brew's version. Never the reverse, and never to the newest release on Galaxy — a pin ahead of brew drifts from what runs here just as badly as one behind it. Editing the pin is all it takes: CI installs it on its next run.
 
 ## 5. Verify and commit
 
