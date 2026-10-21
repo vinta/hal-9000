@@ -42,7 +42,6 @@
       "Read(~/.docker/**)",
       "Read(~/.dropbox/**)",
       "Read(~/.gnupg/**)",
-      "Read(~/.gsutil/**)",
       "Read(~/.kube/**)",
       "Read(~/.npmrc)",
       "Read(~/.orbstack/**)",

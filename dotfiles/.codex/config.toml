@@ -20,11 +20,11 @@ extends = ":workspace"
 "~/Projects" = true
 
 [permissions.my-projects.filesystem]
+"~/.app-store" = "deny"
 "~/.aws" = "deny"
 "~/.config" = "deny"
 "~/.docker" = "deny"
 "~/.dropbox" = "deny"
-"~/.gsutil" = "deny"
 "~/.kube" = "deny"
 "~/.orbstack" = "deny"
 "~/.pypirc" = "deny"
