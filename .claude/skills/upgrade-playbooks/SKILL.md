@@ -1,12 +1,13 @@
 ---
 name: upgrade-playbooks
-description: (project) Use when upgrading install tasks in playbooks/roles/ against upstream docs — bumping a pinned version, adopting a newly recommended install method, repointing a doc link that moved, or realigning the community.general pin with the brew-installed ansible
+description: (project) Use when upgrading install tasks in playbooks/roles/ against upstream docs — bumping a pinned version, adopting a newly recommended install method, repointing a doc link that moved, or realigning the community.general pin with the brew-installed ansible and CI's ansible-lint action with uv.lock
 user-invocable: true
 model: sonnet
 effort: high
 allowed-tools:
   - Edit(./playbooks/roles/**)
   - Edit(./playbooks/collections/requirements.yml)
+  - Edit(./.github/workflows/validate-playbooks.yml)
   - WebFetch
   - Bash(gh api:*)
   - Bash(curl:*)
@@ -28,7 +29,7 @@ Drift takes three forms, and all three are read off the same page — the `#` co
 
 A **release line** is the version prefix a project treats as a stable series: Node `24.x`, Python `3.14.x`, kubectl `1.35.x`. Every bump stays inside the line (`24.15.0` -> `24.18.0` is in-line for Node because Node's line is the major). When a newer line exists (Node 26, Python 3.15, kubectl 1.36), keep the pin on its current line and report the newer line in the final summary so the user can decide.
 
-One pin lives outside the roles and answers to a different source of truth — `playbooks/collections/requirements.yml`, covered in §4.
+Two pins live outside the roles and answer to a different source of truth — `playbooks/collections/requirements.yml`, covered in §4, and CI's ansible-lint action, covered in §5.
 
 ## 1. Scan
 
@@ -55,7 +56,7 @@ Apply version and link drift, matching the surrounding task style:
 - **Version** — replace the old version at every occurrence in the role: the task `name:`, each command line, and any URL. Done when grepping the file for the old version returns nothing.
 - **Link** — repoint the `#` comment at the URL that resolved.
 
-Keep each task's install method, and note each tool whose page recommends a different macOS method for §6. A page that ranks nothing recommends every method it lists, so note a tool only when its task's method is no longer among them.
+Keep each task's install method, and note each tool whose page recommends a different macOS method for §7. A page that ranks nothing recommends every method it lists, so note a tool only when its task's method is no longer among them.
 
 ## 4. Match the collection pin to brew's ansible
 
@@ -67,14 +68,28 @@ ansible-galaxy collection list community.general
 
 When they differ, set the pin to brew's version. Never the reverse, and never to the newest release on Galaxy — a pin ahead of brew drifts from what runs here just as badly as one behind it. Editing the pin is all it takes: CI installs it on its next run.
 
-## 5. Verify and commit
+## 5. Match CI's ansible-lint to uv.lock
 
-Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7`. A collection pin bump is its own commit, separate from any role.
+`.github/workflows/validate-playbooks.yml` runs the `ansible/ansible-lint` action, pinned to a commit SHA with its tag in a trailing comment. Upstream releases do not drive this pin either — `uv.lock` does, since it holds the ansible-lint `make lint` runs, and CI should lint with the same version.
 
-## 6. Offer method switches
+```bash
+grep -A1 '^name = "ansible-lint"' uv.lock
+```
 
-Once §5's commits are made, ask the user with `AskUserQuestion` in Claude Code or `request_user_input` in Codex whether to switch each tool noted in §3, one question per tool, up to four per call in Claude Code and three in Codex. Each question offers keeping the current method and switching to the page's recommended one, quoting the recommended commands in that option's `preview`; when the switch would cost something the task has, such as a version pin Homebrew cannot hold or a script's self-update, say so in the option's description.
+When that version differs from the action's tag comment, resolve the tag to its commit and repin `uses: ansible/ansible-lint@<sha> # v<version>`. Never the reverse: bumping `uv.lock` is not this skill's job.
 
-For each yes, adopt the upstream commands; a script install points its `creates:` guard at the binary the script produces. A Homebrew install uses the `homebrew` module at `state: latest`, which also replaces any separate upgrade task, as fnm and bun show; a formula from the project's own tap takes a `homebrew_tap` task above it. Then run `make lint` and commit each switched tool as in §5.
+```bash
+gh api repos/ansible/ansible-lint/commits/v<version> --jq .sha
+```
+
+## 6. Verify and commit
+
+Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7`. A collection pin bump and an action repin are each their own commit, separate from any role.
+
+## 7. Offer method switches
+
+Once §6's commits are made, ask the user with `AskUserQuestion` in Claude Code or `request_user_input` in Codex whether to switch each tool noted in §3, one question per tool, up to four per call in Claude Code and three in Codex. Each question offers keeping the current method and switching to the page's recommended one, quoting the recommended commands in that option's `preview`; when the switch would cost something the task has, such as a version pin Homebrew cannot hold or a script's self-update, say so in the option's description.
+
+For each yes, adopt the upstream commands; a script install points its `creates:` guard at the binary the script produces. A Homebrew install uses the `homebrew` module at `state: latest`, which also replaces any separate upgrade task, as fnm and bun show; a formula from the project's own tap takes a `homebrew_tap` task above it. Then run `make lint` and commit each switched tool as in §6.
 
 Close with a summary: what changed per tool, which tools were already current, which method switches the user declined, and any newer release lines waiting on the user.
