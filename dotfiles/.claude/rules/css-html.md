@@ -12,10 +12,11 @@ paths:
 - Body font size `16px` minimum, `18px` for content-heavy pages. Never use `14px` or `text-sm` for body text.
 - Adjacent heading levels (h1 > h2 > h3) differ by at least `4px` / `0.25rem`. Never render a heading at body text size.
 - Reserve accent and link colors for clickable items. Non-interactive elements (inline code, badges, pills, tags) use a neutral or muted color so users don't mistake them for links.
-- Balance the space inside a padded container (card, panel, dialog, callout) by what the eye sees, not by the padding value: the gap above its first line equals the gap below its last.
-  - Text carries leading under its last line, so when the container ends in text, trim it with `text-box: trim-end text` on that specific last text element.
-  - Never apply it to every last child: a control row, a strip or an image already sits flush.
+- Balance the space inside a padded container (card, panel, dialog, callout, page section or band) by what the eye sees, not by the padding value: the gap above its first line equals the gap below its last.
+  - Text carries leading above its first line and below its last, so trim each edge where text meets it: `text-box: trim-start cap` on a first text element that opens the container, `text-box: trim-end alphabetic` on a last one that closes it. This also corrects display fonts whose glyphs rise above a tight `line-height`.
+  - Never apply it to every first or last child: a control row, a strip or an image already sits flush.
   - Add no fallback for browsers without `text-box`; the extra space is acceptable.
+  - Judge a gap by glyph ink (the baseline plus the actual characters' ascent and descent), not by line or range boxes. A large or bold line with descenders still reads tight at equal ink gaps, so give the gap under it 2–4px more.
 - Keep spacing consistent across sibling components (card lists, grid items): if one card has `padding-bottom: 1rem`, all do.
 - Use `rem` for font sizes and spacing.
 - Use `gap` in flex/grid layouts, not margin hacks on children.
@@ -28,9 +29,10 @@ A visual change is complete when the user approves how it looks, not when the ed
 
 When a change spans several components, states, or colors, or you are choosing between candidates, show it before asking:
 
-- Render each candidate in the real page, compose them into one labeled image side by side, and `open` it. Label each panel with the candidate and its deciding values.
+- Render each candidate in the real page, compose them into one labeled image side by side, and `open` it. Label each panel with the candidate and its deciding values. When side by side would scale panels below about 0.6, stack them at full width instead, since smaller text stops being readable.
+- When the choice is which gaps should match, draw a bar on each gap, colored by the gap it should equal.
 - Pair the image with a table of the numbers that decide it (contrast ratio, pixel gaps, rendered width, line count), measured from the rendered page.
 - For a palette, render a sheet: one row per element and state (rest, hover), showing the element plus swatches for its text, fill, and border.
-- Before each capture, set `transition: none; animation: none` on `*, ::before, ::after` and wait for layout. `*` alone misses pseudo-elements, and a mid-fade capture shows the old color.
+- Before each capture, set `transition: none; animation: none` on `*, ::before, ::after`, set `scroll-behavior: auto`, force scroll-in reveal states visible, and wait for layout. `*` alone misses pseudo-elements, a mid-fade capture shows the old color, and a smooth scroll leaves the page short of where you scrolled it.
 
 A one-property tweak on one element skips the images and tables: make it and say what changed.
