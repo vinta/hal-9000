@@ -69,7 +69,7 @@ When they differ, set the pin to brew's version. Never the reverse, and never to
 
 ## 5. Verify and commit
 
-Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7` or `install foundryup from getfoundry.sh`. A collection pin bump is its own commit, separate from any role.
+Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7`. A collection pin bump is its own commit, separate from any role.
 
 ## 6. Offer method switches
 

@@ -154,7 +154,6 @@ source /usr/local/hal-9000/playbooks/roles/hal/files/hal_profile.sh
 source /usr/local/hal-9000/playbooks/roles/python/files/py_profile.sh
 source /usr/local/hal-9000/playbooks/roles/node/files/node_profile.sh
 source /usr/local/hal-9000/playbooks/roles/go/files/go_profile.sh
-# source /usr/local/hal-9000/playbooks/roles/solidity/files/sol_profile.sh
 source /usr/local/hal-9000/playbooks/roles/gcp/files/gcp_profile.sh
 source /usr/local/hal-9000/playbooks/roles/kubernetes/files/k8s_profile.sh
 source /usr/local/hal-9000/playbooks/roles/aws/files/aws_profile.sh

@@ -8,7 +8,6 @@
     - { role: node, tags: ["node"] }
     - { role: bun, tags: ["bun"] }
     - { role: go, tags: ["go"] }
-    # - { role: solidity, tags: ["solidity"] }
     - { role: docker, tags: ["docker"] }
     - { role: kubernetes, tags: ["kubernetes"] }
     - { role: aws, tags: ["aws"] }
