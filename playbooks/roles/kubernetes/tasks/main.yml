@@ -17,16 +17,11 @@
     install -m 0755 /tmp/kubectl "$HOME/.local/bin" && rm /tmp/kubectl
   when: "'v1.35.9' not in kubernetes_kubectl_version.stdout"
 
-- name: Tap derailed/k9s
-  homebrew_tap:
-    name:
-      - derailed/k9s
-
 # https://github.com/derailed/k9s
 - name: Install k9s
   homebrew:
     name:
-      - derailed/k9s/k9s
+      - k9s
     state: latest
 
 - name: Ensure Kubernetes environment is sourced in .zshrc
