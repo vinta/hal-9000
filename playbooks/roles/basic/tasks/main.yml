@@ -63,7 +63,7 @@
     creates: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh/"
   register: basic_omz_install
 
-# upgrade.sh is the scripting entrypoint; `omz update` is a shell function that only exists in an interactive zsh
+# The upgrade.sh is the scripting entrypoint; `omz update` is a shell function that only exists in an interactive zsh
 - name: Update oh-my-zsh
   command: "{{ ansible_facts['env']['HOME'] }}/.oh-my-zsh/tools/upgrade.sh -v minimal"
   register: basic_omz_upgrade
