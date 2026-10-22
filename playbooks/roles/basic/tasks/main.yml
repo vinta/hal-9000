@@ -20,6 +20,14 @@
   changed_when: false
   tags: always
 
+# Always install the latest CA bundles explicitly or they lag behind distrust events
+- name: Install CA certificate packages
+  homebrew:
+    name:
+      - ca-certificates
+      - certifi
+    state: latest
+
 - name: Install utility packages
   homebrew:
     name:
