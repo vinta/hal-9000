@@ -7,11 +7,12 @@
     state: latest
 
 # https://www.python.org/downloads/
+# Pin the minor version only: venvs created under an exact patch pin link to that patch's directory and stay on it after `uv python upgrade`.
 - name: Install Python 3.14.9
   shell: |
     set -e
     uv python install 3.14.9 --default
-    uv python pin 3.14.9 --global
+    uv python pin 3.14 --global
   args:
     executable: /bin/bash
   register: python_uv_install
