@@ -44,7 +44,7 @@
 - name: Install blackwall
   shell: |
     eval "$(fnm env --shell bash)"
-    npm install -g blackwall-sandbox@latest
+    npm install -g blackwall-sandbox@latest --min-release-age=0
   args:
     executable: /bin/bash
   changed_when: false
