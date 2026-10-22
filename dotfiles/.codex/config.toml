@@ -6,12 +6,12 @@ model_reasoning_summary = "detailed"
 model_verbosity = "low"
 hide_agent_reasoning = false
 show_raw_agent_reasoning = true
+suppress_unstable_features_warning = true
+cli_auth_credentials_store = "keyring"
+web_search = "live"
 approval_policy = "on-request"
 approvals_reviewer = "auto_review"
 default_permissions = "my-projects"
-cli_auth_credentials_store = "keyring"
-suppress_unstable_features_warning = true
-web_search = "live"
 
 [permissions.my-projects]
 extends = ":workspace"
@@ -129,6 +129,14 @@ enabled = true
 [plugins."ponytail@ponytail"]
 enabled = true
 
+[marketplaces.hal-9000]
+source_type = "git"
+source = "https://github.com/vinta/hal-9000.git"
+
+[marketplaces.ponytail]
+source_type = "git"
+source = "https://github.com/DietrichGebert/ponytail.git"
+
 [projects."/usr/local/hal-9000"]
 trust_level = "trusted"
 
@@ -149,14 +157,6 @@ trust_level = "trusted"
 
 [projects."/Users/vinta/Projects/laughing-man"]
 trust_level = "trusted"
-
-[marketplaces.hal-9000]
-source_type = "git"
-source = "https://github.com/vinta/hal-9000.git"
-
-[marketplaces.ponytail]
-source_type = "git"
-source = "https://github.com/DietrichGebert/ponytail.git"
 
 [hooks.state]
 
