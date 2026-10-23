@@ -29,6 +29,9 @@ scrollback-limit = 50000000
 clipboard-paste-protection = true
 clipboard-paste-bracketed-safe = true
 
+# https://ghostty.org/docs/config/reference#quit-after-last-window-closed
+quit-after-last-window-closed = true
+
 # https://ghostty.org/docs/config/reference#quick-terminal-position
 quick-terminal-position = top
 quick-terminal-screen = mouse
