@@ -144,6 +144,7 @@ ccp() { claude --model sonnet --effort high --safe-mode --no-session-persistence
 alias cx='codex'
 alias cxmax='codex --model gpt-6-astra --config model_reasoning_effort=max'
 alias cxyolo='blackwall codex --dangerously-bypass-approvals-and-sandbox'
+alias cxdaybreak='codex --model gpt-daybreak-blue-latest'
 
 # https://docs.brew.sh/Manpage#environment
 export HOMEBREW_NO_ANALYTICS=1
