@@ -12,7 +12,7 @@ Then restart Claude Code.
 
 ## Usage
 
-Just type. About 250ms after you stop, the draft goes to the model and the result shows up above the prompt box. A result for an older draft is dropped.
+Just type. About 250ms after you stop, the draft goes to the model and the result shows up above the prompt box. A result for an older draft is dropped. Hit Enter before the result arrives and it still shows up, dimmed, until you type again.
 
 [hal-statusline](../hal-statusline) checks each prompt after you submit it. To avoid seeing both, turn that one off with `HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED=1` in your environment variables.
 

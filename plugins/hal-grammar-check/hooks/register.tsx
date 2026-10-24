@@ -135,14 +135,19 @@ async function runOllama($: EngineInterface, prompt: string, mine: number): Prom
 let backend = ''
 let model = ''
 let timer: Timer | undefined
+// The draft the debounce timer holds, so a submit can check it without waiting
+let unchecked: { draft: string; mine: number } | undefined
 // Bumped on every edit, so a slow answer for an older draft never overwrites a newer one
 let seq = 0
 // Ollama answers one request at a time, so a check sent while another runs only queues behind it
 let isRunning = false
 let waiting: { draft: string; mine: number } | undefined
+// The seq of a submitted draft, whose answer lands dimmed
+let submitted = 0
 
 function cancelChecks() {
   timer?.cancel()
+  unchecked = undefined
   seq += 1
   waiting = undefined
 }
@@ -162,7 +167,7 @@ async function grammarCheck($: EngineInterface, draft: string, mine: number) {
     lines = [`${backend} unreachable (${error instanceof Error ? error.message : String(error)})`]
   }
   if (mine === seq) {
-    const result: GrammarCheck = { status: 'done', lines }
+    const result: GrammarCheck = { status: mine === submitted ? 'submitted' : 'done', lines }
     await update($, check, () => result)
   }
 }
@@ -196,18 +201,23 @@ async function scheduleCheck($: EngineInterface, text: string) {
   timer?.cancel()
   seq += 1
   const mine = seq
+  unchecked = { draft, mine }
   timer = $.clock.after(DEBOUNCE_MS, () => {
+    unchecked = undefined
     void requestCheck($, draft, mine)
   })
 }
 
 async function dimResult($: EngineInterface) {
-  cancelChecks()
-  // Keep the last result on screen, dimmed, until the next draft is checked
-  // A submit dims twice, from prompt.submit and from the clear it raises, so an already dimmed result stays
-  await update($, check, (prev): GrammarCheck | null =>
-    prev?.status === 'done' || prev?.status === 'submitted' ? { ...prev, status: 'submitted' } : null,
-  )
+  // Keep checking the sent draft and show its result dimmed until the next edit
+  // A submit dims twice, from prompt.submit and from the clear it raises, so the second call finds nothing unchecked
+  submitted = seq
+  if (unchecked !== undefined) {
+    timer?.cancel()
+    void requestCheck($, unchecked.draft, unchecked.mine)
+    unchecked = undefined
+  }
+  await update($, check, (prev): GrammarCheck | null => (prev?.status === 'done' ? { ...prev, status: 'submitted' } : prev))
 }
 
 export const register: Register = (on, options) => {
