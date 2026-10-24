@@ -2,8 +2,6 @@
 
 Automatically name each session and rename it as the conversation evolves.
 
-After your first turn (your prompt plus everything Claude does until it stops), and every N turns after that, the model you pick (haiku by default) writes a short title from how the session started and the recent conversation. The plugin applies it with `/rename`, so every change shows up as a `/rename` row in the transcript.
-
 ## Installation
 
 ```bash
@@ -14,9 +12,9 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual. By default N is 5. A new title that shares at least half its words with the current one, counted against the longer of the two, is only a rewording, so it's skipped. Each `/rename` makes Claude Code tell the model that the user named the session. That's not true for this plugin's renames, so the plugin rewrites that system reminder to say the title was auto-generated.
+Just use Claude Code as usual.
 
-If you name the session yourself, with `/rename` or `--name`, the plugin never touches it again.
+After your first turn (your prompt plus everything Claude does until it stops), and every N turns after that, the model writes a short session title based on your conversation. The plugin applies it with `/rename` automatically. If you name the session yourself, with `/rename` or `--name`, the plugin never touches it again.
 
 In the Claude desktop app, the plugin does nothing. The app shows its own session title, so a rename there changes nothing you can see, and its `/rename` row would dismiss the app's next-step box.
 
