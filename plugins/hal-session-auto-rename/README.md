@@ -12,9 +12,7 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual.
-
-After your first turn (your prompt plus everything Claude does until it stops), and every N turns after that, the model writes a short session title based on your conversation. The plugin applies it with `/rename` automatically. If you name the session yourself, with `/rename` or `--name`, the plugin never touches it again.
+Just use Claude Code as usual. After your first turn (your prompt plus everything Claude does until it stops), and every N turns after that, the model writes a short session title based on your conversation. The plugin applies it with `/rename` automatically. If you name the session yourself, with `/rename` or `--name`, the plugin never touches it again.
 
 In the Claude desktop app, the plugin does nothing. The app shows its own session title, so a rename there changes nothing you can see, and its `/rename` row would dismiss the app's next-step box.
 

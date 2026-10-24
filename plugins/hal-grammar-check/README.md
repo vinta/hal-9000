@@ -12,9 +12,7 @@ Then restart Claude Code.
 
 ## Usage
 
-Just type.
-
-The grammar-check result of your prompt shows up above the prompt box after you stop typing.
+Just type. The grammar-check result of your prompt shows up above the prompt box after you stop typing.
 
 [hal-statusline](../hal-statusline) also checks each prompt after you submit it. If you use both, turn that one off with `HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED=1` in your environment variables.
 
