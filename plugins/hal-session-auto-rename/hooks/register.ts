@@ -151,6 +151,8 @@ async function askOllama($: EngineInterface, model: string, prompt: string) {
 let lastSetTitle: string | undefined
 // The title as of the latest prompt; it can change without a /rename (accepting a plan retitles the session)
 let latestSeenTitle: string | undefined
+// /clear hands the new session the old session's title, which names a conversation that is gone
+let clearedSessionTitle: string | undefined
 // Undefined until this session's first title
 let turnsSinceTitle: number | undefined
 let isGenerating = false
@@ -216,7 +218,7 @@ export const register: Register = (on, options) => {
   })
 
   on('classic.UserPromptSubmit', ($, e, next) => {
-    latestSeenTitle = e.session_title
+    latestSeenTitle = e.session_title === clearedSessionTitle ? undefined : e.session_title
     return next(e)
   })
 
@@ -230,6 +232,9 @@ export const register: Register = (on, options) => {
   })
 
   on('classic.SessionStart', async ($, e, next) => {
+    if (e.source === 'clear') {
+      clearedSessionTitle = e.session_title
+    }
     // A title at startup came from `--name`; a resumed title other than this plugin's last one was set by the user where this plugin wasn't loaded
     if (e.source === 'startup' && e.session_title) {
       await $.store.set(e.session_id, true)
@@ -248,6 +253,7 @@ export const register: Register = (on, options) => {
     lastSetTitle = undefined
     latestSeenTitle = undefined
     turnsSinceTitle = undefined
+    clearedSessionTitle = undefined
     return next(e)
   })
 

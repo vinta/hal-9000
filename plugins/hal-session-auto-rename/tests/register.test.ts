@@ -168,6 +168,24 @@ describe('renaming', () => {
     expect(world.renames).toEqual(['debug-oauth-token-refresh', 'debug-oauth-token-refresh'])
   })
 
+  test('/clear ignores the title the cleared session carries over', async ($, on) => {
+    const world = worldOf(on)
+    const clock = mock.clock(on)
+
+    await $.turn.complete(TURN)
+    await clock.settle()
+    await $.session.end({ reason: 'clear', sessionId: 's1', resume: { id: 's1' } })
+    world.sessionId = 's2'
+    await $.classic.SessionStart({ source: 'clear', session_title: 'debug-oauth-token-refresh', session_id: 's2' })
+    await $.classic.UserPromptSubmit({ prompt: 'hi', session_title: 'debug-oauth-token-refresh' })
+    world.title = 'Debug OAuth token expiry'
+    await $.turn.complete(TURN)
+    await clock.settle()
+
+    expect(world.renames).toEqual(['debug-oauth-token-refresh', 'debug-oauth-token-expiry'])
+    expect(world.prompts[1]).not.toContain('<current-title>\ndebug-oauth-token-refresh')
+  })
+
   test('/resume starts the resumed session over with a title of its own', async ($, on) => {
     const world = worldOf(on)
     const clock = mock.clock(on)
