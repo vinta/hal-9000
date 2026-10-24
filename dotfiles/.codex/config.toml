@@ -84,13 +84,14 @@ screen_reader_detection_done = true
 
 [desktop]
 followUpQueueMode = "steer"
-preventSleepWhileRunning = true
-dictationDictionary = []
-dock-icon-preference = "app-default"
-show-context-window-usage = true
-usePointerCursors = true
 enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "max"]
-conversationDetailMode = "STEPS_COMMANDS"
+worktree-upstream-refresh-mode = "best-effort"
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+show-context-window-usage = true
+browser-show-full-url = true
+pagesFullWidth = true
+usePointerCursors = true
 sansFontSize = 16
 codeFontSize = 14
 
@@ -134,9 +135,6 @@ enabled = true
 enabled = true
 
 [plugins."unified-computer-use@openai-bundled"]
-enabled = true
-
-[plugins."code-review@openai-bundled"]
 enabled = true
 
 [plugins."ponytail@ponytail"]
