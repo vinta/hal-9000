@@ -2,5 +2,5 @@
 # https://galaxy.ansible.com/ui/repo/published/community/general/
 collections:
   - name: community.general
-    # Only CI installs this. Matches the version bundled with the brew-installed ansible (14.2.0), so CI lints what `ansible-playbook` runs here.
-    version: 13.2.0
+    # Only CI installs this. Matches the version bundled with the brew-installed ansible (14.5.0), so CI lints what `ansible-playbook` runs here.
+    version: 13.5.0
