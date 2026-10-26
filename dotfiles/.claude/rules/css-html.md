@@ -28,12 +28,13 @@ paths:
 
 A visual change is complete when the user approves how it looks, not when the edit lands; this defines "completed" for the commit step in CLAUDE.md. Iterate on injected CSS or uncommitted edits, then commit after approval, one change per commit so each reverts on its own.
 
-When a change spans several components, states, or colors, or you are choosing between candidates, show it before asking:
+Show each visual change before asking, at desktop and phone width, before beside after:
 
-- Render each candidate in the real page, compose them into one labeled image side by side, and `open` it. Label each panel with the candidate and its deciding values. When side by side would scale panels below about 0.6, stack them at full width instead, since smaller text stops being readable.
+- In the Claude desktop app (`mcp__Claude_Browser__*` tools available), show it live in the browser pane, not as images. Keep a before and an after desktop tab plus one phone tab open for the whole task, so the user never switches the viewport. An emulated viewport can reset between turns, so the phone tab is a page of 375px-wide iframes pointing at the same two builds: the pages the change touches plus one page per template, each before iframe beside its after. When choosing between candidates, open one desktop tab per candidate, labeled on the page with the candidate and its deciding values.
+- Elsewhere, render each view (before, after, or candidate) in the real page, compose them into one labeled image side by side, and `open` it. Label each panel with what it shows and its deciding values. When side by side would scale panels below about 0.6, stack them at full width instead, since smaller text stops being readable.
 - When the choice is which gaps should match, draw a bar on each gap, colored by the gap it should equal.
-- Pair the image with a table of the numbers that decide it (contrast ratio, pixel gaps, rendered width, line count), measured from the rendered page.
+- Pair the views with a table of the numbers that decide it (contrast ratio, pixel gaps, rendered width, line count), measured from the rendered page.
 - For a palette, render a sheet: one row per element and state (rest, hover), showing the element plus swatches for its text, fill, and border.
 - Before each capture, set `transition: none; animation: none` on `*, ::before, ::after`, set `scroll-behavior: auto`, force scroll-in reveal states visible, and wait for layout. `*` alone misses pseudo-elements, a mid-fade capture shows the old color, and a smooth scroll leaves the page short of where you scrolled it.
 
-A one-property tweak on one element skips the images and tables: make it and say what changed.
+A one-property tweak on one element skips the before/after and tables: make it, reload the open tabs, and say what changed.
