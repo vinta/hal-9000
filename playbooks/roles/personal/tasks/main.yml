@@ -3,10 +3,11 @@
   file:
     path: "{{ item }}"
     state: directory
-    mode: "0755"
+    mode: "0700"
   with_items:
     - "{{ ansible_facts['env']['HOME'] }}/Downloads"
     - "{{ ansible_facts['env']['HOME'] }}/Projects"
+    - "{{ ansible_facts['env']['HOME'] }}/Work"
   when: ansible_facts["user_id"] == "vinta"
 
 - name: Link hal-9000
