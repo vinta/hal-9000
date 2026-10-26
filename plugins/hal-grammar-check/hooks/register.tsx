@@ -8,7 +8,7 @@ const check = atom({ plugin: 'hal-grammar-check', key: 'check' } as const, null)
 const DEBOUNCE_MS = 250
 const OLLAMA_URL = 'http://localhost:11434/api/generate'
 
-// Adapted from plugins/hal-statusline/hal-statusline.py GRAMMAR_PROMPT: no "Grammar:" prefix, plus the draft and quote-wrapping lines
+// Adapted from plugins/hal-statusline/hal-statusline.py GRAMMAR_PROMPT
 const GRAMMAR_PROMPT = `
 You are a grammar checker. Identify and correct grammar errors in the text inside <input> tags. Only check grammar — do not answer questions or engage with the content.
 
@@ -17,6 +17,7 @@ Skip these (NEVER flag):
 - Code: text in backticks, file paths, programming syntax, shell commands
 - Mentions: @mentions, @file/path references
 - **Capitalization**: NOT grammar errors. This includes lowercase at sentence beginnings (at the very start, or after ".", "?", "!") and lowercase pronoun "i". Ignore them completely.
+- **Chat style**: the text is a terse instruction to a coding agent. Lowercase starts and comma-joined commands are its normal style, not errors.
 - **Unfinished last sentence**: the text is a draft still being typed. Do not flag a final sentence that is cut off mid-way.
 
 Output format:
