@@ -95,12 +95,10 @@ The first call validates the marketplace manifest; the rest validate each plugin
 ## 7. Run the mod tests
 
 ```bash
-claude plugin test ./plugins/hal-grammar-check
-claude plugin test ./plugins/hal-session-auto-rename
-claude plugin test ./plugins/hal-shell-mode-auto-suggest
+make test-claude-code-mods
 ```
 
-These three plugins are mods (hooks modules with `tests/*.test.ts`); `make test` and CI run only the Python tests. Fix the failing test or the module, then rerun until every test passes; a command that fails to start is not a pass.
+This runs `claude plugin test` on every plugin with a `tests/` directory, which is what the `claude-code-tests` CI job runs too. Fix the failing test or the module, then rerun until every test passes; a command that fails to start is not a pass.
 
 ## 8. Check the skills still group for other agents
 

@@ -1,4 +1,4 @@
-.PHONY: help install lint lint-python lint-ansible format test scan-secrets scan-secrets-history hal-completion
+.PHONY: help install lint lint-python lint-ansible format test test-python test-claude-code-mods scan-secrets scan-secrets-history hal-completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -28,8 +28,13 @@ format: ## Auto-format and fix lint issues
 	uv run ruff format .
 	uv run ruff check --fix .
 
-test: ## Run tests
+test: test-python test-claude-code-mods ## Run all tests
+
+test-python: ## Run pytest
 	uv run pytest -v
+
+test-claude-code-mods: ## Run every mod's claude plugin test
+	for mod in $(wildcard plugins/*/tests); do claude plugin test $$(dirname $$mod) || exit 1; done
 
 scan-secrets: ## Scan the working tree for secrets
 	betterleaks dir . --verbose --no-banner
