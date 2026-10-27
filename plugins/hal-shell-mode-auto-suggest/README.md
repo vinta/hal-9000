@@ -12,4 +12,4 @@ Then restart Claude Code.
 
 ## Usage
 
-Just use Claude Code as usual. When Claude's reply tells you to run a `!` command yourself, that command shows up as the dim suggestion in the prompt box. Press Tab to take it, then Enter to run it. If the reply names several, each one you run brings up the next. Type anything else and the rest are dropped.
+Just use Claude Code as usual. When Claude's reply tells you to run a `!` command yourself, that command shows up as the dim suggestion in the prompt box. Press Tab to take it, then Enter to run it. If the reply names several, each one you run brings up the next. Type anything else and the rest are dropped. Resuming a session whose last reply named a `!` command brings it up too.
