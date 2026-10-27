@@ -55,28 +55,22 @@ export const register: Register = on => {
       return next(e)
     }
 
-    const messages = await $.session.messages()
-    const start = messages.findLastIndex(entry => entry.role === 'assistant' && entry.text !== '')
-    let lines = start >= 0 ? parse(messages[start]?.text ?? '') : []
+    // Replay the transcript through the same rules the live hooks apply.
+    for (const { role, text } of await $.session.messages()) {
+      if (role === 'assistant') {
+        const lines = parse(text)
 
-    if (lines.length > 0) {
-      // Replay what the user did after that reply, as the hooks below did live.
-      for (const { role, text } of messages.slice(start + 1)) {
-        if (role !== 'user' || text === '') {
-          continue
+        if (lines.length > 0) {
+          queue = lines
         }
-
-        if (text.startsWith('<bash-input>')) {
-          popRun(lines, text)
-        } else if (!text.startsWith('<')) {
-          lines = []
-          break
-        }
+      } else if (text.startsWith('<bash-input>')) {
+        popRun(queue, text)
+      } else if (text !== '' && !text.startsWith('<')) {
+        queue = []
       }
-
-      queue = lines
-      suggestHead($, queue)
     }
+
+    suggestHead($, queue)
 
     return next(e)
   })

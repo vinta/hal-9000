@@ -166,17 +166,30 @@ test('a notification or peer prompt keeps the remaining lines', async ($, on) =>
   expect(suggested).toEqual(['! echo one', '! echo one'])
 })
 
-test("resuming brings up the last reply's command, past a slash command's row", async ($, on) => {
+test("resuming brings up an earlier reply's command, past a reply without one", async ($, on) => {
   const { clock, suggested } = setUp(on)
 
   await resume($, on, [
     { role: 'user', text: 'How do I say hello?' },
     { role: 'assistant', text: THREE_LINES },
-    { role: 'user', text: '<command-name>/rename</command-name>' },
+    { role: 'assistant', text: 'No response requested.' },
   ])
   await clock.advance(300)
 
   expect(suggested).toEqual(['! echo one'])
+})
+
+test("resuming brings up the newest reply's command, not an older one", async ($, on) => {
+  const { clock, suggested } = setUp(on)
+
+  await resume($, on, [
+    { role: 'assistant', text: 'Run `! echo old`.' },
+    { role: 'user', text: 'Something else, please.' },
+    { role: 'assistant', text: 'Run `! echo new`.' },
+  ])
+  await clock.advance(300)
+
+  expect(suggested).toEqual(['! echo new'])
 })
 
 test('resuming after running a line brings up the next', async ($, on) => {
