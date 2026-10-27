@@ -2,7 +2,8 @@ import { expect, mock, test } from 'claude-code/testing'
 import type { Engine } from 'claude-code/testing'
 import type { On, PromptOrigin, SessionMessage } from 'claude-code'
 
-const setUp = (on: On) => {
+const setUp = (on: On, env: Record<string, string> = {}) => {
+  mock.env(on, env)
   const clock = mock.clock(on)
   const suggested: string[] = []
   on('turn.complete', (_, e) => ({ text: e.answer }))
@@ -207,6 +208,16 @@ test('starting with an empty transcript suggests nothing', async ($, on) => {
   const { clock, suggested } = setUp(on)
 
   await resume($, on, [])
+  await clock.advance(300)
+
+  expect(suggested).toEqual([])
+})
+
+test('in the desktop app, a `!` command suggests nothing', async ($, on) => {
+  const { clock, suggested } = setUp(on, { CLAUDE_CODE_ENTRYPOINT: 'claude-desktop' })
+
+  await resume($, on, [])
+  await complete($, 'Run `! echo one`.')
   await clock.advance(300)
 
   expect(suggested).toEqual([])

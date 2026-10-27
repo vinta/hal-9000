@@ -1,5 +1,8 @@
 import type { EngineInterface, Register } from 'claude-code'
 
+// The desktop app already offers the reply's `!` command to run, so a suggestion there would duplicate it
+const DESKTOP_ENTRYPOINTS = new Set(['claude-desktop', 'claude-desktop-3p'])
+
 const SHELL_COMMAND = /`(![^`\n]+)`|^[ \t]*(!.+)$/gm
 
 const parse = (answer: string) =>
@@ -25,8 +28,13 @@ function popRun(queue: string[], text: string) {
 
 export const register: Register = on => {
   let queue: string[] = []
+  let isDesktop = false
 
   on('turn.complete', ($, e, next) => {
+    if (isDesktop) {
+      return next(e)
+    }
+
     if (e.agentId === undefined && e.reason === 'answer') {
       const lines = parse(e.answer)
 
@@ -41,6 +49,12 @@ export const register: Register = on => {
   })
 
   on('session.start', async ($, e, next) => {
+    isDesktop = DESKTOP_ENTRYPOINTS.has((await $.env.get('CLAUDE_CODE_ENTRYPOINT')) ?? '')
+
+    if (isDesktop) {
+      return next(e)
+    }
+
     const messages = await $.session.messages()
     const start = messages.findLastIndex(entry => entry.role === 'assistant' && entry.text !== '')
     let lines = start >= 0 ? parse(messages[start]?.text ?? '') : []
