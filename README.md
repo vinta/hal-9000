@@ -99,7 +99,7 @@ curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/scripts/install-h
 
 ### CLAUDE.md / AGENTS.md
 
-Dogmatic yet meticulously crafted global instructions for agentic coding:
+Dogmatic yet meticulously crafted global instructions for coding agents:
 
 - [`~/.claude/CLAUDE.md`](dotfiles/.claude/CLAUDE.md)
 - [`~/.codex/AGENTS.md`](dotfiles/.codex/AGENTS.md)
@@ -112,6 +112,7 @@ Tool configs hardened against supply chain attacks and tuned for better DX:
 - [`.codex/config.toml`](dotfiles/.codex/config.toml)
 - [`.config/ghostty/config`](dotfiles/.config/ghostty/config)
 - [`.config/uv/uv.toml`](dotfiles/.config/uv/uv.toml)
+- [`.bunfig.toml`](dotfiles/.bunfig.toml)
 - [`.npmrc`](dotfiles/.npmrc)
 - [`.zshrc`](dotfiles/.zshrc)
 
