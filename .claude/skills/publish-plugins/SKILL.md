@@ -21,13 +21,14 @@ Prepare the repo's plugins for release: work out which ones changed, bump their 
 
 Each plugin owns its version in its own `.claude-plugin/plugin.json`, and the repo-root `.claude-plugin/marketplace.json` carries no `version` fields:
 
-| Plugin                    | Manifest                                                     |
-| ------------------------- | ------------------------------------------------------------ |
-| `hal-skills`              | `skills/.claude-plugin/plugin.json`                          |
-| `hal-output-styles`       | `plugins/hal-output-styles/.claude-plugin/plugin.json`       |
-| `hal-grammar-check`       | `plugins/hal-grammar-check/.claude-plugin/plugin.json`       |
-| `hal-session-auto-rename` | `plugins/hal-session-auto-rename/.claude-plugin/plugin.json` |
-| `hal-voice`               | `plugins/hal-voice/.claude-plugin/plugin.json`               |
+| Plugin                        | Manifest                                                         |
+| ----------------------------- | ---------------------------------------------------------------- |
+| `hal-skills`                  | `skills/.claude-plugin/plugin.json`                              |
+| `hal-output-styles`           | `plugins/hal-output-styles/.claude-plugin/plugin.json`           |
+| `hal-grammar-check`           | `plugins/hal-grammar-check/.claude-plugin/plugin.json`           |
+| `hal-session-auto-rename`     | `plugins/hal-session-auto-rename/.claude-plugin/plugin.json`     |
+| `hal-shell-mode-auto-suggest` | `plugins/hal-shell-mode-auto-suggest/.claude-plugin/plugin.json` |
+| `hal-voice`                   | `plugins/hal-voice/.claude-plugin/plugin.json`                   |
 
 ## 1. Find the changed plugins
 
@@ -85,6 +86,7 @@ claude plugin validate ./skills
 claude plugin validate ./plugins/hal-output-styles
 claude plugin validate ./plugins/hal-grammar-check
 claude plugin validate ./plugins/hal-session-auto-rename
+claude plugin validate ./plugins/hal-shell-mode-auto-suggest
 claude plugin validate ./plugins/hal-voice
 ```
 
@@ -95,9 +97,10 @@ The first call validates the marketplace manifest; the rest validate each plugin
 ```bash
 claude plugin test ./plugins/hal-grammar-check
 claude plugin test ./plugins/hal-session-auto-rename
+claude plugin test ./plugins/hal-shell-mode-auto-suggest
 ```
 
-These two plugins are mods (hooks modules with `tests/*.test.ts`); `make test` and CI run only the Python tests. Fix the failing test or the module, then rerun until every test passes; a command that fails to start is not a pass.
+These three plugins are mods (hooks modules with `tests/*.test.ts`); `make test` and CI run only the Python tests. Fix the failing test or the module, then rerun until every test passes; a command that fails to start is not a pass.
 
 ## 8. Check the skills still group for other agents
 

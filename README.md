@@ -78,12 +78,14 @@ Plugins that wire their own hooks and run themselves:
   - [ASD-STE100](plugins/hal-output-styles/output-styles/asd-ste100.md)
 - [hal-grammar-check](plugins/hal-grammar-check): Grammar-check your prompt as you type, shown above the prompt box
 - [hal-session-auto-rename](plugins/hal-session-auto-rename): Automatically name each session and rename it as the conversation evolves
+- [hal-shell-mode-auto-suggest](plugins/hal-shell-mode-auto-suggest): Suggests the `!` shell command Claude's last reply asks you to run, Tab to take
 - [hal-voice](plugins/hal-voice): Play HAL 9000 voice clips on Claude Code hook events
 
 ```bash
 claude plugin install hal-output-styles --marketplace vinta/hal-9000
 claude plugin install hal-grammar-check --marketplace vinta/hal-9000
 claude plugin install hal-session-auto-rename --marketplace vinta/hal-9000
+claude plugin install hal-shell-mode-auto-suggest --marketplace vinta/hal-9000
 claude plugin install hal-voice --marketplace vinta/hal-9000
 ```
 
