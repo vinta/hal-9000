@@ -12,29 +12,34 @@
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk"
 
-- name: Install gcloud components
-  command: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk/bin/gcloud components install gke-gcloud-auth-plugin"
-  register: gcp_command_result
-  changed_when: "'All components are up to date' not in gcp_command_result.stderr"
-
-- name: Update gcloud components
-  shell: yes 'y' | {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk/bin/gcloud components update
-  register: gcp_command_result
-  changed_when: "'All components are up to date' not in gcp_command_result.stderr"
-
-# Minor version only: uv links a venv built from an exact patch version to that patch's directory,
-# which `uv python upgrade` leaves behind, while `3.14` follows the symlink uv repoints on upgrade.
-# https://docs.cloud.google.com/sdk/docs/install-sdk
-- name: Create gcloud venv with Python 3.14
-  command: uv venv --python 3.14 {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv
+# The installer builds gcloud's virtenv from uv's Python 3.14 here instead of sudo-installing python.org Python.
+# Minor version only: `uv python find 3.14` returns the symlink uv repoints on upgrade, while a patch version's directory is left behind by `uv python upgrade`.
+- name: Run gcloud installer
+  shell: >-
+    CLOUDSDK_PYTHON=$(uv python find --no-project 3.14)
+    {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk/install.sh
+    --quiet
+    --usage-reporting false
+    --path-update false
+    --command-completion false
+    --additional-components gke-gcloud-auth-plugin
   args:
-    creates: "{{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.config/gcloud/virtenv"
 
 # https://docs.cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
-- name: Install numpy in gcloud venv
-  command: uv pip install --python {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk-venv/bin/python numpy
+- name: Install numpy in gcloud virtenv
+  command: uv pip install --python {{ ansible_facts['env']['HOME'] }}/.config/gcloud/virtenv/bin/python numpy
   register: gcp_command_result
   changed_when: "'Installed' in gcp_command_result.stderr"
+
+# A component change runs `gcloud components update-macos-python`, which sudo-installs python.org Python
+# unless CLOUDSDK_PYTHON is exported, and Ansible doesn't source gcp_profile.sh.
+- name: Update gcloud components
+  shell: yes 'y' | {{ ansible_facts['env']['HOME'] }}/.google-cloud-sdk/bin/gcloud components update
+  environment:
+    CLOUDSDK_PYTHON: "{{ ansible_facts['env']['HOME'] }}/.config/gcloud/virtenv/bin/python"
+  register: gcp_command_result
+  changed_when: "'All components are up to date' not in gcp_command_result.stderr"
 
 - name: Ensure GCP environment is sourced in .zshrc
   lineinfile:
