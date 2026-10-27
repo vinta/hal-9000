@@ -1,7 +1,7 @@
 {
   "name": "hal-shell-mode-auto-suggest",
   "displayName": "HAL Shell Mode Auto-suggest",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Suggests the `!` shell command Claude's last reply asks you to run, Tab to take",
   "author": {
     "name": "Vinta Chen",
