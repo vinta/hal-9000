@@ -102,7 +102,7 @@ test('the first of several plain `!` lines wins, verbatim', async ($, on) => {
   ])
 })
 
-test('running each suggested line brings up the next', async ($, on) => {
+test('running the pending line clears it', async ($, on) => {
   const { clock, suggested } = setUp(on)
 
   await complete($, THREE_LINES)
@@ -111,37 +111,10 @@ test('running each suggested line brings up the next', async ($, on) => {
   await complete($, 'The output says one.')
   await clock.advance(300)
 
-  expect(suggested).toEqual(['! echo one', '! echo two', '! echo two'])
-
-  await run($, ' echo two')
-  await complete($, 'The output says two.')
-  await clock.advance(300)
-
-  expect(suggested).toEqual(['! echo one', '! echo two', '! echo two', '! echo three', '! echo three'])
+  expect(suggested).toEqual(['! echo one'])
 })
 
-test('running a later line first leaves the head suggested', async ($, on) => {
-  const { clock, suggested } = setUp(on)
-
-  await complete($, THREE_LINES)
-  await clock.advance(300)
-  await run($, ' echo two')
-  await complete($, 'The output says two.')
-  await clock.advance(300)
-  await run($, ' echo one')
-  await complete($, 'The output says one.')
-  await clock.advance(300)
-
-  expect(suggested).toEqual([
-    '! echo one',
-    '! echo one',
-    '! echo one',
-    '! echo three',
-    '! echo three',
-  ])
-})
-
-test('a typed prompt drops the remaining lines', async ($, on) => {
+test('a typed prompt drops the pending line', async ($, on) => {
   const { clock, suggested } = setUp(on)
 
   await complete($, THREE_LINES)
@@ -153,7 +126,7 @@ test('a typed prompt drops the remaining lines', async ($, on) => {
   expect(suggested).toEqual(['! echo one'])
 })
 
-test('a notification or peer prompt keeps the remaining lines', async ($, on) => {
+test('a notification or peer prompt keeps the pending line', async ($, on) => {
   const { clock, suggested } = setUp(on)
 
   await complete($, THREE_LINES)
@@ -192,7 +165,7 @@ test("resuming brings up the newest reply's command, not an older one", async ($
   expect(suggested).toEqual(['! echo new'])
 })
 
-test('resuming after running a line brings up the next', async ($, on) => {
+test('resuming after running the pending line suggests nothing', async ($, on) => {
   const { clock, suggested } = setUp(on)
 
   await resume($, on, [
@@ -202,7 +175,7 @@ test('resuming after running a line brings up the next', async ($, on) => {
   ])
   await clock.advance(300)
 
-  expect(suggested).toEqual(['! echo two'])
+  expect(suggested).toEqual([])
 })
 
 test('resuming after a typed prompt suggests nothing', async ($, on) => {
