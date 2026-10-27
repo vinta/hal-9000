@@ -38,23 +38,6 @@ jobs:
       - name: Run tests
         run: make test-python
 
-  claude-code-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Install Claude Code
-        run: |
-          curl -fsSL https://claude.ai/install.sh | bash
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      - name: Run mod tests
-        run: make test-claude-code-mods
-
   system-python-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -80,3 +63,20 @@ jobs:
         run: |
           pip install vermin==1.9.1
           vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --hidden --exclude 'typing.NotRequired' bin/ dotfiles/ plugins/ skills/
+
+  claude-code-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Run mod tests
+        run: make test-claude-code-mods
