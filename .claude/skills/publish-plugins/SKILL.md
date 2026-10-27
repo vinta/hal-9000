@@ -4,13 +4,6 @@ description: (project) Use when editing any file under skills/ or plugins/ to bu
 user-invocable: true
 model: sonnet
 effort: medium
-allowed-tools:
-  - Edit(**/.claude-plugin/*.json)
-  - Bash(python3 .claude/skills/publish-plugins/scripts/check_manifest_sync.py:*)
-  - Bash(python3 .claude/skills/publish-plugins/scripts/check_skill_descriptions_sync.py:*)
-  - Bash(claude plugin validate:*)
-  - Bash(claude plugin test:*)
-  - Bash(npx -y skills@latest add . -l)
 metadata:
   internal: true
 ---

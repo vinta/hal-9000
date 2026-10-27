@@ -4,15 +4,6 @@ description: (project) Use when upgrading install tasks in playbooks/roles/ agai
 user-invocable: true
 model: sonnet
 effort: high
-allowed-tools:
-  - Edit(./playbooks/roles/**)
-  - Edit(./playbooks/collections/requirements.yml)
-  - Edit(./.github/workflows/validate-playbooks.yml)
-  - WebFetch
-  - Bash(gh api:*)
-  - Bash(curl:*)
-  - Bash(make lint:*)
-  - Bash(ansible-galaxy collection list:*)
 metadata:
   internal: true
 ---
