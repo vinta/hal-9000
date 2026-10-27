@@ -1,11 +1,12 @@
 import { expect, mock, test } from 'claude-code/testing'
 import type { Engine } from 'claude-code/testing'
-import type { On } from 'claude-code'
+import type { On, PromptOrigin } from 'claude-code'
 
 const setUp = (on: On) => {
   const clock = mock.clock(on)
   const suggested: string[] = []
   on('turn.complete', (_, e) => ({ text: e.answer }))
+  on('prompt.submit', (_, e) => ({ text: e.text }))
   on('prompt.suggest', (_, e) => {
     suggested.push(e.text)
 
@@ -24,6 +25,18 @@ const complete = ($: Engine, answer: string, agentId?: string) =>
     reason: 'answer',
     ...(agentId === undefined ? {} : { agentId }),
   })
+
+const run = ($: Engine, input: string) =>
+  $.session.append({
+    door: 'command',
+    origin: { kind: 'unclassified' },
+    uuid: 'u1',
+    message: { type: 'user', content: [{ type: 'text', text: `<bash-input>${input}</bash-input>` }] },
+  })
+
+const submit = ($: Engine, origin: PromptOrigin) => $.prompt.submit({ text: 'hi', wait: false, origin })
+
+const THREE_LINES = ['Run these:', '', '! echo one', '! echo two', '! echo three'].join('\n')
 
 test('a `!` command in the answer becomes the suggestion', async ($, on) => {
   const { clock, suggested } = setUp(on)
@@ -80,4 +93,68 @@ test('the first of several plain `!` lines wins, verbatim', async ($, on) => {
   expect(suggested).toEqual([
     "! sudo find /usr/local/bin -lname '*Python.framework/Versions/3.13/*' -delete",
   ])
+})
+
+test('running each suggested line brings up the next', async ($, on) => {
+  const { clock, suggested } = setUp(on)
+
+  await complete($, THREE_LINES)
+  await clock.advance(300)
+  await run($, ' echo one')
+  await complete($, 'The output says one.')
+  await clock.advance(300)
+
+  expect(suggested).toEqual(['! echo one', '! echo two', '! echo two'])
+
+  await run($, ' echo two')
+  await complete($, 'The output says two.')
+  await clock.advance(300)
+
+  expect(suggested).toEqual(['! echo one', '! echo two', '! echo two', '! echo three', '! echo three'])
+})
+
+test('running a later line first leaves the head suggested', async ($, on) => {
+  const { clock, suggested } = setUp(on)
+
+  await complete($, THREE_LINES)
+  await clock.advance(300)
+  await run($, ' echo two')
+  await complete($, 'The output says two.')
+  await clock.advance(300)
+  await run($, ' echo one')
+  await complete($, 'The output says one.')
+  await clock.advance(300)
+
+  expect(suggested).toEqual([
+    '! echo one',
+    '! echo one',
+    '! echo one',
+    '! echo three',
+    '! echo three',
+  ])
+})
+
+test('a typed prompt drops the remaining lines', async ($, on) => {
+  const { clock, suggested } = setUp(on)
+
+  await complete($, THREE_LINES)
+  await clock.advance(300)
+  await submit($, { kind: 'composer' })
+  await complete($, 'Sure, done.')
+  await clock.advance(300)
+
+  expect(suggested).toEqual(['! echo one'])
+})
+
+test('a notification or peer prompt keeps the remaining lines', async ($, on) => {
+  const { clock, suggested } = setUp(on)
+
+  await complete($, THREE_LINES)
+  await clock.advance(300)
+  await submit($, { kind: 'task-notification' })
+  await submit($, { kind: 'peer' })
+  await complete($, 'Noted.')
+  await clock.advance(300)
+
+  expect(suggested).toEqual(['! echo one', '! echo one'])
 })
