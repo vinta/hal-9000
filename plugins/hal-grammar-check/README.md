@@ -1,6 +1,6 @@
 # Claude Code Grammar Check
 
-A grammar check on your prompt while you type, with explanations in Traditional Chinese. The corrections show up above the prompt box, before you hit Enter.
+A grammar check on your prompt while you type, with explanations in your language. The corrections show up above the prompt box, before you hit Enter.
 
 ## Installation
 
@@ -23,6 +23,7 @@ Set them in `/config`:
 - `model`: which of the two models below checks your draft, default `claude/haiku`.
   - `claude/haiku` runs on your Claude account. It bills one call every time you pause typing.
   - `ollama/gemma4:26b-nvfp4` runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
+- `language`: which language the explanations are in, default `English`. One of `English`, `Traditional Chinese`, `Simplified Chinese`, `Japanese`, or `Korean`.
 
 Pick `ollama/gemma4:26b-nvfp4` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
 

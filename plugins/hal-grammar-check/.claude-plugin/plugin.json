@@ -1,7 +1,7 @@
 {
   "name": "hal-grammar-check",
   "displayName": "HAL Grammar Check",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "description": "Grammar-check your prompt as you type, shown above the prompt box",
   "author": {
     "name": "Vinta Chen",
@@ -20,7 +20,13 @@
     "spell-check",
     "hooks",
     "mods",
-    "ollama"
+    "ollama",
+    "english",
+    "chinese",
+    "traditional-chinese",
+    "simplified-chinese",
+    "japanese",
+    "korean"
   ],
   "types": "./types/index.d.ts",
   "userConfig": {
@@ -30,6 +36,13 @@
       "description": "claude/haiku runs on your Claude account; ollama/gemma4:26b-nvfp4 runs on a local Ollama at localhost:11434.",
       "options": ["claude/haiku", "ollama/gemma4:26b-nvfp4"],
       "default": "claude/haiku"
+    },
+    "language": {
+      "type": "string",
+      "title": "Language",
+      "description": "The language the grammar check writes its explanations in.",
+      "options": ["English", "Traditional Chinese", "Simplified Chinese", "Japanese", "Korean"],
+      "default": "English"
     }
   }
 }

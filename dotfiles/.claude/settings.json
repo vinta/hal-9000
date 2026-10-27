@@ -217,7 +217,8 @@
   "pluginConfigs": {
     "hal-grammar-check@hal-9000": {
       "options": {
-        "model": "ollama/gemma4:26b-nvfp4"
+        "model": "ollama/gemma4:26b-nvfp4",
+        "language": "Traditional Chinese"
       }
     },
     "hal-session-auto-rename@hal-9000": {

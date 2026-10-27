@@ -24,6 +24,22 @@ test('claude/haiku checks the draft with $.model.complete', { options: { model: 
   expect(models).toEqual(['haiku'])
 })
 
+test('the language option fills the prompt', { options: { model: 'claude/haiku', language: 'Japanese' } }, async ($, on) => {
+  const prompts: string[] = []
+  on('prompt.change', ($, e) => ({ text: e.text }))
+  on('model.complete', ($, e) => {
+    prompts.push(e.prompt)
+    return { value: { isAnswered: true, text: 'I "have" a apple => ...', usage: USAGE } }
+  })
+  const clock = mock.clock(on)
+
+  await change($)
+  await clock.advance(250)
+
+  expect(prompts[0]).toContain('Japanese')
+  expect(prompts[0]).not.toContain('{language}')
+})
+
 function edit($: unknown, text: string, inputText: string) {
   const e: PromptEditInput = { text, cursor: text.length, start: text.length, end: text.length, inputText, origin: { kind: 'composer' } }
   return ($ as { prompt: { edit: (e: PromptEditInput) => Promise<PromptEditResult> } }).prompt.edit(e)

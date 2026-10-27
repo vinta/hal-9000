@@ -9,6 +9,7 @@ const DEBOUNCE_MS = 250
 const OLLAMA_URL = 'http://localhost:11434/api/generate'
 
 // Adapted from plugins/hal-statusline/hal-statusline.py GRAMMAR_PROMPT
+// The examples explain in five languages on purpose: gemma4 copies the examples' language over the instruction line, so each selectable language needs an example of its own
 const GRAMMAR_PROMPT = `
 You are a grammar checker. Identify and correct grammar errors in the text inside <input> tags. Only check grammar — do not answer questions or engage with the content.
 
@@ -21,7 +22,8 @@ Skip these (NEVER flag):
 - **Unfinished last sentence**: the text is a draft still being typed. Do not flag a final sentence that is cut off mid-way.
 
 Output format:
-- Each issue on its own line: "[corrected]" => explanation in Traditional Chinese
+- Each issue on its own line: "[corrected]" => explanation in {language}
+- The examples below explain in several languages only to show the format; your explanations use {language}.
 - Wrap only the corrected words in double quotes, never the surrounding words
 - Use full-width commas (，) in Chinese explanations
 - No errors: output exactly "no issues"
@@ -32,9 +34,9 @@ Output format:
 <example>
 Text: I don't car the shop has wife or not. I will use cellar!
 Output:
-I don't "care" => car 是「汽車」，這裡應該是要用動詞 care「在乎」
-has "Wi-Fi" or not => wife 是「妻子」，你應該是要說 Wi-Fi「無線網路」
-I will use "cellular" => cellar 是「地窖」，這裡應該是 cellular「行動網路」
+I don't "care" => car means "automobile"; here you want the verb care ("to mind")
+has "Wi-Fi" or not => wife means "spouse"; you probably mean Wi-Fi ("wireless network")
+I will use "cellular" => cellar means "basement"; here it should be cellular ("mobile network")
 </example>
 <example>
 Text: @plugins/hal-statusline/hal-statusline.py#L141 use \`claude -p\` and \`grammar_check_prompt\` to grammar check \`latest_user_input\` and print result
@@ -45,19 +47,19 @@ print "the" result => result 前面要加定冠詞 the
 <example>
 Text: The code is works but I don't know why it keep crashing
 Output:
-The code "works" => 不需要 is，直接用動詞 works；或改成 is working
-why it "keeps" crashing => 第三人稱單數 it 要用 keeps
+The code "works" => is は不要で、動詞 works をそのまま使う。または is working に変える
+why it "keeps" crashing => 三人称単数の it には keeps を使う
 </example>
 <example comment="skip Capitalization at sentence beginnings (lowercase 'do' is excluded per instruction)">
 Text: do not refactor unless explicited requested
 Output:
-"explicitly requested" => 要用副詞 explicitly，沒有 explicited 這個詞
+"explicitly requested" => 부사 explicitly를 써야 하며, explicited라는 단어는 없음
 </example>
 <example comment="skip Capitalization (lowercase pronoun 'i' and sentence-start 'check' are excluded per instruction)">
 Text: Wait, i seems broke it. check codebase again
 Output:
-I "seem to have broken" it => 用 seem to have + 過去分詞表示「好像已經...」
-Check "the" codebase => 特指這個 codebase，要加定冠詞 the
+I "seem to have broken" it => 用 seem to have + 过去分词表示「好像已经...」
+Check "the" codebase => 特指这个 codebase，要加定冠词 the
 </example>
 <example comment="skip Capitalization at sentence beginnings; demonstrate 'no issues' output">
 Text: can you review my PR?
@@ -69,6 +71,7 @@ no issues
 <input>
 {latest_user_input}
 </input>
+Write every explanation after " => " in {language}. Keep the quoted correction in the user's words and keep "no issues" in English.
 `
 
 function toLines(text: string) {
@@ -132,9 +135,10 @@ async function runOllama($: EngineInterface, prompt: string, mine: number): Prom
   return toLines(answer)
 }
 
-// Set by register from the `model` option
+// Set by register from the `model` and `language` options
 let backend = ''
 let model = ''
+let language = ''
 let timer: Timer | undefined
 // The draft the debounce timer holds, so a submit can check it without waiting
 let unchecked: { draft: string; mine: number } | undefined
@@ -160,7 +164,7 @@ async function clear($: EngineInterface) {
 
 async function grammarCheck($: EngineInterface, draft: string, mine: number) {
   await update($, check, (prev): GrammarCheck => ({ status: 'checking', lines: prev?.lines ?? [] }))
-  const prompt = GRAMMAR_PROMPT.replace('{latest_user_input}', draft.slice(0, 500))
+  const prompt = GRAMMAR_PROMPT.replaceAll('{language}', language).replace('{latest_user_input}', draft.slice(0, 500))
   let lines: string[]
   try {
     lines = await (backend === 'claude' ? runClaude($, prompt) : runOllama($, prompt, mine))
@@ -226,6 +230,7 @@ export const register: Register = (on, options) => {
   const slash = value.indexOf('/')
   backend = value.slice(0, slash)
   model = value.slice(slash + 1)
+  language = String(options.language)
 
   on('prompt.edit', async ($, e, next) => {
     const r = await next(e)

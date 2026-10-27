@@ -154,7 +154,13 @@
         "spell-check",
         "hooks",
         "mods",
-        "ollama"
+        "ollama",
+        "english",
+        "chinese",
+        "traditional-chinese",
+        "simplified-chinese",
+        "japanese",
+        "korean"
       ],
       "tags": [
         "grammar",
@@ -163,7 +169,13 @@
         "spell-check",
         "hooks",
         "mods",
-        "ollama"
+        "ollama",
+        "english",
+        "chinese",
+        "traditional-chinese",
+        "simplified-chinese",
+        "japanese",
+        "korean"
       ],
       "userConfig": {
         "model": {
@@ -175,6 +187,19 @@
             "ollama/gemma4:26b-nvfp4"
           ],
           "default": "claude/haiku"
+        },
+        "language": {
+          "type": "string",
+          "title": "Language",
+          "description": "The language the grammar check writes its explanations in.",
+          "options": [
+            "English",
+            "Traditional Chinese",
+            "Simplified Chinese",
+            "Japanese",
+            "Korean"
+          ],
+          "default": "English"
         }
       }
     },
