@@ -71,6 +71,16 @@ Text: did our hooks catch the typo before the commit?
 Output:
 no issues
 </example>
+<example comment="lowercase tool names and chat phrasing are not errors; the one real error is the missing article">
+Text: blackwall codex cannot reach npm? any way to let the sandbox install package?
+Output:
+install "a" package => package 是可數名詞，前面要加冠詞
+</example>
+<example comment="chat shorthand and hyphenated words are not errors">
+Text: what follow-up is left? headless at least?
+Output:
+no issues
+</example>
 </examples>
 
 <input>
