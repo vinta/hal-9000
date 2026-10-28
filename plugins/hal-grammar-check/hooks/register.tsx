@@ -66,6 +66,11 @@ Text: can you review my PR?
 Output:
 no issues
 </example>
+<example comment="a correct question stays 'no issues'; never invent a fix">
+Text: did our hooks catch the typo before the commit?
+Output:
+no issues
+</example>
 </examples>
 
 <input>
