@@ -20,7 +20,8 @@
     "title",
     "ai-title",
     "hooks",
-    "mods"
+    "mods",
+    "ollama"
   ],
   "userConfig": {
     "model": {
