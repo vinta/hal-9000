@@ -34,32 +34,32 @@ Output format:
 <example>
 Text: I don't car the shop has wife or not. I will use cellar!
 Output:
-I don't "care" => car means "automobile"; here you want the verb care ("to mind")
-has "Wi-Fi" or not => wife means "spouse"; you probably mean Wi-Fi ("wireless network")
-I will use "cellular" => cellar means "basement"; here it should be cellular ("mobile network")
+I don't "care" => car is a noun; the verb is care
+has "Wi-Fi" or not => wife means spouse; the network is Wi-Fi
+I will use "cellular" => cellar is a basement; the network is cellular
 </example>
 <example>
 Text: @plugins/hal-statusline/hal-statusline.py#L141 use \`claude -p\` and \`grammar_check_prompt\` to grammar check \`latest_user_input\` and print result
 Output:
-to "grammar-check" latest_user_input => 要用連字號 "-" 連接形成複合動詞
+to "grammar-check" latest_user_input => 複合動詞要用連字號
 print "the" result => result 前面要加定冠詞 the
 </example>
 <example>
 Text: The code is works but I don't know why it keep crashing
 Output:
-The code "works" => is は不要で、動詞 works をそのまま使う。または is working に変える
+The code "works" => is は不要、動詞 works だけでよい
 why it "keeps" crashing => 三人称単数の it には keeps を使う
 </example>
 <example comment="skip Capitalization at sentence beginnings (lowercase 'do' is excluded per instruction)">
 Text: do not refactor unless explicited requested
 Output:
-"explicitly requested" => 부사 explicitly를 써야 하며, explicited라는 단어는 없음
+"explicitly requested" => 부사는 explicitly, explicited는 없는 단어
 </example>
 <example comment="skip Capitalization (lowercase pronoun 'i' and sentence-start 'check' are excluded per instruction)">
 Text: Wait, i seems broke it. check codebase again
 Output:
-I "seem to have broken" it => 用 seem to have + 过去分词表示「好像已经...」
-Check "the" codebase => 特指这个 codebase，要加定冠词 the
+I "seem to have broken" it => seem to have + 过去分词
+Check "the" codebase => 特指时要加定冠词 the
 </example>
 <example comment="skip Capitalization at sentence beginnings; demonstrate 'no issues' output">
 Text: can you review my PR?
