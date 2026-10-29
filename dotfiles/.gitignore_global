@@ -20,6 +20,6 @@ local/
 *.log
 *_history
 
-# tool
+# tools
 .blackwall/
 .playwright-cli/
