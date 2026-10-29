@@ -303,6 +303,7 @@ class HAL9000:
         backup_parser = subparsers.add_parser("backup", help="back up all backup entries to their destinations")
         backup_parser.set_defaults(func=self.backup)
         backup_parser.add_argument("--prune", action="store_true", help="after backing up, list files present only in the backup and offer to delete them")
+        backup_parser.add_argument("--yes", action="store_true", help="delete pruned files without asking")
 
         restore_parser = subparsers.add_parser("restore", help="restore all backup entries, overwriting local files")
         restore_parser.set_defaults(func=self.restore)
@@ -424,7 +425,7 @@ class HAL9000:
     def _find_orphans(self, entry: Entry) -> list[Path]:
         return self.mirror.find_orphans(self._expand_template(entry["src"]), self._expand_template(entry["dest"]))
 
-    def _prune(self) -> None:
+    def _prune(self, *, yes: bool) -> None:
         orphans: list[Path] = []
         for entry in self.dotfiles.data["backups"]:
             if entry.get("prune", True):
@@ -443,7 +444,7 @@ class HAL9000:
         for path in orphans:
             print(f"  {abbreviate_home(path)}")
 
-        if not self._confirm(f"Delete {counted} from backup? [y/N] "):
+        if not yes and not self._confirm(f"Delete {counted} from backup? [y/N] "):
             return
 
         removed = sum(self.mirror.remove_orphan(path) for path in reversed(orphans))
@@ -464,7 +465,7 @@ class HAL9000:
         self._copy_entries(self.dotfiles.data["backups"])
 
         if namespace.prune:
-            self._prune()
+            self._prune(yes=namespace.yes)
 
     def restore(self, namespace: argparse.Namespace) -> None:  # noqa: ARG002 unused-method-argument
         entries = self.dotfiles.data["backups"]

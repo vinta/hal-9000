@@ -956,7 +956,7 @@ class TestBackupRestore:
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
-            hal_instance.backup(argparse.Namespace(prune=False))
+            hal_instance.backup(argparse.Namespace(prune=False, yes=False))
 
         assert dest.read_text() == "live data"
 
@@ -976,7 +976,7 @@ class TestBackupRestore:
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [entry]}
-            hal_instance.backup(argparse.Namespace(prune=False))
+            hal_instance.backup(argparse.Namespace(prune=False, yes=False))
 
         assert (dest / "current.txt").read_text() == "current"
         assert (dest / "deleted_long_ago.txt").read_text() == "keep me"
@@ -1087,7 +1087,7 @@ class TestBackupRestore:
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
-            hal_instance.backup(argparse.Namespace(prune=False))
+            hal_instance.backup(argparse.Namespace(prune=False, yes=False))
 
         out = capsys.readouterr().out
         assert "HAL: copy ~/live.txt -> ~/dropbox/live.txt" in out
@@ -1105,7 +1105,7 @@ class TestBackupPrune:
             patch("builtins.input", return_value=answer),
         ):
             mock_dotfiles.data = {"backups": entries}
-            hal_instance.backup(argparse.Namespace(prune=True))
+            hal_instance.backup(argparse.Namespace(prune=True, yes=False))
 
     def test_deletes_orphans_after_confirmation(self, hal_instance, tmp_path):
         src = tmp_path / "live"
@@ -1138,6 +1138,25 @@ class TestBackupPrune:
 
         assert (dest / "orphan.txt").read_text() == "orphan"
 
+    def test_yes_skips_confirmation(self, hal_instance, tmp_path):
+        """--yes deletes orphans without prompting."""
+        src = tmp_path / "live"
+        src.mkdir()
+
+        dest = tmp_path / "dropbox"
+        dest.mkdir()
+        (dest / "orphan.txt").write_text("orphan")
+
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+            patch("builtins.input", side_effect=AssertionError("prompted")),
+        ):
+            mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
+            hal_instance.backup(argparse.Namespace(prune=True, yes=True))
+
+        assert not (dest / "orphan.txt").exists()
+
     def test_backup_without_prune_deletes_nothing(self, hal_instance, tmp_path):
         src = tmp_path / "live"
         src.mkdir()
@@ -1152,7 +1171,7 @@ class TestBackupPrune:
             patch.object(hal_instance, "dotfiles") as mock_dotfiles,
         ):
             mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
-            hal_instance.backup(argparse.Namespace(prune=False))
+            hal_instance.backup(argparse.Namespace(prune=False, yes=False))
 
         assert (dest / "orphan.txt").read_text() == "orphan"
 
@@ -1233,7 +1252,7 @@ class TestBackupPrune:
             patch("builtins.input", return_value=""),
         ):
             mock_dotfiles.data = {"backups": [{"src": "{{HOME}}/hal-prune-test-absent", "dest": str(dest), "prune": False}]}
-            hal_instance.backup(argparse.Namespace(prune=True))
+            hal_instance.backup(argparse.Namespace(prune=True, yes=False))
 
         assert f"prune disabled {dest}" in capsys.readouterr().out
 
@@ -1534,7 +1553,7 @@ class TestBackupPrune:
             patch("builtins.input", side_effect=fail_if_called),
         ):
             mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
-            hal_instance.backup(argparse.Namespace(prune=True))
+            hal_instance.backup(argparse.Namespace(prune=True, yes=False))
 
     def test_listing_precedes_the_prompt(self, hal_instance, tmp_path, capsys):
         src = tmp_path / "live"

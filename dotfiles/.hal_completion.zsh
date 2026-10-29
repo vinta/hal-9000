@@ -50,7 +50,8 @@ _hal() {
             backup)
                 _arguments \
                     '(-h --help)'{-h,--help}'[show this help message and exit]' \
-                    '--prune[after backing up, list files present only in the backup and offer to delete them]'
+                    '--prune[after backing up, list files present only in the backup and offer to delete them]' \
+                    '--yes[delete pruned files without asking]'
                 ;;
             restore|open-the-pod-bay-doors)
                 _arguments \
