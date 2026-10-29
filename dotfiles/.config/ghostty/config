@@ -26,6 +26,9 @@ shell-integration-features = no-cursor,title,ssh-env,ssh-terminfo
 clipboard-paste-protection = true
 clipboard-paste-bracketed-safe = true
 
+# https://ghostty.org/docs/config/reference#bell-features
+bell-features = border
+
 # https://ghostty.org/docs/config/reference#quit-after-last-window-closed
 quit-after-last-window-closed = true
 
