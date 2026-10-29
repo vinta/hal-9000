@@ -20,11 +20,7 @@ cursor-style-blink = false
 maximize = true
 
 # https://ghostty.org/docs/config/reference#shell-integration-features
-shell-integration-features = no-cursor,title,ssh-env,ssh-terminfo
-
-# https://ghostty.org/docs/config/reference#clipboard-paste-protection
-clipboard-paste-protection = true
-clipboard-paste-bracketed-safe = true
+shell-integration-features = no-cursor,ssh-env,ssh-terminfo
 
 # https://ghostty.org/docs/config/reference#bell-features
 bell-features = border
@@ -32,10 +28,8 @@ bell-features = border
 # https://ghostty.org/docs/config/reference#quit-after-last-window-closed
 quit-after-last-window-closed = true
 
-# https://ghostty.org/docs/config/reference#quick-terminal-position
-quick-terminal-position = top
+# https://ghostty.org/docs/config/reference#quick-terminal-screen
 quick-terminal-screen = mouse
-quick-terminal-autohide = true
 quick-terminal-animation-duration = 0.15
 
 # https://ghostty.org/docs/config/keybind/reference#new_split
