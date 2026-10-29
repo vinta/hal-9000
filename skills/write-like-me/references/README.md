@@ -19,8 +19,8 @@ Every quote in these files comes from published text:
 - READMEs of public repos:
   - [hal-9000](https://github.com/vinta/hal-9000)
   - [pangu.js](https://github.com/vinta/pangu.js)
-  - [laughing-man](https://github.com/vinta/laughing-man)
   - [blackwall](https://github.com/vinta/blackwall)
+  - [laughing-man](https://github.com/vinta/laughing-man)
 - Pre-2025 revisions from public git history, blame-verified as human-typed before AI assistance: hal-9000 README (`79e27cc`, 2023-06-27), awesome-python README (`f387123`, 2024-09-18), awesome-python CONTRIBUTING (`aa4e0ee`, 2021-07-25)
 
 ## Corpus rationale
