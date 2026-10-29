@@ -11,7 +11,7 @@
     "DISABLE_FEEDBACK_COMMAND": "1",
     "DISABLE_UPGRADE_COMMAND": "1",
     "HAL_STATUSLINE_GRAMMAR_CHECK_DISABLED": "1",
-    "HAL_STATUSLINE_GRAMMAR_CHECK_MODEL": "ollama/gemma4:26b-nvfp4"
+    "HAL_STATUSLINE_GRAMMAR_CHECK_MODEL": "ollama/gemma4:31b-mlx"
   },
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>",
@@ -217,13 +217,13 @@
   "pluginConfigs": {
     "hal-grammar-check@hal-9000": {
       "options": {
-        "model": "ollama/gemma4:26b-nvfp4",
+        "model": "ollama/gemma4:31b-mlx",
         "language": "Traditional Chinese"
       }
     },
     "hal-session-auto-rename@hal-9000": {
       "options": {
-        "model": "ollama/gemma4:26b-nvfp4"
+        "model": "ollama/gemma4:31b-mlx"
       }
     }
   },

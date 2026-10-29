@@ -1,7 +1,7 @@
 {
   "name": "hal-grammar-check",
   "displayName": "HAL Grammar Check",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Grammar-check your prompt as you type, shown above the prompt box",
   "author": {
     "name": "Vinta Chen",
@@ -33,8 +33,8 @@
     "model": {
       "type": "string",
       "title": "Model",
-      "description": "claude/haiku runs on your Claude account; ollama/gemma4:26b-nvfp4 runs on a local Ollama at localhost:11434.",
-      "options": ["claude/haiku", "ollama/gemma4:26b-nvfp4"],
+      "description": "claude/haiku runs on your Claude account; ollama/gemma4:31b-mlx runs on a local Ollama at localhost:11434.",
+      "options": ["claude/haiku", "ollama/gemma4:31b-mlx"],
       "default": "claude/haiku"
     },
     "language": {

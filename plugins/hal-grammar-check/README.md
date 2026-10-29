@@ -22,13 +22,13 @@ Set them in `/config`:
 
 - `model`: which of the two models below checks your draft, default `claude/haiku`.
   - `claude/haiku` runs on your Claude account. It bills one call every time you pause typing.
-  - `ollama/gemma4:26b-nvfp4` runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
+  - `ollama/gemma4:31b-mlx` runs on your local Ollama at `localhost:11434`. It's the free, offline choice.
 - `language`: which language the explanations are in, default `English`. One of `English`, `Traditional Chinese`, `Simplified Chinese`, `Japanese`, or `Korean`.
 
-Pick `ollama/gemma4:26b-nvfp4` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
+Pick `ollama/gemma4:31b-mlx` to keep everything on your machine. That needs a local [Ollama](https://ollama.com/) with the model pulled:
 
 ```bash
-ollama pull gemma4:26b-nvfp4
+ollama pull gemma4:31b-mlx
 ```
 
 ## Privacy
