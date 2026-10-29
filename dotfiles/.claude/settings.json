@@ -215,6 +215,11 @@
   "awaySummaryEnabled": false,
   "showClearContextOnPlanAccept": true,
   "pluginConfigs": {
+    "cc-plugin-agents-md@builtin": {
+      "options": {
+        "instructionFiles": "claude-md-and-agents-md"
+      }
+    },
     "hal-grammar-check@hal-9000": {
       "options": {
         "model": "ollama/gemma4:31b-mlx",

@@ -4,22 +4,21 @@ macOS dev environment automation: dotfiles, AI agent configs, skills, and dev st
 
 ## Commands
 
-Use `make help` to find targets and `hal --help` for CLI usage. When a matching Makefile target exists, use it to run the required tools and flags together.
+Run `make help` to list targets and `hal --help` for the CLI.
+
+Use `make` targets instead of running the underlying commands directly. They chain the right tools with the right flags.
 
 ## Gotchas
 
-- Edit managed home-directory files in `dotfiles/`; `dotfiles/hal_dotfiles.json` maps them to their destinations under `~/`.
-- Edit skills in `skills/`. The `hal-9000` Claude Code marketplace installs the published GitHub version, so local edits do not update that installed plugin. Distribution commands are in [README.md](README.md#skills).
-- Keep the `hal-skills` skill lists in `skills/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` synchronized. Both copies are intentional: Claude Code reads the first for author and skill count; `npx skills` needs the second to group skills because it only looks for a root `plugin.json`.
-- Regenerate generated artifacts with their repo command. After changing `bin/hal.py`, run `make hal-completion` to update zsh completion.
+- **Edit under `dotfiles/`, never under `~/`**: `hal sync` symlinks every `links` entry in `dotfiles/hal_dotfiles.json` into `~/`, so an edit to a linked path is live immediately. A new file outside a linked directory needs its own entry plus `hal sync` before anything references it.
+- **Mirror `dotfiles/.claude/settings.json` edits into `dotfiles/.claude/settings.sandbox.json`**: the sandbox copy is the settings for Claude Code under blackwall and drifts otherwise. Skip what it leaves out on purpose: hooks, the `ask` list, host-path `deny` rules, Ollama-backed plugins and env vars, and its own theme and statusline paths.
+- **Edits under `skills/` and `plugins/` are not live until published**: Claude Code loads them from the `hal-9000` marketplace on GitHub (see `dotfiles/.claude/settings.json`), and other coding agents install `skills/` via `npx skills add vinta/hal-9000`. Publish with a version bump (the `publish-plugins` skill) for a change to reach either.
+- All skill descriptions must start with `Use when`, `Use before`, or `Use after`, except skills with `disable-model-invocation: true`, whose description is a human-facing summary. A project-level skill's description may have a `(project)` prefix.
+- For generated artifacts such as zsh completion, regenerate them with the repo command instead of editing them by hand (e.g. `make hal-completion` after modifying `bin/hal.py`).
 
 ## External Tool Documentation
 
-When looking up tool behavior or configuration, use `find-docs` or an available documentation/web fetch tool.
-
-### Context7 Library IDs
-
-Use these pre-resolved IDs with `find-docs`. Pass the matching ID directly to `npx ctx7@latest docs <libraryId> "<query>"`, skipping library resolution. If an ID no longer resolves, look it up again with `find-docs`.
+Pre-resolved Context7 IDs for the `find-docs` skill. Pass them to `ctx7 docs` and skip `ctx7 library`:
 
 | Tool           | `libraryId`                                |
 | -------------- | ------------------------------------------ |
@@ -27,6 +26,7 @@ Use these pre-resolved IDs with `find-docs`. Pass the matching ID directly to `n
 | ansible-lint   | `/ansible/ansible-lint`                    |
 | betterleaks    | `/betterleaks/betterleaks`                 |
 | fnm            | `/schniz/fnm`                              |
+| ghostty        | `/websites/ghostty`                        |
 | github-actions | `/websites/github_en_actions`              |
 | homebrew       | `/homebrew/brew`                           |
 | oh-my-zsh      | `/ohmyzsh/ohmyzsh`                         |
@@ -37,10 +37,3 @@ Use these pre-resolved IDs with `find-docs`. Pass the matching ID directly to `n
 | ty             | `/websites/astral_sh_ty`                   |
 | uv             | `/websites/astral_sh_uv`                   |
 | zsh            | `/websites/zsh_sourceforge_io_doc_release` |
-
-### Documentation Links
-
-Fetch the relevant official page when changing prompts or configuration:
-
-- [GPT-6 prompting guidance](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra#prompting-best-practices)
-- [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)

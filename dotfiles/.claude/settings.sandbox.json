@@ -138,6 +138,13 @@
   "askUserQuestionTimeout": "10m",
   "dialogExpiry": "10m",
   "tui": "fullscreen",
+  "pluginConfigs": {
+    "cc-plugin-agents-md@builtin": {
+      "options": {
+        "instructionFiles": "claude-md-and-agents-md"
+      }
+    }
+  },
   "voice": {
     "enabled": false
   },
