@@ -4,10 +4,8 @@
 # hide .git/ from Codex's @ picker
 .git/
 
-# temp
-local/
-
 # local
+local/
 *.local.*
 
 # secrets
