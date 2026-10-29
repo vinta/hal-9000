@@ -1,23 +1,23 @@
-# simple wildcards like *.log already match recursively, you only need **/ when matching a rule not starts with *
+# Simple wildcards like *.log already match recursively, you only need **/ when matching a rule not starts with *
 **/.DS_Store
 
-# hide .git/ from Codex's @ picker
+# Hide .git/ from Codex's @ picker
 .git/
 
-# local
+# Local
 local/
 *.local.*
 
-# secrets
+# Secrets
 *.key
 *.pem
 **/.env*
 !**/.env.example
 
-# logs
+# Logs
 *.log
 *_history
 
-# tools
+# Tools
 .blackwall/
 .playwright-cli/
