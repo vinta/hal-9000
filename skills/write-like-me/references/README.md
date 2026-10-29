@@ -27,7 +27,7 @@ Every quote in these files comes from published text:
 
 The voice was extracted from a curated corpus, not from everything the user ever wrote. Three provenance tiers:
 
-1. **Blame-verified pre-2025 human text** — the calibration anchor. When an AI-era pattern and an anchor pattern conflict, the anchor wins.
+1. **Blame-verified pre-2025 human text** — the calibration anchor. When two patterns conflict, the one from the same register as the text being written wins; within one register, the newer vouched text wins over the anchor (ruled 2026-10-29).
 2. **Vouched AI-era text** — writing the user reviewed line by line and claims as their own, regardless of who typed the draft.
 3. **The user's own chat messages** (private) — only turns the user typed; assistant text, pasted logs, and command output never qualify. Chat evidence informs the claims in the style spec, but a chat line appears as a quote only with the user's per-quote approval.
 
