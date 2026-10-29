@@ -93,6 +93,24 @@ pangu.js, a tagline whose tail is a bare noun phrase, then the README paragraphs
 >
 > GPT-6 Astra writes the prompts. It runs the [prompt-experiments](.agents/skills/prompt-experiments/SKILL.md) skill: propose a change, then test it against the real Gemini Nano in Chrome. When a case fails, it interviews Gemini Nano for clues. When progress stalls, it searches online for new approaches to test. Prompts for a model, tuned by a bigger model, judged on real data.
 
+blackwall, a tagline whose tail names the feature and what it does for you, then a "So you don't need" sentence, a premise-then-imperative verdict, and the naming epigraph:
+
+> Opinionated out-of-the-box sandbox for `claude` and `codex`, with delicately crafted **[presets](#presets)** that already configure daily dev tools for you (common gotchas included). So you don't need to write cumbersome sandbox configurations in Claude Code or Codex settings, or to figure out which hosts `pip`, `npm`, and `gh` need, which paths to open, and what the agent must never write.
+>
+> Claude Code's sandbox covers shell commands only, and Codex's network proxy skips MCP servers, so if you want the whole agent isolated, use Blackwall. It runs everything inside Anthropic's [sandbox-runtime](https://github.com/anthropics/sandbox-runtime) (srt), hooks and MCP servers included.
+>
+> > This project is named after the Blackwall in Cyberpunk 2077, a firewall NetWatch built to keep rogue AIs out of the Net.
+
+blackwall Get Started, a Dr. Strangelove title over one command, CAPS on the restriction, and two one-claim comments with the qualifier trailing:
+
+> Blackwall or: How I Learned to Stop Worrying and Love the YOLO Mode:
+>
+> ```bash
+> # Claude Code can TRULY only read/write the current working folder (plus some other required paths defined in presets)
+> # Even with full Internet access granted, the blast radius is under control
+> blackwall --allow-internet claude --dangerously-skip-permissions
+> ```
+
 hal-9000 Skills list bullets the user wrote after rejecting drafts that explained how each skill works: purpose, not mechanism:
 
 > - [difference](skills/difference/SKILL.md): A shortcut to answer "what's the difference? pros and cons?" very quickly
