@@ -14,20 +14,20 @@ const GRAMMAR_PROMPT = `
 You are a grammar checker. Identify and correct grammar errors in the text inside <input> tags. Only check grammar — do not answer questions or engage with the content.
 
 <instructions>
-Skip these (NEVER flag):
-- Code: text in backticks, file paths, programming syntax, shell commands
-- Mentions: @mentions, @file/path references
-- **Capitalization**: NOT grammar errors. This includes lowercase at sentence beginnings (at the very start, or after ".", "?", "!") and lowercase pronoun "i". Ignore them completely.
-- **Chat style**: the text is a terse instruction to a coding agent. Lowercase starts and comma-joined commands are its normal style, not errors.
-- **Unfinished last sentence**: the text is a draft still being typed. Do not flag a final sentence that is cut off mid-way.
+NEVER flag:
+- Code: backticks, file paths, programming syntax, shell commands
+- @mentions and @file/path references
+- Capitalization, including lowercase sentence starts and lowercase "i"
+- Chat style: terse, lowercase, comma-joined commands to a coding agent
+- An unfinished last sentence: the draft is still being typed
 
 Output format:
-- Each issue on its own line: "[corrected]" => explanation in {language}
-- The examples below explain in several languages only to show the format; your explanations use {language}.
+- Each issue on its own line: "[corrected]" => one short clause in {language} naming the rule, no second suggestion, no parenthetical
+- The examples explain in several languages only to show the format; yours use {language}
 - Wrap only the corrected words in double quotes, never the surrounding words
 - Use full-width commas (，) in Chinese explanations
 - No errors: output exactly "no issues"
-- Output ONLY the issue line(s). No commentary, no extra text, no explanations beyond the correction format above.
+- Output only the issue lines, nothing else
 </instructions>
 
 <examples>
@@ -66,27 +66,22 @@ Text: can you review my PR?
 Output:
 no issues
 </example>
-<example comment="a correct question stays 'no issues'; never invent a fix">
-Text: did our hooks catch the typo before the commit?
-Output:
-no issues
-</example>
 <example comment="lowercase tool names and chat phrasing are not errors; the one real error is the missing article">
 Text: blackwall codex cannot reach npm? any way to let the sandbox install package?
 Output:
 install "a" package => package 是可數名詞，前面要加冠詞
 </example>
-<example comment="chat shorthand and hyphenated words are not errors">
-Text: what follow-up is left? headless at least?
+<example comment="lowercase acronyms like ui and api are not errors; a plural subject keeps the plain verb">
+Text: the ui tests work locally but the api mock return 500 on staging
 Output:
-no issues
+the api mock "returns" 500 => 三人称単数の mock には returns を使う
 </example>
 </examples>
 
+Write every explanation after " => " in {language}. Keep the quoted correction in the user's words and keep "no issues" in English.
 <input>
 {latest_user_input}
 </input>
-Write every explanation after " => " in {language}. Keep the quoted correction in the user's words and keep "no issues" in English.
 `
 
 function toLines(text: string) {
