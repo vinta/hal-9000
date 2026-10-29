@@ -98,9 +98,13 @@ async function runClaude($: EngineInterface, prompt: string): Promise<string[]> 
   return result.isAnswered ? toLines(result.text) : []
 }
 
-async function runOllama($: EngineInterface, prompt: string, mine: number): Promise<string[]> {
+function grammarPrompt(draft: string) {
+  return GRAMMAR_PROMPT.replaceAll('{language}', language).replace('{latest_user_input}', draft.slice(0, 500))
+}
+
+function ollamaBody(prompt: string) {
   // `think: false` disables reasoning tokens; `temperature: 0` and `num_predict` keep the output short
-  const body = JSON.stringify({
+  return JSON.stringify({
     model,
     prompt,
     stream: true,
@@ -108,9 +112,16 @@ async function runOllama($: EngineInterface, prompt: string, mine: number): Prom
     keep_alive: '30m',
     options: { temperature: 0, num_predict: 250 },
   })
-  // curl instead of $.http.fetch, which resolves only once the whole answer is in
-  // cwd `/` because the session's may be deleted (a removed worktree), which fails the spawn with ENOENT
-  const curl = $.process.spawn({ argv: ['curl', '-sSN', '--fail-with-body', OLLAMA_URL, '-d', '@-'], cwd: '/', input: body })
+}
+
+// curl instead of $.http.fetch, which resolves only once the whole answer is in
+// cwd `/` because the session's may be deleted (a removed worktree), which fails the spawn with ENOENT
+function spawnOllama($: EngineInterface, body: string) {
+  return $.process.spawn({ argv: ['curl', '-sSN', '--fail-with-body', OLLAMA_URL, '-d', '@-'], cwd: '/', input: body })
+}
+
+async function runOllama($: EngineInterface, prompt: string, mine: number): Promise<string[]> {
+  const curl = spawnOllama($, ollamaBody(prompt))
   let ndjson = ''
   let answer = ''
   let stderr = ''
@@ -179,7 +190,7 @@ async function clear($: EngineInterface) {
 
 async function grammarCheck($: EngineInterface, draft: string, mine: number) {
   await update($, check, (prev): GrammarCheck => ({ status: 'checking', lines: prev?.lines ?? [] }))
-  const prompt = GRAMMAR_PROMPT.replaceAll('{language}', language).replace('{latest_user_input}', draft.slice(0, 500))
+  const prompt = grammarPrompt(draft)
   let lines: string[]
   try {
     lines = await (backend === 'claude' ? runClaude($, prompt) : runOllama($, prompt, mine))
