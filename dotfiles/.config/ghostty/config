@@ -22,9 +22,6 @@ maximize = true
 # https://ghostty.org/docs/config/reference#shell-integration-features
 shell-integration-features = no-cursor,title,ssh-env,ssh-terminfo
 
-# https://ghostty.org/docs/config/reference#scrollback-limit
-scrollback-limit = 50000000
-
 # https://ghostty.org/docs/config/reference#clipboard-paste-protection
 clipboard-paste-protection = true
 clipboard-paste-bracketed-safe = true
