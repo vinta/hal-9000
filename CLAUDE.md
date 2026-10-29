@@ -26,6 +26,7 @@ Pre-resolved Context7 IDs for the `find-docs` skill. Pass them to `ctx7 docs` an
 | ansible-lint   | `/ansible/ansible-lint`                    |
 | betterleaks    | `/betterleaks/betterleaks`                 |
 | fnm            | `/schniz/fnm`                              |
+| ghostty        | `/websites/ghostty`                        |
 | github-actions | `/websites/github_en_actions`              |
 | homebrew       | `/homebrew/brew`                           |
 | oh-my-zsh      | `/ohmyzsh/ohmyzsh`                         |
