@@ -99,13 +99,12 @@ function grammarPrompt(draft: string) {
 
 function ollamaBody(prompt: string, stream: boolean, numPredict: number) {
   // `think: false` disables reasoning tokens; `temperature: 0` and `num_predict` keep the output short
-  // `keep_alive: -1` keeps the model loaded, so an idle gap never brings back the ~15 s cold start
   return JSON.stringify({
     model,
     prompt,
     stream,
     think: false,
-    keep_alive: -1,
+    keep_alive: '30m',
     options: { temperature: 0, num_predict: numPredict },
   })
 }

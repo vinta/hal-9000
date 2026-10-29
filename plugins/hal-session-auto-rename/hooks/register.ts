@@ -135,7 +135,7 @@ async function askOllama($: EngineInterface, model: string, prompt: string) {
       prompt,
       stream: false,
       think: false,
-      keep_alive: -1,
+      keep_alive: '30m',
       options: { temperature: 0, num_predict: 30 },
     }),
   })

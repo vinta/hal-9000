@@ -365,7 +365,7 @@ def run_ollama_grammar_model(prompt: str, model: str) -> str | None:
             "prompt": prompt,
             "stream": False,
             "think": False,
-            "keep_alive": -1,
+            "keep_alive": "30m",
             "options": {"temperature": 0, "num_predict": 250},
         }
     ).encode()
