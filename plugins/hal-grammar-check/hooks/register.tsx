@@ -97,15 +97,16 @@ function grammarPrompt(draft: string) {
   return GRAMMAR_PROMPT.replaceAll('{language}', language).replace('{latest_user_input}', draft.slice(0, 500))
 }
 
-function ollamaBody(prompt: string) {
+function ollamaBody(prompt: string, stream: boolean, numPredict: number) {
   // `think: false` disables reasoning tokens; `temperature: 0` and `num_predict` keep the output short
+  // `keep_alive: -1` keeps the model loaded, so an idle gap never brings back the ~15 s cold start
   return JSON.stringify({
     model,
     prompt,
-    stream: true,
+    stream,
     think: false,
-    keep_alive: '30m',
-    options: { temperature: 0, num_predict: 250 },
+    keep_alive: -1,
+    options: { temperature: 0, num_predict: numPredict },
   })
 }
 
@@ -115,8 +116,19 @@ function spawnOllama($: EngineInterface, body: string) {
   return $.process.spawn({ argv: ['curl', '-sSN', '--fail-with-body', OLLAMA_URL, '-d', '@-'], cwd: '/', input: body })
 }
 
+async function warmOllama($: EngineInterface) {
+  // An empty draft loads the model and reads the prompt prefix every check shares, so the first check skips the cold start
+  try {
+    const curl = spawnOllama($, ollamaBody(grammarPrompt(''), false, 1))
+    for await (const _ of curl) {
+    }
+    await curl.result
+  } catch {}
+}
+
 async function runOllama($: EngineInterface, prompt: string, mine: number): Promise<string[]> {
-  const curl = spawnOllama($, ollamaBody(prompt))
+  // A typical reply is ~20 tokens and two issues ~60, while a 250-token runaway costs 12-20 s
+  const curl = spawnOllama($, ollamaBody(prompt, true, 150))
   let ndjson = ''
   let answer = ''
   let stderr = ''
@@ -252,6 +264,15 @@ export const register: Register = (on, options) => {
   backend = value.slice(0, slash)
   model = value.slice(slash + 1)
   language = String(options.language)
+
+  // register has no `$`, so the warm-up waits for session.start, and runs without holding it up
+  on('session.start', async ($, e, next) => {
+    const started = await next(e)
+    if (backend === 'ollama' && e.isInteractive) {
+      void warmOllama($)
+    }
+    return started
+  })
 
   on('prompt.edit', async ($, e, next) => {
     const r = await next(e)
