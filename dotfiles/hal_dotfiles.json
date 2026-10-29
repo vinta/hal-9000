@@ -143,22 +143,6 @@
       "dest": "{{HOME}}/.claude/statusline/hal-statusline.py"
     },
     {
-      "src": "{{REPO_ROOT}}/dotfiles/.blackwall/config.json",
-      "dest": "{{HOME}}/.blackwall/config.json"
-    },
-    {
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.sandbox.json",
-      "dest": "{{HOME}}/.claude-blackwall/settings.json"
-    },
-    {
-      "src": "{{REPO_ROOT}}/dotfiles/.claude/themes/sandbox.json",
-      "dest": "{{HOME}}/.claude-blackwall/themes/sandbox.json"
-    },
-    {
-      "src": "{{REPO_ROOT}}/plugins/hal-statusline/hal-statusline.py",
-      "dest": "{{HOME}}/.claude-blackwall/statusline/hal-statusline.py"
-    },
-    {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/AGENTS.md",
       "dest": "{{HOME}}/.codex/AGENTS.md"
     },
@@ -173,6 +157,22 @@
     {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/rules/default.rules",
       "dest": "{{HOME}}/.codex/rules/default.rules"
+    },
+    {
+      "src": "{{REPO_ROOT}}/dotfiles/.blackwall/config.json",
+      "dest": "{{HOME}}/.blackwall/config.json"
+    },
+    {
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/settings.sandbox.json",
+      "dest": "{{HOME}}/.claude-blackwall/settings.json"
+    },
+    {
+      "src": "{{REPO_ROOT}}/dotfiles/.claude/themes/sandbox.json",
+      "dest": "{{HOME}}/.claude-blackwall/themes/sandbox.json"
+    },
+    {
+      "src": "{{REPO_ROOT}}/plugins/hal-statusline/hal-statusline.py",
+      "dest": "{{HOME}}/.claude-blackwall/statusline/hal-statusline.py"
     },
     {
       "src": "{{REPO_ROOT}}/dotfiles/.codex/rules/default.sandbox.rules",
