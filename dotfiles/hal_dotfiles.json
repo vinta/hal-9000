@@ -61,6 +61,10 @@
       "dest": "{{HOME}}/Dropbox/Projects/*/.claude/settings.local.json"
     },
     {
+      "src": "{{HOME}}/Projects/*/.blackwall/",
+      "dest": "{{HOME}}/Dropbox/Projects/*/.blackwall/"
+    },
+    {
       "src": "{{HOME}}/Projects/*.code-workspace",
       "dest": "{{HOME}}/Dropbox/Projects/*.code-workspace"
     }
