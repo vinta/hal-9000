@@ -229,8 +229,9 @@ async function requestCheck($: EngineInterface, draft: string, mine: number) {
 }
 
 async function scheduleCheck($: EngineInterface, text: string) {
-  // Check a slash command's arguments, not the command name, and skip image placeholders: the model reads [Image #3] as a sentence subject
-  const draft = text.trim().replace(/^\/\S*\s*/, '').replace(/\[Image #\d+\]\s*/g, '').trim()
+  // Check a slash command's arguments, not the command name, and skip image and pasted-text placeholders
+  // The model reads [Image #3] or [Pasted text #1 +12 lines] as part of the sentence
+  const draft = text.trim().replace(/^\/\S*\s*/, '').replace(/\[(?:Image #\d+|Pasted text #\d+(?: \+\d+ lines)?)\]\s*/g, '').trim()
   if (draft === '' || draft.startsWith('!')) {
     await clear($)
     return

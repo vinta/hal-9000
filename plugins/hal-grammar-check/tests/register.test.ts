@@ -87,4 +87,9 @@ test('image placeholders are left out of the checked draft', async ($, on) => {
   expect(prompts).toHaveLength(1)
   expect(prompts[0]).toContain('are you sure?')
   expect(prompts[0]).not.toContain('[Image #3]')
+
+  await edit($, '[Image #3] are you sure?', ' [Pasted text #1 +12 lines]')
+  await clock.advance(250)
+  expect(prompts).toHaveLength(2)
+  expect(prompts[1]).not.toContain('[Pasted text #1 +12 lines]')
 })
