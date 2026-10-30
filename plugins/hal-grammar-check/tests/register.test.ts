@@ -65,3 +65,26 @@ test('a bare digit in an empty prompt is left to the band hotkeys, not checked',
   await clock.advance(250)
   expect(prompts, 'a prompt that starts with a digit is still checked').toHaveLength(1)
 })
+
+test('image placeholders are left out of the checked draft', async ($, on) => {
+  const prompts: string[] = []
+  on('prompt.edit', ($, e) => {
+    const text = e.text.slice(0, e.start) + e.inputText + e.text.slice(e.end)
+    return { text, cursor: e.start + e.inputText.length }
+  })
+  on('model.complete', ($, e) => {
+    prompts.push(e.prompt)
+    return { value: { isAnswered: true, text: 'no issues', usage: USAGE } }
+  })
+  const clock = mock.clock(on)
+
+  await edit($, '', '[Image #3]')
+  await clock.advance(250)
+  expect(prompts, 'an image-only draft is not checked').toEqual([])
+
+  await edit($, '[Image #3]', ' are you sure?')
+  await clock.advance(250)
+  expect(prompts).toHaveLength(1)
+  expect(prompts[0]).toContain('are you sure?')
+  expect(prompts[0]).not.toContain('[Image #3]')
+})
