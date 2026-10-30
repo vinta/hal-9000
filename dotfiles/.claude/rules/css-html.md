@@ -22,6 +22,7 @@ paths:
 - Keep sibling components (card lists, grid items, parallel sections) consistent: the same spacing (if one card has `padding-bottom: 1rem`, all do), one font size for their titles or quotes rather than scaling with content length, and the same order of parts, so parallel sections open with the same kind of element.
 - Space an element closer to the group it belongs to than to the next group: a list's trailing button sits nearer the list than the heading that follows.
 - A hover background fills the item between its own rules or borders, never past them, and pads its text equally on both sides so no glyph touches the tint's edge.
+- Set `scroll-behavior: smooth` on `html` so in-page anchor links glide to their target, and reset it to `auto` under `prefers-reduced-motion: reduce`.
 - Use `rem` for font sizes and spacing.
 - Use `gap` in flex/grid layouts, not margin hacks on children.
 - Use CSS custom properties (`--var`) for colors and repeated values.
