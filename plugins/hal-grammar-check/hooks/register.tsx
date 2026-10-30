@@ -58,8 +58,8 @@ Output:
 <example comment="skip Capitalization (lowercase pronoun 'i' and sentence-start 'check' are excluded per instruction)">
 Text: Wait, i seems broke it. check codebase again
 Output:
-I "seem to have broken" it => seem to have + 过去分词
-Check "the" codebase => 特指时要加定冠词 the
+i "seem to have broken" it => seem to have + 过去分词
+check "the" codebase => 特指时要加定冠词 the
 </example>
 <example comment="skip Capitalization at sentence beginnings; demonstrate 'no issues' output">
 Text: can you review my PR?
@@ -71,7 +71,7 @@ Text: blackwall codex cannot reach npm? any way to let the sandbox install packa
 Output:
 install "a" package => package 是可數名詞，前面要加冠詞
 </example>
-<example comment="lowercase acronyms like ui and api are not errors; a plural subject keeps the plain verb">
+<example comment="lowercase acronyms like ui and api are not errors; a singular subject takes the -s verb">
 Text: the ui tests work locally but the api mock return 500 on staging
 Output:
 the api mock "returns" 500 => 三人称単数の mock には returns を使う
