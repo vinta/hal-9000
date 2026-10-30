@@ -21,6 +21,7 @@ paths:
   - Judge a gap by glyph ink (the baseline plus the actual characters' ascent and descent), not by line or range boxes. A large or bold line with descenders still reads tight at equal ink gaps, so give the gap under it 2–4px more. An underline or other decoration under the last line is its bottom ink, so measure the gap below from it.
 - Keep sibling components (card lists, grid items, parallel sections) consistent: the same spacing (if one card has `padding-bottom: 1rem`, all do), one font size for their titles or quotes rather than scaling with content length, and the same order of parts, so parallel sections open with the same kind of element.
 - Space an element closer to the group it belongs to than to the next group: a list's trailing button sits nearer the list than the heading that follows.
+- A hover background fills the item between its own rules or borders, never past them, and pads its text equally on both sides so no glyph touches the tint's edge.
 - Use `rem` for font sizes and spacing.
 - Use `gap` in flex/grid layouts, not margin hacks on children.
 - Use CSS custom properties (`--var`) for colors and repeated values.
