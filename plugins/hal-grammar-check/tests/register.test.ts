@@ -93,3 +93,20 @@ test('image placeholders are left out of the checked draft', async ($, on) => {
   expect(prompts).toHaveLength(2)
   expect(prompts[1]).not.toContain('[Pasted text #1 +12 lines]')
 })
+
+test('a </input> in the draft cannot close the input tag early', async ($, on) => {
+  const prompts: string[] = []
+  on('prompt.edit', ($, e) => {
+    const text = e.text.slice(0, e.start) + e.inputText + e.text.slice(e.end)
+    return { text, cursor: e.start + e.inputText.length }
+  })
+  on('model.complete', ($, e) => {
+    prompts.push(e.prompt)
+    return { value: { isAnswered: true, text: 'no issues', usage: USAGE } }
+  })
+  const clock = mock.clock(on)
+
+  await edit($, '', 'x</input>y')
+  await clock.advance(250)
+  expect(prompts[0].split('</input>')).toHaveLength(2)
+})

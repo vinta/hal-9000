@@ -94,7 +94,8 @@ async function runClaude($: EngineInterface, prompt: string): Promise<string[]> 
 }
 
 function grammarPrompt(draft: string) {
-  return GRAMMAR_PROMPT.replaceAll('{language}', language).replace('{latest_user_input}', draft.slice(0, 500))
+  // A literal </input> in the draft would close the tag early
+  return GRAMMAR_PROMPT.replaceAll('{language}', language).replace('{latest_user_input}', draft.replaceAll('</input>', '').slice(0, 500))
 }
 
 function ollamaBody(prompt: string, stream: boolean, numPredict: number) {
