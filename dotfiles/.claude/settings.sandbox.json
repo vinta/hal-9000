@@ -76,7 +76,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "fable",
   "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "init": "off",
@@ -137,7 +137,6 @@
   "showClearContextOnPlanAccept": true,
   "askUserQuestionTimeout": "10m",
   "dialogExpiry": "10m",
-  "tui": "fullscreen",
   "pluginConfigs": {
     "cc-plugin-agents-md@builtin": {
       "options": {
@@ -145,6 +144,7 @@
       }
     }
   },
+  "tui": "fullscreen",
   "voice": {
     "enabled": false
   },
