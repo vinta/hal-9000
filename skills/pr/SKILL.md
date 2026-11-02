@@ -76,7 +76,7 @@ Move name-suffix into core rules and protect URLs and slashes
 1. `gh pr view --json url,number,state` — abort if no PR or not open.
 2. `git push`, alone in its Bash call, every time: it prints `Everything up-to-date` when nothing is ahead. Abort if it fails.
 3. `git rev-parse HEAD`, then `gh pr view --json headRefOid --jq .headRefOid`. If they differ, GitHub has not seen the push yet and `gh pr checks` would report the old head's runs: wait 15 seconds and compare once more, then abort if they still differ.
-4. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If the push sent commits and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once.
+4. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If the push sent commits and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once. If the call times out instead, the checks are still running: run it again with the same timeout, and after a third timeout report the checks still pending and stop.
 5. If exit code 0 (all checks passed):
    - `gh pr merge --merge --delete-branch`. It also switches to the base branch, pulls it, and deletes the local branch.
    - Report: merged, remote and local branches cleaned up.
