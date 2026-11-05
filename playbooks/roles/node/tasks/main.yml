@@ -7,11 +7,11 @@
     state: latest
 
 # https://nodejs.org/en/about/previous-releases
-- name: Install Node.js 24.22.2
+- name: Install Node.js 26.13.0
   shell: |
     eval "$(fnm env --shell bash)"
-    fnm install 24.22.2
-    fnm default 24.22.2
+    fnm install 26.13.0
+    fnm default 26.13.0
   args:
     executable: /bin/bash
   register: node_install
