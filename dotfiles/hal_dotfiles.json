@@ -63,6 +63,18 @@
     {
       "src": "{{HOME}}/Projects/*.code-workspace",
       "dest": "{{HOME}}/Dropbox/Projects/*.code-workspace"
+    },
+    {
+      "src": "{{HOME}}/Work/*/local/",
+      "dest": "{{HOME}}/Dropbox/Work/*/local/"
+    },
+    {
+      "src": "{{HOME}}/Work/*/.claude/settings.local.json",
+      "dest": "{{HOME}}/Dropbox/Work/*/.claude/settings.local.json"
+    },
+    {
+      "src": "{{HOME}}/Work/*.code-workspace",
+      "dest": "{{HOME}}/Dropbox/Work/*.code-workspace"
     }
   ],
   "links": [
