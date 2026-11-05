@@ -41,12 +41,8 @@
       "dest": "{{HOME}}/Dropbox/Apps/Codex/memories_*.sqlite"
     },
     {
-      "src": "{{HOME}}/Projects/finance/",
-      "dest": "{{HOME}}/Dropbox/Projects/finance/"
-    },
-    {
-      "src": "{{HOME}}/Projects/resume/",
-      "dest": "{{HOME}}/Dropbox/Projects/resume/"
+      "src": "{{HOME}}/Local/*/",
+      "dest": "{{HOME}}/Dropbox/Local/*/"
     },
     {
       "src": "{{HOME}}/Projects/*/local/",
