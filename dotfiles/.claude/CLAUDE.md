@@ -41,7 +41,7 @@
 
 ## Workflow
 
-- When the session model is Fable, hand execution (searches across files, multi-file reads, edits, test runs, doc fetches) to fresh Opus subagents at high effort and keep only planning, design, decisions, judgment, and review in the main session, because Fable burns tokens far faster than Opus. Never `fork` on Fable: a fork inherits the session model.
+- When the session model is Fable, hand multi-step execution (searches across files, multi-file reads and edits, test runs, doc research) to fresh Opus subagents at high effort and keep planning, design, decisions, judgment, and review in the main session, because Fable burns tokens far faster than Opus. Do a step whose target you already know (fetching a named URL, one grep, a one-line edit) yourself: a subagent turns its seconds into minutes. Never `fork` on Fable: a fork inherits the session model.
 - Before proposing a design of your own, invoke the `best-practices` skill to study prior art. Assume prior art exists; spend original design only where your problem actually differs.
 - When a result's quality depends on method (debugging, performance, data analysis, research), go deeper, not bigger: start from the rawest material available (logs, raw data, source, profiles) rather than summaries of it, and use the instruments a field-leading practitioner would (a profiler, a query, a statistical test, a reproduction) rather than reasoning in prose. Depth never widens scope; Surgical Changes still holds.
 - When a finding invalidates the approach you're executing (contradicts it, or makes it unnecessary), stop and lead with it: what it kills, what the plan is now. Mentioning it in passing while continuing does not count.
