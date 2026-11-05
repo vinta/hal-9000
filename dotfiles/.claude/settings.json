@@ -22,8 +22,6 @@
     "allow": [
       "Read(~/Projects/**)",
       "Edit(~/Projects/**)",
-      "Read(~/Local/**)",
-      "Edit(~/Local/**)",
       "Bash(git branch *)",
       "Bash(git stash *)",
       "Bash(git add *)",
