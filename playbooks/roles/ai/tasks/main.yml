@@ -22,15 +22,6 @@
   environment:
     OLLAMA_NO_START: "1"
 
-# https://github.com/upstash/context7
-- name: Install ctx7
-  shell: |
-    eval "$(fnm env --shell bash)"
-    npm install -g ctx7@latest
-  args:
-    executable: /bin/bash
-  changed_when: false
-
 # https://github.com/microsoft/playwright-cli
 - name: Install playwright-cli
   shell: |
