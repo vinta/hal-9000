@@ -35,7 +35,7 @@ Excluded entirely: all Chinese text (the skill never writes Chinese), agent-faci
 
 ## Adjudication
 
-Every recurring second-language pattern found in the corpus was put to the user with verbatim evidence, and the user ruled all of them slips to fix, none of them voice. That ruling is why the grammar section of the style spec corrects unconditionally: voice lives in structure, register, and signature moves, never in grammar errors. A newly noticed ambiguous pattern gets the same call from the user before being auto-fixed.
+Every recurring second-language pattern found in the corpus was put to the user with verbatim evidence, and the user ruled all of them slips to fix, none of them voice. That ruling is why the grammar section of the style spec corrects unconditionally: voice lives in structure, register, and signature moves, never in grammar errors. Phrasing a native reader understands but would not write got the same call and was ruled a slip; a grammatical phrase that is only the user's own choice of words was ruled voice. A newly noticed ambiguous pattern gets the same call from the user before being auto-fixed.
 
 ## Harvest
 
