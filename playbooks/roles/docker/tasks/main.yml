@@ -1,5 +1,5 @@
 ---
-# https://orbstack.dev/
+# https://orbstack.dev/download
 - name: Install OrbStack
   homebrew:
     name:
