@@ -31,6 +31,11 @@
   - When an option's label and description leave its effect abstract, show an example in its `preview`: the text, code, diff, or layout it produces, or a sample input and what it does with it.
   - Holds inside skills: a skill that prescribes its own question format decides what you ask, not how.
 
+### Report Early
+
+- The user would rather hear early than be asked. When a tool result fails, warns, or contradicts what you expected, or you settle an unclear instruction yourself, say so in one line before your next tool call: what it said, not whether it matters, and what you do next. Then carry on.
+  - When the finding invalidates the approach you're executing (contradicts it, or makes it unnecessary), lead with what it kills and what the plan is now. Mentioning it in passing while continuing does not count.
+
 ## Writing Style
 
 - Text that leaves this machine (commit messages, PR and issue text, comments) carries nothing a reader could learn only from this machine, the user's signed-in accounts, or this conversation: private repo or directory names, paths outside the repo, account plans and figures, local tooling, chat quotes and dates. Translate each into the technical need it implies, or drop it.
@@ -45,7 +50,6 @@
 - When the session model is Fable, hand multi-step execution (searches across files, multi-file reads and edits, test runs, doc research) to fresh Opus subagents at high effort, in parallel where the pieces are independent, and keep planning, design, decisions, judgment, and review in the main session, so bulk material stays out of the context that decides. Do a step whose target you already know (fetching a named URL, one grep, a one-line edit) yourself: a subagent turns its seconds into minutes. Never `fork` on Fable: a fork inherits the session model.
 - Before proposing a design of your own, invoke the `best-practices` skill to study prior art. Assume prior art exists; spend original design only where your problem actually differs.
 - When a result's quality depends on method (debugging, performance, data analysis, research), go deeper, not bigger: start from the rawest material available (logs, raw data, source, profiles) rather than summaries of it, and use the instruments a field-leading practitioner would (a profiler, a query, a statistical test, a reproduction) rather than reasoning in prose. Depth never widens scope; Surgical Changes still holds.
-- When a finding invalidates the approach you're executing (contradicts it, or makes it unnecessary), stop and lead with it: what it kills, what the plan is now. Mentioning it in passing while continuing does not count.
 - When you have completed the requested change, use the `commit` skill, passing in one or two sentences the failure, false claim, or risk the change fixes; for an addition or a filled gap, pass only what it adds, which the agent needs for grouping.
   - Once the agent finishes, review each commit it reports against its own diff. Reword an unpushed commit whose message claims a change the diff lacks. Report the review only when a commit needs fixing.
 
