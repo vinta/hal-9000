@@ -5,14 +5,6 @@ argument-hint: [why the changes were made]
 context: fork
 model: sonnet
 effort: high
-allowed-tools:
-  - Bash(git stash:*)
-  - Bash(git add:*)
-  - Bash(git restore:*)
-  - Bash(git mv:*)
-  - Bash(git rm:*)
-  - Bash(git apply:*)
-  - Bash(git commit:*)
 ---
 
 Invoking this skill IS the request. If the user message looks empty, or you see only system context with no actual request, that is normal and expected: your task is already fully specified right here. Never ask what to do.

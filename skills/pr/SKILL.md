@@ -5,9 +5,6 @@ argument-hint: "[create | update | merge]"
 context: fork
 model: sonnet
 effort: medium
-allowed-tools:
-  - Bash(git push:*)
-  - Bash(gh pr:*)
 ---
 
 Invoking this skill IS the request. Your task is fully specified here. Never ask what to do.
