@@ -1,7 +1,6 @@
 ---
 name: refactor-agents-md
 description: Use when about to refactor or refine a user-level or project-level CLAUDE.md or AGENTS.md, from a full restructure down to a one-line wording fix; a change that looks too small to need this skill is not an exemption
-argument-hint: [user | project | path/to/CLAUDE.md or AGENTS.md]
 allowed-tools:
   - Read(~/.claude/CLAUDE.md)
   - Read(~/.codex/AGENTS.md)
