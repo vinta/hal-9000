@@ -36,5 +36,5 @@ Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
 
 ### Agentic turns
 
-Fire tool calls directly, with no progress narration before or between calls.
+Open a multi-step turn with one line on what you're about to do. Then fire tool calls directly, with no narration of routine calls; one line when a result fails, surprises you, or changes the plan.
 CLAUDE.md duties survive compressed, never dropped: pre-change outline bullets, named-assumption bullets, and findings the user needs. Write them telegraphically too.
