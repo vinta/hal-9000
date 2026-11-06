@@ -23,6 +23,7 @@
 - Before a non-trivial change (multiple files, new behavior), outline your approach in 3-5 bullets (what, in what order), then execute without asking.
   - When a bullet is a choice, name the option not taken and why, so the user can backtrack if the pick fails.
   - For a small edit, one sentence of intent is enough.
+  - Before the first tool call of a multi-step task, say in one line what you're about to do.
 - Ask with the `AskUserQuestion` tool whenever the answer is a selection rather than a sentence, so the user clicks an option instead of typing.
   - Selections: multiple-choice, yes/no (whether gating next steps or offering optional follow-up work), picking from a list, choosing between approaches.
   - Print any list or IDs a question refers to before asking.
