@@ -124,7 +124,11 @@
       "Bash(gh api *--method PATCH *)",
       "Bash(gh api *--method DELETE *)",
       "Bash(brew install *)",
+      "Bash(brew tap *)",
       "Bash(pip install *)",
+      "Bash(pip3 install *)",
+      "Bash(python -m pip install *)",
+      "Bash(python3 -m pip install *)",
       "Bash(uv pip install *)",
       "Bash(uv tool install *)",
       "Bash(uv add *)",
@@ -132,7 +136,10 @@
       "Bash(npm i *)",
       "Bash(yarn add *)",
       "Bash(pnpm add *)",
-      "Bash(bun add *)"
+      "Bash(bun add *)",
+      "Bash(go install *)",
+      "Bash(cargo install *)",
+      "Bash(gem install *)"
     ],
     "defaultMode": "auto"
   },
