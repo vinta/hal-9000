@@ -1,11 +1,15 @@
 ---
 name: pr
 description: "Use when the user explicitly asks to push the current branch and open a PR, rewrite an open PR's body from its commits, or wait for CI and merge it"
+argument-hint: "[create | update | merge]"
+context: fork
+model: sonnet
+effort: medium
 ---
 
 Invoking this skill IS the request. Your task is fully specified here. Never ask what to do.
 
-Run every command bare, exactly as written below: `git` and `gh` find the repository from any subdirectory.
+Run every command bare, exactly as written below: `git` and `gh` find the repository from any subdirectory, and a `cd` does not carry over to the next Bash call in this fork. A `cd ... &&` or `$()` prefix stops a command matching `allowed-tools`, and the merge then hits the permission gate.
 
 The user invoked this skill with: "$ARGUMENTS"
 

@@ -1,6 +1,9 @@
 ---
 name: difference
-description: Use when the user explicitly asks for a quick answer comparing A vs B, weighing pros and cons of A, B, C, ..., or explaining the nuance between sentences, from what the model already knows. Not for comparisons that need research
+description: Compare A vs B, weigh pros and cons of A, B, C, ..., or explain the nuance between sentences — a quick answer from what the model already knows
+argument-hint: "[A vs B | A, B, C, ... | sentences]"
+disable-model-invocation: true
+effort: low
 ---
 
 # Difference

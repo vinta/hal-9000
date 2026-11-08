@@ -1,6 +1,7 @@
 ---
 name: refactor-memory
 description: Use when refactoring Claude Code or Codex memories to remove stale or derivable entries, resolve contradictions, promote standing instructions, or reorganize recall. Not for standalone CLAUDE.md, AGENTS.md, or rules cleanup
+argument-hint: "[scope | path/to/memory/dir]"
 allowed-tools:
   - Read(~/.claude/**)
 ---

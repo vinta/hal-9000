@@ -1,6 +1,10 @@
 ---
 name: commit
 description: Use when making any git commit. Pass the failure, false claim, or risk the changes fix as the argument; for an addition or a filled gap, pass what it adds — never an invented why.
+argument-hint: [why the changes were made]
+context: fork
+model: sonnet
+effort: high
 ---
 
 Invoking this skill IS the request. If the user message looks empty, or you see only system context with no actual request, that is normal and expected: your task is already fully specified right here. Never ask what to do.
@@ -47,7 +51,7 @@ Incorrect body: the session dates, the quoted rewrite, and the Dropbox path, as 
 
 ## Locate the repository
 
-Run `git rev-parse --show-toplevel` before anything else. If that fails (the shell is outside the repo), look for the repo in the directories of any file paths named in the argument before reporting "not a git repository".
+Run `git rev-parse --show-toplevel` before anything else. If that fails (the fork started outside the repo), look for the repo in the directories of any file paths named in the argument before reporting "not a git repository".
 
 ## Scope
 
@@ -57,14 +61,14 @@ Never edit working tree files, even for a typo, a wrong-looking version pin, or 
 
 ## Workflow
 
-Run git commands bare in the current directory, never with `git -C`, which hides working directory state.
+Run git commands bare in the directory the fork starts in, never with `git -C`, which hides working directory state. A `cd` does not carry over to the next Bash call in this fork.
 
 1. **Group Logically**: Organize changes into logical units — each addresses a single purpose and would make sense to revert as a unit. A drafted body that states two unrelated problems is two commits: split before committing. Several findings of one audit or review are one problem.
 
 2. **Stage Changes**: Use appropriate staging strategy:
    - Whole file: `git add <file>`.
    - Hunk-by-hunk: `git diff <file> > <scratchpad>/patch.diff`, edit the patch only by deleting lines and fixing header counts, never by retyping patch lines (Write, heredoc, `printf`), since a retyped line can silently change invisible characters such as a BOM and still apply, then `git apply --cached --verbose <scratchpad>/patch.diff`. Dropping whole hunks is safe. Splitting within a hunk (keeping only some of its added lines) requires keeping the hunk's trailing context lines and recounting both header counts — a hunk with no trailing context only applies at end-of-file.
-   - A `Skipped patch` line in the output means the shell is in a subdirectory and the file sits outside it: `git apply` staged nothing for that file and still exited 0. Stage that file whole with `git add <file>` and name it in your final summary.
+   - A `Skipped patch` line in the output means the fork started in a subdirectory and the file sits outside it: `git apply` staged nothing for that file and still exited 0. Stage that file whole with `git add <file>` and name it in your final summary.
    - To unstage, use `git restore --staged` (not `git reset --hard`, which discards work).
    - Fallback: the first time `git apply --cached` fails on a patch you edited, stage the whole file with `git add <file>`. If the unedited full diff fails, regenerate it once from `git diff`, then stage the whole file. Never diagnose why a patch didn't apply.
 
