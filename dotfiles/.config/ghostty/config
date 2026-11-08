@@ -46,3 +46,5 @@ keybind = copy=copy_to_clipboard:mixed
 keybind = paste=paste_from_clipboard
 keybind = super+c=copy_to_clipboard:mixed
 keybind = super+v=paste_from_clipboard
+keybind = super+g=navigate_search:next
+keybind = super+shift+g=navigate_search:previous
