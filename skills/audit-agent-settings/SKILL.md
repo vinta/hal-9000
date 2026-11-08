@@ -1,9 +1,6 @@
 ---
 name: audit-agent-settings
 description: Use when auditing Claude Code or Codex settings and env vars against the latest docs to suggest tailored changes
-allowed-tools:
-  - Read(~/.claude/**)
-  - Read(~/.codex/**)
 ---
 
 # Audit Agent Settings
