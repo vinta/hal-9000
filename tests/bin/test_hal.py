@@ -831,9 +831,29 @@ class TestSkipUnchanged:
         mirror.copy(src, dest)
 
         assert said == [
-            f"copy {src}/ -> {dest}/ (1 file)",
+            f"copy {src}/ -> {dest}/ (1 file)\n./a.txt",
             f"unchanged {src}/",
-            f"copy {src}/ -> {dest}/ (1 file)",
+            f"copy {src}/ -> {dest}/ (1 file)\n./a.txt",
+        ]
+
+    def test_lists_copied_files_up_to_limit(self, hal_module, tmp_path):
+        """A directory copy of at most LISTED_COPIES files names each under the summary; more stays a count."""
+        said = []
+        src = tmp_path / "src"
+        (src / "sub").mkdir(parents=True)
+        (src / "a.txt").write_text("A")
+        (src / "sub" / "b.txt").write_text("B")
+        dest = tmp_path / "dest"
+        mirror = hal_module.Mirror(say=said.append)
+
+        mirror.copy(src, dest)
+        for index in range(hal_module.Settings.LISTED_COPIES + 1):
+            (src / f"{index}.txt").write_text("X")
+        mirror.copy(src, dest)
+
+        assert said == [
+            f"copy {src}/ -> {dest}/ (2 files)\n./a.txt\n./sub/b.txt",
+            f"copy {src}/ -> {dest}/ ({hal_module.Settings.LISTED_COPIES + 1} files)",
         ]
 
     def test_reports_new_empty_directory_as_copy(self, hal_module, tmp_path):
@@ -1092,6 +1112,11 @@ class TestBackupRestore:
         out = capsys.readouterr().out
         assert "HAL: copy ~/live.txt -> ~/dropbox/live.txt" in out
         assert str(home) not in out
+
+    def test_indents_continuation_lines_under_prefix(self, hal_instance, capsys):
+        hal_instance._hal_says("copy a/ -> b/ (1 file)\n./x")
+
+        assert capsys.readouterr().out == "HAL: copy a/ -> b/ (1 file)\n     ./x\n"
 
 
 class TestBackupPrune:

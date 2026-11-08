@@ -40,6 +40,8 @@ class Settings:
     # git reclaims loose objects and packs locally, so a copy-only backup keeps every
     # superseded one forever and they would drown out the orphans worth seeing.
     DIFF_IGNORE_PATTERNS: tuple[str, ...] = (".git",)
+    # A directory copy of at most this many files lists them under its summary line
+    LISTED_COPIES: int = 5
 
 
 class Entry(TypedDict):
@@ -127,12 +129,12 @@ class Mirror:
 
         if src.is_dir():
             existed = dest.exists()
-            copied = 0
+            copied: list[Path] = []
 
             # copytree hands its copy_function plain strings
             def copy_file(source: str, target: str) -> None:
-                nonlocal copied
-                copied += self._copy_file_allow_overwrite(Path(source), Path(target))
+                if self._copy_file_allow_overwrite(Path(source), Path(target)):
+                    copied.append(Path(source).relative_to(src))
 
             shutil.copytree(
                 src,
@@ -145,7 +147,9 @@ class Mirror:
                 self._say(f"unchanged {abbreviate_home(src)}/")
                 return
             slash = "/"
-            count = f" ({copied} file{'' if copied == 1 else 's'})"
+            count = f" ({len(copied)} file{'' if len(copied) == 1 else 's'})"
+            # Few enough to read at a glance; a bulk copy would bury the other entries
+            listed = sorted(copied) if len(copied) <= Settings.LISTED_COPIES else []
         else:
             if self._is_unchanged(src, dest):
                 self._say(f"unchanged {abbreviate_home(src)}")
@@ -153,7 +157,11 @@ class Mirror:
             dest.parent.mkdir(parents=True, exist_ok=True)
             self._copy_file_allow_overwrite(src, dest)
             slash = count = ""
-        self._say(f"copy {abbreviate_home(src)}{slash} -> {abbreviate_home(dest)}{slash}{count}")
+            listed = []
+        lines = [f"copy {abbreviate_home(src)}{slash} -> {abbreviate_home(dest)}{slash}{count}"]
+        lines += [f"./{file}" for file in listed]
+        # One message per entry: copies run in parallel, so separate lines would interleave
+        self._say("\n".join(lines))
 
     @staticmethod
     def _glob(pattern: Path) -> list[Path]:
@@ -312,7 +320,8 @@ class HAL9000:
         pod_bay_doors_parser.set_defaults(func=self.open_the_pod_bay_doors)
 
     def _hal_says(self, text: str) -> None:
-        print(f"HAL: {text}")
+        prefix = "HAL: "
+        print(prefix + text.replace("\n", "\n" + " " * len(prefix)))
 
     def _confirm(self, question: str) -> bool:
         try:
