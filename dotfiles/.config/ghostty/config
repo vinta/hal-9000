@@ -42,5 +42,7 @@ keybind = cmd+shift+left=move_tab:-1
 keybind = cmd+shift+right=move_tab:1
 
 # Remove after https://github.com/ghostty-org/ghostty/issues/10749 is fixed
+keybind = copy=copy_to_clipboard:mixed
+keybind = paste=paste_from_clipboard
+keybind = super+c=copy_to_clipboard:mixed
 keybind = super+v=paste_from_clipboard
-keybind = super+c=copy_to_clipboard
