@@ -67,8 +67,7 @@
         "codex",
         "agents-md",
         "auto-memory",
-        "skill-md",
-        "allowed-tools"
+        "skill-md"
       ],
       "tags": [
         "git",
@@ -99,8 +98,7 @@
         "claude-md",
         "agents-md",
         "auto-memory",
-        "skill-md",
-        "allowed-tools"
+        "skill-md"
       ]
     },
     {

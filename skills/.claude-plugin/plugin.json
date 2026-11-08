@@ -1,7 +1,7 @@
 {
   "name": "hal-skills",
   "displayName": "HAL Skills",
-  "version": "2.14.11",
+  "version": "2.14.12",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
@@ -58,7 +58,6 @@
     "codex",
     "agents-md",
     "auto-memory",
-    "skill-md",
-    "allowed-tools"
+    "skill-md"
   ]
 }
