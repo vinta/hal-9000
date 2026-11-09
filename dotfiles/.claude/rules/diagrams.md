@@ -22,7 +22,7 @@ For hand-drawn SVG diagrams: architecture maps, flowcharts, boxes and arrows.
 - Lay flows out left to right: producers and sources on the left, consumers and sinks on the right.
 - Put a diagram too large for one screen on a pan-and-zoom canvas that opens on its most useful region, so the reader does not have to scroll or zoom first.
 - Draw containers and boxes before lines and labels: a box's fill hides every line drawn under it.
-- Keep at least 20 units between neighboring boxes, every arrowhead at least 16 units from any border it crosses, and every line at least 10 units from a box edge it runs alongside; inset nodes in their container to make room.
+- Keep at least 20 units between separate components and at least 8 between small boxes side by side in one container (topics in a cluster, workers in a process), every arrowhead at least 16 units from any border it crosses, and every line at least 10 units from a box edge it runs alongside; inset nodes in their container to make room.
 - Keep each label inside the box it names, clear of other text and of every line; put an edge label in open space beside its line, never across a box edge.
 - Gather a fan-out or fan-in on one bar with a dot at the junction, and split the path there, so it reads as one source splitting rather than lines crossing.
 
