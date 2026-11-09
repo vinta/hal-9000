@@ -35,7 +35,7 @@ class PathNotAllowedError(Exception):
 class Settings:
     REPO_ROOT: Path = Path(__file__).resolve().parent.parent
     DOTFILES_ROOT: Path = REPO_ROOT / "dotfiles"
-    IGNORE_PATTERNS: tuple[str, ...] = (".DS_Store", ".venv", ".*_cache", "__pycache__", "node_modules", "-private-tmp*")
+    IGNORE_PATTERNS: tuple[str, ...] = (".DS_Store", ".venv", ".*_cache", "__pycache__", "node_modules", "-private-tmp*", "sourcetreeconfig")
     # Skipped when diffing a backup against its source, but still copied by backup itself:
     # git reclaims loose objects and packs locally, so a copy-only backup keeps every
     # superseded one forever and they would drown out the orphans worth seeing.
