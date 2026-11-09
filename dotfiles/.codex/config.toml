@@ -94,6 +94,7 @@ pagesFullWidth = true
 usePointerCursors = true
 sansFontSize = 16
 codeFontSize = 14
+migratedFollowUpQueueToSteer = false
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
