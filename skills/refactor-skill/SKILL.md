@@ -6,7 +6,7 @@ argument-hint: [skill name | path/to/SKILL.md]
 
 # Overview
 
-Refactor a skill. A skill spends two budgets. Its description is loaded into every session, so each word there must do triggering work. Its body enters the context on invocation and stays there for the rest of the session, so each line there must guide every path through the skill. Conditional material moves behind a pointer; unnecessary material leaves the skill.
+Refactor a skill. Conditional material moves behind a pointer; unnecessary material leaves the skill.
 
 ## Instructions
 
