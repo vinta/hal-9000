@@ -6,30 +6,24 @@ argument-hint: "[path, module, or area — omit for whole repo]"
 
 # Fuck Over-Engineering
 
-Audit the scope for over-engineering and report what to cut, ranked biggest cut first. The best outcome is a shorter codebase with the same behavior. The argument is the scope; without one, the whole tree. Read what the scope holds before judging it, and fan out subagents when it will not fit in context.
+Audit the scope for over-engineering and report what to cut. The best outcome is a shorter codebase with the same behavior. The argument is the scope; without one, the whole tree. Read what the scope holds before judging it, and fan out subagents when it will not fit in context.
 
 ## Tags
 
-- `delete:` dead code, unused flexibility, speculative feature. Nothing replaces it.
-- `reuse:` hand-written code that a helper already in this codebase, or an installed dependency, already provides. Name the helper or function.
-- `stdlib:` hand-rolled thing the language's standard library ships. Name the function.
+- `delete:` dead code, unused flexibility, speculative feature, special-case branch no input reaches. Nothing replaces it.
+- `reuse:` hand-written code, or a near-duplicate, that a helper in this codebase or an installed dependency already provides. Name the helper or function.
+- `stdlib:` hand-rolled thing, or a dependency, that the language's standard library ships. Name the function.
 - `native:` dependency or code doing what the platform already does. Name the feature.
-- `yagni:` abstraction with one implementation, config nobody sets, layer with one caller.
+- `yagni:` abstraction with one implementation, factory with one product, wrapper that only delegates, file exporting one thing, config or flag nobody sets, layer with one caller.
 - `shrink:` same logic, fewer lines. Show the shorter form.
-
-## Hunt
-
-Dependencies the stdlib or platform already covers, single-implementation interfaces, factories with one product, wrappers that only delegate, files exporting one thing, dead flags and config, hand-rolled stdlib, near-duplicates of an existing helper, special-case branches bolted onto shared paths, feature logic living in shared modules.
 
 ## Evidence
 
-Every finding cites the evidence that makes it a cut: caller count, implementation count, or the stdlib or platform feature and the version that ships it. Count callers through dynamic dispatch, entry points, hooks, and tests, not grep alone. A published package's public export stays at zero in-repo callers. Verify `stdlib:` and `native:` claims against current docs (the `find-docs` skill when present) before asserting them.
+Every finding cites the evidence that makes it a cut: caller count, implementation count, or the stdlib or platform feature and the version that ships it. Count callers through dynamic dispatch, entry points, hooks, and tests, not grep alone. A published package's public export is not a cut at zero in-repo callers: its callers live outside the repo. Verify `stdlib:` and `native:` claims against current docs (the `find-docs` skill when present) before asserting them.
 
 A finding removes lines or concepts; moving them between files is a refactor, not a cut. Fewer, bigger cuts beat a long list: a `shrink:` that saves two lines earns a slot only when it also removes a concept.
 
 ## Output
-
-Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available. Use plain text when neither tool is available.
 
 One line per finding, numbered, ranked biggest cut first:
 
@@ -41,7 +35,7 @@ One line per finding, numbered, ranked biggest cut first:
 - `2. reuse: hand-rolled slugify. python-slugify is installed, slugify(). 1 caller. [utils/text.py:10-31]`
 - `3. delete: retry wrapper around an idempotent local call. 0 callers outside its own test. [src/net.py:52-71]`
 
-Then offer the findings in ranked batches, collect the user's picks, and apply them.
+Then offer the findings in ranked batches, collect the user's picks, and apply only those. Ask with `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available, in plain text otherwise. Done when the project's checks pass after the cuts and you have reported the actual `net:`.
 
 ## Boundaries
 
