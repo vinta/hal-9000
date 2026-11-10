@@ -209,7 +209,7 @@
   "viewMode": "verbose",
   "modelSettings": {
     "claude-fable-5-2": {
-      "effortLevel": "medium"
+      "effortLevel": "high"
     },
     "claude-opus-5-5": {
       "effortLevel": "high"
