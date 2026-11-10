@@ -10,10 +10,10 @@
 
 ## Guides
 
-Resolve each Claude reader to its full model ID from the model list in your system prompt, then fetch:
+Each URL below ends in `.md`, which returns the page as raw Markdown: download it and read it whole. Resolve each Claude reader to its full model ID from the model list in your system prompt, then fetch:
 
-- https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
-- The page for each Claude reader, regardless of which model this session runs on, plus any earlier model's page it names as its baseline: `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-<model-id>`
+- https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices.md
+- The page for each Claude reader, regardless of which model this session runs on, plus any earlier model's page it names as its baseline: `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-<model-id>.md`
 
 ## System-prompt probe
 
@@ -27,6 +27,6 @@ Then verify, in this order. The decoy must come back NONE on every model. For th
 
 ## Demote destinations
 
-- A `paths:`-scoped file in `.claude/rules/` for a project file, or in `~/.claude/rules/` for the user-level file. Only Claude readers load it. When creating one, fetch https://code.claude.com/docs/en/memory#path-specific-rules for the `paths:` frontmatter syntax.
+- A `paths:`-scoped file in `.claude/rules/` for a project file, or in `~/.claude/rules/` for the user-level file. Only Claude readers load it. When creating one, fetch https://code.claude.com/docs/en/memory.md and read "Path-specific rules" for the `paths:` frontmatter syntax.
 - A nested `CLAUDE.md` in the subdirectory the line governs.
 - A doc file linked from the target.
