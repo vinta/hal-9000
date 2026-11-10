@@ -23,7 +23,11 @@ Create mode and update mode run these steps where they say "gather PR material":
 
 2. The PR describes the net change of the branch. A commit whose subject starts with `Revert "` and the commit it names cancel each other when both sit in the log, as does a later commit that restores what an earlier one removed, and a subject starting with `build: bump` describes no change. Remove those blocks from the log before passing it on.
 
-3. `git log --format=%b main..HEAD` (same fallback). Collect every issue number written as `#N` or as a GitHub issue URL. Each one becomes a `Fix #N` line at the end of the body, one per line, no duplicates.
+3. `git branch --show-current`, then `git log --format=%B main..HEAD` (same fallback). Collect the issues the branch fixes from the branch name and the commit messages:
+   - A GitHub issue: `#N`, or an issue URL. One in another repository is `owner/repo#N`.
+   - An issue in a tracker such as Linear or Jira: a key like `ENG-123`, or a URL that contains one. Branch names carry the key in lowercase, as in `fix/eng-123-login-timeout`; write it in uppercase.
+
+   Skip an issue a commit cites only as related or earlier work. Each remaining issue becomes a `Fix <issue>` line at the end of the body (`Fix #12`, `Fix octo-org/octo-repo#100`, `Fix ENG-123`), one per line, no duplicates. GitHub and Linear close the issue on merge only when a closing word such as `Fix` comes before it; a non-closing word such as `Refs` just links it.
 
 4. Invoke the `write-like-me` skill. Pass as argument: "Write a GitHub PR title and body from the material below. Shape the draft as the title on the first line, a blank line, then the body, and nothing else: the caller splits on the first line, so a label or heading would land in the title. The draft goes straight into the caller's next `gh` command in the same response, never into a reply: a reply with no tool call ends the caller before the PR exists.
 
@@ -49,7 +53,7 @@ Move name-suffix into core rules and protect URLs and slashes
 
 <material>" followed by the log from step 2, then a closing "</material>" line.
 
-5. From `write-like-me`'s output, take the first line as title, the rest as body. Append a blank line and the `Fix #N` lines from step 3 to the body.
+5. From `write-like-me`'s output, take the first line as title, the rest as body. Append a blank line and the `Fix` lines from step 3 to the body.
 
 ## Create mode
 
