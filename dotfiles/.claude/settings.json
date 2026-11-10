@@ -208,8 +208,8 @@
   "outputStyle": "hal-output-styles:Say no more",
   "viewMode": "verbose",
   "modelSettings": {
-    "claude-fable-5-1": {
-      "effortLevel": "high"
+    "claude-fable-5-2": {
+      "effortLevel": "medium"
     },
     "claude-opus-5-5": {
       "effortLevel": "high"
