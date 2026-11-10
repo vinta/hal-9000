@@ -4,6 +4,8 @@ description: Compare A vs B, weigh pros and cons of A, B, C, ..., or explain the
 argument-hint: "[A vs B | A, B, C, ... | sentences]"
 disable-model-invocation: true
 effort: low
+allowed-tools:
+  - WebSearch
 ---
 
 # Difference
