@@ -25,6 +25,8 @@ A finding removes lines or concepts; moving them between files is a refactor, no
 
 ## Output
 
+Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available. Use plain text when neither tool is available.
+
 One line per finding, numbered, ranked biggest cut first:
 
 `N. <tag> <what to cut>. <replacement>. <evidence>. [path:line]`
@@ -35,7 +37,7 @@ One line per finding, numbered, ranked biggest cut first:
 - `2. reuse: hand-rolled slugify. python-slugify is installed, slugify(). 1 caller. [utils/text.py:10-31]`
 - `3. delete: retry wrapper around an idempotent local call. 0 callers outside its own test. [src/net.py:52-71]`
 
-Then offer the findings in ranked batches, collect the user's picks, and apply only those. Ask with `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available, in plain text otherwise. Done when the project's checks pass after the cuts and you have reported the actual `net:`.
+Then offer the findings in ranked batches, collect the user's picks, and apply only those. Done when the project's checks pass after the cuts and you have reported the actual `net:`.
 
 ## Boundaries
 
