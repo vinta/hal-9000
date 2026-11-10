@@ -1,7 +1,7 @@
 ---
 name: best-practices
-description: Use when about to choose, configure, or refine a tool, library, config format, API pattern, or project setup, or before proposing a design of your own — research current guidance, pitfalls, and prior art first; already knowing an approach, or assuming no prior art exists, is not an exemption. Also use when the user asks about best practices, gotchas, or recommended patterns
-argument-hint: "[tool, library, pattern, or design to research]"
+description: Use when about to choose, configure, or refine a tool, library, config format, API pattern, or project setup, or before proposing a design or fix of your own — research current guidance, pitfalls, and prior art for the problem it solves first; already knowing an approach, or assuming no prior art exists, is not an exemption. Also use when the user asks about best practices, gotchas, or recommended patterns
+argument-hint: "[problem, tool, library, or pattern to research]"
 ---
 
 # Best Practices
