@@ -7,6 +7,9 @@ allowed-tools:
   - WebFetch(domain:learn.chatgpt.com)
   - Read(~/.claude/**)
   - Edit(CLAUDE.md)
+  - Edit(~/.claude/projects/*/memory/**)
+  - Edit(~/.codex/memories/**)
+  - Edit(~/.codex/AGENTS.md)
 ---
 
 # Overview

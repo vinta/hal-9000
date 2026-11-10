@@ -9,6 +9,9 @@ allowed-tools:
   - WebFetch(domain:learn.chatgpt.com)
   - Edit(CLAUDE.md)
   - Edit(AGENTS.md)
+  - Edit(~/.codex/AGENTS.md)
+  - Edit(~/.codex/AGENTS.override.md)
+  - Bash(claude -p --safe-mode *)
   - Read(~/.claude/CLAUDE.md)
   - Read(~/.codex/AGENTS.md)
 ---

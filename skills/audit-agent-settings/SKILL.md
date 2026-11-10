@@ -6,6 +6,12 @@ allowed-tools:
   - Bash(curl -sfL https://learn.chatgpt.com/*)
   - Bash(claude doctor)
   - Bash(strings:*)
+  - Bash(codex --version)
+  - Bash(codex --help)
+  - Bash(codex doctor *)
+  - Bash(codex features list)
+  - Bash(timeout 120 codex exec --strict-config *)
+  - Edit(~/.codex/config.toml)
   - Read(~/.claude/**)
   - Read(~/.codex/**)
 ---
