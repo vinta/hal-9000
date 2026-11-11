@@ -252,13 +252,14 @@ class Mirror:
         # Orphans are removed deepest first, so anything left inside a directory was
         # filtered out of the diff and never listed. Clear those, then rmdir, which
         # still refuses any directory holding something the listing did not account for.
-        for child in path.iterdir():
-            if not self._is_ignored(child, Settings.IGNORE_PATTERNS):
-                continue
-            if child.is_dir() and not child.is_symlink():
-                shutil.rmtree(child)
-            else:
-                child.unlink()
+        # Clear only when nothing else is left, so a refused directory keeps its .git.
+        children = list(path.iterdir())
+        if all(self._is_ignored(child, Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS) for child in children):
+            for child in children:
+                if child.is_dir() and not child.is_symlink():
+                    shutil.rmtree(child)
+                else:
+                    child.unlink()
 
         try:
             path.rmdir()

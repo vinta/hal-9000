@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import shutil
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -1259,6 +1260,27 @@ class TestBackupPrune:
 
         assert not (dest / "gone").exists()
 
+    def test_orphan_directory_holding_git_is_removed(self, hal_instance, tmp_path):
+        """.git is copied but filtered out of the diff, so rmdir would fail on a removed worktree's backup."""
+        src = tmp_path / "live"
+        (src / "worktree").mkdir(parents=True)
+        (src / "worktree" / ".git").write_text("gitdir: /elsewhere/.git/worktrees/worktree")
+        (src / "worktree" / "README.md").write_text("readme")
+        dest = tmp_path / "dropbox"
+
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+        ):
+            mock_dotfiles.data = {"backups": [{"src": str(src), "dest": str(dest)}]}
+            hal_instance.backup(argparse.Namespace(prune=False, yes=False))
+        assert (dest / "worktree" / ".git").is_file()
+
+        shutil.rmtree(src / "worktree")
+        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+
+        assert not (dest / "worktree").exists()
+
     def test_opted_out_entry_reports_its_expanded_destination(self, hal_instance, tmp_path, capsys):
         """The manifest stores a {{HOME}} template, which is not a path the reader can act on."""
         src = tmp_path / "live"
@@ -1430,21 +1452,21 @@ class TestBackupPrune:
         assert (outside / "unrelated.txt").read_text() == "not part of any backup"
 
     def test_undeletable_directory_is_kept_and_prune_continues(self, hal_instance, tmp_path):
-        """A directory holding something the listing never accounted for survives, and later orphans still go."""
+        """A directory holding something the listing never accounted for survives intact, and later orphans still go."""
         src = tmp_path / "live"
-        src.mkdir()
-        (src / "current.txt").write_text("current")
+        (src / "current").mkdir(parents=True)
 
+        # A wildcard lists an unmatched directory as one orphan without walking it, so notes.txt goes unlisted
         dest = tmp_path / "dropbox"
-        dest.mkdir()
-        (dest / "current.txt").write_text("current")
-        (dest / "abandoned_repo").mkdir()
-        (dest / "abandoned_repo" / ".git").mkdir()
+        (dest / "current").mkdir(parents=True)
+        (dest / "abandoned_repo" / ".git").mkdir(parents=True)
+        (dest / "abandoned_repo" / "notes.txt").write_text("unlisted")
         (dest / "zz_orphan.txt").write_text("orphan")
 
-        self._prune(hal_instance, [{"src": str(src), "dest": str(dest)}])
+        self._prune(hal_instance, [{"src": str(src / "*"), "dest": str(dest / "*")}])
 
         assert (dest / "abandoned_repo" / ".git").is_dir()
+        assert (dest / "abandoned_repo" / "notes.txt").read_text() == "unlisted"
         assert not (dest / "zz_orphan.txt").exists()
 
     def test_symlink_orphan_is_unlinked_without_touching_target(self, hal_instance, tmp_path):
