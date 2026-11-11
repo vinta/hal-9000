@@ -598,7 +598,7 @@ class TestCopyEntryMerge:
 
         assert dest.read_text() == "new content"
 
-    def test_skips_ignored_single_file(self, hal_instance, tmp_path):
+    def test_skips_ignored_single_file(self, hal_instance, tmp_path, capsys):
         """Ignore patterns apply to single-file copies, not just directory trees."""
         src = tmp_path / ".DS_Store"
         src.write_text("junk")
@@ -609,9 +609,10 @@ class TestCopyEntryMerge:
             hal_instance._copy_entry(copy_entry)
 
         assert not dest.exists()
+        assert f"ignored {src}" in capsys.readouterr().out
 
-    def test_skips_ignored_glob_match(self, hal_instance, tmp_path):
-        """Ignore patterns apply to files matched by a glob entry."""
+    def test_skips_ignored_glob_match(self, hal_instance, tmp_path, capsys):
+        """Ignore patterns apply to files matched by a glob entry, silently since the manifest never named them."""
         src = tmp_path / "src"
         src.mkdir()
         (src / "keep.log").write_text("keep")
@@ -626,6 +627,7 @@ class TestCopyEntryMerge:
 
         assert (dest / "keep.log").read_text() == "keep"
         assert not (dest / ".DS_Store").exists()
+        assert f"ignored {src / '.DS_Store'}" not in capsys.readouterr().out
 
     def test_patterns_are_glob_matched(self, hal_instance, hal_module, tmp_path):
         """Patterns are globs, not literal names."""

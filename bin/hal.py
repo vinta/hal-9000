@@ -188,7 +188,9 @@ class Mirror:
                 self._say(f"no matches {abbreviate_home(src)}")
                 return
             for match, match_dest in pairs:
-                self._copy_one(match, match_dest)
+                # The manifest never named an ignored match, so skipping it is not worth reporting
+                if not self._is_ignored(match, Settings.IGNORE_PATTERNS):
+                    self._copy_one(match, match_dest)
             return
 
         if not src.exists():
