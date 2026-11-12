@@ -5,6 +5,7 @@
   "syncClaudeAiPlugins": false,
   "env": {
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+    "CLAUDE_CODE_SHELL": "/bin/bash",
     "CLAUDE_CODE_SUBAGENT_MODEL": "opus",
     "DISABLE_ERROR_REPORTING": "1",
     "DISABLE_EXTRA_USAGE_COMMAND": "1",
