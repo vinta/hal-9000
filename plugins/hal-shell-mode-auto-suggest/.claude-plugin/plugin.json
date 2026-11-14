@@ -1,7 +1,7 @@
 {
   "name": "hal-shell-mode-auto-suggest",
   "displayName": "HAL Shell Mode Auto-suggest",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Suggests the `!` shell command Claude's last reply asks you to run, Tab to take",
   "author": {
     "name": "Vinta Chen",
@@ -12,6 +12,7 @@
   "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-shell-mode-auto-suggest/README.md",
   "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
+  "icon": "./icon.png",
   "keywords": [
     "shell",
     "shell-mode",
