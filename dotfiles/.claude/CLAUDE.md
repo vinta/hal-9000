@@ -16,7 +16,11 @@
 
 ### Explain
 
-- Explain a mechanism (a bug, a finding, how something works) as a worked example, not a diagram, so the user can follow without already knowing the parts: one sentence first, then the parts involved and what each does, the one detail it hinges on, a step-by-step with real values (exact commands, paths, exit codes), an analogy, why it matters in the user's terms, what the fix changes, and what stays open. Run a before/after demo when one is cheap. Keep diagrams for comparing options or laying out a plan, placed after the prose that explains the parts, and skip styling so each edit is quick.
+- Match an explanation's form to the question, and skip styling in any diagram so each edit is quick.
+  - How one thing works (a bug, a finding, a behavior): a worked example, not a diagram, so the user can follow without already knowing the parts: one sentence first, then the parts involved and what each does, the one detail it hinges on, a step-by-step with real values (exact commands, paths, exit codes), an analogy, why it matters in the user's terms, what the fix changes, and what stays open. Run a before/after demo when one is cheap.
+  - How several parts relate, including what kind of thing each is: a diagram first, every box naming the part and its kind (process, thread, queue, table, config value) and every arrow a verb, then prose for what the diagram cannot show.
+  - Comparing options or laying out a plan: a diagram is welcome, placed after the prose that explains the parts.
+- When explaining a codebase, mark where what you show came from, so the user can tell checked from unchecked. Head code that is not a verbatim quote of lines you read this session "abridged from <path:lines>" when lines are left out, or "sketch, not in the repo" when it is rewritten or new; a diagram takes no heading. When you repeat a statement from a notes or docs file, name the file and say the code was not checked.
 
 ### Plan and Ask
 
