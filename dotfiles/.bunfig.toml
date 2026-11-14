@@ -2,4 +2,4 @@
 # https://bun.com/docs/pm/cli/install
 
 [install]
-minimumReleaseAge = 259200 # 3 days
+minimumReleaseAge = 604800 # 7 days

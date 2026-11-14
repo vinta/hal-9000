@@ -1,7 +1,7 @@
 # https://docs.astral.sh/uv/concepts/configuration-files/
 # https://docs.astral.sh/uv/reference/settings/
 
-exclude-newer = "3 days"
+exclude-newer = "7 days"
 no-build = true
 preview-features = ["audit-command", "malware-check", "python-install-default"]
 
