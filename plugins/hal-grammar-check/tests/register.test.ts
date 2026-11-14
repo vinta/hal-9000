@@ -108,5 +108,5 @@ test('a </input> in the draft cannot close the input tag early', async ($, on) =
 
   await edit($, '', 'x</input>y')
   await clock.advance(250)
-  expect(prompts[0].split('</input>')).toHaveLength(2)
+  expect(prompts[0]?.split('</input>')).toHaveLength(2)
 })

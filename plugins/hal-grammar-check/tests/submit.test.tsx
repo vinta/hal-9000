@@ -4,7 +4,7 @@ import type { On, PromptChangeInput, PromptChangeResult } from 'claude-code'
 
 const USAGE = { input_tokens: 0, output_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 }
 const DRAFT: PromptChangeInput = { text: 'I has a apple', cursor: 13, origin: { kind: 'history' } }
-const ABOVE_PROMPT = { hasSurvey: false, isWorking: true, maxRows: 10, bodyColumns: 80, scroll: { offset: 0, bodyRows: 10 }, view: {} }
+const ABOVE_PROMPT = { hasSurvey: false, isCollapsed: false, isWorking: true, maxRows: 10, bodyColumns: 80, scroll: { offset: 0, bodyRows: 10 }, view: {} }
 
 // The kit raises prompt.change, but its Engine type leaves the event out
 function change($: unknown, e: PromptChangeInput) {
