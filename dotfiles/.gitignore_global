@@ -21,3 +21,6 @@ local/
 # Tools
 .blackwall/
 .playwright-cli/
+
+# Agents
+**/.claude/settings.local.json
