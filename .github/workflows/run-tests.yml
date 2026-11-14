@@ -39,7 +39,7 @@ jobs:
         run: make test-python
 
   system-python-tests:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 10
     steps:
       - name: Checkout repository
@@ -47,22 +47,21 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: "3.9"
+      # Apple's own python3, not the image's newer one on PATH; fails when Apple moves past 3.9, so the floor can rise
+      - name: Check system python3 is 3.9
+        run: /usr/bin/python3 -c 'import sys; assert sys.version_info[:2] == (3, 9), sys.version'
 
       # The project itself requires 3.14, so this job installs pytest directly instead of using uv. pytest 9 dropped 3.9
       - name: Run tests under system python3
         run: |
-          pip install pytest==8.4.2
-          pytest tests/ -q
+          /usr/bin/python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install pytest==8.4.2 vermin==1.9.1
+          "$RUNNER_TEMP/venv/bin/pytest" tests/ -q
 
       # The tests only execute the code paths they cover, so a 3.10+ stdlib call on an uncovered branch would pass them
       - name: Check scripts avoid stdlib APIs newer than 3.9
         run: |
-          pip install vermin==1.9.1
-          vermin -t=3.9 --eval-annotations --no-parse-comments --no-tips --hidden --exclude 'typing.NotRequired' bin/ dotfiles/ plugins/ skills/
+          "$RUNNER_TEMP/venv/bin/vermin" -t=3.9 --eval-annotations --no-parse-comments --no-tips --hidden --exclude 'typing.NotRequired' bin/ dotfiles/ plugins/ skills/
 
   claude-code-tests:
     runs-on: ubuntu-latest
