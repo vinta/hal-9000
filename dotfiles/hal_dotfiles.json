@@ -17,6 +17,10 @@
       "dest": "{{HOME}}/Dropbox/Apps/Claude Code/history.jsonl"
     },
     {
+      "src": "{{HOME}}/Library/Application Support/Claude/claude-code-sessions/",
+      "dest": "{{HOME}}/Dropbox/Apps/Claude/claude-code-sessions/"
+    },
+    {
       "src": "{{HOME}}/.codex/sessions/",
       "dest": "{{HOME}}/Dropbox/Apps/Codex/sessions/"
     },
