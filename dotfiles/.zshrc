@@ -138,7 +138,7 @@ alias ccmax="claude --model fable --effort max"
 alias ccfable="claude --model fable"
 alias ccopus="claude --model opus"
 alias ccsonnet="claude --model sonnet"
-alias ccyolo="blackwall claude --dangerously-skip-permissions"
+alias ccyolo="CLAUDE_CODE_RESUME_HINT_COMMAND=ccyolo blackwall claude --dangerously-skip-permissions"
 ccp() { CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 claude --model sonnet --effort high --no-session-persistence --no-chrome -p "$*"; }
 
 alias cx='codex'
