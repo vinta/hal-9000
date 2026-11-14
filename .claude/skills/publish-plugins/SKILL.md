@@ -47,7 +47,7 @@ If a plugin's version already differs from `origin/main`, it was bumped for unre
 - **Minor** (0.2.0 -> 0.3.0): new features, new hooks, new commands.
 - **Major** (0.2.0 -> 1.0.0): breaking changes to hook behavior or config format.
 
-When a change makes a mod use a `$` API, hook or prop it did not use before, find the Claude Code release that added it in the [changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md). If that release is newer than the floor in the plugin's `engines["claude-code"]`, or the plugin has none, set the floor to it (`">=X.Y.Z"`), so older clients keep the previous plugin release instead of loading one that breaks.
+When a change makes a plugin rely on a Claude Code feature it did not use before (a mod's `$` API, hook or prop, a hook event, or a manifest or frontmatter field), find the Claude Code release that added it in the [changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md). If that release is newer than the floor in the plugin's `engines["claude-code"]`, or the plugin has none, set the floor to it (`">=X.Y.Z"`), so older clients keep the previous plugin release instead of loading one that breaks.
 
 Commit a bump made on its own through the `commit` skill with no argument: its subject already says why a bump exists.
 
