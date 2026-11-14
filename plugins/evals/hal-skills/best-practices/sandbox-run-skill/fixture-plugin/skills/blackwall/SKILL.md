@@ -86,7 +86,7 @@ sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0      # Ubuntu 24.0
 blackwall claude                                                   # or codex, or any command
 blackwall --add-dir ../other-repo claude
 blackwall --no-config npx some-tool                                # defaults only, ignores every config and .env file
-blackwall --self-signed-node claude                                # runs blackwall as node-blackwall, for firewall rules
+blackwall --generate-signed-node                                   # macOS only, makes blackwall run as node-blackwall, for firewall rules
 blackwall --trust                                                  # in the project, after reviewing .blackwall/config.json
 ```
 

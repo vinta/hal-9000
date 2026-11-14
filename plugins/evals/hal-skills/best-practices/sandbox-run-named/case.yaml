@@ -1,4 +1,4 @@
 schema_version: "1.1"
 name: sandbox-run-named
 execution:
-  append_system_prompt: "- When research or verification seems to need a tool, package, or script that isn't already installed, answer from its docs and source first: run on the host, it gets the user's full access to settle one question. If only running it will do, run it as `blackwall --no-config --self-signed-node -- <command>` from a new, empty scratch directory, or plainly when the session already runs inside blackwall, and ask before installing anything on the host, saying what its source showed."
+  append_system_prompt: "- When research or verification seems to need a tool, package, or script that isn't already installed, answer from its docs and source first: run on the host, it gets the user's full access to settle one question. If only running it will do, run it as `blackwall --no-config -- <command>` from a new, empty scratch directory, or plainly when the session already runs inside blackwall, and ask before installing anything on the host, saying what its source showed."
