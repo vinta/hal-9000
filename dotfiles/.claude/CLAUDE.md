@@ -69,8 +69,10 @@
 
 - Training data goes stale, so invoke the `find-docs` skill before writing code or config that touches a library/framework/SDK API, config key, CLI flag, cloud service, platform feature, syntax, or version, and before answering questions about them. Being about to write such code is trigger enough, even when no question was asked.
   - Confidence is not an exemption, and neither is the library being well known. Answering from training data, or fetching a URL recalled from training data instead of invoking the skill, does not satisfy this rule.
+  - Check the installed version first (`--version`, the lockfile) and read docs for that version, in `find-docs` too: docs for another release can be confidently wrong for the one that runs. When `--help`, `man`, or the installed source answers the question, it covers that exact version and satisfies this rule.
+  - When `find-docs` snippets don't quote the exact answer, read the raw text of the official page, one a snippet cites or one from the site's `llms.txt`.
   - For topics `find-docs` covers poorly, search online for the official docs instead of falling back to training data.
-  - When neither turns up the answer, mark each claim you could not verify as from training data.
+  - When none of these turns up the answer, mark each claim you could not verify as from training data.
 - A URL named by the user, a skill, a rule, or a memory is a primary source: fetch each one before searching further.
 
 ## Coding Discipline
