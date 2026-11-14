@@ -74,16 +74,16 @@ For every skill under `skills/`, check that `interface.short_description` in `ag
 ## 6. Validate
 
 ```bash
-claude plugin validate .
-claude plugin validate ./skills
-claude plugin validate ./plugins/hal-output-styles
-claude plugin validate ./plugins/hal-grammar-check
-claude plugin validate ./plugins/hal-session-auto-rename
-claude plugin validate ./plugins/hal-shell-mode-auto-suggest
-claude plugin validate ./plugins/hal-voice
+claude plugin validate --strict .
+claude plugin validate --strict ./skills
+claude plugin validate --strict ./plugins/hal-output-styles
+claude plugin validate --strict ./plugins/hal-grammar-check
+claude plugin validate --strict ./plugins/hal-session-auto-rename
+claude plugin validate --strict ./plugins/hal-shell-mode-auto-suggest
+claude plugin validate --strict ./plugins/hal-voice
 ```
 
-The first call validates the marketplace manifest; the rest validate each plugin manifest.
+The first call validates the marketplace manifest; the rest validate each plugin manifest. `--strict` fails on warnings too, such as a type error in a mod's TypeScript hooks module or its tests.
 
 ## 7. Run the mod tests
 
