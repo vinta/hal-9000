@@ -11,3 +11,17 @@
     name:
       - hashicorp/tap/terraform
     state: latest
+
+# https://developer.hashicorp.com/terraform/cli/config/config-file#provider-plugin-cache
+- name: Create terraform provider plugin cache directory
+  file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.terraform.d/plugin-cache"
+    state: directory
+    mode: "0755"
+
+- name: Ensure Terraform environment is sourced in .zshrc
+  lineinfile:
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/terraform/files/terraform_profile.sh"
+    state: present
+  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
