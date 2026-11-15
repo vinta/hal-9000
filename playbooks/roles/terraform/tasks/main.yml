@@ -1,0 +1,7 @@
+---
+# https://developer.hashicorp.com/terraform/install
+- name: Install terraform
+  homebrew:
+    name:
+      - hashicorp/tap/terraform
+    state: latest

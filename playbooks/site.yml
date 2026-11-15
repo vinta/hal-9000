@@ -12,5 +12,6 @@
     - { role: kubernetes, tags: ["kubernetes"] }
     - { role: aws, tags: ["aws"] }
     - { role: gcp, tags: ["gcp"] }
+    - { role: terraform, tags: ["terraform"] }
     - { role: ai, tags: ["ai"] }
     - { role: personal, tags: ["personal"] }

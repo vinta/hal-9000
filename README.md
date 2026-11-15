@@ -26,6 +26,7 @@ All-in-one command to set up:
   - [Kubernetes](playbooks/roles/kubernetes/tasks/main.yml)
   - [Amazon Web Services](playbooks/roles/aws/tasks/main.yml)
   - [Google Cloud](playbooks/roles/gcp/tasks/main.yml)
+  - [Terraform](playbooks/roles/terraform/tasks/main.yml)
 
 ```bash
 curl -sL https://raw.githubusercontent.com/vinta/hal-9000/main/bin/open-the-pod-bay-doors.sh | bash

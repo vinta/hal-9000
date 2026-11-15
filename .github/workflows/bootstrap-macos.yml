@@ -82,6 +82,7 @@ jobs:
             eksctl version
             gcloud --version
             "$CLOUDSDK_PYTHON" -c "import numpy; print(numpy.__version__)"
+            terraform version
             claude --version
             codex --version
             playwright-cli --version
