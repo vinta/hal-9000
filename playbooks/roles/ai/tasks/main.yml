@@ -49,11 +49,11 @@
   args:
     executable: /bin/bash
   changed_when: false
-  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
+  when: ansible_facts["user_shell"] == "/bin/zsh"
 
 - name: Ensure AI environment is sourced in .zshrc
   lineinfile:
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/ai/files/ai_profile.sh"
     state: present
-  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
+  when: ansible_facts["user_shell"] == "/bin/zsh"

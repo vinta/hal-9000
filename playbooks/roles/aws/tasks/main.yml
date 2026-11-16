@@ -20,4 +20,4 @@
     dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
     line: "source {{ REPO_ROOT }}/playbooks/roles/aws/files/aws_profile.sh"
     state: present
-  when: ansible_facts["env"]["SHELL"] == "/bin/zsh"
+  when: ansible_facts["user_shell"] == "/bin/zsh"
