@@ -15,7 +15,7 @@ Then restart Claude Code.
 Just use Claude Code as usual. Each subagent row under the prompt box shows up like this:
 
 ```
-hal-skills-commit (general-purpose) · working · sonnet-5 high · Context 12%
+hal-skills-commit (general-purpose) · 1m42s · working · sonnet-5 high · Context 12%
 ```
 
 Once Claude Code writes a progress summary for the subagent, it shows up in gray on a second line, like `Reading register.ts`.

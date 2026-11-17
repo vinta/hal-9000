@@ -1,4 +1,4 @@
-import type { AgentInfo, EngineInterface, Register } from 'claude-code'
+import type { AgentInfo, EngineInterface, Register, Timer } from 'claude-code'
 
 const BLUE = '\x1b[34m'
 const GREEN = '\x1b[32m'
@@ -66,6 +66,22 @@ function usageColor(pct: number) {
   return pct >= 90 ? RED : pct >= 70 ? YELLOW : GREEN
 }
 
+function isLive(agent: AgentInfo) {
+  return agent.status === 'running' || agent.status === 'waiting'
+}
+
+function formatElapsed(ms: number) {
+  const seconds = Math.max(0, Math.floor(ms / 1000))
+  if (seconds < 60) {
+    return `${seconds}s`
+  }
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) {
+    return `${minutes}m${String(seconds % 60).padStart(2, '0')}s`
+  }
+  return `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, '0')}m`
+}
+
 function agentState(agent: AgentInfo) {
   if (agent.status !== 'running') {
     return agent.status
@@ -74,7 +90,7 @@ function agentState(agent: AgentInfo) {
   return recent.length === WAIT_SAMPLES && new Set(recent).size === 1 ? 'waiting' : 'working'
 }
 
-export function agentRowBody(agent: AgentInfo, columns: number | undefined) {
+export function agentRowBody(agent: AgentInfo, columns: number | undefined, now: number) {
   if (agent.model === undefined || agent.contextWindowSize === undefined) {
     return undefined
   }
@@ -85,12 +101,17 @@ export function agentRowBody(agent: AgentInfo, columns: number | undefined) {
   const ctxPlain = `Context ${ctxPct}%`
   const status = agentState(agent)
   const parts = [`${STATUS_COLORS[status] ?? WHITE}${status}${RESET}`, `${BLUE}${modelPart}${RESET}`, `${usageColor(ctxPct)}${ctxPlain}${RESET}`]
+  // An ended agent has no end time, so its clock would keep counting
+  const elapsed = isLive(agent) ? formatElapsed(now - agent.startTime) : ''
+  if (elapsed) {
+    parts.unshift(elapsed)
+  }
 
   const agentType = `(${agent.type.toLowerCase()})`
   const fullTitle = agent.name || agent.description || agent.label
   let title = fullTitle
   if (columns !== undefined) {
-    const budget = columns - agentType.length - 1 - status.length - modelPart.length - ctxPlain.length - 3 * SEPARATOR_WIDTH
+    const budget = columns - agentType.length - 1 - status.length - modelPart.length - ctxPlain.length - parts.length * SEPARATOR_WIDTH - elapsed.length
     if (columnWidth(title) > budget) {
       title = budget >= 2 ? fitColumns(title, budget) : ''
     }
@@ -122,9 +143,21 @@ async function nestingDepth($: EngineInterface, agent: AgentInfo) {
 }
 
 export const register: Register = (on) => {
+  // The engine re-asks a row only when its props change, which a waiting agent's barely do, so a timer keeps the elapsed time moving
+  let ticker: Timer | undefined
   on('ui.render', { component: 'AgentRow' }, async ($, e, next) => {
+    if (ticker === undefined && isLive(e.props)) {
+      ticker = $.clock.every(1000, async () => {
+        if ((await $.agent.list()).some((agent) => agent.hasRow && isLive(agent))) {
+          $.ui.invalidate('ui.render')
+        } else {
+          ticker?.cancel()
+          ticker = undefined
+        }
+      })
+    }
     const columns = e.props.columns === undefined ? undefined : e.props.columns - NESTING_COLUMNS * (await nestingDepth($, e.props))
-    const body = agentRowBody(e.props, columns)
+    const body = agentRowBody(e.props, columns, await $.clock.now())
     return next(body === undefined ? e : { ...e, props: { ...e.props, body } })
   })
 }
