@@ -5,6 +5,13 @@
   args:
     creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/claude"
 
+# https://formulae.brew.sh/formula/bash
+# CLAUDE_CODE_SHELL in dotfiles/.claude/settings.json points here: macOS /bin/bash is 3.2, which the Bash tool refuses for some commands
+- name: Install bash for Claude Code
+  homebrew:
+    name: bash
+    state: latest
+
 # https://github.com/openai/codex
 - name: Install Codex
   shell: curl -fsSL https://chatgpt.com/codex/install.sh | sh
