@@ -1,4 +1,4 @@
-.PHONY: help install lint lint-python lint-ansible format test test-python test-claude-code-mods scan-secrets scan-secrets-history hal-completion
+.PHONY: help install lint lint-python lint-ansible format test test-python test-claude-code-mods validate-claude-code-mods scan-secrets scan-secrets-history hal-completion
 
 help: ## Show this help message
 	@echo 'Usage: make [target]'
@@ -35,6 +35,9 @@ test-python: ## Run pytest
 
 test-claude-code-mods: ## Run every mod's claude plugin test
 	for mod in $(wildcard plugins/*/tests); do claude plugin test $$(dirname $$mod) || exit 1; done
+
+validate-claude-code-mods: ## Validate the marketplace and every plugin with claude plugin validate --strict
+	for dir in . skills $(patsubst %/.claude-plugin/plugin.json,%,$(wildcard plugins/*/.claude-plugin/plugin.json)); do claude plugin validate --strict $$dir || exit 1; done
 
 scan-secrets: ## Scan the working tree for secrets
 	betterleaks dir . --verbose --no-banner
