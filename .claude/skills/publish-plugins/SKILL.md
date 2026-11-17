@@ -21,6 +21,7 @@ Each plugin owns its version in its own `.claude-plugin/plugin.json`, and the re
 | `hal-grammar-check`           | `plugins/hal-grammar-check/.claude-plugin/plugin.json`           |
 | `hal-session-auto-rename`     | `plugins/hal-session-auto-rename/.claude-plugin/plugin.json`     |
 | `hal-shell-mode-auto-suggest` | `plugins/hal-shell-mode-auto-suggest/.claude-plugin/plugin.json` |
+| `hal-subagent-rows`           | `plugins/hal-subagent-rows/.claude-plugin/plugin.json`           |
 | `hal-voice`                   | `plugins/hal-voice/.claude-plugin/plugin.json`                   |
 
 ## 1. Find the changed plugins
@@ -82,6 +83,7 @@ claude plugin validate --strict ./plugins/hal-output-styles
 claude plugin validate --strict ./plugins/hal-grammar-check
 claude plugin validate --strict ./plugins/hal-session-auto-rename
 claude plugin validate --strict ./plugins/hal-shell-mode-auto-suggest
+claude plugin validate --strict ./plugins/hal-subagent-rows
 claude plugin validate --strict ./plugins/hal-voice
 ```
 
