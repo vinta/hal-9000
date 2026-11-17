@@ -38,7 +38,8 @@ if path.exists():
             d = {}
 
 d["statusLine"] = {"type": "command", "command": cmd, "refreshInterval": 1}
-d["subagentStatusLine"] = {"type": "command", "command": cmd + " --subagents"}
+# The --subagents mode is gone; its rows come from the hal-subagent-rows plugin now
+d.pop("subagentStatusLine", None)
 
 with path.open("w") as f:
     json.dump(d, f, indent=2)

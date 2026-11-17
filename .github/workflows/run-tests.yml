@@ -77,5 +77,8 @@ jobs:
           curl -fsSL https://claude.ai/install.sh | bash
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
+      - name: Validate plugins
+        run: make validate-claude-code-mods
+
       - name: Run mod tests
         run: make test-claude-code-mods

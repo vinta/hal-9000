@@ -2,8 +2,6 @@
 
 A custom [Claude Code statusline](https://code.claude.com/docs/en/statusline) that shows the current model and effort level, directory, git branch, context usage, and your 5h/7d rate limit usage. Plus **a grammar check on every prompt you type**, with corrections explained in Traditional Chinese.
 
-The statusline also shows a row for each running subagent: its name, type, model, effort, and context usage.
-
 ## Installation
 
 ```bash
@@ -24,5 +22,3 @@ Just use Claude Code as usual. The statusline appears below the input box.
 ## Screenshots
 
 ![Claude Code Statusline with English Grammar Check example](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/claude-code-statusline-grammar-check.png)
-
-![Claude Code Statusline subagent rows example](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/claude-code-statusline-subagents.png)
