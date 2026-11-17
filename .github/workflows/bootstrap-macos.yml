@@ -26,9 +26,6 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 10
     env:
-      # Some roles append their profile scripts to ~/.zshrc behind a `when: ansible_facts["env"]["SHELL"] == "/bin/zsh"` gate.
-      # Actions runs steps in a non-interactive bash shell, so without this those tasks silently skip.
-      SHELL: /bin/zsh
       REPO_ROOT: /usr/local/hal-9000
 
     steps:
@@ -55,6 +52,10 @@ jobs:
         run: |
           branch=$(git -C "$REPO_ROOT" rev-parse --abbrev-ref HEAD)
           git -C "$REPO_ROOT" branch --set-upstream-to="origin/${branch}" "${branch}"
+
+      - name: Make zsh the runner's login shell
+        # Some roles append their profile scripts to ~/.zshrc behind a `when: ansible_facts["user_shell"] == "/bin/zsh"` gate, and the runner's login shell is not zsh, so without this those tasks silently skip.
+        run: sudo chsh -s /bin/zsh "$USER"
 
       - name: Run the bootstrap
         run: bash "$REPO_ROOT/bin/open-the-pod-bay-doors"
