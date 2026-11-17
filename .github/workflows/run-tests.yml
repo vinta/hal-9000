@@ -39,6 +39,7 @@ jobs:
         run: make test-python
 
   system-python-tests:
+    # arm64 macOS runners run short of capacity at times: a job no runner acquires is cancelled after ~15 minutes with no steps run, so re-run it rather than debug it
     runs-on: macos-latest
     timeout-minutes: 10
     steps:
