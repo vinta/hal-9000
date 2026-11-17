@@ -24,4 +24,4 @@ If your settings still have `subagentStatusLine`, remove it. Claude Code depreca
 
 ## Screenshots
 
-![Claude Code subagent rows example](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/claude-code-statusline-subagents.png)
+![Claude Code subagent rows example](https://raw.githubusercontent.com/vinta/hal-9000/main/assets/claude-code-subagent-rows.png)
