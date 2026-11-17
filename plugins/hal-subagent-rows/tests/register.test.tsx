@@ -99,6 +99,14 @@ describe('agentRowBody', () => {
     expect(plain(agentRowBody(makeAgent({ label: 'Reading every register file in the repo' }), 20))?.split('\n')[1]).toBe('Reading every regis…')
   })
 
+  test('fits a wide-character title by terminal columns', () => {
+    expect(plain(agentRowBody(makeAgent({ name: '審查所有外掛程式的掛鉤設定' }), 70))).toBe('審查所有外… (general-purpose) · working · sonnet-5 high · Context 12%')
+  })
+
+  test('fits a wide-character progress summary by terminal columns', () => {
+    expect(plain(agentRowBody(makeAgent({ label: '讀取外掛程式的掛鉤設定檔' }), 20))?.split('\n')[1]).toBe('讀取外掛程式的掛鉤…')
+  })
+
   test('draws nothing before the model resolves', () => {
     expect(agentRowBody(makeAgent({ model: undefined, contextWindowSize: undefined }), 120)).toBeUndefined()
   })
@@ -124,5 +132,25 @@ for (const surface of ['terminal', 'desktop'] as const) {
     }
 
     expect(bodies.map(plain)).toEqual(['hal-skills-commit (general-purpose) · working · sonnet-5 high · Context 12%', undefined])
+  })
+
+  test(`narrows a nested row by 2 columns per level on ${surface}`, async ($, on) => {
+    const titles: (string | undefined)[] = []
+    on('agent.list', () => ({ value: [makeAgent({ id: 'root' }), makeAgent({ id: 'middle', parentId: 'root' })] }))
+    on('ui.render', ($, e) => {
+      if (e.component === 'AgentRow') {
+        titles.push(plain(e.props.body)?.split(' (')[0])
+      }
+      const { Text } = $.ui.resolve(e)
+      return <Text>engine</Text>
+    })
+
+    const base = { ...makeAgent(), rowIds: ['root', 'middle', 'leaf'], columns: 67, isHidden: false }
+    for (const props of [base, { ...base, id: 'middle', parentId: 'root' }, { ...base, id: 'leaf', parentId: 'middle' }]) {
+      const ui = await $.ui.mount({ plugin: PLUGIN, surface, component: 'AgentRow', requestId: props.id, props })
+      await ui.unmount()
+    }
+
+    expect(titles).toEqual(['hal-skil…', 'hal-sk…', 'hal-…'])
   })
 }
