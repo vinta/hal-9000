@@ -1,7 +1,7 @@
 {
   "name": "hal-subagent-rows",
   "displayName": "HAL Subagent Rows",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Show each subagent's status, model, effort, and context usage in its agent row",
   "author": {
     "name": "Vinta Chen",
@@ -12,6 +12,7 @@
   "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-subagent-rows/README.md",
   "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
+  "icon": "./icon.png",
   "engines": {
     "claude-code": ">=2.1.326"
   },
