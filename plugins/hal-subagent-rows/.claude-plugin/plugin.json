@@ -12,6 +12,9 @@
   "documentationUrl": "https://github.com/vinta/hal-9000/blob/main/plugins/hal-subagent-rows/README.md",
   "supportUrl": "https://github.com/vinta/hal-9000/issues",
   "license": "MIT",
+  "engines": {
+    "claude-code": ">=2.1.326"
+  },
   "keywords": [
     "subagent",
     "agent-row",
