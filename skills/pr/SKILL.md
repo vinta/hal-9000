@@ -7,6 +7,7 @@ model: sonnet
 effort: medium
 allowed-tools:
   - Bash(git push:*)
+  - Bash(git rev-parse:*)
   - Bash(gh pr:*)
   - Bash(gh repo view:*)
 ---
@@ -59,11 +60,19 @@ Move name-suffix into core rules and protect URLs and slashes
 
 5. From `write-like-me`'s output, take the first line as title, the rest as body. Append a blank line and the `Fix` lines from step 3 to the body.
 
+## Push
+
+Create, update, and merge mode run these steps where they say "push the branch", so a branch the remote already has is never pushed again:
+
+1. `git rev-parse HEAD`, then `git rev-parse @{u}`, each alone in its Bash call.
+2. If both print the same commit, the remote already has every commit: skip the push.
+3. Otherwise, including when `git rev-parse @{u}` fails because the branch has no upstream, run `git push -u origin HEAD` alone in its Bash call. Abort if it fails.
+
 ## Create mode
 
 1. `git rev-parse --abbrev-ref HEAD` — abort if `main` or `master`.
 2. `gh pr view --json url 2>/dev/null` — if a PR already exists, report its URL and stop.
-3. `git push -u origin HEAD`.
+3. Push the branch.
 4. Gather PR material.
 5. `gh pr create --title "<title>" --body "<body>"`.
 6. Report the PR URL.
@@ -71,7 +80,7 @@ Move name-suffix into core rules and protect URLs and slashes
 ## Update mode
 
 1. `gh pr view --json url,state 2>/dev/null` — abort if no PR or not open.
-2. `git push`, alone in its Bash call, every time: it prints `Everything up-to-date` when nothing is ahead. Abort if it fails.
+2. Push the branch.
 3. Gather PR material.
 4. `gh pr edit --body "<body>"` — the title stays as it is.
 5. Report the PR URL.
@@ -79,12 +88,11 @@ Move name-suffix into core rules and protect URLs and slashes
 ## Merge mode
 
 1. `gh pr view --json url,number,state` — abort if no PR or not open.
-2. `git push`, alone in its Bash call, every time: it prints `Everything up-to-date` when nothing is ahead. Abort if it fails.
+2. Push the branch.
 3. `git rev-parse HEAD`, then `gh pr view --json headRefOid --jq .headRefOid`. If they differ, GitHub has not seen the push yet and `gh pr checks` would report the old head's runs: wait 15 seconds and compare once more, then abort if they still differ.
-4. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If the push sent commits and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once. If the call times out instead, the checks are still running: run it again with the same timeout, and after a third timeout report the checks still pending and stop.
-5. If exit code 0 (all checks passed):
+4. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If step 2 pushed and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once. If the call times out instead, the checks are still running: run it again with the same timeout, and after a third timeout report the checks still pending and stop.
+5. `gh pr checks --json name,bucket,link --jq '.[] | select(.bucket != "pass" and .bucket != "skipping")'`. Its output, not the watch's exit code, decides the merge: `gh pr checks` exits 0 even when a check was cancelled, and a cancelled check never ran.
+6. If it prints nothing (every check passed or was skipped):
    - `gh pr merge --merge --delete-branch`. It also switches to the base branch, pulls it, and deletes the local branch.
    - Report: merged, remote and local branches cleaned up.
-6. If non-zero (check failed):
-   - Run `gh pr checks` once more to list failed checks and their URLs.
-   - Report which checks failed. Take no other action.
+7. Otherwise, report each check it printed with its bucket and link. Take no other action.
