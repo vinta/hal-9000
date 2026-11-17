@@ -15,7 +15,7 @@ function makeAgent(overrides: Partial<AgentInfo> = {}): AgentInfo {
     status: 'running',
     kind: 'local_agent',
     taskStatus: 'running',
-    label: 'commit',
+    label: '/hal-skills:commit all pending changes',
     startTime: 1754000000000,
     cwd: '/usr/local/hal-9000',
     model: 'claude-sonnet-5',
@@ -69,12 +69,12 @@ describe('agentRowBody', () => {
   })
 
   test('leads with the description when the agent has no name', () => {
-    const agent = makeAgent({ name: undefined, effort: undefined, type: 'Explore', model: 'claude-opus-5[1m]', contextWindowSize: 1000000, tokenCount: 28261, description: 'List repo files' })
+    const agent = makeAgent({ name: undefined, effort: undefined, type: 'Explore', model: 'claude-opus-5[1m]', contextWindowSize: 1000000, tokenCount: 28261, description: 'List repo files', label: 'List repo files' })
     expect(plain(agentRowBody(agent, 120))).toBe('List repo files (explore) · working · opus-5[1m] · Context 2%')
   })
 
   test('falls back to the label when the description is empty', () => {
-    expect(plain(agentRowBody(makeAgent({ name: undefined, description: '' }), 120))).toBe('commit (general-purpose) · working · sonnet-5 high · Context 12%')
+    expect(plain(agentRowBody(makeAgent({ name: undefined, description: '', label: 'commit' }), 120))).toBe('commit (general-purpose) · working · sonnet-5 high · Context 12%')
   })
 
   test('keeps a running agent working until 6 samples are flat', () => {
@@ -85,6 +85,18 @@ describe('agentRowBody', () => {
 
   test('leaves the title whole when columns are unknown', () => {
     expect(plain(agentRowBody(makeAgent(), undefined))).toBe('hal-skills-commit (general-purpose) · working · sonnet-5 high · Context 12%')
+  })
+
+  test('adds the progress summary as a gray second line', () => {
+    expect(agentRowBody(makeAgent({ label: 'Reading register.ts' }), 120)).toMatch(/\n\x1b\[90mReading register\.ts\x1b\[0m$/)
+  })
+
+  test('shows only the first non-empty line of the progress summary', () => {
+    expect(plain(agentRowBody(makeAgent({ label: '\nReading register.ts\nthen the tests' }), 120))?.split('\n')[1]).toBe('Reading register.ts')
+  })
+
+  test('truncates the progress summary to the columns', () => {
+    expect(plain(agentRowBody(makeAgent({ label: 'Reading every register file in the repo' }), 20))?.split('\n')[1]).toBe('Reading every regis…')
   })
 
   test('draws nothing before the model resolves', () => {

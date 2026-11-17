@@ -5,6 +5,7 @@ const GREEN = '\x1b[32m'
 const YELLOW = '\x1b[33m'
 const RED = '\x1b[31m'
 const WHITE = '\x1b[37m'
+const GRAY = '\x1b[90m'
 const RESET = '\x1b[0m'
 
 const SEPARATOR = ` ${WHITE}·${RESET} `
@@ -38,7 +39,8 @@ export function agentRowBody(agent: AgentInfo, columns: number | undefined) {
   const parts = [`${STATUS_COLORS[status] ?? WHITE}${status}${RESET}`, `${BLUE}${modelPart}${RESET}`, `${usageColor(ctxPct)}${ctxPlain}${RESET}`]
 
   const agentType = `(${agent.type.toLowerCase()})`
-  let title = agent.name || agent.description || agent.label
+  const fullTitle = agent.name || agent.description || agent.label
+  let title = fullTitle
   if (columns !== undefined) {
     const budget = columns - agentType.length - 1 - status.length - modelPart.length - ctxPlain.length - 3 * SEPARATOR_WIDTH
     if (title.length > budget) {
@@ -46,8 +48,17 @@ export function agentRowBody(agent: AgentInfo, columns: number | undefined) {
     }
   }
   parts.unshift(title ? `${title} ${agentType}` : agentType)
+  const row = parts.join(SEPARATOR)
 
-  return parts.join(SEPARATOR)
+  // label falls back to description until the engine stores a progress summary
+  let progress = agent.label.split('\n').find((line) => line.trim())?.trim()
+  if (!progress || progress === agent.description || progress === fullTitle) {
+    return row
+  }
+  if (columns !== undefined && progress.length > columns) {
+    progress = `${progress.slice(0, columns - 1)}…`
+  }
+  return `${row}\n${GRAY}${progress}${RESET}`
 }
 
 export const register: Register = (on) => {
