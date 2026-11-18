@@ -75,7 +75,7 @@ gh api repos/ansible/ansible-lint/commits/v<version> --jq .sha
 
 ## 6. Verify and commit
 
-Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7`. A collection pin bump and an action repin are each their own commit, separate from any role.
+Run `make lint`. Then create one commit per tool with the `commit` skill, passing what moved, e.g. `bump kubectl to v1.35.7` or `install foundryup from getfoundry.sh`. A collection pin bump and an action repin are each their own commit, separate from any role.
 
 ## 7. Offer method switches
 
