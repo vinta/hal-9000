@@ -20,7 +20,7 @@ Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when avail
 1. **Pick the target.** If the invocation names one, resolve it to its `SKILL.md`. Otherwise ask which skill. For a full audit, read `SKILL.md` and every sibling file in its directory. For a targeted change, read `SKILL.md`, affected files, and references needed to assess their interactions. That change sets the scope: the verdicts below cover the lines it adds or touches, the rest of the skill stays as it is, and anything noticed there is a follow-up.
 
 2. **Fetch the guides.** The platform and model guides below calibrate the delete, demote, and rewrite verdicts. Read each page's full text, not a fetch tool's summary of it: a summary misquotes long pages and misses parts of them.
-   - Fetch one model guide, picked by the target skill's `model:` frontmatter. Unset or `inherit` means the most capable model of the family running this skill: `fable` under Claude, `gpt-6-astra` under a GPT model. Read the matching reference and fetch the pages it lists:
+   - Use the model named in the target skill's `model:` frontmatter. If unset or `inherit`, use `fable` under Claude or `astra` under GPT. Follow the matching reference:
      - **A Claude model**: [references/claude-code.md](references/claude-code.md).
      - **A GPT model**: [references/codex.md](references/codex.md).
 
