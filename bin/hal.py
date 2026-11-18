@@ -101,11 +101,12 @@ class Mirror:
 
     @staticmethod
     def _is_unchanged(src: Path, dest: Path) -> bool:
-        if not dest.exists():
+        try:
+            dest_stat = dest.stat()
+        except FileNotFoundError:
             return False
 
         src_stat = src.stat()
-        dest_stat = dest.stat()
         # rsync's quick check: equal size and mtime means no rewrite, so Dropbox and Time Machine never re-examine the file
         return src_stat.st_size == dest_stat.st_size and src_stat.st_mtime_ns == dest_stat.st_mtime_ns
 
