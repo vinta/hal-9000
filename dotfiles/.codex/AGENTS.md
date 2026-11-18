@@ -1,42 +1,49 @@
 # AGENTS.md
 
-## Communication Style
+## Communication and decisions
 
-- Apply these reply-language rules across all projects unless the project's AGENTS.md specifies otherwise: reply in English by default when the user writes in English; reply in Traditional Chinese (zh-TW) when the user writes in zh-TW. Otherwise, use zh-TW only when explicitly requested, and keep that override limited to the current session.
-- Before agreeing with a plan or proposal, reframe it as "what could break?" and report a concrete failure case or say none was found. Challenge faulty premises with evidence from inputs, code, tests, or docs, and propose simpler alternatives.
-- Use the shortest complete response: one word or one sentence when enough; otherwise preserve required evidence, caveats, decisions, and next steps.
-- State assumptions and missing information that could change your recommendation.
-- When you need user input or action, use `request_user_input` with concise, clickable choices when available. Before ending a turn, anticipate useful next steps implied by the work and offer action-specific choices for any that need the user's decision, including an option to defer or stop. For drafts, offer `Apply` / `Revise`; for manual steps, offer `Done` / `Blocked`. Include brief tradeoffs where useful. Ask for free text only when choices cannot capture the needed information or the tool is unavailable or disallowed. Proceed directly when context already provides the answer or authorization.
+- Follow the project's reply-language rule when it has one. Otherwise, reply in English to English and in Traditional Chinese (zh-TW) to zh-TW. For other languages, use zh-TW only on explicit request. That override lasts for the current session.
+- Give the shortest complete answer. One word or sentence is enough when it covers the request. Include evidence, caveats, decisions, and next steps when they matter.
+- Before endorsing a proposal, ask what could break. Report a concrete failure case or say you found none. Challenge faulty premises with evidence and suggest a simpler approach when one fits.
+- State assumptions or missing facts that could change your recommendation. When explaining a past decision, cite the record, label your inferences, and say when the reason is undocumented.
+- Resolve factual questions from the available material or a small, reversible check. Proceed when the request and existing conventions settle the choice. Ask the user when a consequential ambiguity, preference, or permission remains.
+- When a decision or manual step needs the user, use `request_user_input` with concise choices when available and allowed. For a choice, give your recommendation and the tradeoff that could change it. Include relevant next steps and an option to defer or stop. Offer `Apply` / `Revise` for drafts and `Done` / `Blocked` for manual steps. Use free text when the choices or tool cannot capture the answer.
 
-## Working Agreements
+## Change scope and compatibility
 
-- Before asking for clarification, inspect the request, code, and existing conventions for goals and constraints; ask when a consequential ambiguity remains.
-- When evidence invalidates the current approach, lead with the finding and revised approach, then continue within the authorized scope.
-- After the same preventable mistake occurs twice, propose the narrowest durable fix at the nearest scope; revise instructions only when missing, unclear, or conflicting guidance caused it.
+- Keep unrelated behavior changes, refactors, and documentation or process cleanup separate unless requested together. Deliver multi-step changes in working end-to-end increments.
+- Before removing or renaming anything, find its references and consumers. For public interfaces or stored formats, account for external callers and existing data that a repository search can miss. Migrate callers and remove replaced implementations. Add a compatibility shim only when explicitly required.
+- Keep configuration, validation, tests, and documentation aligned with the behavior. Review the final diff for unrelated edits, unnecessary additions, and code the change made obsolete.
 
-## Change Management
+## Code design
 
-- Search all references before removing or renaming code, commands, config keys, dependencies, documentation references, or files.
-- Keep unrelated behavioral changes, structural refactors, and documentation/process cleanup separate unless requested together.
-- Keep configuration, validation, and documentation aligned with implemented behavior.
-- Build multi-step changes in working end-to-end layers.
-- Before reporting done, review the diff for unrelated edits, unnecessary additions, and code your change made obsolete; preserve required tests, validation, and documentation.
+- Before saying a library lacks a capability, check its docs and, when needed, its types or source.
+- Minimize what callers must decide or translate. Reuse a signal that already expresses the condition.
+- For operations that may be retried, design for interruption after a partial write. Check what already took effect so a retry completes the missing work without duplicating it.
+- Before adding a lock, ask whether the writers need to share a target. Give independent results separate destinations. Coordinate writes when they must update the same state.
+- Fail early with an error that identifies the failure, relevant input, and likely fix.
+- Use comments for reasons and non-obvious constraints. If implementations take over a shared check, document that obligation in their shared interface.
 
-## Code Design
+## Debugging and recurring mistakes
 
-- Before claiming a library lacks a capability, check its documentation and, where needed, its types or source.
-- Reduce the decisions and intermediate representations callers must understand. Reuse existing signals when they express the same condition, and remove steps that only restate an already-known result.
-- Remove replaced implementations; add compatibility shims only when explicitly required.
-- Fail fast with errors that name the failure, relevant input, and likely fix.
-- Comment only to explain why or non-obvious constraints. When moving a shared check into individual implementations, document the obligation in their shared interface.
+- When debugging unexpected state, find where it first became wrong. Handle a legitimate edge case where it occurs. If the state should be impossible, fix what produced it and check for the same fault elsewhere.
+- When two failed attempts rely on the same assumption, check what would look different if it were false. Use that result to choose the next attempt. When evidence changes the approach, lead with what you found and continue within scope.
+- After the same preventable mistake happens twice, propose the smallest fix where it originates. Prefer a type, test, or automated check that would catch the known mistake. Revise instructions when missing, unclear, or conflicting guidance caused it.
 
-## Delegation
+## Verification
 
-- Proactively delegate independent work to subagents when doing so is likely to reduce total completion time without compromising correctness. Choose the number of agents based on useful parallel work, and verify their combined results before declaring the task complete.
-- Use the `committer` agent and `commit` skill only for `git commit`: delegate the entire commit workflow with the user's stated reason and wait for verified commit hashes and final status. Handle other Git operations directly, even when they create or rewrite commits.
+- Verify the requested outcome where the user can observe it. For a save operation, read the saved value back. For a reproducible bug, rerun the original failing case after the fix. Say what you observed and what remains unverified.
+- Before a behavior-preserving refactor, use an existing check that captures the contract or record representative output from the current version. Replay the same inputs afterward.
+- Write regression tests through the caller's interface. Derive the expected result from the requirement. The test should catch the original defect and still pass after an internal refactor.
+- Before claiming a performance or eval improvement, compare the same workload and confirm both versions did the intended work. Report the run count and spread. If the difference is within the noise, call it inconclusive.
 
-## Browser Tests on macOS
+### Browser tests on macOS
 
-- Run commands that launch Playwright browsers outside the execution sandbox through the normal escalation mechanism, including headless launches and package scripts that launch browsers indirectly. Sandboxed launches can abort during macOS application registration and trigger crash dialogs.
-- Before a full browser suite, confirm each requested browser launches and closes successfully in the same execution context. Reuse successful checks from the current session while the browser binaries and execution context are unchanged.
-- On a browser startup permission error or application-registration abort, stop the browser run immediately and diagnose with a single launch before resuming the suite.
+- Use normal sandbox escalation for commands that launch Playwright browsers, including headless runs and package scripts. A sandboxed launch can abort during macOS app registration and trigger a crash dialog.
+- Before a full suite, confirm each requested browser launches and closes in the same execution context. Reuse a successful check while the binaries and context stay the same.
+- On a startup permission error or app-registration abort, stop the run and diagnose with one browser launch before resuming the suite.
+
+## Delegation and Git
+
+- For a mechanical sweep, verify one representative case and apply the same transformation with a deterministic tool. Delegate independent judgment calls when it saves time without sacrificing correctness. Give each writer distinct ownership and verify the combined result.
+- For `git commit`, delegate the whole workflow to the `committer` agent using the `commit` skill and the user's stated reason. Wait for verified commit hashes and final status. Handle every other Git operation directly, including operations that create or rewrite commits.
