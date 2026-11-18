@@ -819,6 +819,21 @@ class TestSkipUnchanged:
         assert dest_file.read_text() == "BBBB"
         assert dest_file.stat().st_mode & 0o777 == 0o444
 
+    def test_skips_copystat_on_directory_that_already_matches(self, hal_module, tmp_path):
+        """A matching directory keeps its metadata untouched, since copystat would still change its ctime."""
+        src = tmp_path / "src"
+        (src / "sub").mkdir(parents=True)
+        (src / "sub" / "a.txt").write_text("AAAA")
+        dest = tmp_path / "dest"
+        mirror = hal_module.Mirror(say=lambda _: None)
+
+        mirror.copy(src, dest)
+        with patch.object(hal_module.shutil, "copystat", wraps=shutil.copystat) as copystat:
+            mirror.copy(src, dest)
+
+        assert (dest / "sub").stat().st_mtime_ns == (src / "sub").stat().st_mtime_ns
+        copystat.assert_not_called()
+
     def test_reports_directory_unchanged_when_no_file_copied(self, hal_module, tmp_path):
         """A directory whose files all match reports unchanged; one changed file reports the copy count."""
         said = []
