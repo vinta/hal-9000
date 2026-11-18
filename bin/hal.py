@@ -6,6 +6,7 @@ import concurrent.futures
 import fnmatch
 import json
 import os
+import re
 import shlex
 import shutil
 import stat
@@ -200,30 +201,33 @@ class Mirror:
         self._copy_one(src, dest)
 
     @staticmethod
-    def _walk_names(root: Path, *, follow_symlinks: bool) -> set[Path]:
-        names: set[Path] = set()
+    def _walk_names(root: Path, *, follow_symlinks: bool) -> set[str]:
+        # Hot path over 100k+ entries: scandir skips a stat per entry, and one regex with str names beats per-pattern fnmatch on Paths
+        ignored = re.compile("|".join(fnmatch.translate(pattern) for pattern in Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS)).match
+        names: set[str] = set()
         visited = {root.resolve()}
-        stack = [(root, Path())]
+        stack = [(str(root), "")]
         while stack:
             directory, prefix = stack.pop()
-            for child in directory.iterdir():
-                if Mirror._is_ignored(child, Settings.IGNORE_PATTERNS + Settings.DIFF_IGNORE_PATTERNS):
-                    continue
-                relative = prefix / child.name
-                names.add(relative)
-                if not child.is_dir():
-                    continue
-                if child.is_symlink():
-                    # A source is followed because backup copies symlinked directories dereferenced, so their contents
-                    # sit in the destination as real files and would otherwise all read as orphans. A destination is
-                    # not, so a symlink there stays a single entry to unlink rather than a way out of the backup.
-                    if not follow_symlinks:
+            with os.scandir(directory) as children:
+                for child in children:
+                    if ignored(child.name):
                         continue
-                    resolved = child.resolve()
-                    if resolved in visited:
+                    relative = prefix + child.name
+                    names.add(relative)
+                    if not child.is_dir():
                         continue
-                    visited.add(resolved)
-                stack.append((child, relative))
+                    if child.is_symlink():
+                        # A source is followed because backup copies symlinked directories dereferenced, so their contents
+                        # sit in the destination as real files and would otherwise all read as orphans. A destination is
+                        # not, so a symlink there stays a single entry to unlink rather than a way out of the backup.
+                        if not follow_symlinks:
+                            continue
+                        resolved = Path(child.path).resolve()
+                        if resolved in visited:
+                            continue
+                        visited.add(resolved)
+                    stack.append((child.path, f"{relative}/"))
         return names
 
     @staticmethod
