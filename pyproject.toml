@@ -22,6 +22,9 @@ dev = [
     { include-group = "audit" },
 ]
 
+[tool.pytest]
+testpaths = ["tests"]
+
 [tool.uv]
 exclude-newer = "7 days"
 no-build = true
