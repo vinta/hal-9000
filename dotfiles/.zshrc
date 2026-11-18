@@ -142,7 +142,7 @@ alias ccyolo="CLAUDE_CODE_RESUME_HINT_COMMAND=ccyolo blackwall claude --dangerou
 ccp() { CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 claude --model sonnet --effort high --no-session-persistence --no-chrome -p "$*"; }
 
 alias cx='codex'
-alias cxmax='codex --model gpt-6-astra --config model_reasoning_effort=max'
+alias cxmax='codex --model gpt-6.2-astra --config model_reasoning_effort=max'
 alias cxyolo='blackwall codex --dangerously-bypass-approvals-and-sandbox'
 alias cxdaybreak='codex --model gpt-daybreak-blue-latest'
 
