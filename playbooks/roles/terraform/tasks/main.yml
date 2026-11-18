@@ -1,5 +1,4 @@
 ---
-# The homebrew module runs `brew info` before `brew install`, and only `brew install` auto-taps and trusts a fully qualified formula
 - name: Tap hashicorp/tap
   homebrew_tap:
     name: hashicorp/tap
