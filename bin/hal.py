@@ -124,6 +124,40 @@ class Mirror:
     def _is_ignored(path: Path, patterns: tuple[str, ...]) -> bool:
         return any(fnmatch.fnmatch(path.name, pattern) for pattern in patterns)
 
+    @staticmethod
+    def _copy_tree(src: str, dest: str, copy_file: Callable[[str, str], None]) -> None:
+        # shutil.copytree(symlinks=False, dirs_exist_ok=True), minus copystat on a directory whose metadata already
+        # matches: copytree rewrites every directory on every run, changing its ctime
+        with os.scandir(src) as scan:
+            children = list(scan)
+        ignored = shutil.ignore_patterns(*Settings.IGNORE_PATTERNS)(src, [child.name for child in children])
+        Path(dest).mkdir(parents=True, exist_ok=True)
+        errors: list[tuple[str, str, str]] = []
+        for child in children:
+            if child.name in ignored:
+                continue
+            target = f"{dest}/{child.name}"
+            try:
+                # Follows symlinks, so a linked directory lands as a real one and a dangling link fails in copy_file
+                if child.is_dir():
+                    Mirror._copy_tree(child.path, target, copy_file)
+                else:
+                    copy_file(child.path, target)
+            except shutil.Error as error:
+                errors.extend(error.args[0])
+            except OSError as error:
+                errors.append((child.path, target, str(error)))
+        # copystat on macOS sets only times, mode, and flags; an atime-only difference is not worth a rewrite
+        src_stat, dest_stat = Path(src).stat(), Path(dest).stat()
+        # st_flags exists only on macOS and the BSDs, and CI runs the tests on Linux
+        if any(getattr(src_stat, field, None) != getattr(dest_stat, field, None) for field in ("st_mtime_ns", "st_mode", "st_flags")):
+            try:
+                shutil.copystat(src, dest)
+            except OSError as error:
+                errors.append((src, dest, str(error)))
+        if errors:
+            raise shutil.Error(errors)
+
     def _copy_one(self, src: Path, dest: Path) -> None:
         if self._is_ignored(src, Settings.IGNORE_PATTERNS):
             self._say(f"ignored {abbreviate_home(src)}")
@@ -138,13 +172,7 @@ class Mirror:
                 if self._copy_file_allow_overwrite(Path(source), Path(target)):
                     copied.append(Path(source).relative_to(src))
 
-            shutil.copytree(
-                src,
-                dest,
-                ignore=shutil.ignore_patterns(*Settings.IGNORE_PATTERNS),
-                copy_function=copy_file,
-                dirs_exist_ok=True,
-            )
+            self._copy_tree(str(src), str(dest), copy_file)
             if existed and not copied:
                 self._say(f"unchanged {abbreviate_home(src)}/")
                 return
