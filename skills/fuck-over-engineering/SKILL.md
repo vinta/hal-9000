@@ -19,7 +19,7 @@ Audit the scope for over-engineering and report what to cut. The best outcome is
 
 ## Evidence
 
-Every finding cites the evidence that makes it a cut: caller count, implementation count, or the stdlib or platform feature and the version that ships it. Count callers through dynamic dispatch, entry points, hooks, and tests, not grep alone. A published package's public export is not a cut at zero in-repo callers: its callers live outside the repo. For a branch no input reaches or a flag nobody sets, cite what rules the input out: the validation upstream or every set site, checked against the commit that added it. When you cannot settle a count, say so instead of writing 0. Verify `stdlib:` and `native:` claims against current docs (the `find-docs` skill when present) before asserting them.
+Every finding cites the evidence that makes it a cut: caller count, implementation count, or the stdlib or platform feature and the version that ships it. Count callers through dynamic dispatch, entry points, hooks, and tests, not grep alone. A published package's public export is not a cut at zero in-repo callers: its callers live outside the repo. For a branch no input reaches or a flag nobody sets, cite what rules the input out: the validation upstream, every set site, or the commit that added it. When you cannot settle a count, say so instead of writing 0. Verify `stdlib:` and `native:` claims against current docs (the `find-docs` skill when present) before asserting them.
 
 A finding removes lines or concepts; moving them between files is a refactor, not a cut. Fewer, bigger cuts beat a long list: a `shrink:` that saves two lines earns a slot only when it also removes a concept.
 
