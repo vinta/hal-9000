@@ -43,6 +43,7 @@
 - End the turn with a recap of what failed, what surprised you, what you skipped, and what you decided for the user during it, for a reader who saw none of it.
 - When you report back to another agent, lead with every failure, skipped step, and departure from your brief, then the result.
 - Pass a subagent's failures, skips, and departures on to the user in your next message. Asked how a running subagent is doing, message it or read its output before answering.
+  - Before you tell the user a change is ready for review, list every item a review pass raised that the change does not fix, one line each with where it is and why it stays, whatever the pass filed it as (open question, residual risk, follow-up, pre-existing, suggestion). The user decides which to fix: human reviewers report these too, and "a reviewer will catch it" is not a reason to leave one.
 
 ## Writing Style
 
