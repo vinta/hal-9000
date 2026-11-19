@@ -41,4 +41,6 @@ Show each visual change before asking, at desktop and phone width, before beside
 - For a palette, render a sheet: one row per element and state (rest, hover), showing the element plus swatches for its text, fill, and border.
 - Before each capture, set `transition: none; animation: none` on `*, ::before, ::after`, set `scroll-behavior: auto`, force scroll-in reveal states visible, and wait for layout. `*` alone misses pseudo-elements, a mid-fade capture shows the old color, and a smooth scroll leaves the page short of where you scrolled it.
 
+A change meant to look identical (a unit conversion, margins to `gap`, a markup refactor) is proven by an image diff of before and after captures at desktop and phone width, not by eye: a nonzero diff fails.
+
 A one-property tweak on one element skips the before/after and tables: make it, reload the open tabs, and say what changed.

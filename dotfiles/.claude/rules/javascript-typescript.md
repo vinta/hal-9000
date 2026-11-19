@@ -12,6 +12,7 @@ paths:
 - Use the `node:` prefix for Node.js built-in modules (`node:fs`, `node:path`).
 - Prefer `interface` over `type` for object shapes (extendable, better error messages).
 - Write a proper type instead of `any` or a cast (`as any`, `as unknown`). For a genuinely untypable value, use `unknown` and narrow it; `any` is the last resort.
+- When the compiler or a linter flags something, read the rule and fix the code. Suppress it only when the rule does not apply to the project, on that one line, with the rule named and the reason after it.
 - Do not add explicit return types. Let TypeScript infer them, except where the annotation checks returned literals against a declared union or contract.
 - Mark a class property `readonly` only when it is set once and its contents never change. One that is never reassigned but mutated in place (a queue, a cache, a settings object) stays unmarked.
 - Use a readonly type (`readonly T[]`, `ReadonlySet`, `ReadonlyMap`) only where an accidental mutation would break other code: an exported constant, a parameter a published API only reads, a parameter the body must copy before mutating. The type is shallow: judge the container, not what its items point to. Everything else stays plain.
