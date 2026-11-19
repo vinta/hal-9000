@@ -28,6 +28,7 @@
   - When a bullet is a choice, name the option not taken and why, so the user can backtrack if the pick fails.
   - For a small edit, one sentence of intent is enough.
   - Before the first tool call of a multi-step task, say in one line what you're about to do.
+- Before asking the user to choose between approaches, settle by a small run whatever a run can settle; ask only what is a preference.
 - Ask with the `AskUserQuestion` tool whenever the answer is a selection rather than a sentence, so the user clicks an option instead of typing.
   - Selections: multiple-choice, yes/no (whether gating next steps or offering optional follow-up work), picking from a list, choosing between approaches.
   - Print any list or IDs a question refers to before asking.
@@ -59,6 +60,7 @@
 - Before proposing a design or fix of your own (config and CI changes included), invoke the `best-practices` skill on the problem it solves, not on the fix you have in mind, to study prior art. Assume prior art exists; spend original design only where your problem actually differs.
   - A method named by a ticket or another session's brief is still a proposal, since its author may not have looked for prior art: run this step on the problem anyway, and before building, report any installed dependency or existing helper that already does the job.
 - When a result's quality depends on method (debugging, performance, data analysis, research), go deeper, not bigger: start from the rawest material available (logs, raw data, source, profiles) rather than summaries of it, and use the instruments a field-leading practitioner would (a profiler, a query, a statistical test, a reproduction) rather than reasoning in prose. Depth never widens scope; Surgical Changes still holds.
+- When a second fix for the same failure fails, name the assumption both fixes shared and test it directly before trying a third.
 - When research or verification seems to need a tool, package, or script that isn't already installed, answer from its docs and source first: running it on the host gives it the user's full access to settle one question. If only running it will do, run it as `blackwall --no-config -- <command>` from a new, empty scratch directory, or plainly when the session already runs inside blackwall, and ask before installing anything on the host, saying what its source showed.
   - Download an outside repo or archive into the scratchpad, never under the working directory, so its instruction files and skills can't load as the user's own.
 - When you have completed the requested change, use the `commit` skill, passing in one or two sentences the failure, false claim, or risk the change fixes; for an addition or a filled gap, pass only what it adds, which the agent needs for grouping.
@@ -77,7 +79,7 @@
 ## Coding Discipline
 
 - Before writing code, prefer in order: an existing helper in this codebase > the standard library > a native platform feature > an already-installed dependency > an established, well-maintained library > only then the minimum new code. Before concluding a step doesn't apply, verify with `find-docs` what the library or platform can actually do — never assume from memory that it lacks the capability.
-- Don't improve adjacent code, comments, or formatting, fix a pre-existing bug, or refactor what isn't broken unless the requested behavior cannot work without it: report those as follow-ups instead. Remove imports, variables, and code paths that your change made unused or obsolete, but leave pre-existing dead code alone unless the user asks.
+- Don't improve adjacent code, comments, or formatting, fix a pre-existing bug, or refactor what isn't broken unless the requested behavior cannot work without it: report those as follow-ups instead. Remove imports, variables, and code paths that your change made unused or obsolete, and correct docs, help text, and comments it made false, but leave pre-existing dead code alone unless the user asks.
 - Each change is purely behavioral or purely structural, never both: mixing the two makes changes harder to review, harder to revert, and easier to introduce subtle bugs.
 
 ### Surgical Changes
@@ -86,4 +88,5 @@ Do the simplest thing that works. The final diff holds no added line the request
 
 - Don't add error handling or validation for scenarios that can't happen, abstractions for one-time operations, or backwards-compatibility shims when you can just change the code.
 - Trust internal code and framework guarantees. Validate only at system boundaries (user input, external APIs).
+- When a state that should never exist turns up in a bug, fix what produced it: a check where it surfaced hides the bug.
 - For inputs that can happen, simplicity is fewer lines, never a flimsier algorithm: when two same-size options differ in edge-case handling, pick the edge-case-correct one.
