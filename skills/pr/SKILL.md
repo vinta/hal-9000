@@ -1,7 +1,7 @@
 ---
 name: pr
 description: "Use when the user explicitly asks to push the current branch and open a PR, rewrite an open PR's body from its commits, or wait for CI and merge it"
-argument-hint: "[create | update | merge]"
+argument-hint: "[create | update | merge [PR number or URL]]"
 context: fork
 model: sonnet
 effort: medium
@@ -15,6 +15,8 @@ allowed-tools:
 Invoking this skill IS the request. Your task is fully specified here. Never ask what to do.
 
 Run every command bare, exactly as written below: `git` and `gh` find the repository from any subdirectory, and a `cd` does not carry over to the next Bash call in this fork. A `cd ... &&` or `$()` prefix stops a command matching `allowed-tools`, and the merge then hits the permission gate.
+
+So the shell has to start inside the repository. When a command fails with `not a git repository`, stop and report that the skill has to be invoked from inside the repository, or for merge mode with the PR's URL, which `gh` accepts from any directory. A path in the arguments does not change this.
 
 The user invoked this skill with: "$ARGUMENTS"
 
@@ -87,12 +89,18 @@ Create, update, and merge mode run these steps where they say "push the branch",
 
 ## Merge mode
 
-1. `gh pr view --json url,number,state` — abort if no PR or not open.
+The arguments may name the PR by number or URL, as in `merge 173` or `merge https://github.com/acme/app/pull/173`. The shell then need not be on the PR's branch, so three things change: put the number or URL right after the subcommand in every `gh pr` command below (`gh pr view 173 ...`, `gh pr checks 173 ...`, `gh pr merge 173 ...`), skip step 2, and in step 3 run only the `gh pr view` command and keep the commit it prints.
+
+1. `gh pr view --json url,number,state,headRefName` — abort if no PR or not open.
 2. Push the branch.
 3. `git rev-parse HEAD`, then `gh pr view --json headRefOid --jq .headRefOid`. If they differ, GitHub has not seen the push yet and `gh pr checks` would report the old head's runs: wait 15 seconds and compare once more, then abort if they still differ.
 4. `gh pr checks --watch` — blocks until all checks complete. Use a 10-minute Bash timeout. If step 2 pushed and it reports no checks yet, the push just queued them: wait 15 seconds and run it again once. If the call times out instead, the checks are still running: run it again with the same timeout, and after a third timeout report the checks still pending and stop.
 5. `gh pr checks --json name,bucket,link --jq '.[] | select(.bucket != "pass" and .bucket != "skipping")'`. Its output, not the watch's exit code, decides the merge: `gh pr checks` exits 0 even when a check was cancelled, and a cancelled check never ran.
 6. If it prints nothing (every check passed or was skipped):
-   - `gh pr merge --merge --delete-branch`. It also switches to the base branch, pulls it, and deletes the local branch.
-   - Report: merged, remote and local branches cleaned up.
+   - `gh pr merge --merge --delete-branch`. When the arguments named the PR, add `--match-head-commit` with the commit from step 3: no local `HEAD` was compared there, and the flag makes GitHub refuse the merge if the PR's head moved after the checks were read.
+   - `git rev-parse --verify --quiet refs/heads/<headRefName from step 1>`, alone in its Bash call. `gh` deletes the local branch and removes its worktree only where the checkout allows, and it reports a finished cleanup only on a terminal, so its silence here proves nothing.
+   - Report that the PR is merged, then the local side as that command showed it:
+     - No output: no local branch is left, and no worktree of it either, since git refuses to delete a branch a worktree has checked out.
+     - A commit: the local branch is still there. If `gh pr merge` printed a `skipping local delete` warning, quote it and the `To finish cleanup` command under it word for word.
+     - `not a git repository`: the shell is outside the repository, so a local branch or worktree of the PR, if one exists, is still there.
 7. Otherwise, report each check it printed with its bucket and link. Take no other action.
