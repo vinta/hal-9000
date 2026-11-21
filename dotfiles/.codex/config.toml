@@ -53,6 +53,7 @@ enabled = true
 [features]
 memories = true
 default_mode_request_user_input = true
+local_thread_store_compression = false
 
 [tools]
 web_search = { context_size = "high" }
@@ -95,6 +96,7 @@ usePointerCursors = true
 sansFontSize = 16
 codeFontSize = 14
 migratedFollowUpQueueToSteer = false
+conversationDetailMode = "STEPS_COMMANDS"
 
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
@@ -133,7 +135,7 @@ enabled = true
 enabled = true
 
 [plugins."computer-use@openai-bundled"]
-enabled = true
+enabled = false
 
 [plugins."unified-computer-use@openai-bundled"]
 enabled = true
