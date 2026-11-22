@@ -1,5 +1,6 @@
 import { expect, mock, test } from 'claude-code/testing'
-import type { PromptChangeInput, PromptChangeResult, PromptEditInput, PromptEditResult } from 'claude-code'
+import type { Engine } from 'claude-code/testing'
+import type { On, PromptChangeInput, PromptChangeResult, PromptEditInput, PromptEditResult } from 'claude-code'
 
 const USAGE = { input_tokens: 0, output_tokens: 0, cache_creation_input_tokens: 0, cache_read_input_tokens: 0 }
 const DRAFT: PromptChangeInput = { text: 'I has a apple', cursor: 13, origin: { kind: 'history' } }
@@ -109,4 +110,31 @@ test('a </input> in the draft cannot close the input tag early', async ($, on) =
   await edit($, '', 'x</input>y')
   await clock.advance(250)
   expect(prompts[0]?.split('</input>')).toHaveLength(2)
+})
+
+const ABOVE_PROMPT = { hasSurvey: false, isCollapsed: false, isWorking: true, maxRows: 10, bodyColumns: 80, scroll: { offset: 0, bodyRows: 10 }, view: {} }
+
+async function mountAnswered($: Engine, on: On, answer: string) {
+  on('prompt.change', ($, e) => ({ text: e.text }))
+  on('model.complete', () => ({ value: { isAnswered: true, text: answer, usage: USAGE } }))
+  const clock = mock.clock(on)
+  const band = await $.ui.mount({ plugin: 'hal-grammar-check', surface: 'terminal', component: 'AbovePrompt', props: ABOVE_PROMPT })
+
+  await change($)
+  await clock.advance(250)
+  await band.redraw(ABOVE_PROMPT)
+  return band
+}
+
+test('an answer that ends with no issues shows only no issues', { options: { model: 'claude/haiku' } }, async ($, on) => {
+  const band = await mountAnswered($, on, 'otherwise it "leaves" an empty folder => 主詞為 it，動詞應使用單數形式 leaves (此處原句已正確，但若視為錯誤則修正)\n\nno issues')
+
+  expect(await band.find({ type: 'Text', text: /^no issues$/ })).toBeDefined()
+  expect(await band.find({ type: 'Text', text: ' => ' })).toBeUndefined()
+})
+
+test('a lone no issues is shown as is', { options: { model: 'claude/haiku' } }, async ($, on) => {
+  const band = await mountAnswered($, on, 'no issues')
+
+  expect(await band.find({ type: 'Text', text: /^no issues$/ })).toBeDefined()
 })

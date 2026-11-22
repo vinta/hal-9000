@@ -205,7 +205,9 @@ async function grammarCheck($: EngineInterface, draft: string, mine: number) {
     lines = [`${backend} unreachable (${error instanceof Error ? error.message : String(error)})`]
   }
   if (mine === seq) {
-    const result: GrammarCheck = { status: mine === submitted ? 'submitted' : 'done', lines }
+    // The model sometimes flags a correct sentence, takes it back, and ends with `no issues`, so its last line wins
+    const hasNoIssues = lines.some(line => line.toLowerCase() === 'no issues')
+    const result: GrammarCheck = { status: mine === submitted ? 'submitted' : 'done', lines: hasNoIssues ? ['no issues'] : lines }
     await update($, check, () => result)
   }
 }
