@@ -1514,6 +1514,25 @@ class TestBackupPrune:
         assert not (dest / "link").exists()
         assert (target / "keep.txt").read_text() == "keep"
 
+    def test_glob_entry_unlinks_symlink_orphan_without_touching_target(self, hal_instance, tmp_path, capsys):
+        """Listing what an unmatched symlink points at would delete it, outside the backup."""
+        src = tmp_path / "live"
+        (src / "current").mkdir(parents=True)
+
+        target = tmp_path / "target"
+        target.mkdir()
+        (target / "keep.txt").write_text("keep")
+
+        dest = tmp_path / "dropbox"
+        (dest / "current").mkdir(parents=True)
+        (dest / "link").symlink_to(target)
+
+        self._prune(hal_instance, [{"src": str(src / "*"), "dest": str(dest / "*")}])
+
+        assert "1 orphan in backup" in capsys.readouterr().out
+        assert not (dest / "link").is_symlink()
+        assert (target / "keep.txt").read_text() == "keep"
+
     def test_glob_entry_prunes_unmatched_files(self, hal_instance, tmp_path):
         src_dir = tmp_path / "projects"
         src_dir.mkdir()
