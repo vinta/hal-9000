@@ -1473,18 +1473,27 @@ class TestBackupPrune:
         src = tmp_path / "live"
         (src / "current").mkdir(parents=True)
 
-        # A wildcard lists an unmatched directory as one orphan without walking it, so notes.txt goes unlisted
         dest = tmp_path / "dropbox"
         (dest / "current").mkdir(parents=True)
         (dest / "abandoned_repo" / ".git").mkdir(parents=True)
-        (dest / "abandoned_repo" / "notes.txt").write_text("unlisted")
-        (dest / "zz_orphan.txt").write_text("orphan")
+        (dest / "aa_orphan.txt").write_text("orphan")
 
-        self._prune(hal_instance, [{"src": str(src / "*"), "dest": str(dest / "*")}])
+        # A sync client writes into the orphan directory while the prompt is open, after the listing was taken
+        def confirm_while_syncing(_question):
+            (dest / "abandoned_repo" / "synced.txt").write_text("unlisted")
+            return "y"
+
+        with (
+            patch.object(hal_instance, "_expand_template", side_effect=Path),
+            patch.object(hal_instance, "dotfiles") as mock_dotfiles,
+            patch("builtins.input", side_effect=confirm_while_syncing),
+        ):
+            mock_dotfiles.data = {"backups": [{"src": str(src / "*"), "dest": str(dest / "*")}]}
+            hal_instance.backup(argparse.Namespace(prune=True, yes=False))
 
         assert (dest / "abandoned_repo" / ".git").is_dir()
-        assert (dest / "abandoned_repo" / "notes.txt").read_text() == "unlisted"
-        assert not (dest / "zz_orphan.txt").exists()
+        assert (dest / "abandoned_repo" / "synced.txt").read_text() == "unlisted"
+        assert not (dest / "aa_orphan.txt").exists()
 
     def test_symlink_orphan_is_unlinked_without_touching_target(self, hal_instance, tmp_path):
         src = tmp_path / "live"
@@ -1549,6 +1558,30 @@ class TestBackupPrune:
 
         assert (dest_dir / "acme" / "tmp").is_dir()
         assert not (dest_dir / "retired" / "tmp").exists()
+
+    def test_glob_in_parent_lists_and_prunes_files_inside_unmatched_directories(self, hal_instance, tmp_path, capsys):
+        src_dir = tmp_path / "projects"
+        (src_dir / "acme" / "local").mkdir(parents=True)
+        (src_dir / "acme" / "local" / "kept.md").write_text("kept")
+        (src_dir / "retired").mkdir()
+
+        dest_dir = tmp_path / "dropbox"
+        (dest_dir / "acme" / "local").mkdir(parents=True)
+        (dest_dir / "acme" / "local" / "kept.md").write_text("kept")
+        (dest_dir / "retired" / "local" / "drafts").mkdir(parents=True)
+        (dest_dir / "retired" / "local" / "notes.md").write_text("orphan")
+        (dest_dir / "retired" / "local" / "drafts" / "plan.md").write_text("orphan")
+
+        entry = {"src": str(src_dir / "*" / "local"), "dest": str(dest_dir / "*" / "local")}
+        self._prune(hal_instance, [entry])
+
+        out = capsys.readouterr().out
+        assert "4 orphans in backup" in out
+        assert f"  {dest_dir / 'retired' / 'local' / 'notes.md'}\n" in out
+        assert f"  {dest_dir / 'retired' / 'local' / 'drafts' / 'plan.md'}\n" in out
+        assert "pruned 4" in out
+        assert not (dest_dir / "retired" / "local").exists()
+        assert (dest_dir / "acme" / "local" / "kept.md").read_text() == "kept"
 
     def test_glob_in_parent_prunes_files_inside_matched_directories(self, hal_instance, tmp_path):
         src_dir = tmp_path / "projects"

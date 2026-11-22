@@ -267,6 +267,10 @@ class Mirror:
                 return []
             expected = {pair_dest for _, pair_dest in pairs}
             orphans = [match for match in Mirror._glob(dest) if match not in expected]
+            # The prompt must list every file before it is deleted, as it does for plain entries
+            for match in list(orphans):
+                if match.is_dir() and not match.is_symlink():
+                    orphans.extend(match / name for name in Mirror._walk_names(match, follow_symlinks=False))
             # A matched pair is a plain entry in its own right, so files deleted inside it are orphans too
             for pair_src, pair_dest in pairs:
                 orphans.extend(Mirror.find_orphans(pair_src, pair_dest))
