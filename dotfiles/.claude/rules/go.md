@@ -18,7 +18,7 @@ When an older and a newer idiom both fit the module's `go` line, pick the newer 
 - Pin other Go-built dev tools with `go get -tool <pkg>@<version>` and run them as `go tool <name>`; no `tools.go` blank-import file.
 - Run `govulncheck ./...` after dependency changes when the project uses it.
 
-## Go 1.27 (only when the `go` line is 1.27 or later)
+## Go 1.27
 
 - Give a type a generic method (`func (s Set[T]) Map[U any](f func(T) U) []U`) when the operation belongs to that type, and a package-level generic function when it does not. A method that must satisfy an interface cannot be generic.
 - Use `encoding/json/v2` for new JSON code, and give custom types `MarshalJSONTo`/`UnmarshalJSONFrom` methods instead of `MarshalJSON`/`UnmarshalJSON`. Choose explicitly where v2's defaults leave a gap: `json.Deterministic(true)` when output must be byte-stable (golden files, hashes, signatures); an explicit encoding for `time.Duration` fields (`jsonv1.FormatDurationAsNano(true)` or a custom type), which v2 rejects otherwise; a `case:ignore` tag on fields that must match input case-insensitively; an `embed` field of type `jsontext.Value` to keep unknown members.
