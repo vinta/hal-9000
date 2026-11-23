@@ -7,7 +7,7 @@ paths:
 
 # Go
 
-Write for the `go` line in the module's `go.mod`, never for the newest toolchain: modules in one workspace can sit on different releases, and a feature newer than the line does not compile. When an older and a newer idiom both fit that line, pick the newer one: training data holds more old Go than new.
+When an older and a newer idiom both fit the module's `go` line, pick the newer one: training data holds more old Go than new.
 
 ## Tooling
 
@@ -16,7 +16,6 @@ Write for the `go` line in the module's `go.mod`, never for the newest toolchain
 - Run tools under the toolchain the `go` line selects (leave `GOTOOLCHAIN` at its default), so a `go 1.27` module gets 1.27's vet and `go fix`.
 - Lint with `golangci-lint run` when the project has a `.golangci.yml`, using a binary install (Homebrew), not `go get -tool`.
 - Pin other Go-built dev tools with `go get -tool <pkg>@<version>` and run them as `go tool <name>`; no `tools.go` blank-import file.
-- Raise the `go` line only on purpose (`go get go@<version>`): it is the minimum for every module that imports this one.
 - Run `govulncheck ./...` after dependency changes when the project uses it.
 
 ## Go 1.27 (only when the `go` line is 1.27 or later)
