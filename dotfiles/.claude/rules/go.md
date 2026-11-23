@@ -46,8 +46,8 @@ Write for the `go` line in the module's `go.mod`, never for the newest toolchain
 - `errors.Join` to combine errors; `errors.Is`, never `==`, for sentinels.
 - `mux.HandleFunc("GET /items/{id}", h)` with `r.PathValue("id")` instead of manual method checks and path trimming.
 - `testing/synctest.Test` for code that uses time, timers or tickers, never `time.Sleep` in tests; use `net.Pipe`, not real sockets, inside the bubble.
-- `b.Loop()` in benchmarks, with setup before the loop and never sized from `b.N`. `t.Context()` in tests, but a fresh context in `t.Cleanup` functions.
-- `log/slog` for logs, `os.Root` to confine file access to one directory, `runtime.AddCleanup` instead of `SetFinalizer`, `net.JoinHostPort` instead of `fmt.Sprintf("%s:%d")`.
+- `b.Loop()` in benchmarks. `t.Context()` in tests, but a fresh context in `t.Cleanup` functions.
+- `log/slog` for logs, `os.Root` to confine file access to one directory.
 - No `automaxprocs` and no explicit `GOMAXPROCS`: leave CPU sizing to the runtime.
 
 ## Style
