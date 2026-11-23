@@ -11,12 +11,12 @@ Write for the `go` line in the module's `go.mod`, never for the newest toolchain
 
 ## Tooling
 
-- Format with `gofmt`, or `golangci-lint fmt` when the project's config enables formatters. Run `go vet ./...` and `go test -race ./...`.
+- Format with `golangci-lint fmt` when the project's config enables formatters. Run `go test -race ./...`.
 - After writing code, run `go fix -diff` on the packages you changed (`./internal/auth`, not `./...`), then apply it, until it reports nothing, and build again after. Keep its fixes in files you changed; report fixes in other files instead of keeping them. A whole-module `go fix ./...` is its own commit, run only when asked.
 - Run tools under the toolchain the `go` line selects (leave `GOTOOLCHAIN` at its default), so a `go 1.27` module gets 1.27's vet and `go fix`.
 - Lint with `golangci-lint run` when the project has a `.golangci.yml`, using a binary install (Homebrew), not `go get -tool`.
 - Pin other Go-built dev tools with `go get -tool <pkg>@<version>` and run them as `go tool <name>`; no `tools.go` blank-import file.
-- Change dependencies with `go get <pkg>@<version>` then `go mod tidy`, never by hand-editing `require` lines. Raise the `go` line only on purpose (`go get go@<version>`): it is the minimum for every module that imports this one.
+- Raise the `go` line only on purpose (`go get go@<version>`): it is the minimum for every module that imports this one.
 - Run `govulncheck ./...` after dependency changes when the project uses it.
 
 ## Go 1.27 (only when the `go` line is 1.27 or later)
