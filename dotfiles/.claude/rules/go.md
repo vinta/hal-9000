@@ -51,14 +51,14 @@ When an older and a newer idiom both fit the module's `go` line, pick the newer 
 
 ## Style
 
-- Name a package for what it provides; no `util`, `common`, `helpers`, `types` or `models`. Don't repeat the package name in its identifiers (`config.Load`, not `config.LoadConfig`).
+- Don't repeat the package name in its identifiers (`config.Load`, not `config.LoadConfig`).
 - Define an interface in the package that consumes it, small, once a second implementation or a test needs it. Accept interfaces, return concrete types. No interface per struct (`UserService` beside `userService`).
-- Check `err` before touching any other return value. Check `scanner.Err()` and `rows.Err()` after the loop.
-- Wrap with context, lowercase, no "failed to": `fmt.Errorf("load config: %w", err)`. Use `%w` only when callers need `errors.Is`/`As` on the cause, `%v` to keep it out of your API. Handle an error once: log it or return it, never both. Exported functions return `error`, not a concrete error type, so a nil pointer never becomes a non-nil `error`.
+- Check `err` before touching any other return value. Check `scanner.Err()` after the loop.
+- Wrap with context, lowercase, no "failed to": `fmt.Errorf("load config: %w", err)`. Use `%w` only when callers need `errors.Is`/`As` on the cause, `%v` to keep it out of your API. Handle an error once: log it or return it, never both.
 - `ctx context.Context` is the first parameter; never store it in a struct.
 - Prefer synchronous APIs and let the caller add concurrency. Every goroutine has an owner that waits for it and a way to stop. Only the sender closes a channel. Use `errgroup` for fan-out that returns errors. Use a mutex for shared state and a channel for handing off work; never copy a struct that holds a mutex.
 - Tests follow the assertion style the project already uses. Otherwise: table-driven with `t.Run` and named cases; compare structs with `cmp.Diff(want, got)` from go-cmp, not `reflect.DeepEqual`; call `t.Helper()` in helpers; never `t.Fatal` from a goroutine the test spawned.
-- Receivers are one or two letters, never `this`/`self`. No `Get` prefix on getters. Initialisms keep one case: `userID`, `URL`, `ServeHTTP`.
+- Receivers are one or two letters. No `Get` prefix on getters.
 - Declare an empty slice as `var s []T` and test `len(s) == 0`, except where `encoding/json` v1 output must be `[]`, not `null`.
 - Use an options struct when most callers set options; functional options only for many rarely used settings.
 - `main` calls `run() error` and is the only place that calls `os.Exit` or `log.Fatal`.
