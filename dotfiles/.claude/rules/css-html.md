@@ -26,6 +26,7 @@ paths:
 - Use `rem` for font sizes and spacing.
 - Use `gap` in flex/grid layouts, not margin hacks on children.
 - Use CSS custom properties (`--var`) for colors and repeated values.
+- Build light mode only; add dark mode only when asked.
 - Never use `text-transform`. Write the casing directly in the markup.
 
 ## Visual changes

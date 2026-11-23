@@ -25,6 +25,7 @@ For hand-drawn SVG diagrams: architecture maps, flowcharts, boxes and arrows.
 - Keep at least 20 units between separate components and at least 8 between small boxes side by side in one container (topics in a cluster, workers in a process), every arrowhead at least 16 units from any border it crosses, and every line at least 10 units from a box edge it runs alongside; inset nodes in their container to make room.
 - Keep each label inside the box it names, clear of other text and of every line; put an edge label in open space beside its line, never across a box edge.
 - Gather a fan-out or fan-in on one bar with a dot at the junction, and split the path there, so it reads as one source splitting rather than lines crossing.
+- Draw for light mode only; add dark mode only when asked, so no time goes to a second palette.
 
 ## Verify
 
