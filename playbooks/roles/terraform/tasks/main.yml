@@ -11,6 +11,18 @@
       - hashicorp/tap/terraform
     state: latest
 
+- name: Tap terraform-linters/tap
+  homebrew_tap:
+    name: terraform-linters/tap
+    trust: true
+
+# https://github.com/terraform-linters/tflint#installation
+- name: Install tflint
+  homebrew_cask:
+    name:
+      - terraform-linters/tap/tflint
+    state: latest
+
 # https://developer.hashicorp.com/terraform/cli/config/config-file#provider-plugin-cache
 - name: Create terraform provider plugin cache directory
   file:

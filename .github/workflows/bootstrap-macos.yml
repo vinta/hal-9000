@@ -85,6 +85,7 @@ jobs:
             gcloud --version
             "$CLOUDSDK_PYTHON" -c "import numpy; print(numpy.__version__)"
             terraform version
+            tflint --version
             claude --version
             /opt/homebrew/bin/bash --version
             codex --version
