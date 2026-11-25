@@ -140,7 +140,8 @@
       "Bash(bun add *)",
       "Bash(go install *)",
       "Bash(cargo install *)",
-      "Bash(gem install *)"
+      "Bash(gem install *)",
+      "Bash(terraform apply *)"
     ],
     "defaultMode": "auto"
   },
