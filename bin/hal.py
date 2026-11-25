@@ -38,7 +38,6 @@ def paint(text: str, sgr: str) -> str:
 
 DIM = "2"
 RED = "31"
-GREEN = "32"
 YELLOW = "33"
 BOLD_RED = "1;31"
 
@@ -210,7 +209,7 @@ class Mirror:
             self._copy_file_allow_overwrite(src, dest)
             slash = count = ""
             listed = []
-        lines = [f"{paint('copy', GREEN)} {abbreviate_home(src)}{slash} -> {abbreviate_home(dest)}{slash}{count}"]
+        lines = [f"copy {abbreviate_home(src)}{slash} -> {abbreviate_home(dest)}{slash}{count}"]
         lines += [f"./{file}" for file in listed]
         # One message per entry: copies run in parallel, so separate lines would interleave
         self._say("\n".join(lines))
