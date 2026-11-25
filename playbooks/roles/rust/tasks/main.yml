@@ -1,0 +1,23 @@
+---
+# https://rust-lang.github.io/rustup/installation/other.html
+# cmake and pkgconf build native code for -sys crates (e.g. rdkafka-sys, openssl-sys)
+- name: Install rustup and native build tools
+  homebrew:
+    name:
+      - rustup
+      - cmake
+      - pkgconf
+    state: latest
+
+# A repo's rust-toolchain.toml pin installs on first use (RUSTUP_AUTO_INSTALL defaults to 1)
+- name: Set stable as the default Rust toolchain
+  command: /opt/homebrew/opt/rustup/bin/rustup default stable
+  register: rust_default_toolchain
+  changed_when: "' unchanged - ' not in rust_default_toolchain.stdout"
+
+- name: Ensure Rust environment is sourced in .zshrc
+  lineinfile:
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+    line: "source {{ REPO_ROOT }}/playbooks/roles/rust/files/rust_profile.sh"
+    state: present
+  when: ansible_facts["user_shell"] == "/bin/zsh"

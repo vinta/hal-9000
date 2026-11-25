@@ -21,6 +21,7 @@ All-in-one command to set up:
   - [Node.js](playbooks/roles/node/tasks/main.yml)
   - [Bun](playbooks/roles/bun/tasks/main.yml)
   - [Go](playbooks/roles/go/tasks/main.yml)
+  - [Rust](playbooks/roles/rust/tasks/main.yml)
 - DevOps
   - [Docker](playbooks/roles/docker/tasks/main.yml) (OrbStack)
   - [Kubernetes](playbooks/roles/kubernetes/tasks/main.yml)

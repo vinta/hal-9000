@@ -77,6 +77,10 @@ jobs:
             npm --version
             bun --version
             go version
+            rustup --version
+            cargo --version
+            cmake --version
+            pkgconf --version
             forge --version
             kubectl version --client
             k9s version
