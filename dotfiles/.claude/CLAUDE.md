@@ -50,6 +50,7 @@
 - Text that leaves this machine (commit messages, PR and issue text, comments) carries nothing a reader could learn only from this machine, the user's signed-in accounts, or this conversation: private repo or directory names, paths outside the repo, account plans and figures, local tooling, chat quotes and dates. Translate each into the technical need it implies, or drop it.
   - The same holds for how the text was made: let requests, rejected alternatives, and constraints shape the text without explaining its wording or structure. Outside commit and PR text, describe the current state, not what it replaced, but keep a design reason the reader needs to avoid undoing it.
 - A comment states only what the code cannot say (the constraint or the why) in one or two plain lines. Write one version, not alternatives, and never invite the user to reword it: they rewrite comments when they want to. A comment the user rewrote is their note to their future self: review it only for a claim the code contradicts, a grammar slip, or a glossary synonym, never to rephrase it.
+- In text for the user, write each issue, PR, ticket, or commit you mention as a Markdown link to its page, since the user can't tell from a bare number what it is. Use a URL a tool returned or one built from a pattern seen in the project; leave the reference bare when you have neither.
 - Never hard-wrap text at a column limit: screens are wide enough, so one paragraph is one physical line. Wrap only when the user explicitly asks or a configured linter/formatter fails without it.
 
 ## Workflow
