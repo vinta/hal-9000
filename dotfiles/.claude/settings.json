@@ -147,7 +147,6 @@
     "defaultMode": "auto"
   },
   "model": "fable",
-  "disableClaudeAiConnectors": true,
   "skillOverrides": {
     "init": "off",
     "fewer-permission-prompts": "off",
