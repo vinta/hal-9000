@@ -211,7 +211,7 @@ class Mirror:
             slash = count = ""
             listed = []
         lines = [f"{paint('copy', GREEN)} {abbreviate_home(src)}{slash} -> {abbreviate_home(dest)}{slash}{count}"]
-        lines += [paint(f"./{file}", DIM) for file in listed]
+        lines += [f"./{file}" for file in listed]
         # One message per entry: copies run in parallel, so separate lines would interleave
         self._say("\n".join(lines))
 
