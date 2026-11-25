@@ -23,7 +23,6 @@ When an older and a newer idiom both fit the module's `required_version` and pro
 - In a mocked test, a value the mock generated proves nothing, and neither does an assert that recomputes the resource's own expression, such as comparing a policy with the same `file()` the resource reads. Assert on values the configuration computes from inputs, or pin the mocked value with an override and `override_during = plan`.
 - Compare a `map(string)` attribute with `tomap({...})`: an object literal never equals a map.
 - Test a validation or precondition with `expect_failures` under `command = plan`. A precondition on a value unknown at plan never fires there, so make the value known first with `override_during = plan`.
-- Say what a mocked test cannot show (whether AWS accepts the configuration, permissions, quotas) when reporting that tests pass.
 
 ## Roots and modules
 
