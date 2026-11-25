@@ -55,9 +55,9 @@ class Settings:
     # superseded one forever and they would drown out the orphans worth seeing.
     DIFF_IGNORE_PATTERNS: tuple[str, ...] = (".git",)
     # A directory copy of at most this many files lists them under its summary line
-    LISTED_COPIES: int = 5
+    LISTED_COPIES: int = 10
     # A directory copy of at least this many files gets a yellow, then bold red, count so a bulk copy stands out
-    BULK_COPY_WARN: int = 5
+    BULK_COPY_WARN: int = 10
     BULK_COPY_ALARM: int = 50
 
 
