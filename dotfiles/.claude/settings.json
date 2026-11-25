@@ -141,7 +141,8 @@
       "Bash(go install *)",
       "Bash(cargo install *)",
       "Bash(gem install *)",
-      "Bash(terraform apply *)"
+      "Bash(terraform *apply*)",
+      "Bash(terraform *destroy*)"
     ],
     "defaultMode": "auto"
   },
