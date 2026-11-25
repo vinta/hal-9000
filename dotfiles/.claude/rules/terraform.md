@@ -28,7 +28,7 @@ When an older and a newer idiom both fit the module's `required_version` and pro
 
 - A root is one state: its backend, providers, lookups and module calls. Put resources in child modules, one level deep, and pass each module the IDs it needs as input variables rather than looking them up inside it, so the root decides where each value comes from.
 - Make a value that is the same in every deployment of a root a local. A variable whose validation accepts exactly one value only adds an input to set.
-- Between roots, look resources up by name or tag, or read a value published for consumers (an SSM parameter), rather than `terraform_remote_state`, which needs read access to the producer's whole state, secrets included.
+- Between roots, look resources up by name or tag, and read a value published for consumers (an SSM parameter) only for what has neither. Don't add a `terraform_remote_state` data source: it needs read access to the producer's whole state, secrets included.
 
 ## State and apply
 
