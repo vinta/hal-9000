@@ -886,6 +886,37 @@ class TestSkipUnchanged:
         assert dest.is_dir()
         assert said == [f"copy {src}/ -> {dest}/ (0 files)"]
 
+    def test_colors_bulk_copy_count_on_terminal(self, hal_module, tmp_path, monkeypatch):
+        """On a terminal the copy count turns yellow at BULK_COPY_WARN files and bold red at BULK_COPY_ALARM."""
+        monkeypatch.delenv("NO_COLOR", raising=False)
+        monkeypatch.setattr(hal_module.sys.stdout, "isatty", lambda: True)
+        said = []
+        mirror = hal_module.Mirror(say=said.append)
+        for count in (hal_module.Settings.BULK_COPY_WARN - 1, hal_module.Settings.BULK_COPY_WARN, hal_module.Settings.BULK_COPY_ALARM):
+            src = tmp_path / f"src{count}"
+            src.mkdir()
+            for index in range(count):
+                (src / f"{index}.txt").write_text("X")
+            mirror.copy(src, tmp_path / f"dest{count}")
+
+        first_lines = [message.split("\n")[0] for message in said]
+        assert first_lines[0].endswith(f" ({hal_module.Settings.BULK_COPY_WARN - 1} files)")
+        assert first_lines[1].endswith(f" \033[33m({hal_module.Settings.BULK_COPY_WARN} files)\033[0m")
+        assert first_lines[2].endswith(f" \033[1;31m({hal_module.Settings.BULK_COPY_ALARM} files)\033[0m")
+
+    def test_no_color_keeps_terminal_output_plain(self, hal_module, tmp_path, monkeypatch):
+        """NO_COLOR turns color off even on a terminal."""
+        monkeypatch.setenv("NO_COLOR", "1")
+        monkeypatch.setattr(hal_module.sys.stdout, "isatty", lambda: True)
+        said = []
+        src = tmp_path / "src"
+        src.mkdir()
+        dest = tmp_path / "dest"
+
+        hal_module.Mirror(say=said.append).copy(src, dest)
+
+        assert said == [f"copy {src}/ -> {dest}/ (0 files)"]
+
 
 class TestCopyEntryGlob:
     """_copy_entry expands a single `*`, copying each match with the star spliced into dest."""

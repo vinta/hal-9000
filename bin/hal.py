@@ -29,6 +29,20 @@ def abbreviate_home(path: Path) -> str:
     return str(path).replace(str(home), "~", 1) if path.is_relative_to(home) else str(path)
 
 
+def paint(text: str, sgr: str) -> str:
+    # NO_COLOR is the no-color.org opt-out; piped or captured output stays plain
+    if os.environ.get("NO_COLOR") or not sys.stdout.isatty():
+        return text
+    return f"\033[{sgr}m{text}\033[0m"
+
+
+DIM = "2"
+RED = "31"
+GREEN = "32"
+YELLOW = "33"
+BOLD_RED = "1;31"
+
+
 class PathNotAllowedError(Exception):
     pass
 
@@ -43,6 +57,9 @@ class Settings:
     DIFF_IGNORE_PATTERNS: tuple[str, ...] = (".git",)
     # A directory copy of at most this many files lists them under its summary line
     LISTED_COPIES: int = 5
+    # A directory copy of at least this many files gets a yellow, then bold red, count so a bulk copy stands out
+    BULK_COPY_WARN: int = 5
+    BULK_COPY_ALARM: int = 50
 
 
 class Entry(TypedDict):
@@ -174,22 +191,27 @@ class Mirror:
 
             self._copy_tree(str(src), str(dest), copy_file)
             if existed and not copied:
-                self._say(f"unchanged {abbreviate_home(src)}/")
+                self._say(paint(f"unchanged {abbreviate_home(src)}/", DIM))
                 return
             slash = "/"
-            count = f" ({len(copied)} file{'' if len(copied) == 1 else 's'})"
+            count = f"({len(copied)} file{'' if len(copied) == 1 else 's'})"
+            if len(copied) >= Settings.BULK_COPY_ALARM:
+                count = paint(count, BOLD_RED)
+            elif len(copied) >= Settings.BULK_COPY_WARN:
+                count = paint(count, YELLOW)
+            count = f" {count}"
             # Few enough to read at a glance; a bulk copy would bury the other entries
             listed = sorted(copied) if len(copied) <= Settings.LISTED_COPIES else []
         else:
             if self._is_unchanged(src, dest):
-                self._say(f"unchanged {abbreviate_home(src)}")
+                self._say(paint(f"unchanged {abbreviate_home(src)}", DIM))
                 return
             dest.parent.mkdir(parents=True, exist_ok=True)
             self._copy_file_allow_overwrite(src, dest)
             slash = count = ""
             listed = []
-        lines = [f"copy {abbreviate_home(src)}{slash} -> {abbreviate_home(dest)}{slash}{count}"]
-        lines += [f"./{file}" for file in listed]
+        lines = [f"{paint('copy', GREEN)} {abbreviate_home(src)}{slash} -> {abbreviate_home(dest)}{slash}{count}"]
+        lines += [paint(f"./{file}", DIM) for file in listed]
         # One message per entry: copies run in parallel, so separate lines would interleave
         self._say("\n".join(lines))
 
@@ -489,15 +511,15 @@ class HAL9000:
         # Overlapping entries (a directory and a wildcard reaching into it) find the same orphan twice
         orphans = sorted(set(orphans))
         counted = f"{len(orphans)} orphan" if len(orphans) == 1 else f"{len(orphans)} orphans"
-        self._hal_says(f"{counted} in backup, absent from source:")
+        self._hal_says(paint(f"{counted} in backup, absent from source:", YELLOW))
         for path in orphans:
-            print(f"  {abbreviate_home(path)}")
+            print(f"  {paint(abbreviate_home(path), RED)}")
 
         if not yes and not self._confirm(f"Delete {counted} from backup? [y/N] "):
             return
 
         removed = sum(self.mirror.remove_orphan(path) for path in reversed(orphans))
-        self._hal_says(f"pruned {removed}")
+        self._hal_says(paint(f"pruned {removed}", RED))
 
     def _copy_entries(self, entries: Iterable[Entry]) -> None:
         with concurrent.futures.ThreadPoolExecutor() as executor:
