@@ -20,17 +20,19 @@ HOME = str(Path.home())
 DENIED_PREFIXES = [
     f"{HOME}/{d}"
     for d in [
+        ".app-store",
         ".aws",
+        ".cloudflared",
         ".config",
         ".docker",
         ".dropbox",
         ".gnupg",
-        ".gsutil",
         ".kube",
         ".npmrc",
         ".orbstack",
         ".pypirc",
         ".ssh",
+        ".zsh_sessions",
         "Dropbox",
         "Library",
     ]

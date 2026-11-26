@@ -1,10 +1,20 @@
 import json
+import re
 import subprocess
 import sys
 
 import pytest
 
 from .conftest import GUARD_PATH
+
+SETTINGS_PATH = GUARD_PATH.parent.parent / "settings.json"
+
+
+def settings_deny_probes() -> list[str]:
+    deny = json.loads(SETTINGS_PATH.read_text())["permissions"]["deny"]
+    paths = [m.group(1) for rule in deny if (m := re.fullmatch(r"(?:Read|Edit)\((.+)\)", rule))]
+    # A concrete path each rule denies: every bracket class and `*` run becomes an `x`, which all of them accept.
+    return [re.sub(r"\[[^\]]*\]|\*+", "x", path) for path in paths]
 
 
 class TestCheck:
@@ -96,6 +106,10 @@ class TestCheck:
     def test_benign_commands_allowed(self, guard):
         assert guard.check("ls -la") is None
         assert guard.check(f"cat {guard.HOME}/project/notes.txt") is None
+
+    @pytest.mark.parametrize("probe", settings_deny_probes())
+    def test_every_settings_deny_path_asks(self, guard, probe):
+        assert guard.check(f'cat "{probe}"') is not None
 
 
 class TestHookProcessContract:
