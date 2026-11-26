@@ -36,6 +36,9 @@ DENIED_PREFIXES = [
     ]
 ] + ["/etc/"]
 
+# Mirrors the one ~/Library folder the settings.json deny rules leave readable, where side sessions share notes.
+ALLOWED_PREFIX = f"{HOME}/Library/Application Support/Claude"
+
 # Matches simple `VAR=value` assignments so `D=Dropbox; ls ~/$D` can be resolved
 # before the path check. Not a real shell parser: command substitution like
 # `$(...)` still isn't resolved, since doing that safely would require running
@@ -79,6 +82,9 @@ def check(command: str) -> str | None:
     # `~/Drop"box"` and `~/Drop\box` still resolve to the denied path.
     stripped = re.sub(r"""["'\\]""", "", normalized)
     lower = stripped.lower()
+    # A `..` could climb out of the allowed folder, so a command containing one gets no exception.
+    if ".." not in lower:
+        lower = re.sub(re.escape(ALLOWED_PREFIX.lower()) + r"(?:/|(?![\w.\-]))", "", lower)
     for prefix in DENIED_PREFIXES:
         # Anchor at a path boundary so `.config` does not match `.configuration`.
         # The boundary is either the separator itself or the end of the segment,

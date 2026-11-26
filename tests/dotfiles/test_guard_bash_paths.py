@@ -42,6 +42,29 @@ class TestCheck:
     @pytest.mark.parametrize(
         "command",
         [
+            'ls "$HOME/Library/Application Support/Claude/side-session-notes"',
+            r"cat ~/Library/Application\ Support/Claude/side-session-notes/a/notes.md",
+            "ls '~/Library/Application Support/Claude'",
+        ],
+    )
+    def test_claude_app_support_allowed(self, guard, command):
+        assert guard.check(command) is None
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            'ls "$HOME/Library/Application Support/Claude-3p"',
+            'cat "$HOME/Library/Application Support/Claude/../../Keychains/login.keychain-db"',
+            'ls "$HOME/Library/Application Support/Claude" ~/Library/Keychains',
+            "ls ~/Library",
+        ],
+    )
+    def test_library_outside_claude_asks(self, guard, command):
+        assert guard.check(command) == f"{guard.HOME}/Library"
+
+    @pytest.mark.parametrize(
+        "command",
+        [
             'git commit -m "fix: guard ~/.config reads" -m "Body mentions /etc/hosts and ~/.zsh_history."',
             "git commit -m 'drop ~/Library check'",
             'git commit -am "touch ~/.ssh docs"',
