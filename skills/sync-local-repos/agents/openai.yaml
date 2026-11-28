@@ -1,0 +1,6 @@
+interface:
+  display_name: "Sync Local Repos"
+  short_description: "Pulls every repo in your workspace, then rebases your branch onto main"
+
+policy:
+  allow_implicit_invocation: false

@@ -26,7 +26,8 @@
         "./audit-agent-settings",
         "./refactor-agents-md",
         "./refactor-memory",
-        "./refactor-skill"
+        "./refactor-skill",
+        "./sync-local-repos"
       ],
       "author": {
         "name": "Vinta Chen",
@@ -67,7 +68,9 @@
         "codex",
         "agents-md",
         "auto-memory",
-        "skill-md"
+        "skill-md",
+        "sync",
+        "rebase"
       ],
       "tags": [
         "git",
@@ -98,7 +101,9 @@
         "claude-md",
         "agents-md",
         "auto-memory",
-        "skill-md"
+        "skill-md",
+        "sync",
+        "rebase"
       ]
     },
     {

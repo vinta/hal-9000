@@ -1,7 +1,7 @@
 {
   "name": "hal-skills",
   "displayName": "HAL Skills",
-  "version": "2.15.0",
+  "version": "2.16.0",
   "description": "Opinionated agentic skills that do the boring parts for you",
   "skills": [
     "./commit",
@@ -15,7 +15,8 @@
     "./audit-agent-settings",
     "./refactor-agents-md",
     "./refactor-memory",
-    "./refactor-skill"
+    "./refactor-skill",
+    "./sync-local-repos"
   ],
   "author": {
     "name": "Vinta Chen",
@@ -58,6 +59,8 @@
     "codex",
     "agents-md",
     "auto-memory",
-    "skill-md"
+    "skill-md",
+    "sync",
+    "rebase"
   ]
 }
