@@ -9,12 +9,14 @@ allowed-tools:
 
 # sync-local-repos
 
-1. Pick the folder to sync from the session's working directory:
-   - Invoked with `this`: the working directory itself, so only its repo is synced.
-   - Working directory not inside a git repo: the working directory, whose repos sit directly inside it.
-   - Working directory inside a repo: the folder holding that repo and its sibling repos, normally the parent of its main checkout (`git rev-parse --path-format=absolute --git-common-dir` without the trailing `/.git`). When that folder holds no other repo, the repo is probably linked into the real folder by a symlink: find it with `find ~ -maxdepth 3 -lname <main checkout path> 2>/dev/null` and use the symlink's folder. When neither gives a folder of sibling repos, ask the user which folder to sync.
+Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available to ask the user anything below.
 
-2. Run the script with that folder and the working directory:
+1. Pick the folder to sync from the session's working directory. The repo's main checkout is `git rev-parse --path-format=absolute --git-common-dir` without the trailing `/.git`.
+   - Invoked with `this`: the main checkout, so only that repo is synced.
+   - Working directory not inside a git repo: the working directory, whose repos sit directly inside it.
+   - Working directory inside a repo: the folder holding the main checkout and its sibling repos, normally the main checkout's parent. When that folder holds no other repo, the repo is probably linked into the real folder by a symlink: find it with `find ~ -maxdepth 3 -lname <main checkout> 2>/dev/null` and use the symlink's folder. When neither gives a folder of sibling repos, ask the user which folder to sync.
+
+2. Run `scripts/sync_local_repos.py` from this skill's folder with that folder and the working directory:
 
    ```bash
    python3 ${CLAUDE_SKILL_DIR}/scripts/sync_local_repos.py "<folder>" "<working directory>"

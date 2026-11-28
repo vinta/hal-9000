@@ -14,7 +14,7 @@ Agentic skills sharpened by daily use:
 - [refactor-agents-md](refactor-agents-md/SKILL.md): Refactors a CLAUDE.md or AGENTS.md so every line earns its always-loaded cost
 - [refactor-memory](refactor-memory/SKILL.md): Prunes stale Claude Code and Codex memories, applies only what you pick
 - [refactor-skill](refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
-- [sync-local-repos](sync-local-repos/SKILL.md): Pulls every repo in your workspace, then rebases your branch onto main
+- [sync-local-repos](sync-local-repos/SKILL.md): Pulls every repo in your workspace (or just this one), then rebases your branch onto the default branch
 
 ```bash
 # Claude Code
@@ -44,4 +44,4 @@ These skills collect nothing. A few talk to other services when you run them:
 - `write-like-me` reads READMEs and docs in your other repos, and your recent PRs and issues, to match your existing writing
 - `refactor-agents-md` sends lines of your CLAUDE.md or AGENTS.md to Claude via `claude -p`, on your own account, when a Claude model reads the file, to check which lines the model already follows
 - `audit-agent-settings`, `refactor-agents-md`, `refactor-memory`, and `refactor-skill` read public docs from Anthropic, OpenAI, and SchemaStore
-- `sync-local-repos` fetches and pulls each repo it syncs from its `origin` remote, via `git`, and force-pushes a rebased branch only after you approve
+- `sync-local-repos` pulls each repo from its `origin` and force-pushes your rebased branch only when you approve, via `git`
