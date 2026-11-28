@@ -51,7 +51,7 @@ Agentic skills sharpened by daily use:
 - [refactor-agents-md](skills/refactor-agents-md/SKILL.md): Refactors a CLAUDE.md or AGENTS.md so every line earns its always-loaded cost
 - [refactor-memory](skills/refactor-memory/SKILL.md): Prunes stale Claude Code and Codex memories, applies only what you pick
 - [refactor-skill](skills/refactor-skill/SKILL.md): Refactors a skill by simplifying it instead of complicating it
-- [sync-local-repos](skills/sync-local-repos/SKILL.md): Pulls every repo in your workspace (or just this one), then rebases your branch onto the default branch
+- [sync-local-repos](skills/sync-local-repos/SKILL.md): Pulls every repo in your workspace, then rebases your branch onto the default branch
 
 ```bash
 # Claude Code
