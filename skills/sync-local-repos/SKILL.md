@@ -1,7 +1,7 @@
 ---
 name: sync-local-repos
 description: Pull the default branch of every repo in your workspace from origin, then rebase the current branch onto it. Pass `this` to sync only the current repo.
-argument-hint: "[this]"
+argument-hint: "[all | this]"
 disable-model-invocation: true
 allowed-tools:
   - Bash(python3 ${CLAUDE_SKILL_DIR}/scripts/sync_local_repos.py *)
@@ -12,9 +12,9 @@ allowed-tools:
 Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when available to ask the user anything below.
 
 1. Pick the folder to sync from the session's working directory. The repo's main checkout is `git rev-parse --path-format=absolute --git-common-dir` without the trailing `/.git`.
-   - Invoked with `this`: the main checkout, so only that repo is synced.
-   - Working directory not inside a git repo: the working directory, whose repos sit directly inside it.
-   - Working directory inside a repo: the folder holding the main checkout and its sibling repos, normally the main checkout's parent. When that folder holds no other repo, the repo is probably linked into the real folder by a symlink: find it with `find ~ -maxdepth 3 -lname <main checkout> 2>/dev/null` and use the symlink's folder. When neither gives a folder of sibling repos, ask the user which folder to sync.
+   - `this`: the main checkout, so only that repo is synced.
+   - `all` or no argument, working directory not inside a git repo: the working directory, whose repos sit directly inside it.
+   - `all` or no argument, working directory inside a repo: the folder holding the main checkout and its sibling repos, normally the main checkout's parent. When that folder holds no other repo, the repo is probably linked into the real folder by a symlink: find it with `find ~ -maxdepth 3 -lname <main checkout> 2>/dev/null` and use the symlink's folder. When neither gives a folder of sibling repos, ask the user which folder to sync.
 
 2. Run `scripts/sync_local_repos.py` from this skill's folder with that folder and the working directory:
 
@@ -35,4 +35,4 @@ Use `AskUserQuestion` in Claude Code or `request_user_input` in Codex when avail
    git push --force-with-lease=<branch>:<old tip> origin <branch>
    ```
 
-5. Report the folder synced, the repos that moved or failed, the branch's old and new tip, the script's tree check, and whether anything was pushed.
+5. When nothing needs the user, report one line: `Synced <folder>: all N repos ok on their default branch`, plus `; rebased <branch> onto origin/<def>` when the branch moved. Otherwise lead with what needs the user (each `FAIL` and `STOP`, a tree check asking for review, a pending force-push), then the repos that moved, the branch's old and new tip, and whether anything was pushed. Never list checks that passed.
